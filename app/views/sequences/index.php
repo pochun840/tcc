@@ -89,9 +89,9 @@
         <div class="buttonbox">
             <!--onclick="document.getElementById('newseq').style.display='block'"-->
             <input id="S3" name="Seq_Manager_Submit" type="button" value="new" tabindex="1"  onclick="cound_job('new');">
-            <input id="S6" name="Seq_Manager_Submit" type="button" value="Edit" tabindex="1">
+            <input id="S6" name="Seq_Manager_Submit" type="button" value="Edit" tabindex="1" onclick="cound_job('edit');">
             <input id="S5" name="Seq_Manager_Submit" type="button" value="Copy" tabindex="1" onclick="document.getElementById('copyseq').style.display='block'">
-            <input id="S4" name="Seq_Manager_Submit" type="button" value="Delete" tabindex="1">
+            <input id="S4" name="Seq_Manager_Submit" type="button" value="Delete" tabindex="1" onclick="cound_job('del');">
         </div>
     </div>
 
@@ -150,6 +150,12 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div for="offset" class="col-6 t1">Offset :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="offset" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
                             <div for="torque-unit" class="col-6 t1">Torque Unit :</div>
                             <div class="col-4 t2">
                                 <select id="torque_unit" class="col custom-file">
@@ -159,6 +165,24 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="row">
+                            <div for="NG-stop" class="col-6 t1">NG Stop :</div>
+                            <div class="col-4 t2">
+                                <select id="ng_stop" class="col custom-file">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div for="join" class="col-6 t1">Join :</div>
                             <div class="col t2" >
@@ -204,6 +228,144 @@
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="saveseq();">Save</button>
                     <button id="" class="button-modal" onclick="hideElementById('newseq');"  class="closebtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- edit Sequence -->
+    <div id="editseq" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content w3-animate-zoom" style="width: 70%">
+                <header class="w3-container modal-header">
+                    <span onclick="hideElementById('editseq');"
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
+                    <h3 id='modal_title'>New Seq</h3>
+                </header>
+
+                <div class="modal-body">
+                    <form id="new_seq_form" style="padding-left: 5%">
+                        <div class="row">
+                            <div for="job-id" class="col-6 t1">Job ID :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="job_id" maxlength="" value="<?php echo $data['job_id'];?>" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="seq-id" class="col-6 t1">Seq ID :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="old_seqid" maxlength="" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="seq-name" class="col-6 t1">Seq Name :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="edit_seq_name" maxlength="" value=''>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="Tighten-Repeat" class="col-6 t1">Tighten Repeat :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="tighten_repeat" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="ok-time" class="col-6 t1">OK Time (sec) :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="ok_time" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="okall-alarm" class="col-6 t1">OK All Alarm Time (sec) :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="okall-alarm" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="k(30%-300%)" class="col-6 t1">K (30%-300%) :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="K" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="offset" class="col-6 t1">Offset :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="offset" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="torque-unit" class="col-6 t1">Torque Unit :</div>
+                            <div class="col-4 t2">
+                                <select id="torque_unit" class="col custom-file">
+                                   <?php foreach($data['unit_arr'] as $k_unit => $v_unit){?>
+                                      <option value="<?php echo $k_unit;?>"><?php echo $v_unit;?></option>
+                                   <?php }?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="NG-stop" class="col-6 t1">NG Stop :</div>
+                            <div class="col-4 t2">
+                                <select id="ng_stop" class="col custom-file">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="join" class="col-6 t1">Join :</div>
+                            <div class="col t2" >
+            			      	<div class="col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="join_option" id="soft" value="0">
+            					  <label class="form-check-label" for="soft">Soft</label>
+            					</div>
+            					<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="join_option" id="hard" value="1" checked="checked">
+            					  <label class="form-check-label" for="hard">Hard</label>
+            					</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="okall-stop" class="col-6 t1">OK All Stop :</div>
+                            <div class="col t2" >
+            			      	<div class="col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_FF" value="0">
+            					  <label class="form-check-label" for="Okall_OFF">OFF</label>
+            					</div>
+            					<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_ON" value="1" checked="checked">
+            					  <label class="form-check-label" for="Okall_ON">ON</label>
+            					</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="OPT" class="col-6 t1">OPT :</div>
+                            <div class="col t2" >
+            			      	<div class=" col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_OFF" value="0">
+            					  <label class="form-check-label" for="OPT_OFF">OFF</label>
+            					</div>
+            					<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1" checked="checked">
+            					  <label class="form-check-label" for="OPT_ON">ON</label>
+            					</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                    <button id="" class="button-modal" onclick="edirseq();">Save</button>
+                    <button id="" class="button-modal" onclick="hideElementById('editseq');"  class="closebtn">Close</button>
                 </div>
             </div>
         </div>
@@ -392,16 +554,16 @@ function swap_row(row, direction) {
 function cound_job(argument){
 
     var seqid = readFromLocalStorage("seqid");
-    /*if(argument == 'del' && jobid != null){
-        delete_jobid(jobid);
-    }*/
+    if(argument == 'del' && seqid != null){
+        delete_seqid(seqid);
+    }
 
-    /*if(argument =="edit" && jobid != null){
-        edit_job(jobid);
-    }*/
+    if(argument =="edit" && seqid != null){
+        edit_seq(seqid);
+    }
 
     if(argument =="new"){
-        create_job();
+        create_seq();
     }
 
     /*if(argument =="copy" && jobid != null){
@@ -411,11 +573,77 @@ function cound_job(argument){
 
 }
 
-function create_job() {
+
+function  delete_seqid(seqid){
+    var jobid = '<?php echo $data['job_id']?>';
+    if (jobid) {
+        $.ajax({
+            url: "?url=Sequences/delete_seq",
+            method: "POST",
+            data:{ 
+                jobid: jobid,
+                seqid: seqid
+            },
+            success: function(response) {
+                console.log( response);
+                alert(response);
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+    }
+
+}
+
+function create_seq() {
     document.getElementById('newseq').style.display = 'block';
     saveseq();
 
 }
+
+function edit_seq() {
+    var seqid = readFromLocalStorage("seqid");
+    var jobid = '<?php echo $data['job_id']?>';
+    if(jobid){
+        $.ajax({
+            url: "?url=Sequences/search_seqinfo",
+            method: "POST",
+            data:{ 
+                jobid: jobid,
+                seqid: seqid
+            },
+            success: function(response) {
+                var responseJSON = JSON.stringify(response);
+                var cleanString = responseJSON.replace(/Array|\\n/g, '');
+                var cleanString = cleanString.substring(2, cleanString.length - 2);
+
+                var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seqname] = cleanString.match(/\[sequence_name]\s*=>\s*([^ ]+)/) || [, null];
+
+                //console.log(seqname);
+    
+            
+                document.getElementById('editseq').style.display = 'block';
+                document.getElementById("old_seqid").value = seqid;
+                document.getElementById("edit_seq_name").value = seqname;
+                
+         
+
+           
+            },
+            error: function(xhr, status, error) {
+                //console.error("發生錯誤：" + error);
+            }
+        });
+    }
+}
+
+
+
+
 
 function saveseq(){
 
@@ -427,9 +655,11 @@ function saveseq(){
     var okall_alarm = document.getElementById("okall-alarm").value;
     var k_value = document.getElementById("K").value;
     var torque_unit_val = document.getElementById('torque_unit').value;
+    var ng_stop = document.getElementById('ng_stop').value;
     var join_val = document.querySelector('input[name="join_option"]:checked').value;
     var okall_stop_val = document.querySelector('input[name="okall_stop_option"]:checked').value;
     var opt_val = document.querySelector('input[name="opt_option"]:checked').value;
+    var offset = document.getElementById("offset").value;
 
     if(seq_name){
         $.ajax({
@@ -446,7 +676,10 @@ function saveseq(){
                 torque_unit_val: torque_unit_val,
                 join_val: join_val,
                 okall_stop_val: okall_stop_val,
-                opt_val: opt_val
+                opt_val: opt_val,
+                ng_stop: ng_stop,
+                offset: offset
+
             },
             success: function(response) {
                 console.log(response);
