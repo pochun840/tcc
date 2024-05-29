@@ -39,7 +39,7 @@ class Sequence{
     public function create_job($mode, $jobdata){
     
             $sql = "INSERT INTO `sequences`(job_id, sequence_id, sequence_name,tightening_repeat, ng_stop,sequence_enable,screw_join,okall_stop,opt,torque_unit,k_value,ok_time,okall_alarm_time,offset)";
-            $sql .= "VALUES(:job_id, :sequence_id, :sequence_name, :tightening_repeat, :ng_stop, :sequence_enable,:screw_join,:okall_stop,:opt,:torque_unit);";
+            $sql .= "VALUES(:job_id, :sequence_id, :sequence_name, :tightening_repeat, :ng_stop, :sequence_enable,:screw_join,:okall_stop,:opt,:torque_unit,:k_value,:ok_time,:okall_alarm_time,:offset);";
             $statement = $this->db_iDas->prepare($sql);
 
 
