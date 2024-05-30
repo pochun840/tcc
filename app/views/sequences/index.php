@@ -18,7 +18,7 @@
                     <h3>Sequence Management</h3>
                 </td>
                 <td>
-                    <img src="./img/btn_home.png" style="margin-right: 10px">
+                    <!--<img src="./img/btn_home.png" style="margin-right: 10px">-->
                 </td>
             </tr>
         </table>
@@ -266,37 +266,37 @@
                         <div class="row">
                             <div for="Tighten-Repeat" class="col-6 t1">Tighten Repeat :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="tighten_repeat" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_tighten_repeat" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
                             <div for="ok-time" class="col-6 t1">OK Time (sec) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="ok_time" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_ok_time" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
                             <div for="okall-alarm" class="col-6 t1">OK All Alarm Time (sec) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="okall-alarm" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_okall_alarm" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
                             <div for="k(30%-300%)" class="col-6 t1">K (30%-300%) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="K" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_K" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
                             <div for="offset" class="col-6 t1">Offset :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="offset" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_offset" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
                             <div for="torque-unit" class="col-6 t1">Torque Unit :</div>
                             <div class="col-4 t2">
-                                <select id="torque_unit" class="col custom-file">
+                                <select id="edit_torque_unit" class="col custom-file">
                                    <?php foreach($data['unit_arr'] as $k_unit => $v_unit){?>
                                       <option value="<?php echo $k_unit;?>"><?php echo $v_unit;?></option>
                                    <?php }?>
@@ -306,7 +306,7 @@
                         <div class="row">
                             <div for="NG-stop" class="col-6 t1">NG Stop :</div>
                             <div class="col-4 t2">
-                                <select id="ng_stop" class="col custom-file">
+                                <select id="edit_ng_stop" class="col custom-file">
                                     <option value="0">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -325,11 +325,11 @@
                             <div for="join" class="col-6 t1">Join :</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="join_option" id="soft" value="0">
+            					  <input class="form-check-input" type="radio" name="edit_join_option" id="soft" value="0">
             					  <label class="form-check-label" for="soft">Soft</label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="join_option" id="hard" value="1" checked="checked">
+            					  <input class="form-check-input" type="radio" name="edit_join_option" id="hard" value="1" >
             					  <label class="form-check-label" for="hard">Hard</label>
             					</div>
                             </div>
@@ -338,11 +338,11 @@
                             <div for="okall-stop" class="col-6 t1">OK All Stop :</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_FF" value="0">
+            					  <input class="form-check-input" type="radio" name="edit_okall_stop_option" id="Okall_FF" value="0">
             					  <label class="form-check-label" for="Okall_OFF">OFF</label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_ON" value="1" checked="checked">
+            					  <input class="form-check-input" type="radio" name="edit_okall_stop_option" id="Okall_ON" value="1" >
             					  <label class="form-check-label" for="Okall_ON">ON</label>
             					</div>
                             </div>
@@ -351,11 +351,11 @@
                             <div for="OPT" class="col-6 t1">OPT :</div>
                             <div class="col t2" >
             			      	<div class=" col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_OFF" value="0">
+            					  <input class="form-check-input" type="radio" name="edit_opt_option" id="OPT_OFF" value="0">
             					  <label class="form-check-label" for="OPT_OFF">OFF</label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1" checked="checked">
+            					  <input class="form-check-input" type="radio" name="edit_opt_option" id="OPT_ON" value="1">
             					  <label class="form-check-label" for="OPT_ON">ON</label>
             					</div>
                             </div>
@@ -364,7 +364,7 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="" class="button-modal" onclick="edirseq();">Save</button>
+                    <button id="" class="button-modal" onclick="edit_seq_save();">Save</button>
                     <button id="" class="button-modal" onclick="hideElementById('editseq');"  class="closebtn">Close</button>
                 </div>
             </div>
@@ -606,6 +606,7 @@ function create_seq() {
 function edit_seq() {
     var seqid = readFromLocalStorage("seqid");
     var jobid = '<?php echo $data['job_id']?>';
+
     if(jobid){
         $.ajax({
             url: "?url=Sequences/search_seqinfo",
@@ -622,28 +623,112 @@ function edit_seq() {
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqname] = cleanString.match(/\[sequence_name]\s*=>\s*([^ ]+)/) || [, null];
-
-                //console.log(seqname);
-    
-            
+                var [, tightening_repeat] = cleanString.match(/\[tightening_repeat]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ok_time] = cleanString.match(/\[ok_time]\s*=>\s*([^ ]+)/) || [, null];
+                var [, okall_alarm_time] = cleanString.match(/\[okall_alarm_time]\s*=>\s*([^ ]+)/) || [, null];
+                var [, k_value] = cleanString.match(/\[k_value]\s*=>\s*([^ ]+)/) || [, null];
+                var [, offset] = cleanString.match(/\[offset]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ng_stop] = cleanString.match(/\[ng_stop]\s*=>\s*([^ ]+)/) || [, null];
+                var [, torque_unit] = cleanString.match(/\[torque_unit]\s*=>\s*([^ ]+)/) || [, null];
+                var [, screw_join] = cleanString.match(/\[screw_join]\s*=>\s*([^ ]+)/) || [, null];
+                var [, okall_stop] = cleanString.match(/\[okall_stop]\s*=>\s*([^ ]+)/) || [, null];
+                var [, opt] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
+     
                 document.getElementById('editseq').style.display = 'block';
                 document.getElementById("old_seqid").value = seqid;
                 document.getElementById("edit_seq_name").value = seqname;
-                
-         
+                document.getElementById("edit_tighten_repeat").value = tightening_repeat;
+                document.getElementById("edit_ok_time").value = ok_time;
+                document.getElementById("edit_okall_alarm").value = okall_alarm_time;
+                document.getElementById("edit_K").value = k_value;
+                document.getElementById("edit_offset").value = offset;
+                document.getElementById("edit_ng_stop").value = ng_stop;
+                document.getElementsByName("edit_torque_unit").value = torque_unit;
+                 
+                var radioButtons = document.getElementsByName("edit_join_option");
+                var radioButtons_1 = document.getElementsByName("edit_okall_stop_option");
+                var radioButtons_2 = document.getElementsByName("edit_opt_option");
 
-           
+                //redio 取值
+                setRadioButtonValue(radioButtons, screw_join);
+                setRadioButtonValue(radioButtons_1, okall_stop);
+                setRadioButtonValue(radioButtons_2, opt);
+
+                //var oldSeqid = document.getElementById("old_seqid").value;
+                var oldSeqname = document.getElementById("edit_seq_name").value;
+                var oldTighteningRepeat = document.getElementById("edit_tighten_repeat").value;
+                
+                if (seqname !== oldSeqname || tightening_repeat !== oldTighteningRepeat ) {
+                    edit_seq_save();
+
+                }
+
+
+
+                
+                //edit_seq_save();
             },
             error: function(xhr, status, error) {
-                //console.error("發生錯誤：" + error);
+             
             }
         });
     }
 }
 
 
+function edit_seq_save(){
+
+    var jobid = '<?php echo $data['job_id']?>';
+    var seqid = readFromLocalStorage("seqid");
+
+    var seq_name = document.getElementById("edit_seq_name").value;
+    var tightening_repeat = document.getElementById("edit_tighten_repeat").value;
+    var ok_time = document.getElementById("edit_ok_time").value;
+    var okall_alarm_time = document.getElementById("edit_okall_alarm").value;
+    var k_value = document.getElementById("edit_K").value;
+    var offset = document.getElementById("edit_offset").value;
+    var torque_unit = document.getElementById('edit_torque_unit').value;
+    var ng_stop = document.getElementById('edit_ng_stop').value;
+    var join_val = document.querySelector('input[name="edit_join_option"]:checked').value;
+    var okall_stop_val = document.querySelector('input[name="edit_okall_stop_option"]:checked').value;
+    var opt_val = document.querySelector('input[name="edit_opt_option"]:checked').value;
+    
+    console.log(seq_name);
+    if(seq_name){
+        $.ajax({
+            url: "?url=Sequences/edit_seq",
+            method: "POST",
+            data:{ 
+                jobid: jobid,
+                seqid: seqid,
+                seq_name: seq_name,
+                tightening_repeat: tightening_repeat,
+                ok_time: ok_time,
+                okall_alarm_time: okall_alarm_time,
+                k_value: k_value,
+                offset: offset,
+                torque_unit: torque_unit,
+                ng_stop: ng_stop,
+                join_val:join_val,
+                okall_stop_val: okall_stop_val,
+                opt_val: opt_val
 
 
+
+            },
+            success: function(response) {
+                console.log( response);
+                alert(response);
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+    }
+
+
+}
 
 function saveseq(){
 
@@ -693,14 +778,16 @@ function saveseq(){
 
     }
     
+}
 
 
-    //okall-alarm
-    //ok_time
-    //tighten_repeat
-    //seq_name
-
-
+function setRadioButtonValue(radioButtons, value) {
+    for (var i = 0; i < radioButtons.length; i++) {
+        if (radioButtons[i].value === value) {
+            radioButtons[i].checked = true;
+            break;
+        }
+    }
 }
 </script>
 

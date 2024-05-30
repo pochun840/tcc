@@ -92,6 +92,44 @@ class Sequence{
         return $statement->fetchall();
 
     }
+
+    #修改 sequences
+    public function update_seq_by_id($jobdata){
+        
+        $sql = "UPDATE `sequence` SET  sequence_name = :sequence_name,
+                                  tightening_repeat = :tightening_repeat, 
+                                  ng_stop = :ng_stop, 
+                                  screw_join = :screw_join, 
+                                  okall_stop = :okall_stop,
+                                  opt = :opt,
+                                  torque_unit = :torque_unit,
+                                  k_value = :k_value,
+                                  ok_time = :ok_time,
+                                  okall_alarm_time = :okall_alarm_time,
+                                  offset = :offset
+                WHERE job_id = :job_id  AND   sequence_id = :sequence_id ";
+
+
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->bindValue(':sequence_name', $jobdata['sequence_name']);
+        $statement->bindValue(':tightening_repeat', $jobdata['tightening_repeat']);
+        $statement->bindValue(':ng_stop', $jobdata['ng_stop']);
+        $statement->bindValue(':screw_join', $jobdata['screw_join']);
+        $statement->bindValue(':okall_stop', $jobdata['okall_stop']);
+        $statement->bindValue(':opt', $jobdata['opt']);
+        $statement->bindValue(':torque_unit', $jobdata['torque_unit']);
+        $statement->bindValue(':k_value', $jobdata['k_value']);
+        $statement->bindValue(':ok_time', $jobdata['ok_time']);
+        $statement->bindValue(':okall_alarm_time', $jobdata['okall_alarm_time']);
+        $statement->bindValue(':offset', $jobdata['offset']);
+        $statement->bindValue(':job_id', $jobdata['job_id']);
+        $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
+        $results = $statement->execute();
+
+        return $results;
+
+
+    }
     
 
 

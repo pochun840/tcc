@@ -76,7 +76,7 @@ class Sequences extends Controller
                 'sequence_enable' => 0,
                 'screw_join' => $join_val,
                 'okall_stop' => $okall_stop_val,
-                'opt' => $_POST['opt_val'],
+                'opt' => $opt_val,
                 'torque_unit' => $torque_unit_val,
                 'k_value' => $k_value,
                 'ok_time' => $ok_time,
@@ -124,6 +124,56 @@ class Sequences extends Controller
             print_r($res[0]);
         }
 
+    }
+
+    public function edit_seq(){
+
+        if(isset($_POST['jobid'])){
+
+            $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
+            $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
+
+            $k_value = isset($_POST['k_value']) ? floatval($_POST['k_value']) : 100.0;
+            $ok_time = isset($_POST['ok_time']) ? floatval($_POST['ok_time']) : 9.9;
+            $okall_alarm_time = isset($_POST['okall_alarm']) ? floatval($_POST['okall_alarm']) : 1.0;
+            $tighten_repeat = isset($_POST['tightening_repeat']) ? intval($_POST['tightening_repeat']) : 0;
+            $join_val = isset($_POST['join_val']) ? intval($_POST['join_val']) : 0;
+            $okall_stop_val = isset($_POST['okall_stop_val']) ? intval($_POST['okall_stop_val']) : 0;
+            $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : 0;
+            $torque_unit_val = isset($_POST['torque_unit_val']) ? intval($_POST['torque_unit_val']) : 0;
+            $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
+            $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;    
+
+
+            //echo ""
+            
+            
+            $jobdata = array(
+                'job_id' => $jobid,
+                'sequence_id' => $seqid,
+                'sequence_name' => $_POST['seq_name'],
+                'tightening_repeat' => $tighten_repeat,
+                'ng_stop' => $ng_stop,
+                //'sequence_enable' => 0,
+                'screw_join' => $join_val,
+                'okall_stop' => $okall_stop_val,
+                'opt' => $opt_val,
+                'torque_unit' => $torque_unit_val,
+                'k_value' => $k_value,
+                'ok_time' => $ok_time,
+                'okall_alarm_time' => $okall_alarm_time,
+                'offset' => $offset,
+            );
+           
+            $res = $this->sequenceModel->update_seq_by_id($jobdata);
+            if($res){
+                $res_msg = 'update seq:'. $seqid.'success';
+            }else{
+                $res_msg = 'update seq:'. $seqid.'fail';
+            }
+            echo $res_msg;
+
+        }
     }
     
 }
