@@ -54,13 +54,13 @@
 
                             <tbody style="font-size: 1.8vmin;text-align: center;">
                                 <?php foreach($data['sequences'] as $key =>$val) {?>
-                                <tr >
-                                    <td><?php echo $val['sequence_id'];?></td>
-                                    <td><?php echo $val['sequence_name'];?></td>
+                                <tr>
+                                    <td class="seq-id"> <?php echo $val['sequence_id'];?></td>
+                                    <td class="seq-name"><?php echo $val['sequence_name'];?></td>
                                     <td><?php echo $data['unit_arr'][$val['torque_unit']];?></td>
                                     <td><?php echo $val['tightening_repeat'];?></td>
                                     <td>
-                                        <input class="seq_enable" style="zoom:1.5; vertical-align: middle" id="" name="" value="" type="checkbox" >
+                                        <input class="seq_enable" style="zoom:1.5; vertical-align: middle" id="sequence_enable" name="sequence_enable" value="1" type="checkbox" <?php if($val['sequence_enable'] == 1) echo 'checked'; ?> onclick="check_seq_type()">
                                     </td>
                                     <td><img src="./img/btn_up.png"   onclick="MoveUp.call(this);"></td>
                                     <td><img src="./img/btn_down.png" onclick="MoveDown.call(this);"></td>
@@ -87,10 +87,9 @@
         </div>
 
         <div class="buttonbox">
-            <!--onclick="document.getElementById('newseq').style.display='block'"-->
             <input id="S3" name="Seq_Manager_Submit" type="button" value="new" tabindex="1"  onclick="cound_job('new');">
             <input id="S6" name="Seq_Manager_Submit" type="button" value="Edit" tabindex="1" onclick="cound_job('edit');">
-            <input id="S5" name="Seq_Manager_Submit" type="button" value="Copy" tabindex="1" onclick="document.getElementById('copyseq').style.display='block'">
+            <input id="S5" name="Seq_Manager_Submit" type="button" value="Copy" tabindex="1" onclick="cound_job('copy');">
             <input id="S4" name="Seq_Manager_Submit" type="button" value="Delete" tabindex="1" onclick="cound_job('del');">
         </div>
     </div>
@@ -418,8 +417,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="" class="button-modal">Save</button>
-                    <button id="" class="button-modal" onclick="document.getElementById('copyseq').style.display='none'" class="closebtn">Close</button>
+                    <button id="" class="button-modal" onclick="copy_seq_by_id()">Save</button>
+                    <button id="" class="button-modal" onclick="hideElementById('copyseq');" class="closebtn">Close</button>
                 </div>
             </div>
         </div>
@@ -488,44 +487,37 @@ for (var i = 0; i < rows.length; i++) {
 }
 
 function MoveUp() {
-    var table,
-        row = this.parentNode;
-    var index = this.parentNode.parentNode.rowIndex;
-
-    while (row != null) {
-        if (row.nodeName == 'TR') {
-            break;
-        }
-        row = row.parentNode;
-    }
-    
-    table = row.parentNode;
-    $(this.parentNode.parentNode).removeClass('selected');
+    var row = this.parentNode.parentNode; // 取得目前按鈕所在的行
+    var index = row.rowIndex;
 
     if (index > 1) {
         swap_row(row, 'up');
+        // 同時移動 Seq ID
+        var prevRow = row.previousElementSibling;
+        if (prevRow && !prevRow.classList.contains('seq-id-row')) {
+            row.parentNode.insertBefore(row, prevRow);
+        } else {
+            alert("已經到達頂部！");
+        }
     } else {
         alert('已經到達頂部！');
     }
 }
 
 function MoveDown() {
-    var table,
-        row = this.parentNode;
-    var index = this.parentNode.parentNode.rowIndex;
-
-    while (row != null) {
-        if (row.nodeName == 'TR') {
-            break;
-        }
-        row = row.parentNode;
-    }
-
-    table = row.parentNode;
-    $(this.parentNode.parentNode).removeClass('selected'); // 保持up down selected
+    var row = this.parentNode.parentNode; 
+    var index = row.rowIndex;
+    var table = row.parentNode;
 
     if (index < table.rows.length) {
         swap_row(row, 'down');
+        // 同時移動 Seq ID
+        var nextRow = row.nextElementSibling;
+        if (nextRow && !row.classList.contains('seq-id-row')) {
+            row.parentNode.insertBefore(nextRow, row);
+        } else {
+            alert("已經到達底部！");
+        }
     } else {
         alert('已經到達底部！');
     }
@@ -534,8 +526,9 @@ function MoveDown() {
 function swap_row(row, direction) {
     if (direction === 'up') {
         var prevRow = row.previousElementSibling;
-        if (prevRow.nodeName === 'TR') {
+        if (prevRow && !prevRow.classList.contains('seq-id-row')) {
             row.parentNode.insertBefore(row, prevRow);
+            updateOrder(); 
         } else {
             alert("已經到達頂部！");
         }
@@ -543,11 +536,57 @@ function swap_row(row, direction) {
         var nextRow = row.nextElementSibling;
         if (nextRow) {
             row.parentNode.insertBefore(nextRow, row);
+            updateOrder(); 
         } else {
             alert("已經到達底部！");
         }
     }
 }
+
+// 更新表格順序並發送 AJAX 請求
+function updateOrder() {
+    var seqidArray = []; // 創建一個空陣列來存儲序列 ID
+    var seqnameArray = []; // 創建一個空陣列來存儲序列名稱
+    var tableRows = document.querySelectorAll('#seq_table tbody tr');
+    
+    tableRows.forEach(function(row) {
+        var seqidElement = row.querySelector('.seq-id');
+        var seqnameElement = row.querySelector('.seq-name');
+        if (seqidElement && seqnameElement) {
+            seqidArray.push(seqidElement.textContent); // 將序列 ID 推入陣列
+            seqnameArray.push(seqnameElement.textContent); // 將序列名稱推入陣列
+        }
+    });
+    
+
+
+    //console.log(seqidArray);exit();
+    var jobid = '<?php echo $data['job_id']?>';
+    //console.log(jobid);
+
+    
+    // 在這裡執行 AJAX 請求，並將 seqidArray 和 seqnameArray 發送到後端
+    $.ajax({
+        url: "?url=Sequences/adjustment_order", // 替換為你的 PHP 處理檔案路徑
+        method: "POST",
+        data: { 
+            seqid: seqidArray,
+            seqname: seqnameArray,
+            jobid: jobid 
+        },
+        success: function(response) {
+            console.log(response);
+            alert(response);
+            history.go(0);
+        },
+        error: function(xhr, status, error) {
+            // 在這裡處理錯誤
+        }
+    });
+}
+
+
+
 
 
 
@@ -566,11 +605,55 @@ function cound_job(argument){
         create_seq();
     }
 
-    /*if(argument =="copy" && jobid != null){
-        copy_job(jobid);
-    }*/
+    if(argument =="copy" && seqid != null){
+        copy_seq(seqid);
+    }
 
 
+}
+
+function copy_seq_by_id(){
+
+    var jobid = '<?php echo $data['job_id']?>';
+    var newseqid = '<?php echo $data['seq_id']?>';
+    var oldseqid = readFromLocalStorage("seqid");
+    var oldseqname = readFromLocalStorage("seqname");
+
+    document.getElementById('from_seq_id').value = oldseqid;
+    document.getElementById("from_seq_name").value = oldseqname;
+    document.getElementById('to_seq_id').value = newseqid;
+
+    var newseqname = document.getElementById("to_seq_name").value;
+
+    if(newseqname){
+        $.ajax({
+            url: "?url=Sequences/copy_seq",
+            method: "POST",
+            data:{ 
+                jobid: jobid,
+                oldseqid: oldseqid,
+                oldseqname: oldseqname,
+                newseqid: newseqid,
+                newseqname: newseqname
+
+            },
+            success: function(response) {
+                console.log( response);
+                alert(response);
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+    }
+
+
+}
+function copy_seq(seqid){
+    
+    document.getElementById('copyseq').style.display = 'block';   
+    copy_seq_by_id(seqid);
 }
 
 
@@ -654,7 +737,6 @@ function edit_seq() {
                 setRadioButtonValue(radioButtons_1, okall_stop);
                 setRadioButtonValue(radioButtons_2, opt);
 
-                //var oldSeqid = document.getElementById("old_seqid").value;
                 var oldSeqname = document.getElementById("edit_seq_name").value;
                 var oldTighteningRepeat = document.getElementById("edit_tighten_repeat").value;
                 
@@ -662,11 +744,6 @@ function edit_seq() {
                     edit_seq_save();
 
                 }
-
-
-
-                
-                //edit_seq_save();
             },
             error: function(xhr, status, error) {
              
@@ -781,13 +858,37 @@ function saveseq(){
 }
 
 
-function setRadioButtonValue(radioButtons, value) {
-    for (var i = 0; i < radioButtons.length; i++) {
-        if (radioButtons[i].value === value) {
-            radioButtons[i].checked = true;
-            break;
-        }
+
+function check_seq_type(){
+
+    var jobid = '<?php echo $data['job_id']?>';
+    var seqid = readFromLocalStorage("seqid");
+
+    var checkbox = document.getElementById('sequence_enable');
+    var type_value = checkbox.checked ? 1 : 0;
+
+    if(type_value){
+        $.ajax({
+            url: "?url=Sequences/check_seq_type",
+            method: "POST",
+            data: { 
+                jobid: jobid,
+                seqid: seqid,
+                type_value: type_value
+            },
+            success: function(response) {
+                console.log(response);
+                alert(response);
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+            }
+        }); 
     }
+
+
+
 }
 </script>
 

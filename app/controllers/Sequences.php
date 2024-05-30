@@ -73,7 +73,7 @@ class Sequences extends Controller
                 'sequence_name' => $_POST['seq_name'],
                 'tightening_repeat' => $tighten_repeat,
                 'ng_stop' => $ng_stop,
-                'sequence_enable' => 0,
+                'sequence_enable' => 1,
                 'screw_join' => $join_val,
                 'okall_stop' => $okall_stop_val,
                 'opt' => $opt_val,
@@ -144,9 +144,6 @@ class Sequences extends Controller
             $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;    
 
-
-            //echo ""
-            
             
             $jobdata = array(
                 'job_id' => $jobid,
@@ -175,5 +172,117 @@ class Sequences extends Controller
 
         }
     }
+
+
+    public function check_seq_type(){
+
+        $jobid = $_POST['jobid'] ?? null;
+        $seqid = $_POST['seqid'] ?? null;
+        $type_value = $_POST['type_value'] ?? null;
+
+        if(!empty($jobid)){
+
+            $res = $this->sequenceModel->check_seq_type($jobid,$seqid,$type_value);
+            if($res){
+                $res_msg = 'update seq:'. $seqid.'success';
+            }else{
+                $res_msg = 'update seq:'. $seqid.'fail';
+            }
+            echo $res_msg;
+        }
+
+    }
+
+    public function copy_seq(){
+
+        /*
+          jobid: jobid,
+                oldseqid: oldseqid,
+                oldseqname: oldseqname,
+                newseqid: newseqid,
+                newseqname: newseqname
+        */
+
+        $jobdata = array();
+        $mode = "copy"; 
+
+        $jobid = $_POST['jobid'] ?? null;
+        $seqid = $_POST['oldseqid'] ?? null;
+        $newseqid = $_POST['newseqid'] ?? null;
+        $oldseqname = $_POST['oldseqname'] ?? null;
+        $newseqname = $_POST['newseqname'] ?? null;
+
+        if(!empty($jobid && $seqid && $oldseqname )){
+
+            $old_res = $this->sequenceModel->search_old_data($jobid,$seqid,$oldseqname);
+
+            if(!empty($old_res)){
+
+                $jobdata = array(
+                    'job_id'   => $jobid,
+                    'sequence_id' => $newseqid,
+                    'sequence_name' => $newseqname,
+                    'tightening_repeat' => $old_res['tightening_repeat'],  
+                    'ng_stop' => $old_res['ng_stop'],  
+                    'sequence_enable' => $old_res['sequence_enable'], 
+                    'screw_join' => $old_res['screw_join'], 
+                    'okall_stop' => $old_res['okall_stop'], 
+                    'opt' => $old_res['opt '], 
+                    'torque_unit' => $old_res['torque_unit'], 
+                    'k_value' => $old_res['k_value'], 
+                    'ok_time' => $old_res['ok_time'], 
+                    'okall_alarm_time' => $old_res['okall_alarm_time'], 
+                    'offset' => $old_res['offset'], 
+
+                );
+
+                $res = $this->sequenceModel->create_seq($mode,$jobdata);
+                if($res){
+                    $res_msg = 'copy:'.$newseqid.'success';
+                }else{
+                    $res_msg = 'copy:'.$newseqid.'fail';
+                }
+    
+                echo $res_msg;
+
+            }
+        }
+
+    }
+    
+    public function adjustment_order(){
+
+        if (isset($_POST['seqid']) && isset($_POST['seqname']) && isset($_POST['jobid'])) {
+            // 取得從 JavaScript 傳遞過來的資料
+            $seqid = $_POST['seqid'];
+            $seqid_old = $_POST['seqid'];
+            $seqname = $_POST['seqname'];
+            $jobid = $_POST['jobid'];
+
+            $seqid_new = array_values($seqid);
+
+
+            $res = $this->sequenceModel->swapAndUpdate($jobid,$seqname,$seqid_new);
+
+
+            if($res){
+                $res_msg = 'copy:'.$jobid.'success';
+            }else{
+                $res_msg = 'copy:'.$jobid.'fail';
+            }
+            echo $res_msg;
+
+
+        } else {
+            // 如果缺少任何一個資料，則回傳錯誤訊息
+            echo "錯誤：未收到所有必要的資料";
+            //var_dump($_POST);
+        }
+
+      
+
+    }
+
+  
     
 }

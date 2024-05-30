@@ -51,6 +51,12 @@ class Sequence{
             $statement->bindValue(':job_id', $jobdata['job_id']);
             $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
             $statement->bindValue(':sequence_name', $jobdata['sequence_name']);
+
+        }else if($mode =="copy"){
+            
+            $statement->bindValue(':job_id', $jobdata['job_id']);
+            $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
+            $statement->bindValue(':sequence_name', $jobdata['sequence_name']);
         }
     
         $statement->bindValue(':tightening_repeat', $jobdata['tightening_repeat']);
@@ -82,6 +88,7 @@ class Sequence{
 
     }
 
+
     #查詢 單筆的sequences
     public function search_seqinfo($jobid,$seqid){
 
@@ -95,7 +102,7 @@ class Sequence{
 
     #修改 sequences
     public function update_seq_by_id($jobdata){
-        
+
         $sql = "UPDATE `sequence` SET  sequence_name = :sequence_name,
                                   tightening_repeat = :tightening_repeat, 
                                   ng_stop = :ng_stop, 
@@ -130,13 +137,103 @@ class Sequence{
 
 
     }
+
+    #修改單筆的sequence的狀態
+    public function check_seq_type($jobid,$seqid,$type_value){
+        
+        $sql = "UPDATE `sequence` SET  sequence_enable = :sequence_enable WHERE job_id = :job_id  AND   sequence_id = :sequence_id ";
+        $statement = $this->db_iDas->prepare($sql);
+
+        $statement->bindValue(':sequence_enable', $type_value);
+        $statement->bindValue(':job_id', $jobid);
+        $statement->bindValue(':sequence_id',$seqid);
+        $results = $statement->execute();
+        return $results;
+    }
+
+    #用jobid seqid oldseqname 查詢該筆的所有資料
+    public function search_old_data($jobid,$seqid,$oldseqname){
+
+        $sql= " SELECT * FROM sequence WHERE job_id = ? AND sequence_id = ? AND sequence_name = ? ";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$jobid,$seqid,$oldseqname]);
+        $rows = $statement->fetch();
+
+        return $rows;
+    }
+
+    public function swapAndUpdate($jobid, $seqname, $seqid_new_values) {
+        
+        $seqid_new = array_combine(range(1, count($seqname)), $seqid_new_values);
+
+        $temp = array();
+        foreach($seqname as $k_s => $v_s) {
+            $sql = "SELECT * FROM sequence WHERE job_id = '".$jobid."' AND sequence_name = '".$v_s."' ";
+            $statement = $this->db_iDas->prepare($sql);
+            $result = $statement->fetch();
+            if($result) {
+                $temp[] = $result; 
+            }
+            echo $sql;
+            echo "<br>";
+            /*$statement = $this->db_iDas->prepare($sql, array($jobid, $v_s));
+            $result = $statement->fetch();
+            if ($result) {
+                $temp[] = $result; 
+            }*/
+        }
+
+        var_dump($temp);die();
+        foreach($temp as $k => $record) {
+            if (isset($seqid_new[$k + 1])) {
+                $nne = $seqid_new[$k + 1]; 
+                $sql = "UPDATE `sequence` SET sequence_id = '".$nne."' WHERE job_id = '".$record['job_id']."' AND sequence_id = '".$record['sequence_id']."'";
+                
+                echo $sql;die();
+
+                /*$this->db_iDas->set('sequence_id', $nne)
+                         ->where('job_id', $record['job_id'])
+                         ->where('sequence_id', $record['sequence_id'])
+                         ->update('sequence');*/
+            } else {
+                echo "Error: Missing sequence_id for key " . ($k + 1);
+                return false;
+            }
+        }
+
+        //return true;
+    }
+
+
+
+    public function swap($jobid, $seqname, $seqid_new) {
+
+        
+        $temp = array();
+        foreach($seqname as $k_s => $v_s) {
+            $sql = "SELECT * FROM sequence WHERE job_id = :job_id AND sequence_name = :sequence_name";
+            $statement = $this->db_iDas->prepare($sql);
+            $statement->execute(array(':job_id' => $jobid, ':sequence_name' => $v_s));
+            $result = $statement->fetch();
+            if ($result) {
+                $temp[] = $result; 
+            }
+        }
+
+        foreach($temp as $k => $record) {
+            if (isset($seqid_new[$k + 1])) {
+                $nne = $seqid_new[$k + 1]; // 根据键获取新的 sequence_id
+                $sql ="UPDATE `sequence` SET sequence_id = '".$nne."' WHERE job_id = :job_id AND sequence_id = :sequence_id ";
+                $statement_update = $this->db_iDas->prepare($sql);
+                $statement_update->execute(array(':job_id' => $record['job_id'], ':sequence_id' => $record['sequence_id']));
+            } else {
+                echo "Error: Missing sequence_id for key " . ($k + 1);
+            }
+        }
+    
+        return true;
+    }
     
 
-
-
-
- 
-  
-   
 
 }
