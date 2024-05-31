@@ -863,6 +863,9 @@ function updateValue(checkbox){
     if (tr) {
         var seqname = tr.querySelector('.seq-name').textContent;
         var type_value = checkbox.checked ? 1 : 0;
+
+   
+
         if (jobid) {
             console.log(jobid);
             console.log(seqname);
@@ -878,6 +881,8 @@ function updateValue(checkbox){
 
             },
             success: function(response) {
+                console.log( response);
+                //alert(response);
                 history.go(0);
             },
             error: function(xhr, status, error) {
@@ -886,6 +891,8 @@ function updateValue(checkbox){
         });
             
         }
+    } else {
+        
     }
 }
 
