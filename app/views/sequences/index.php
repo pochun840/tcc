@@ -60,7 +60,13 @@
                                     <td><?php echo $data['unit_arr'][$val['torque_unit']];?></td>
                                     <td><?php echo $val['tightening_repeat'];?></td>
                                     <td>
-                                        <input class="seq_enable" style="zoom:1.5; vertical-align: middle" id="sequence_enable" name="sequence_enable" value="1" type="checkbox" <?php if($val['sequence_enable'] == 1) echo 'checked'; ?> onclick="check_seq_type()">
+                                        <?php if($val['sequence_enable']== 1){?>
+                                            <input class="seq_enable" style="zoom:1.5; vertical-align: middle" id="sequence_enable"   value="1"  type="checkbox" onclick="updateValue(this)"  checked>
+                                        <?php }else{?>
+                                            <input class="seq_enable" style="zoom:1.5; vertical-align: middle" id="sequence_enable"   value="0"  type="checkbox" onclick="updateValue(this)">
+                                        <?php }?>
+                                        
+
                                     </td>
                                     <td><img src="./img/btn_up.png"   onclick="MoveUp.call(this);"></td>
                                     <td><img src="./img/btn_down.png" onclick="MoveDown.call(this);"></td>
@@ -557,26 +563,17 @@ function updateOrder() {
             seqnameArray.push(seqnameElement.textContent); // 將序列名稱推入陣列
         }
     });
-    
-
-
-    //console.log(seqidArray);exit();
     var jobid = '<?php echo $data['job_id']?>';
-    //console.log(jobid);
-
-    
-    // 在這裡執行 AJAX 請求，並將 seqidArray 和 seqnameArray 發送到後端
     $.ajax({
-        url: "?url=Sequences/adjustment_order", // 替換為你的 PHP 處理檔案路徑
-        method: "POST",
+        url: "?url=Sequences/adjustment_order", 
         data: { 
             seqid: seqidArray,
             seqname: seqnameArray,
             jobid: jobid 
         },
         success: function(response) {
-            console.log(response);
-            alert(response);
+            /*console.log(response);
+            alert(response);*/
             history.go(0);
         },
         error: function(xhr, status, error) {
@@ -739,8 +736,9 @@ function edit_seq() {
 
                 var oldSeqname = document.getElementById("edit_seq_name").value;
                 var oldTighteningRepeat = document.getElementById("edit_tighten_repeat").value;
-                
-                if (seqname !== oldSeqname || tightening_repeat !== oldTighteningRepeat ) {
+                var oldtorque_unit = document.getElementsByName("edit_torque_unit").value;
+
+                if (seqname !== oldSeqname || tightening_repeat !== oldTighteningRepeat || oldtorque_unit !==  torque_unit) {
                     edit_seq_save();
 
                 }
@@ -859,37 +857,45 @@ function saveseq(){
 
 
 
-function check_seq_type(){
-
+function updateValue(checkbox){
     var jobid = '<?php echo $data['job_id']?>';
-    var seqid = readFromLocalStorage("seqid");
+    var tr = checkbox.closest('tr');
+    if (tr) {
+        var seqname = tr.querySelector('.seq-name').textContent;
+        var type_value = checkbox.checked ? 1 : 0;
 
-    var checkbox = document.getElementById('sequence_enable');
-    var type_value = checkbox.checked ? 1 : 0;
 
-    if(type_value){
-        $.ajax({
+
+        if (jobid) {
+            console.log(jobid);
+            console.log(seqname);
+            console.log(type_value);
+
+            $.ajax({
             url: "?url=Sequences/check_seq_type",
             method: "POST",
-            data: { 
+            data:{ 
                 jobid: jobid,
-                seqid: seqid,
-                type_value: type_value
+                seqname: seqname,
+                type_value:type_value
+
             },
             success: function(response) {
-                console.log(response);
-                alert(response);
+                //console.log( response);
+                //alert(response);
                 history.go(0);
             },
             error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
+                
             }
-        }); 
+        });
+            
+        }
+    } else {
+        
     }
-
-
-
 }
+
 </script>
 
 <style type="text/css">

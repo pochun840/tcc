@@ -179,18 +179,9 @@ class Sequences extends Controller
 
         $jobid = $_POST['jobid'] ?? null;
         $seqname = $_POST['seqname'] ?? null;
-        $type_value = $_POST['type_value'] ?? null;
-
-        echo $jobid;
-        echo "<br>";
-        echo $seqname;
-        echo "<br>";
-        echo $type_value;
-
-        //die();
+        $type_value = $_POST['type_value'] ?? 0;
 
         if(!empty($jobid)){
-
             $res = $this->sequenceModel->check_seq_type($jobid,$seqname,$type_value);
             if($res){
                 
@@ -294,6 +285,8 @@ class Sequences extends Controller
 
     }
 
-  
+    public function test(){
+        $this->view('sequences/test');
+    }
     
 }
