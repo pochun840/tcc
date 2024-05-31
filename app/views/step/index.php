@@ -29,11 +29,11 @@
         <div class="center-content">
             <div class="topnav">
                 <label style="font-size:20px;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;
-                <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="1" disabled
+                <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="<?php echo $data['job_id'];?>" disabled
                 style="height:28px; font-size:20px;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
                 <label style="font-size:20px;color: #000; padding-left: 2%" for="seq_id">Seq ID :</label>&nbsp;
-                <input type="text" id="seq_id" name="seq_id" size="8" maxlength="20" value="1" disabled
+                <input type="text" id="seq_id" name="seq_id" size="8" maxlength="20" value="<?php echo $data['seq_id'];?>" disabled
                 style="height:28px; font-size:20px;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
                 <button id="back_btn" type="button" onclick="cancelSetting()">Return</button>
@@ -52,34 +52,15 @@
                     </thead>
 
                     <tbody style="font-size: 1.8vmin;text-align: center;">
+                       <?php foreach($data['step'] as $key =>$val){?>
                         <tr>
-                            <td>1</td>
-                            <td>Torque</td>
-                            <td>CW</td>
+                            <td><?php echo $val['step_id'];?></td>
+                            <td><?php echo $data['target_option'][$val['target_option']];?></td>
+                            <td><?php echo $data['direction'][$val['direction']];?></td>
                             <td><img src="./img/btn_up.png"></td>
                             <td><img src="./img/btn_down.png"></td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Angle</td>
-                            <td>CCW</td>
-                            <td><img src="./img/btn_up.png"></td>
-                            <td><img src="./img/btn_down.png"></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Delay Time</td>
-                            <td>-</td>
-                            <td><img src="./img/btn_up.png"></td>
-                            <td><img src="./img/btn_down.png"></td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Torque</td>
-                            <td>CW</td>
-                            <td><img src="./img/btn_up.png"></td>
-                            <td><img src="./img/btn_down.png"></td>
-                        </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -91,7 +72,7 @@
         <div id="TotalPage">
             <div id="TotalStepTable">
                 <div style="color:black; float: right; margin: 2px">Total Step :
-                    <label id="RecordCnt" name="RecordCnt" type="text" style="margin-right: 20px">4</label>
+                    <label id="RecordCnt" name="RecordCnt" type="text" style="margin-right: 20px"><?php echo count($data['step']);?></label>
                 </div>
             </div>
         </div>
@@ -100,7 +81,7 @@
             <input id="S3" name="Step_Manager_Submit" type="button" value="New" tabindex="1" onclick="document.getElementById('newstep').style.display='block'">
             <input id="S6" name="Step_Manager_Submit" type="button" value="Edit" tabindex="1">
             <input id="S5" name="Step_Manager_Submit" type="button" value="Copy" tabindex="1" onclick="document.getElementById('copystep').style.display='block'">
-            <input id="S4" name="Step_Manager_Submit" type="button" value="Delete" tabindex="1">
+            <input id="S4" name="Step_Manager_Submit" type="button" value="Delete" tabindex="1" >
         </div>
     </div>
 
@@ -109,7 +90,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: 80%">
                 <header class="w3-container modal-header">
-                    <span onclick="document.getElementById('newstep').style.display='none'"
+                    <span onclick="hideElementById('newstep');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'>New Step</h3>
                 </header>
@@ -167,11 +148,11 @@
                             <div for="direction" class="col-6 t1">Direction:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CW" value="1">
+            					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CW" value="0">
             					  <label class="form-check-label" for="direction_CW">CW</label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="2" checked="checked">
+            					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">
             					  <label class="form-check-label" for="direction_CCW">CWW</label>
             					</div>
                             </div>
@@ -212,7 +193,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="add_member_user()" >Save</button>
-                    <button id="" class="button-modal" onclick="document.getElementById('newstep').style.display='none'" class="closebtn">Close</button>
+                    <button id="" class="button-modal" onclick="hideElementById('newstep');"  class="closebtn">Close</button>
                 </div>
             </div>
         </div>
@@ -262,7 +243,6 @@
 </div>
 
 <script>
-// Change the color of a row in a table
 $(document).ready(function () {
     highlight_row('step_table');
     });
@@ -294,11 +274,40 @@ window.onclick = function(event) {
 
 
 // Button Return
-document.getElementById('back_btn').onclick = function()
+/*document.getElementById('back_btn').onclick = function()
 {
     window.location.href = './tcc_sequence.html';
     return;
-};
+};*/
+
+
+
+
+var rows = document.getElementsByTagName("tr");
+for (var i = 0; i < rows.length; i++) {
+    (function(row) {
+        var cells = row.getElementsByTagName("td");
+        if (cells.length > 0) {
+            cells[0].addEventListener("click", function() {
+           
+                var stepid   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
+                //var seqname = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
+                localStorage.setItem("stepid", stepid);
+            });
+        }
+    })(rows[i]);
+}
+
+function del_stepid(step_id){
+    var jobid ='<?php echo $data['job_id']?>';
+    var seqid ='<?php echo $data['seq_id']?>';
+
+    if(jobid){
+        //進行ajax del 
+    }
+
+}
+
 
 </script>
 

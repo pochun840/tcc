@@ -11,10 +11,7 @@ class Step extends Controller
         $this->stepModel = $this->model('Steptcc');
     }
 
-    // 取得所有info
     public function index($job_id,$seq_id){
-
-
         if( isset($job_id) && !empty($job_id)  && isset($seq_id) && !empty($seq_id)){
 
         }else{
@@ -23,18 +20,32 @@ class Step extends Controller
         }
 
         $isMobile = $this->isMobileCheck();
-        $step_info = $this->stepModel->getStep($job_id, $seq_id);
+        $step = $this->stepModel->getStep($job_id, $seq_id);
         $target_option = $this->MiscellaneousModel->details("target_option");
+        $direction = $this->MiscellaneousModel->details('unscrew_direction');
 
         $data = array(
             'isMobile' => $isMobile,
-            'step_info' => $step_info,
-            'target_option' => $target_option
+            'step' => $step,
+            'target_option' => $target_option,
+            'direction' => $direction,
+            'job_id' => $job_id,
+            'seq_id' => $seq_id,
         );
 
         
         $this->view('step/index',$data);
         
+    }
+
+
+    public function getStepNo(){
+
+        if(isset($_POST['jobid'])){
+
+            
+        }
+
     }
 
 
