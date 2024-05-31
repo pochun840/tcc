@@ -140,11 +140,12 @@ class Sequences extends Controller
             $join_val = isset($_POST['join_val']) ? intval($_POST['join_val']) : 0;
             $okall_stop_val = isset($_POST['okall_stop_val']) ? intval($_POST['okall_stop_val']) : 0;
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : 0;
-            $torque_unit_val = isset($_POST['torque_unit_val']) ? intval($_POST['torque_unit_val']) : 0;
+            $torque_unit_val = isset($_POST['torque_unit']) ? intval($_POST['torque_unit']) : 0;
             $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;    
 
             
+           
             $jobdata = array(
                 'job_id' => $jobid,
                 'sequence_id' => $seqid,
@@ -177,17 +178,27 @@ class Sequences extends Controller
     public function check_seq_type(){
 
         $jobid = $_POST['jobid'] ?? null;
-        $seqid = $_POST['seqid'] ?? null;
+        $seqname = $_POST['seqname'] ?? null;
         $type_value = $_POST['type_value'] ?? null;
+
+        echo $jobid;
+        echo "<br>";
+        echo $seqname;
+        echo "<br>";
+        echo $type_value;
+
+        //die();
 
         if(!empty($jobid)){
 
-            $res = $this->sequenceModel->check_seq_type($jobid,$seqid,$type_value);
+            $res = $this->sequenceModel->check_seq_type($jobid,$seqname,$type_value);
             if($res){
-                $res_msg = 'update seq:'. $seqid.'success';
+                
+                //$res_msg = 'update seq:'. $seqid.'success';
             }else{
-                $res_msg = 'update seq:'. $seqid.'fail';
+                //$res_msg = 'update seq:'. $seqid.'fail';
             }
+            $res_msg ="";
             echo $res_msg;
         }
 
@@ -265,12 +276,12 @@ class Sequences extends Controller
             $res = $this->sequenceModel->swapAndUpdate($jobid,$seqname,$seqid_new);
 
 
-            if($res){
+            /*if($res){
                 $res_msg = 'copy:'.$jobid.'success';
             }else{
                 $res_msg = 'copy:'.$jobid.'fail';
             }
-            echo $res_msg;
+            echo $res_msg;*/
 
 
         } else {
