@@ -6,6 +6,7 @@
     .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
     .t2{font-size: 17px; margin: 5px 0px;}
     .t3{font-size: 17px; margin: 3px 0px;}
+
 </style>
 </head>
 
@@ -68,10 +69,11 @@
                                         
 
                                     </td>
-                                    <td><img src="./img/btn_up.png"   onclick="MoveUp.call(this);"></td>
-                                    <td><img src="./img/btn_down.png" onclick="MoveDown.call(this);"></td>
+                                    <td><img src="./img/btn_up.png"   onclick="MoveUp(this);"></td>
+                                    <td><img src="./img/btn_down.png" onclick="MoveDown(this);"></td>
                                     <td><?php echo $data['total_step'];?></td>
-                                    <td><img id="Add_Step" src="./img/btn_plus.png"></td>
+                                    <?php $url ='?url=Step/index/'.$data['job_id']."/".$val['sequence_id'];?>
+                                    <td><img id="Add_Step" src="./img/btn_plus.png" onclick="location.href='<?php echo $url;?>'"></td>
                                 </tr>
                                 <?php  } ?>
                                
@@ -473,6 +475,18 @@ document.getElementById('back_btn').onclick = function()
 {
     window.location.href = '?url=Jobs/index';
 };
+var rowInfoArray = [];
+<?php foreach($data['sequences'] as $key =>$val) {?>
+        var sequenceId = "<?php echo $val['sequence_id'];?>";
+        var sequenceName = "<?php echo $val['sequence_name'];?>";
+        
+        var rowInfo = {
+            sequence_id: sequenceId,
+            sequence_name: sequenceName
+        };
+        
+        rowInfoArray.push(rowInfo);
+<?php } ?>
 
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
@@ -492,95 +506,48 @@ for (var i = 0; i < rows.length; i++) {
     })(rows[i]);
 }
 
-function MoveUp() {
-    var row = this.parentNode.parentNode; // 取得目前按鈕所在的行
-    var index = row.rowIndex;
+function swap_row(row1, row2) {
+    var parent = row1.parentNode;
+    var nextSibling = row2.nextSibling;
+    parent.insertBefore(row2, row1);
+    parent.insertBefore(row1, nextSibling);
+}
 
-    if (index > 1) {
-        swap_row(row, 'up');
-        // 同時移動 Seq ID
-        var prevRow = row.previousElementSibling;
-        if (prevRow && !prevRow.classList.contains('seq-id-row')) {
-            row.parentNode.insertBefore(row, prevRow);
-        } else {
-            alert("已經到達頂部！");
-        }
-    } else {
-        alert('已經到達頂部！');
+function MoveUp(button) {
+    var row = button.parentNode.parentNode;
+    var prevRow = row.previousElementSibling;
+    if (prevRow) {
+        swap_row(row, prevRow);
+       
+        var index1 = Array.from(row.parentNode.children).indexOf(row);
+        var index2 = Array.from(row.parentNode.children).indexOf(prevRow);
+        var temp = rowInfoArray[index1];
+        rowInfoArray[index1] = rowInfoArray[index2];
+        rowInfoArray[index2] = temp;
+
+        console.log(rowInfoArray);
+        sendRowInfoArray();
     }
 }
 
-function MoveDown() {
-    var row = this.parentNode.parentNode; 
-    var index = row.rowIndex;
-    var table = row.parentNode;
+function MoveDown(button) {
+    var row = button.parentNode.parentNode;
+    var nextRow = row.nextElementSibling;
+    if (nextRow) {
+        swap_row(nextRow, row);
+     
+        var index1 = Array.from(row.parentNode.children).indexOf(row);
+        var index2 = Array.from(row.parentNode.children).indexOf(nextRow);
+        var temp = rowInfoArray[index1];
+        rowInfoArray[index1] = rowInfoArray[index2];
+        rowInfoArray[index2] = temp;
 
-    if (index < table.rows.length) {
-        swap_row(row, 'down');
-        // 同時移動 Seq ID
-        var nextRow = row.nextElementSibling;
-        if (nextRow && !row.classList.contains('seq-id-row')) {
-            row.parentNode.insertBefore(nextRow, row);
-        } else {
-            alert("已經到達底部！");
-        }
-    } else {
-        alert('已經到達底部！');
+        console.log(rowInfoArray);
+        sendRowInfoArray();
     }
 }
 
-function swap_row(row, direction) {
-    if (direction === 'up') {
-        var prevRow = row.previousElementSibling;
-        if (prevRow && !prevRow.classList.contains('seq-id-row')) {
-            row.parentNode.insertBefore(row, prevRow);
-            updateOrder(); 
-        } else {
-            alert("已經到達頂部！");
-        }
-    } else if (direction === 'down') {
-        var nextRow = row.nextElementSibling;
-        if (nextRow) {
-            row.parentNode.insertBefore(nextRow, row);
-            updateOrder(); 
-        } else {
-            alert("已經到達底部！");
-        }
-    }
-}
 
-// 更新表格順序並發送 AJAX 請求
-function updateOrder() {
-    var seqidArray = []; // 創建一個空陣列來存儲序列 ID
-    var seqnameArray = []; // 創建一個空陣列來存儲序列名稱
-    var tableRows = document.querySelectorAll('#seq_table tbody tr');
-    
-    tableRows.forEach(function(row) {
-        var seqidElement = row.querySelector('.seq-id');
-        var seqnameElement = row.querySelector('.seq-name');
-        if (seqidElement && seqnameElement) {
-            seqidArray.push(seqidElement.textContent); // 將序列 ID 推入陣列
-            seqnameArray.push(seqnameElement.textContent); // 將序列名稱推入陣列
-        }
-    });
-    var jobid = '<?php echo $data['job_id']?>';
-    $.ajax({
-        url: "?url=Sequences/adjustment_order", 
-        data: { 
-            seqid: seqidArray,
-            seqname: seqnameArray,
-            jobid: jobid 
-        },
-        success: function(response) {
-            /*console.log(response);
-            alert(response);*/
-            history.go(0);
-        },
-        error: function(xhr, status, error) {
-            // 在這裡處理錯誤
-        }
-    });
-}
 
 
 
@@ -863,14 +830,7 @@ function updateValue(checkbox){
     if (tr) {
         var seqname = tr.querySelector('.seq-name').textContent;
         var type_value = checkbox.checked ? 1 : 0;
-
-   
-
         if (jobid) {
-            console.log(jobid);
-            console.log(seqname);
-            console.log(type_value);
-
             $.ajax({
             url: "?url=Sequences/check_seq_type",
             method: "POST",
@@ -882,7 +842,6 @@ function updateValue(checkbox){
             },
             success: function(response) {
                 console.log( response);
-                //alert(response);
                 history.go(0);
             },
             error: function(xhr, status, error) {
@@ -907,3 +866,45 @@ function updateValue(checkbox){
 </body>
 
 </html>
+
+<script>
+    
+<?php foreach($data['sequences'] as $key =>$val) {?>
+    var sequenceId = "<?php echo $val['sequence_id'];?>";
+    var sequenceName = "<?php echo $val['sequence_name'];?>";
+
+    var exists = rowInfoArray.some(function(item) {
+        return item.sequence_id === sequenceId || item.sequence_name === sequenceName;
+    });
+
+    if (!exists) {
+        var rowInfo = {
+            sequence_id: sequenceId,
+            sequence_name: sequenceName
+        };
+        rowInfoArray.push(rowInfo);
+    }
+<?php } ?>
+
+
+function sendRowInfoArray() {
+    var jobid = '<?php echo $data['job_id']?>';
+    var dataToSend = {
+        jobid: jobid,
+        rowInfoArray: rowInfoArray
+    };
+
+    $.ajax({
+        url: "?url=Sequences/adjustment_order", 
+        method: "POST",
+        data: dataToSend,
+        success: function(response) {
+            console.log(response);
+            history.go(0); 
+        },
+        error: function(xhr, status, error) {
+            console.error('Error sending data:', error);
+        }
+    });
+}
+</script>

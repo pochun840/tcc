@@ -163,67 +163,39 @@ class Sequence{
         return $rows;
     }
 
-    public function swapAndUpdate($jobid, $seqname, $seqid_new_values) {
+
+    public function swapupdate($jobid, $rowInfoArray) {
         $temp = array();
-        foreach($seqname as $k_s => $v_s) {
-            $sql = "SELECT * FROM sequence WHERE job_id = '".$jobid."' AND sequence_name = '".$v_s."' ";
+        foreach ($rowInfoArray as $k_s => $v_s) {
+            $sql = "SELECT sequence_id FROM sequence WHERE job_id = ? AND sequence_name = ? ";
             $statement = $this->db_iDas->prepare($sql);
-            $statement->execute(); 
-            $result = $statement->fetch();
-            if($result) {
-                $temp[] = $result; 
+            $statement->execute([$jobid, $v_s['sequence_name']]);
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            
+            if ($result) {
+                $new_val = 'New_Value'.($k_s + 1);
+                $update_sql = "UPDATE sequence SET sequence_id = ? WHERE job_id = ? AND sequence_name = ? ";
+                $update_statement = $this->db_iDas->prepare($update_sql);
+                $update_statement->execute([$new_val, $jobid, $v_s['sequence_name']]);
+                
+                $rows_count = $update_statement->rowCount();
+                if ($rows_count  > 0){
+                    $new_val = 'New_Value'.($k_s + 1);
+                    $updated_sequence_id = preg_replace('/[^0-9]/', '', $new_val);
+                    
+                    $update_id_sql = "UPDATE sequence SET sequence_id = ? WHERE job_id = ? AND sequence_name = ? ";
+                    $update_id_statement = $this->db_iDas->prepare($update_id_sql);
+                    $update_id_statement->execute([$updated_sequence_id, $jobid, $v_s['sequence_name']]);
+                }
             }
+
+            //最終再次檢查 強制把 欄位sequence_id 不是數字的 通通移除
+            $force_update_sql = "UPDATE sequence SET sequence_id = CAST(REPLACE(sequence_id, 'New_Value', '') AS UNSIGNED) WHERE job_id =  ? ";
+            $force_update_statement = $this->db_iDas->prepare($force_update_sql);
+            $force_update_statement->execute([$jobid]);
+
         }
-
-        foreach($temp as $k => $record) {
-            if (is_array($seqid_new_values)) {
-                $mm = $seqid_new_values[$k]+99;
-                $mm_array[] = $mm;
-                $sql = " UPDATE `sequence` SET sequence_id = '".$mm."' WHERE job_id = '".$record['job_id']."' AND sequence_name = '".$record['sequence_name']."' ";
-                $statement = $this->db_iDas->prepare($sql);
-                $statement->execute(); 
-                //echo "<br>";
-
-            }
-        }
-        
-        /*$new_mm = array();
-        foreach ($mm_array as $value) {
-            $new_value = intval($value) - 100;
-            $new_mm[] = $new_value;
-        }
-
-        $keys = array_keys($new_mm);
-
-        foreach ($temp as $kei =>$vei){
-            if (isset($keys[$kei])) {
-                $nn = $new_mm[$keys[$kei]] + 1;
-                $sql1 = " UPDATE `sequence` SET sequence_id = '".$nn."' WHERE job_id = '".$vei['job_id']."' AND sequence_name = '".$vei['sequence_name']."' ";
-                //echo $sql1;
-                $statement = $this->db_iDas->prepare($sql1);
-                $statement->execute(); 
-                echo "<br>";
-
-            }
-       
-
-        }*/
-        //var_dump($new_mm);die();
-
-
-
-        //return true;
+        return true;
+   
     }
-
-   // echo $sql 得到
-    //UPDATE `sequence` SET sequence_id = '101' WHERE job_id = '3' AND sequence_name = 'Seq-301'
-    //UPDATE `sequence` SET sequence_id = '100' WHERE job_id = '3' AND sequence_name = 'Seq-300'
-    //想要再變成
-    //UPDATE `sequence` SET sequence_id = '1' WHERE job_id = '3' AND sequence_name = 'Seq-301'
-    //UPDATE `sequence` SET sequence_id = '2' WHERE job_id = '3' AND sequence_name = 'Seq-300'
-
-
-
-
-
 }

@@ -18,7 +18,7 @@ class Miscellaneous{
     public function details($mode){
         
         $array = array();
-        if($mode=="unscrew_direction"){
+        if($mode == "unscrew_direction"){
 
             $array = array(
                 0 => 'CW',
@@ -28,12 +28,21 @@ class Miscellaneous{
         }
 
 
-        if($mode ="torque_unit"){
+        if($mode == "torque_unit"){
             $array = array(
                 0 => 'kgf.cm',
                 1 => 'lbf.in',
                 2 => 'kgf.m',
                 3 => 'N.m',
+                
+            );
+        }
+
+        if($mode == "target_option" ){
+            $array = array(
+                0 => 'Torque',
+                1 => 'Angle',
+                2 => 'Delay Time',
                 
             );
         }

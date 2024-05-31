@@ -254,39 +254,30 @@ class Sequences extends Controller
     
     public function adjustment_order(){
 
-        if (isset($_POST['seqid']) && isset($_POST['seqname']) && isset($_POST['jobid'])) {
-            // 取得從 JavaScript 傳遞過來的資料
-            $seqid = $_POST['seqid'];
-            $seqid_old = $_POST['seqid'];
-            $seqname = $_POST['seqname'];
+        if(isset($_POST['jobid'])){
             $jobid = $_POST['jobid'];
+            $rowInfoArray = $_POST['rowInfoArray'];
+            $res = $this->sequenceModel->swapupdate($jobid,$rowInfoArray);
 
-            $seqid_new = array_values($seqid);
-
-
-            $res = $this->sequenceModel->swapAndUpdate($jobid,$seqname,$seqid_new);
-
-
-            /*if($res){
-                $res_msg = 'copy:'.$jobid.'success';
+            if($res){
+                $res_msg = 'success';
             }else{
-                $res_msg = 'copy:'.$jobid.'fail';
+                $res_msg = 'fail';
             }
-            echo $res_msg;*/
-
-
-        } else {
-            // 如果缺少任何一個資料，則回傳錯誤訊息
-            echo "錯誤：未收到所有必要的資料";
-            //var_dump($_POST);
+            echo $res_msg;
         }
-
-      
-
     }
 
     public function test(){
-        $this->view('sequences/test');
+        $k_s = 0;
+        $new_val = 'New_Value'.($k_s + 1);
+        $updated_sequence_id = preg_replace('/[^0-9]/', '', $new_val);
+
+        echo $new_val;
+        echo "<br>";
+        echo $updated_sequence_id;
+
+        //$this->view('sequences/test');
     }
     
 }
