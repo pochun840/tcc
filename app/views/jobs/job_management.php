@@ -378,7 +378,7 @@ function savejob() {
     if (jobname_val && unscrew_rpm_val && unscre_power_val && direction_val) {
 
         
-        var jobnamePattern = /^[a-zA-Z0-9]{1,12}$/;
+        /*var jobnamePattern = /^[a-zA-Z0-9]{1,12}$/;
         if (!jobnamePattern.test(jobname_val)) {
             alert("Only letters (A-Z, a-z) and numbers (0-9) are allowed, and the length cannot exceed 12 characters.");
             return false;
@@ -392,7 +392,7 @@ function savejob() {
         if (!unscre_power_val.match(/^[1-9]$|^10$/)) {
             alert("Unscrew Power must be a number between 1 and 10.");
             return;
-        }
+        }*/
 
         $.ajax({
             url: "?url=Jobs/create_job",
