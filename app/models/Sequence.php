@@ -40,7 +40,7 @@ class Sequence{
 
     #透過 job_id 及 seq_id 取得當前有幾個seq
     public function countseq($jobid,$seqid){
-        $sql = "SELECT COUNT(*) as sequence FROM step WHERE job_id = ? AND sequence_id = ?";
+        $sql = "SELECT COUNT(*) as count FROM step WHERE job_id = ? AND sequence_id = ?";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$jobid, $seqid]);
         $result = $statement->fetch();
@@ -89,17 +89,17 @@ class Sequence{
     #刪除sequences
     public function delete_seq_by_id($jobid,$seqid){
 
-        $table_name = 'sequence'; 
+        
         $sql= " DELETE FROM sequence WHERE job_id = ? AND sequence_id = ? ";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$jobid, $seqid]);
 
-        /*
-        0if (!$this->is_table_empty($table_name)) {
-            #沒有資料，不需要调整 step_id 順序
-            return true;
-        }*/
-        
+
+        if ($seqid != 50 ) {
+            $sql_update = "UPDATE sequence  SET sequence_id = sequence_id - 1 WHERE job_id = ? AND sequence_id > ?";
+            $statement_update = $this->db_iDas->prepare($sql_update);
+            $statement_update->execute([$jobid, $seqid]);
+        }   
         return $results;
 
     }

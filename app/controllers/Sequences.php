@@ -149,9 +149,7 @@ class Sequences extends Controller
                 echo "The maximum number of steps has been reached, unable to continue copying seqs";
                 return;
             }
-            
-
-            
+               
            
             $jobdata = array(
                 'job_id' => $jobid,
