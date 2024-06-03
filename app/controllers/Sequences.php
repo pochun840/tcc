@@ -229,7 +229,7 @@ class Sequences extends Controller
                     'sequence_enable' => $old_res['sequence_enable'], 
                     'screw_join' => $old_res['screw_join'], 
                     'okall_stop' => $old_res['okall_stop'], 
-                    'opt' => $old_res['opt '], 
+                    'opt' => $old_res['opt'], 
                     'torque_unit' => $old_res['torque_unit'], 
                     'k_value' => $old_res['k_value'], 
                     'ok_time' => $old_res['ok_time'], 

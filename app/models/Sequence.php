@@ -46,7 +46,7 @@ class Sequence{
         $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :tightening_repeat, :ng_stop, :sequence_enable, :screw_join, :okall_stop, :opt, :torque_unit, :k_value, :ok_time, :okall_alarm_time, :offset);";
         $statement = $this->db_iDas->prepare($sql);
     
-        // 绑定参数
+
         if ($mode == "create") {
             $statement->bindValue(':job_id', $jobdata['job_id']);
             $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
@@ -80,9 +80,16 @@ class Sequence{
     #刪除sequences
     public function delete_seq_by_id($jobid,$seqid){
 
+        $table_name = 'sequence'; 
         $sql= " DELETE FROM sequence WHERE job_id = ? AND sequence_id = ? ";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$jobid, $seqid]);
+
+        /*
+        0if (!$this->is_table_empty($table_name)) {
+            #沒有資料，不需要调整 step_id 順序
+            return true;
+        }*/
         
         return $results;
 
@@ -157,7 +164,7 @@ class Sequence{
 
         $sql= " SELECT * FROM sequence WHERE job_id = ? AND sequence_id = ? AND sequence_name = ? ";
         $statement = $this->db_iDas->prepare($sql);
-        $results = $statement->execute([$jobid,$seqid,$oldseqname]);
+        $statement->execute([$jobid,$seqid,$oldseqname]);
         $rows = $statement->fetch();
 
         return $rows;

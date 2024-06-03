@@ -395,7 +395,7 @@
         		            <div class="row">
         				        <label for="from_seq_id" class="t1 col-4 col-form-label">Seq ID :</label>
         				        <div class="col-5 t2 ">
-        				            <input type="number" class="form-control" id="from_seq_id" disabled>
+        				            <input type="text" class="form-control" id="old_seq_id" disabled>
         				        </div>
         				    </div>
         				    <div class="row">
@@ -583,13 +583,15 @@ function copy_seq_by_id(){
     var oldseqid = readFromLocalStorage("seqid");
     var oldseqname = readFromLocalStorage("seqname");
 
-    document.getElementById('from_seq_id').value = oldseqid;
+
     document.getElementById("from_seq_name").value = oldseqname;
     document.getElementById('to_seq_id').value = newseqid;
+    document.getElementById('old_seq_id').value= oldseqid;
+  
 
     var newseqname = document.getElementById("to_seq_name").value;
 
-    if(newseqname){
+   if(newseqname){
         $.ajax({
             url: "?url=Sequences/copy_seq",
             method: "POST",
@@ -611,7 +613,6 @@ function copy_seq_by_id(){
             }
         });
     }
-
 
 }
 function copy_seq(seqid){
