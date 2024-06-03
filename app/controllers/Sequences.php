@@ -142,7 +142,14 @@ class Sequences extends Controller
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : 0;
             $torque_unit_val = isset($_POST['torque_unit']) ? intval($_POST['torque_unit']) : 0;
             $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
-            $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;    
+            $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
+            
+            $seq_count = $this->sequenceModel->countseq($jobid,$seqid);
+            if($seq_count >= 50) {
+                echo "The maximum number of steps has been reached, unable to continue copying seqs";
+                return;
+            }
+            
 
             
            
@@ -216,6 +223,13 @@ class Sequences extends Controller
 
         if(!empty($jobid && $seqid && $oldseqname )){
 
+
+            $seq_count = $this->sequenceModel->countseq($jobid,$seqid);
+            if($seq_count >= 50) {
+                echo "The maximum number of steps has been reached, unable to continue copying seqs";
+                return;
+            }
+
             $old_res = $this->sequenceModel->search_old_data($jobid,$seqid,$oldseqname);
 
             if(!empty($old_res)){
@@ -268,16 +282,6 @@ class Sequences extends Controller
         }
     }
 
-    public function test(){
-        $k_s = 0;
-        $new_val = 'New_Value'.($k_s + 1);
-        $updated_sequence_id = preg_replace('/[^0-9]/', '', $new_val);
 
-        echo $new_val;
-        echo "<br>";
-        echo $updated_sequence_id;
-
-        //$this->view('sequences/test');
-    }
     
 }

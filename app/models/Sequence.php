@@ -38,6 +38,15 @@ class Sequence{
 
     }
 
+    #透過 job_id 及 seq_id 取得當前有幾個seq
+    public function countseq($jobid,$seqid){
+        $sql = "SELECT COUNT(*) as sequence FROM step WHERE job_id = ? AND sequence_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid, $seqid]);
+        $result = $statement->fetch();
+        return $result['count'];
+    }
+
 
     #新增sequence
     public function create_seq($mode, $jobdata) {
