@@ -48,6 +48,14 @@ class Jobs extends Controller
                 'unscrew_direction' => $_POST['direction_val'],
             );
             $mode = "create";
+
+            $job_count = $this->jobModel->countjob();
+            if($job_count >= 50) {
+                echo "The maximum number of steps has been reached, unable to continue copying jobs";
+                return;
+            }
+
+            
             $res = $this->jobModel->create_job($mode,$jobdata);
             if($res){
                 $res_msg = 'insert job:'. $jobdata['job_id'].'success';
@@ -109,6 +117,15 @@ class Jobs extends Controller
         $jobdata = array();
         $old_jobid = $_POST['old_jobid'] ?? null;
         if(!empty($old_jobid)){
+
+
+            $job_count = $this->jobModel->countjob();
+            if($job_count >= 50) {
+                echo "The maximum number of steps has been reached, unable to continue copying jobs";
+                return;
+            }
+
+
             $old_res = $this->jobModel->search($old_jobid);
             if(!empty($old_res)){
                   #取得 unscrew_power && 	unscrew_rpm && unscrew_direction

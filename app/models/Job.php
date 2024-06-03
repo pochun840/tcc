@@ -34,6 +34,7 @@ class Job{
 
     #刪除JOB 
     public function delete_job_by_id($jobid){
+        
         $sql= "DELETE FROM job WHERE job_id = ?";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$jobid]);
@@ -101,5 +102,16 @@ class Job{
 
         return $rows;
     }
+
+    #計算 有幾個JOB
+    public public function countjob(){
+
+        $sql = "SELECT  COUNT(*) as count FROM job ";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid, $seqid]);
+        $result = $statement->fetch();
+        return $result['count'];
+    }
+
 
 }
