@@ -16,6 +16,17 @@ class Steptcc{
 
     }
 
+
+    #透過 job_id 及 seq_id 取得當前有幾個step
+    public function countstep($jobid, $seqid){
+
+        $sql = "SELECT COUNT(*) as count FROM step WHERE job_id = ? AND sequence_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid, $seqid]);
+        $result = $statement->fetch();
+        return $result['count'];
+    }
+
     #透過job_id 及 seq_id 取得對應的step
     public function getStep($job_id, $seq_id) {
 
@@ -34,6 +45,69 @@ class Steptcc{
         return $statement->fetchAll();
 
     }
+
+
+    #透過 job_id 及 seq_id 及 step_id 刪除對應的資料
+    public function delete_step_id($jobid,$seqid,$stepid){
+
+        $sql= " DELETE FROM step WHERE job_id = ? AND sequence_id = ?  AND step_id = ? ";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$jobid, $seqid,$stepid]);
+
+
+        if ($stepid != 4) {
+            $sql_update = "UPDATE step SET step_id = step_id - 1 WHERE job_id = ? AND sequence_id = ? AND step_id > ?";
+            $statement_update = $this->db_iDas->prepare($sql_update);
+            $statement_update->execute([$jobid, $seqid, $stepid]);
+        }
+            
+        return $results;
+
+
+    }
+
+
+    public function create_step($mode,$jobdata){
+
+
+        if (empty($jobdata['job_id'])) {
+            return false; 
+        }
+        
+        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, 	downshift_torque,downshift_rpm )";
+        $sql .= " VALUES (:job_id,:sequence_id,:step_id,:target_option,:target_torque,:target_angle,:target_delaytime,:hi_torque,:lo_torque,:hi_angle,:lo_angle,:rpm,:direction,:downshift,:threshold_torque,:downshift_torque,:downshift_rpm );";
+        $statement = $this->db_iDas->prepare($sql);
+
+        if ($mode == "copy" ) {
+            $statement->bindValue(':job_id', $jobdata['job_id']);
+            $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
+            $statement->bindValue(':step_id', $jobdata['step_id']);
+        }
+
+        $statement->bindValue(':target_option', $jobdata['target_option']);
+        $statement->bindValue(':target_torque', $jobdata['target_torque']);
+        $statement->bindValue(':target_angle', $jobdata['target_angle']);
+        $statement->bindValue(':target_delaytime', $jobdata['target_delaytime']);
+        $statement->bindValue(':hi_torque', $jobdata['hi_torque']);
+        $statement->bindValue(':lo_torque', $jobdata['lo_torque']);
+        $statement->bindValue(':hi_angle', $jobdata['hi_angle']);
+        $statement->bindValue(':lo_angle', $jobdata['lo_angle']);
+        $statement->bindValue(':rpm', $jobdata['rpm']);
+        $statement->bindValue(':direction', $jobdata['direction']);
+        $statement->bindValue(':downshift', $jobdata['downshift']);
+        $statement->bindValue(':threshold_torque', $jobdata['threshold_torque']);
+        $statement->bindValue(':downshift_torque', $jobdata['downshift_torque']);
+        $statement->bindValue(':downshift_rpm', $jobdata['downshift_rpm']);
+
+        $results = $statement->execute();
+
+        return $results;
+        
+
+
+    }
+
+    //public function copy
 
     
 }
