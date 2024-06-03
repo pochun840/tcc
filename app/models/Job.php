@@ -34,11 +34,18 @@ class Job{
 
     #刪除JOB 
     public function delete_job_by_id($jobid){
-        
+
         $sql= "DELETE FROM job WHERE job_id = ?";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$jobid]);
 
+
+        if($jobid != 50 ){
+            $sql_update = "UPDATE job SET job_id = job_id - 1 WHERE job_id > ?";
+            $statement_update = $this->db_iDas->prepare($sql_update);
+            $statement_update->execute([$jobid]);
+
+        }
         return $results;
     }
 
@@ -104,7 +111,7 @@ class Job{
     }
 
     #計算 有幾個JOB
-    public public function countjob(){
+    public function countjob(){
 
         $sql = "SELECT  COUNT(*) as count FROM job ";
         $statement = $this->db_iDas->prepare($sql);
