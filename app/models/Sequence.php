@@ -51,6 +51,12 @@ class Sequence{
     #新增sequence
     public function create_seq($mode, $jobdata) {
 
+
+        if(intval($jobdata['job_id']) > 50 || intval($jobdata['sequence_id']) > 50) {
+           
+            return false; 
+        }
+
         $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, tightening_repeat, ng_stop, sequence_enable, screw_join, okall_stop, opt, torque_unit, k_value, ok_time, okall_alarm_time, offset)";
         $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :tightening_repeat, :ng_stop, :sequence_enable, :screw_join, :okall_stop, :opt, :torque_unit, :k_value, :ok_time, :okall_alarm_time, :offset);";
         $statement = $this->db_iDas->prepare($sql);
@@ -118,6 +124,11 @@ class Sequence{
 
     #修改 sequences
     public function update_seq_by_id($jobdata){
+
+        if(intval($jobdata['job_id']) > 50 || intval($jobdata['sequence_id']) > 50) {   
+            return false; 
+        }
+
 
         $sql = "UPDATE `sequence` SET  sequence_name = :sequence_name,
                                   tightening_repeat = :tightening_repeat, 

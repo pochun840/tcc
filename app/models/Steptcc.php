@@ -82,6 +82,10 @@ class Steptcc{
             $statement->bindValue(':job_id', $jobdata['job_id']);
             $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
             $statement->bindValue(':step_id', $jobdata['step_id']);
+        }else{
+            $statement->bindValue(':job_id', $jobdata['job_id']);
+            $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
+            $statement->bindValue(':step_id', $jobdata['step_id']);
         }
 
         $statement->bindValue(':target_option', $jobdata['target_option']);
@@ -103,11 +107,7 @@ class Steptcc{
 
         return $results;
         
-
-
     }
-
-    //public function copy
 
     
 }

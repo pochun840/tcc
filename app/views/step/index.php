@@ -325,6 +325,7 @@ function create_step() {
     var targetoptionselect = document.getElementById('target_option');
     targetoptionselect.addEventListener('change', function() {
         var targetOptionValue = targetoptionselect.value;
+        localStorage.setItem('target_option', targetOptionValue);
 
         var targetTorqueElement = document.getElementById('target_torque');
         var hiTorqueElement = document.getElementById('hi_torque');
@@ -352,7 +353,7 @@ function create_step() {
 
         if (targetOptionValue == 2) {
             document.querySelector('div[for="target-torque"]').textContent = "Target Delay Time  (kgf-cm)";
-            targetTorqueElement.disabled = true;
+            //targetTorqueElement.disabled = true;
             hiTorqueElement.disabled = true;
             loTorqueElement.disabled = true;
             hiAngleElement.disabled = true;
@@ -365,11 +366,16 @@ function create_step() {
             downshiftOptions.forEach(radioButton => radioButton.disabled = true);
             
         } else if (targetOptionValue == 1) {
-            document.querySelector('div[for="target-torque"]').textContent = "Target Angle (kgf-cm)";
+            document.querySelector('div[for="target-torque"]').textContent = "Target Angle (degree)";
+        }
+
+        else if (targetOptionValue == 0) {
+            document.querySelector('div[for="target-torque"]').textContent = "Target Torque (kgf-cm)";
         }
     });
 
     var downshiftOptionRadios = document.getElementsByName("downshift_option");
+    localStorage.setItem('downshift_option',downshiftOptionRadios);
 
     for (var i = 0; i < downshiftOptionRadios.length; i++) {
         downshiftOptionRadios[i].addEventListener("change", function() {
@@ -391,12 +397,71 @@ function create_step() {
             }
         });
     }
+
+
 }
 
 
 function add_step(){
+
+    var jobid = '<?php echo $data['job_id']?>';
+    var seqid = '<?php echo $data['seq_id']?>';
+    var stepid = '<?php echo $data['stepid_new']?>';
+
     var target_option = document.getElementById('target_option').value;
     var target_torque = document.getElementById('target_torque').value;
+
+    var hi_torque = document.getElementById('hi_torque').value;
+    var lo_torque = document.getElementById('lo_torque').value;
+
+    var hi_angle = document.getElementById('hi_angle').value;
+    var lo_angle = document.getElementById('lo_angle').value;
+    var rpm = document.getElementById('rpm').value;
+
+    var threshold_torque = document.getElementById('downshift_threshold').value;
+    var downshift_torque = document.getElementById('downshift_torque').value;
+    var downshift_rpm  = document.getElementById('downshift_rpm').value;
+
+    var direction = document.querySelector('input[name="direction_option"]:checked').value;
+    var downshift = document.querySelector('input[name="downshift_option"]:checked').value;
+
+
+    if(target_torque){
+        // 進行 新增的ajax 
+        $.ajax({
+            url: "?url=Step/create_step",
+            method: "POST",
+            data:{ 
+                jobid: jobid,
+                seqid: seqid,
+                stepid: stepid,
+                target_option: target_option,
+                target_torque: target_torque,
+                hi_torque: hi_torque,
+                lo_torque: lo_torque,
+                hi_angle: hi_angle,
+                lo_angle: lo_angle,
+                rpm: rpm,
+                direction: direction,
+                downshift: downshift,
+                threshold_torque: threshold_torque,
+                downshift_torque: downshift_torque,
+                downshift_rpm: downshift_rpm
+
+            },
+            success: function(response) {
+                console.log( response);
+                alert(response);
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+    }
+
+
+
     
 
 }
