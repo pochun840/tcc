@@ -115,7 +115,7 @@ class Job{
 
         $sql = "SELECT  COUNT(*) as count FROM job ";
         $statement = $this->db_iDas->prepare($sql);
-        $statement->execute([$jobid, $seqid]);
+        $statement->execute();
         $result = $statement->fetch();
         return $result['count'];
     }
