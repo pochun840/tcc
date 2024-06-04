@@ -591,6 +591,7 @@ function copy_seq_by_id(){
 
     var newseqname = document.getElementById("to_seq_name").value;
 
+    //console.log(newseqname);
    if(newseqname){
         $.ajax({
             url: "?url=Sequences/copy_seq",

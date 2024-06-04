@@ -144,12 +144,13 @@ class Sequences extends Controller
             $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
             
-            $seq_count = $this->sequenceModel->countseq($jobid,$seqid);
+            $seq_count = $this->sequenceModel->countseq($jobid);
+            $seq_count = intval($seq_count);
+           
             if($seq_count >= 50) {
                 echo "The maximum number of steps has been reached, unable to continue copying seqs";
                 return;
             }
-               
            
             $jobdata = array(
                 'job_id' => $jobid,
@@ -202,13 +203,6 @@ class Sequences extends Controller
 
     public function copy_seq(){
 
-        /*
-          jobid: jobid,
-                oldseqid: oldseqid,
-                oldseqname: oldseqname,
-                newseqid: newseqid,
-                newseqname: newseqname
-        */
 
         $jobdata = array();
         $mode = "copy"; 
@@ -222,7 +216,9 @@ class Sequences extends Controller
         if(!empty($jobid && $seqid && $oldseqname )){
 
 
-            $seq_count = $this->sequenceModel->countseq($jobid,$seqid);
+            $seq_count = $this->sequenceModel->countseq($jobid);
+            $seq_count = intval($seq_count);
+           
             if($seq_count >= 50) {
                 echo "The maximum number of steps has been reached, unable to continue copying seqs";
                 return;
@@ -249,6 +245,8 @@ class Sequences extends Controller
                     'offset' => $old_res['offset'], 
 
                 );
+
+                //var_dump($jobdata);die();
 
                 $res = $this->sequenceModel->create_seq($mode,$jobdata);
                 if($res){

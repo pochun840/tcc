@@ -38,11 +38,11 @@ class Sequence{
 
     }
 
-    #透過 job_id 及 seq_id 取得當前有幾個seq
-    public function countseq($jobid,$seqid){
-        $sql = "SELECT COUNT(*) as count FROM step WHERE job_id = ? AND sequence_id = ?";
+    #透過 job_id  取得當前有幾個seq
+    public function countseq($jobid ){
+        $sql = "SELECT COUNT(*) as count FROM sequence WHERE job_id = ? ";
         $statement = $this->db_iDas->prepare($sql);
-        $statement->execute([$jobid, $seqid]);
+        $statement->execute([$jobid]);
         $result = $statement->fetch();
         return $result['count'];
     }
