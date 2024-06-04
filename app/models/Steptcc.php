@@ -37,11 +37,11 @@ class Steptcc{
     }
 
     #透過job_id 及 seq_id 及 step_id取得對應的資料
-    public function getStepNo($job_id,$seq_id,$step_id){
+    public function getStepNo($jobid,$seqid,$stepid){
 
         $sql = "SELECT * FROM step WHERE job_id = ? AND sequence_id = ? AND step_id = ?";
         $statement = $this->db_iDas->prepare($sql);
-        $statement->execute([$job_id, $seq_id, $step_id]);
+        $statement->execute([$jobid, $seqid, $stepid]);
         return $statement->fetchAll();
 
     }
@@ -107,6 +107,49 @@ class Steptcc{
 
         return $results;
         
+    }
+
+
+    public function update_step_by_id($jobdata){
+        $sql = "UPDATE `step` SET 
+                    target_option = :target_option,
+                    target_torque = :target_torque, 
+                    target_angle = :target_angle, 
+                    target_delaytime = :target_delaytime, 
+                    hi_torque = :hi_torque,
+                    lo_torque = :lo_torque,
+                    hi_angle = :hi_angle,
+                    lo_angle = :lo_angle,
+                    direction = :direction,
+                    downshift = :downshift,
+                    threshold_torque = :threshold_torque,
+                    downshift_torque = :downshift_torque,
+                    downshift_rpm = :downshift_rpm
+        WHERE job_id = :job_id  AND   sequence_id = :sequence_id  AND step_id = :step_id ";
+        $statement = $this->db_iDas->prepare($sql);
+
+        $statement->bindValue(':job_id', $jobdata['job_id']);
+        $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
+        $statement->bindValue(':step_id', $jobdata['step_id']);
+        $statement->bindValue(':target_option', $jobdata['target_option']);
+        $statement->bindValue(':target_torque', $jobdata['target_torque']);
+        $statement->bindValue(':target_angle', $jobdata['target_angle']);
+        $statement->bindValue(':target_delaytime', $jobdata['target_delaytime']);
+        $statement->bindValue(':hi_torque', $jobdata['hi_torque']);
+        $statement->bindValue(':lo_torque', $jobdata['lo_torque']);
+        $statement->bindValue(':hi_angle', $jobdata['hi_angle']);
+        $statement->bindValue(':lo_angle', $jobdata['lo_angle']);
+        $statement->bindValue(':direction', $jobdata['direction']);
+        $statement->bindValue(':downshift', $jobdata['downshift']);
+        $statement->bindValue(':threshold_torque', $jobdata['threshold_torque']);
+        $statement->bindValue(':downshift_torque', $jobdata['downshift_torque']);
+        $statement->bindValue(':downshift_rpm', $jobdata['downshift_rpm']);
+        $results = $statement->execute();
+
+
+        return $results;
+
+
     }
 
     

@@ -78,9 +78,8 @@
         </div>
 
         <div class="buttonbox">
-
             <input id="S3" name="Step_Manager_Submit" type="button" value="New" tabindex="1"  onclick="cound_step('new');" >
-            <input id="S6" name="Step_Manager_Submit" type="button" value="Edit" tabindex="1">
+            <input id="S6" name="Step_Manager_Submit" type="button" value="Edit" tabindex="1" onclick="cound_step('edit')">
             <input id="S5" name="Step_Manager_Submit" type="button" value="Copy" tabindex="1"  onclick="cound_step('copy');">
             <input id="S4" name="Step_Manager_Submit" type="button" value="Delete" tabindex="1" onclick="cound_step('del');" >
         </div>
@@ -155,7 +154,7 @@
             					</div>
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">
-            					  <label class="form-check-label" for="direction_CCW">CWW</label>
+            					  <label class="form-check-label" for="direction_CCW">CCW</label>
             					</div>
                             </div>
                         </div>
@@ -196,6 +195,121 @@
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="add_step()" >Save</button>
                     <button id="" class="button-modal" onclick="hideElementById('newstep');"  class="closebtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- edit Step -->
+    <div id="editstep" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content w3-animate-zoom" style="width: 80%">
+                <header class="w3-container modal-header">
+                    <span onclick="hideElementById('editstep');"
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
+                    <h3 id='modal_title'>Edit Step</h3>
+                </header>
+
+                <div class="modal-body">
+                    <form id="new_step_form" style="padding-left: 5%">
+                        <div class="row">
+                            <div for="target-option" class="col-6 t1">Target Option :</div>
+                            <div class="col-3 t2">
+                                <select id="edit_target_option" name="edit_target_option" class="col custom-file">
+                                    <?php foreach($data['target_option'] as $key => $val){?>
+                                        <option value="<?php echo $key;?>"><?php echo $val;?></option>
+                                    <?php }?>
+                                    
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="edit_target-torque" class="col-6 t1">Target Torque (kgf-cm):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_target_torque" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="hi-torque" class="col-6 t1">Hi Torque (kgf-cm):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_hi_torque" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="lo-torque" class="col-6 t1">Lo Torque (kgf-cm):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_lo_torque" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="hi-angle" class="col-6 t1">Hi Angle (degree):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_hi_angle" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="lo-angle" class="col-6 t1">Lo Angle (degree):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_lo_angle" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="RPM" class="col-6 t1">RPM:</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_rpm" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="direction" class="col-6 t1">Direction:</div>
+                            <div class="col t2" >
+            			      	<div class="col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CW" value="0">
+            					  <label class="form-check-label" for="direction_CW">CW</label>
+            					</div>
+            					<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CCW" value="1">
+            					  <label class="form-check-label" for="direction_CCW">CCW</label>
+            					</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="downshift" class="col-6 t1">Downshift:</div>
+                            <div class="col t2" >
+            			      	<div class="col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_ON" value="1">
+            					  <label class="form-check-label" for="downshift_ON">ON</label>
+            					</div>
+            					<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_OFF" value="0" >
+            					  <label class="form-check-label" for="downshift_OFF">OFF</label>
+            					</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="edit_downshift-threshold" class="col-6 t1">Downshift Threshold(kgf-cm):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_downshift_threshold" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="edit_downshift-torque" class="col-6 t1">Downshift Torque(kgf-cm):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_downshift_torque" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="edit_downshift-rpm" class="col-6 t1">Downshift RPM:</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_downshift_rpm" maxlength="" >
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                    <button id="" class="button-modal" onclick="edit_step_save()" >Save</button>
+                    <button id="" class="button-modal" onclick="hideElementById('edittep');"  class="closebtn">Close</button>
                 </div>
             </div>
         </div>
@@ -304,20 +418,317 @@ function cound_step(argument){
         create_step();
     }
 
-
-    /*if(argument =="edit" && stepid != null){
+    if(argument =="edit" && stepid != null){
         edit_step(stepid);
     }
 
-    if(argument =="new"){
-        create_step();
+}
+
+
+function edit_step(){
+
+    var jobid = '<?php echo $data['job_id']?>';
+    var seqid = '<?php echo $data['seq_id']?>';
+    var stepid = readFromLocalStorage("stepid");
+
+    if(jobid){
+        $.ajax({
+            url: "?url=Step/search_stepinfo",
+            method: "POST",
+            data:{ 
+                jobid: jobid,
+                seqid: seqid,
+                stepid:stepid,
+            },
+            success: function(response) {
+
+                var responseJSON = JSON.stringify(response);
+                var cleanString = responseJSON.replace(/Array|\\n/g, '');
+                var cleanString = cleanString.substring(2, cleanString.length - 2);
+
+                //console.log(cleanString);
+
+                var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, step_id] = cleanString.match(/\[step_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, hi_torque] = cleanString.match(/\[hi_torque]\s*=>\s*([^ ]+)/) || [, null];
+                var [, lo_torque] = cleanString.match(/\[lo_torque]\s*=>\s*([^ ]+)/) || [, null];
+                var [, hi_angle] = cleanString.match(/\[hi_angle]\s*=>\s*([^ ]+)/) || [, null];
+                var [, lo_angle] = cleanString.match(/\[lo_angle]\s*=>\s*([^ ]+)/) || [, null];
+                var [, rpm] = cleanString.match(/\[rpm]\s*=>\s*([^ ]+)/) || [, null];
+                var [, downshift_rpm] = cleanString.match(/\[downshift_rpm]\s*=>\s*([^ ]+)/) || [, null];
+                var [, downshift_torque] = cleanString.match(/\[downshift_torque]\s*=>\s*([^ ]+)/) || [, null];
+                var [, threshold_torque] = cleanString.match(/\[threshold_torque]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_option] = cleanString.match(/\[target_option]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_torque] = cleanString.match(/\[target_torque]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_angle] = cleanString.match(/\[target_angle]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_delaytime] = cleanString.match(/\[target_delaytime]\s*=>\s*([^ ]+)/) || [, null];
+                var [, direction] = cleanString.match(/\[direction]\s*=>\s*([^ ]+)/) || [, null];
+                var [, downshift] = cleanString.match(/\[downshift]\s*=>\s*([^ ]+)/) || [, null];
+
+                document.getElementById('editstep').style.display = 'block';
+                document.getElementById("edit_hi_torque").value = hi_torque;
+                document.getElementById("edit_lo_torque").value = lo_torque;
+                document.getElementById("edit_hi_angle").value = hi_angle;
+                document.getElementById("edit_lo_angle").value = lo_angle;
+                document.getElementById("edit_rpm").value = rpm;
+                document.getElementById("edit_downshift_rpm").value = downshift_rpm;
+                document.getElementById("edit_downshift_torque").value = downshift_torque;
+                document.getElementById("edit_downshift_threshold").value = threshold_torque;
+                document.querySelector("select[name='edit_target_option']").value = target_option;
+
+                var radioButtons1 = document.getElementsByName("edit_direction_option");
+                var radioButtons2 = document.getElementsByName("edit_downshift_option");
+
+                setRadioButtonValue(radioButtons1, direction);
+                setRadioButtonValue(radioButtons2, downshift);
+
+                if(target_option == 2){
+
+                    document.querySelector('div[for="edit_target-torque"]').textContent = "Target Delay Time";
+                    document.getElementById("edit_target_torque").value = target_delaytime;
+                    document.getElementById('edit_hi_torque').disabled = true; 
+                    document.getElementById('edit_lo_torque').disabled = true; 
+                    document.getElementById('edit_hi_angle').disabled = true; 
+                    document.getElementById('edit_lo_angle').disabled = true; 
+                    document.getElementById('edit_rpm').disabled = true; 
+                    document.getElementById('edit_downshift_threshold').disabled = true; 
+                    document.getElementById('edit_downshift_torque').disabled = true; 
+                    document.getElementById('edit_downshift_rpm').disabled = true; 
+
+                    document.querySelectorAll('input[name="edit_direction_option"]').forEach(function(radioButton) {
+                                radioButton.disabled = true;
+                    });
+
+                    document.querySelectorAll('input[name="edit_downshift_option"]').forEach(function(radioButton) {
+                                radioButton.disabled = true;
+                    });
+                }
+
+                if(target_option == 1){
+                    document.querySelector('div[for="edit_target-torque"]').textContent = "Target Angle (degree)";
+                    document.getElementById("edit_target_torque").value = target_angle;
+                    
+                }
+
+                if(target_option == 0){
+                    document.querySelector('div[for="edit_target-torque"]').textContent = "Target Torque (kgf-cm)";
+                    document.getElementById("edit_target_torque").value = target_torque;
+                }
+
+                if(downshift == 0){
+                    document.querySelector('div[for="edit_downshift-torque"]').style.display = "none";
+                    document.getElementById('edit_downshift_torque').style.display = "none";
+
+                    document.querySelector('div[for="edit_downshift-threshold"]').style.display = "none";
+                    document.getElementById('edit_downshift_threshold').style.display = "none";
+
+                    document.querySelector('div[for="edit_downshift-rpm"]').style.display = "none";
+                    document.getElementById('edit_downshift_rpm').style.display = "none";
+
+                }
+
+                var target_option = document.getElementById("edit_target_option");
+                target_option.addEventListener('change', function() {
+                    var selectedValue = this.value;
+                    if (selectedValue == 2) {
+                        var elementsToDisable = [
+                            document.getElementById('edit_hi_torque'),
+                            document.getElementById('edit_lo_torque'),
+                            document.getElementById('edit_hi_angle'),
+                            document.getElementById('edit_lo_angle'),
+                            document.getElementById('edit_rpm'),
+                            document.getElementById('edit_downshift_rpm'),
+                            document.getElementById('edit_downshift_threshold'),
+                            document.getElementById('edit_downshift_rpm'),
+                            document.getElementById('edit_downshift_torque')
+                        ];
+
+                        disableElements(elementsToDisable, true);
+
+                        document.querySelectorAll('input[name="edit_direction_option"]').forEach(function(radioButton) {
+                            radioButton.disabled = true;
+                        });
+
+                        document.querySelectorAll('input[name="edit_downshift_option"]').forEach(function(radioButton) {
+                            radioButton.disabled = true;
+                        });
+
+                        document.querySelector('div[for="edit_target-torque"]').textContent = "Target Delay Time";
+                    } 
+                    
+                    if (selectedValue == 1 || selectedValue == 0) {
+                        document.getElementById('edit_hi_torque').disabled = false;
+                        document.getElementById('edit_hi_torque').value = hi_torque;
+
+                        document.getElementById('edit_lo_torque').disabled = false;
+                        document.getElementById('edit_lo_torque').value = lo_torque;
+
+                        document.getElementById('edit_hi_angle').disabled = false;
+                        document.getElementById('edit_hi_angle').value = hi_angle;
+
+                        document.getElementById('edit_lo_angle').disabled = false;
+                        document.getElementById('edit_lo_angle').value = lo_angle;
+
+                        document.getElementById('edit_rpm').disabled = false;  
+                        document.getElementById('edit_rpm').value = rpm;
+
+                        document.getElementById('edit_downshift_threshold').disabled = false; 
+                        document.getElementById('edit_downshift_threshold').value = threshold_torque;
+
+                        document.getElementById('edit_downshift_rpm').disabled = false; 
+                        document.getElementById('edit_downshift_rpm').value = downshift_rpm;
+
+
+                        document.getElementById('edit_downshift_torque').disabled = false; 
+                        document.getElementById('edit_downshift_torque').value = downshift_torque;
+
+
+                        document.querySelectorAll('input[name="edit_direction_option"]').forEach(function(radioButton) {
+                            radioButton.disabled = false;
+                        });
+
+                        document.querySelectorAll('input[name="edit_downshift_option"]').forEach(function(radioButton) {
+                            radioButton.disabled = false;
+                        });
+
+                    }
+
+                    if(selectedValue == 1){
+                        document.querySelector('div[for="edit_target-torque"]').textContent = "Target Angle (degree)";
+
+                    }
+
+                    if(selectedValue == 0){
+                        document.querySelector('div[for="edit_target-torque"]').textContent = "Target Torque (kgf-cm)";
+
+                    }
+                });
+
+
+                var downshiftOptionRadios = document.getElementsByName("edit_downshift_option");
+                for (var i = 0; i < downshiftOptionRadios.length; i++) {
+                    downshiftOptionRadios[i].addEventListener("change", function() {
+                        var selectval = this.value;
+                        localStorage.setItem('downshift_option',selectval);
+                        if(selectval == 1){
+                            document.querySelector('div[for="edit_downshift-torque"]').style.display = "block";
+                            document.getElementById('edit_downshift_torque').style.display = "block";
+
+                            document.querySelector('div[for="edit_downshift-threshold"]').style.display = "block";
+                            document.getElementById('edit_downshift_threshold').style.display = "block";
+
+                            document.querySelector('div[for="edit_downshift-rpm"]').style.display = "block";
+                            document.getElementById('edit_downshift_rpm').style.display = "block";
+                        }else{
+                            document.querySelector('div[for="edit_downshift-torque"]').style.display = "none";
+                            document.getElementById('edit_downshift_torque').style.display = "none";
+
+                            document.querySelector('div[for="edit_downshift-threshold"]').style.display = "none";
+                            document.getElementById('edit_downshift_threshold').style.display = "none";
+
+                            document.querySelector('div[for="edit_downshift-rpm"]').style.display = "none";
+                            document.getElementById('edit_downshift_rpm').style.display = "none";
+                        }
+                      
+                    });
+                }
+
+
+
+
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+
     }
 
-    if(argument =="copy" && stepid != null){
-        copy_step(stepid);
-    }*/
-
 }
+
+
+function edit_step_save() {
+
+    var jobid = '<?php echo $data['job_id']?>';
+    var seqid = '<?php echo $data['seq_id']?>';
+    var stepid = readFromLocalStorage("stepid");
+
+    var target_option = document.getElementById("edit_target_option").value;
+
+    var target_torque = 0;
+    var target_angle = 0;
+    var target_delaytime = 0;
+    var hi_torque = 0;
+    var lo_torque = 0;
+    var hi_angle = 0;
+    var lo_angle = 0;
+    var rpm = 0;
+    var direction = 0;
+    var downshift = 0;
+    var threshold_torque = 0;
+    var downshift_torque = 0;
+    var downshift_rpm = 0;
+
+    if (target_option == 2) {
+        target_delaytime = document.getElementById("edit_target_torque").value;
+    } else {
+        if (target_option == 1) {
+            target_angle = document.getElementById("edit_target_torque").value;
+        }
+        if (target_option == 0) {
+            target_torque = document.getElementById("edit_target_torque").value;
+        }
+
+        hi_torque = document.getElementById("edit_hi_torque").value;
+        lo_torque = document.getElementById("edit_lo_torque").value;
+        hi_angle = document.getElementById("edit_hi_angle").value;
+        lo_angle = document.getElementById("edit_lo_angle").value;
+        rpm = document.getElementById("edit_rpm").value;
+        direction = document.querySelector('input[name="edit_direction_option"]:checked').value;
+        downshift = document.querySelector('input[name="edit_downshift_option"]:checked').value;
+        threshold_torque = document.getElementById("edit_downshift_threshold").value;
+        downshift_torque = document.getElementById("edit_downshift_torque").value;
+        downshift_rpm = document.getElementById("edit_downshift_rpm").value;
+    }
+
+    var requestData = {
+        jobid: jobid,
+        seqid: seqid,
+        stepid: stepid,
+        target_option: target_option,
+        target_torque: target_torque,
+        target_angle: target_angle,
+        target_delaytime: target_delaytime,
+        hi_torque: hi_torque,
+        lo_torque: lo_torque,
+        hi_angle: hi_angle,
+        lo_angle: lo_angle,
+        rpm: rpm,
+        direction: direction,
+        downshift: downshift,
+        threshold_torque: threshold_torque,
+        downshift_torque: downshift_torque,
+        downshift_rpm: downshift_rpm
+    };
+
+    if (target_option) {
+        $.ajax({
+            url: "?url=Step/edit_step",
+            method: "POST",
+            data: requestData,
+            success: function(response) {
+                console.log(response);
+                alert(response);
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+
+            }
+        });
+    }
+}
+
 
 function create_step() {
     document.getElementById('newstep').style.display = 'block';
@@ -353,7 +764,7 @@ function create_step() {
 
         if (targetOptionValue == 2) {
             document.querySelector('div[for="target-torque"]').textContent = "Target Delay Time  (kgf-cm)";
-            //targetTorqueElement.disabled = true;
+            
             hiTorqueElement.disabled = true;
             loTorqueElement.disabled = true;
             hiAngleElement.disabled = true;
@@ -375,26 +786,33 @@ function create_step() {
     });
 
     var downshiftOptionRadios = document.getElementsByName("downshift_option");
-    localStorage.setItem('downshift_option',downshiftOptionRadios);
+  
 
-    for (var i = 0; i < downshiftOptionRadios.length; i++) {
+    for(var i = 0; i < downshiftOptionRadios.length; i++) {
         downshiftOptionRadios[i].addEventListener("change", function() {
+        var selectedValue = this.value;
+        localStorage.setItem('downshift_option',selectedValue);
+        if(selectedValue  == 1){
+            document.querySelector('div[for="downshift-threshold"]').style.display = "none";
+            document.getElementById('downshift_threshold').style.display = "none";
+
+            document.querySelector('div[for="downshift-torque"]').style.display = "none";
+            document.getElementById('downshift_torque').style.display = "none";
+
+            document.querySelector('div[for="downshift-rpm"]').style.display = "none";
+            document.getElementById('downshift_rpm').style.display = "none";
+        }else{
+            document.querySelector('div[for="downshift-threshold"]').style.display = "block";
+            document.getElementById('downshift_threshold').style.display = "block";
+
+            document.querySelector('div[for="downshift-torque"]').style.display = "block";
+            document.getElementById('downshift_torque').style.display = "block";
+
+            document.querySelector('div[for="downshift-rpm"]').style.display = "block";
+            document.getElementById('downshift_rpm').style.display = "block";
+
+        }
           
-            if (this.checked) {
-                document.querySelector('div[for="downshift-threshold"]').style.display = "none";
-                document.getElementById('downshift_threshold').style.display = "none";
-
-                document.querySelector('div[for="downshift-threshold"]').style.display = "none";
-                document.getElementById('downshift_threshold').style.display = "none";
-
-                document.querySelector('div[for="downshift-torque"]').style.display = "none";
-                document.getElementById('downshift_torque').style.display = "none";
-
-                document.querySelector('div[for="downshift-rpm"]').style.display = "none";
-                document.getElementById('downshift_rpm').style.display = "none";
-
-
-            }
         });
     }
 
@@ -543,6 +961,49 @@ function del_stepid(step_id){
 
     }
 
+}
+
+function disableElements(elements, value) {
+    elements.forEach(function(element) {
+        element.disabled = value;
+        element.value = value === true ? 0 : ''; 
+    });
+}
+
+function handleTargetOptionChange(value) {
+    var targetTorqueDiv = document.querySelector('div[for="edit_target-torque"]');
+    if (value == 2) {
+        targetTorqueDiv.textContent = "Target Delay Time";
+    } else if (value == 1) {
+        targetTorqueDiv.textContent = "Target Angle (degree)";
+    } else if (value == 0) {
+        targetTorqueDiv.textContent = "Target Torque (kgf-cm)";
+    }
+}
+
+function toggleDownshiftOptions(value) {
+    var torqueDiv = document.querySelector('div[for="edit_downshift-torque"]');
+    var thresholdDiv = document.querySelector('div[for="edit_downshift-threshold"]');
+    var rpmDiv = document.querySelector('div[for="edit_downshift-rpm"]');
+    var torqueInput = document.getElementById('edit_downshift_torque');
+    var thresholdInput = document.getElementById('edit_downshift_threshold');
+    var rpmInput = document.getElementById('edit_downshift_rpm');
+
+    if (value == 1) {
+        torqueDiv.style.display = "block";
+        thresholdDiv.style.display = "block";
+        rpmDiv.style.display = "block";
+        torqueInput.style.display = "block";
+        thresholdInput.style.display = "block";
+        rpmInput.style.display = "block";
+    } else {
+        torqueDiv.style.display = "none";
+        thresholdDiv.style.display = "none";
+        rpmDiv.style.display = "none";
+        torqueInput.style.display = "none";
+        thresholdInput.style.display = "none";
+        rpmInput.style.display = "none";
+    }
 }
 
 
