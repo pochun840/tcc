@@ -147,6 +147,7 @@ class Sequences extends Controller
             $seq_count = $this->sequenceModel->countseq($jobid);
             $seq_count = intval($seq_count);
            
+            #檢查job 
             if($seq_count >= 50) {
                 echo "The maximum number of steps has been reached, unable to continue copying seqs";
                 return;
@@ -189,8 +190,7 @@ class Sequences extends Controller
 
         if(!empty($jobid)){
             $res = $this->sequenceModel->check_seq_type($jobid,$seqname,$type_value);
-            if($res){
-                
+            if($res){ 
                 //$res_msg = 'update seq:'. $seqid.'success';
             }else{
                 //$res_msg = 'update seq:'. $seqid.'fail';
@@ -245,8 +245,6 @@ class Sequences extends Controller
                     'offset' => $old_res['offset'], 
 
                 );
-
-                //var_dump($jobdata);die();
 
                 $res = $this->sequenceModel->create_seq($mode,$jobdata);
                 if($res){
