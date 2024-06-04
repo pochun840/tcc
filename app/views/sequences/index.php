@@ -547,13 +547,6 @@ function MoveDown(button) {
     }
 }
 
-
-
-
-
-
-
-
 function cound_job(argument){
 
     var seqid = readFromLocalStorage("seqid");
@@ -588,10 +581,8 @@ function copy_seq_by_id(){
     document.getElementById('to_seq_id').value = newseqid;
     document.getElementById('old_seq_id').value= oldseqid;
   
-
     var newseqname = document.getElementById("to_seq_name").value;
 
-    //console.log(newseqname);
    if(newseqname){
         $.ajax({
             url: "?url=Sequences/copy_seq",
