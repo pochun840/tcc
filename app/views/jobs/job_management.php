@@ -287,11 +287,8 @@ function cound_job(argument){
     var jobid = selectedRowData ? selectedRowData[0] : null;
 
     //移除
-    removeElementById("job_table_filter");
-    removeElementById("job_table_length");
-    removeElementById("job_table_info");
-    removeElementById("job_table_paginate");
-
+    var elementsToRemove = ["job_table_filter", "job_table_length", "job_table_info", "job_table_paginate"];
+    removeElements(elementsToRemove);
 
     if(argument == 'del' && jobid != null){
         delete_jobid(jobid);
