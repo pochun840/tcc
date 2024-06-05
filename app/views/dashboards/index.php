@@ -21,7 +21,7 @@
 
             <div class="button col pt-5">
                 <button class="menu-item blue" id="job_manager" style="font-size: 20px;" onclick="window.location.href='?url=Jobs/index'">Job</button>
-                <button class="menu-item green" id="io_input" style="font-size: 20px;">IO Input</button>
+                <button class="menu-item green" id="io_input" style="font-size: 20px;"   onclick="window.location.href='?url=Inputs/index'">IO Input</button>
                 <button class="menu-item orange" id="io_output" style="font-size: 20px">IO Output</button>
                 <br><br>
                 <button class="menu-item purple" id="operation" style="font-size: 20px">Operation</button>

@@ -13,8 +13,9 @@ class Inputs extends Controller
     public function index(){
 
         //要檢查是否有alljobinput，有的話要直接帶入
-
-        $job_list = $this->InputModel->get_job_list();
+        $isMobile = $this->isMobileCheck();
+        
+        /*$job_list = $this->InputModel->get_job_list();
         $isMobile = $this->isMobileCheck();
         $device_data = $this->InputModel->get_input_alljob();
         $device_info = $this->Device_Info();
@@ -30,8 +31,9 @@ class Inputs extends Controller
             $this->view('input/index_m', $data);
         }else{
             $this->view('input/index', $data);
-        }
-        
+        }*/
+        $data = array();
+        $this->view('input/index', $data);
 
     }
 
