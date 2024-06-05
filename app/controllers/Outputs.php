@@ -14,24 +14,19 @@ class Outputs extends Controller
 
         //要檢查是否有alljobinput，有的話要直接帶入
 
-        $job_list = $this->InputModel->get_job_list();
+        //$job_list = $this->InputModel->get_job_list();
         $isMobile = $this->isMobileCheck();
-        $device_data = $this->InputModel->get_input_alljob();
-        $device_info = $this->Device_Info();
+        //$device_data = $this->InputModel->get_input_alljob();
+        //$device_info = $this->Device_Info();
 
         $data = [
             'isMobile' => $isMobile,
-            'job_list' => $job_list,
-            'device_data' => $device_data,
-            'device_info' => $device_info
+            //'job_list' => $job_list,
+            //'device_data' => $device_data,
+            //'device_info' => $device_info
         ];
-        
-        if($isMobile){
-            $this->view('output/index_m', $data);
-        }else{
-            $this->view('output/index', $data);
-        }
 
+        $this->view('input/index', $data);
     }
 
     // get_input_by_job_id
