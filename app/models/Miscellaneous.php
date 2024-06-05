@@ -52,6 +52,37 @@ class Miscellaneous{
 
     }
 
+    #驗證name 
+    function validateName($jobName){
+        if (!empty($jobName)) {
+            if (preg_match('/^[a-zA-Z0-9-]+$/', $jobName)) {
+                if (strlen($jobName) > 12) {
+                    return  false;
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    function validateUnscrewPower($unscrewPower) {
+        if (is_numeric($unscrewPower)) {
+            if ($unscrewPower >= 0 && $unscrewPower <= 10) {
+                return true; 
+            } else {
+                return false; 
+            }
+        } else {
+            return false; 
+        }
+    }
+
+
+
 
     
 }
