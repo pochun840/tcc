@@ -9,6 +9,7 @@ class Step extends Controller
         //$this->ToolModel = $this->model('Tool');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
         $this->stepModel = $this->model('Steptcc');
+        $this->sequenceModel = $this->model('Sequence');
     }
 
     public function index($job_id,$seq_id){
@@ -23,7 +24,11 @@ class Step extends Controller
         $step = $this->stepModel->getStep($job_id, $seq_id);
         $target_option = $this->MiscellaneousModel->details("target_option");
         $direction = $this->MiscellaneousModel->details('unscrew_direction');
+        $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
+        $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
 
+        $unit = $unit_arr[$seqinfo[0]['torque_unit']];
+  
 
         if(empty($step)){
             $stepid_new = 1;
@@ -39,6 +44,8 @@ class Step extends Controller
             'job_id' => $job_id,
             'seq_id' => $seq_id,
             'stepid_new' => $stepid_new,
+            'unit_arr' => $unit_arr,
+            'unit' => $unit
         );
 
         
@@ -49,23 +56,7 @@ class Step extends Controller
 
     #create step 
     public function create_step(){
-        /*
-         jobid: jobid,
-                seqid: seqid,
-                stepid: stepid,
-                target_option: target_option,
-                target_torque: target_torque,
-                hi_torque: hi_torque,
-                lo_torque: lo_torque,
-                hi_angle: hi_angle,
-                lo_angle: lo_angle,
-                rpm: rpm,
-                direction: direction,
-                downshift: downshift,
-                threshold_torque: threshold_torque,
-                downshift_torque: downshift_torque,
-                downshift_speed: downshift_speed
-        */
+
         if(isset($_POST['jobid'])){
 
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;

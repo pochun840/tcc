@@ -110,19 +110,19 @@
                         </div>
 
                         <div class="row">
-                            <div for="target-torque" class="col-6 t1">Target Torque (kgf-cm):</div>
+                            <div for="target-torque" class="col-6 t1">Target Torque (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="hi-torque" class="col-6 t1">Hi Torque (kgf-cm):</div>
+                            <div for="hi-torque" class="col-6 t1">Hi Torque (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="hi_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="lo-torque" class="col-6 t1">Lo Torque (kgf-cm):</div>
+                            <div for="lo-torque" class="col-6 t1">Lo Torque (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="lo_torque" maxlength="" >
                             </div>
@@ -172,13 +172,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-threshold" class="col-6 t1">Downshift Threshold(kgf-cm):</div>
+                            <div for="downshift-threshold" class="col-6 t1">Downshift Threshold(<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="downshift_threshold" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-torque" class="col-6 t1">Downshift Torque(kgf-cm):</div>
+                            <div for="downshift-torque" class="col-6 t1">Downshift Torque(<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="downshift_torque" maxlength="" >
                             </div>
@@ -225,19 +225,19 @@
                         </div>
 
                         <div class="row">
-                            <div for="edit_target-torque" class="col-6 t1">Target Torque (kgf-cm):</div>
+                            <div for="edit_target-torque" class="col-6 t1">Target Torque (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_target_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="hi-torque" class="col-6 t1">Hi Torque (kgf-cm):</div>
+                            <div for="hi-torque" class="col-6 t1">Hi Torque (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_hi_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="lo-torque" class="col-6 t1">Lo Torque (kgf-cm):</div>
+                            <div for="lo-torque" class="col-6 t1">Lo Torque (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_lo_torque" maxlength="" >
                             </div>
@@ -287,13 +287,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-threshold" class="col-6 t1">Downshift Threshold(kgf-cm):</div>
+                            <div for="edit_downshift-threshold" class="col-6 t1">Downshift Threshold(<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_threshold" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-torque" class="col-6 t1">Downshift Torque(kgf-cm):</div>
+                            <div for="edit_downshift-torque" class="col-6 t1">Downshift Torque(<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_torque" maxlength="" >
                             </div>
@@ -387,7 +387,6 @@ window.onclick = function(event) {
     }
 }
 
-
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
     (function(row) {
@@ -430,6 +429,8 @@ function edit_step(){
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
     var stepid = readFromLocalStorage("stepid");
+
+    var unit = '<?php echo $data['unit']?>';
 
     if(jobid){
         $.ajax({
@@ -512,7 +513,7 @@ function edit_step(){
                 }
 
                 if(target_option == 0){
-                    document.querySelector('div[for="edit_target-torque"]').textContent = "Target Torque (kgf-cm)";
+                    document.querySelector('div[for="edit_target-torque"]').textContent = "Target Torque (" + unit+")";
                     document.getElementById("edit_target_torque").value = target_torque;
                 }
 
@@ -600,7 +601,7 @@ function edit_step(){
                     }
 
                     if(selectedValue == 0){
-                        document.querySelector('div[for="edit_target-torque"]').textContent = "Target Torque (kgf-cm)";
+                        document.querySelector('div[for="edit_target-torque"]').textContent = "Target Torque (" + unit + ")";
 
                     }
                 });
@@ -733,6 +734,8 @@ function edit_step_save() {
 function create_step() {
     document.getElementById('newstep').style.display = 'block';
 
+    var unit = '<?php echo $data['unit']?>';
+
     var targetoptionselect = document.getElementById('target_option');
     targetoptionselect.addEventListener('change', function() {
         var targetOptionValue = targetoptionselect.value;
@@ -763,7 +766,7 @@ function create_step() {
         downshiftOptions.forEach(radioButton => radioButton.disabled = false);
 
         if (targetOptionValue == 2) {
-            document.querySelector('div[for="target-torque"]').textContent = "Target Delay Time  (kgf-cm)";
+            document.querySelector('div[for="target-torque"]').textContent = "Target Delay Time";
             
             hiTorqueElement.disabled = true;
             loTorqueElement.disabled = true;
@@ -781,7 +784,7 @@ function create_step() {
         }
 
         else if (targetOptionValue == 0) {
-            document.querySelector('div[for="target-torque"]').textContent = "Target Torque (kgf-cm)";
+            document.querySelector('div[for="target-torque"]').textContent = "Target Torque (" + unit + ")";
         }
     });
 
