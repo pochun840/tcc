@@ -14,6 +14,9 @@ class Login{
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
 
+        $this->db_iDas_login = new Database;
+        $this->db_iDas_login  = $this->db_iDas_login->getDb_das_login();
+
     }
 
     // 取得控制器登入密碼
@@ -30,7 +33,7 @@ class Login{
     public function GetiDasPwd()
     {
         $sql = "SELECT * FROM `users` ";
-        $statement = $this->db_iDas->prepare($sql);
+        $statement = $this->db_iDas_login->prepare($sql);
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -41,12 +44,12 @@ class Login{
     public function logLoginAttempt($ip) {
 
         // 插入登录尝试记录
-        $stmt = $this->db_iDas->prepare("INSERT INTO login_attempts (ip) VALUES (:ip)");
+        $stmt = $this->db_iDas_login->prepare("INSERT INTO login_attempts (ip) VALUES (:ip)");
         $stmt->bindValue(':ip', $ip);
         $stmt->execute();
 
         // 获取当前记录数量
-        $result = $this->db_iDas->query("SELECT COUNT(*) AS count FROM login_attempts");
+        $result = $this->db_iDas_login->query("SELECT COUNT(*) AS count FROM login_attempts");
         $row = $result->fetch(PDO::FETCH_ASSOC);
         $count = $row['count'];
         
@@ -54,7 +57,7 @@ class Login{
         $max_records = 100;
         if ($count > $max_records) {
             $delete_count = $count - $max_records;
-            $this->db_iDas->exec("DELETE FROM login_attempts WHERE id IN (SELECT id FROM login_attempts ORDER BY id ASC LIMIT $delete_count)");
+            $this->db_iDas_login->exec("DELETE FROM login_attempts WHERE id IN (SELECT id FROM login_attempts ORDER BY id ASC LIMIT $delete_count)");
         }
     }
 
@@ -62,7 +65,7 @@ class Login{
     public function GetConcurrentUsers($session_id) {
 
         // 查询当前活动会话的数量
-        $result = $this->db_iDas->query("SELECT COUNT(*) AS active_sessions FROM active_sessions WHERE session_id <> '".$session_id."'");
+        $result = $this->db_iDas_login->query("SELECT COUNT(*) AS active_sessions FROM active_sessions WHERE session_id <> '".$session_id."'");
         $row = $result->fetch(PDO::FETCH_ASSOC);
         $active_sessions = $row['active_sessions'];
 
@@ -76,7 +79,7 @@ class Login{
         $expired_timestamp = date('Y-m-d H:i:s',time() - 600);
 
         // 删除过期的会话记录
-        $stmt = $this->db_iDas->prepare("DELETE FROM active_sessions WHERE timestamp < :expired_timestamp");
+        $stmt = $this->db_iDas_login->prepare("DELETE FROM active_sessions WHERE timestamp < :expired_timestamp");
         $stmt->bindValue(':expired_timestamp', $expired_timestamp);
         $stmt->execute();
 
@@ -96,13 +99,13 @@ class Login{
         $row = $this->session_exist_check($session_id);
 
         if($row == false){
-            $stmt = $this->db_iDas->prepare("INSERT INTO active_sessions (username, session_id, ip) VALUES (:username, :session_id, :ip)");
+            $stmt = $this->db_iDas_login->prepare("INSERT INTO active_sessions (username, session_id, ip) VALUES (:username, :session_id, :ip)");
             $stmt->bindValue(':username', $username);
             $stmt->bindValue(':session_id', $session_id);
             $stmt->bindValue(':ip', $ip);
             $stmt->execute();
         }else{
-            $stmt = $this->db_iDas->prepare("UPDATE active_sessions SET timestamp = :time_now WHERE session_id  = :session_id ");
+            $stmt = $this->db_iDas_login->prepare("UPDATE active_sessions SET timestamp = :time_now WHERE session_id  = :session_id ");
             $stmt->bindValue(':time_now', date('Y-m-d H:i:s'));
             $stmt->bindValue(':session_id', $session_id);
             $stmt->execute();
@@ -112,7 +115,7 @@ class Login{
 
     public function session_exist_check($session_id)
     {
-        $stmt = $this->db_iDas->prepare("SELECT session_id FROM active_sessions WHERE session_id = :session_id");
+        $stmt = $this->db_iDas_login->prepare("SELECT session_id FROM active_sessions WHERE session_id = :session_id");
         $stmt->bindValue(':session_id', $session_id);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -124,7 +127,7 @@ class Login{
     public function get_max_user() {
 
         // 查询当前活动会话的数量
-        $result = $this->db_iDas->query("SELECT * FROM config WHERE config_name = 'max_concurrent_users' ");
+        $result = $this->db_iDas_login->query("SELECT * FROM config WHERE config_name = 'max_concurrent_users' ");
         $row = $result->fetch(PDO::FETCH_ASSOC);
         $max_user = $row['config_value'];
 
