@@ -15,7 +15,7 @@
 
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="<?php echo URLROOT; ?>js/all.js?v=202405291030"></script>
+    <script src="<?php echo URLROOT; ?>js/all.js?v=202406051600"></script>
     <title><?php echo SITENAME; ?></title>
 
     <style>
