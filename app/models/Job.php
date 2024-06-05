@@ -22,9 +22,11 @@ class Job{
     #取得所有Job
     public function getJobs(){
 
-        $sql = "SELECT job.*,count(job.job_id) as total_seq  FROM  `job` LEFT JOIN sequence on job.job_id = sequence.job_id 
+        $sql = "SELECT job.*, IFNULL(COUNT(sequence.job_id), 0) as total_seq  
+                FROM `job`
+                LEFT JOIN sequence on job.job_id = sequence.job_id 
                 WHERE job.job_id != ''
-                GROUP by job.job_id";
+                GROUP BY job.job_id ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute();
 
