@@ -281,7 +281,16 @@ window.onclick = function(event) {
     
 function cound_job(argument){
 
-    var jobid = readFromLocalStorage("jobid");
+    let table = $('#job_table').DataTable();
+    let jobid;
+
+    try { 
+        jobid = table.row('.selected').data()[0];
+    } catch (error) {
+        jobid = null; 
+    };
+
+
     if(argument == 'del' && jobid != null){
         delete_jobid(jobid);
     }
