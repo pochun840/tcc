@@ -486,7 +486,16 @@ for (var i = 0; i < rows.length; i++) {
 
 function cound_job(argument){
 
-    var seqid = readFromLocalStorage("seqid");
+
+    var table = $('#seq_table').DataTable();
+    var selectedRowData = table.row('.selected').data();
+    var seqid = selectedRowData ? selectedRowData[0] : null;
+
+    //移除
+    var elementsToRemove = ["seq_table_filter", "seq_table_length", "seq_table_info", "seq_table_paginate"];
+    removeElements(elementsToRemove);
+
+
     if(argument == 'del' && seqid != null){
         delete_seqid(seqid);
     }
@@ -634,10 +643,7 @@ function edit_seq(seqid) {
                 var oldTighteningRepeat = document.getElementById("edit_tighten_repeat").value;
                 var oldtorque_unit = document.getElementsByName("edit_torque_unit").value;
 
-                if (seqname !== oldSeqname || tightening_repeat !== oldTighteningRepeat || oldtorque_unit !==  torque_unit) {
-                    edit_seq_save();
-
-                }
+               
             },
             error: function(xhr, status, error) {
              
@@ -690,6 +696,7 @@ function edit_seq_save(){
             success: function(response) {
                 console.log( response);
                 alert(response);
+                //localStorage.removeItem("seqid");
                 history.go(0);
             },
             error: function(xhr, status, error) {

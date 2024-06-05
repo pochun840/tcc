@@ -281,14 +281,16 @@ window.onclick = function(event) {
     
 function cound_job(argument){
 
-    let table = $('#job_table').DataTable();
-    let jobid;
+ 
+    var table = $('#job_table').DataTable();
+    var selectedRowData = table.row('.selected').data();
+    var jobid = selectedRowData ? selectedRowData[0] : null;
 
-    try { 
-        jobid = table.row('.selected').data()[0];
-    } catch (error) {
-        jobid = null; 
-    };
+    //移除
+    removeElementById("job_table_filter");
+    removeElementById("job_table_length");
+    removeElementById("job_table_info");
+    removeElementById("job_table_paginate");
 
 
     if(argument == 'del' && jobid != null){

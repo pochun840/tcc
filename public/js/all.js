@@ -81,3 +81,14 @@ function swap_row(row1, row2) {
     parent.insertBefore(row2, row1);
     parent.insertBefore(row1, nextSibling);
 }
+
+
+
+function removeElements(elementIds) {
+    elementIds.forEach(function(id) {
+        var element = document.getElementById(id);
+        if (element) {
+            element.parentNode.removeChild(element);
+        }
+    });
+}

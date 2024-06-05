@@ -55,7 +55,6 @@ class Job{
     #新增JOB
     public function create_job($mode, $jobdata){
         
-        
         $sql = "INSERT INTO `job`(job_id, job_name, unscrew_power, unscrew_rpm, unscrew_direction)";
         $sql .= "VALUES(:job_id, :job_name, :unscrew_power, :unscrew_rpm, :unscrew_direction);";
         $statement = $this->db_iDas->prepare($sql);
@@ -110,6 +109,7 @@ class Job{
         $rows = $statement->fetch();
         return $rows;
     }
+
 
     #計算 有幾個JOB
     public function countjob(){
