@@ -57,8 +57,8 @@
                             <td><?php echo $val['step_id'];?></td>
                             <td><?php echo $data['target_option'][$val['target_option']];?></td>
                             <td><?php echo $data['direction'][$val['direction']];?></td>
-                            <td><img src="./img/btn_up.png"></td>
-                            <td><img src="./img/btn_down.png"></td>
+                            <td><img src="./img/btn_up.png" onclick="MoveUp(this);"></td>
+                            <td><img src="./img/btn_down.png"onclick="MoveDown(this);"></td>
                         </tr>
                         <?php } ?>
                     </tbody>
@@ -877,11 +877,6 @@ function add_step(){
             }
         });
     }
-
-
-
-    
-
 }
 
 function copy_step(stepid){
@@ -970,43 +965,82 @@ function disableElements(elements, value) {
     });
 }
 
-function handleTargetOptionChange(value) {
-    var targetTorqueDiv = document.querySelector('div[for="edit_target-torque"]');
-    if (value == 2) {
-        targetTorqueDiv.textContent = "Target Delay Time";
-    } else if (value == 1) {
-        targetTorqueDiv.textContent = "Target Angle (degree)";
-    } else if (value == 0) {
-        targetTorqueDiv.textContent = "Target Torque (kgf-cm)";
+var rowInfoArray = [];
+<?php foreach($data['step'] as $key =>$val) {?>
+        var jobid = "<?php echo $val['job_id'];?>";
+        var sequenceId = "<?php echo $val['sequence_id'];?>";
+        var stepid = "<?php echo $val['step_id'];?>";
+      
+        
+        var rowInfo = {
+            job_id: jobid,
+            sequence_id: sequenceId,
+            step_id: stepid,
+        };
+        
+        rowInfoArray.push(rowInfo);
+<?php } ?>
+
+function swap_row(row1, row2) {
+    var parent = row1.parentNode;
+    var nextSibling = row2.nextSibling;
+    parent.insertBefore(row2, row1);
+    parent.insertBefore(row1, nextSibling);
+}
+
+function MoveUp(button) {
+    var row = button.parentNode.parentNode;
+    var prevRow = row.previousElementSibling;
+    if (prevRow) {
+        swap_row(row, prevRow);
+       
+        var index1 = Array.from(row.parentNode.children).indexOf(row);
+        var index2 = Array.from(row.parentNode.children).indexOf(prevRow);
+        var temp = rowInfoArray[index1];
+        rowInfoArray[index1] = rowInfoArray[index2];
+        rowInfoArray[index2] = temp;
+        sendRowInfoArray();
     }
 }
 
-function toggleDownshiftOptions(value) {
-    var torqueDiv = document.querySelector('div[for="edit_downshift-torque"]');
-    var thresholdDiv = document.querySelector('div[for="edit_downshift-threshold"]');
-    var rpmDiv = document.querySelector('div[for="edit_downshift-rpm"]');
-    var torqueInput = document.getElementById('edit_downshift_torque');
-    var thresholdInput = document.getElementById('edit_downshift_threshold');
-    var rpmInput = document.getElementById('edit_downshift_rpm');
-
-    if (value == 1) {
-        torqueDiv.style.display = "block";
-        thresholdDiv.style.display = "block";
-        rpmDiv.style.display = "block";
-        torqueInput.style.display = "block";
-        thresholdInput.style.display = "block";
-        rpmInput.style.display = "block";
-    } else {
-        torqueDiv.style.display = "none";
-        thresholdDiv.style.display = "none";
-        rpmDiv.style.display = "none";
-        torqueInput.style.display = "none";
-        thresholdInput.style.display = "none";
-        rpmInput.style.display = "none";
+function MoveDown(button) {
+    var row = button.parentNode.parentNode;
+    var nextRow = row.nextElementSibling;
+    if (nextRow) {
+        swap_row(nextRow, row);
+     
+        var index1 = Array.from(row.parentNode.children).indexOf(row);
+        var index2 = Array.from(row.parentNode.children).indexOf(nextRow);
+        var temp = rowInfoArray[index1];
+        rowInfoArray[index1] = rowInfoArray[index2];
+        rowInfoArray[index2] = temp;
+        sendRowInfoArray();
     }
 }
 
+function sendRowInfoArray() {
+    var jobid = '<?php echo $data['job_id']?>';
+    var dataToSend = {
+        jobid: jobid,
+        rowInfoArray: rowInfoArray
+    };
+ 
+    if(rowInfoArray){
 
+        $.ajax({
+            url: "?url=Step/adjustment_order", 
+            method: "POST",
+            data: dataToSend,
+            success: function(response) {
+                console.log(response);
+                history.go(0); 
+            },
+            error: function(xhr, status, error) {
+                console.error('Error sending data:', error);
+            }
+        });
+    }
+}
 </script>
 
 <style type="text/css">
