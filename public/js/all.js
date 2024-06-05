@@ -38,3 +38,46 @@ function highlight_row(tableId)
         }
     }
 }
+
+
+function MoveUp(button) {
+    var row = button.parentNode.parentNode;
+    var prevRow = row.previousElementSibling;
+    if (prevRow) {
+        swap_row(row, prevRow);
+       
+        var index1 = Array.from(row.parentNode.children).indexOf(row);
+        var index2 = Array.from(row.parentNode.children).indexOf(prevRow);
+        var temp = rowInfoArray[index1];
+        rowInfoArray[index1] = rowInfoArray[index2];
+        rowInfoArray[index2] = temp;
+
+        console.log(rowInfoArray);
+        sendRowInfoArray();
+    }
+}
+
+function MoveDown(button) {
+    var row = button.parentNode.parentNode;
+    var nextRow = row.nextElementSibling;
+    if (nextRow) {
+        swap_row(nextRow, row);
+     
+        var index1 = Array.from(row.parentNode.children).indexOf(row);
+        var index2 = Array.from(row.parentNode.children).indexOf(nextRow);
+        var temp = rowInfoArray[index1];
+        rowInfoArray[index1] = rowInfoArray[index2];
+        rowInfoArray[index2] = temp;
+
+        console.log(rowInfoArray);
+        sendRowInfoArray();
+    }
+}
+
+
+function swap_row(row1, row2) {
+    var parent = row1.parentNode;
+    var nextSibling = row2.nextSibling;
+    parent.insertBefore(row2, row1);
+    parent.insertBefore(row1, nextSibling);
+}
