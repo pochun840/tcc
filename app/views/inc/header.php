@@ -22,8 +22,11 @@
         .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
         .t2{font-size: 17px; margin: 5px 0px;}
         .t3{font-size: 17px; margin: 3px 0px;}
+        .selected { background-color: #9AC0CD !important;}
 
     </style>
+
+
 
 </head>
 <body>

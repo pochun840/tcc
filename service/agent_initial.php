@@ -2,7 +2,8 @@
 
 if (file_exists('/var/www/html/database/das.db') && PHP_OS_FAMILY == 'Linux') {
 	$db_iDas = new PDO('sqlite:/var/www/html/database/das.db'); //das設定DB
-	// $db_iDas = new PDO('sqlite:./das.db'); //das設定DB
+
+	
 	$result = $db_iDas->query("SELECT * FROM config WHERE config_name = 'agent_type' ");
 	$rows = $result->fetch(PDO::FETCH_ASSOC);
 	$agent_type = $rows['config_value'];

@@ -5,6 +5,7 @@ class Input{
     private $db_dev;//devdb tool
     private $db_data;//devdb tool
     private $dbh;
+    private $db_iDas;
 
     // 在建構子將 Database 物件實例化
     public function __construct()
@@ -19,6 +20,11 @@ class Input{
         $this->db_data = $this->db_data->getDb_data();
 
         $this->dbh = new Database;
+
+
+        $this->db_iDas = new Database;
+        $this->db_iDas = $this->db_iDas->getDb_das();
+
 
     }
 
@@ -47,8 +53,8 @@ class Input{
     //get all job
     public function get_job_list()
     {
-        $sql = "SELECT * FROM job ORDER BY job_id";
-        $statement = $this->db->prepare($sql);
+        $sql = "SELECT * FROM job ORDER BY job_id ";
+        $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);
 

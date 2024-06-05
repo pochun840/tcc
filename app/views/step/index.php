@@ -1037,11 +1037,6 @@ function sendRowInfoArray() {
 }
 </script>
 
-<style type="text/css">
-    .selected {
-        background-color: #9AC0CD !important;
-    }
-</style>
 </body>
 
 </html>

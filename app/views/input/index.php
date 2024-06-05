@@ -29,17 +29,17 @@
                     <div class="w3-light-grey">
                         <header class="w3-container w3-dark-grey" style="height: 48px">
                             <span onclick="document.getElementById('JobSelect').style.display='none'" class="w3-button w3-red w3-large w3-display-topright" style="margin: 2px">&times;</span>
-                            <h3 style="margin: 5px">Job Select</h3>
+                            <h3 style="margin: 5px" onclick="get_job_list()">Job Select</h3>
                         </header>
                         <table id="Job_Select">
                             <tr>
                                 <td>
                                     <select style="margin: center" id="JobNameSelect" name="JobNameSelect" size="200">
-                                        <option value="1">Sample Job 1</option>
+                                        <!--<option value="1">Sample Job 1</option>
                                         <option value="2">Sample Job 2</option>
                                         <option value="3">Sample Job 3</option>
                                         <option value="4">Sample Job 4</option>
-                                        <option value="5">Sample Job 5</option>                                                                                                                             
+                                        <option value="5">Sample Job 5</option>-->                                                                                                                             
                                      </select>
                                 </td>
                             </tr>
@@ -483,11 +483,6 @@ window.onclick = function(event) {
 
 </script>
 
-<style type="text/css">
-    .selected {
-        background-color: #9AC0CD !important;
-    }
-</style>
 </body>
 
 </html>

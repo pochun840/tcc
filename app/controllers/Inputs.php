@@ -14,25 +14,17 @@ class Inputs extends Controller
 
         //要檢查是否有alljobinput，有的話要直接帶入
         $isMobile = $this->isMobileCheck();
-        
-        /*$job_list = $this->InputModel->get_job_list();
-        $isMobile = $this->isMobileCheck();
-        $device_data = $this->InputModel->get_input_alljob();
-        $device_info = $this->Device_Info();
+        $job_list = $this->InputModel->get_job_list();
 
-        $data = [
-            'isMobile' => $isMobile,
-            'job_list' => $job_list,
-            'device_data' => $device_data,
-            'device_info' => $device_info
-        ];
-        
-        if($isMobile){
-            $this->view('input/index_m', $data);
-        }else{
-            $this->view('input/index', $data);
-        }*/
         $data = array();
+
+        $data = array(
+            'isMobile' => $isMobile,
+            'job_list' => $joblist,
+
+        );
+
+        
         $this->view('input/index', $data);
 
     }

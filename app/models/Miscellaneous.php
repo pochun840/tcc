@@ -47,6 +47,29 @@ class Miscellaneous{
             );
         }
 
+        if($mode =="io_input"){
+            $array = array(
+                101 => 'Disable',
+                102 => 'Enable',
+                103 => 'Clear',
+                104 => 'Confirm',
+                105 => 'Start-IN(Remote)',
+                106 => 'Unscrew(Remote)',
+                107 => 'Sequence Clear',
+                108 => 'Reboot',
+                109 => 'Gate Once',
+                110 => 'UserDefine1',
+                111 => 'UserDefine2',
+                112 => 'UserDefine3',
+                113 => 'UserDefine4',
+                114 => 'UserDefine5',
+                //1   => ''
+
+            );
+        }
+
+
+
         return $array;
 
 
