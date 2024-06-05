@@ -24,6 +24,9 @@ class Admin{
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
 
+        $this->db_iDas_login = new Database;
+        $this->db_iDas_login = $this->db_iDas_login->getDb_das_login();
+
     }
 
     public function GetActiveSession()
@@ -36,7 +39,7 @@ class Admin{
 
     public function Get_Das_Config($config_name)
     {
-        $result = $this->db_iDas->query("SELECT * FROM config WHERE config_name = '".trim($config_name)."' ");
+        $result = $this->db_iDas_login->query("SELECT * FROM config WHERE config_name = '".trim($config_name)."' ");
         $rows = $result->fetch(PDO::FETCH_ASSOC);
 
         return $rows['config_value'];
@@ -46,7 +49,7 @@ class Admin{
 
         foreach ($sessionsToDelete as $sessionId) {
             // 执行删除操作
-            $stmt = $this->db_iDas->prepare("DELETE FROM active_sessions WHERE id = :sessionId");
+            $stmt = $this->db_iDas_login->prepare("DELETE FROM active_sessions WHERE id = :sessionId");
             $stmt->bindValue(':sessionId', $sessionId);
             $stmt->execute();
         }
@@ -55,7 +58,7 @@ class Admin{
     public function Edit_Guest_Password($new_password)
     {
         $sql = "UPDATE `users` SET password = ? WHERE id = 1 AND username = 'guest'";
-        $statement = $this->db_iDas->prepare($sql);
+        $statement = $this->db_iDas_login->prepare($sql);
         $results = $statement->execute([$new_password]);
 
         return $results;
@@ -64,7 +67,7 @@ class Admin{
     public function Edit_Max_Link($max_user)
     {
         $sql = "UPDATE `config` SET config_value = :max_user WHERE config_name = 'max_concurrent_users' ";
-        $statement = $this->db_iDas->prepare($sql);
+        $statement = $this->db_iDas_login->prepare($sql);
         $statement->bindValue(':max_user', $max_user);
         $results = $statement->execute();
 
@@ -74,7 +77,7 @@ class Admin{
     public function Set_Agent_Ip($ip)
     {
         $sql = "UPDATE `config` SET config_value = :ip WHERE config_name = 'agent_server_ip' ";
-        $statement = $this->db_iDas->prepare($sql);
+        $statement = $this->db_iDas_login->prepare($sql);
         $statement->bindValue(':ip', $ip);
         $results = $statement->execute();
 
@@ -85,20 +88,20 @@ class Admin{
     {
         //check config_name exist 
         $sql = "SELECT COUNT(*) as count FROM  `config` WHERE config_name = :config_name ";
-        $statement = $this->db_iDas->prepare($sql);
+        $statement = $this->db_iDas_login->prepare($sql);
         $statement->bindValue(':config_name', $config_name);
         $results = $statement->execute();
         $results = $statement->fetch();
 
         if($results['count'] > 0){//表示config已存在，用update
             $sql = "UPDATE `config` SET config_value = :value WHERE config_name = :config_name ";
-            $statement = $this->db_iDas->prepare($sql);
+            $statement = $this->db_iDas_login->prepare($sql);
             $statement->bindValue(':config_name', $config_name);
             $statement->bindValue(':value', $value);
             $results = $statement->execute();
         }else{//表示config不存在，用insert
             $sql = "INSERT INTO `config` (config_name, config_value) VALUES (:config_name, :value) ";
-            $statement = $this->db_iDas->prepare($sql);
+            $statement = $this->db_iDas_login->prepare($sql);
             $statement->bindValue(':config_name', $config_name);
             $statement->bindValue(':value', $value);
             $results = $statement->execute();
@@ -110,7 +113,7 @@ class Admin{
     public function Edit_Csv_Path($file_path)
     {
         $sql = "UPDATE `config` SET config_value = :max_user WHERE config_name = 'max_concurrent_users' ";
-        $statement = $this->db_iDas->prepare($sql);
+        $statement = $this->db_iDas_login->prepare($sql);
         $statement->bindValue(':max_user', $max_user);
         $results = $statement->execute();
 
