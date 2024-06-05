@@ -643,7 +643,7 @@ function create_seq() {
 
 }
 
-function edit_seq() {
+function edit_seq(seqid) {
     var seqid = readFromLocalStorage("seqid");
     var jobid = '<?php echo $data['job_id']?>';
 
