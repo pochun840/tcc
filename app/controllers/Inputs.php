@@ -24,7 +24,7 @@ class Inputs extends Controller
 
         );
 
-        
+
         $this->view('input/index', $data);
 
     }
@@ -284,6 +284,12 @@ class Inputs extends Controller
         }
 
         echo json_encode($job_inputs);
+    }
+
+    public function get_job(){
+
+        $res = $this->InputModel->get_job_list();
+
     }
     
 
