@@ -1,14 +1,5 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
 <link rel="stylesheet" type="text/css" href="./css/tcc_seq.css">
-<script src="<?php echo URLROOT; ?>js/all.js?v=202405291030"></script>
-
-<style>
-    .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
-    .t2{font-size: 17px; margin: 5px 0px;}
-    .t3{font-size: 17px; margin: 3px 0px;}
-
-</style>
-</head>
 
 <body>
 <div class="container-ms">

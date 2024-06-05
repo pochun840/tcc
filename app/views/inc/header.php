@@ -15,7 +15,15 @@
 
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="<?php echo URLROOT; ?>js/all.js?v=202405291030"></script>
     <title><?php echo SITENAME; ?></title>
+
+    <style>
+        .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
+        .t2{font-size: 17px; margin: 5px 0px;}
+        .t3{font-size: 17px; margin: 3px 0px;}
+
+    </style>
 
 </head>
 <body>
