@@ -103,12 +103,11 @@ class Job{
 
 
     #查詢JOB 
-    public function search($jobid){
+    public function search_jobinfo($jobid){
         $sql= "SELECT * FROM job WHERE job_id = ?";
         $statement = $this->db_iDas->prepare($sql);
-        $results = $statement->execute([$jobid]);
+        $statement->execute([$jobid]);
         $rows = $statement->fetch();
-
         return $rows;
     }
 

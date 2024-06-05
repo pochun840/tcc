@@ -49,20 +49,30 @@ class Jobs extends Controller
             );
             $mode = "create";
 
-            $job_count = $this->jobModel->countjob();
-            if($job_count >= 50) {
-                echo "The maximum number of steps has been reached, unable to continue copying jobs";
-                return;
-            }
+            #驗證
 
-            
-            $res = $this->jobModel->create_job($mode,$jobdata);
-            if($res){
-                $res_msg = 'insert job:'. $jobdata['job_id'].'success';
-            }else{
-                $res_msg = 'insert job:'. $jobdata['job_id'].'fail';
+            $result  = $this->MiscellaneousModel->validateName($jobdata['job_name']);
+            $result1 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_power']);
+            $result2 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_rpm']);
+
+            if ($result == true  && $result1 == true && $result2 == true) {
+
+                $job_count = $this->jobModel->countjob();
+                if($job_count >= 50) {
+                    echo "The maximum number of steps has been reached, unable to continue copying jobs";
+                    return;
+                }
+    
+                $res = $this->jobModel->create_job($mode,$jobdata);
+                if($res){
+                    $res_msg = 'insert job:'. $jobdata['job_id'].'success';
+                }else{
+                    $res_msg = 'insert job:'. $jobdata['job_id'].'fail';
+                }
+                echo $res_msg;
             }
-            echo $res_msg;
+           
+           
         }
     }
 
@@ -77,14 +87,23 @@ class Jobs extends Controller
                 'unscrew_rpm' => $_POST['rpmvalue'],
                 'unscrew_direction' => $_POST['directionValue'],
             );
-            $res = $this->jobModel->update_job_by_id($jobdata);
-            if($res){
-                $res_msg = 'update job:'. $jobdata['job_id'].'success';
-            }else{
-                $res_msg = 'update job:'. $jobdata['job_id'].'fail';
-            }
+            
+            $result  = $this->MiscellaneousModel->validateName($jobdata['job_name']);
+            $result1 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_power']);
+            $result2 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_rpm']);
 
-            echo $res_msg;  
+            if ($result == true  && $result1 == true && $result2 == true) {
+                
+                $res = $this->jobModel->update_job_by_id($jobdata);
+                if($res){
+                    $res_msg = 'update job:'. $jobdata['job_id'].'success';
+                }else{
+                    $res_msg = 'update job:'. $jobdata['job_id'].'fail';
+                }
+
+                echo $res_msg;  
+
+            }
         } 
     
     }
@@ -106,6 +125,15 @@ class Jobs extends Controller
    
     }
 
+    public function search_job($jobid){
+        $jobid = $_POST['jobid'] ?? null;
+        if(!empty($jobid)){
+        
+            $res  = $this->jobModel->search_jobinfo($jobid);
+            print_r($res);
+        }
+    }
+
     #copy 
     public function copy_job(){
         /*
@@ -125,7 +153,7 @@ class Jobs extends Controller
                 return;
             }
 
-
+            
             $old_res = $this->jobModel->search($old_jobid);
             if(!empty($old_res)){
                   #取得 unscrew_power && 	unscrew_rpm && unscrew_direction

@@ -162,24 +162,24 @@
                         <div class="row">
                             <div for="job-id" class="col-6 t1">Job ID :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="jobid" maxlength=""  value=''>
+                                <input type="text" class="form-control input-ms" id="edit_jobid" maxlength=""  value=''>
                             </div>
                         </div>
                         <div class="row">
                             <div for="job-name" class="col-6 t1">Job Name :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="jobname" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_jobname" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
                             <div for="Unscrew-Direction" class="col-6 t1">Unscrew Direction :</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction" id="direction_CW" value="0">
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_CW" value="0">
             					  <label class="form-check-label" for="unfasten_direction_CW">CW</label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio"  name="direction" id="direction_CCW" value="1">
+            					  <input class="form-check-input" type="radio"  name="edit_direction" id="direction_CCW" value="1">
             					  <label class="form-check-label" for="unfasten_direction_CCW">CCW</label>
             					</div>
                             </div>
@@ -187,13 +187,13 @@
                         <div class="row">
                             <div for="unscrew-RPM" class="col-6 t1">Unscrew RPM(1=10%) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="rpmvalue" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_unscrew_rpm" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
                             <div for="unscrew-power" class="col-6 t1">Unscrew Power(1=10%):</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="powervalue" maxlength="">
+                                <input type="text" class="form-control input-ms" id="edit_unscrew_power" maxlength="">
                             </div>
                         </div>
 
@@ -378,21 +378,6 @@ function savejob() {
     if (jobname_val && unscrew_rpm_val && unscre_power_val && direction_val) {
 
         
-        /*var jobnamePattern = /^[a-zA-Z0-9]{1,12}$/;
-        if (!jobnamePattern.test(jobname_val)) {
-            alert("Only letters (A-Z, a-z) and numbers (0-9) are allowed, and the length cannot exceed 12 characters.");
-            return false;
-        }
-
-        if (!unscrew_rpm_val.match(/^[1-9]$|^10$/)) {
-            alert("Unscrew RPM must be a number between 1 and 10.");
-            return;
-        }
-
-        if (!unscre_power_val.match(/^[1-9]$|^10$/)) {
-            alert("Unscrew Power must be a number between 1 and 10.");
-            return;
-        }*/
 
         $.ajax({
             url: "?url=Jobs/create_job",
@@ -435,43 +420,56 @@ function delete_jobid(jobid) {
 }
 
 function edit_job(jobid) {
+    var jobid = readFromLocalStorage("jobid");
+    console.log(jobid);
+    if(jobid){
+        $.ajax({
+            url: "?url=Jobs/search_job",
+            method: "POST",
+            data:{ 
+                jobid: jobid
+            },
+            success: function(response) {
+                var responseJSON = JSON.stringify(response);
+                var cleanString = responseJSON.replace(/Array|\\n/g, '');
+                var cleanString = cleanString.substring(2, cleanString.length - 2);
 
-    document.getElementById('editjob').style.display = 'block';
-    document.getElementById("jobid").value = jobid;
-    document.getElementById("jobname").value = readFromLocalStorage("jobname");
-    document.getElementById("rpmvalue").value = readFromLocalStorage("rpm");
-    document.getElementById("powervalue").value = readFromLocalStorage("power");
-    var direction = readFromLocalStorage("direction");
-    if(direction == "CW"){
-        document.getElementById("direction_CW").checked = true;
-    }else{
-        document.getElementById("direction_CCW").checked = true;
+                var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, jobname] = cleanString.match(/\[job_name]\s*=>\s*([^ ]+)/) || [, null];
+
+                var [, unscrew_direction] = cleanString.match(/\[unscrew_direction]\s*=>\s*([^ ]+)/) || [, null];
+
+                var [, unscrew_power] = cleanString.match(/\[unscrew_power]\s*=>\s*([^ ]+)/) || [, null];
+                var [, unscrew_rpm] = cleanString.match(/\[unscrew_rpm]\s*=>\s*([^ ]+)/) || [, null];
+          
+                document.getElementById('editjob').style.display = 'block';
+
+
+                document.getElementById("edit_jobid").value = jobid;
+                document.getElementById("edit_jobname").value = jobname;
+
+                document.getElementById("edit_unscrew_rpm").value = unscrew_rpm;
+                document.getElementById("edit_unscrew_power").value = unscrew_power;
+
+                var radioButtons = document.getElementsByName("edit_direction");
+                setRadioButtonValue(radioButtons, unscrew_direction);
+              
+            },
+            error: function(xhr, status, error) {
+                //console.log('eew');
+            }
+        });
     }
+   
 }
 
 function updatejob(){
 
-    var jobid      = document.getElementById("jobid").value;
-    var jobname    = document.getElementById("jobname").value;
-    var rpmvalue   = document.getElementById("rpmvalue").value;
-    var powervalue = document.getElementById("powervalue").value;
-    var directionValue = document.querySelector('input[name="direction"]:checked').value;
-
-    var jobnamePattern = /^[a-zA-Z0-9]{1,12}$/;
-    if(!jobnamePattern.test(jobname)){
-        alert("Only letters (A-Z, a-z) and numbers (0-9) are allowed, and the length cannot exceed 12 characters.");
-        return false;
-    }
-
-    if(!rpmvalue.match(/^[1-9]$|^10$/)) {
-        alert("Unscrew RPM must be a number between 1 and 10.");
-        return;
-    }
-
-    if(!powervalue.match(/^[1-9]$|^10$/)) {
-        alert("Unscrew Power must be a number between 1 and 10.");
-        return;
-    }
+    var jobid      = document.getElementById("edit_jobid").value;
+    var jobname    = document.getElementById("edit_jobname").value;
+    var rpmvalue   = document.getElementById("edit_unscrew_rpm").value;
+    var powervalue = document.getElementById("edit_unscrew_power").value;
+    var directionValue = document.querySelector('input[name="edit_direction"]:checked').value;
 
     if(jobid) {
         $.ajax({
@@ -493,7 +491,6 @@ function updatejob(){
                 localStorage.setItem('direction', directionValue);
 
                 console.log( response);
-                alert(response);
                 history.go(0);
             },
             error: function(xhr, status, error) {
