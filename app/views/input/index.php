@@ -19,7 +19,7 @@
                 <div class="center-content">
             <div class="topnav">
                 <label style="font-size:2.5vmin;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;
-                <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="1" disabled style="height:30px; font-size:2.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
+                <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="" disabled style="height:30px; font-size:2.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
                 <button id="Button_Select" type="button" onclick="document.getElementById('JobSelect').style.display='block'">Select</button>
             </div>
 
@@ -35,24 +35,24 @@
                             <tr>
                                 <td>
                                     <select style="margin: center" id="JobNameSelect" name="JobNameSelect" size="200">
-                                        <!--<option value="1">Sample Job 1</option>
-                                        <option value="2">Sample Job 2</option>
-                                        <option value="3">Sample Job 3</option>
-                                        <option value="4">Sample Job 4</option>
-                                        <option value="5">Sample Job 5</option>-->                                                                                                                             
+                                        <?php foreach($data['job_list'] as $key =>$val){?>
+                                            <option value="<?php echo $val['job_id'];?>"><?php echo $val['job_name'];?></option>
+                                        <?php }?>                                                                                                                             
                                      </select>
                                 </td>
                             </tr>
                         </table>
                     </div>
                     <div class="modal-footer justify-content-center w3-dark-grey" style="height: 48px">
-                        <button id="select_confirm" type="button" class="btn btn-primary">Confirm</button>
+                        <button id="select_confirm" type="button" class="btn btn-primary" onclick="job_confirm()">Confirm</button>
                         <button id="select_close" type="button" class="btn btn-secondary" onclick="document.getElementById('JobSelect').style.display='none'" >Close</button>
                     </div>
                 </form>
             </div>
             <div id="DivMode">
                 <!-- Table Input -->
+                <!--<img src="./img/low.png" style="max-width: 50px;">-->
+                <!--<img src="./img/high.png" style="max-width: 50px;">-->
                 <div id="TableInputSetting">
                     <div class="table-input">
                         <div class="scrollbar" id="style-inputtable">
@@ -76,37 +76,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody style="font-size: 1.8vmin;text-align: center;">
-                                        <tr>
-                                            <td>Disable</td>
-                                            <td><img src="./img/high.png" style="max-width: 50px;"></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>No</td>
-                                            <td>1</td>
-                                            <td>Event</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Clear</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td><img src="./img/low.png" style="max-width: 50px;"></td>
-                                            <td>No</td>
-                                            <td>1</td>
-                                            <td>Event</td>
-                                        </tr>
+                                    <tbody  id="input_jobid_select" style="font-size: 1.8vmin;text-align: center;">
                                     </tbody>
                                 </table>
                             </div>
@@ -460,13 +430,43 @@ function showTableInputSetting() {
 // Get the modal
 var modal = document.getElementById('newinput');
 
-// When the user clicks anywhere outside of the modal, close it
+
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
 
+
+function job_confirm(){
+   //取得 checked 的 job_id
+   var jobid = document.getElementById("JobNameSelect").value;
+
+   console.log(jobid);
+   localStorage.setItem("jobid",jobid);
+
+   if(job_id){
+    $.ajax({
+        url: "?url=Inputs/get_input_by_job_id",
+        method: "POST",
+        data:{ 
+            jobid: jobid,
+        },
+        success: function(response) {
+            console.log(response);
+            var ans = response;
+            document.getElementById("input_jobid_select").innerHTML = response;
+            document.getElementById("JobSelect").style.display='none';
+            document.getElementById("job_id").value = jobid;
+        },
+        error: function(xhr, status, error) {
+            
+        }
+    }); 
+   }
+   
+
+}
 </script>
 
 </body>

@@ -31,7 +31,7 @@ class Input{
     //get_input_by_job_id
     public function get_input_by_job_id($job_id)
     {   
-        $sql = "SELECT * FROM input WHERE input_jobid = ? ORDER BY CASE WHEN input_event >= 200 THEN 0 ELSE 1 END, input_event";
+        $sql = "SELECT * FROM input WHERE input_job_id = ? ORDER BY CASE WHEN input_event >= 200 THEN 0 ELSE 1 END, input_event";
         $statement = $this->db->prepare($sql);
         $results = $statement->execute([$job_id]);
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -53,12 +53,11 @@ class Input{
     //get all job
     public function get_job_list()
     {
-        $sql = "SELECT * FROM job ORDER BY job_id ";
+        $sql = " SELECT  * FROM job  ORDER BY job_id ASC ";
         $statement = $this->db_iDas->prepare($sql);
-        $results = $statement->execute();
-        $rows = $statement->fetchall(PDO::FETCH_ASSOC);
-
-        return $rows;
+        $statement->execute();
+        $result = $statement->fetchAll();
+        return $result;
     }
 
     public function check_job_event_conflict($job_id,$event_id)
@@ -152,5 +151,27 @@ class Input{
 
         return $results;
     }
+
+    public function generateTableCell($value,$value2) {
+        if ($value >= 2 && $value <= 10) {
+            $tableCells = "";
+            for ($i = 2; $i <= 10; $i++) {
+                if ($i == $value) { 
+                    if($value2 == 1){
+                        $img = '<img src="./img/high.png" style="max-width: 50px;">';
+                    }else{
+                        $img = '<img src="./img/low.png" style="max-width: 50px;">';
+                    }
+                    $tableCells .= "<td>".$img."</td>";
+                } else {
+                    $tableCells .= "<td></td>";
+                }
+            }
+            return $tableCells;
+        } else {
+            return ""; 
+        }
+    }
+    
 
 }

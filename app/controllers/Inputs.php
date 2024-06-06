@@ -6,6 +6,7 @@ class Inputs extends Controller
     public function __construct()
     {
         $this->InputModel = $this->model('Input');
+        $this->MiscellaneousModel = $this->model('Miscellaneous');
         // $this->DashboardModel = $this->model('Dashboard');
     }
 
@@ -14,14 +15,15 @@ class Inputs extends Controller
 
         //要檢查是否有alljobinput，有的話要直接帶入
         $isMobile = $this->isMobileCheck();
-        $job_list = $this->InputModel->get_job_list();
+        $joblist  = $this->InputModel->get_job_list();
+        $event    = $this->MiscellaneousModel->details('io_input');
 
         $data = array();
 
         $data = array(
             'isMobile' => $isMobile,
             'job_list' => $joblist,
-
+            'event'    => '',
         );
 
 
@@ -32,70 +34,38 @@ class Inputs extends Controller
     // get_input_by_job_id
     public function get_input_by_job_id(){
 
+        $event    = $this->MiscellaneousModel->details('io_input');
+
         $input_check = true;
-        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $job_id = $_POST['job_id'];
+        if( !empty($_POST['jobid']) && isset($_POST['jobid'])){
+            $job_id = $_POST['jobid'];
         }else{ 
             $input_check = false; 
         }
-
-        if($input_check){
-            $job_inputs = $this->InputModel->get_input_by_job_id($job_id);    
-            //調整Array格式 event,pin,wave,time
-            $tempA = array();
-            $tempB = array();
-            foreach ($job_inputs as $key => $value) {
-                $tempB['input_jobid'] = $value['input_jobid'];
-                $tempB['input_event'] = $value['input_event'];
-                for ($i=2; $i <= 10; $i++) { 
-                    if($value['input_pin'.$i] > 0){
-                        $tempB['input_pin'] = $i;
-                        $tempB['wave'] = $value['input_pin'.$i];
-                    }
-                }
-                $tempA[] = $tempB;
-                $job_inputs[$key]['input_pin'] = $tempB['input_pin'];
-                $job_inputs[$key]['wave'] = $tempB['wave'];
-            }
-        }
-
-        echo json_encode($job_inputs);
-
-    }
-
-    public function get_input_by_job_id_m(){
-
-        $input_check = true;
-        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $job_id = $_POST['job_id'];
-        }else{ 
-            $input_check = false; 
-        }
-
         if($input_check){
             $job_inputs = $this->InputModel->get_input_by_job_id($job_id);
-            //調整Array格式 event,pin,wave,time
-            $tempA = array();
-            $tempB = array();
-            foreach ($job_inputs as $key => $value) {
-                $tempB['input_jobid'] = $value['input_jobid'];
-                $tempB['input_event'] = $value['input_event'];
-                for ($i=2; $i <= 10; $i++) { 
-                    if($value['input_pin'.$i] > 0){
-                        $tempB['input_pin'] = $i;
-                        $tempB['wave'] = $value['input_pin'.$i];
-                    }
+            $job_inputlist = '';  
+
+            if(!empty($job_inputs)){
+                foreach($job_inputs as $kk =>$vv){
+
+                    $job_inputlist .='<tr>';
+                    $job_inputlist .='<td>'.$event[$vv['input_event']].'</td>';
+                    $job_inputlist .= $this->InputModel->generateTableCell($vv['input_pin'],$vv['input_wave']);
+                    $job_inputlist .='<td>NO</td>';
+                    $job_inputlist .='<td>1</td>';
+                    $job_inputlist .='<td>EVENT</td>';
+                    $job_inputlist .='</tr>';
+
                 }
-                $tempA[] = $tempB;
-                $job_inputs[$key]['input_pin'] = $tempB['input_pin'];
-                $job_inputs[$key]['wave'] = $tempB['wave'];
+                echo $job_inputlist;
             }
         }
-
-        echo json_encode($job_inputs);
+      
 
     }
 
+   
     public function check_job_event_conflict($value='')
     {
         $input_check = true;
@@ -291,6 +261,9 @@ class Inputs extends Controller
         $res = $this->InputModel->get_job_list();
 
     }
+
+
+   
     
 
     

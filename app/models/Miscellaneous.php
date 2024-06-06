@@ -63,8 +63,6 @@ class Miscellaneous{
                 112 => 'UserDefine3',
                 113 => 'UserDefine4',
                 114 => 'UserDefine5',
-                //1   => ''
-
             );
         }
 
