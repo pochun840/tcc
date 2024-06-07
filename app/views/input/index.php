@@ -85,9 +85,10 @@
 
                     <div class="footer" id='input_menu'>
                         <div class="buttonbox">
+                                        <!--document.getElementById('copyinput').style.display='block'-->
                             <input id="S1" name="New_Submit" type="button" value="New" tabindex="1" onclick="crud_job_event('new')">
                             <input id="S2" name="Edit_Submit" type="button" value="Edit" tabindex="1">
-                            <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="document.getElementById('copyinput').style.display='block'">
+                            <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="crud_job_event('copy')">
                             <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1" onclick="crud_job_event('del')">
                             <input id="S5" name="Table_Submit" type="button" value="Table" tabindex="1" onclick="tablesubmit('show')">
                             <input id="S6" name="Align_Submit" type="button" value="Align" tabindex="1">
@@ -505,7 +506,7 @@ function create_input_id(){
 
     if(input_event == 109){
         var selectedOption = document.querySelector('input[name="gateconfirm"]:checked');
-        var gateconfirm    = selectedOption ? selectedOption.value :0;
+        var gateconfirm    = selectedOption ? selectedOption.value : 0;
     }else{
         var gateconfirm	 = 0;
     }
@@ -540,6 +541,10 @@ function create_input_id(){
     }
 
 
+}
+
+function codd(){
+    
 }
 function delete_input_id(jobid,input_event){
     if(job_id){
