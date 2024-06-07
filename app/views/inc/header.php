@@ -28,7 +28,7 @@
         .t3{font-size: 17px; margin: 3px 0px;}
         .selected { background-color: #9AC0CD !important;}
         .input-pin img{ height: 25px; width: 40px}
-        .disabled_input { color: #999; pointer-events: none;}
+        .disabled_input{ color: #999; pointer-events: none;}
 
     </style>
 
