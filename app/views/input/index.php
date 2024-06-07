@@ -477,7 +477,7 @@ function job_confirm(){
 
 
 function crud_job_event(argument){
-    if(argument == 'new' && jobid != '' && input_event != ''){
+    if(argument == 'new' && job_id != '' && input_event != ''){
         //針對已設定的pin角位disable
         if (Array.isArray(temp)){ 
             temp.forEach(function(element) {
@@ -501,13 +501,13 @@ function crud_job_event(argument){
             tempA.forEach(function(element) {
                 var option = document.querySelector('#Event_Option option[value="' + element + '"]');
                 if (option) {
-                    option.classList.add('disabled'); 
+                    option.classList.add('disabled_input'); 
                 }
             });
         }
 
         document.getElementById('newinput').style.display='block';
-        console.log(jobid);
+        //console.log(jobid);
     } 
     
     if(argument == 'del') {
@@ -521,11 +521,11 @@ function crud_job_event(argument){
     }
 }
 
+function create_input_id(){
 
+
+}
 function delete_input_id(jobid,input_event){
-    console.log(job_id);
-    console.log(input_event);
-
     if(job_id){
         $.ajax({
             url: "?url=Inputs/delete_input",
@@ -584,9 +584,3 @@ function get_input_by_job_id(jobid) {
 </body>
 
 </html>
-<style>
-.disabled {
-    color: #999; 
-    pointer-events: none; 
-}
-</style>
