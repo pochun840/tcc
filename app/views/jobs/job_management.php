@@ -356,9 +356,6 @@ function savejob() {
     var direction_val = directionElement ? directionElement.value : null;
 
     if (jobname_val && unscrew_rpm_val && unscre_power_val && direction_val) {
-
-        
-
         $.ajax({
             url: "?url=Jobs/create_job",
             method: "POST",

@@ -85,10 +85,14 @@
 
                     <div class="footer">
                         <div class="buttonbox">
-                            <input id="S1" name="New_Submit" type="button" value="New" tabindex="1" onclick="document.getElementById('newinput').style.display='block'">
+                            <!---$_COOKIE
+                            //onclick="crud_job_event('new')">
+                            document.getElementById('newinput').style.display='block'
+                            -->
+                            <input id="S1" name="New_Submit" type="button" value="New" tabindex="1" onclick="crud_job_event('new')">
                             <input id="S2" name="Edit_Submit" type="button" value="Edit" tabindex="1">
                             <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="document.getElementById('copyinput').style.display='block'">
-                            <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1">
+                            <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1" onclick="crud_job_event('del')">
                             <input id="S5" name="Table_Submit" type="button" value="Table" tabindex="1" onclick="toggleDivs()">
                             <input id="S6" name="Align_Submit" type="button" value="Align" tabindex="1">
                         </div>
@@ -196,23 +200,11 @@
                                 <div class="row">
                                     <div for="event" class="col-3 t1">Event :</div>
                                     <div class="col-2 t2">
-                                        <select id="Event_Option" class="col custom-file">
-                                            <option value="-1" disabled selected>Option</option>
-                                            <option value="101">Disable</option>
-                                            <option value="102">Enable</option>
-                                            <option value="103">Clear</option>
-                                            <option value="104">Confirm</option>
-                                            <option value="105">Start-IN(Remote)</option>
-                                            <option value="106">Unscrew(Remote)</option>
-                                            <option value="107">Sequence Clear</option>
-                                            <option value="108">Reboot</option>
-                                            <option value="109">Gate Once</option>
-                                            <option value="110">UserDefine1</option>
-                                            <option value="111">UserDefine2</option>
-                                            <option value="112">UserDefine3</option>
-                                            <option value="113">UserDefine4</option>
-                                            <option value="114">UserDefine5</option>
-                                            <option value="1">SW Job1</option>
+                                        <select id="Event_Option" name ="Event_Optio" class="col custom-file">
+                                            <?php foreach($data['event'] as $key =>$val){?>
+                                                <option value ='<?php echo $key;?>'><?php echo $val;?></option>
+                                            <?php } ?>
+                                    
                                         </select>
                                     </div>
                                 </div>
@@ -225,7 +217,7 @@
                     					    <label class="form-check-label" for="pin2_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_low" value="2">
                     					    <label class="form-check-label" for="pin2_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
@@ -237,7 +229,7 @@
                     					    <label class="form-check-label" for="pin7_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_low" value="2">
                     					    <label class="form-check-label" for="pin7_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
@@ -251,7 +243,7 @@
                     					    <label class="form-check-label" for="pin3_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_low" value="2">
                     					    <label class="form-check-label" for="pin3_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
@@ -263,7 +255,7 @@
                     					    <label class="form-check-label" for="pin8_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_low" value="2">
                     					    <label class="form-check-label" for="pin8_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
@@ -277,7 +269,7 @@
                     					    <label class="form-check-label" for="pin4_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_low" value="2">
                     					    <label class="form-check-label" for="pin4_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
@@ -289,7 +281,7 @@
                     					    <label class="form-check-label" for="pin9_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_low" value="2">
                     					    <label class="form-check-label" for="pin9_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
@@ -303,7 +295,7 @@
                     					    <label class="form-check-label" for="pin5_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_low" value="2">
                     					    <label class="form-check-label" for="pin5_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
@@ -315,7 +307,7 @@
                     					    <label class="form-check-label" for="pin10_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_low" value="2">
                     					    <label class="form-check-label" for="pin10_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
@@ -329,7 +321,7 @@
                     					    <label class="form-check-label" for="pin6_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="col form-check form-check-inline" style="margin-left: -10px">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_low" value="2">
                     					    <label class="form-check-label" for="pin6_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
@@ -438,37 +430,163 @@ window.onclick = function(event) {
 }
 
 
+
+
+
+var job_id; 
+var input_event;
+var temp;
+var tempA;
 function job_confirm(){
-   //取得 checked 的 job_id
-   var jobid = document.getElementById("JobNameSelect").value;
+    var jobid = document.getElementById("JobNameSelect").value;
+    localStorage.setItem("jobid", jobid);
+    job_id = jobid;
 
-   console.log(jobid);
-   localStorage.setItem("jobid",jobid);
+    if(jobid){
+        $.ajax({
+            url: "?url=Inputs/get_input_by_job_id",
+            method: "POST",
+            data:{ 
+                jobid: jobid,
+            },
+            success: function(response) {
+                var data = JSON.parse(response);
+                var job_inputlist = data.job_inputlist;
+                temp = data.temp;
+                tempA = data.tempA;
 
-   if(job_id){
+                document.getElementById("input_jobid_select").innerHTML = job_inputlist;
+                document.getElementById("JobSelect").style.display = 'none';
+                document.getElementById("job_id").value = jobid;
+            
+                var rows = document.querySelectorAll('#input_jobid_select tr');
+                rows.forEach(function(row) {
+                    row.addEventListener('click', function() { 
+                        input_event = this.className; 
+                    
+                    });
+                });
+
+            },
+            error: function(xhr, status, error) {
+            
+            }
+        }); 
+    }
+}
+
+
+function crud_job_event(argument){
+    if(argument == 'new' && jobid != '' && input_event != ''){
+        //針對已設定的pin角位disable
+        if (Array.isArray(temp)){ 
+            temp.forEach(function(element) {
+                var radio = document.getElementById(element);
+                if (radio && radio.type === 'radio') { 
+                    radio.disabled = true; 
+                }
+            });
+        } 
+
+        //針對已設定的事件option做反灰+disable
+        if (Array.isArray(tempA)) {
+            tempA.forEach(function(element) {
+                var option = document.querySelector('#Event_Option option[value="' + element + '"]');
+                if (option) {
+                    option.disabled = true;
+                }
+            });
+        }
+        if (Array.isArray(tempA)) {
+            tempA.forEach(function(element) {
+                var option = document.querySelector('#Event_Option option[value="' + element + '"]');
+                if (option) {
+                    option.classList.add('disabled'); 
+                }
+            });
+        }
+
+        document.getElementById('newinput').style.display='block';
+        console.log(jobid);
+    } 
+    
+    if(argument == 'del') {
+        delete_input_id(job_id,input_event);
+    }
+
+
+
+    if(argument == 'edit' && jobid != '' && input_event != ''){
+
+    }
+}
+
+
+function delete_input_id(jobid,input_event){
+    console.log(job_id);
+    console.log(input_event);
+
+    if(job_id){
+        $.ajax({
+            url: "?url=Inputs/delete_input",
+            method: "POST",
+            data: { 
+                job_id: job_id,
+                input_event: input_event,
+             
+            },
+            success: function(response) {
+                console.log(response);
+                alert(response);
+                get_input_by_job_id(jobid);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+            }
+        });     
+    }
+
+}
+
+function get_input_by_job_id(jobid) {
     $.ajax({
         url: "?url=Inputs/get_input_by_job_id",
         method: "POST",
-        data:{ 
+        data: { 
             jobid: jobid,
         },
         success: function(response) {
-            console.log(response);
-            var ans = response;
-            document.getElementById("input_jobid_select").innerHTML = response;
-            document.getElementById("JobSelect").style.display='none';
+            var data = JSON.parse(response);
+            var job_inputlist = data.job_inputlist;
+            temp = data.temp;
+            tempA = data.tempA;
+
+            document.getElementById("input_jobid_select").innerHTML = job_inputlist;
+            document.getElementById("JobSelect").style.display = 'none';
             document.getElementById("job_id").value = jobid;
+        
+            var rows = document.querySelectorAll('#input_jobid_select tr');
+            rows.forEach(function(row) {
+                row.addEventListener('click', function() { 
+                    input_event = this.className; 
+                });
+            });
         },
         error: function(xhr, status, error) {
-            
+            console.error("AJAX request failed:", status, error);
         }
     }); 
-   }
-   
-
 }
+
+/** */
 </script>
 
 </body>
 
 </html>
+<style>
+.disabled {
+    color: #999; 
+    pointer-events: none; 
+}
+</style>

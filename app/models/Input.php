@@ -132,12 +132,13 @@ class Input{
 
         return $results;
     }
-    //delete input by job_id and event_id
-    public function delete_input_event_by_id($job_id,$event_id){
 
-        $sql= "DELETE FROM input WHERE input_jobid = ? AND input_event = ?";
-        $statement = $this->db->prepare($sql);
-        $results = $statement->execute([$job_id,$event_id]);
+
+    //delete input by job_id and event_id
+    public function delete_input_event_by_id($job_id,$input_event){
+        $sql= "DELETE FROM input WHERE input_job_id = ? AND input_event = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$job_id,$input_event]);
 
         return $results;
     }
@@ -152,23 +153,24 @@ class Input{
         return $results;
     }
 
+
     public function generateTableCell($value,$value2) {
-        if ($value >= 2 && $value <= 10) {
+        if($value >= 2 && $value <= 10){
             $tableCells = "";
-            for ($i = 2; $i <= 10; $i++) {
-                if ($i == $value) { 
+            for($i = 2; $i <= 10; $i++){
+                if($i == $value){ 
                     if($value2 == 1){
                         $img = '<img src="./img/high.png" style="max-width: 50px;">';
                     }else{
                         $img = '<img src="./img/low.png" style="max-width: 50px;">';
                     }
                     $tableCells .= "<td>".$img."</td>";
-                } else {
+                }else{
                     $tableCells .= "<td></td>";
                 }
             }
             return $tableCells;
-        } else {
+        }else{
             return ""; 
         }
     }
