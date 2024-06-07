@@ -100,48 +100,64 @@ class Inputs extends Controller
         echo json_encode($job_inputs);
     }
 
-    public function create_input_event($value='')
+    public function create_input_event()
     {
         $input_check = true;
+        $jobdata = array();
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $job_id = $_POST['job_id'];
+            $jobdata['input_job_id'] = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
-        if( !empty($_POST['event_id']) && isset($_POST['event_id'])  ){
-            $event_id = $_POST['event_id'];
+
+        if( !empty($_POST['input_event']) && isset($_POST['input_event'])  ){
+            $jobdata['input_event'] = $_POST['input_event'];
         }else{ 
             $input_check = false; 
         }
+
         if( !empty($_POST['input_pin']) && isset($_POST['input_pin'])  ){
-            $input_pin = $_POST['input_pin'];
+            $jobdata['input_pin'] = intval($_POST['input_pin']);
         }else{ 
             $input_check = false; 
         }
-        if( !empty($_POST['option']) && isset($_POST['option'])  ){
-            $option = $_POST['option'];
+
+        if( !empty($_POST['input_wave']) && isset($_POST['input_wave'])  ){
+            $jobdata['input_wave'] = $_POST['input_wave'];
         }else{ 
             $input_check = false; 
         }
+
         if( isset($_POST['gateconfirm'])  ){
-            $gateconfirm = $_POST['gateconfirm'];
+            $jobdata['gateconfirm'] = $_POST['gateconfirm'];
+        }else{ 
+            $input_check = false; 
+        }
+
+        if( isset($_POST['pagemode'])  ){
+            $jobdata['pagemode'] = $_POST['pagemode'];
+        }else{ 
+            $input_check = false; 
+        }
+
+        if( isset($_POST['input_seqid'])  ){
+            $jobdata['input_seqid'] = $_POST['input_seqid'];
         }else{ 
             $input_check = false; 
         }
 
         if($input_check){
-            $job_inputs = $this->InputModel->create_input($job_id,$event_id,$input_pin,$option,$gateconfirm);
-            if ($job_inputs) { // copy DB
-                $copy_result = $this->copyDB_to_RamdiskDB();
-                if ($copy_result) {
-                    $this->logMessage('edit input job:'.$job_id.',event_id:'.$event_id.' copyDB success');
-                } else {
-                    $this->logMessage('edit input job:'.$job_id.',event_id:'.$event_id.' copyDB fail');
+            $count = $this->InputModel->check_job_event_conflict($jobdata['input_job_id'],$jobdata['input_event']);
+            if(!$count){
+                $res  = $this->InputModel->create_input($jobdata);
+                if($res){
+                    $res_msg = 'create input from job:'.$jobdata['input_job_id'].',event_id:'.$jobdata['input_event'].'  success';
+                }else{
+                    $res_msg = 'create input from job:'.$jobdata['input_job_id'].',event_id:'.$jobdata['input_event'].'  fail';
                 }
+                echo $res_msg;
             }
         }
-
-        echo json_encode($job_inputs);
     }
 
     public function edit_input_event($value='')

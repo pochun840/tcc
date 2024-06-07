@@ -60,11 +60,11 @@ class Input{
         return $result;
     }
 
-    public function check_job_event_conflict($job_id,$event_id)
+    public function check_job_event_conflict($input_job_id,$input_event)
     {
-        $sql = "SELECT count(*) as count FROM input WHERE input_jobid = ? AND input_event = ?";
+        $sql = "SELECT count(*) as count FROM input WHERE input_job_id = ? AND input_event = ?";
         $statement = $this->db->prepare($sql);
-        $results = $statement->execute([$job_id,$event_id]);
+        $results = $statement->execute([$input_job_id,$input_event]);
         $rows = $statement->fetch();
 
         if ($rows['count'] > 0) {
@@ -74,36 +74,22 @@ class Input{
         }
     }
 
-    public function create_input($job_id,$event_id,$input_pin,$option,$gateconfirm)
-    {
-        $pin = [
-            '1' => 0,
-            '2' => 0,
-            '3' => 0,
-            '4' => 0,
-            '5' => 0,
-            '6' => 0,
-            '7' => 0,
-            '8' => 0,
-            '9' => 0,
-            '10' => 0,
-        ];
+    public function create_input($jobdata)
+    {   
+    
+        $sql = "INSERT INTO `input` (input_job_id, input_event, input_pin, input_wave, gateconfirm, pagemode, input_seqid) ";
+        $sql .= "VALUES (:input_job_id, :input_event, :input_pin, :input_wave, :gateconfirm, :pagemode, :input_seqid);";
 
-        if($option == 'on'){
-            $pin[$input_pin] = 1;
-        }else{
-            $pin[$input_pin] = 2;
-        }
-        
-        if( $this->check_job_event_conflict($job_id,$event_id) ){ //已存在，用update
-            $sql = "UPDATE `input` SET input_pin2 = ?, input_pin3 = ?, input_pin4 = ?, input_pin5 = ?, input_pin6 = ?, input_pin7 = ?, input_pin8 = ?, input_pin9 = ?, input_pin10 = ?, input_gateconfirm = ? WHERE input_jobid = ? AND input_event = ?";
-            $statement = $this->db->prepare($sql);
-            $results = $statement->execute([$pin[2],$pin[3],$pin[4],$pin[5],$pin[6],$pin[7],$pin[8],$pin[9],$pin[10],$gateconfirm,$job_id,$event_id]);
-        }else{ //不存在，用insert
-             $sql = "INSERT INTO `input` ('input_jobid','input_event','input_pin1','input_pin2','input_pin3','input_pin4','input_pin5','input_pin6','input_pin7','input_pin8','input_pin9','input_pin10','input_gateconfirm','input_pagemode','input_seqid') VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
-            $statement = $this->db->prepare($sql);
-            $results = $statement->execute([$job_id,$event_id,$pin[1],$pin[2],$pin[3],$pin[4],$pin[5],$pin[6],$pin[7],$pin[8],$pin[9],$pin[10],$gateconfirm,0,-1]);
-        }
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->bindValue(':input_job_id', $jobdata['input_job_id']);
+        $statement->bindValue(':input_event', $jobdata['input_event']);
+        $statement->bindValue(':input_pin', $jobdata['input_pin']);
+        $statement->bindValue(':input_wave', $jobdata['input_wave']);
+        $statement->bindValue(':gateconfirm', $jobdata['gateconfirm']);
+        $statement->bindValue(':pagemode', $jobdata['pagemode']);
+        $statement->bindValue(':input_seqid', $jobdata['input_seqid']);
+
+        $results = $statement->execute();
 
         return $results;
     }

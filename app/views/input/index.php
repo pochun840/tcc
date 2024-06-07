@@ -83,17 +83,13 @@
                         </div>
                     </div>
 
-                    <div class="footer">
+                    <div class="footer" id='input_menu'>
                         <div class="buttonbox">
-                            <!---$_COOKIE
-                            //onclick="crud_job_event('new')">
-                            document.getElementById('newinput').style.display='block'
-                            -->
                             <input id="S1" name="New_Submit" type="button" value="New" tabindex="1" onclick="crud_job_event('new')">
                             <input id="S2" name="Edit_Submit" type="button" value="Edit" tabindex="1">
                             <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="document.getElementById('copyinput').style.display='block'">
                             <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1" onclick="crud_job_event('del')">
-                            <input id="S5" name="Table_Submit" type="button" value="Table" tabindex="1" onclick="toggleDivs()">
+                            <input id="S5" name="Table_Submit" type="button" value="Table" tabindex="1" onclick="tablesubmit('show')">
                             <input id="S6" name="Align_Submit" type="button" value="Align" tabindex="1">
                         </div>
                     </div>
@@ -101,58 +97,7 @@
 
                 <!-- Table Data Information -->
                 <div id="TableDataInput" style="display: none">
-                    <div style="height: calc(100vh - 370px); padding-bottom: 5px">
-                        <div class="scrollbar" id="style-tableinput">
-                            <div class="force-overflow">
-                                <table class="table w3-table-all w3-hoverable" >
-                                    <thead class="header-table">
-                                        <tr class="w3-dark-grey">
-                                            <th>No</th>
-                                            <th>Event ID</th>
-                                            <th>2</th>
-                                            <th>3</th>
-                                            <th>4</th>
-                                            <th>5</th>
-                                            <th>6</th>
-                                            <th>7</th>
-                                            <th>8</th>
-                                            <th>9</th>
-                                            <th>10</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>101</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td><img src="./img/low.png" style="max-width: 50px;"></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>102</td>
-                                            <td></td>
-                                            <td><img src="./img/high.png" style="max-width: 50px;"></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
+                    
                     <div id="Event_List" align="center" style="margin-top: 10px;background-color: #F2F2D9">
                         <div class="w3-border-bottom" style="font-size: 20px;">Event List</div>
                         <table class="w3-table-all">
@@ -200,7 +145,7 @@
                                 <div class="row">
                                     <div for="event" class="col-3 t1">Event :</div>
                                     <div class="col-2 t2">
-                                        <select id="Event_Option" name ="Event_Optio" class="col custom-file">
+                                        <select id="Event_Option" name ="Event_Option" class="col custom-file">
                                             <?php foreach($data['event'] as $key =>$val){?>
                                                 <option value ='<?php echo $key;?>'><?php echo $val;?></option>
                                             <?php } ?>
@@ -325,12 +270,29 @@
                     					    <label class="form-check-label" for="pin6_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
+
+                                    
                                 </div>
+
+                                <div class="row" id='work_goc'  style="display: none;">
+                                    <div for="Workpice Ready Confirm" class="col-6 t1">Workpice Ready Confirm :</div>
+                                    <div class="col t2" >
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_0" value="0" checked>
+                                        <label class="form-check-label">NO</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_1" value="1">
+                                        <label class="form-check-label" >YES</label>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </form>
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <button id="" class="button-modal" onclick="add_member_user()">Save</button>
+                            <button id="" class="button-modal" onclick="create_input_id()">Save</button>
                             <button id="" class="button-modal" onclick="document.getElementById('newinput').style.display='none'" class="closebtn">Close</button>
                         </div>
                     </div>
@@ -383,7 +345,7 @@
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <button id="" class="button-modal" onclick="add_member_user()">Save</button>
+                            <button id="" class="button-modal" onclick="ss()">Save</button>
                             <button id="" class="button-modal" onclick="document.getElementById('copyinput').style.display='none'" class="closebtn">Close</button>
                         </div>
                     </div>
@@ -398,6 +360,19 @@
 $(document).ready(function () {
     highlight_row('input_table');
 });
+
+document.getElementById("Event_Option").onchange = function() {
+    var selectedValue = this.value; 
+    handleEventChange(selectedValue); 
+};
+
+function handleEventChange(selectedValue) {
+    if(selectedValue ==109){
+        document.getElementById('work_goc').style.display = 'block';
+    }else{
+        document.getElementById('work_goc').style.display = 'none';
+    }
+}
 
 
 // Div Mode
@@ -417,6 +392,8 @@ function toggleDivs() {
 function showTableInputSetting() {
     document.getElementById('TableInputSetting').style.display = 'block';
     document.getElementById('TableDataInput').style.display = 'none';
+
+    document.getElementById('input_menu').style.display = 'block';
 }
 
 // Get the modal
@@ -429,14 +406,11 @@ window.onclick = function(event) {
     }
 }
 
-
-
-
-
 var job_id; 
 var input_event;
 var temp;
 var tempA;
+var selectedValue;
 function job_confirm(){
     var jobid = document.getElementById("JobNameSelect").value;
     localStorage.setItem("jobid", jobid);
@@ -487,30 +461,28 @@ function crud_job_event(argument){
                 }
             });
         } 
-
+        
         //針對已設定的事件option做反灰+disable
-        if (Array.isArray(tempA)) {
-            tempA.forEach(function(element) {
+        if (Array.isArray(tempA)){
+            tempA.forEach(function(element){
                 var option = document.querySelector('#Event_Option option[value="' + element + '"]');
-                if (option) {
+                if(option){
+                    if (option.selected){
+                        selectedValue = element;
+                    }
+
                     option.disabled = true;
+                    option.classList.add('disabled_input');
                 }
             });
         }
-        if (Array.isArray(tempA)) {
-            tempA.forEach(function(element) {
-                var option = document.querySelector('#Event_Option option[value="' + element + '"]');
-                if (option) {
-                    option.classList.add('disabled_input'); 
-                }
-            });
-        }
+
+
 
         document.getElementById('newinput').style.display='block';
-        //console.log(jobid);
     } 
     
-    if(argument == 'del') {
+    if(argument == 'del'){
         delete_input_id(job_id,input_event);
     }
 
@@ -521,7 +493,51 @@ function crud_job_event(argument){
     }
 }
 
+
 function create_input_id(){
+ 
+    var input_event = document.getElementById("Event_Option").value;
+    var pinval      = collectpin();
+    var pin_old   = pinval[0]['id'];
+    var input_wave  = pinval[0]['value'];
+    var pagemode    = 1;
+    var input_seqid = 0;
+
+    if(input_event == 109){
+        var selectedOption = document.querySelector('input[name="gateconfirm"]:checked');
+        var gateconfirm    = selectedOption ? selectedOption.value :0;
+    }else{
+        var gateconfirm	 = 0;
+    }
+
+
+    var input_pin = pin_old.match(/\d+/)[0];
+    if(job_id){
+        $.ajax({
+            url: "?url=Inputs/create_input_event",
+            method: "POST",
+            data: { 
+                job_id: job_id,
+                input_event: input_event,
+                input_pin: 	input_pin,
+                input_wave: input_wave,
+                gateconfirm: gateconfirm,
+                pagemode: pagemode,
+                input_seqid: input_seqid
+            },
+            success: function(response) {
+
+                document.getElementById('newinput').style.display='none';
+                console.log(response);
+                alert(response);
+                get_input_by_job_id(job_id);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+
+    }
 
 
 }
@@ -538,7 +554,7 @@ function delete_input_id(jobid,input_event){
             success: function(response) {
                 console.log(response);
                 alert(response);
-                get_input_by_job_id(jobid);
+                get_input_by_job_id(job_id);
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -548,7 +564,7 @@ function delete_input_id(jobid,input_event){
 
 }
 
-function get_input_by_job_id(jobid) {
+function get_input_by_job_id(jobid){
     $.ajax({
         url: "?url=Inputs/get_input_by_job_id",
         method: "POST",
@@ -577,8 +593,31 @@ function get_input_by_job_id(jobid) {
         }
     }); 
 }
+function collectpin() {
+    var pinOptions = document.querySelectorAll('input[name="pin_option"]');
+    var selectedValues = [];
 
-/** */
+    pinOptions.forEach(function(option) {
+        if (option.checked){ 
+            var radioInfo = {
+                id: option.id,
+                value: option.value
+            };
+            selectedValues.push(radioInfo);
+        }
+    });
+
+    return selectedValues;
+}
+
+function tablesubmit(keyno){
+    if(keyno =='show'){
+        document.getElementById('TableDataInput').style.display = 'block';
+        document.getElementById('input_menu').style.display = 'none';
+        get_input_by_job_id(job_id);
+    }
+}   
+
 </script>
 
 </body>
