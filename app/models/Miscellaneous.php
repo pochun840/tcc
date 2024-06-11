@@ -66,6 +66,28 @@ class Miscellaneous{
             );
         }
 
+        if($mode =="io_output"){
+            $array = array(
+                1   => 'OK',
+                2   => 'NG',
+                3   => 'NG-High',
+                4   => 'NG-Low',
+                5   => 'OK-Sequence',
+                6   => 'OK-Job',
+                7   => 'Tool Runing',
+                8   => 'Tool Trigger',
+                9   => 'Reverse',
+                10  => 'BS',
+                11  => 'Barcode',
+                12  => 'UserDefine1',
+                13  => 'UserDefine2',
+                14  => 'UserDefine3',
+                15  => 'UserDefine4',
+                16  => 'UserDefine5',
+            );
+        }
+
+      
 
 
         return $array;

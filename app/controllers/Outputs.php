@@ -7,30 +7,94 @@ class Outputs extends Controller
     {
         $this->OutputModel = $this->model('Output');
         $this->InputModel = $this->model('Input');
+        $this->MiscellaneousModel = $this->model('Miscellaneous');
+        $this->jobModel = $this->model('Job');
     }
 
     // 取得所有Jobs
     public function index(){
 
+      
         //要檢查是否有alljobinput，有的話要直接帶入
+        $isMobile     = $this->isMobileCheck();
+        $joblist      = $this->InputModel->get_job_list();
+        $event_output = $this->MiscellaneousModel->details('io_output');
 
-        //$job_list = $this->InputModel->get_job_list();
-        $isMobile = $this->isMobileCheck();
-        //$device_data = $this->InputModel->get_input_alljob();
-        //$device_info = $this->Device_Info();
 
-        $data = [
-            'isMobile' => $isMobile,
-            //'job_list' => $job_list,
-            //'device_data' => $device_data,
-            //'device_info' => $device_info
-        ];
+        /*if(!empty($joblist)){
+            $job_list_new = array();
+            foreach($joblist as $kk =>$vv){
+                $job_list_new[$vv['job_id']] =$vv;  
+            }
+        }*/
 
-        $this->view('input/index', $data);
+        
+        $data = array();
+        $data = array(
+            'isMobile'     => $isMobile,
+            'job_list'     => $joblist,
+            'event_output' => $event_output,
+            //'job_list_new' => $job_list_new,
+            
+        );
+
+
+        $this->view('output/index', $data);
     }
 
     // get_input_by_job_id
+
     public function get_output_by_job_id(){
+
+        $event_output = $this->MiscellaneousModel->details('io_output');
+
+        $input_check = true;
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+            $job_id = $_POST['job_id'];
+        }else{ 
+            $input_check = false; 
+        }
+
+        if($input_check){
+            $job_outputs = $this->OutputModel->get_output_by_job_id($job_id);
+            $temp  = array(); 
+            $tempA = array();
+            $job_outputlist = ''; 
+        
+
+            if (!empty($job_outputs)) {
+                foreach ($job_outputs as $kk => $vv) {
+                    if (!empty($vv['output_pin'])) {
+                        $pin_number = $vv['output_pin'];
+                        $temp[] = "output_pin" . $pin_number;
+                        $temp[] = "output_pin" . $pin_number;
+                    }
+
+                    if (!empty($vv['input_event'])) {
+                        $tempA[] = $vv['input_event'];
+                    }
+
+                    $job_outputlist .= "<tr class='".$vv['output_event']."'>";
+                    $job_outputlist .= '<td>'.$event_output[$vv['output_event']].'</td>';
+                    $job_outputlist .= $this->OutputModel->generateTableCell($vv['output_pin'],$vv['wave']);
+                    $job_outputlist .= '<td>'.$vv['wave_on'].'</td>';
+                    $job_outputlist .= '</tr>';
+                }
+
+            }
+        }
+
+        $response = array(
+            'job_outputlist' => $job_outputlist,
+            'temp' => $temp,
+            'tempA' => $tempA,
+        );
+        echo json_encode($response);
+        
+
+    }
+
+    /*public function get_output_by_job_id(){
 
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
@@ -64,7 +128,7 @@ class Outputs extends Controller
 
         echo json_encode($job_outputs);
 
-    }
+    }*/
 
     public function check_job_output_conflict($value='')
     {

@@ -20,13 +20,17 @@ class Output{
 
         $this->dbh = new Database;
 
+        $this->db_iDas = new Database;
+        $this->db_iDas = $this->db_iDas->getDb_das();
+
+
     }
 
     //get_input_by_job_id
     public function get_output_by_job_id($job_id)
     {   
-        $sql = "SELECT * FROM output WHERE output_jobid = ? ORDER BY output_event";
-        $statement = $this->db->prepare($sql);
+        $sql = "SELECT * FROM output WHERE output_job_id = ? ORDER BY output_event";
+        $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$job_id]);
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
 
@@ -106,8 +110,28 @@ class Output{
         return $results;
     }
 
-
-
-
-
+    public function generateTableCell($value,$value2) {
+        if($value >= 1 && $value <= 11){
+            $tableCells = "";
+            for($i = 1; $i <= 11; $i++){
+                if($i == $value){ 
+                    if($value2 == 1){
+                        $img = '<img src="./img/signal01.png" style="max-width: 50px;">';
+                    }else if($value2 == 2){
+                        $img = '<img src="./img/signal02.png" style="max-width: 50px;">';
+                    }else if($value2 == 3){
+                        $img = '<img src="./img/trigger.png" style="max-width: 50px;">';
+                    }else{
+                        $img = '';
+                    }
+                    $tableCells .= "<td>".$img."</td>";
+                }else{
+                    $tableCells .= "<td></td>";
+                }
+            }
+            return $tableCells;
+        }else{
+            return ""; 
+        }
+    }
 }

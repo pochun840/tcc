@@ -20,7 +20,7 @@
         <div class="center-content">
             <div class="topnav">
                 <label style="font-size:2.5vmin;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;
-                <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="1" disabled style="height:30px; font-size:2.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
+                <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="" disabled style="height:30px; font-size:2.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
                 <button id="Button_Select" type="button" onclick="document.getElementById('JobSelect').style.display='block'">Select</button>
             </div>
 
@@ -36,24 +36,25 @@
                             <tr>
                                 <td>
                                     <select style="margin: center" id="JobNameSelect" name="JobNameSelect" size="200">
-                                        <option value="1">Sample Job 1</option>
-                                        <option value="2">Sample Job 2</option>
-                                        <option value="3">Sample Job 3</option>
-                                        <option value="4">Sample Job 4</option>
-                                        <option value="5">Sample Job 5</option>                                                                                                                             
+                                        <?php foreach($data['job_list'] as $key =>$val){?>
+                                            <option value="<?php echo $val['job_id'];?>"><?php echo $val['job_name'];?></option>
+                                        <?php }?>                                                                                                                                
                                      </select>
                                 </td>
                             </tr>
                         </table>
                     </div>
                     <div class="modal-footer justify-content-center w3-dark-grey" style="height: 48px">
-                        <button id="select_confirm" type="button" class="btn btn-primary">Confirm</button>
+                        <button id="select_confirm" type="button" class="btn btn-primary" onclick='job_confirm()'>Confirm</button>
                         <button id="select_close" type="button" class="btn btn-secondary" onclick="document.getElementById('JobSelect').style.display='none'">Close</button>
                     </div>
                 </form>
             </div>
 
             <!-- Table Input -->
+            <!---./img/signal01.png持續 -->
+            <!---./img/signal02.png單一週期 -->
+            <!---./img/trigger.png起子trigger觸發-->
             <div id="TableOutputSetting">
                 <div class="table-output">
                     <div class="scrollbar" id="style-outputtable">
@@ -77,67 +78,11 @@
                                     </tr>
                                 </thead>
 
-                                <tbody style="font-size: 1.8vmin;text-align: center;">
-                                    <tr>
-                                        <td>NG</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><img src="./img/signal01.png" style="max-width: 50px;"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NG-Higt</td>
-                                        <td><img src="./img/signal02.png" style="max-width: 50px;"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>OK-Job</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><img src="./img/signal02.png" style="max-width: 50px;"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>1000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tool Runing</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><img src="./img/trigger.png" style="max-width: 50px;"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                <tbody id="output_jobid_select" style="font-size: 1.8vmin;text-align: center;">
+                                 
+                                   
+                                    
+                                   
                                 </tbody>
                             </table>
                         </div>
@@ -474,6 +419,51 @@ var modal = document.getElementById('newinput');
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
+    }
+}
+
+
+var job_id; 
+var input_event;
+var temp;
+var tempA;
+function job_confirm(){
+    var jobid = document.getElementById("JobNameSelect").value;
+    localStorage.setItem("jobid", jobid);
+    job_id = jobid;
+
+    if(jobid){
+        $.ajax({
+            url: "?url=Outputs/get_output_by_job_id",
+            method: "POST",
+            data:{ 
+                job_id: job_id,
+            },
+            success: function(response) {
+                var data = JSON.parse(response);
+                var job_outputlist = data.job_outputlist;
+                temp = data.temp;
+                tempA = data.tempA;
+
+                document.getElementById("output_jobid_select").innerHTML = job_outputlist;
+                document.getElementById("JobSelect").style.display = 'none';
+                document.getElementById("job_id").value = job_id;
+            
+                var rows = document.querySelectorAll('#output_jobid_select tr');
+                rows.forEach(function(row) {
+                    row.addEventListener('click', function() { 
+                        output_event = this.className; 
+                        old_output_event = this.className;
+                    
+                    });
+                });
+               
+
+            },
+            error: function(xhr, status, error) {
+            
+            }
+        });
     }
 }
 
