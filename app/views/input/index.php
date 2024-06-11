@@ -792,7 +792,7 @@ function copy_input_id(){
             },
             success: function(response) {
 
-                document.getElementById('copyinput').style.display='none';
+                document.getElementById('newinput').style.display='none';
                 console.log(response);
                 //alert(response);
                 get_input_by_job_id(job_id);
@@ -801,8 +801,8 @@ function copy_input_id(){
                 
             }
         });
-    }
 
+    }
 
 }
 
