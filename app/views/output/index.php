@@ -93,7 +93,7 @@
                     <div class="buttonbox">
                         <input id="S1" name="New_Submit" type="button" value="New" tabindex="1" onclick="crud_job_event('new')">
                         <input id="S2" name="Edit_Submit" type="button" value="Edit" tabindex="1">
-                        <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="document.getElementById('copy_output').style.display='block'">
+                        <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="crud_job_event('copy')">
                         <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1" onclick="crud_job_event('del')">
                         <input id="S6" name="Align_Submit" type="button" value="Align" tabindex="1">
                     </div>
@@ -356,7 +356,7 @@
 
                 				        <label for="from_job_name" class="t1 col-4 col-form-label">Job Name :</label>
                 				        <div class="col-5 t2 ">
-                				            <input type="number" class="form-control" id="from_job_name" disabled>
+                				            <input type="text" class="form-control" id="from_job_name" disabled>
                 				        </div>
                 				    </div>
                 			    </div>
@@ -366,13 +366,13 @@
                 				    <div class="row">
                 				        <label for="to_step_id" class="t1 col-4 col-form-label">Job :</label>
                 				        <div class="t2 col-6">
-                                            <select id="JobSelect" class="col custom-file" style="margin: center; width: 160px">
-                                                <option value="1">1 - Job1</option>
-                                                <option value="2">2 - Job2</option>
-                                                <option value="3">3 - Job </option>
-                                                <option value="4">4 - Job </option>
-                                                <option value="5">5 - Job5</option>
-                                             </select>
+                                            <select id="JobSelect1" class="col custom-file" style="margin: center; width: 160px">
+                                                <?php foreach($data['job_list'] as $kk => $vv){?>
+                                                    <option id ='job_list_option' value="<?php echo $vv['job_id']; ?>">
+                                                        <?php echo $vv['job_id'] . " - " . $vv['job_name']; ?>
+                                                    </option>
+                                                <?php } ?>  
+                                            </select>
                 				        </div>
                 				    </div>
                 			    </div>
@@ -380,7 +380,7 @@
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <button id="" class="button-modal" onclick="add_member_user()">Save</button>
+                            <button id="" class="button-modal" onclick="copy_output_id()">Save</button>
                             <button id="" class="button-modal" onclick="document.getElementById('copy_output').style.display='none'" class="closebtn">Close</button>
                         </div>
                     </div>
@@ -428,7 +428,6 @@ function job_confirm(){
                 tempA = data.tempA;
 
 
-                console.log(tempA);
                 document.getElementById("output_jobid_select").innerHTML = job_outputlist;
                 document.getElementById("JobSelect").style.display = 'none';
                 document.getElementById("job_id").value = job_id;
@@ -487,8 +486,65 @@ function crud_job_event(argument){
         document.getElementById('new_output').style.display='block';
     }
 
+    if(argument == 'edit'){
+
+    }
+
+    if(argument == 'copy' && job_id != ''){
+
+        var jobinfo = <?php echo json_encode($data['job_list_new']); ?>;
+        var from_job_name_bk = jobinfo[job_id]['job_name'];
+
+        console.log(jobinfo);
+        console.log(from_job_name_bk);
+
+
+        document.getElementById("from_job_id").value = job_id;
+        document.getElementById("from_job_name").value = from_job_name_bk;
+
+        var selectElement = document.getElementById('JobSelect1');
+        var options = selectElement.getElementsByTagName('option');
+
+        for (var i = 0; i < options.length; i++) {
+            var optionId = options[i].getAttribute('id');
+            var optionValue = options[i].value;
+            if(optionValue == job_id){
+                options[i].disabled = true; 
+                options[i].classList.add('disabled_input'); 
+            }
+        }
+
+
+        document.getElementById('copy_output').style.display='block';
+        
+
+    }
+
 }
 
+function copy_output_id(){
+    var to_job_id = document.getElementById("JobSelect1").value;
+    if(to_job_id){
+        $.ajax({
+            url: "?url=Outputs/copy_output",
+            method: "POST",
+            data: { 
+                from_job_id: job_id,
+                to_job_id: to_job_id
+            },
+            success: function(response) {
+
+                document.getElementById('copy_output').style.display='none';
+                console.log(response);
+                get_output_by_job_id(job_id);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+
+    }    
+}
 
 function create_output_id(){
     var output_event = document.getElementById("Event_Option").value;

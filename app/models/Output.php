@@ -27,11 +27,11 @@ class Output{
     }
 
     //get_input_by_job_id
-    public function get_output_by_job_id($job_id)
+    public function get_output_by_job_id($output_job_id)
     {   
         $sql = "SELECT * FROM output WHERE output_job_id = ? ORDER BY output_event";
         $statement = $this->db_iDas->prepare($sql);
-        $results = $statement->execute([$job_id]);
+        $results = $statement->execute([$output_job_id]);
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
 
         return $row;

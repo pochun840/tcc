@@ -21,12 +21,13 @@ class Outputs extends Controller
         $event_output = $this->MiscellaneousModel->details('io_output');
 
 
-        /*if(!empty($joblist)){
+      
+        if(!empty($joblist)){
             $job_list_new = array();
             foreach($joblist as $kk =>$vv){
                 $job_list_new[$vv['job_id']] =$vv;  
             }
-        }*/
+        }
 
         
         $data = array();
@@ -34,7 +35,7 @@ class Outputs extends Controller
             'isMobile'     => $isMobile,
             'job_list'     => $joblist,
             'event_output' => $event_output,
-            //'job_list_new' => $job_list_new,
+            'job_list_new' => $job_list_new,
             
         );
 
@@ -165,7 +166,7 @@ class Outputs extends Controller
     {
         $input_check = true;
         if( !empty($_POST['from_job_id']) && isset($_POST['from_job_id'])  ){
-            $from_job_id = $_POST['from_job_id'];
+            $output_job_id = $_POST['from_job_id'];
         }else{ 
             $input_check = false; 
         }
@@ -176,18 +177,29 @@ class Outputs extends Controller
         }
 
         if($input_check){
-            $job_inputs = $this->OutputModel->copy_output_by_id($from_job_id,$to_job_id);
-            if ($job_inputs) { // copy DB
-                $copy_result = $this->copyDB_to_RamdiskDB();
-                if ($copy_result) {
-                    $this->logMessage('copy output from_job_id:'.$from_job_id.',to_job_id:'.$to_job_id.' copyDB success');
-                } else {
-                    $this->logMessage('copy output from_job_id:'.$from_job_id.',to_job_id:'.$to_job_id.' copyDB fail');
+            $job_outputs_from = $this->OutputModel->get_output_by_job_id($output_job_id);
+            if (!empty($job_outputs_from)) {
+                $jobdata = array();
+                foreach ($job_outputs_from as $key => $val) {
+                
+                    if (isset($val['output_job_id'])) {
+                        $jobdata[$key]['output_job_id'] = $to_job_id;
+                    } else {
+                        continue; 
+                    }
+
+                    $jobdata[$key]['output_pin'] = $val['output_pin'];
+                    $jobdata[$key]['output_event'] = $val['output_event'];
+                    $jobdata[$key]['wave'] = $val['wave'];
+                    $jobdata[$key]['wave_on'] = $val['wave_on'];
+
+                    $res = $this->OutputModel->create_output($jobdata[$key]);
+
                 }
             }
         }
 
-        echo json_encode($job_inputs);
+        //echo json_encode($job_inputs);
     }
 
     public function delete_output(){
