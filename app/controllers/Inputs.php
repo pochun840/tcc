@@ -7,7 +7,7 @@ class Inputs extends Controller
     {
         $this->InputModel = $this->model('Input');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
-        // $this->DashboardModel = $this->model('Dashboard');
+        $this->jobModel = $this->model('Job');
     }
 
     // 取得所有Inputs
@@ -17,12 +17,23 @@ class Inputs extends Controller
         $isMobile = $this->isMobileCheck();
         $joblist  = $this->InputModel->get_job_list();
         $event    = $this->MiscellaneousModel->details('io_input');
-        $data = array();
 
+
+        if(!empty($joblist)){
+            $job_list_new = array();
+            foreach($joblist as $kk =>$vv){
+                $job_list_new[$vv['job_id']] =$vv;  
+            }
+        }
+
+        
+        $data = array();
         $data = array(
-            'isMobile' => $isMobile,
-            'job_list' => $joblist,
-            'event'    => $event,
+            'isMobile'     => $isMobile,
+            'job_list'     => $joblist,
+            'event'        => $event,
+            'job_list_new' => $job_list_new,
+            
         );
 
 
@@ -231,34 +242,54 @@ class Inputs extends Controller
         }
     }
 
-    public function copy_input()
-    {
+    public function copy_input_event(){
         $input_check = true;
-        if( !empty($_POST['from_job_id']) && isset($_POST['from_job_id'])  ){
-            $from_job_id = $_POST['from_job_id'];
-        }else{ 
-            $input_check = false; 
+        if (!empty($_POST['from_job_id']) && isset($_POST['from_job_id'])) {
+            $input_job_id = $_POST['from_job_id'];
+        } else {
+            $input_check = false;
         }
-        if( !empty($_POST['to_job_id']) && isset($_POST['to_job_id'])  ){
+        if (!empty($_POST['to_job_id']) && isset($_POST['to_job_id'])) {
             $to_job_id = $_POST['to_job_id'];
-        }else{ 
-            $input_check = false; 
+        } else {
+            $input_check = false;
         }
 
-        if($input_check){
-            $job_inputs = $this->InputModel->copy_input_by_id($from_job_id,$to_job_id);
-            if ($job_inputs) { // copy DB
-                $copy_result = $this->copyDB_to_RamdiskDB();
-                if ($copy_result) {
-                    $this->logMessage('copy input from job:'.$from_job_id.',to_job_id:'.$to_job_id.' copyDB success');
-                } else {
-                    $this->logMessage('copy input from job:'.$from_job_id.',to_job_id:'.$to_job_id.' copyDB fail');
+        if ($input_check) {
+            $job_inputs_from = $this->InputModel->check_job_event($input_job_id);
+            if (!empty($job_inputs_from)) {
+                $jobdata = array();
+                foreach ($job_inputs_from as $key => $val) {
+                
+                    if (isset($val['input_job_id'])) {
+                        $jobdata[$key]['input_job_id'] = $to_job_id;
+                    } else {
+                        continue; 
+                    }
+
+                 
+                    $jobdata[$key]['input_event'] = $val['input_event'];
+                    $jobdata[$key]['input_pin'] = $val['input_pin'];
+                    $jobdata[$key]['input_wave'] = $val['input_wave'];
+                    $jobdata[$key]['gateconfirm'] = $val['gateconfirm'];
+                    $jobdata[$key]['pagemode'] = $val['pagemode'];
+                    $jobdata[$key]['input_seqid'] = 0;
+                    $res = $this->InputModel->create_input($jobdata[$key]);
+
                 }
+                /*if (!empty($job_inputs_from)) {
+                    $res_msg = 'copy input job:'.$input_job_id.'copyDB success';
+                } else {
+                    $res_msg = 'copy input job:'.$input_job_id.' copyDB fail';
+                }
+                echo $res_msg;*/
+
             }
         }
 
-        echo json_encode($job_inputs);
+        //echo json_encode($job_inputs);
     }
+
 
     public function delete_input(){
         $input_check = true;
@@ -306,17 +337,5 @@ class Inputs extends Controller
         }
 
         echo json_encode($job_inputs);
-    }
-
-    public function get_job(){
-
-        $res = $this->InputModel->get_job_list();
-
-    }
-
-
-   
-    
-
-    
+    }    
 }

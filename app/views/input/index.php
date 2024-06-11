@@ -491,7 +491,8 @@
 
                 				        <label for="from_job_name" class="t1 col-4 col-form-label">Job Name :</label>
                 				        <div class="col-5 t2 ">
-                				            <input type="number" class="form-control" id="from_job_name" disabled>
+                				            <input type="text
+                                            ." class="form-control" id="from_job_name" disabled>
                 				        </div>
                 				    </div>
                 			    </div>
@@ -501,13 +502,14 @@
                 				    <div class="row">
                 				        <label for="to_step_id" class="t1 col-4 col-form-label">Job :</label>
                 				        <div class="t2 col-6">
-                                            <select id="JobSelect" class="col custom-file" style="margin: center; width: 153px">
-                                                <option value="1">1 - Job1</option>
-                                                <option value="2">2 - Job2</option>
-                                                <option value="3">3 - Job </option>
-                                                <option value="4">4 - Job </option>
-                                                <option value="5">5 - Job5</option>
-                                             </select>
+                                        <select id="JobSelect1" class="col custom-file" style="margin: center; width: 153px">
+                                            <?php foreach($data['job_list'] as $kk => $vv){?>
+                                                <option id ='job_list_option' value="<?php echo $vv['job_id']; ?>">
+                                                    <?php echo $vv['job_id'] . " - " . $vv['job_name']; ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+
                 				        </div>
                 				    </div>
                 			    </div>
@@ -515,7 +517,7 @@
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <button id="" class="button-modal" onclick="ss()">Save</button>
+                            <button id="" class="button-modal" onclick="copy_input_id()">Save</button>
                             <button id="" class="button-modal" onclick="document.getElementById('copyinput').style.display='none'" class="closebtn">Close</button>
                         </div>
                     </div>
@@ -698,6 +700,30 @@ function crud_job_event(argument){
         document.getElementById('edit_input').style.display='block';
        
     }
+
+    if(argument == 'copy' && job_id != ''){
+        var jobinfo = <?php echo json_encode($data['job_list_new']); ?>;
+        var from_job_name_bk = jobinfo[job_id]['job_name'];
+
+        document.getElementById("from_job_id").value = job_id;
+        document.getElementById("from_job_name").value = from_job_name_bk;
+        var selectElement = document.getElementById('JobSelect1');
+        var options = selectElement.getElementsByTagName('option');
+
+        for (var i = 0; i < options.length; i++) {
+            var optionId = options[i].getAttribute('id');
+            var optionValue = options[i].value;
+            if(optionValue == job_id){
+                options[i].disabled = true; 
+                options[i].classList.add('disabled_input'); 
+                //console.log("Option with value " + job_id + " disabled.");
+            }
+        }
+
+        document.getElementById('copyinput').style.display='block';
+    }
+
+
 }
 
 
@@ -750,6 +776,33 @@ function get_input_info(){
    
         
     }
+
+}
+
+function copy_input_id(){
+
+    var to_job_id = document.getElementById("JobSelect1").value;
+    if(to_job_id){
+        $.ajax({
+            url: "?url=Inputs/copy_input_event",
+            method: "POST",
+            data: { 
+                from_job_id: job_id,
+                to_job_id: to_job_id
+            },
+            success: function(response) {
+
+                document.getElementById('copyinput').style.display='none';
+                console.log(response);
+                //alert(response);
+                get_input_by_job_id(job_id);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+    }
+
 
 }
 
@@ -948,3 +1001,10 @@ function tablesubmit(keyno){
 </body>
 
 </html>
+<style>
+ .disabled-option {
+    color: #999;
+    background-color: #f2f2f2;
+    cursor: not-allowed;
+}   
+</style>    

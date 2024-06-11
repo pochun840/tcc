@@ -60,14 +60,25 @@ class Input{
         return $result;
     }
 
-    public function check_job_event_conflict($input_job_id,$input_event)
-    {
+    public function check_job_event_conflict($input_job_id,$input_event){
+        
         $sql = "SELECT *  FROM input WHERE input_job_id = ? AND input_event = ?";
         $statement = $this->db->prepare($sql);
         $statement->execute([$input_job_id,$input_event]);
         $rows = $statement->fetch();
 
         return $rows;
+    }
+
+    public function check_job_event($input_job_id){
+        
+        $sql = "SELECT *  FROM input WHERE input_job_id = ? ";
+        $statement = $this->db->prepare($sql);
+        $statement->execute([$input_job_id]);
+        $rows = $statement->fetchAll();
+
+        return $rows;
+
     }
 
     public function create_input($jobdata){   
@@ -159,7 +170,6 @@ class Input{
         return $results;
     }
 
-
     public function generateTableCell($value,$value2) {
         if($value >= 2 && $value <= 10){
             $tableCells = "";
@@ -180,6 +190,4 @@ class Input{
             return ""; 
         }
     }
-    
-
 }
