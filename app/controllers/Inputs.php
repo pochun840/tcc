@@ -87,23 +87,24 @@ class Inputs extends Controller
         }else{ 
             $input_check = false; 
         }
-        if( !empty($_POST['event_id']) && isset($_POST['event_id'])  ){
-            $event_id = $_POST['event_id'];
+        if( !empty($_POST['input_event']) && isset($_POST['input_event'])  ){
+           $input_event = $_POST['input_event'];
         }else{ 
             $input_check = false; 
         }
 
         if($input_check){
-            $job_inputs = $this->InputModel->check_job_event_conflict($job_id,$event_id);    
+            $job_inputs = $this->InputModel->check_job_event_conflict($job_id,$input_event);    
         }
 
-        echo json_encode($job_inputs);
+        print_r($job_inputs);
     }
 
     public function create_input_event()
     {
         $input_check = true;
         $jobdata = array();
+
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
             $jobdata['input_job_id'] = $_POST['job_id'];
         }else{ 
@@ -149,6 +150,7 @@ class Inputs extends Controller
         if($input_check){
             $count = $this->InputModel->check_job_event_conflict($jobdata['input_job_id'],$jobdata['input_event']);
             if(!$count){
+               
                 $res  = $this->InputModel->create_input($jobdata);
                 if($res){
                     $res_msg = 'create input from job:'.$jobdata['input_job_id'].',event_id:'.$jobdata['input_event'].'  success';
@@ -160,48 +162,73 @@ class Inputs extends Controller
         }
     }
 
-    public function edit_input_event($value='')
+    public function edit_input_event()
     {
         $input_check = true;
+        $jobdata = array();
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $job_id = $_POST['job_id'];
+            $jobdata['input_job_id'] = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
-        if( !empty($_POST['event_id_new']) && isset($_POST['event_id_new'])  ){
-            $event_id_new = $_POST['event_id_new'];
+
+        if( !empty($_POST['input_event']) && isset($_POST['input_event'])  ){
+            $jobdata['input_event'] = $_POST['input_event'];
         }else{ 
             $input_check = false; 
         }
-        if( !empty($_POST['event_id_old']) && isset($_POST['event_id_old'])  ){
-            $event_id_old = $_POST['event_id_old'];
-        }else{ 
-            $input_check = false; 
-        }
+
         if( !empty($_POST['input_pin']) && isset($_POST['input_pin'])  ){
-            $input_pin = $_POST['input_pin'];
+            $jobdata['input_pin'] = intval($_POST['input_pin']);
         }else{ 
             $input_check = false; 
         }
-        if( !empty($_POST['option']) && isset($_POST['option'])  ){
-            $option = $_POST['option'];
+
+        if( !empty($_POST['input_wave']) && isset($_POST['input_wave'])  ){
+            $jobdata['input_wave'] = $_POST['input_wave'];
         }else{ 
             $input_check = false; 
+        }
+
+        if( isset($_POST['gateconfirm'])){
+            $jobdata['gateconfirm'] = $_POST['gateconfirm'];
+        }else{ 
+            $input_check = false; 
+        }
+
+        if( isset($_POST['pagemode'])){
+            $jobdata['pagemode'] = $_POST['pagemode'];
+        }else{ 
+            $input_check = false; 
+        }
+
+        if( isset($_POST['input_seqid'])){
+            $jobdata['input_seqid'] = $_POST['input_seqid'];
+        }else{ 
+            $input_check = false; 
+        }
+        if( isset($_POST['old_input_event'])){
+            $jobdata['old_input_event'] = $_POST['old_input_event'];
         }
 
         if($input_check){
-            $job_inputs = $this->InputModel->create_input($job_id,$event_id,$input_pin,$option);
-            if ($job_inputs) { // copy DB
-                $copy_result = $this->copyDB_to_RamdiskDB();
-                if ($copy_result) {
-                    $this->logMessage('edit input job:'.$job_id.',event_id:'.$event_id.' copyDB success');
-                } else {
-                    $this->logMessage('edit input job:'.$job_id.',event_id:'.$event_id.' copyDB fail');
-                }
+            $count = $this->InputModel->check_job_event_conflict($jobdata['input_job_id'],$jobdata['old_input_event']);
+            if ($count > 0 && $jobdata['input_event'] != $jobdata['old_input_event']){
+                
+                //先移除舊的資料 再新增新的資料
+                $ans  = $this->InputModel->delete_input_event_by_id($jobdata['input_job_id'],$jobdata['old_input_event']);
+                $res  = $this->InputModel->create_input($jobdata);
+            }else if($count > 0 && $jobdata['input_event'] == $jobdata['old_input_event']) {
+                $res  = $this->InputModel->edit_input($jobdata);
             }
-        }
 
-        echo json_encode($job_inputs);
+            if($res){
+                $res_msg = 'edit input job:'.$jobdata['input_job_id'].',event_id:'.$jobdata['input_event'].' copyDB success';
+            } else {
+                $res_msg = 'edit input job:'.$jobdata['input_job_id'].',event_id:'.$jobdata['input_event'].' copyDB fail';
+            }
+            echo $res_msg;            
+        }
     }
 
     public function copy_input()
