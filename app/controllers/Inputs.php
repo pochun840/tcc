@@ -63,6 +63,9 @@ class Inputs extends Controller
                         $pin_number = $vv['input_pin'];
                         $temp[] = "pin" . $pin_number . "_high";
                         $temp[] = "pin" . $pin_number . "_low";
+
+                        $temp[] = "edit_pin" . $pin_number . "_high";
+                        $temp[] = "edit_pin" . $pin_number . "_low";
                     }
 
                     if (!empty($vv['input_event'])) {
@@ -277,12 +280,7 @@ class Inputs extends Controller
                     $res = $this->InputModel->create_input($jobdata[$key]);
 
                 }
-                /*if (!empty($job_inputs_from)) {
-                    $res_msg = 'copy input job:'.$input_job_id.'copyDB success';
-                } else {
-                    $res_msg = 'copy input job:'.$input_job_id.' copyDB fail';
-                }
-                echo $res_msg;*/
+               
 
             }
         }
