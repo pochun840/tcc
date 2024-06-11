@@ -810,7 +810,7 @@ function copy_input_id(){
 function create_input_id(){
  
     var input_event = document.getElementById("Event_Option").value;
-    var pinval      = collectpin();
+    var pinval      = collectPinValues('input[name="pin_option"]');
     var pin_old   = pinval[0]['id'];
     var input_wave  = pinval[0]['value'];
     var pagemode    = 1;
@@ -858,7 +858,7 @@ function create_input_id(){
 function edit_input_id(){
 
     var input_event = document.getElementById("edit_Event_Option").value;
-    var pinval      = collectpin_edit();
+    var pinval      = collectPinValues('input[name="edit_pin_option"]');
     var pin_old   = pinval[0]['id'];
     var input_wave  = pinval[0]['value'];
     var pagemode    = 1;
@@ -954,25 +954,10 @@ function get_input_by_job_id(jobid){
         }
     }); 
 }
-function collectpin() {
-    var pinOptions = document.querySelectorAll('input[name="pin_option"]');
-    var selectedValues = [];
 
-    pinOptions.forEach(function(option) {
-        if (option.checked){ 
-            var radioInfo = {
-                id: option.id,
-                value: option.value
-            };
-            selectedValues.push(radioInfo);
-        }
-    });
 
-    return selectedValues;
-}
-
-function collectpin_edit() {
-    var pinOptions = document.querySelectorAll('input[name="edit_pin_option"]');
+function collectPinValues(selector) {
+    var pinOptions = document.querySelectorAll(selector);
     var selectedValues = [];
 
     pinOptions.forEach(function(option) {

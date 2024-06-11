@@ -61,17 +61,15 @@ class Outputs extends Controller
             $tempA = array();
             $job_outputlist = ''; 
         
-
             if (!empty($job_outputs)) {
                 foreach ($job_outputs as $kk => $vv) {
                     if (!empty($vv['output_pin'])) {
                         $pin_number = $vv['output_pin'];
-                        $temp[] = "output_pin" . $pin_number;
-                        $temp[] = "output_pin" . $pin_number;
+                        $temp[] = "pin" . $pin_number."_".$vv['wave'];
                     }
 
-                    if (!empty($vv['input_event'])) {
-                        $tempA[] = $vv['input_event'];
+                    if (!empty($vv['output_event'])) {
+                        $tempA[] = $vv['output_event'];
                     }
 
                     $job_outputlist .= "<tr class='".$vv['output_event']."'>";
@@ -94,41 +92,7 @@ class Outputs extends Controller
 
     }
 
-    /*public function get_output_by_job_id(){
-
-        $input_check = true;
-        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $job_id = $_POST['job_id'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        // if($input_check){
-        //     $job_outputs = $this->OutputModel->get_output_by_job_id($job_id);    
-        // }
-        if($input_check){
-            $job_outputs = $this->OutputModel->get_output_by_job_id($job_id);    
-            //調整Array格式 event,pin,wave,time
-            // $tempA = array();
-            // $tempB = array();
-            // foreach ($job_outputs as $key => $value) {
-            //     $tempB['output_jobid'] = $value['output_jobid'];
-            //     $tempB['output_event'] = $value['output_event'];
-            //     for ($i=2; $i <= 10; $i++) { 
-            //         if($value['output_pin'.$i] > 0){
-            //             $tempB['output_pin'] = $i;
-            //             $tempB['wave'] = $value['output_pin'.$i];
-            //         }
-            //     }
-            //     $tempA[] = $tempB;
-            //     $job_inputs[$key]['output_pin'] = $tempB['output_pin'];
-            //     $job_inputs[$key]['wave'] = $tempB['wave'];
-            // }
-        }
-
-        echo json_encode($job_outputs);
-
-    }*/
+   
 
     public function check_job_output_conflict($value='')
     {
@@ -151,51 +115,50 @@ class Outputs extends Controller
         echo json_encode($job_inputs);
     }
 
-    public function create_output_event($value='')
+    public function create_output_event()
     {
         $input_check = true;
+        $jobdata = array();
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $job_id = $_POST['job_id'];
-        }else{ 
-            $input_check = false; 
-        }
-        if( !empty($_POST['event_id']) && isset($_POST['event_id'])  ){
-            $event_id = $_POST['event_id'];
+            $jobdata['output_job_id'] = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
         if( !empty($_POST['output_pin']) && isset($_POST['output_pin'])  ){
-            $output_pin = $_POST['output_pin'];
+            $jobdata['output_pin'] = $_POST['output_pin'];
         }else{ 
             $input_check = false; 
         }
-        if( !empty($_POST['option']) && isset($_POST['option'])  ){
-            $option = $_POST['option'];
+        if( !empty($_POST['output_event']) && isset($_POST['output_event'])  ){
+            $jobdata['output_event'] = $_POST['output_event'];
         }else{ 
             $input_check = false; 
         }
-        if( isset($_POST['time']) && $_POST['time']>=0 && $_POST['time'] <= 10000 ){
-            $time = $_POST['time'];
-            if($time == ''){
-                $time = 0;//預設值
+        if( !empty($_POST['wave']) && isset($_POST['wave'])  ){
+            $jobdata['wave'] = $_POST['wave'];
+        }else{ 
+            $input_check = false; 
+        }
+        if( isset($_POST['wave_on']) && $_POST['wave_on']>=0 && $_POST['wave_on'] <= 10000 ){
+            $jobdata['wave_on'] = $_POST['wave_on'];
+            if($jobdata['wave_on'] == ''){
+                $jobdata['wave_on'] = 0;//預設值
             }
         }else{ 
             $input_check = false; 
         }
+
 
         if($input_check){
-            $job_inputs = $this->OutputModel->create_output($job_id,$event_id,$output_pin,$option,$time);
-            if ($job_inputs) { // copy DB
-                $copy_result = $this->copyDB_to_RamdiskDB();
-                if ($copy_result) {
-                    $this->logMessage('edit output job:'.$job_id.',event_id:'.$event_id.' copyDB success');
-                } else {
-                    $this->logMessage('edit output job:'.$job_id.',event_id:'.$event_id.' copyDB fail');
-                }
+            $res = $this->OutputModel->create_output($jobdata);
+            if($res){
+                $res_msg = 'create input from job:'.$jobdata['output_job_id'].',event_id:'.$jobdata['output_event'].'  success';
+            }else{
+                $res_msg = 'create input from job:'.$jobdata['output_job_id'].',event_id:'.$jobdata['output_event'].'  fail';
             }
+            echo $res_msg;
         }
-
-        echo json_encode($job_inputs);
+       
     }
 
     public function copy_output()
@@ -230,29 +193,25 @@ class Outputs extends Controller
     public function delete_output(){
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $job_id = $_POST['job_id'];
+            $output_job_id	 = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
-        if( !empty($_POST['event_id']) && isset($_POST['event_id'])  ){
-            $event_id = $_POST['event_id'];
+        if( !empty($_POST['output_event']) && isset($_POST['output_event'])  ){
+            $output_event = $_POST['output_event'];
         }else{ 
             $input_check = false; 
         }
 
         if($input_check){
-            $job_inputs = $this->OutputModel->delete_output_event_by_id($job_id,$event_id);
-            if ($job_inputs) { // copy DB
-                $copy_result = $this->copyDB_to_RamdiskDB();
-                if ($copy_result) {
-                    $this->logMessage('delete output from job:'.$job_id.',event_id:'.$event_id.' copyDB success');
-                } else {
-                    $this->logMessage('delete output from job:'.$job_id.',event_id:'.$event_id.' copyDB fail');
-                }
+            $res = $this->OutputModel->delete_output_event_by_id($output_job_id,$output_event);
+            if ($res) {
+                $res_msg = 'delete output from job:'.$output_job_id.',event_id:'.$output_event.'  success';
+            } else {
+                $res_msg = 'delete output from job:'.$output_job_id.',event_id:'.$output_event.'  fail';
             }
+            echo $res_msg;
         }
-
-        echo json_encode($job_inputs);
     }
 
     public function output_alljob()
@@ -277,10 +236,5 @@ class Outputs extends Controller
         }
 
         echo json_encode($job_inputs);
-    }
-
-    
-
-
-    
+    }    
 }

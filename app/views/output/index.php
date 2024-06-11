@@ -91,10 +91,10 @@
 
                 <div class="footer">
                     <div class="buttonbox">
-                        <input id="S1" name="New_Submit" type="button" value="New" tabindex="1" onclick="document.getElementById('new_output').style.display='block'">
+                        <input id="S1" name="New_Submit" type="button" value="New" tabindex="1" onclick="crud_job_event('new')">
                         <input id="S2" name="Edit_Submit" type="button" value="Edit" tabindex="1">
                         <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="document.getElementById('copy_output').style.display='block'">
-                        <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1">
+                        <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1" onclick="crud_job_event('del')">
                         <input id="S6" name="Align_Submit" type="button" value="Align" tabindex="1">
                     </div>
                 </div>
@@ -116,23 +116,9 @@
                                     <div for="event" class="col-3 t1">Event :</div>
                                     <div class="col-2 t2">
                                         <select id="Event_Option" class="col custom-file">
-                                            <option value="-1" disabled selected>Option</option>
-                                            <option value="1">OK</option>
-                                            <option value="2">NG</option>
-                                            <option value="3">NG-High</option>
-                                            <option value="4">NG-Low</option>
-                                            <option value="5">OK-Sequence</option>
-                                            <option value="6">OK-Job</option>
-                                            <option value="7">Tool Runing</option>
-                                            <option value="8">Tool Trigger</option>
-                                            <option value="9">Reverse</option>
-                                            <option value="10">BS</option>
-                                            <option value="11">Barcode</option>
-                                            <option value="12">UserDefine1</option>
-                                            <option value="13">UserDefine2</option>
-                                            <option value="14">UserDefine3</option>
-                                            <option value="15">UserDefine4</option>
-                                            <option value="16">UserDefine5</option>
+                                           <?php foreach($data['event_output'] as $key =>$val){?>
+                                                <option value ='<?php echo $key;?>'><?php echo $val;?></option>
+                                            <?php } ?>
                                         </select>
                                     </div>
                                 </div>
@@ -140,33 +126,33 @@
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">1:</div>
                     			    <div class="col-sm-2 t2 form-check form-check-inline">
-                    				    <input class="form-check-input" type="radio" name="pin_option" id="pin1_signal01" value="0">
+                    				    <input class="form-check-input" type="radio" name="pin_option" id="pin1_1" value="1">
                     				    <label class="form-check-label" for="pin1_signal01"><img src="./img/signal01.png"></label>
                     				</div>
                     				<div class="col-sm-2 t2 form-check form-check-inline">
-                    				    <input class="form-check-input" type="radio" name="pin_option" id="pin1_signal02" value="1" checked="checked">
+                    				    <input class="form-check-input" type="radio" name="pin_option" id="pin1_2" value="2">
                     				    <label class="form-check-label" for="pin1_signal02"><img src="./img/signal02.png"></label>
                     				</div>
                     				<div class="col-sm-2 t2 form-check form-check-inline">
-                    				    <input class="form-check-input" type="radio" name="pin_option" id="pin1_trigger" value="0">
+                    				    <input class="form-check-input" type="radio" name="pin_option" id="pin1_3" value="3">
                     				    <label class="form-check-label" for="pin1_trigger"><img src="./img/trigger.png"></label>
                     				</div>
                   				    <div class="col-sm-2 t2">
-                				        <input type="text" class="form-control" id="time2" placeholder="ms" value="500" disabled style="height: 28px;text-align: center;">
+                				        <input type="text" class="form-control" id="time2" placeholder="ms" value="" disabled style="height: 28px;text-align: center;">
                    				    </div>
                                 </div>
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">2:</div>
                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_signal01" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_1" value="1">
                    					    <label class="form-check-label" for="pin2_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_signal02" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_2" value="2">
                    					    <label class="form-check-label" for="pin2_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_trigger" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_3" value="3">
                    					    <label class="form-check-label" for="pin2_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-sm-2 t2">
@@ -176,15 +162,15 @@
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">3:</div>
                    			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_signal01" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_1" value="1">
                    					    <label class="form-check-label" for="pin3_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_signal02" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_2" value="2">
                    					    <label class="form-check-label" for="pin3_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_trigger" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_3" value="3">
                    					    <label class="form-check-label" for="pin3_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-sm-2 t2">
@@ -194,15 +180,15 @@
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">4:</div>
                    			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_signal01" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_1" value="1">
                    					    <label class="form-check-label" for="pin4_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_signal02" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_2" value="2">
                    					    <label class="form-check-label" for="pin4_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_trigger" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_3" value="3">
                    					    <label class="form-check-label" for="pin4_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-sm-2 t2">
@@ -212,15 +198,15 @@
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">5:</div>
                    			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_signal01" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_1" value="1">
                    					    <label class="form-check-label" for="pin5_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_signal02" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_2" value="2">
                    					    <label class="form-check-label" for="pin5_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_trigger" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_3" value="3">
                    					    <label class="form-check-label" for="pin5_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-sm-2 t2">
@@ -230,15 +216,15 @@
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">6:</div>
                    			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_signal01" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_1" value="1">
                    					    <label class="form-check-label" for="pin6_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_signal02" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_2" value="2">
                    					    <label class="form-check-label" for="pin6_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_trigger" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_3" value="3">
                    					    <label class="form-check-label" for="pin6_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-sm-2 t2">
@@ -248,15 +234,15 @@
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">7:</div>
                    			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_signal01" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_1" value="1">
                    					    <label class="form-check-label" for="pin7_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_signal02" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_2" value="2">
                    					    <label class="form-check-label" for="pin7_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_trigger" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_3" value="3">
                    					    <label class="form-check-label" for="pin7_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-sm-2 t2">
@@ -266,15 +252,15 @@
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">8:</div>
                    			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_signal01" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_1" value="1">
                    					    <label class="form-check-label" for="pin8_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_signal02" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_2" value="2">
                    					    <label class="form-check-label" for="pin8_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_trigger" value="0">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_3" value="3">
                    					    <label class="form-check-label" for="pin8_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-sm-2 t2">
@@ -284,15 +270,15 @@
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">9:</div>
                    			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_signal01" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_1" value="1">
                    					    <label class="form-check-label" for="pin9_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_signal02" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_2" value="2">
                    					    <label class="form-check-label" for="pin9_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_trigger" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_3" value="3">
                    					    <label class="form-check-label" for="pin9_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-sm-2 t2">
@@ -302,15 +288,15 @@
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">10:</div>
                    			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_signal01" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_1" value="1">
                    					    <label class="form-check-label" for="pin10_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_signal02" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_2" value="2">
                    					    <label class="form-check-label" for="pin10_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_trigger" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_3" value="3">
                    					    <label class="form-check-label" for="pin10_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-sm-2 t2">
@@ -320,15 +306,15 @@
                                 <div class="row output-pin">
                                     <div class="col-sm-2 t1">11:</div>
                    			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_signal01" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_1" value="1">
                    					    <label class="form-check-label" for="pin11_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_signal02" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_2" value="2">
                    					    <label class="form-check-label" for="pin11_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_trigger" value="1">
+                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_3" value="3">
                    					    <label class="form-check-label" for="pin11_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-sm-2 t2">
@@ -341,7 +327,7 @@
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <button id="" class="button-modal" onclick="add_member_user()">Save</button>
+                            <button id="" class="button-modal" onclick="create_output_id()">Save</button>
                             <button id="" class="button-modal" onclick="document.getElementById('new_output').style.display='none'" class="closebtn">Close</button>
                         </div>
                     </div>
@@ -405,17 +391,13 @@
 </div>
 
 <script>
-// Change the color of a row in a table
 $(document).ready(function () {
     highlight_row('output_table');
 });
 
 
-
-// Get the modal
 var modal = document.getElementById('newinput');
 
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
@@ -445,6 +427,8 @@ function job_confirm(){
                 temp = data.temp;
                 tempA = data.tempA;
 
+
+                console.log(tempA);
                 document.getElementById("output_jobid_select").innerHTML = job_outputlist;
                 document.getElementById("JobSelect").style.display = 'none';
                 document.getElementById("job_id").value = job_id;
@@ -465,6 +449,155 @@ function job_confirm(){
             }
         });
     }
+}
+
+function crud_job_event(argument){
+    if(argument == 'del'){
+        delete_output_id(job_id,output_event);
+    }
+
+    if(argument == 'new'){
+
+        if (Array.isArray(temp)){ 
+            temp.forEach(function(element) {
+                var radio = document.getElementById(element);
+                if (radio && radio.type === 'radio') { 
+                    radio.disabled = true; 
+                }
+            });
+        } 
+
+
+         //針對已設定的事件option做反灰+disable
+         if (Array.isArray(tempA)){
+            tempA.forEach(function(element){
+                var option = document.querySelector('#Event_Option option[value="' + element + '"]');
+                if(option){
+                    if (option.selected){
+                        selectedValue = element;
+                    }
+
+                    option.disabled = true;
+                    option.classList.add('disabled_input');
+                }
+            });
+        }
+
+
+        document.getElementById('new_output').style.display='block';
+    }
+
+}
+
+
+function create_output_id(){
+    var output_event = document.getElementById("Event_Option").value;
+    var pinval      = collectPinValues('input[name="pin_option"]');
+    var pin_old   = pinval[0]['id'];
+    var wave  = pinval[0]['value'];
+
+    var match = pin_old.match(/\d+/); 
+    var output_pin = match ? parseInt(match[0]) : null;
+    var wave_on = 0;
+
+    if(job_id){
+        $.ajax({
+            url: "?url=Outputs/create_output_event",
+            method: "POST",
+            data: { 
+                job_id: job_id,
+                output_pin: output_pin,
+                output_event: output_event,
+                wave: wave,
+                wave_on: wave_on
+            },
+            success: function(response) {
+                console.log(response);
+                alert(response);
+                get_output_by_job_id(job_id);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+            }
+        });         
+    }
+    //var time_ms = 'time'+ output_pin;
+    //var ss =  document.getElementById(time_ms).value;
+
+
+
+    //console.log(ss);
+}
+
+
+function delete_output_id(job_id,output_event){
+    if(job_id){
+        $.ajax({
+            url: "?url=Outputs/delete_output",
+            method: "POST",
+            data: { 
+                job_id: job_id,
+                output_event: output_event,
+             
+            },
+            success: function(response) {
+                console.log(response);
+                alert(response);
+                get_output_by_job_id(job_id);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+            }
+        });     
+    }   
+}
+
+function get_output_by_job_id(job_id){
+    $.ajax({
+        url: "?url=Outputs/get_output_by_job_id",
+        method: "POST",
+        data: { 
+            job_id: job_id,
+        },
+        success: function(response) {
+            var data = JSON.parse(response);
+            var job_outputlist = data.job_outputlist;
+            temp = data.temp;
+            tempA = data.tempA;
+
+            document.getElementById("output_jobid_select").innerHTML = job_outputlist;
+            document.getElementById("JobSelect").style.display = 'none';
+            document.getElementById("job_id").value = job_id;
+        
+            var rows = document.querySelectorAll('#output_jobid_select tr');
+            rows.forEach(function(row) {
+                row.addEventListener('click', function() { 
+                    input_event = this.className; 
+                });
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX request failed:", status, error);
+        }
+    }); 
+
+}
+
+function collectPinValues(selector) {
+    var pinOptions = document.querySelectorAll(selector);
+    var selectedValues = [];
+
+    pinOptions.forEach(function(option) {
+        if (option.checked){ 
+            var radioInfo = {
+                id: option.id,
+                value: option.value
+            };
+            selectedValues.push(radioInfo);
+        }
+    });
+
+    return selectedValues;
 }
 
 </script>

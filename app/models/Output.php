@@ -51,17 +51,17 @@ class Output{
         }
     }
 
-    public function create_output($job_id,$event_id,$output_pin,$option,$time)
-    {    
-        if( $this->check_job_output_conflict($job_id,$event_id) ){ //已存在，用update
-            $sql = "UPDATE `output` SET output_pin = ?, wave = ?, wave_on = ? WHERE output_jobid = ? AND output_event = ?";
-            $statement = $this->db->prepare($sql);
-            $results = $statement->execute([$output_pin,$option,$time,$job_id,$event_id]);
-        }else{ //不存在，用insert
-            $sql = "INSERT INTO `output` ('output_jobid','output_pin','output_event','wave','wave_on','wave_off','output_seqid') VALUES (?,?,?,?,?,?,?) ";
-            $statement = $this->db->prepare($sql);
-            $results = $statement->execute([$job_id,$output_pin,$event_id,$option,$time,0,1]);
-        }
+    public function create_output($jobdata){    
+        $sql = "INSERT INTO `output` (output_job_id, output_pin, output_event, wave, wave_on) ";
+        $sql .= "VALUES (:output_job_id, :output_pin, :output_event, :wave, :wave_on);";
+
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->bindValue(':output_job_id', $jobdata['output_job_id']);
+        $statement->bindValue(':output_pin', $jobdata['output_pin']);
+        $statement->bindValue(':output_event', $jobdata['output_event']);
+        $statement->bindValue(':wave', $jobdata['wave']);
+        $statement->bindValue(':wave_on', $jobdata['wave_on']);
+        $results = $statement->execute();
 
         return $results;
     }
@@ -85,17 +85,17 @@ class Output{
     public function delete_output_by_id($job_id){
 
         $sql= "DELETE FROM output WHERE output_jobid = ?";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$job_id]);
 
         return $results;
     }
     //delete output by job_id and event_id
-    public function delete_output_event_by_id($job_id,$event_id){
+    public function delete_output_event_by_id($output_job_id,$output_event){
 
-        $sql= "DELETE FROM output WHERE output_jobid = ? AND output_event = ?";
-        $statement = $this->db->prepare($sql);
-        $results = $statement->execute([$job_id,$event_id]);
+        $sql= "DELETE FROM output WHERE output_job_id = ? AND output_event = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$output_job_id,$output_event]);
 
         return $results;
     }
@@ -109,7 +109,7 @@ class Output{
 
         return $results;
     }
-
+    //pin2_signal02
     public function generateTableCell($value,$value2) {
         if($value >= 1 && $value <= 11){
             $tableCells = "";
