@@ -673,34 +673,24 @@ function crud_job_event(argument){
 
     if(argument == 'edit' && job_id != '' && input_event != ''){
 
-        if (Array.isArray(temp)){ 
-            temp.forEach(function(element) {
+        var selectElement = document.getElementById('edit_Event_Option');
+        if(selectElement){
+            selectElement.disabled = true;
+            var options = selectElement.options;
+            for (var i = 0; i < options.length; i++) {
+                options[i].disabled = true;
+                options[i].classList.add('disabled_input');
+            }
+        }
+    
+        if (Array.isArray(temp)){
+            temp.forEach(function(element){
                 var radio = document.getElementById(element);
-                if (radio && radio.type === 'radio') { 
-                    radio.disabled = true; 
+                if (radio && radio.type === 'radio'){
+                    radio.disabled = true;
                 }
             });
         }
-        
-  
-
-
-        if (Array.isArray(tempA)){
-            tempA.forEach(function(element){
-                var option = document.querySelector('#edit_Event_Option option[value="' + element + '"]');
-                if(option){
-                    if (option.selected){
-                        selectedValue = element;
-                    }
-
-                    option.disabled = true;
-                    option.classList.add('disabled_input');
-                }
-            });
-        }
-
-        
-
         get_input_info(job_id,input_event);
         handleEventChange(input_event); 
         document.getElementById('edit_input').style.display='block';
