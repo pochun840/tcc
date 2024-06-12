@@ -64,8 +64,14 @@ class Inputs extends Controller
                         $temp[] = "pin" . $pin_number . "_high";
                         $temp[] = "pin" . $pin_number . "_low";
 
-                        $temp[] = "edit_pin" . $pin_number . "_high";
-                        $temp[] = "edit_pin" . $pin_number . "_low";
+                        $edit_pin_high = "edit_pin" . $pin_number . "_high";
+                        $edit_pin_low = "edit_pin" . $pin_number . "_low";
+                        if (!in_array($edit_pin_high, $temp)) {
+                            $temp[] = $edit_pin_high;
+                        }
+                        if (!in_array($edit_pin_low, $temp)) {
+                            $temp[] = $edit_pin_low;
+                        }
                     }
 
                     if (!empty($vv['input_event'])) {
@@ -114,30 +120,28 @@ class Inputs extends Controller
         print_r($job_inputs);
     }
 
-    public function create_input_event()
-    {
+    public function create_input_event(){
         $input_check = true;
         $jobdata = array();
-
-        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])){
             $jobdata['input_job_id'] = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
 
-        if( !empty($_POST['input_event']) && isset($_POST['input_event'])  ){
+        if( !empty($_POST['input_event']) && isset($_POST['input_event'])){
             $jobdata['input_event'] = $_POST['input_event'];
         }else{ 
             $input_check = false; 
         }
 
-        if( !empty($_POST['input_pin']) && isset($_POST['input_pin'])  ){
+        if( !empty($_POST['input_pin']) && isset($_POST['input_pin'])){
             $jobdata['input_pin'] = intval($_POST['input_pin']);
         }else{ 
             $input_check = false; 
         }
 
-        if( !empty($_POST['input_wave']) && isset($_POST['input_wave'])  ){
+        if( !empty($_POST['input_wave']) && isset($_POST['input_wave'])){
             $jobdata['input_wave'] = $_POST['input_wave'];
         }else{ 
             $input_check = false; 
@@ -335,5 +339,15 @@ class Inputs extends Controller
         }
 
         echo json_encode($job_inputs);
-    }    
+    }  
+    
+    #驗證
+    private function validate_input($input_data){
+        foreach($input_data as $value){
+            if (empty($value)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
