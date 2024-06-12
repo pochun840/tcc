@@ -9,7 +9,7 @@
                     <h3>I/O Input</h3>
                 </td>
                 <td>
-                    <img src="./img/btn_home.png" style="margin-right: 10px">
+                    <img src="./img/btn_home.png" style="margin-right: 10px"  onclick="window.location.href = '?url=In';">
                 </td>
             </tr>
         </table>
@@ -794,7 +794,6 @@ function copy_input_id(){
 
                 document.getElementById('newinput').style.display='none';
                 console.log(response);
-                //alert(response);
                 get_input_by_job_id(job_id);
             },
             error: function(xhr, status, error) {
