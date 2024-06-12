@@ -51,6 +51,16 @@ class Output{
         }
     }
 
+    public function check_job_event_conflict($output_job_id,$output_event){
+        
+        $sql = "SELECT *  FROM output WHERE output_job_id = ? AND output_event = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$output_job_id,$output_event]);
+        $rows = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $rows;
+    }
+
     public function create_output($jobdata){    
         $sql = "INSERT INTO `output` (output_job_id, output_pin, output_event, wave, wave_on) ";
         $sql .= "VALUES (:output_job_id, :output_pin, :output_event, :wave, :wave_on);";
@@ -65,6 +75,27 @@ class Output{
 
         return $results;
     }
+
+
+    public function edit_output($jobdata){
+
+        $sql = "UPDATE `output` 
+        SET output_event = :output_event, 
+            output_pin  = :output_pin,
+            wave = :wave, 
+            wave_on = :wave_on ";
+        $sql .= "WHERE output_event = :output_event  AND output_job_id = :output_job_id;";
+
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->bindValue(':output_job_id', $jobdata['output_job_id']);
+        $statement->bindValue(':output_event', $jobdata['output_event']);
+        $statement->bindValue(':output_pin', $jobdata['output_pin']);
+        $statement->bindValue(':wave', $jobdata['wave']);
+        $statement->bindValue(':wave_on', $jobdata['wave_on']);
+        $results = $statement->execute();
+        return $results;
+
+    } 
 
     public function copy_output_by_id($from_job_id,$to_job_id){
         // 判斷job_id是否存在，若存在就先把舊的刪除

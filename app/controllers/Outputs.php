@@ -67,6 +67,7 @@ class Outputs extends Controller
                     if (!empty($vv['output_pin'])) {
                         $pin_number = $vv['output_pin'];
                         $temp[] = "pin" . $pin_number."_".$vv['wave'];
+                        $temp[] = "edit_pin" . $pin_number."_".$vv['wave'];
                     }
 
                     if (!empty($vv['output_event'])) {
@@ -198,8 +199,6 @@ class Outputs extends Controller
                 }
             }
         }
-
-        //echo json_encode($job_inputs);
     }
 
     public function delete_output(){
@@ -248,5 +247,82 @@ class Outputs extends Controller
         }
 
         echo json_encode($job_inputs);
-    }    
+    }  
+    
+    public function check_job_event(){
+
+        $input_check = true;
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+            $output_job_id  = $_POST['job_id'];
+        }else{ 
+            $input_check = false; 
+        }
+        if( !empty($_POST['output_event']) && isset($_POST['output_event'])  ){
+           $output_event = $_POST['output_event'];
+        }else{ 
+            $input_check = false; 
+        }
+
+        if($input_check){
+            $job_outputs = $this->OutputModel->check_job_event_conflict($output_job_id,$output_event);    
+        }
+        print_r($job_outputs);
+
+    }
+
+
+    public function edit_output_event(){
+        
+        $input_check = true;
+        $jobdata = array();
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+            $jobdata['output_job_id'] = $_POST['job_id'];
+        }else{ 
+            $input_check = false; 
+        }
+        if( !empty($_POST['output_pin']) && isset($_POST['output_pin'])  ){
+            $jobdata['output_pin'] = $_POST['output_pin'];
+        }else{ 
+            $input_check = false; 
+        }
+        if( !empty($_POST['output_event']) && isset($_POST['output_event'])  ){
+            $jobdata['output_event'] = $_POST['output_event'];
+        }else{ 
+            $input_check = false; 
+        }
+        if( !empty($_POST['wave']) && isset($_POST['wave'])  ){
+            $jobdata['wave'] = $_POST['wave'];
+        }else{ 
+            $input_check = false; 
+        }
+        if( isset($_POST['wave_on']) && $_POST['wave_on']>=0 && $_POST['wave_on'] <= 10000 ){
+            $jobdata['wave_on'] = $_POST['wave_on'];
+            if($jobdata['wave_on'] == ''){
+                $jobdata['wave_on'] = 0;//預設值
+            }
+        }else{ 
+            $input_check = false; 
+        }
+
+        if( !empty($_POST['old_output_event']) && isset($_POST['old_output_event'])  ){
+            $jobdata['old_output_event'] = $_POST['old_output_event'];
+        }
+        
+        $count = $this->OutputModel->check_job_event_conflict($jobdata['output_job_id'],$jobdata['old_output_event']);
+        if ($count > 0 && $jobdata['output_event'] != $jobdata['old_output_event']){
+            //先移除舊的資料 再新增新的資料
+            $ans  = $this->OutputModel->delete_output_event_by_id($jobdata['output_job_id'],$jobdata['old_output_event']);
+            $res  = $this->OutputModel->create_output($jobdata);
+
+        }else if($count > 0 && $jobdata['output_event'] == $jobdata['old_output_event']){
+            $res  = $this->OutputModel->edit_output($jobdata);
+        } 
+        
+        if($res){
+            $res_msg = 'edit input job:'.$jobdata['output_job_id'].',event_id:'.$jobdata['output_event'].' copyDB success';
+        } else {
+            $res_msg = 'edit input job:'.$jobdata['output_job_id'].',event_id:'.$jobdata['output_event'].' copyDB fail';
+        }
+        echo $res_msg;     
+    }
 }
