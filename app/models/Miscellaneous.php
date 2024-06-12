@@ -87,6 +87,15 @@ class Miscellaneous{
             );
         }
 
+        if($mode =="chart_mode"){
+            $array = array(
+                1 => 'Torque/Time(MS)',
+                2 => 'Angle/Time(MS)',
+                3 => 'RPM/Time(MS)',
+                4 => 'Torque/Angle',
+            );
+        }
+
       
 
 
