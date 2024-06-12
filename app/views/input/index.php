@@ -91,7 +91,7 @@
                             <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="crud_job_event('copy')">
                             <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1" onclick="crud_job_event('del')">
                             <input id="S5" name="Table_Submit" type="button" value="Table" tabindex="1" onclick="tablesubmit('show')">
-                            <input id="S6" name="Align_Submit" type="button" value="Unified" tabindex="1">
+                            <input id="S6" name="Align_Submit" type="button" value="Unified" tabindex="1" onclick="crud_job_event('unified')" >
                         </div>
                     </div>
                 </div>
@@ -719,10 +719,43 @@ function crud_job_event(argument){
         document.getElementById('copyinput').style.display='block';
     }
 
+    if(argument == 'unified' && job_id != ''){
+        alignsubmit(job_id);
+
+    }
+
 
 }
 
+function alignsubmit(job_id) {
+        all_job = document.getElementById('input_alljob').value;
+        if(all_job != 0){
+            job_id = 0;
+            document.getElementById('input_alljob').value = 0;
+        }
+        $.ajax({
+            type: "POST",
+            url: "?url=Inputs/input_alljob",
+            data: { 'job_id': job_id},
+            dataType: "json",
+            encode: true,
+            // async: false, //等待ajax完成
+            beforeSend: function() {
+                $('#overlay').removeClass('hidden');
+            },
+        }).done(function(res) { //成功且有回傳值才會執行
+            $('#overlay').addClass('hidden');
+            if(job_id == 0){
+                document.getElementById('Job_Name').style.backgroundColor = '';
+                document.getElementById('job_name_div').onclick = function () { document.getElementById('JobSelect').style.display='block';};
+                document.getElementById('Button_Select').onclick = function () { document.getElementById('JobSelect').style.display='block';};
+                job_input();
+            }else{
+                location.reload();
+            }
 
+        });
+    }
 function get_input_info(){
 
     if(job_id){
