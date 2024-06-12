@@ -91,7 +91,7 @@
                             <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="crud_job_event('copy')">
                             <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1" onclick="crud_job_event('del')">
                             <input id="S5" name="Table_Submit" type="button" value="Table" tabindex="1" onclick="tablesubmit('show')">
-                            <input id="S6" name="Align_Submit" type="button" value="Align" tabindex="1">
+                            <input id="S6" name="Align_Submit" type="button" value="Unified" tabindex="1">
                         </div>
                     </div>
                 </div>
@@ -302,171 +302,171 @@
 
             <!-- edit Input -->
             <div id="edit_input" class="modal">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 70%">
-            <header class="w3-container modal-header">
-                <span onclick="document.getElementById('edit_input').style.display='none'"
-                    class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
-                <h3 id='modal_title'>Edit Event</h3>
-            </header>
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content w3-animate-zoom" style="width: 70%">
+                    <header class="w3-container modal-header">
+                        <span onclick="document.getElementById('edit_input').style.display='none'"
+                            class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
+                        <h3 id='modal_title'>Edit Event</h3>
+                    </header>
 
-            <div class="modal-body">
-                <form id="new_input_form" style="padding-left: 5%">
-                    <div class="row">
-                        <div for="event" class="col-3 t1">Event :</div>
-                        <div class="col-2 t2">
-                            <select id="edit_Event_Option" name ="edit_Event_Option" class="col custom-file">
-                                <?php foreach($data['event'] as $key =>$val){?>
-                                    <option value ='<?php echo $key;?>'><?php echo $val;?></option>
-                                <?php } ?>
-                        
-                            </select>
-                        </div>
+                    <div class="modal-body">
+                        <form id="new_input_form" style="padding-left: 5%">
+                            <div class="row">
+                                <div for="event" class="col-3 t1">Event :</div>
+                                <div class="col-2 t2">
+                                    <select id="edit_Event_Option" name ="edit_Event_Option" class="col custom-file">
+                                        <?php foreach($data['event'] as $key =>$val){?>
+                                            <option value ='<?php echo $key;?>'><?php echo $val;?></option>
+                                        <?php } ?>
+                                
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row input-pin">
+                                <div class="col-1 t1">2:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_high" value="1">
+                                        <label class="form-check-label" for="pin2_high"><img src="./img/high.png"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_low" value="2">
+                                        <label class="form-check-label" for="pin2_low"><img src="./img/low.png"></label>
+                                    </div>
+                                </div>
+
+                                <div class="col-1 t1">7:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_high" value="1">
+                                        <label class="form-check-label" for="pin7_high"><img src="./img/high.png"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_low" value="2">
+                                        <label class="form-check-label" for="pin7_low"><img src="./img/low.png"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row input-pin">
+                                <div class="col-1 t1">3:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_high" value="1">
+                                        <label class="form-check-label" for="pin3_high"><img src="./img/high.png"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_low" value="2">
+                                        <label class="form-check-label" for="pin3_low"><img src="./img/low.png"></label>
+                                    </div>
+                                </div>
+
+                                <div class="col-1 t1">8:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_high" value="1">
+                                        <label class="form-check-label" for="pin8_high"><img src="./img/high.png"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_low" value="2">
+                                        <label class="form-check-label" for="pin8_low"><img src="./img/low.png"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row input-pin">
+                                <div class="col-1 t1">4:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_high" value="1">
+                                        <label class="form-check-label" for="pin4_high"><img src="./img/high.png"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_low" value="2">
+                                        <label class="form-check-label" for="pin4_low"><img src="./img/low.png"></label>
+                                    </div>
+                                </div>
+
+                                <div class="col-1 t1">9:</div>
+                                <div class="col t2">
+                                    <div class="col-4 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_high" value="1">
+                                        <label class="form-check-label" for="pin9_high"><img src="./img/high.png"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_low" value="2">
+                                        <label class="form-check-label" for="pin9_low"><img src="./img/low.png"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row input-pin">
+                                <div class="col-1 t1">5:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_high" value="1">
+                                        <label class="form-check-label" for="pin5_high"><img src="./img/high.png"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_low" value="2">
+                                        <label class="form-check-label" for="pin5_low"><img src="./img/low.png"></label>
+                                    </div>
+                                </div>
+
+                                <div class="col-1 t1">10:</div>
+                                <div class="col t2">
+                                    <div class="col-4 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_high" value="1">
+                                        <label class="form-check-label" for="pin10_high"><img src="./img/high.png"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_low" value="2">
+                                        <label class="form-check-label" for="pin10_low"><img src="./img/low.png"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row input-pin">
+                                <div class="col-1 t1">6:</div>
+                                <div class="col t2" >
+                                    <div class="col-2 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_high" value="1">
+                                        <label class="form-check-label" for="pin6_high"><img src="./img/high.png"></label>
+                                    </div>
+                                    <div class="col form-check form-check-inline" style="margin-left: -10px">
+                                        <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_low" value="2">
+                                        <label class="form-check-label" for="pin6_low"><img src="./img/low.png"></label>
+                                    </div>
+                                </div>
+
+                                
+                            </div>
+
+                            <div class="row" id='edit_work_goc'  style="display: none;">
+                                <div for="Workpice Ready Confirm" class="col-6 t1">Workpice Ready Confirm :</div>
+                                <div class="col t2" >
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" value="0" checked>
+                                    <label class="form-check-label">NO</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_1" value="1">
+                                    <label class="form-check-label" >YES</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
                     </div>
 
-                    <div class="row input-pin">
-                        <div class="col-1 t1">2:</div>
-                        <div class="col t2" >
-                            <div class="col-4 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_high" value="1">
-                                <label class="form-check-label" for="pin2_high"><img src="./img/high.png"></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_low" value="2">
-                                <label class="form-check-label" for="pin2_low"><img src="./img/low.png"></label>
-                            </div>
-                        </div>
-
-                        <div class="col-1 t1">7:</div>
-                        <div class="col t2" >
-                            <div class="col-4 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_high" value="1">
-                                <label class="form-check-label" for="pin7_high"><img src="./img/high.png"></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_low" value="2">
-                                <label class="form-check-label" for="pin7_low"><img src="./img/low.png"></label>
-                            </div>
-                        </div>
+                    <div class="modal-footer justify-content-center">
+                        <button id="" class="button-modal" onclick="edit_input_id()">Save</button>
+                        <button id="" class="button-modal" onclick="document.getElementById('editinput').style.display='none'" class="closebtn">Close</button>
                     </div>
-
-                    <div class="row input-pin">
-                        <div class="col-1 t1">3:</div>
-                        <div class="col t2" >
-                            <div class="col-4 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_high" value="1">
-                                <label class="form-check-label" for="pin3_high"><img src="./img/high.png"></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_low" value="2">
-                                <label class="form-check-label" for="pin3_low"><img src="./img/low.png"></label>
-                            </div>
-                        </div>
-
-                        <div class="col-1 t1">8:</div>
-                        <div class="col t2" >
-                            <div class="col-4 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_high" value="1">
-                                <label class="form-check-label" for="pin8_high"><img src="./img/high.png"></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_low" value="2">
-                                <label class="form-check-label" for="pin8_low"><img src="./img/low.png"></label>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="row input-pin">
-                        <div class="col-1 t1">4:</div>
-                        <div class="col t2" >
-                            <div class="col-4 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_high" value="1">
-                                <label class="form-check-label" for="pin4_high"><img src="./img/high.png"></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_low" value="2">
-                                <label class="form-check-label" for="pin4_low"><img src="./img/low.png"></label>
-                            </div>
-                        </div>
-
-                        <div class="col-1 t1">9:</div>
-                        <div class="col t2">
-                            <div class="col-4 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_high" value="1">
-                                <label class="form-check-label" for="pin9_high"><img src="./img/high.png"></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_low" value="2">
-                                <label class="form-check-label" for="pin9_low"><img src="./img/low.png"></label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row input-pin">
-                        <div class="col-1 t1">5:</div>
-                        <div class="col t2" >
-                            <div class="col-4 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_high" value="1">
-                                <label class="form-check-label" for="pin5_high"><img src="./img/high.png"></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_low" value="2">
-                                <label class="form-check-label" for="pin5_low"><img src="./img/low.png"></label>
-                            </div>
-                        </div>
-
-                        <div class="col-1 t1">10:</div>
-                        <div class="col t2">
-                            <div class="col-4 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_high" value="1">
-                                <label class="form-check-label" for="pin10_high"><img src="./img/high.png"></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_low" value="2">
-                                <label class="form-check-label" for="pin10_low"><img src="./img/low.png"></label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row input-pin">
-                        <div class="col-1 t1">6:</div>
-                        <div class="col t2" >
-                            <div class="col-2 form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_high" value="1">
-                                <label class="form-check-label" for="pin6_high"><img src="./img/high.png"></label>
-                            </div>
-                            <div class="col form-check form-check-inline" style="margin-left: -10px">
-                                <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_low" value="2">
-                                <label class="form-check-label" for="pin6_low"><img src="./img/low.png"></label>
-                            </div>
-                        </div>
-
-                        
-                    </div>
-
-                    <div class="row" id='edit_work_goc'  style="display: none;">
-                        <div for="Workpice Ready Confirm" class="col-6 t1">Workpice Ready Confirm :</div>
-                        <div class="col t2" >
-                            <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" value="0" checked>
-                            <label class="form-check-label">NO</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_1" value="1">
-                            <label class="form-check-label" >YES</label>
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-
-            <div class="modal-footer justify-content-center">
-                <button id="" class="button-modal" onclick="edit_input_id()">Save</button>
-                <button id="" class="button-modal" onclick="document.getElementById('editinput').style.display='none'" class="closebtn">Close</button>
-            </div>
-            </div>
-            </div>
+                </div>
             </div>
 
             <!-- Copy Input -->
@@ -680,7 +680,10 @@ function crud_job_event(argument){
                     radio.disabled = true; 
                 }
             });
-        } 
+        }
+        
+  
+
 
         if (Array.isArray(tempA)){
             tempA.forEach(function(element){
@@ -695,6 +698,9 @@ function crud_job_event(argument){
                 }
             });
         }
+
+        
+
         get_input_info(job_id,input_event);
         handleEventChange(input_event); 
         document.getElementById('edit_input').style.display='block';
@@ -716,7 +722,7 @@ function crud_job_event(argument){
             if(optionValue == job_id){
                 options[i].disabled = true; 
                 options[i].classList.add('disabled_input'); 
-                //console.log("Option with value " + job_id + " disabled.");
+             
             }
         }
 
@@ -741,8 +747,6 @@ function get_input_info(){
                 var responseJSON = JSON.stringify(response);
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
-                //console.log(cleanString);
-
                 var [, jobid] = cleanString.match(/\[input_job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_event] = cleanString.match(/\[input_event]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_pin] = cleanString.match(/\[input_pin]\s*=>\s*([^ ]+)/) || [, null];
@@ -757,11 +761,13 @@ function get_input_info(){
                 
                 var edit_input_pin = "edit_pin" + input_pin + wave;
                 var radioButton = document.getElementById(edit_input_pin);
-          
+                radioButton.removeAttribute('disabled');
                 old_input_event = input_event;
+                
                 if(radioButton){
                     radioButton.checked = true;
                 }
+
                 document.querySelector("select[name='edit_Event_Option']").value = input_event;
 
                 document.getElementById("edit_Event_Option").onchange = function() {
@@ -985,10 +991,3 @@ function tablesubmit(keyno){
 </body>
 
 </html>
-<style>
- .disabled-option {
-    color: #999;
-    background-color: #f2f2f2;
-    cursor: not-allowed;
-}   
-</style>    
