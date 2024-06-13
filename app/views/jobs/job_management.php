@@ -10,7 +10,7 @@
                     <h3>Job Management</h3>
                 </td>
                 <td>
-                    <img src="./img/btn_home.png" style="margin-right: 10px">
+                    <img src="./img/btn_home.png" style="margin-right: 10px" onclick="window.location.href = '?url=In';">
                 </td>
             </tr>
         </table>
