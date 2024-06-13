@@ -101,7 +101,7 @@ class Miscellaneous{
     }
 
     #驗證name 
-    function validateName($jobName){
+    public function validateName($jobName){
         if (!empty($jobName)) {
             if (preg_match('/^[a-zA-Z0-9-]+$/', $jobName)) {
                 if (strlen($jobName) > 12) {
@@ -117,7 +117,7 @@ class Miscellaneous{
         }
     }
 
-    function validateUnscrewPower($unscrewPower) {
+    public function validateUnscrewPower($unscrewPower) {
         if (is_numeric($unscrewPower)) {
             if ($unscrewPower >= 0 && $unscrewPower <= 10) {
                 return true; 
@@ -128,6 +128,84 @@ class Miscellaneous{
             return false; 
         }
     }
+
+    #扭力單位轉換
+    public function unitarr_change($torValues, $inputType, $TransType){
+        
+        $inputType = (int)$inputType;
+        $TransType = (int)$TransType;
+
+        
+        $TorqueUnit = [
+            "N_M" => 1,
+            "KGF_M" => 0,
+            "KGF_CM" => 2,
+            "LBF_IN" => 3
+        ];
+
+        $convertedValues = array();
+        foreach($torValues as $torValue) {
+           
+            $torValue = floatval($torValue);
+           
+            if ($inputType == $TorqueUnit["N_M"]) {
+                if ($TransType == $TorqueUnit["KGF_M"]) {
+                
+                    $convertedValues[] = round($torValue * 0.102, 4);
+                } elseif ($TransType == $TorqueUnit["KGF_CM"]) {
+                
+                    $convertedValues[] = round($torValue * 10.2, 2);
+                } elseif ($TransType == $TorqueUnit["LBF_IN"]) {
+                  
+                    $convertedValues[] = round($torValue * 10.2 * 0.86805, 2);
+                } elseif ($TransType == $TorqueUnit["N_M"]) {
+                  
+                    $convertedValues[] = round($torValue, 3);
+                }
+            } 
+            
+            elseif ($inputType == $TorqueUnit["KGF_M"]) {
+                if ($TransType == $TorqueUnit["KGF_M"]) {
+                    $convertedValues[] = round($torValue, 4);
+                } elseif ($TransType == $TorqueUnit["KGF_CM"]) {
+                    $convertedValues[] = round($torValue * 100, 2);
+                } elseif ($TransType == $TorqueUnit["LBF_IN"]) {
+                    
+                    $convertedValues[] = round($torValue * 100 * 0.86805, 2);
+                } elseif ($TransType == $TorqueUnit["N_M"]) {
+                    $convertedValues[] = round($torValue * 9.80392156, 3);
+                }
+            }
+
+            elseif ($inputType == $TorqueUnit["KGF_CM"]) {
+                if ($TransType == $TorqueUnit["KGF_M"]) {
+                    $convertedValues[] = round($torValue * 0.01, 4);
+                } elseif ($TransType == $TorqueUnit["KGF_CM"]) {
+                    $convertedValues[] = round($torValue, 2);
+                } elseif ($TransType == $TorqueUnit["LBF_IN"]) {
+                    $convertedValues[] = round($torValue * 0.86805, 2);
+                } elseif ($TransType == $TorqueUnit["N_M"]) {
+                    $convertedValues[] = round($torValue * 0.0980392156, 3);
+                }
+            }
+
+            elseif ($inputType == $TorqueUnit["LBF_IN"]) {
+                
+                if ($TransType == $TorqueUnit["KGF_M"]) {
+                    $convertedValues[] = round($torValue * 1.152 * 0.01, 4);
+                } elseif ($TransType == $TorqueUnit["KGF_CM"]) {
+                    $convertedValues[] = round($torValue * 1.152, 2);
+                } elseif ($TransType == $TorqueUnit["LBF_IN"]) {
+                    $convertedValues[] = round($torValue, 2);
+                } elseif ($TransType == $TorqueUnit["N_M"]) {
+                    $convertedValues[] = round($torValue * 0.11294117637119998, 3);
+                }
+            }
+        }
+
+        return $convertedValues;
+    }
+
 
 
 

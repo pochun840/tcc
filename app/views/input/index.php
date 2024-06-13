@@ -748,9 +748,7 @@ function crud_job_event(argument){
         if(input_job != job_id){
             alignsubmit(job_id);  
         }else{
-
             resetalignsubmit(job_id);
-
         }
     }
 }
@@ -819,9 +817,11 @@ function get_input_info(){
                 input_event: input_event,
             },
             success: function(response) {
+                
                 var responseJSON = JSON.stringify(response);
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
+
                 var [, jobid] = cleanString.match(/\[input_job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_event] = cleanString.match(/\[input_event]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_pin] = cleanString.match(/\[input_pin]\s*=>\s*([^ ]+)/) || [, null];

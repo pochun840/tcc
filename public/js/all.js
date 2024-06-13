@@ -107,3 +107,10 @@ function resetBackgroundColor() {
         jobInput.style.backgroundColor = '';
     }
 }
+
+function cleanResponse(response) {
+    var responseJSON = JSON.stringify(response);
+    var cleanString = responseJSON.replace(/Array|\\n/g, '');
+    var cleanString = cleanString.substring(2, cleanString.length - 2);
+    return cleanString ? JSON.parse(cleanString) : null;
+}

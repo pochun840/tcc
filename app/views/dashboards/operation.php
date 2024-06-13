@@ -2,6 +2,11 @@
 <link rel="stylesheet" type="text/css" href="./css/tcc_operation.css">
 
 <body>
+<?php 
+
+
+
+?>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -61,8 +66,8 @@
                             <button class="btn-chart" id="torque_angle" type="button" onclick="changeBackgroundColor(this)">Torque Angle</button>
                         </div>
                         <div id="graph" class="display-chart">
-                            <div id="chart" style="width: 100%; height: 100%">
-                                <img src="img/chart.png" alt="" style="width: 100%; height: 100%">                            
+                            <div id="chart" style="width: 100%; height: 100%">    
+                             <div id="chartinfo" style="width: 1500px; height: 400px;"></div>                      
                             </div>
                         </div>      
                     </div>
@@ -85,6 +90,11 @@ function changeBackgroundColor(button) {
     }
     button.classList.add('active');
 }
+
+
+
+var myChart = echarts.init(document.getElementById('chartinfo'));
+
 </script>
 
 </body>

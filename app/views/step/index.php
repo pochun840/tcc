@@ -404,14 +404,13 @@ for (var i = 0; i < rows.length; i++) {
 
 function cound_step(argument){
 
-    var table = $('#step_table').DataTable();
-    var selectedRowData = table.row('.selected').data();
-    var seqid = selectedRowData ? selectedRowData[0] : null;
+  
+    var table = document.getElementById('step_table');
+    var selectedRow = table.querySelector('.selected');
+    var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
+    var stepid = selectedRowData || null;
     localStorage.setItem("stepid", stepid);
 
-    //移除
-    var elementsToRemove = ["step_table_filter", "step_table_length", "step_table_info", "step_table_paginate"];
-    removeElements(elementsToRemove);
 
 
     if(argument == 'del'){
@@ -455,6 +454,7 @@ function edit_step(){
                 var responseJSON = JSON.stringify(response);
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
+
 
 
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
