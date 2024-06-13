@@ -9,6 +9,7 @@ class Dashboards extends Controller
     {
         $this->DashboardModel = $this->model('Dashboard');
         $this->AdminModel = $this->model('Admin');
+        $this->MiscellaneousModel = $this->model('Miscellaneous');
     }
 
     // 取得所有Jobs
@@ -32,20 +33,45 @@ class Dashboards extends Controller
     public function operation(){
 
         $isMobile = $this->isMobileCheck();
-        
-        $data = [
-            'isMobile' => $isMobile
-        ];
 
-        if($isMobile){
+        $chat_mode = 1;
+        $id = 4170;
+        $unitvalue = 3;
+        $chat_mode_arr = 1;
+
+
+        #取得目前的曲線圖模式 制定曲線圖的座標名稱
+        $chart_mode_arr = $this->MiscellaneousModel->details('chart_mode');
+        $echart_name = explode("/",$chart_mode_arr[$chat_mode]);
+
+        
+        $csvdata_arr    = $this->DashboardModel->get_info($id,$chat_mode);
+        if(!empty($csvdata_arr)){
+            $temp_chart = $this->ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr);       
+        }
+   
+        $data = [
+            'isMobile'    => $isMobile,
+            'chart_info'  => $temp_chart,
+            'echart_name' => $echart_name
+
+        ];
+        
+        $this->view('dashboards/operation', $data);
+        /*if($isMobile){
             $this->view('dashboards/operation_m', $data);
         }else{
             $this->view('dashboards/operation', $data);
-        }
+        }*/
 
     }
 
-    public function get_last_data(){
+    public function get_chart_info(){
+
+        
+    }
+
+    /*public function get_last_data(){
         date_default_timezone_set("Asia/Taipei");
 
         try {        
@@ -77,7 +103,7 @@ class Dashboards extends Controller
           die('數據庫連接錯誤: ' . $e->getMessage());
         }
 
-    }
+    }*/
 
     //return datalog csv for graph
     public function get_datalog($sn = null)
@@ -127,7 +153,6 @@ class Dashboards extends Controller
             $error_message .= "language,";
         }
 
-        // session_start();
         $_SESSION['language'] = $language;
 
         $response = array(
@@ -138,7 +163,7 @@ class Dashboards extends Controller
 
     }
 
-    function writeToCSV($input, $filePath) {
+    /*function writeToCSV($input, $filePath) {
         // 检查文件是否存在，如果不存在则创建一个新的文件
         if (!file_exists($filePath)) {
             $file = fopen($filePath, 'w');
@@ -157,6 +182,33 @@ class Dashboards extends Controller
 
         // 关闭文件
         fclose($file);
+    }*/
+
+    private function ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr){
+        $chart_info = array();
+   
+           
+        if(($chat_mode == "1" || $chat_mode == "3" || $chat_mode == "4") && $unitvalue != "1"){
+            
+            $TransType = $unitvalue;
+            $torValues = $csvdata_arr;
+            $temp_val = $this->MiscellaneousModel->unitarr_change($torValues, 1, $TransType);
+            $chart_info['y_val'] = json_encode($temp_val);
+            $chart_info['max'] = max($temp_val);
+            $chart_info['min'] = min($temp_val);
+
+        }else{
+            
+            $chart_info['y_val'] = json_encode($csvdata_arr);
+            $chart_info['max'] = max($csvdata_arr);
+            $chart_info['min'] = min($csvdata_arr);
+            
+        }
+        $chart_info['x_val'] = json_encode(array_keys($csvdata_arr));
+        
+    
+        //$chart_info['chat_title'] = $chat_mode_arr[(int)$chat_mode] ?? '';
+        return $chart_info;
     }
 
     

@@ -88,8 +88,49 @@ class Dashboard{
         return $rows;
     }
 
+    public function get_info($no, $chat_mode){
+        $resultarr = array();
+    
+        if(!empty($no)){
+            #檔案類型
+            $file_arr  = array('_0p5','_1p0','_2p0');
+            $csv_array = array();
+            $resultarr = array();
+            foreach ($file_arr as $v_f) {
+                $infile = "../public/data/DATALOG_000000".$no.$v_f.".csv";
 
-
-
-
+                if (file_exists($infile)) {
+                    $csvdata_tmp = file_get_contents($infile);
+                  
+                    if (!empty($csvdata_tmp)) {
+                        $csvdata = $csvdata_tmp;
+                        $lines = explode("\n", $csvdata); 
+                        $csv_array = array_map('str_getcsv', $lines); 
+                        break; 
+                    }
+                }
+            }
+    
+            if(empty($csv_array)){
+                $resultarr = null;
+            } else {
+                $position = (int)$chat_mode;
+    
+                foreach ($csv_array as $subarray) {
+                    if(isset($subarray[$position])){
+                        if($chat_mode =="5" || $chat_mode =="6"){
+                            if($chat_mode =="6" && $position == 6) {
+                                $resultarr['torque'][] = $subarray[1];
+                            } else {
+                                $resultarr['torque'][] = $subarray[$position];
+                            }
+                        } else {
+                            $resultarr[] = $subarray[$position];
+                        }
+                    }
+                }
+            }
+        }
+        return $resultarr;
+    }
 }

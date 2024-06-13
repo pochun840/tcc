@@ -67,7 +67,7 @@
                         </div>
                         <div id="graph" class="display-chart">
                             <div id="chart" style="width: 100%; height: 100%">    
-                             <div id="chartinfo" style="width: 1500px; height: 400px;"></div>                      
+                            <div id="chart" style="width: 800px;height:600px;"></div>                
                             </div>
                         </div>      
                     </div>
@@ -93,8 +93,96 @@ function changeBackgroundColor(button) {
 
 
 
-var myChart = echarts.init(document.getElementById('chartinfo'));
 
+var myChart = echarts.init(document.getElementById('chart'));
+var x_data_val = <?php echo  $data['chart_info']['x_val']; ?>;
+var y_data_val = <?php echo  $data['chart_info']['y_val']; ?>;
+var x_title    = '<?php echo addslashes($data['echart_name'][1]); ?>';
+var y_title    = '<?php echo addslashes($data['echart_name'][0]); ?>';
+
+var option = {
+    title: {
+        text: ''
+    },
+    tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+            return [pt[0], '10%'];
+        },
+        formatter: function (params) {
+            var state = '<span style="color: red;">' + y_title + '</span>';
+            var value = '<span style="color: red;">' + params[0].value + '</span>';
+            return state + ': ' + value; 
+        },
+        
+    },
+    xAxis:{
+        type: 'category',
+        boundaryGap: false,
+        name: x_title,
+        data: x_data_val
+    },
+    yAxis: {
+        type: 'value',
+        name: y_title,
+        boundaryGap: [0, '100%']
+    },
+    dataZoom: generateDataZoom(),
+    series: [
+            {
+                name:'',
+                type:'line',
+                symbol: 'none',
+                sampling: 'average',
+                
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(255,0,0)'
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [{
+                            offset: 0,
+                            color: 'rgb(255,255,255)'
+                        }, {
+                            offset: 0,
+                            color: 'rgb(255,255,255)'
+                        }])
+                    }
+                },
+                lineStyle: {width: 0.75},
+                data: y_data_val
+            }
+        ]
+};
+
+myChart.setOption(option);
+
+function generateDataZoom() {
+    return [
+        {
+            type: 'inside',
+            start: 0,
+            end: 100
+        },
+        {
+            show: false,
+            type: 'slider',
+            start: 0,
+            end: 100,
+            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+            handleSize: '80%',
+            handleStyle: {
+                color: '#fff',
+                shadowBlur: 3,
+                shadowColor: 'rgba(0, 0, 0, 0)',
+                shadowOffsetX: 0,
+                shadowOffsetY: 0
+            }
+        }
+    ];
+}
 </script>
 
 </body>

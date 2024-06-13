@@ -16,10 +16,13 @@
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="<?php echo URLROOT; ?>js/all.js?v=202406131200"></script>
-    <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202406121600"></script>
+
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+    
 
     <title><?php echo SITENAME; ?></title>
 
