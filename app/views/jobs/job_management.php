@@ -278,17 +278,39 @@ window.onclick = function(event) {
 
 </html>
 <script>
+var jobid ='';
+var rows = document.getElementsByTagName("tr");
+for (var i = 0; i < rows.length; i++) {
+    (function(row) {
+        var cells = row.getElementsByTagName("td");
+        if (cells.length > 0) {
+            cells[0].addEventListener("click", function() {
+           
+                var jobid = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
+                var secondCellValue = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
+                var thirdCellValue = cells[2] ? (cells[2].textContent || cells[2].innerText) : null;
+                var rpmvalue = cells[3] ? (cells[3].textContent || cells[3].innerText) : null;
+                var powervalue = cells[4] ? (cells[4].textContent || cells[4].innerText) : null;
+                jobid = jobid;
+        
+                localStorage.setItem("jobid", jobid );
+                localStorage.setItem("jobname", secondCellValue);
+                localStorage.setItem("direction", thirdCellValue);
+                localStorage.setItem("powervalue", powervalue);
+                localStorage.setItem("rpmvalue", rpmvalue);
+
+            });
+        }
+    })(rows[i]);
+}
+
     
 function cound_job(argument){
 
  
-    var table = $('#job_table').DataTable();
-    var selectedRowData = table.row('.selected').data();
-    var jobid = selectedRowData ? selectedRowData[0] : null;
-
-    //移除
-    var elementsToRemove = ["job_table_filter", "job_table_length", "job_table_info", "job_table_paginate"];
-    removeElements(elementsToRemove);
+    var table = document.getElementById('job_table');
+    var selectedRow = table.querySelector('.selected');
+    var jobid = selectedRow ? selectedRow.cells[0].innerText : null;
 
     if(argument == 'del' && jobid != null){
         delete_jobid(jobid);
@@ -307,30 +329,6 @@ function cound_job(argument){
     }
 
 
-}
-
-var rows = document.getElementsByTagName("tr");
-for (var i = 0; i < rows.length; i++) {
-    (function(row) {
-        var cells = row.getElementsByTagName("td");
-        if (cells.length > 0) {
-            cells[0].addEventListener("click", function() {
-           
-                var jobid = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
-                var secondCellValue = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
-                var thirdCellValue = cells[2] ? (cells[2].textContent || cells[2].innerText) : null;
-                var rpmvalue = cells[3] ? (cells[3].textContent || cells[3].innerText) : null;
-                var powervalue = cells[4] ? (cells[4].textContent || cells[4].innerText) : null;
-        
-                localStorage.setItem("jobid", jobid );
-                localStorage.setItem("jobname", secondCellValue);
-                localStorage.setItem("direction", thirdCellValue);
-                localStorage.setItem("powervalue", powervalue);
-                localStorage.setItem("rpmvalue", rpmvalue);
-
-            });
-        }
-    })(rows[i]);
 }
 
 

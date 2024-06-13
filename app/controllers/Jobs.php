@@ -128,7 +128,6 @@ class Jobs extends Controller
     public function search_job($jobid){
         $jobid = $_POST['jobid'] ?? null;
         if(!empty($jobid)){
-        
             $res  = $this->jobModel->search_jobinfo($jobid);
             print_r($res);
         }
@@ -154,7 +153,7 @@ class Jobs extends Controller
             }
 
             
-            $old_res = $this->jobModel->search($old_jobid);
+            $old_res = $this->jobModel->search_jobinfo($old_jobid);
             if(!empty($old_res)){
                   #取得 unscrew_power && 	unscrew_rpm && unscrew_direction
                 $jobdata = array(
