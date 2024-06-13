@@ -318,7 +318,7 @@ class Inputs extends Controller
         $input_check = true;
         if( isset($_POST['job_id']) && $_POST['job_id'] >= 0 ){
             $input_job_id = $_POST['job_id'];
-        }elseif(isset($_POST['job_id_new']) && $_POST['job_id_new'] >= 0){
+        }else if(isset($_POST['job_id_new']) && $_POST['job_id_new'] >= 0){
             $input_job_id = '';
         }else{
             $input_check = false; 
