@@ -43,8 +43,8 @@ class Input{
     public function get_input_alljob()
     {   
         $sql = "SELECT * FROM device ";
-        $statement = $this->db->prepare($sql);
-        $results = $statement->execute();
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $row;
@@ -161,12 +161,11 @@ class Input{
     }
 
     //set input_alljob
-    public function set_input_alljob($job_id){
+    public function set_input_alljob($input_job_id){
 
-        $sql= "UPDATE device SET device_input_alljob = ? ";
-        $statement = $this->db->prepare($sql);
-        $results = $statement->execute([$job_id]);
-
+        $sql = "UPDATE device SET device_input_all_job = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $results   = $statement->execute([$input_job_id]);
         return $results;
     }
 

@@ -529,8 +529,30 @@
 
 <script>
 // Change the color of a row in a table
+
+var job_id; 
+var input_event;
+var temp;
+var tempA;
+var selectedValue;
+var old_input_event;
+var all_job;
+var buttonDisabled = false;
+var backgroundColorYellow = false;
+var input_job;
+
 $(document).ready(function () {
     highlight_row('input_table');
+ 
+    var all_input_job = '<?php echo $data['device_data']['device_input_all_job']?>';
+    job_id = all_input_job;
+    input_job = all_input_job;
+    if(job_id){
+        get_input_by_job_id(job_id);
+        document.getElementById('Button_Select').disabled = true;
+        document.getElementById('job_id').style.backgroundColor = 'yellow';
+    }
+
 });
 
 document.getElementById("Event_Option").onchange = function() {
@@ -587,16 +609,14 @@ window.onclick = function(event) {
     }
 }
 
-var job_id; 
-var input_event;
-var temp;
-var tempA;
-var selectedValue;
-var old_input_event;
+
+
+
 function job_confirm(){
     var jobid = document.getElementById("JobNameSelect").value;
     localStorage.setItem("jobid", jobid);
     job_id = jobid;
+    all_job = jobid;
 
     if(jobid){
         $.ajax({
@@ -720,42 +740,64 @@ function crud_job_event(argument){
     }
 
     if(argument == 'unified' && job_id != ''){
-        alignsubmit(job_id);
+        enableButton();
+        resetBackgroundColor();
+        console.log('input_job 有值:', input_job);
+        console.log('job_id 有值:', job_id);
 
+        if(input_job != job_id){
+            alignsubmit(job_id);
+           
+        }
     }
 
 
 }
+function enableButton() {
+    var button = document.getElementById('Button_Select');
+    if (button.disabled) {
+        button.disabled = false;
+    }
+}
+
+function resetBackgroundColor() {
+    var jobInput = document.getElementById('job_id');
+    if (jobInput.style.backgroundColor === 'yellow') {
+        jobInput.style.backgroundColor = '';
+    }
+}
+
+
+
 
 function alignsubmit(job_id) {
-        all_job = document.getElementById('input_alljob').value;
-        if(all_job != 0){
-            job_id = 0;
-            document.getElementById('input_alljob').value = 0;
-        }
+    if (job_id) {
         $.ajax({
-            type: "POST",
             url: "?url=Inputs/input_alljob",
-            data: { 'job_id': job_id},
-            dataType: "json",
-            encode: true,
-            // async: false, //等待ajax完成
-            beforeSend: function() {
-                $('#overlay').removeClass('hidden');
+            method: "POST",
+            data: {
+                job_id: job_id
             },
-        }).done(function(res) { //成功且有回傳值才會執行
-            $('#overlay').addClass('hidden');
-            if(job_id == 0){
-                document.getElementById('Job_Name').style.backgroundColor = '';
-                document.getElementById('job_name_div').onclick = function () { document.getElementById('JobSelect').style.display='block';};
-                document.getElementById('Button_Select').onclick = function () { document.getElementById('JobSelect').style.display='block';};
-                job_input();
-            }else{
-                location.reload();
-            }
+            success: function (response) {
+                console.log(response);
+                get_input_by_job_id(job_id);
+            
+                buttonDisabled = !buttonDisabled;
+                document.getElementById('Button_Select').disabled = buttonDisabled;
+     
+                backgroundColorYellow = !backgroundColorYellow;
+                if (backgroundColorYellow) {
+                    document.getElementById('job_id').style.backgroundColor = 'yellow';
+                } else {
+                    document.getElementById('job_id').style.backgroundColor = '';
+                }
+            },
+            error: function (xhr, status, error) {
 
+            }
         });
     }
+}
 function get_input_info(){
 
     if(job_id){

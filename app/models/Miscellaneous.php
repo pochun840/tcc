@@ -96,11 +96,7 @@ class Miscellaneous{
             );
         }
 
-      
-
-
         return $array;
-
 
     }
 
