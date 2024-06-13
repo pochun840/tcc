@@ -750,25 +750,7 @@ function crud_job_event(argument){
            
         }
     }
-
-
 }
-function enableButton() {
-    var button = document.getElementById('Button_Select');
-    if (button.disabled) {
-        button.disabled = false;
-    }
-}
-
-function resetBackgroundColor() {
-    var jobInput = document.getElementById('job_id');
-    if (jobInput.style.backgroundColor === 'yellow') {
-        jobInput.style.backgroundColor = '';
-    }
-}
-
-
-
 
 function alignsubmit(job_id) {
     if (job_id) {

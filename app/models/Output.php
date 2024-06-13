@@ -132,11 +132,11 @@ class Output{
     }
 
     //set input_alljob
-    public function set_output_alljob($job_id){
+    public function set_output_alljob($output_job_id){
 
-        $sql= "UPDATE device SET device_output_alljob = ? ";
-        $statement = $this->db->prepare($sql);
-        $results = $statement->execute([$job_id]);
+        $sql= "UPDATE device SET device_output_all_job = ? ";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$output_job_id]);
 
         return $results;
     }

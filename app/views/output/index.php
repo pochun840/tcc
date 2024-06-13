@@ -86,11 +86,11 @@
 
                 <div class="footer">
                     <div class="buttonbox">
-                        <input id="S1" name="New_Submit" type="button" value="New" tabindex="1" onclick="crud_job_event('new')">
-                        <input id="S2" name="Edit_Submit" type="button" value="Edit" tabindex="1"onclick="crud_job_event('edit')">
-                        <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="crud_job_event('copy')">
+                        <input id="S1" name="New_Submit" type="button" value="New" tabindex="1"       onclick="crud_job_event('new')">
+                        <input id="S2" name="Edit_Submit" type="button" value="Edit" tabindex="1"     onclick="crud_job_event('edit')">
+                        <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1"     onclick="crud_job_event('copy')">
                         <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1" onclick="crud_job_event('del')">
-                        <input id="S6" name="Align_Submit" type="button" value="Unified" tabindex="1">
+                        <input id="S6" name="Align_Submit" type="button" value="Unified" tabindex="1" onclick="crud_job_event('unified')">
                     </div>
                 </div>
             </div>
@@ -620,8 +620,25 @@
 </div>
 
 <script>
+var job_id; 
+var output_event;
+var temp;
+var tempA;
+var buttonDisabled = false;
+var backgroundColorYellow = false;
+var output_job;
+var all_job;
 $(document).ready(function () {
     highlight_row('output_table');
+
+    var all_output_job = '<?php echo $data['device_data']['device_output_all_job']?>';
+    job_id = all_output_job ;
+    output_job = all_output_job;
+    if(job_id){
+        get_output_by_job_id(job_id);
+        document.getElementById('Button_Select').disabled = true;
+        document.getElementById('job_id').style.backgroundColor = 'yellow';
+    }
 });
 
 
@@ -634,14 +651,11 @@ window.onclick = function(event) {
 }
 
 
-var job_id; 
-var output_event;
-var temp;
-var tempA;
 function job_confirm(){
     var jobid = document.getElementById("JobNameSelect").value;
     localStorage.setItem("jobid", jobid);
     job_id = jobid;
+    all_job = jobid;
 
     if(jobid){
         $.ajax({
@@ -767,8 +781,48 @@ function crud_job_event(argument){
 
     }
 
+    if(argument == 'unified' && job_id != ''){
+        enableButton();
+        resetBackgroundColor();
+        console.log('output_job 有值:', output_job);
+        console.log('job_id 有值:', job_id);
+
+        if(output_job != job_id){
+            alignsubmit(job_id);
+           
+        }
+        
+    }
 }
 
+function alignsubmit(job_id) {
+    if (job_id) {
+        $.ajax({
+            url: "?url=Outputs/output_alljob",
+            method: "POST",
+            data: {
+                job_id: job_id
+            },
+            success: function (response) {
+                console.log(response);
+                get_output_by_job_id(job_id);
+            
+                buttonDisabled = !buttonDisabled;
+                document.getElementById('Button_Select').disabled = buttonDisabled;
+     
+                backgroundColorYellow = !backgroundColorYellow;
+                if (backgroundColorYellow) {
+                    document.getElementById('job_id').style.backgroundColor = 'yellow';
+                } else {
+                    document.getElementById('job_id').style.backgroundColor = '';
+                }
+            },
+            error: function (xhr, status, error) {
+
+            }
+        });
+    }
+}
 function copy_output_id(){
     var to_job_id = document.getElementById("JobSelect1").value;
     if(to_job_id){

@@ -19,9 +19,8 @@ class Outputs extends Controller
         $isMobile     = $this->isMobileCheck();
         $joblist      = $this->InputModel->get_job_list();
         $event_output = $this->MiscellaneousModel->details('io_output');
+        $device_data  = $this->InputModel->get_input_alljob();
 
-
-      
         if(!empty($joblist)){
             $job_list_new = array();
             foreach($joblist as $kk =>$vv){
@@ -29,13 +28,13 @@ class Outputs extends Controller
             }
         }
 
-        
         $data = array();
         $data = array(
             'isMobile'     => $isMobile,
             'job_list'     => $joblist,
             'event_output' => $event_output,
             'job_list_new' => $job_list_new,
+            'device_data'  => $device_data
             
         );
 
@@ -229,24 +228,22 @@ class Outputs extends Controller
     {
         $input_check = true;
         if( isset($_POST['job_id']) && $_POST['job_id'] >= 0 ){
-            $job_id = $_POST['job_id'];
+            $output_job_id = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
 
         if($input_check){
-            $job_inputs = $this->OutputModel->set_output_alljob($job_id);
-            if ($job_inputs) { // copy DB
-                $copy_result = $this->copyDB_to_RamdiskDB();
-                if ($copy_result) {
-                    $this->logMessage('set outputall job:'.$job_id.' copyDB success');
-                } else {
-                    $this->logMessage('set outputall job:'.$job_id.' copyDB fail');
-                }
+            $res = $this->OutputModel->set_output_alljob($output_job_id);
+            if ($res) {
+                $res_msg = 'set outputall job:'.$output_job_id.' success';
+            } else {
+                $res_msg  = 'set outputall job:'.$output_job_id.' fail';
             }
+            echo $res_msg;
         }
 
-        echo json_encode($job_inputs);
+       
     }  
     
     public function check_job_event(){
