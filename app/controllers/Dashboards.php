@@ -34,10 +34,10 @@ class Dashboards extends Controller
 
         $isMobile = $this->isMobileCheck();
 
-        $chat_mode = 1;
+        $chat_mode = 2;
         $id = 4170;
         $unitvalue = 3;
-        $chat_mode_arr = 1;
+        $chat_mode_arr = 2;
 
 
         #取得目前的曲線圖模式 制定曲線圖的座標名稱

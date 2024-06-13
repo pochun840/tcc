@@ -26,7 +26,7 @@
                 <label style="font-size:18px;color: #fff; padding-left: 1%" for="job_name">Job Name :</label>&nbsp;
                 <input type="text" id="Job_Name" name="Job_Name" size="15" maxlength="20" value="1-Sample Job 1" disabled>
 
-                <label style="font-size:18px;color: #fff; padding-left: 2%" for="seq_name">Job Name :</label>&nbsp;
+                <label style="font-size:18px;color: #fff; padding-left: 2%" for="seq_name">Sequence Name :</label>&nbsp;
                 <input type="text" id="Seq_Name" name="Seq_Name" size="15" maxlength="20" value="3-Sample Seq 3" disabled>
 
                 <label style="font-size:18px;color: #fff; padding-left: 2%" for="screw">Screw :</label>&nbsp;
@@ -60,10 +60,10 @@
                 <div class="column">
                     <div class="item-chart">
                         <div class="button-chart">
-                            <button class="btn-chart active" id="torque_time" type="button" onclick="changeBackgroundColor(this)">Torque Time</button>
-                            <button class="btn-chart" id="angle_time" type="button" onclick="changeBackgroundColor(this)">Angle Time</button>
-                            <button class="btn-chart" id="rpm_time" type="button" onclick="changeBackgroundColor(this)">RPM Time</button>
-                            <button class="btn-chart" id="torque_angle" type="button" onclick="changeBackgroundColor(this)">Torque Angle</button>
+                            <button class="btn-chart active" id="torque_time" type="button" onclick="chart_type('C1')">Torque Time</button>
+                            <button class="btn-chart" id="angle_time" type="button" onclick="chart_type('C2')">Angle Time</button>
+                            <button class="btn-chart" id="rpm_time" type="button" onclick="chart_type('C3')">RPM Time</button>
+                            <button class="btn-chart" id="torque_angle" type="button" onclick="chart_type('C4')">Torque Angle</button>
                         </div>
                         <div id="graph" class="display-chart">
                             <div id="chart" style="width: 100%; height: 100%">    
@@ -91,7 +91,12 @@ function changeBackgroundColor(button) {
     button.classList.add('active');
 }
 
+function chart_type(argument){
 
+    //f()
+
+    
+}
 
 
 var myChart = echarts.init(document.getElementById('chart'));
