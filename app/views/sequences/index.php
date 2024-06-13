@@ -487,17 +487,16 @@ for (var i = 0; i < rows.length; i++) {
 function cound_job(argument){
 
 
-    var table = $('#seq_table').DataTable();
-    var selectedRowData = table.row('.selected').data();
-    var seqid = selectedRowData ? selectedRowData[0] : null;
-
-    //移除
-    var elementsToRemove = ["seq_table_filter", "seq_table_length", "seq_table_info", "seq_table_paginate"];
-    removeElements(elementsToRemove);
+    var table = document.getElementById('seq_table');
+    var selectedRow = table.querySelector('.selected');
+    var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
+    var seqid = selectedRowData || null;
+    
 
 
     if(argument == 'del' && seqid != null){
-        delete_seqid(seqid);
+        console.log(seqid);
+        //delete_seqid(seqid);
     }
 
     if(argument =="edit" && seqid != null){
@@ -601,9 +600,11 @@ function edit_seq(seqid) {
                 seqid: seqid
             },
             success: function(response) {
+
                 var responseJSON = JSON.stringify(response);
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
+
 
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
