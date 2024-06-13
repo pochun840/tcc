@@ -746,9 +746,37 @@ function crud_job_event(argument){
         console.log('job_id 有值:', job_id);
 
         if(input_job != job_id){
-            alignsubmit(job_id);
-           
+            alignsubmit(job_id);  
+        }else{
+
+            resetalignsubmit(job_id);
+
         }
+    }
+}
+
+
+function resetalignsubmit(job_id) {
+
+    var job_id_new = 0;
+ 
+    if(job_id_new == 0){
+        console.log(job_id_new);
+        console.log(job_id);
+        $.ajax({
+            url: "?url=Inputs/input_alljob",
+            method: "POST",
+            data: {
+                job_id_new: job_id_new
+            },
+            success: function (response) {
+                console.log(response);
+                get_input_by_job_id(job_id);
+            },
+            error: function (xhr, status, error) {
+
+            }
+        });
     }
 }
 
