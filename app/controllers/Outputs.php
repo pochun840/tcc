@@ -229,6 +229,8 @@ class Outputs extends Controller
         $input_check = true;
         if( isset($_POST['job_id']) && $_POST['job_id'] >= 0 ){
             $output_job_id = $_POST['job_id'];
+        }else if(isset($_POST['job_id_new']) && $_POST['job_id_new'] >= 0){
+            $output_job_id  = '';
         }else{ 
             $input_check = false; 
         }
