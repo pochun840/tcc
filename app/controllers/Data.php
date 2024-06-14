@@ -163,32 +163,7 @@ class Data extends Controller
     }
 
 
-    public function f_status($value=0)
-    {
-        //fasten_status
-        $text['fasten_status_0'] = 'INIT';
-        $text['fasten_status_1'] = 'READY';
-        $text['fasten_status_2'] = 'RUNNING';
-        $text['fasten_status_3'] = 'REVERSE';
-        $text['fasten_status_4'] = 'OK';
-        $text['fasten_status_5'] = 'OK_SEQ';
-        $text['fasten_status_6'] = 'OK_JOB';
-        $text['fasten_status_7'] = 'NG';
-        $text['fasten_status_8'] = 'NS';
-        $text['fasten_status_9'] = 'SETTING';
-        $text['fasten_status_10'] = 'EOC';
-        $text['fasten_status_11'] = 'C1';
-        $text['fasten_status_12'] = 'C1_ERR';
-        $text['fasten_status_13'] = 'C2';
-        $text['fasten_status_14'] = 'C2_ERR';
-        $text['fasten_status_15'] = 'C4';
-        $text['fasten_status_16'] = 'C4_ERR';
-        $text['fasten_status_17'] = 'C5';
-        $text['fasten_status_18'] = 'C5_ERR';
-        $text['fasten_status_19'] = 'BS';
 
-        return $text['fasten_status_'.$value];
-    }
 
  
     

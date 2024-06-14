@@ -36,6 +36,9 @@ class Dashboards extends Controller
 
 
         $chart_mode = !empty($_GET['chart']) ? $_GET['chart'] : 1;
+        if ($chart_mode < 1 || $chart_mode > 4) {
+            $chart_mode = 1;
+        } 
         $id = 4170;
         $unitvalue = 3;
         $chat_mode_arr = $chart_mode;

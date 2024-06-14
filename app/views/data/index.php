@@ -202,7 +202,7 @@ flatpickr("#start_date,#end_date", {
     static: true,
     inline:true,
     dateFormat: "Y-m-d H:i",
-    locale: "", // 設定語言為繁體中文
+    //locale: "", // 設定語言為繁體中文
     disableMobile: "true",
     // minDate: String(yy),
     maxDate: String(yy)+'-12-31',
@@ -241,6 +241,41 @@ function DataMode(){
 
 function exportData(){
 
+    //T
+    var radioButtons = document.querySelectorAll('input[name="export-option"]');
+    var isChecked = false;
+    for (var i = 0; i < radioButtons.length; i++) {
+        if (radioButtons[i].checked) {
+            isChecked = true;
+            break;
+        }
+    }
+    if (!isChecked) {
+        alert("Please select an option");
+    } else {
+        var expert_val = document.querySelector('input[name="export-option"]:checked').value;
+    }
+
+    var start_date = document.getElementById('start_date').value;
+    var end_date = document.getElementById('end_date').value;
+    var valid_flag = true;
+
+    if(start_date > end_date){
+        
+        alert("開始日期需小於結束日期");
+        valid_flag = false;
+    }
+    if(start_date == '' || end_date == ''){
+        alert("請選擇開始日期與結束日期");
+        valid_flag = false;
+    }
+
+    if(valid_flag){
+
+        
+    }
+
+    
 
 
 }
