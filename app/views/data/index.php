@@ -56,9 +56,11 @@
                                     
                                             <?php foreach($data['res_data'] as $key =>$val){?>
 
-                                                <?php 
+                                                <?php ////#FFEF62
                                                     if($val['fasten_status'] == 7 || $val['fasten_status'] == 8 ){
                                                         $style ='style="background: red"';
+                                                    }else if($val['fasten_status'] == 5 || $val['fasten_status'] == 6){
+                                                        $style ='style="background: #FFEF62"';
                                                     }else{
                                                         $style ='style="background: green"';
                                                     }
@@ -235,8 +237,14 @@ function DataMode(){
 
     }
 
+}
+
+function exportData(){
+
+
 
 }
+
 
 </script>
 

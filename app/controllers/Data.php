@@ -56,11 +56,12 @@ class Data extends Controller
                     
                     if($ve['fasten_status'] == 7 || $ve['fasten_status'] == 8 ){
                         $style = 'style="background: red"';
+                    }else if($ve['fasten_status'] == 5 || $ve['fasten_status'] == 6){
+                        $style ='style="background: #FFEF62"';
                     }else{
                         $style = 'style="background: green"';
                     }
-
-
+                    //#FFEF62
                     $info_data  ='<tr>';
                     $info_data .= "<td id='system_sn'>".$ve['system_sn']."</td>";
                     $info_data .= "<td>".$ve['data_time']."</td>";
