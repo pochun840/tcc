@@ -105,6 +105,33 @@ class Miscellaneous{
             );
         }
 
+
+        if($mode == "status"){
+            $array = array(
+                0 => 'INIT', 
+                1 => 'READY',
+                2 => 'RUNNING',
+                3 => 'REVERSE',
+                4 => 'OK',
+                5 => 'OK-SEQ',
+                6 => 'OK-JOB',
+                7 => 'NG',
+                8 => 'NS',
+                9 => 'SETTING',
+                10 => 'EOC',
+                11 => 'C1',
+                12 => 'C1_ERR',
+                13 => 'C2',
+                14 => 'C2_ERR',
+                15 => 'C4',
+                16 => 'C4_ERR',
+                17 => 'C5',
+                18 => 'C5_ERR',
+                19 => 'BS'
+            );
+
+        }
+
         return $array;
 
     }

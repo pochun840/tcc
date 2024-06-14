@@ -6,26 +6,80 @@ class Data extends Controller
     public function __construct()
     {
         $this->DataModel = $this->model('Datas');
+        $this->MiscellaneousModel = $this->model('Miscellaneous');
     }
 
     // 取得所有Jobs
     public function index(){
 
+
+        $type ='ALL';
         $isMobile = $this->isMobileCheck();
-        $Data_ALL = $this->DataModel->getData('ALL');
-        $Data_OK = $this->DataModel->getData('OK');
-        $Data_NOK = $this->DataModel->getData('NOK');
+        $res_data = $this->DataModel->getData('ALL');
+
+        $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
+        $status_arr = $this->MiscellaneousModel->details('status');
+        
         $device_info = $this->Device_Info();
 
         $data = [
             'isMobile' => $isMobile,
-            'Data_ALL' => $Data_ALL,
-            'Data_OK' => $Data_OK,
-            'Data_NOK' => $Data_NOK,
+            'res_data' => $res_data,
             'device_info' => $device_info,
+            'unit_arr' => $unit_arr,
+            'status_arr' => $status_arr
         ];
         
         $this->view('data/index', $data);
+
+    }
+
+
+    public function search_info(){
+
+        $unit_arr    = $this->MiscellaneousModel->details('torque_unit');
+        $status_arr  = $this->MiscellaneousModel->details('status');
+        //$device_info = $this->Device_Info();
+
+        $input_check = true;
+        if( !empty($_POST['mode']) && isset($_POST['mode'])  ){
+            $mode = $_POST['mode'];
+        }else{ 
+            $input_check = false; 
+        }
+        
+        if($input_check){
+            $res_data = $this->DataModel->getData($mode);
+            if(!empty($res_data)){
+                $info_data = '';
+                foreach($res_data as $ke => $ve){
+                    
+                    if($ve['fasten_status'] == 7 || $ve['fasten_status'] == 8 ){
+                        $style = 'style="background: red"';
+                    }else{
+                        $style = 'style="background: green"';
+                    }
+
+
+                    $info_data  ='<tr>';
+                    $info_data .= "<td id='system_sn'>".$ve['system_sn']."</td>";
+                    $info_data .= "<td>".$ve['data_time']."</td>";
+                    $info_data .= "<td>".$ve['job_name']."</td>";
+                    $info_data .= "<td>".$ve['sequence_name']."</td>";
+                    $info_data .= "<td>".$ve['fasten_torque']."</td>";
+                    $info_data .= "<td>".$unit_arr[$ve['torque_unit']]."</td>";
+                    $info_data .= "<td>".$ve['fasten_angle']."</td>";
+                    $info_data .= "<td>".$ve['total_screw_count']."</td>";
+                    $info_data .= "<td>".$ve['last_screw_count']."</td>";
+                    $info_data .= "<td $style >". $status_arr[$ve['fasten_status']]."</td>";
+                    $info_data  .='</tr>';
+
+                    echo $info_data;
+                }
+
+            }
+
+        }
 
     }
 
@@ -135,15 +189,6 @@ class Data extends Controller
         return $text['fasten_status_'.$value];
     }
 
-    public function unit_type($value=0)
-    {
-        //unit_status_0
-        $text['unit_status_0'] = 'Kgf-m';
-        $text['unit_status_1'] = 'N-m';
-        $text['unit_status_2'] = 'Kgf-cm';
-        $text['unit_status_3'] = 'In-lbs';
-
-        return $text['unit_status_'.$value];
-    }
+ 
     
 }

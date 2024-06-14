@@ -20,6 +20,15 @@ function includecss_file($part, $cssFileName) {
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/flatpickr.min.css" type="text/css">
+
+    <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=202406131200"></script>
+    <script src="<?php echo URLROOT; ?>js/tcc_data.js?v=202406131200"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr_zh.js"></script>
+
     
 
 <?php 
@@ -31,5 +40,6 @@ function includecss_file($part, $cssFileName) {
     includecss_file("Jobs", "tcc_jobs.css");
     includecss_file("Step", "tcc_step.css");
     includecss_file("Dashboards","tcc_operation.css");
+    includecss_file("Data","tcc_data.css");
 
 ?>
