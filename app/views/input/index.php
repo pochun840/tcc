@@ -1,5 +1,5 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" type="text/css" href="../public/css/tcc_input.css">
+
 <body>
 <div class="container-ms">
     <div class="w3-text-white w3-center">

@@ -1,5 +1,5 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" type="text/css" href="../public/css/tcc_jobs.css">
+
 <body>
 
 <div class="container-ms">

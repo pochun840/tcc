@@ -1,5 +1,4 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" type="text/css" href="./css/tcc_seq.css">
 
 <body>
 <div class="container-ms">
