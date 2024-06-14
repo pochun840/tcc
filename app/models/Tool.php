@@ -22,7 +22,7 @@ class Tool{
 
     }
 
-    public function GetControllerInfo()
+    /*public function GetControllerInfo()
     {
         $sql = "SELECT * FROM device ";
         $statement = $this->db->prepare($sql);
@@ -50,6 +50,6 @@ class Tool{
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $row;
-    }
+    }*/
 
 }

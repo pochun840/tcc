@@ -13,22 +13,22 @@ class Tools extends Controller
     public function index(){
 
         $isMobile = $this->isMobileCheck();
-        $Controller_Info = $this->ToolModel->GetControllerInfo();
-        $Device_Info = $this->ToolModel->GetDeviceInfo();
-        $Tool_Info = $this->ToolModel->GetToolInfo();
+        //$Controller_Info = $this->ToolModel->GetControllerInfo();
+        //$Device_Info = $this->ToolModel->GetDeviceInfo();
+        //$Tool_Info = $this->ToolModel->GetToolInfo();
         
         $MAC = $this->getMacAddress();
         $ip_addr = $this->getIp();
-        $device_info = $this->Device_Info();
+        //$device_info = $this->Device_Info();
 
         $data = [
             'isMobile' => $isMobile,
-            'Controller_Info' => $Controller_Info,
-            'Device_Info' => $Device_Info,
-            'Tool_Info' => $Tool_Info,
+            //'Controller_Info' => $Controller_Info,
+            //'Device_Info' => $Device_Info,
+            //'Tool_Info' => $Tool_Info,
             'IP' => $ip_addr,
             'MAC' => $MAC,
-            'device_info' => $device_info
+            //'device_info' => $device_info
         ];
 
         
