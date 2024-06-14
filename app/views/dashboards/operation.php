@@ -60,11 +60,13 @@
                 <div class="column">
                     <div class="item-chart">
                         <div class="button-chart">
-                            <button class="btn-chart active" id="torque_time" type="button" onclick="chart_type('C1')">Torque Time</button>
-                            <button class="btn-chart" id="angle_time" type="button" onclick="chart_type('C2')">Angle Time</button>
-                            <button class="btn-chart" id="rpm_time" type="button" onclick="chart_type('C3')">RPM Time</button>
-                            <button class="btn-chart" id="torque_angle" type="button" onclick="chart_type('C4')">Torque Angle</button>
+
+                            <?php foreach($data['chart_menu_arr'] as $k_menu =>$v_menu){?>
+                                <button type="button" <?php if($data['chart_mode'] == $k_menu){ echo $class ='class="btn-chart active"';}else { echo $class ='class="btn-chart"'; }?>   id= '<?php echo $v_menu['id'];?>' onclick="chart_type('<?php echo $v_menu['id'];?>')" ><?php echo $v_menu['name'];?></button>
+                            <?php }?>
+                            <!--class="btn-chart active"-->
                         </div>
+
                         <div id="graph" class="display-chart">
                             <div id="chart" style="width: 100%; height: 100%">    
                             <div id="chart" style="width: 800px;height:600px;"></div>                
@@ -93,9 +95,54 @@ function changeBackgroundColor(button) {
 
 function chart_type(argument){
 
-    //f()
+    var currentUrl = window.location.href;
 
+    // 處理button的class 
+    var buttons = document.getElementsByClassName("btn-chart");
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove("active");
+    }
+    var activeButton = document.getElementById(argument);
+    activeButton.classList.add("active");
+
+    var chartIndex = currentUrl.indexOf('chart=');
+
+    var chart;
+
+    if(argument == "torque_time"){
+        chart = 1;
+    }
     
+    if(argument == "angle_time"){
+        chart = 2;
+    }
+
+    if(argument == "rpm_time"){
+        chart = 3;
+    }
+
+    if(argument == "torque_angle"){
+        chart = 4;
+    }
+
+    var nextinfo_url;
+
+    if (chartIndex !== -1) {
+        var nextChartValue = 'chart=' + chart;
+        nextinfo_url = currentUrl.substring(0, chartIndex) + nextChartValue;
+    } else {
+        var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
+        nextinfo_url = currentUrl + separator + 'chart=' + chart;
+    }
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            window.location.assign(nextinfo_url);
+        }
+    };
+    xhttp.open("GET", nextinfo_url, true);
+    xhttp.send();
 }
 
 

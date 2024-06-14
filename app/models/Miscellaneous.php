@@ -96,6 +96,15 @@ class Miscellaneous{
             );
         }
 
+        if($mode == "chart_menu"){
+            $array = array(
+                1 => array('name'=>'Torque Time', 'id'=>'torque_time'),
+                2 => array('name'=>'Angle Time',  'id'=>'angle_time'),
+                3 => array('name'=>'RPM Time',    'id'=>'rpm_time'),
+                4 => array('name'=>'Torque Angle','id'=>'torque_angle'),
+            );
+        }
+
         return $array;
 
     }
