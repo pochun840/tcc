@@ -6,16 +6,30 @@ function includecss_file($part, $cssFileName) {
     $firstPart = $parts[0];
     
     if($firstPart === $part) { ?>
-<link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>">
     <?php }
-}
+}?>
 
-includecss_file("Tools", "tcc_tool.css");
-includecss_file("Inputs", "tcc_input.css");
-includecss_file("Outputs", "tcc_output.css");
-includecss_file("Sequences", "tcc_seq.css");
-includecss_file("Jobs", "tcc_jobs.css");
-includecss_file("Step", "tcc_step.css");
-//<link rel="stylesheet" type="text/css" href="./css/tcc_seq.css">
+    <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/datatables.min.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css">
+    <script src="<?php echo URLROOT; ?>js/all.js?v=202406131200"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    
+
+<?php 
+
+    includecss_file("Tools", "tcc_tool.css");
+    includecss_file("Inputs", "tcc_input.css");
+    includecss_file("Outputs", "tcc_output.css");
+    includecss_file("Sequences", "tcc_seq.css");
+    includecss_file("Jobs", "tcc_jobs.css");
+    includecss_file("Step", "tcc_step.css");
+    includecss_file("Dashboards","tcc_operation.css");
 
 ?>
