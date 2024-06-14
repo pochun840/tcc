@@ -1,12 +1,7 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" type="text/css" href="./css/tcc_operation.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
 
 <body>
-<?php 
-
-
-
-?>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -64,13 +59,10 @@
                             <?php foreach($data['chart_menu_arr'] as $k_menu =>$v_menu){?>
                                 <button type="button" <?php if($data['chart_mode'] == $k_menu){ echo $class ='class="btn-chart active"';}else { echo $class ='class="btn-chart"'; }?>   id= '<?php echo $v_menu['id'];?>' onclick="chart_type('<?php echo $v_menu['id'];?>')" ><?php echo $v_menu['name'];?></button>
                             <?php }?>
-                            <!--class="btn-chart active"-->
                         </div>
 
                         <div id="graph" class="display-chart">
-                            <div id="chart" style="width: 100%; height: 100%">    
-                            <div id="chart" style="width: 800px;height:600px;"></div>                
-                            </div>
+                            <div id="chart" style="width: 100%; height: 100%"></div>
                         </div>      
                     </div>
                 </div>
