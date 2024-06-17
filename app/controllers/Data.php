@@ -39,7 +39,6 @@ class Data extends Controller
 
         $unit_arr    = $this->MiscellaneousModel->details('torque_unit');
         $status_arr  = $this->MiscellaneousModel->details('status');
-        //$device_info = $this->Device_Info();
 
         $input_check = true;
         if( !empty($_POST['mode']) && isset($_POST['mode'])  ){
@@ -84,87 +83,83 @@ class Data extends Controller
 
     }
 
-
-    public function exportData()
-    {
+   
+    public function exportData() {
         $input_check = true;
-        if( !empty($_POST['start_date']) && isset($_POST['start_date'])  ){
+        if (!empty($_POST['start_date']) && isset($_POST['start_date'])) {
             $start_date = $_POST['start_date'];
-        }else{ 
-            $input_check = false; 
+        } else {
+            $input_check = false;
         }
-        if( !empty($_POST['end_date']) && isset($_POST['end_date'])  ){
+        if (!empty($_POST['end_date']) && isset($_POST['end_date'])) {
             $end_date = $_POST['end_date'];
-        }else{ 
-            $input_check = false; 
+        } else {
+            $input_check = false;
         }
-
-        if($input_check){
-            $total_count = 0;
+    
+        if (!empty($_POST['expert_val']) && isset($_POST['expert_val'])) {
+            $expert_val = $_POST['expert_val'];
+        } else {
+            $expert_val = "0";
+        }
+    
+        if ($input_check) {
             $start_date = str_replace('-', "", $start_date);
             $end_date = str_replace('-', "", $end_date);
-            $start_year = substr($start_date,0,4);
-            $end_year = substr($end_date,0,4);
-            $dataset = array();
-
-            //計算筆數
-            for ($i=$start_year; $i <=$end_year ; $i++) { 
-                $total_count += $this->DataModel->get_range_data_count($start_date,$end_date,$i);
-            }
-            //超過XXX筆跳出，預設 10000
-            if($total_count < 10000){
-                for ($i=$start_year; $i <=$end_year ; $i++) { 
-                    $temp_dataset = $this->DataModel->get_range_data_year($start_date,$end_date,$i);
-                    $dataset = array_merge($dataset,$temp_dataset);
+            $dataset = $this->DataModel->get_range_data_year($start_date, $end_date);
+    
+            // 限制笔数上限为1万笔
+            $dataset = array_slice($dataset, 0, 10000);
+    
+            if ($dataset && $expert_val == "0") {
+                // 生成 CSV 檔案並下載
+                $csv_headers = array_keys($dataset[0]);
+                header('Content-Type: text/csv; charset=utf-8');
+                header('Content-Disposition: attachment; filename=data.csv');
+    
+                $output = fopen('php://output', 'w');
+                fputcsv($output, $csv_headers);
+    
+                foreach ($dataset as $row) {
+                    fputcsv($output, $row);
                 }
-            }else{
-                // header('Content-Type: text/csv');
-                // header('Content-Disposition: attachment; filename=1231.csv');
-                echo 'false';
+    
+                fclose($output);
+                exit();
+            } elseif ($dataset && $expert_val == "1") {
+         
+                $csv_content = '';
+                $csv_headers = array_keys($dataset[0]);
+                $csv_content .= implode(',', $csv_headers) . "\n";
+    
+                foreach ($dataset as $row) {
+                    $csv_content .= implode(',', $row) . "\n";
+                }
+    
+                $zip = new ZipArchive();
+                $zip_filename = tempnam(sys_get_temp_dir(), 'exported_data') . '.zip';
+    
+                if ($zip->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+                    
+                    $zip->addFromString("data.csv", $csv_content);
+                    $zip->close();
+    
+                    header('Content-Type: application/zip');
+                    header('Content-Disposition: attachment; filename=exported_data.zip');
+                    header('Content-Length: ' . filesize($zip_filename));
+                    readfile($zip_filename);
+    
+                    // 删除临时ZIP文件
+                    unlink($zip_filename);
+                    exit();
+                } else {
+                    echo "無法建立 ZIP 檔案";
+                }
             }
-
         }
-
-        //建立table header
-        $header = array();
-        if(isset($dataset[0])){
-            foreach ($dataset[0] as $key => $value) {
-                array_push($header,$key);            
-            }
-        }
-
-        // 设置 CSV 文件名
-        $filename = 'export_data.csv';
-
-        // 设置 CSV 文件的 HTTP 头信息
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename=' . $filename);
-
-        // 创建输出流
-        $output = fopen('php://output', 'w');
-
-        // 写入 CSV 头部
-        fputcsv($output, $header);
-
-        $sn = 1;
-        foreach ($dataset as $key => $value) {
-            // code...
-            $value['system_sn'] = $sn; //調整sn
-            $value['torque_unit'] = $this->unit_type($value['torque_unit']);
-            $value['fasten_status'] = $this->f_status($value['fasten_status']);
-            fputcsv($output, $value);
-            $sn++;
-        }
-
-        // 关闭输出流
-        fclose($output);
-        exit;
-
     }
-
-
-
-
- 
+    
+    
+    
     
 }
