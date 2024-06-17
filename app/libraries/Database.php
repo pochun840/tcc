@@ -36,6 +36,7 @@ class Database
             
             $this->db_iDas = new PDO('sqlite:/var/www/html/database/data.db'); //local
             $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/das.db'); 
+            $this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db'); 
             
         }else{
             $this->db_con = new PDO('sqlite:../data.db'); //local
@@ -47,12 +48,16 @@ class Database
             }
             $this->db_iDas = new PDO('sqlite:../data.db'); //local
             $this->db_iDas_login = new PDO('sqlite:../das.db'); //local
+            $this->db_iDas_device = new PDO('sqlite:../data_device.db'); 
+
+            //$this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db'); 
         }
         $this->db_con->exec('set names utf-8'); 
         $this->db_dev->exec('set names utf-8'); 
         $this->db_data->exec('set names utf-8'); 
         $this->db_iDas->exec('set names utf-8'); 
         $this->db_iDas_login->exec('set names utf-8'); 
+        $this->db_iDas_device->exec('set names utf-8'); 
 
     }
 
@@ -86,10 +91,17 @@ class Database
     }
 
     public function getDb_das_login() {
-        if ($this->db_iDas instanceof PDO) {
+        if ($this->db_iDas_login instanceof PDO) {
             return $this->db_iDas_login;
         }
     }
+
+    public function getDb_das_device() {
+        if ($this->db_iDas_device instanceof PDO) {
+            return $this->db_iDas_device;
+        }
+    }
+
 
     public function get_tool_rpm()
     {
