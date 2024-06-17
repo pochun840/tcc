@@ -11,12 +11,42 @@ class Settings extends Controller
         $this->SettingModel = $this->model('Setting');
         $this->AdminModel = $this->model('Admin');
         $this->ToolModel = $this->model('Tool');
+
+        $this->MiscellaneousModel = $this->model('Miscellaneous');
     }
 
     // 取得所有info
     public function index(){
 
         $isMobile = $this->isMobileCheck();
+
+        $lang = $this->MiscellaneousModel->details('lang');
+        $controller_info = $this->SettingModel->GetControllerInfo();
+
+
+
+
+
+        // 设置时区为台北时间（东八区）
+        date_default_timezone_set('Asia/Taipei');
+
+        
+        $current_time = date('Y-m-d H:i', time()); /// 'H:i' 表示小时:分钟 24小时制
+
+        // 获取当前小时
+        $current_hour = date('H', time());
+
+        // 判断上午还是下午
+        if ($current_hour >= 12) {
+            $time = $current_time . " PM";
+        } else {
+            $time = $current_time . " AM";
+        }
+
+
+        echo $time;
+
+        /*$isMobile = $this->isMobileCheck();
         $Controller_Info = $this->SettingModel->GetControllerInfo();
         $operator_priviledge = $this->SettingModel->GetOperator_priviledge();
         $priviledge = $this->intTo16BitArray($operator_priviledge);
@@ -57,6 +87,14 @@ class Settings extends Controller
         ];
 
         
+        $this->view('setting/index', $data);*/
+        $data = array();
+        $data = array(
+            'lang_arr' =>$lang,
+            'controller_info' => $controller_info,
+            'times ' => $time,
+
+        );
         $this->view('setting/index', $data);
 
     }
@@ -266,99 +304,58 @@ class Settings extends Controller
         return $decimalValue;
     }
 
-    public function control_setting($value='')
+    public function control_setting()
     {
         $input_check = true;
-        $error_message = '';
-        $con_setting = array();
 
         if( !empty($_POST['control_id']) && isset($_POST['control_id'])  ){
             $con_setting['control_id'] = $_POST['control_id'];
         }else{ 
             $input_check = false; 
-            $error_message .= "control_id,";
         }
+
         if( !empty($_POST['control_name']) && isset($_POST['control_name'])  ){
             $con_setting['control_name'] = $_POST['control_name'];
         }else{ 
             $input_check = false; 
-            $error_message .= "control_name,";
         }
-        if( isset($_POST['torque_unit']) && $_POST['torque_unit']>=0 && $_POST['torque_unit'] <=3 ){
-            $con_setting['torque_unit'] = $_POST['torque_unit'];
+
+        if( !empty($_POST['lang_val']) && isset($_POST['lang_val'])  ){
+            $con_setting['lang_val'] = $_POST['lang_val'];
         }else{ 
             $input_check = false; 
-            $error_message .= "torque_unit,";
         }
-        if( isset($_POST['select_language']) && $_POST['select_language']>=0 && $_POST['select_language'] <=2 ){
-            $con_setting['select_language'] = $_POST['select_language'];
+
+        if( !empty($_POST['batch_val']) && isset($_POST['batch_val'])  ){
+            $con_setting['batch_val'] = $_POST['batch_val'];
         }else{ 
             $input_check = false; 
-            $error_message .= "select_language,";
         }
-        if( isset($_POST['batch_mode_option']) && $_POST['batch_mode_option']>=0 && $_POST['batch_mode_option'] <=1 ){
-            $con_setting['batch_mode_option'] = $_POST['batch_mode_option'];
+
+        if( !empty($_POST['buzzer_val']) && isset($_POST['buzzer_val'])  ){
+            $con_setting['buzzer_val'] = $_POST['buzzer_val'];
         }else{ 
             $input_check = false; 
-            $error_message .= "batch_mode_option,";
         }
-        if( isset($_POST['buzzer_mode_option']) && $_POST['buzzer_mode_option']>=0 && $_POST['buzzer_mode_option'] <=1 ){
-            $con_setting['buzzer_mode_option'] = $_POST['buzzer_mode_option'];
-        }else{ 
-            $input_check = false; 
-            $error_message .= "buzzer_mode_option,";
-        }
-        if( isset($_POST['blackout_recovery_option']) && $_POST['blackout_recovery_option']>=0 && $_POST['blackout_recovery_option'] <=1 ){
-            $con_setting['blackout_recovery_option'] = $_POST['blackout_recovery_option'];
-        }else{ 
-            $input_check = false; 
-            $error_message .= "blackout_recovery_option,";
-        }
-        if( isset($_POST['Diskfull_Warning']) && $_POST['Diskfull_Warning']>=0 && $_POST['Diskfull_Warning'] <=99  ){
-            $con_setting['Diskfull_Warning'] = $_POST['Diskfull_Warning'];
-        }else{ 
-            $input_check = false; 
-            $error_message .= "Diskfull_Warning,";
-        }
-        if( isset($_POST['Torque_Filter'])  ){
-            $con_setting['Torque_Filter'] = $_POST['Torque_Filter'];
-        }else{ 
-            $input_check = false; 
-            $error_message .= "Torque_Filter,";
-        }
-        if( isset($_POST['sample_rate'])  ){
-            $con_setting['sample_rate'] = $_POST['sample_rate'];
-        }else{ 
-            $input_check = false; 
-            $error_message .= "sample_rate,";
-        }
+        
 
         if($input_check){
+          $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
+          if($res['count'] =="1"){
+            //UPDATE
             $result = $this->SettingModel->Controller_Setting($con_setting);
-
-            if($result){// copy DB
-                $copy_result =  $this->copyDB_to_RamdiskDB();
-                if($copy_result){
-                    $this->logMessage('con_setting:set '.json_encode($con_setting).'  copyDB success');
-                }else{
-                    $this->logMessage('con_setting:set '.json_encode($con_setting).' copyDB fail');
-                }
-            }
-
-            if(!$result){
-                echo json_encode(array('error' => 'fail'));
-                exit();
+            if($result){
+                $res_msg = 'edit:'. $con_setting['control_id'].'success';
             }else{
-                echo json_encode(array('error' => ''));
-                exit();
+                $res_msg = 'edit:'. $con_setting['control_id'].'fail';
             }
+            echo $res_msg;
 
-        }else{
-            echo json_encode(array('error' => ''));
-            exit();
-        }
+          }else{
+            //INSERT 
+          }
 
-        
+        }    
     }
 
     public function edit_system_date()

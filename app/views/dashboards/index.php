@@ -27,7 +27,7 @@
                 <button class="menu-item purple" id="operation" style="font-size: 20px" onclick="window.location.href='?url=Dashboards/operation'">Operation</button>
                 <button class="menu-item lightblue" id="data" style="font-size: 20px" onclick="window.location.href='?url=Data/index'">Data</button>
                 <button class="menu-item pink" id="tool" style="font-size: 20px" onclick="window.location.href='?url=Tools/index'">Tool</button>
-                <button class="menu-item PaleGreen" id="setting" style="font-size: 20px;">Setting</button>
+                <button class="menu-item PaleGreen" id="setting" style="font-size: 20px;" onclick="window.location.href='?url=Settings/index'">Setting</button>
                 <br><br>
 <!--
                 <?php if($_SESSION['privilege'] == 'admin'){?>

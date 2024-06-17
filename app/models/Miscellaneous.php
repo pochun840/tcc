@@ -132,6 +132,14 @@ class Miscellaneous{
 
         }
 
+        if($mode =="lang"){
+            $array = array(
+                0 => 'English',
+                1 => '繁體中文',
+                2 => '簡體中文',
+            );    
+        }
+
         return $array;
 
     }

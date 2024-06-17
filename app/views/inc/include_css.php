@@ -43,5 +43,6 @@ function includecss_file($part, $cssFileName) {
     includecss_file("Step", "tcc_step.css");
     includecss_file("Dashboards","tcc_operation.css");
     includecss_file("Data","tcc_data.css");
+    includecss_file("Settings","tcc_setting.css");
 
 ?>

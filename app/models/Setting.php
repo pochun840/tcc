@@ -21,6 +21,9 @@ class Setting{
 
         $this->db_das = new Database;
         $this->db_das = $this->db_das->getDb_das();
+        
+        $this->db_iDas_device = new Database;
+        $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
 
         $this->dbh = new Database;
 
@@ -29,10 +32,26 @@ class Setting{
     public function GetControllerInfo()
     {
         $sql = "SELECT * FROM device ";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas_device->prepare($sql);
         $results = $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
+
+        return $row;
+    }
+
+    public function GetControllerInfo_count($control_id){
+
+
+        //var_dump($control_id);die();
+        $sql = "SELECT count(*) AS count FROM device WHERE device_id = :device_id";
+        $statement = $this->db_iDas_device->prepare($sql);
+        $statement->bindValue(':device_id', $control_id);
+        $statement->execute(); // 执行查询
+        $row = $statement->fetch(PDO::FETCH_ASSOC); // 获取结果
+
+
+    
         return $row;
     }
 
@@ -123,11 +142,25 @@ class Setting{
         return $results;
     }
 
-    public function Controller_Setting($data)
+    public function Controller_Setting($con_setting)
     {
-        $sql = "UPDATE `device` SET device_id =?, device_name=?, device_torque_unit=?, device_language=?, device_batch_mode=?, device_buzzer_mode=?,device_memory=?, device_diskfullwarning=?, device_torque_filter=?, device_datalog_frequency=?";
-        $statement = $this->db->prepare($sql);
-        $results = $statement->execute([ $data['control_id'],$data['control_name'],$data['torque_unit'],$data['select_language'],$data['batch_mode_option'],$data['buzzer_mode_option'],$data['blackout_recovery_option'],$data['Diskfull_Warning'],$data['Torque_Filter'],$data['sample_rate'] ] );
+       
+        $sql = "UPDATE `device` 
+        SET device_name = :device_name,
+            language = :language,
+            batch = :batch,
+            buzzer_mode = :buzzer_mode
+        WHERE device_id = :device_id ";
+        
+        $statement = $this->db_iDas_device->prepare($sql);
+        $statement->bindValue(':device_name', $con_setting['control_name']);
+        $statement->bindValue(':language', $con_setting['lang_val']);
+        $statement->bindValue(':batch', $con_setting['batch_val']);
+        $statement->bindValue(':buzzer_mode', $con_setting['buzzer_val'] );
+        $statement->bindValue(':device_id', $con_setting['control_id'] );
+
+        $results = $statement->execute();
+
 
         return $results;
     }
