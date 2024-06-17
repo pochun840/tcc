@@ -108,11 +108,11 @@ class Data extends Controller
             $end_date = str_replace('-', "", $end_date);
             $dataset = $this->DataModel->get_range_data_year($start_date, $end_date);
     
-            // 限制笔数上限为1万笔
             $dataset = array_slice($dataset, 0, 10000);
     
             if ($dataset && $expert_val == "0") {
-                // 生成 CSV 檔案並下載
+
+              
                 $csv_headers = array_keys($dataset[0]);
                 header('Content-Type: text/csv; charset=utf-8');
                 header('Content-Disposition: attachment; filename=data.csv');
@@ -148,8 +148,6 @@ class Data extends Controller
                     header('Content-Disposition: attachment; filename=exported_data.zip');
                     header('Content-Length: ' . filesize($zip_filename));
                     readfile($zip_filename);
-    
-                    // 删除临时ZIP文件
                     unlink($zip_filename);
                     exit();
                 } else {
