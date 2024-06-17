@@ -28,6 +28,8 @@ function includecss_file($part, $cssFileName) {
     <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
     <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
     <script src="<?php echo URLROOT; ?>js/flatpickr_zh.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+
 
     
 
