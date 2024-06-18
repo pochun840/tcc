@@ -104,7 +104,7 @@ class Data extends Controller
         if ($input_check) {
             $start_date = str_replace('-', "", $start_date);
             $end_date = str_replace('-', "", $end_date);
-            $dataset = $this->DataModel->get_range_data_year($start_date, $end_date);
+            $dataset = $this->DataModel->get_range_data($start_date, $end_date);
     
             $dataset = array_slice($dataset, 0, 10000);
     
