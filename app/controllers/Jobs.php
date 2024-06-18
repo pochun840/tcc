@@ -26,12 +26,17 @@ class Jobs extends Controller
         $lastRow = end($jobs);
         $jobIdInt = intval($lastRow['job_id']) + 1 ;
       
-        $data = [
+        $data = array(
             'jobint' => $jobIdInt,
             'jobs' => $jobs,
             'direction' => $direction,
-        ];
-        $this->view('jobs/job_management', $data);
+        );
+        
+        if($isMobile){
+            $this->view('jobs/job_management_m', $data);
+        }else{
+            $this->view('jobs/job_management', $data);
+        }
 
     }
 

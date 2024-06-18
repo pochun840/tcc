@@ -29,13 +29,15 @@ class Admin{
 
     }
 
-    public function GetActiveSession()
-    {
-        $result = $this->db_iDas->query("SELECT * FROM active_sessions");
-        $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+    public function GetActiveSession(){
 
-        return $rows;
+        $sql ="SELECT * FROM active_sessions ";
+        $statement = $this->db_iDas_login ->prepare($sql);
+        $statement->execute();
+        $results = $statement->fetchAll();
+        return $results;
     }
+    
 
     public function Get_Das_Config($config_name)
     {

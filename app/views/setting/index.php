@@ -316,14 +316,17 @@
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: 1.8vmin;text-align: center;">
-                                        <tr>
-                                            <td style="text-align: center; vertical-align: middle;">
-                                                <input class="form-check-input" type="checkbox" name="barcode_check" id="" value="" style="zoom:1.2">
-                                            </td>
-                                            <td>admin</td>
-                                            <td>192.168.0.19</td>
-                                            <td>2024-06-10 11:08:09</td>
-                                        </tr>
+                                        <?php foreach($data['active_session'] as $key =>$val){?>
+                                            <tr>
+                                                    <td style="text-align: center; vertical-align: middle;">
+                                                        <input class="form-check-input" type="checkbox" name="barcode_check" id="" value="<?php echo $val['id'];?>" style="zoom:1.2">
+                                                    </td>
+                                                    <td><?php echo $val['username'];?></td>
+                                                    <td><?php echo $val['ip'];?></td>
+                                                    <td><?php echo $val['timestamp'];?></td>
+                                            </tr>
+                                        <?php } ?>
+                                       
                                     </tbody>
                                 </table>
                             </div>    
@@ -624,32 +627,58 @@ function Import_SystemConfig(){
         }
 }
 
-function Firmware_Update(){
+unction Firmware_Update() {
+    var bb_file = document.getElementById("firmware-file-uploader").files[0];
+    if (bb_file == undefined) {
+        return;
+    }
 
-    var bbs = document.getElementById("firmware-file-uploader").files[0];
     var form = new FormData();
-    form.append("file", bb)
+    form.append("file", bb_file);
     var url = '?url=Settings/FirmwareUpdate';
 
-        if(bbs == undefined){
+    $.ajax({
+        type: "POST",
+        processData: false,
+        cache: false,
+        contentType: false,
+        data: form,
+        dataType: "json",
+        url: url,
+        beforeSend: function() {
+            $('#overlay').removeClass('hidden');
+        },
+    }).done(function(result) {
+        $('#overlay').addClass('hidden');
+        document.getElementById("firmware-file-uploader").value = '';
+    });
+}
 
-        }else{
-            $.ajax({ // 提醒
-                type: "POST",
-                processData: false,
-                cache: false,
-                contentType: false,
-                data: form,
-                dataType: "json",
-                url: url,
-                beforeSend: function() {
-                    $('#overlay').removeClass('hidden');
-                },
-            }).done(function(result) { //成功且有回傳值才會執行
-                $('#overlay').addClass('hidden');
-                document.getElementById("firmware-file-uploader").value = '';
-            });
-        }
+function edit_guest_password(){
+
+    var pass_guest1 = document.getElementById('new_password_guest').value;
+    var pass_guest2 = document.getElementById('comfirm_password_guest').value;
+
+    if(pass_guest1 == pass_guest2){
+        $.ajax({
+            url: "?url=Settings/edit_password",
+            method: "POST",
+            data:{ 
+                device_id: device_id,
+                new_password: new_password
+
+            },
+            success: function(response) {
+                console.log(response);
+                alert(response);
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });   
+    }
+    
 }
 
 </script>    

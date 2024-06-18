@@ -15,8 +15,16 @@
 
 
     
-    <?php include_once 'include_css.php'; ?>
+    <?php
+    $userAgent = $_SERVER['HTTP_USER_AGENT'];
+    $isMobile = preg_match('/Mobile|Android|Silk|Kindle|BlackBerry|Opera Mini|Opera Mobi/', $userAgent);
 
+    if ($isMobile) {
+        include_once 'include_css_m.php';
+    } else {
+        include_once 'include_css.php';
+    }
+    ?>
     <title><?php echo SITENAME; ?></title>
 
     <style>

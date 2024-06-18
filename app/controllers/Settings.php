@@ -22,7 +22,7 @@ class Settings extends Controller
 
         $lang = $this->MiscellaneousModel->details('lang');
         $controller_info = $this->SettingModel->GetControllerInfo();
-
+        $active_session = $this->AdminModel->GetActiveSession();
 
         /*$isMobile = $this->isMobileCheck();
         $Controller_Info = $this->SettingModel->GetControllerInfo();
@@ -70,6 +70,7 @@ class Settings extends Controller
         $data = array(
             'lang_arr' =>$lang,
             'controller_info' => $controller_info,
+            'active_session' => $active_session
 
         );
         $this->view('setting/index', $data);
@@ -138,7 +139,7 @@ class Settings extends Controller
 
     }
 
-    public function edit_permission()//等控制器來確認
+    public function edit_permission()
     {
         //default array
         $input_check = true;
@@ -333,7 +334,7 @@ class Settings extends Controller
     public function edit_system_date()
     {
         if( PHP_OS_FAMILY == 'Linux'){
-            $dateTime = $_POST["datetime"];
+            /*$dateTime = $_POST["datetime"];
             // var_dump($dateTime);
             // 驗證日期時間格式
             if (!preg_match("/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/", $dateTime)) {
@@ -353,7 +354,7 @@ class Settings extends Controller
 
 
             echo json_encode(array('error' => '','result' => $rr));
-            exit();
+            exit();*/
         }else{
             // post
             $conset = array();
