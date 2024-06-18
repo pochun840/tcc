@@ -24,28 +24,6 @@ class Settings extends Controller
         $controller_info = $this->SettingModel->GetControllerInfo();
 
 
-
-
-
-        // 设置时区为台北时间（东八区）
-        date_default_timezone_set('Asia/Taipei');
-
-        
-        $current_time = date('Y-m-d H:i', time()); /// 'H:i' 表示小时:分钟 24小时制
-
-        // 获取当前小时
-        $current_hour = date('H', time());
-
-        // 判断上午还是下午
-        if ($current_hour >= 12) {
-            $time = $current_time . " PM";
-        } else {
-            $time = $current_time . " AM";
-        }
-
-
-        echo $time;
-
         /*$isMobile = $this->isMobileCheck();
         $Controller_Info = $this->SettingModel->GetControllerInfo();
         $operator_priviledge = $this->SettingModel->GetOperator_priviledge();
@@ -92,7 +70,6 @@ class Settings extends Controller
         $data = array(
             'lang_arr' =>$lang,
             'controller_info' => $controller_info,
-            'times ' => $time,
 
         );
         $this->view('setting/index', $data);
@@ -127,46 +104,37 @@ class Settings extends Controller
         echo json_encode($data_array);
     }
 
-    public function edit_password()
-    {
+    public function edit_password(){
 
-        // code... table `device`
-        if( !empty($_GET['new_password']) && isset($_GET['new_password'])  ){
-            $new_password = $_GET['new_password'];
+        $conset = array();
+        $input_check = true;
+        if( !empty($_POST['device_id']) && isset($_POST['device_id'])  ){
+            $conset['device_id'] = $_POST['device_id'];
         }else{ 
             $input_check = false; 
-            $error_message .= "new_password,";
         }
-        if( !empty($_GET['comfirm_password']) && isset($_GET['comfirm_password'])  ){
-            $comfirm_password = $_GET['comfirm_password'];
+
+        if( !empty($_POST['new_password']) && isset($_POST['new_password'])  ){
+             $conset['new_password']  = $_POST['new_password'];
         }else{ 
             $input_check = false; 
-            $error_message .= "comfirm_password,";
         }
+        
 
-        if ( $new_password != '') {
-            $result = $this->SettingModel->Edit_Login_Password($new_password);
-
-            if($result){// copy DB
-                $copy_result =  $this->copyDB_to_RamdiskDB();
-                if($copy_result){
-                    $this->logMessage('edit_password: copyDB success');
-                }else{
-                    $this->logMessage('edit_password: copyDB fail');
-                }
+        if ($input_check) {
+            $result = $this->SettingModel->Edit_Login_Password($conset);
+            if($result){
+                $res_msg = 'edit:'. $conset['device_id'].'password  success';
+            }else{
+                $res_msg = 'edit:'. $conset['device_id'].'password  fail';
             }
+            echo $res_msg;
+
         }else{
             $result = false;
         }
         
 
-        if(!$result){
-            echo json_encode(array('error' => 'fail'));
-            exit();
-        }else{
-            echo json_encode(array('error' => ''));
-            exit();
-        }
 
     }
 
@@ -314,17 +282,20 @@ class Settings extends Controller
             $input_check = false; 
         }
 
-        if( !empty($_POST['control_name']) && isset($_POST['control_name'])  ){
+        if( !empty($_POST['control_name']) && isset($_POST['control_name'])){
             $con_setting['control_name'] = $_POST['control_name'];
         }else{ 
             $input_check = false; 
         }
 
-        if( !empty($_POST['lang_val']) && isset($_POST['lang_val'])  ){
-            $con_setting['lang_val'] = $_POST['lang_val'];
+        if( !empty($_POST['lang_val']) && isset($_POST['lang_val'])){
+            $lang_val =  $_POST['lang_val'];
+            intval($lang_val);
         }else{ 
-            $input_check = false; 
+            $lang_val = 0;
         }
+
+        $con_setting['lang_val']  = $lang_val;
 
         if( !empty($_POST['batch_val']) && isset($_POST['batch_val'])  ){
             $con_setting['batch_val'] = $_POST['batch_val'];
@@ -338,9 +309,13 @@ class Settings extends Controller
             $input_check = false; 
         }
         
-
+     
+        
         if($input_check){
           $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
+          //var_dump($res);die();
+
+
           if($res['count'] =="1"){
             //UPDATE
             $result = $this->SettingModel->Controller_Setting($con_setting);

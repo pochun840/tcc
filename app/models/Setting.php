@@ -1,16 +1,18 @@
 <?php
 
 class Setting{
-    private $db;//condb control box
-    private $db_dev;//devdb tool
+    //private $db;//condb control box
+    //private $db_dev;//devdb tool
     private $db_data;//devdb tool
-    private $db_das;//devdb tool
+    //private $db_das;//devdb tool
+    private $db_iDas;
+    private $db_iDas_device;
     private $dbh;
 
     // 在建構子將 Database 物件實例化
     public function __construct()
     {
-        $this->db = new Database;
+        /*$this->db = new Database;
         $this->db = $this->db->getDb();
 
         $this->db_dev = new Database;
@@ -20,10 +22,13 @@ class Setting{
         $this->db_data = $this->db_data->getDb_data();
 
         $this->db_das = new Database;
-        $this->db_das = $this->db_das->getDb_das();
+        $this->db_das = $this->db_das->getDb_das();*/
         
         $this->db_iDas_device = new Database;
         $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
+
+        $this->db_iDas = new Database;
+        $this->db_iDas = $this->db_iDas->getDb_das();
 
         $this->dbh = new Database;
 
@@ -42,13 +47,11 @@ class Setting{
 
     public function GetControllerInfo_count($control_id){
 
-
-        //var_dump($control_id);die();
         $sql = "SELECT count(*) AS count FROM device WHERE device_id = :device_id";
         $statement = $this->db_iDas_device->prepare($sql);
         $statement->bindValue(':device_id', $control_id);
-        $statement->execute(); // 执行查询
-        $row = $statement->fetch(PDO::FETCH_ASSOC); // 获取结果
+        $statement->execute();
+        $row = $statement->fetch(PDO::FETCH_ASSOC); 
 
 
     
@@ -118,15 +121,63 @@ class Setting{
     }
 
 
-    public function Edit_Login_Password($new_password)
-    {
-        $sql = "UPDATE `operator` SET operator_adminpwd = ? ";
-        $statement = $this->db->prepare($sql);
-        $results = $statement->execute([$new_password]);
-        // $row = $statement->fetchall(PDO::FETCH_ASSOC);
-
-        return $results;
+    public function Edit_Login_Password($conset){
+        
+      
+        $conset['device_id'] = intval($conset['device_id']);
+    
+        try {
+      
+            $sql = "UPDATE `device` 
+                    SET device_password = :device_password
+                    WHERE device_id = :device_id";
+    
+            $statement = $this->db_iDas_device->prepare($sql);
+    
+            if ($statement === false) {
+                $errorInfo = $this->db_iDas_device->errorInfo();
+                throw new Exception("Failed to prepare SQL statement: " . $errorInfo[2]);
+            }
+    
+            $statement->bindValue(':device_password', $conset['new_password']);
+            $statement->bindValue(':device_id', $conset['device_id']);
+    
+            $results = $statement->execute();
+    
+            if ($results === false) {
+                $errorInfo = $statement->errorInfo();
+                throw new Exception("Failed to execute SQL statement: " . $errorInfo[2]);
+            }
+    
+            $sql_1 = "UPDATE `operator` 
+                      SET operator_adminpwd = :operator_adminpwd
+                      WHERE operator_loginflag = :operator_loginflag";
+    
+            $statement_1 = $this->db_iDas->prepare($sql_1);
+    
+            if ($statement_1 === false) {
+                $errorInfo = $this->db_iDas->errorInfo();
+                throw new Exception("Failed to prepare SQL statement: " . $errorInfo[2]);
+            }
+    
+            $statement_1->bindValue(':operator_adminpwd', $conset['new_password']);
+            $statement_1->bindValue(':operator_loginflag', 1);
+    
+            $results1 = $statement_1->execute();
+    
+            if ($results1 === false) {
+                $errorInfo = $statement_1->errorInfo();
+                throw new Exception("Failed to execute SQL statement: " . $errorInfo[2]);
+            }
+    
+            return $results && $results1;
+        } catch (Exception $e) {
+            $this->logMessage('Error: ' . $e->getMessage());
+            echo json_encode(array('error' => $e->getMessage()));
+            return false;
+        }
     }
+    
 
     public function Edit_Priviledge($value)
     {   
@@ -147,14 +198,14 @@ class Setting{
        
         $sql = "UPDATE `device` 
         SET device_name = :device_name,
-            language = :language,
+            device_language = :language_val,
             batch = :batch,
             buzzer_mode = :buzzer_mode
         WHERE device_id = :device_id ";
         
         $statement = $this->db_iDas_device->prepare($sql);
         $statement->bindValue(':device_name', $con_setting['control_name']);
-        $statement->bindValue(':language', $con_setting['lang_val']);
+        $statement->bindValue(':language_val', $con_setting['lang_val']);
         $statement->bindValue(':batch', $con_setting['batch_val']);
         $statement->bindValue(':buzzer_mode', $con_setting['buzzer_val'] );
         $statement->bindValue(':device_id', $con_setting['control_id'] );

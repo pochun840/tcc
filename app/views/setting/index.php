@@ -1,5 +1,18 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
 <body>
+
+<?php 
+$current_time = date('Y-m-d H:i', time()); 
+$current_hour = date('H', time());
+#判斷PM 還是AM
+if ($current_hour >= 12) {
+    $times = $current_time . " PM";
+} else {
+    $times = $current_time . " AM";
+}
+
+
+?>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -34,7 +47,7 @@
                 <div class="row t2">
                     <div class="col-3 t1">Name:</div>
                     <div class="col-3 t2">
-                        <input id="control_name" name="control_name" maxlength="12" type="text" value="" class="t3 form-control"  required>
+                        <input id="control_name" name="control_name" maxlength="12" type="text" value="<?php echo $data['controller_info']['device_name'];?>" class="t3 form-control"  required>
                     </div>
                 </div>    
                 <div class="row t2">
@@ -42,7 +55,7 @@
                     <div class="col-3 t2">
                         <select class="form-select" id="select_language" name="select_language">
                             <?php foreach($data['lang_arr'] as $k_lang =>$v_lang){?>
-                            <option value="<?php echo $k_lang;?>"><?php echo $v_lang;?></option>
+                            <option value="<?php echo $k_lang;?>"  <?php echo $k_lang == $data['controller_info']['device_language'] ? 'selected' : ''; ?> ><?php echo $v_lang;?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -51,11 +64,11 @@
                     <div class="col-3 t1">Batch Mode:</div>
                     <div class="col t2" >
       			      	<div class="col-1 form-check form-check-inline">
-        				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="1" checked="checked">
+        				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="1"  <?php echo $data['controller_info']['batch'] == 1 ? 'checked="checked"' : ''; ?>>
             				<label class="form-check-label" for="dec">DEC</label>
             			</div>
             			<div class="form-check form-check-inline">
-            			    <input class="form-check-input" type="radio" name="batch-mode-option" id="inc" value="2">
+            			    <input class="form-check-input" type="radio" name="batch-mode-option" id="inc" value="2"  <?php echo $data['controller_info']['batch'] == 2 ? 'checked="checked"' : ''; ?> >
             				<label class="form-check-label" for="inc">INC</label>
             			</div>
                     </div>
@@ -64,11 +77,11 @@
                     <div class="col-3 t1">Buzzer:</div>
                     <div class="col t2">
       			      	<div class="col-1 form-check form-check-inline">
-           				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1" checked="checked">
+           				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
                				<label class="form-check-label" for="buzzer-on">ON</label>
                			</div>
               			<div class="form-check form-check-inline">
-               			    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-off" value="2">
+               			    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-off" value="2"  <?php echo $data['controller_info']['buzzer_mode'] == 2 ? 'checked="checked"' : ''; ?>>
                				<label class="form-check-label" for="buzzer-off">OFF</label>
                			</div>
                     </div>
@@ -83,10 +96,10 @@
                 <div class="row t2">
                     <div class="col-3 t1">Password:</div>
                     <div class="col t2">
-                        <form id="edit_password" method="get" style="margin: 3px 0px">
+                        <form id="edit_password"  style="margin: 3px 0px">
                             <input type="password" id="new_password" size="15" placeholder="New Password" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
                             <input type="password" id="comfirm_password" size="15" placeholder="Confirm Password" maxlength="10" required class="t3 w3-submit w3-border w3-round">
-                            <input type="submit" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                            <input type="button" value="Save" onclick="edit_password()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                         </form>
                     </div>        
                 </div>          
@@ -95,6 +108,7 @@
                     <div class="col t2">
                         <form style="margin: 3px 0px">
                             <span id="currentSystemTime"></span>&nbsp;
+                            <?php echo  $times;?>
                             <input type="datetime-local" id="newTime" value="" required class="t3 w3-submit w3-border w3-round">
                             <!-- 使用按钮来触发日期时间选择器 -->
                             <input type="submit" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
@@ -392,8 +406,6 @@ function OpenButton(ButtonMode)
         document.getElementById('bnt4').classList.remove("active");
         document.getElementById('bnt5').classList.remove("active");
 
-
-        var times ='<?php echo?>'
     }
     else if (ButtonMode == "Barcode")
     {
@@ -462,7 +474,8 @@ function cc_save(){
     }
 
     var control_name = document.getElementById('control_name').value;
-    var lang_val = document.getElementById('select_language').value;
+    var selectElement = document.getElementById('select_language');
+    var selectedValue = selectElement.value;
     var batch_val = document.querySelector('input[name="batch-mode-option"]:checked').value;
     var buzzer_val = document.querySelector('input[name="buzzer-option"]:checked').value;
 
@@ -473,7 +486,7 @@ function cc_save(){
             data:{ 
                 control_id: control_id,
                 control_name: control_name,
-                lang_val: lang_val,
+                lang_val: selectedValue,
                 batch_val:batch_val,
                 buzzer_val:buzzer_val
 
@@ -492,6 +505,39 @@ function cc_save(){
 
 
 
+
+}
+function edit_password(){
+    var new_password = document.getElementById('new_password').value;
+    var comfirm_password = document.getElementById('comfirm_password').value;
+
+    var device_id = <?php echo $data['controller_info']['device_id'];?>;
+    if(new_password == comfirm_password){
+        $.ajax({
+            url: "?url=Settings/edit_password",
+            method: "POST",
+            data:{ 
+                device_id: device_id,
+                new_password: new_password
+
+            },
+            success: function(response) {
+                console.log( response);
+                //history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });   
+    }else{
+        alert("請確認密碼");
+        return false;
+    }
+
+
+    
+
+    
 
 }
 </script>    
