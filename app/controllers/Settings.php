@@ -313,9 +313,6 @@ class Settings extends Controller
         
         if($input_check){
           $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
-          //var_dump($res);die();
-
-
           if($res['count'] =="1"){
             //UPDATE
             $result = $this->SettingModel->Controller_Setting($con_setting);
@@ -358,8 +355,38 @@ class Settings extends Controller
             echo json_encode(array('error' => '','result' => $rr));
             exit();
         }else{
-            echo json_encode(array('error' => ''));
-            exit();
+            // post
+            $conset = array();
+            $input_check = true;
+            if( !empty($_POST['device_id']) && isset($_POST['device_id'])){
+                $conset['device_id'] = $_POST['device_id'];
+            }else{ 
+                $input_check = false; 
+            }
+
+            if( !empty($_POST['newTime']) && isset($_POST['newTime'])  ){
+                $conset['newTime'] = $_POST['newTime'];
+                $conset['newTime'] = strtotime($conset['newTime']);
+                $conset['newTime'] = date('Y-m-d H:i:s', $conset['newTime']);
+                
+                if(!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $conset['newTime'])){
+                    echo "格式錯誤";exit();
+                }
+
+            }else{ 
+                $input_check = false; 
+            }
+
+            if($input_check){
+                $result = $this->SettingModel->system_date_edit($conset);
+                if($result){
+                    $res_msg = 'edit:'. $conset['device_id'].'success';
+                }else{
+                    $res_msg = 'edit:'. $conset['device_id'].'fail';
+                }
+                echo $res_msg;
+            }
+
         }
     }
 
@@ -381,7 +408,7 @@ class Settings extends Controller
     public function export_sysytem_config()
     {
         if( PHP_OS_FAMILY == 'Linux'){
-            require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+            /*require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
             $modbus = new ModbusMaster("127.0.0.1", "TCP");
             try {
                 $modbus->port = 502;
@@ -410,18 +437,18 @@ class Settings extends Controller
                 $this->logMessage('db_sync D2C end');
                 echo json_encode(array('error' => 'modbus error'));
                 exit();
-            }
+            }*/
         }else{//windows
-            // echo json_encode(array('error' => ''));
-                header("Content-type: text/html; charset=utf-8");
-                $file="../tcscon.db"; // 實際檔案的路徑+檔名
-                $filename="tcscon.cfg"; // 下載的檔名
-                //指定類型
-                header("Content-type: ".filetype("$file"));
-                //指定下載時的檔名
-                header("Content-Disposition: attachment; filename=".$filename."");
-                //輸出下載的內容。
-                readfile($file);
+            
+            header("Content-type: text/html; charset=utf-8");
+            $file="../data.db"; // 實際檔案的路徑+檔名
+            $filename="data.cfg"; // 下載的檔名
+            //指定類型
+            header("Content-type: ".filetype("$file"));
+            //指定下載時的檔名
+            header("Content-Disposition: attachment; filename=".$filename."");
+            //輸出下載的內容。
+            readfile($file);
             exit();
         }
     }
@@ -1024,7 +1051,7 @@ class Settings extends Controller
 
 
         if( PHP_OS_FAMILY == 'Linux'){
-            $this->logMessage('Import config start');
+            /*$this->logMessage('Import config start');
 
             $destination = "/mnt/ramdisk/FTP/iDas.cfg";
             //將檔案移到指定位置
@@ -1062,11 +1089,11 @@ class Settings extends Controller
                 $this->logMessage('Import config end');
                 echo json_encode(array('error' => 'copy db error'));
                 exit();
-            }
+            }*/
 
-        }else{//windows暫不考慮升級，可能整包升級
+        }else{
             // $this->logMessage('Import config start');
-            $destination = "../tcscon.db";
+            $destination = "../data.db";
             $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
             if($result){
                 echo json_encode(["error" => '']);
@@ -1090,8 +1117,9 @@ class Settings extends Controller
             exit();
         }
 
+
         if( PHP_OS_FAMILY == 'Linux'){
-            $this->logMessage('firmware update start');
+            /*$this->logMessage('firmware update start');
 
             // $destination = "/mnt/ramdisk/FTP/iDas.cfg";
             $destination = "/mnt/ramdisk/FTP/".$_FILES['file']['name'];
@@ -1132,9 +1160,9 @@ class Settings extends Controller
                 $this->logMessage('firmware update end');
                 echo json_encode(array('error' => 'copy db error'));
                 exit();
-            }
+            }*/
 
-        }else{//windows暫不考慮升級，可能整包升級
+        }else{
             // $this->logMessage('Import config start');
             $file_location = $_SERVER['DOCUMENT_ROOT'].'/';
             echo json_encode(["Error" => 'not for windows']);

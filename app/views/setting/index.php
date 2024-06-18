@@ -1,18 +1,7 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
 <body>
 
-<?php 
-$current_time = date('Y-m-d H:i', time()); 
-$current_hour = date('H', time());
-#判斷PM 還是AM
-if ($current_hour >= 12) {
-    $times = $current_time . " PM";
-} else {
-    $times = $current_time . " AM";
-}
 
-
-?>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -108,31 +97,29 @@ if ($current_hour >= 12) {
                     <div class="col t2">
                         <form style="margin: 3px 0px">
                             <span id="currentSystemTime"></span>&nbsp;
-                            <?php echo  $times;?>
                             <input type="datetime-local" id="newTime" value="" required class="t3 w3-submit w3-border w3-round">
-                            <!-- 使用按钮来触发日期时间选择器 -->
-                            <input type="submit" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                            <input type="button" value="time_save" class="all-btn w3-submit w3-border w3-round-large" style="float: right" onclick="time_save()">
                         </form>
                     </div>        
                 </div>          
                 <div class="row t2">
                     <div class="col t1">Export Config:</div>
                     <div class="col t2">
-                        <button class="all-btn w3-button w3-border w3-round-large" style="float: right">Export Config</button>
+                        <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Export_SystemConfig();">Export Config</button>
                     </div>        
                 </div>          
                 <div class="row t2">
                     <div class="col-3 t1">Import Config:</div>
                     <div class="col t2">
                         <input type="file" id="import-file-uploader" data-target="import-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round">
-                        <button class="all-btn w3-button w3-border w3-round-large" style="float: right">Export Config</button>
+                        <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Import_SystemConfig();">Import Config</button>
                     </div>        
                 </div>          
                 <div class="row t2">
                     <div class="col-3 t1">Firmware Update:</div>
                     <div class="col t2">
                         <input type="file" id="firmware-file-uploader" data-target="firmware-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round">
-                        <button class="all-btn w3-button w3-border w3-round-large" style="float: right">Firmware Update</button>
+                        <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Firmware_Update();">Firmware Update</button>
                     </div>        
                 </div>          
             </div>
@@ -512,6 +499,7 @@ function edit_password(){
     var comfirm_password = document.getElementById('comfirm_password').value;
 
     var device_id = <?php echo $data['controller_info']['device_id'];?>;
+
     if(new_password == comfirm_password){
         $.ajax({
             url: "?url=Settings/edit_password",
@@ -522,8 +510,9 @@ function edit_password(){
 
             },
             success: function(response) {
-                console.log( response);
-                //history.go(0);
+                console.log(response);
+                alert(response);
+                history.go(0);
             },
             error: function(xhr, status, error) {
                 
@@ -533,13 +522,136 @@ function edit_password(){
         alert("請確認密碼");
         return false;
     }
+}
 
+function time_save(){
+    var newTime = document.getElementById('newTime').value;
+    var device_id = <?php echo $data['controller_info']['device_id'];?>;
 
-    
+    //console.log(newTime);
+    if(newTime){
+        $.ajax({
+            url: "?url=Settings/edit_system_date",
+            method: "POST",
+            data:{ 
+                device_id: device_id,
+                newTime: newTime
 
-    
+            },
+            success: function(response) {
+                console.log( response);
+                alert(response);
+                //history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });       
+    }
 
 }
+
+function updateTime() {
+    var currentTime = new Date();
+    var hours = currentTime.getHours();
+    var minutes = currentTime.getMinutes();
+    var seconds = currentTime.getSeconds();
+    var period = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 should be 12
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    seconds = seconds < 10 ? '0'+seconds : seconds;
+
+    var timeString = currentTime.getFullYear() + '-' + 
+                        ('0' + (currentTime.getMonth() + 1)).slice(-2) + '-' + 
+                        ('0' + currentTime.getDate()).slice(-2) + ' ' + 
+                        ('0' + hours).slice(-2) + ':' + 
+                        ('0' + minutes).slice(-2) + ':' + 
+                        ('0' + seconds).slice(-2) + ' ' + period;
+
+    document.getElementById('currentSystemTime').innerText = timeString;
+}
+
+updateTime();
+// 每秒更新一次時間
+setInterval(updateTime, 1000);
+
+function Export_SystemConfig(argument) {
+
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = "blob";
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var a = document.createElement("a");
+            a.href = window.URL.createObjectURL(xhr.response);
+            a.download = "data.cfg"; 
+            a.style.display = "none";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    };
+
+    xhr.open("GET", "?url=Settings/export_sysytem_config", true);
+    xhr.send();
+}
+function Import_SystemConfig(){
+
+        var bbs = document.getElementById("import-file-uploader").files[0];
+        var form = new FormData();
+        form.append("file", bbs)
+        var url = '?url=Settings/Import_Config';        
+
+        if(bbs == undefined){
+            
+        }else{
+            $.ajax({ // 提醒
+                type: "POST",
+                processData: false,
+                cache: false,
+                contentType: false,
+                data: form,
+                dataType: "json",
+                url: url,
+                beforeSend: function() {
+                    $('#overlay').removeClass('hidden');
+                },
+            }).done(function(result) { //成功且有回傳值才會執行
+                $('#overlay').addClass('hidden');
+                document.getElementById("import-file-uploader").value = '';
+            });
+        }
+}
+
+function Firmware_Update(){
+
+    var bbs = document.getElementById("firmware-file-uploader").files[0];
+    var form = new FormData();
+    form.append("file", bb)
+    var url = '?url=Settings/FirmwareUpdate';
+
+        if(bbs == undefined){
+
+        }else{
+            $.ajax({ // 提醒
+                type: "POST",
+                processData: false,
+                cache: false,
+                contentType: false,
+                data: form,
+                dataType: "json",
+                url: url,
+                beforeSend: function() {
+                    $('#overlay').removeClass('hidden');
+                },
+            }).done(function(result) { //成功且有回傳值才會執行
+                $('#overlay').addClass('hidden');
+                document.getElementById("firmware-file-uploader").value = '';
+            });
+        }
+}
+
 </script>    
 
 </body>

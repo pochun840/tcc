@@ -177,6 +177,22 @@ class Setting{
             return false;
         }
     }
+
+    public function system_date_edit($conset){
+
+        $conset['device_id'] = intval($conset['device_id']);
+        
+        $sql = "UPDATE `device` 
+        SET device_time = :device_time
+        WHERE device_id = :device_id";
+
+        $statement = $this->db_iDas_device->prepare($sql);
+        $statement->bindValue(':device_time', $conset['newTime']);
+        $statement->bindValue(':device_id', $conset['device_id']);
+        $results = $statement->execute();
+        return  $results;
+
+    }
     
 
     public function Edit_Priviledge($value)
@@ -441,5 +457,10 @@ class Setting{
 
         return $row['device_torque_unit'];
     }
+
+
+    
+ 
+    
 
 }

@@ -29,17 +29,16 @@
                 <button class="menu-item pink" id="tool" style="font-size: 20px" onclick="window.location.href='?url=Tools/index'">Tool</button>
                 <button class="menu-item PaleGreen" id="setting" style="font-size: 20px;" onclick="window.location.href='?url=Settings/index'">Setting</button>
                 <br><br>
-<!--
                 <?php if($_SESSION['privilege'] == 'admin'){?>
                 <div>
                 <?php if($data['agent_type'] == '2'){ ?>
-                <button class="menu-item lime" id="" style="font-size: 24px" onclick="window.location.href='?url=Agents'">Agent</button>
+                <!--<button class="menu-item lime" id="" style="font-size: 24px" onclick="window.location.href='?url=Agents'">Agent</button>-->
                 <?php } ?>
-                <button class="menu-item indigo" id="download" style="font-size: 24px" onclick="DB_sync('C2D')">Load</button>
-                <button class="menu-item deep-orange" id="upload" style="font-size: 24px;" onclick="DB_sync('D2C')">Save</button>
+                <button class="menu-item blue" id="download" style="font-size: 20px" //onclick="DB_sync('C2D')">Load</button>
+                <button class="menu-item green" id="upload" style="font-size: 20px;" //onclick="DB_sync('D2C')">Save</button>
                 </div>
                 <?php } ?>
--->
+
             </div>
         </div>
     </div>
