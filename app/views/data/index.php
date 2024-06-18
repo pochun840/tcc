@@ -32,8 +32,8 @@
             <div id="DataButtonMode">
                 <div id="HistoryDisplay">
                     <!-- Data ALL -->
+                    <div  id ='res_title' style="font-weight: bold; font-size: 20px; padding-left: 1%">Data</div>
                     <div class="table-container">
-                        <div  id ='res_title' style="font-weight: bold; font-size: 20px; padding-left: 1%">Data</div>
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
                                 <table id="fasten_log_all" class="table w3-table-all w3-hoverable">

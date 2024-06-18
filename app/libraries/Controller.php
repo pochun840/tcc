@@ -205,7 +205,8 @@ class Controller
         if( PHP_OS_FAMILY == 'Linux'){
             $con_db = new PDO('sqlite:/var/www/html/database/iDas-data.db'); //local
         }else{
-            $con_db = new PDO('sqlite:../data.db'); //local
+            $con_db = new PDO('sqlite:../data_device.db'); //local
+            
         }
 
         $con_db->exec('set names utf-8'); 

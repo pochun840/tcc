@@ -19,9 +19,7 @@ class Data extends Controller
 
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
         $status_arr = $this->MiscellaneousModel->details('status');
-        
         $device_info = $this->Device_Info();
-
         $data = [
             'isMobile' => $isMobile,
             'res_data' => $res_data,

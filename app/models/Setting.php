@@ -55,7 +55,7 @@ class Setting{
         return $row;
     }
 
-    public function GetDeviceInfo()
+    /*public function GetDeviceInfo()
     {
         $sql = "SELECT * FROM device_info ";
         $statement = $this->db_dev->prepare($sql);
@@ -63,7 +63,7 @@ class Setting{
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $row;
-    }
+    }*/
 
     public function GetToolInfo()
     {

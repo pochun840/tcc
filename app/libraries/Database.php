@@ -12,6 +12,7 @@ class Database
     private $db_data;// db dev
     private $db_iDas;//iDas db
     private $db_iDas_login;
+    private $db_iDas_device;
     public function __construct()
     {
         // 透過 PDO 建立資料庫連線
