@@ -180,6 +180,119 @@
             </div>
         </div>
     </div>
+    <!-- Edit Step -->
+    <div id="editstep" class="modal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content w3-animate-zoom" style="width: 80%">
+                <header class="w3-container modal-header">
+                    <span onclick="document.getElementById('editstep').style.display='none'"
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
+                    <h3 id='modal_title'>Edit Step</h3>
+                </header>
+
+                <div class="modal-body">
+                    <form id="new_step_form" style="padding-left: 5%">
+                        <div class="row">
+                            <div for="target-option" class="col-6 t1">Target Option :</div>
+                            <div class="col-3 t2">
+                                <select id="edit_target_option" name="edit_target_option" class="col custom-file">
+                                    <?php foreach($data['target_option'] as $key => $val){?>
+                                        <option value="<?php echo $key;?>"><?php echo $val;?></option>
+                                    <?php }?>     
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="edit_target-torque" class="col-6 t1">Target Torque (<?php echo $data['unit'];?>):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_target_torque" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="hi-torque" class="col-6 t1">Hi Torque (<?php echo $data['unit'];?>):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_hi_torque" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="lo-torque" class="col-6 t1">Lo Torque (<?php echo $data['unit'];?>):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_lo_torque" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="hi-angle" class="col-6 t1">Hi Angle (degree):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_hi_angle" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="lo-angle" class="col-6 t1">Lo Angle (degree):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_lo_angle" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="RPM" class="col-6 t1">RPM:</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_rpm" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="direction" class="col-6 t1">Direction:</div>
+                            <div class="col t2" >
+            			      	<div class="col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CW" value="0">
+            					  <label class="form-check-label" for="direction_CW">CW</label>
+            					</div>
+            					<div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CCW" value="1">
+            					  <label class="form-check-label" for="direction_CCW">CWW</label>
+            					</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="downshift" class="col-6 t1">Downshift:</div>
+                            <div class="col t2" >
+            			      	<div class="col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_ON" value="1">
+            					  <label class="form-check-label" for="downshift_ON">ON</label>
+            					</div>
+            					<div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_OFF" value="0">
+            					  <label class="form-check-label" for="downshift_OFF">OFF</label>
+            					</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="edit_downshift-threshold" class="col-6 t1">Downshift Threshold(<?php echo $data['unit'];?>):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_downshift_threshold" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="edit_downshift-torque" class="col-6 t1">Downshift Torque(<?php echo $data['unit'];?>):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_downshift_torque" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="edit_downshift-rpm" class="col-6 t1">Downshift RPM:</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_downshift_rpm" maxlength="" >
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                    <button id="" class="button-modal" onclick="edit_step_save()" >Save</button>
+                    <button id="" class="button-modal" onclick="document.getElementById('editstep').style.display='none'" class="closebtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Copy Step -->
     <div id="copystep" class="modal">
@@ -508,6 +621,7 @@ function edit_step_save() {
     var seqid = '<?php echo $data['seq_id']?>';
     var stepid = readFromLocalStorage("stepid");
     var target_option = document.getElementById("edit_target_option").value;
+
     var target_torque = 0;
     var target_angle = 0;
     var target_delaytime = 0;
