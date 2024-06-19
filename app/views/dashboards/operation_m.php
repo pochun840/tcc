@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            
+            ˋ
             <div class="chart-setting">
                 <div class="button-chart">
                     <?php foreach($data['chart_menu_arr'] as $k_menu =>$v_menu){?>
@@ -57,9 +57,7 @@
                     <?php }?>
                 </div>
                 <div id="graph" class="display-chart">
-                    <div id="chart" style="width: 100%; height: 290px">
-                                              
-                    </div>
+                    <div id="chart" style="max-width: 100%; height: 290px;"></div>
                 </div>                         
             </div>
         </div>
@@ -68,22 +66,6 @@
 
 
 <script>
-// Button Home
-document.getElementById('back_home').onclick = function()
-{
-    window.location.href = './tcc_main.html';
-    return;
-};
-
-// change button background coler
-function changeBackgroundColor(button) {
-    var buttons = document.getElementsByClassName('btn-chart');
-    for (var i = 0; i < buttons.length; i++) {
-        buttons[i].classList.remove('active');
-    }
-    button.classList.add('active');
-}
-
 function chart_type(argument){
 
     var currentUrl = window.location.href;
@@ -184,7 +166,7 @@ var option = {
                 },
                 areaStyle: {
                     normal: {
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [{
+                        color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
                             offset: 0,
                             color: 'rgb(255,255,255)'
                         }, {
