@@ -12,18 +12,6 @@ class Setting{
     // 在建構子將 Database 物件實例化
     public function __construct()
     {
-        /*$this->db = new Database;
-        $this->db = $this->db->getDb();
-
-        $this->db_dev = new Database;
-        $this->db_dev = $this->db_dev->getDb_dev();
-
-        $this->db_data = new Database;
-        $this->db_data = $this->db_data->getDb_data();
-
-        $this->db_das = new Database;
-        $this->db_das = $this->db_das->getDb_das();*/
-        
         $this->db_iDas_device = new Database;
         $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
 

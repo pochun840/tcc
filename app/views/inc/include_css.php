@@ -4,12 +4,17 @@ function includecss_file($part, $cssFileName) {
     $queryStringWithoutUrl = str_replace('url=', '', $queryString);
     $parts = explode('/', $queryStringWithoutUrl);
     $firstPart = $parts[0];
-    
-    if($firstPart === $part) { ?>
-    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>">
-    <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi'); ?>"></script>
-    <?php }?>
-<?php }?>
+    $extension = pathinfo($cssFileName, PATHINFO_EXTENSION);
+
+    if ($firstPart == $part) {
+        if ($extension == 'css') { ?>
+            <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>">
+        <?php } elseif ($extension == 'js') { ?>
+            <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi'); ?>"></script>
+        <?php }
+    }
+}?>
+
 
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -46,8 +51,7 @@ function includecss_file($part, $cssFileName) {
             includecss_file("Data","tcc_data.css");
             //includecss_file("Settings","tcc_setting.css");
 
-
-            includecss_file("Inputs", "inputs.js");
+            
 
 
         }else{
@@ -64,8 +68,8 @@ function includecss_file($part, $cssFileName) {
 
 
 
-            includecss_file("Inputs", "inputs.js");
-        
+            
         }
-    
+        includecss_file("Inputs", "inputs.js");
+        includecss_file("Jobs", "jobs.js");
 

@@ -37,3 +37,14 @@ function job_confirm(){
         }); 
     }
 }
+
+
+function tablesubmit(keyno){
+    if(keyno =='show'){
+        document.getElementById('TableDataInput').style.display = 'block';
+        document.getElementById('input_menu').style.display = 'none';
+        get_input_by_job_id(job_id);
+    }
+}
+
+
