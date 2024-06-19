@@ -385,7 +385,7 @@
         		            <div class="row">
         				        <label for="from_seq_id" class="t1 col-4 col-form-label">Seq ID :</label>
         				        <div class="col-5 t2 ">
-        				            <input type="text" class="form-control" id="old_seq_id" disabled>
+        				            <input type="text" class="form-control" id="from_seq_id" disabled>
         				        </div>
         				    </div>
         				    <div class="row">
@@ -434,18 +434,13 @@ $(document).ready(function () {
 
 // Get the modal
 var modal = document.getElementById('newseq');
-
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
 
-// Add Step
-/*document.getElementById('Add_Step').onclick = function() {
-    window.location.href = './tcc_step.html';
-};*/
+
 
 // Button Return
 document.getElementById('back_btn').onclick = function()
@@ -465,6 +460,7 @@ var rowInfoArray = [];
         rowInfoArray.push(rowInfo);
 <?php } ?>
 
+var seqid; 
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
     (function(row) {
@@ -474,6 +470,7 @@ for (var i = 0; i < rows.length; i++) {
            
                 var seqid   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
                 var seqname = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
+                seqid = seqid;
         
                 localStorage.setItem("seqid", seqid);
                 localStorage.setItem("seqname", seqname);
@@ -491,7 +488,6 @@ function cound_job(argument){
     var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
     var seqid = selectedRowData || null;
     
-
 
     if(argument == 'del' && seqid != null){
         console.log(seqid);
@@ -523,32 +519,31 @@ function copy_seq_by_id(){
 
     document.getElementById("from_seq_name").value = oldseqname;
     document.getElementById('to_seq_id').value = newseqid;
-    document.getElementById('old_seq_id').value= oldseqid;
+    document.getElementById('from_seq_id').value= oldseqid;
   
     var newseqname = document.getElementById("to_seq_name").value;
+    if(newseqname){
+            $.ajax({
+                url: "?url=Sequences/copy_seq",
+                method: "POST",
+                data:{ 
+                    jobid: jobid,
+                    oldseqid: oldseqid,
+                    oldseqname: oldseqname,
+                    newseqid: newseqid,
+                    newseqname: newseqname
 
-   if(newseqname){
-        $.ajax({
-            url: "?url=Sequences/copy_seq",
-            method: "POST",
-            data:{ 
-                jobid: jobid,
-                oldseqid: oldseqid,
-                oldseqname: oldseqname,
-                newseqid: newseqid,
-                newseqname: newseqname
-
-            },
-            success: function(response) {
-                console.log( response);
-                alert(response);
-                history.go(0);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-    }
+                },
+                success: function(response) {
+                    console.log( response);
+                    alert(response);
+                    history.go(0);
+                },
+                error: function(xhr, status, error) {
+                    
+                }
+            });
+        }
 
 }
 function copy_seq(seqid){
