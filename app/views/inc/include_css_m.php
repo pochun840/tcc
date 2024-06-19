@@ -40,7 +40,7 @@ function includecss_file($part, $cssFileName) {
     //includecss_file("Outputs", "tcc_output.css");
     includecss_file("Sequences", "tcc_seq_m.css");
     includecss_file("Jobs", "tcc_jobs_m.css");
-    //includecss_file("Step", "tcc_step.css");
+    includecss_file("Step", "tcc_step_m.css");
     includecss_file("Dashboards","tcc_operation_m.css");
     includecss_file("Data","tcc_data.css");
     //includecss_file("Settings","tcc_setting.css");

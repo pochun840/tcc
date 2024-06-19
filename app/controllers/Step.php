@@ -48,8 +48,12 @@ class Step extends Controller
             'unit' => $unit
         );
 
+        if($isMobile){
+            $this->view('step/index_m', $data);
+        }else{
+            $this->view('step/index', $data);
+        }
         
-        $this->view('step/index',$data);
         
     }
 
