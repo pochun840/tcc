@@ -612,8 +612,6 @@ window.onclick = function(event) {
 
 
 
-
-
 function crud_job_event(argument){
     if(argument == 'new' && job_id != '' && input_event != ''){
         //針對已設定的pin角位disable
@@ -715,29 +713,9 @@ function crud_job_event(argument){
 }
 
 
-function resetalignsubmit(job_id) {
 
-    var job_id_new = 0;
- 
-    if(job_id_new == 0){
-        console.log(job_id_new);
-        console.log(job_id);
-        $.ajax({
-            url: "?url=Inputs/input_alljob",
-            method: "POST",
-            data: {
-                job_id_new: job_id_new
-            },
-            success: function (response) {
-                console.log(response);
-                get_input_by_job_id(job_id);
-            },
-            error: function (xhr, status, error) {
 
-            }
-        });
-    }
-}
+
 
 function alignsubmit(job_id) {
     if (job_id) {

@@ -1,3 +1,5 @@
+
+
 function job_confirm(){
     var jobid = document.getElementById("JobNameSelect").value;
     localStorage.setItem("jobid", jobid);
@@ -35,6 +37,30 @@ function job_confirm(){
             
             }
         }); 
+    }
+}
+
+function resetalignsubmit(job_id) {
+
+    var job_id_new = 0;
+ 
+    if(job_id_new == 0){
+        console.log(job_id_new);
+        console.log(job_id);
+        $.ajax({
+            url: "?url=Inputs/input_alljob",
+            method: "POST",
+            data: {
+                job_id_new: job_id_new
+            },
+            success: function (response) {
+                console.log(response);
+                get_input_by_job_id(job_id);
+            },
+            error: function (xhr, status, error) {
+
+            }
+        });
     }
 }
 

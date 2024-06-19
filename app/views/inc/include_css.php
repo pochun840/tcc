@@ -42,7 +42,7 @@ function includecss_file($part, $cssFileName) {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         $isMobile = preg_match('/Mobile|Android|Silk|Kindle|BlackBerry|Opera Mini|Opera Mobi/', $userAgent);
 
-        #判斷是否為行動裝置 是的話就inlude 行動版的css
+        #判斷是否為行動裝置 是的話就include 行動版的css
         if ($isMobile){
             includecss_file("Tools", "tcc_tool.css");
             includecss_file("Inputs", "tcc_input_m.css");
