@@ -25,6 +25,9 @@ class Input{
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
 
+        $this->db_iDas_device = new Database;
+        $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
+
 
     }
 
@@ -43,7 +46,7 @@ class Input{
     public function get_input_alljob()
     {   
         $sql = "SELECT * FROM device ";
-        $statement = $this->db_iDas->prepare($sql);
+        $statement = $this->db_iDas_device->prepare($sql);
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 

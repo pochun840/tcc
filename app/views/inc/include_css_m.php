@@ -7,6 +7,8 @@ function includecss_file($part, $cssFileName) {
     
     if($firstPart === $part) { ?>
     <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>">
+    <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo time(); ?>"></script>
+    
     <?php }
 }?>
 
@@ -36,7 +38,7 @@ function includecss_file($part, $cssFileName) {
 <?php 
 
     includecss_file("Tools", "tcc_tool.css");
-    //includecss_file("Inputs", "tcc_input.css");
+    includecss_file("Inputs", "tcc_input_m.css");
     //includecss_file("Outputs", "tcc_output.css");
     includecss_file("Sequences", "tcc_seq_m.css");
     includecss_file("Jobs", "tcc_jobs_m.css");

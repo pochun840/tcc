@@ -12,18 +12,8 @@
 
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
-
-    
     <?php
-    $userAgent = $_SERVER['HTTP_USER_AGENT'];
-    $isMobile = preg_match('/Mobile|Android|Silk|Kindle|BlackBerry|Opera Mini|Opera Mobi/', $userAgent);
-
-    if ($isMobile) {
-        include_once 'include_css_m.php';
-    } else {
         include_once 'include_css.php';
-    }
     ?>
     <title><?php echo SITENAME; ?></title>
 
@@ -61,6 +51,7 @@
             .input-pin img{ height: 25px; width: 40px}
             .output-pin img{ height: 25px; width: 45px}
             .disabled_input{ color: #999; pointer-events: none;}
+            .zoom{zoom:1.2; vertical-align: middle}
         </style>
         
 

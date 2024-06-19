@@ -35,9 +35,11 @@ class Inputs extends Controller
             
         );
 
-
-        $this->view('input/index', $data);
-
+        if($isMobile){
+            $this->view('input/index_m', $data);
+        }else{
+            $this->view('input/index', $data);
+        }
     }
 
     // get_input_by_job_id
@@ -71,14 +73,34 @@ class Inputs extends Controller
                     if (!empty($vv['input_event'])) {
                         $tempA[] = $vv['input_event'];
                     }
+                    
+                    $isMobile = $this->isMobileCheck();
+                    if($isMobile){
+
+                        if($vv['input_wave'] == 1){
+                            $img = '<img src="./img/high.png" style="max-width: 50px;">';
+                        }else{
+                            $img = '<img src="./img/low.png" style="max-width: 50px;">';
+                        }
+
+                        $job_inputlist .= "<tr class='".$vv['input_event']."'>";
+                        $job_inputlist .= '<td>'.$event[$vv['input_event']].'</td>';
+                        $job_inputlist .= '<td>'.$vv['input_pin'].'</td>';
+                        $job_inputlist .= '<td>'.$img.'</td>';
+                        $job_inputlist .= '</tr>';
+
+
+                    }else{
+                        $job_inputlist .= "<tr class='".$vv['input_event']."'>";
+                        $job_inputlist .= '<td>'.$event[$vv['input_event']].'</td>';
+                        $job_inputlist .= $this->InputModel->generateTableCell($vv['input_pin'],$vv['input_wave']);
+                        $job_inputlist .= '<td>NO</td>';
+                        $job_inputlist .= '<td>1</td>';
+                        $job_inputlist .= '<td>EVENT</td>';
+                        $job_inputlist .= '</tr>';
+                    }
     
-                    $job_inputlist .= "<tr class='".$vv['input_event']."'>";
-                    $job_inputlist .= '<td>'.$event[$vv['input_event']].'</td>';
-                    $job_inputlist .= $this->InputModel->generateTableCell($vv['input_pin'],$vv['input_wave']);
-                    $job_inputlist .= '<td>NO</td>';
-                    $job_inputlist .= '<td>1</td>';
-                    $job_inputlist .= '<td>EVENT</td>';
-                    $job_inputlist .= '</tr>';
+                    
                 }
 
             }
@@ -91,6 +113,8 @@ class Inputs extends Controller
         );
         echo json_encode($response);
     }
+
+    public function get_input_by_job_id_m(){}
     
 
     public function check_job_event_conflict($value='')

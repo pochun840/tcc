@@ -7,6 +7,7 @@ function includecss_file($part, $cssFileName) {
     
     if($firstPart === $part) { ?>
     <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>">
+    <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi'); ?>"></script>
     <?php }?>
 <?php }?>
 
@@ -31,18 +32,40 @@ function includecss_file($part, $cssFileName) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
 
 
+    <?php 
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $isMobile = preg_match('/Mobile|Android|Silk|Kindle|BlackBerry|Opera Mini|Opera Mobi/', $userAgent);
+        if ($isMobile){
+            includecss_file("Tools", "tcc_tool.css");
+            includecss_file("Inputs", "tcc_input_m.css");
+            //includecss_file("Outputs", "tcc_output.css");
+            includecss_file("Sequences", "tcc_seq_m.css");
+            includecss_file("Jobs", "tcc_jobs_m.css");
+            includecss_file("Step", "tcc_step_m.css");
+            includecss_file("Dashboards","tcc_operation_m.css");
+            includecss_file("Data","tcc_data.css");
+            //includecss_file("Settings","tcc_setting.css");
+
+
+            includecss_file("Inputs", "inputs.js");
+
+
+        }else{
+           
+            includecss_file("Tools", "tcc_tool.css");
+            includecss_file("Inputs", "tcc_input.css");
+            includecss_file("Outputs", "tcc_output.css");
+            includecss_file("Sequences", "tcc_seq.css");
+            includecss_file("Jobs", "tcc_jobs.css");
+            includecss_file("Step", "tcc_step.css");
+            includecss_file("Dashboards","tcc_operation.css");
+            includecss_file("Data","tcc_data.css");
+            includecss_file("Settings","tcc_setting.css");
+
+
+
+            includecss_file("Inputs", "inputs.js");
+        
+        }
     
 
-<?php 
-
-    includecss_file("Tools", "tcc_tool.css");
-    includecss_file("Inputs", "tcc_input.css");
-    includecss_file("Outputs", "tcc_output.css");
-    includecss_file("Sequences", "tcc_seq.css");
-    includecss_file("Jobs", "tcc_jobs.css");
-    includecss_file("Step", "tcc_step.css");
-    includecss_file("Dashboards","tcc_operation.css");
-    includecss_file("Data","tcc_data.css");
-    includecss_file("Settings","tcc_setting.css");
-
-?>
