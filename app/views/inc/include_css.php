@@ -7,8 +7,8 @@ function includecss_file($part, $cssFileName) {
     
     if($firstPart === $part) { ?>
     <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>">
-    <?php }
-}?>
+    <?php }?>
+<?php }?>
 
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>

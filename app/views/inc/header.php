@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
     <link rel="apple-touch-icon" sizes="60x60" href="<?php echo ICON_NORMAL_APPLE; ?>">
     <link rel="icon" sizes="192x192" href="<?php echo ICON_NORMAL; ?>">
 
@@ -27,15 +27,38 @@
     ?>
     <title><?php echo SITENAME; ?></title>
 
-    <style>
-        .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
-        .t2{font-size: 17px; margin: 5px 0px;}
-        .t3{font-size: 17px; margin: 3px 0px;}
-        .selected { background-color: #9AC0CD !important;}
-        .input-pin img{ height: 25px; width: 40px}
-        .output-pin img{ height: 25px; width: 45px}
-        .disabled_input{ color: #999; pointer-events: none;}
-    </style>
+
+    <?php 
+      $queryString = $_SERVER['QUERY_STRING'];
+      $queryStringWithoutUrl = str_replace('url=', '', $queryString);
+      $parts = explode('/', $queryStringWithoutUrl);
+      $firstPart = $parts[0];
+
+      if($firstPart =="Tools"){?>
+
+        <style>
+
+            .t1{font-size: 15px; margin: 5px 0px; display: flex; align-items: center;padding-left: 7%}
+            .t2{font-size: 14px; margin: 5px 0px;}
+
+        </style>
+
+      <?php }else{?>
+
+        <style>
+            .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
+            .t2{font-size: 17px; margin: 5px 0px;}
+            .t3{font-size: 17px; margin: 3px 0px;}
+            .selected { background-color: #9AC0CD !important;}
+            .input-pin img{ height: 25px; width: 40px}
+            .output-pin img{ height: 25px; width: 45px}
+            .disabled_input{ color: #999; pointer-events: none;}
+        </style>
+        
+
+    <?php } ?>
+    
+   
 
 
 
