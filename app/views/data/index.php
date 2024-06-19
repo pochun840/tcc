@@ -192,29 +192,20 @@
 </div>
 
 <script>
-// Button Home
-
-
-const moonLanding = new Date();
-let yy = moonLanding.getFullYear();
-flatpickr("#start_date,#end_date", {
-    enableTime: true,
-    static: true,
-    inline:true,
-    dateFormat: "Y-m-d H:i",
-    //locale: "", // 設定語言為繁體中文
-    disableMobile: "true",
-    // minDate: String(yy),
-    maxDate: String(yy)+'-12-31',
-    // maxDate: new Date().fp_incr(0) // 14 days from now
+    // Button Home
+    const moonLanding = new Date();
+    let yy = moonLanding.getFullYear();
+    flatpickr("#start_date,#end_date", {
+        enableTime: true,
+        static: true,
+        inline:true,
+        dateFormat: "Y-m-d H:i",
+        //locale: "", // 設定語言為繁體中文
+        disableMobile: "true",
+        // minDate: String(yy),
+        maxDate: String(yy)+'-12-31',
+        // maxDate: new Date().fp_incr(0) // 14 days from now
     });
- 
-
-
-
-
-
-
 </script>
 
 
