@@ -33,7 +33,7 @@ class Jobs extends Controller
         );
         
         if($isMobile){
-            $this->view('jobs/job_management_m', $data);
+            $this->view('jobs/job_management_m',$data);
         }else{
             $this->view('jobs/job_management', $data);
         }
