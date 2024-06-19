@@ -102,11 +102,22 @@ class Data extends Controller
         }
     
         if ($input_check) {
+
+            $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
+            $status_arr = $this->MiscellaneousModel->details('status');
+
+
             $start_date = str_replace('-', "", $start_date);
             $end_date = str_replace('-', "", $end_date);
             $dataset = $this->DataModel->get_range_data($start_date, $end_date);
     
             $dataset = array_slice($dataset, 0, 10000);
+            #整理$dataset 格式內容
+            foreach($dataset as $key =>$val){
+
+                $dataset[$key]['torque_unit']     = $unit_arr[$val['torque_unit']];
+                $dataset[$key]['fasten_status']  = $status_arr[$val['fasten_status']];
+            }
     
             if ($dataset && $expert_val == "0") {
 
