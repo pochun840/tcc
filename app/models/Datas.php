@@ -59,20 +59,4 @@ class Datas{
         }
     }
 
-    /*public function get_range_data_year($start_date,$end_date){
-        
-        $sql = "SELECT * FROM data 
-                WHERE data_time BETWEEN '".$start_date."' AND '".$end_date."'
-                ORDER BY data_time LIMIT 10000";
-        
-        $statement = $this->db_data->prepare($sql);
-        $results = $statement->execute();
-        $row = $statement->fetchall(PDO::FETCH_ASSOC);
-
-        return $row;
-    }*/
-
-  
-
-
 }

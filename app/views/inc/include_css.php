@@ -72,4 +72,5 @@ function includecss_file($part, $cssFileName) {
         }
         includecss_file("Inputs", "inputs.js");
         includecss_file("Jobs", "jobs.js");
+        includecss_file("Data", ".js");
 
