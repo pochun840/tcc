@@ -13,7 +13,7 @@
         <div class="center-content">
             <div class="topnav">
                 <label style="font-size:3vmin;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;&nbsp;
-                <input type="text" id="job_id" name="job_id" size="10" maxlength="20" value="1" disabled
+                <input type="text" id="job_id" name="job_id" size="10" maxlength="20" value="<?php echo $data['job_id'];?>" disabled
                 style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
                 <button id="back_btn" type="button">Return</button>
@@ -437,10 +437,7 @@ window.onclick = function(event) {
     }
 }
 
-// Add Step
-/*document.getElementById('Add_Step').onclick = function() {
-    window.location.href = './tcc_step.html';
-};*/
+
 
 // Button Return
 document.getElementById('back_btn').onclick = function()
@@ -460,53 +457,24 @@ var rowInfoArray = [];
         rowInfoArray.push(rowInfo);
 <?php } ?>
 
+var seqid = ''; 
+
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
     (function(row) {
         var cells = row.getElementsByTagName("td");
         if (cells.length > 0) {
             cells[0].addEventListener("click", function() {
-           
-                var seqid   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
+                seqid = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
                 var seqname = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
-        
                 localStorage.setItem("seqid", seqid);
                 localStorage.setItem("seqname", seqname);
-
             });
         }
     })(rows[i]);
 }
 
-function cound_job(argument){
 
-
-    var table = document.getElementById('seq_table');
-    var selectedRow = table.querySelector('.selected');
-    var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
-    var seqid = selectedRowData || null;
-    
-
-
-    if(argument == 'del' && seqid != null){
-        //console.log(seqid);
-        delete_seqid(seqid);
-    }
-
-    if(argument =="edit" && seqid != null){
-        edit_seq(seqid);
-    }
-
-    if(argument =="new"){
-        create_seq();
-    }
-
-    if(argument =="copy" && seqid != null){
-        copy_seq(seqid);
-    }
-
-
-}
 
 function copy_seq_by_id(){
 
@@ -554,6 +522,8 @@ function copy_seq(seqid){
 
 
 function delete_seqid(jobid,seqid){
+    var jobid = '<?php echo $data['job_id']?>';
+    var seqid = readFromLocalStorage('seqid');
     if (jobid) {
         $.ajax({
             url: "?url=Sequences/delete_seq",

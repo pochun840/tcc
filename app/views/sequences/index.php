@@ -455,7 +455,7 @@ var rowInfoArray = [];
         var rowInfo = {
             sequence_id: sequenceId,
             sequence_name: sequenceName
-        };
+        };-
         
         rowInfoArray.push(rowInfo);
 <?php } ?>
@@ -478,35 +478,6 @@ for (var i = 0; i < rows.length; i++) {
             });
         }
     })(rows[i]);
-}
-
-function cound_job(argument){
-
-
-    var table = document.getElementById('seq_table');
-    var selectedRow = table.querySelector('.selected');
-    var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
-    var seqid = selectedRowData || null;
-    
-
-    if(argument == 'del' && seqid != null){
-        console.log(seqid);
-        //delete_seqid(seqid);
-    }
-
-    if(argument =="edit" && seqid != null){
-        edit_seq(seqid);
-    }
-
-    if(argument =="new"){
-        create_seq();
-    }
-
-    if(argument =="copy" && seqid != null){
-        copy_seq(seqid);
-    }
-
-
 }
 
 function copy_seq_by_id(){
@@ -554,6 +525,9 @@ function copy_seq(seqid){
 
 
 function delete_seqid(jobid,seqid){
+    var jobid = '<?php echo $data['job_id']?>';
+    var seqid = readFromLocalStorage('seqid');
+
     if (jobid) {
         $.ajax({
             url: "?url=Sequences/delete_seq",
