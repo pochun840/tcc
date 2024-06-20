@@ -463,7 +463,7 @@
 
                     <div class="modal-footer justify-content-center">
                         <button id="" class="button-modal" onclick="edit_input_id()">Save</button>
-                        <button id="" class="button-modal" onclick="document.getElementById('editinput').style.display='none'" class="closebtn">Close</button>
+                        <button id="" class="button-modal" onclick="document.getElementById('edit_input').style.display='none'" class="closebtn">Close</button>
                     </div>
                     </div>
                 </div>
@@ -491,8 +491,7 @@
 
                 				        <label for="from_job_name" class="t1 col-4 col-form-label">Job Name :</label>
                 				        <div class="col-5 t2 ">
-                				            <input type="text
-                                            ." class="form-control" id="from_job_name" disabled>
+                				            <input type="text" class="form-control" id="from_job_name" disabled>
                 				        </div>
                 				    </div>
                 			    </div>
@@ -561,21 +560,6 @@ document.getElementById("Event_Option").onchange = function() {
 };
 
 
-function handleEventChange(selectedValue) {
-    if(selectedValue ==109){
-        document.getElementById('work_goc').style.display = 'block';
-    }else{
-        document.getElementById('work_goc').style.display = 'none';
-    }
-}
-
-function edit_handleEventChange(selectedValue) {
-    if(selectedValue ==109){
-        document.getElementById('edit_work_goc').style.display = 'block';
-    }else{
-        document.getElementById('edit_work_goc').style.display = 'none';
-    }
-}
 
 
 // Div Mode
@@ -608,9 +592,6 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
-
-
-
 
 function crud_job_event(argument){
     if(argument == 'new' && job_id != '' && input_event != ''){
@@ -701,8 +682,6 @@ function crud_job_event(argument){
     if(argument == 'unified' && job_id != ''){
         enableButton();
         resetBackgroundColor();
-        console.log('input_job 有值:', input_job);
-        console.log('job_id 有值:', job_id);
 
         if(input_job != job_id){
             alignsubmit(job_id);  
@@ -711,289 +690,6 @@ function crud_job_event(argument){
         }
     }
 }
-
-
-
-
-
-
-function alignsubmit(job_id) {
-    if (job_id) {
-        $.ajax({
-            url: "?url=Inputs/input_alljob",
-            method: "POST",
-            data: {
-                job_id: job_id
-            },
-            success: function (response) {
-                console.log(response);
-                get_input_by_job_id(job_id);
-            
-                buttonDisabled = !buttonDisabled;
-                document.getElementById('Button_Select').disabled = buttonDisabled;
-     
-                backgroundColorYellow = !backgroundColorYellow;
-                if (backgroundColorYellow) {
-                    document.getElementById('job_id').style.backgroundColor = 'yellow';
-                } else {
-                    document.getElementById('job_id').style.backgroundColor = '';
-                }
-            },
-            error: function (xhr, status, error) {
-
-            }
-        });
-    }
-}
-function get_input_info(){
-
-    if(job_id){
-        $.ajax({
-            url: "?url=Inputs/check_job_event_conflict",
-            method: "POST",
-            data: { 
-                job_id: job_id,
-                input_event: input_event,
-            },
-            success: function(response) {
-                
-                var responseJSON = JSON.stringify(response);
-                var cleanString = responseJSON.replace(/Array|\\n/g, '');
-                var cleanString = cleanString.substring(2, cleanString.length - 2);
-
-                var [, jobid] = cleanString.match(/\[input_job_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, input_event] = cleanString.match(/\[input_event]\s*=>\s*([^ ]+)/) || [, null];
-                var [, input_pin] = cleanString.match(/\[input_pin]\s*=>\s*([^ ]+)/) || [, null];
-                var [, input_wave] = cleanString.match(/\[input_wave]\s*=>\s*([^ ]+)/) || [, null];
-                var [, gateconfirm] = cleanString.match(/\[gateconfirm]\s*=>\s*([^ ]+)/) || [, null];
-
-                if(input_wave == 1){
-                    var wave = "_high";
-                }else{
-                    var wave = "_low";
-                }
-                
-                var edit_input_pin = "edit_pin" + input_pin + wave;
-                var radioButton = document.getElementById(edit_input_pin);
-                radioButton.removeAttribute('disabled');
-                old_input_event = input_event;
-                
-                if(radioButton){
-                    radioButton.checked = true;
-                }
-
-                document.querySelector("select[name='edit_Event_Option']").value = input_event;
-
-                document.getElementById("edit_Event_Option").onchange = function() {
-                    var selectedValue = this.value; 
-                    edit_handleEventChange(selectedValue); 
-                };
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-   
-        
-    }
-
-}
-
-function copy_input_id(){
-
-    var to_job_id = document.getElementById("JobSelect1").value;
-    if(to_job_id){
-        $.ajax({
-            url: "?url=Inputs/copy_input_event",
-            method: "POST",
-            data: { 
-                from_job_id: job_id,
-                to_job_id: to_job_id
-            },
-            success: function(response) {
-
-                document.getElementById('newinput').style.display='none';
-                console.log(response);
-                get_input_by_job_id(job_id);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-
-    }
-
-}
-
-
-function create_input_id(){
- 
-    var input_event = document.getElementById("Event_Option").value;
-    var pinval      = collectPinValues('input[name="pin_option"]');
-    var pin_old   = pinval[0]['id'];
-    var input_wave  = pinval[0]['value'];
-    var pagemode    = 1;
-    var input_seqid = 0;
-
-    if(input_event == 109){
-        var selectedOption = document.querySelector('input[name="gateconfirm"]:checked');
-        var gateconfirm    = selectedOption ? selectedOption.value : 0;
-    }else{
-        var gateconfirm	 = 0;
-    }
-
-
-    var input_pin = pin_old.match(/\d+/)[0];
-    if(job_id){
-        $.ajax({
-            url: "?url=Inputs/create_input_event",
-            method: "POST",
-            data: { 
-                job_id: job_id,
-                input_event: input_event,
-                input_pin: 	input_pin,
-                input_wave: input_wave,
-                gateconfirm: gateconfirm,
-                pagemode: pagemode,
-                input_seqid: input_seqid
-            },
-            success: function(response) {
-
-                document.getElementById('newinput').style.display='none';
-                console.log(response);
-                alert(response);
-                get_input_by_job_id(job_id);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-
-    }
-
-
-}
-
-function edit_input_id(){
-
-    var input_event = document.getElementById("edit_Event_Option").value;
-    var pinval      = collectPinValues('input[name="edit_pin_option"]');
-    var pin_old   = pinval[0]['id'];
-    var input_wave  = pinval[0]['value'];
-    var pagemode    = 1;
-    var input_seqid = 0;
-
-    if(input_event == 109){
-        var selectedOption = document.querySelector('input[name="edit_gateconfirm"]:checked');
-        var gateconfirm    = selectedOption ? selectedOption.value : 0;
-    }else{
-        var gateconfirm	 = 0;
-    }
-
-    var input_pin = pin_old.match(/\d+/)[0];
-    if(job_id){
-        $.ajax({
-            url: "?url=Inputs/edit_input_event",
-            method: "POST",
-            data: { 
-                job_id: job_id,
-                input_event: input_event,
-                input_pin: 	input_pin,
-                input_wave: input_wave,
-                gateconfirm: gateconfirm,
-                pagemode: pagemode,
-                input_seqid: input_seqid,
-                old_input_event: old_input_event
-            },
-            success: function(response) {
-
-                document.getElementById('edit_input').style.display='none';
-                console.log(response);
-                alert(response);
-                get_input_by_job_id(job_id);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-
-    }
-}
-
-
-function delete_input_id(jobid,input_event){
-    if(job_id){
-        $.ajax({
-            url: "?url=Inputs/delete_input",
-            method: "POST",
-            data: { 
-                job_id: job_id,
-                input_event: input_event,
-             
-            },
-            success: function(response) {
-                console.log(response);
-                alert(response);
-                get_input_by_job_id(job_id);
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-            }
-        });     
-    }
-
-}
-
-function get_input_by_job_id(jobid){
-    $.ajax({
-        url: "?url=Inputs/get_input_by_job_id",
-        method: "POST",
-        data: { 
-            jobid: jobid,
-        },
-        success: function(response) {
-            var data = JSON.parse(response);
-            var job_inputlist = data.job_inputlist;
-            temp = data.temp;
-            tempA = data.tempA;
-
-            document.getElementById("input_jobid_select").innerHTML = job_inputlist;
-            document.getElementById("JobSelect").style.display = 'none';
-            document.getElementById("job_id").value = jobid;
-        
-            var rows = document.querySelectorAll('#input_jobid_select tr');
-            rows.forEach(function(row) {
-                row.addEventListener('click', function() { 
-                    input_event = this.className; 
-                });
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error("AJAX request failed:", status, error);
-        }
-    }); 
-}
-
-
-function collectPinValues(selector) {
-    var pinOptions = document.querySelectorAll(selector);
-    var selectedValues = [];
-
-    pinOptions.forEach(function(option) {
-        if (option.checked){ 
-            var radioInfo = {
-                id: option.id,
-                value: option.value
-            };
-            selectedValues.push(radioInfo);
-        }
-    });
-
-    return selectedValues;
-}
-
- 
-
 </script>
 
 </body>

@@ -145,23 +145,11 @@
                                 <div class="row">
                                     <div for="event" class="col-3 t1">Event :</div>
                                     <div class="col-2 t2">
-                                        <select id="Event_Option" class="col custom-file">
-                                            <option value="-1" disabled selected>Option</option>
-                                            <option value="101">Disable</option>
-                                            <option value="102">Enable</option>
-                                            <option value="103">Clear</option>
-                                            <option value="104">Confirm</option>
-                                            <option value="105">Start-IN(Remote)</option>
-                                            <option value="106">Unscrew(Remote)</option>
-                                            <option value="107">Sequence Clear</option>
-                                            <option value="108">Reboot</option>
-                                            <option value="109">Gate Once</option>
-                                            <option value="110">UserDefine1</option>
-                                            <option value="111">UserDefine2</option>
-                                            <option value="112">UserDefine3</option>
-                                            <option value="113">UserDefine4</option>
-                                            <option value="114">UserDefine5</option>
-                                            <option value="1">SW Job1</option>
+                                        <select id="Event_Option" name ="Event_Option" class="col custom-file">
+                                                <?php foreach($data['event'] as $key =>$val){?>
+                                                    <option value ='<?php echo $key;?>'><?php echo $val;?></option>
+                                                <?php } ?>
+                                        
                                         </select>
                                     </div>
                                 </div>
@@ -292,12 +280,216 @@
                     					</div>
                                     </div>
                                 </div>
+
+                                
+                                <div class="row input-pin"  id='work_goc'style="display: none;">
+                                    <div class="col-2 t1" class="col-3 t1">WRC:</div>
+                                    <div class="col t2">
+                    			      	<div class="col-4 form-check form-check-inline">
+                                          <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_0" value="0" checked>
+                                          <label class="form-check-label">NO</label>
+                    					  
+                    					</div>
+                    					<div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_1" value="1" >
+                                            <label class="form-check-label">YES</label>
+                    					    
+                    					</div>
+                                    </div>
+                                </div>
+
+
+                                
+
                             </form>
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <button id="" class="button-modal" onclick="add_member_user()">Save</button>
+                            <button id="" class="button-modal" onclick="create_input_id()">Save</button>
                             <button id="" class="button-modal" onclick="document.getElementById('newinput').style.display='none'" class="closebtn">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Edit Input -->
+            <div id="edit_input" class="modal">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content w3-animate-zoom" style="width: 90%">
+                        <header class="w3-container modal-header">
+                            <span onclick="document.getElementById('edit_input').style.display='none'"
+                                class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
+                            <h3 id='modal_title'>Edit Event</h3>
+                        </header>
+
+                        <div class="modal-body">
+                            <form id="new_input_form" style="padding-left: 5%">
+                                <div class="row">
+                                    <div for="event" class="col-3 t1">Event :</div>
+                                    <div class="col-2 t2">
+                                        <select id="edit_Event_Option" name ="edit_Event_Option" class="col custom-file">
+                                                <?php foreach($data['event'] as $key =>$val){?>
+                                                    <option value ='<?php echo $key;?>'><?php echo $val;?></option>
+                                                <?php } ?>
+                                        
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row input-pin">
+                                    <div class="col-2 t1" style="margin-left: 5%">2:</div>
+                                    <div class="col t2">
+                    			      	<div class="col-4 form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_high" value="1">
+                    					    <label class="form-check-label" for="pin2_high"><img src="./img/high.png"></label>
+                    					</div>
+                    					<div class="form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_low" value="1">
+                    					    <label class="form-check-label" for="pin2_low"><img src="./img/low.png"></label>
+                    					</div>
+                                    </div>
+                                </div>
+
+                                <div class="row input-pin">
+                                    <div class="col-2 t1" style="margin-left: 5%">3:</div>
+                                    <div class="col t2" >
+                    			      	<div class="col-4 form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_high" value="1">
+                    					    <label class="form-check-label" for="pin3_high"><img src="./img/high.png"></label>
+                    					</div>
+                    					<div class="form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_low" value="1">
+                    					    <label class="form-check-label" for="pin3_low"><img src="./img/low.png"></label>
+                    					</div>
+                                    </div>
+                                </div>
+
+                                <div class="row input-pin">
+                                    <div class="col-2 t1" style="margin-left: 5%">4:</div>
+                                    <div class="col t2">
+                    			      	<div class="col-4 form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_high" value="1">
+                    					    <label class="form-check-label" for="pin4_high"><img src="./img/high.png"></label>
+                    					</div>
+                    					<div class="form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_low" value="1">
+                    					    <label class="form-check-label" for="pin4_low"><img src="./img/low.png"></label>
+                    					</div>
+                                    </div>
+                                </div>
+
+                                <div class="row input-pin">
+                                    <div class="col-2 t1" style="margin-left: 5%">5:</div>
+                                    <div class="col t2">
+                    			      	<div class="col-4 form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_high" value="1">
+                    					    <label class="form-check-label" for="pin5_high"><img src="./img/high.png"></label>
+                    					</div>
+                    					<div class="form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_low" value="1">
+                    					    <label class="form-check-label" for="pin5_low"><img src="./img/low.png"></label>
+                    					</div>
+                                    </div>
+                                </div>
+
+                                <div class="row input-pin">
+                                    <div class="col-2 t1" style="margin-left: 5%">6:</div>
+                                    <div class="col t2" >
+                    			      	<div class="col-4 form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_high" value="1">
+                    					    <label class="form-check-label" for="pin6_high"><img src="./img/high.png"></label>
+                    					</div>
+                    					<div class="col form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_low" value="1">
+                    					    <label class="form-check-label" for="pin6_low"><img src="./img/low.png"></label>
+                    					</div>
+                                    </div>
+                                </div>
+
+                                <div class="row input-pin">
+                                    <div class="col-2 t1" style="margin-left: 5%">7:</div>
+                                    <div class="col t2">
+                    			      	<div class="col-4 form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_high" value="1">
+                    					    <label class="form-check-label" for="pin7_high"><img src="./img/high.png"></label>
+                    					</div>
+                    					<div class="form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_low" value="1">
+                    					    <label class="form-check-label" for="pin7_low"><img src="./img/low.png"></label>
+                    					</div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row input-pin">
+                                    <div class="col-2 t1" style="margin-left: 5%">8:</div>
+                                    <div class="col t2">
+                    			      	<div class="col-4 form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_high" value="1">
+                    					    <label class="form-check-label" for="pin8_high"><img src="./img/high.png"></label>
+                    					</div>
+                    					<div class="form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_low" value="1">
+                    					    <label class="form-check-label" for="pin8_low"><img src="./img/low.png"></label>
+                    					</div>
+                                    </div>
+                                </div>
+
+                                <div class="row input-pin">
+                                    <div class="col-2 t1" style="margin-left: 5%">9:</div>
+                                    <div class="col t2">
+                    			      	<div class="col-4 form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_high" value="1">
+                    					    <label class="form-check-label" for="pin9_high"><img src="./img/high.png"></label>
+                    					</div>
+                    					<div class="form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_low" value="1">
+                    					    <label class="form-check-label" for="pin9_low"><img src="./img/low.png"></label>
+                    					</div>
+                                    </div>
+                                </div>
+
+                                <div class="row input-pin">
+                                    <div class="col-2 t1" style="margin-left: 5%">10:</div>
+                                    <div class="col t2">
+                    			      	<div class="col-4 form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_high" value="1">
+                    					    <label class="form-check-label" for="pin10_high"><img src="./img/high.png"></label>
+                    					</div>
+                    					<div class="form-check form-check-inline">
+                    					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_low" value="1">
+                    					    <label class="form-check-label" for="pin10_low"><img src="./img/low.png"></label>
+                    					</div>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="row input-pin"  id='work_goc'style="display: none;">
+                                    <div class="col-2 t1" class="col-3 t1">WRC:</div>
+                                    <div class="col t2">
+                    			      	<div class="col-4 form-check form-check-inline">
+                                          <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" value="0" checked>
+                                          <label class="form-check-label">NO</label>
+                    					  
+                    					</div>
+                    					<div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_1" value="1" >
+                                            <label class="form-check-label">YES</label>
+                    					    
+                    					</div>
+                                    </div>
+                                </div>
+
+
+                                
+
+                            </form>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">
+                            <button id="" class="button-modal" onclick="edit_input_id()">Save</button>
+                            <button id="" class="button-modal" onclick="document.getElementById('edit_input').style.display='none'" class="closebtn">Close</button>
                         </div>
                     </div>
                 </div>
@@ -325,7 +517,7 @@
 
                 				        <label for="from_job_name" class="t1 col-4 col-form-label">Job Name :</label>
                 				        <div class="col-5 t2 ">
-                				            <input type="number" class="form-control" id="from_job_name" disabled>
+                				            <input type="text" class="form-control" id="from_job_name"  disabled>
                 				        </div>
                 				    </div>
                 			    </div>
@@ -335,12 +527,12 @@
                 				    <div class="row">
                 				        <label for="to_step_id" class="t1 col-4 col-form-label">Job :</label>
                 				        <div class="t2 col-6">
-                                            <select id="JobSelect" class="col custom-file" style="margin: center; width: 153px">
-                                                <option value="1">1 - Job1</option>
-                                                <option value="2">2 - Job2</option>
-                                                <option value="3">3 - Job </option>
-                                                <option value="4">4 - Job </option>
-                                                <option value="5">5 - Job5</option>
+                                            <select id="JobSelect1" class="col custom-file" style="margin: center; width: 153px">
+                                                <?php foreach($data['job_list'] as $kk => $vv){?>
+                                                    <option id ='job_list_option' value="<?php echo $vv['job_id']; ?>">
+                                                        <?php echo $vv['job_id'] . " - " . $vv['job_name']; ?>
+                                                    </option>
+                                                <?php } ?>
                                              </select>
                 				        </div>
                 				    </div>
@@ -349,7 +541,7 @@
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <button id="" class="button-modal" onclick="add_member_user()">Save</button>
+                            <button id="" class="button-modal" onclick="copy_input_id()">Save</button>
                             <button id="" class="button-modal" onclick="document.getElementById('copyinput').style.display='none'" class="closebtn">Close</button>
                         </div>
                     </div>
@@ -360,25 +552,33 @@
 </div>
 
 <script>
-// Change the color of a row in a table
+
+var job_id; 
+var input_event;
+var temp;
+var tempA;
+var selectedValue;
+var old_input_event;
+var all_job;
+var buttonDisabled = false;
+var backgroundColorYellow = false;
+var input_job;
+
+
 $(document).ready(function () {
     highlight_row('input_table');
-    });
 
-function highlight_row(tableId)
-{
-    var table = document.getElementById(tableId);
-    var rows = table.getElementsByTagName('tr');
-
-    for (var i = 1; i < rows.length; i++) {
-        rows[i].onclick = function () {
-            for (var j = 1; j < rows.length; j++) {
-                rows[j].classList.remove('selected');
-            }
-            this.classList.add('selected');
-        }
+    var all_input_job = '<?php echo $data['device_data']['device_input_all_job']?>';
+    job_id = all_input_job;
+    input_job = all_input_job;
+    if(job_id){
+        get_input_by_job_id(job_id);
+        document.getElementById('Button_Select').disabled = true;
+        document.getElementById('job_id').style.backgroundColor = 'yellow';
     }
-}
+
+    
+});
 
 // Div Mode
 function toggleDivs() {
@@ -397,6 +597,7 @@ function toggleDivs() {
 function showTableInputSetting() {
     document.getElementById('TableInputSetting').style.display = 'block';
     document.getElementById('TableDataInput').style.display = 'none';
+    document.getElementById('input_menu').style.display = 'block';
 }
 
 // Get the modal
@@ -406,6 +607,13 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+
+document.getElementById("Event_Option").onchange = function() {
+    var selectedValue = this.value; 
+    handleEventChange(selectedValue); 
+};
+
 
 
 function crud_job_event(argument){
@@ -497,8 +705,8 @@ function crud_job_event(argument){
     if(argument == 'unified' && job_id != ''){
         enableButton();
         resetBackgroundColor();
-        console.log('input_job 有值:', input_job);
-        console.log('job_id 有值:', job_id);
+        //console.log('input_job 有值:', input_job);
+        //console.log('job_id 有值:', job_id);
 
         if(input_job != job_id){
             alignsubmit(job_id);  
@@ -507,307 +715,6 @@ function crud_job_event(argument){
         }
     }
 }
-
-
-function resetalignsubmit(job_id) {
-
-    var job_id_new = 0;
- 
-    if(job_id_new == 0){
-        console.log(job_id_new);
-        console.log(job_id);
-        $.ajax({
-            url: "?url=Inputs/input_alljob",
-            method: "POST",
-            data: {
-                job_id_new: job_id_new
-            },
-            success: function (response) {
-                console.log(response);
-                get_input_by_job_id(job_id);
-            },
-            error: function (xhr, status, error) {
-
-            }
-        });
-    }
-}
-
-function alignsubmit(job_id) {
-    if (job_id) {
-        $.ajax({
-            url: "?url=Inputs/input_alljob",
-            method: "POST",
-            data: {
-                job_id: job_id
-            },
-            success: function (response) {
-                console.log(response);
-                get_input_by_job_id(job_id);
-            
-                buttonDisabled = !buttonDisabled;
-                document.getElementById('Button_Select').disabled = buttonDisabled;
-     
-                backgroundColorYellow = !backgroundColorYellow;
-                if (backgroundColorYellow) {
-                    document.getElementById('job_id').style.backgroundColor = 'yellow';
-                } else {
-                    document.getElementById('job_id').style.backgroundColor = '';
-                }
-            },
-            error: function (xhr, status, error) {
-
-            }
-        });
-    }
-}
-function get_input_info(){
-
-    if(job_id){
-        $.ajax({
-            url: "?url=Inputs/check_job_event_conflict",
-            method: "POST",
-            data: { 
-                job_id: job_id,
-                input_event: input_event,
-            },
-            success: function(response) {
-                
-                var responseJSON = JSON.stringify(response);
-                var cleanString = responseJSON.replace(/Array|\\n/g, '');
-                var cleanString = cleanString.substring(2, cleanString.length - 2);
-
-                var [, jobid] = cleanString.match(/\[input_job_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, input_event] = cleanString.match(/\[input_event]\s*=>\s*([^ ]+)/) || [, null];
-                var [, input_pin] = cleanString.match(/\[input_pin]\s*=>\s*([^ ]+)/) || [, null];
-                var [, input_wave] = cleanString.match(/\[input_wave]\s*=>\s*([^ ]+)/) || [, null];
-                var [, gateconfirm] = cleanString.match(/\[gateconfirm]\s*=>\s*([^ ]+)/) || [, null];
-
-                if(input_wave == 1){
-                    var wave = "_high";
-                }else{
-                    var wave = "_low";
-                }
-                
-                var edit_input_pin = "edit_pin" + input_pin + wave;
-                var radioButton = document.getElementById(edit_input_pin);
-                radioButton.removeAttribute('disabled');
-                old_input_event = input_event;
-                
-                if(radioButton){
-                    radioButton.checked = true;
-                }
-
-                document.querySelector("select[name='edit_Event_Option']").value = input_event;
-
-                document.getElementById("edit_Event_Option").onchange = function() {
-                    var selectedValue = this.value; 
-                    edit_handleEventChange(selectedValue); 
-                };
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-   
-        
-    }
-
-}
-
-function copy_input_id(){
-
-    var to_job_id = document.getElementById("JobSelect1").value;
-    if(to_job_id){
-        $.ajax({
-            url: "?url=Inputs/copy_input_event",
-            method: "POST",
-            data: { 
-                from_job_id: job_id,
-                to_job_id: to_job_id
-            },
-            success: function(response) {
-
-                document.getElementById('newinput').style.display='none';
-                console.log(response);
-                get_input_by_job_id(job_id);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-
-    }
-
-}
-
-
-function create_input_id(){
- 
-    var input_event = document.getElementById("Event_Option").value;
-    var pinval      = collectPinValues('input[name="pin_option"]');
-    var pin_old   = pinval[0]['id'];
-    var input_wave  = pinval[0]['value'];
-    var pagemode    = 1;
-    var input_seqid = 0;
-
-    if(input_event == 109){
-        var selectedOption = document.querySelector('input[name="gateconfirm"]:checked');
-        var gateconfirm    = selectedOption ? selectedOption.value : 0;
-    }else{
-        var gateconfirm	 = 0;
-    }
-
-
-    var input_pin = pin_old.match(/\d+/)[0];
-    if(job_id){
-        $.ajax({
-            url: "?url=Inputs/create_input_event",
-            method: "POST",
-            data: { 
-                job_id: job_id,
-                input_event: input_event,
-                input_pin: 	input_pin,
-                input_wave: input_wave,
-                gateconfirm: gateconfirm,
-                pagemode: pagemode,
-                input_seqid: input_seqid
-            },
-            success: function(response) {
-
-                document.getElementById('newinput').style.display='none';
-                console.log(response);
-                alert(response);
-                get_input_by_job_id(job_id);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-
-    }
-
-
-}
-
-function edit_input_id(){
-
-    var input_event = document.getElementById("edit_Event_Option").value;
-    var pinval      = collectPinValues('input[name="edit_pin_option"]');
-    var pin_old   = pinval[0]['id'];
-    var input_wave  = pinval[0]['value'];
-    var pagemode    = 1;
-    var input_seqid = 0;
-
-    if(input_event == 109){
-        var selectedOption = document.querySelector('input[name="edit_gateconfirm"]:checked');
-        var gateconfirm    = selectedOption ? selectedOption.value : 0;
-    }else{
-        var gateconfirm	 = 0;
-    }
-
-    var input_pin = pin_old.match(/\d+/)[0];
-    if(job_id){
-        $.ajax({
-            url: "?url=Inputs/edit_input_event",
-            method: "POST",
-            data: { 
-                job_id: job_id,
-                input_event: input_event,
-                input_pin: 	input_pin,
-                input_wave: input_wave,
-                gateconfirm: gateconfirm,
-                pagemode: pagemode,
-                input_seqid: input_seqid,
-                old_input_event: old_input_event
-            },
-            success: function(response) {
-
-                document.getElementById('edit_input').style.display='none';
-                console.log(response);
-                alert(response);
-                get_input_by_job_id(job_id);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-
-    }
-}
-
-
-function delete_input_id(jobid,input_event){
-    if(job_id){
-        $.ajax({
-            url: "?url=Inputs/delete_input",
-            method: "POST",
-            data: { 
-                job_id: job_id,
-                input_event: input_event,
-             
-            },
-            success: function(response) {
-                console.log(response);
-                alert(response);
-                get_input_by_job_id(job_id);
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-            }
-        });     
-    }
-
-}
-
-function get_input_by_job_id(jobid){
-    $.ajax({
-        url: "?url=Inputs/get_input_by_job_id",
-        method: "POST",
-        data: { 
-            jobid: jobid,
-        },
-        success: function(response) {
-            var data = JSON.parse(response);
-            var job_inputlist = data.job_inputlist;
-            temp = data.temp;
-            tempA = data.tempA;
-
-            document.getElementById("input_jobid_select").innerHTML = job_inputlist;
-            document.getElementById("JobSelect").style.display = 'none';
-            document.getElementById("job_id").value = jobid;
-        
-            var rows = document.querySelectorAll('#input_jobid_select tr');
-            rows.forEach(function(row) {
-                row.addEventListener('click', function() { 
-                    input_event = this.className; 
-                });
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error("AJAX request failed:", status, error);
-        }
-    }); 
-}
-
-
-function collectPinValues(selector) {
-    var pinOptions = document.querySelectorAll(selector);
-    var selectedValues = [];
-
-    pinOptions.forEach(function(option) {
-        if (option.checked){ 
-            var radioInfo = {
-                id: option.id,
-                value: option.value
-            };
-            selectedValues.push(radioInfo);
-        }
-    });
-
-    return selectedValues;
-}
-
 </script>
 
 
