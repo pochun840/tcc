@@ -655,16 +655,18 @@ function Firmware_Update() {
 
 function button_save_password_gust(){
 
+    var device_id = <?php echo $data['controller_info']['device_id'];?>;
+
     var pass_guest1 = document.getElementById('new_password_guest').value;
     var pass_guest2 = document.getElementById('comfirm_password_guest').value;
 
     if(pass_guest1 == pass_guest2){
         $.ajax({
-            url: "?url=Settings/edit_password",
+            url: "?url=Admins/EditGuestPwd",
             method: "POST",
             data:{ 
                 device_id: device_id,
-                new_password: new_password
+                new_password: pass_guest1
 
             },
             success: function(response) {
@@ -680,6 +682,42 @@ function button_save_password_gust(){
     
 }
 
+const fileUploader = document.querySelector('#file-uploader');
+
+function idas_update() {
+    let ff = document.querySelector('#file-uploader').files;
+    let bb = document.getElementById("file-uploader").files[0];
+    let form = new FormData();
+    form.append("file", bb)
+
+    let url = '?url=Settings/iDas_Update';
+    $.ajax({ // 提醒
+        type: "POST",
+        processData: false,
+        cache: false,
+        contentType: false,
+        data: form,
+        dataType: "json",
+        url: url,
+        beforeSend: function() {
+            $('#overlay').removeClass('hidden');
+        },
+    }).done(function(result) { //成功且有回傳值才會執行
+        $('#overlay').addClass('hidden');
+
+        if (result.message != '') {
+            Swal.fire({ // DB sync notice
+                title: 'Error',
+                text: result.message,
+            })
+        } else {
+            Swal.fire('', '', 'success');
+            setTimeout(function() {history.go(0)}, 2000);
+        }
+        document.getElementById("file-uploader").value = '';
+        
+    });
+}
 </script>    
 
 </body>

@@ -89,14 +89,13 @@ class Admins extends Controller
             $result = false;
         }
         
-
-        if(!$result){
-            echo json_encode(array('error' => 'fail'));
-            exit();
+        if($result){
+            $res_msg = 'edit: guest password  success';
         }else{
-            echo json_encode(array('error' => ''));
-            exit();
+            $res_msg = 'edit: guest password  fail';
         }
+        echo $res_msg;
+
     }
 
     //

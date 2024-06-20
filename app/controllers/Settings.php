@@ -144,6 +144,7 @@ class Settings extends Controller
 
     }
 
+
     public function edit_permission()
     {
         //default array
@@ -949,11 +950,11 @@ class Settings extends Controller
             //gtcs與gtcs db版本與更新包相符才會將檔案升級
             if( $match_gtcs_version == $current_device_info['device_version'] && $match_gtcs_db_version == $current_device_info['tcscondb_version'] ){
                 if( PHP_OS_FAMILY == 'Linux'){
-                    $destination = '/var/www/html/das/';
+                    $destination = '/var/www/html/tcc/';
                 }else{
-                    $destination = $file_location.'/das';
+                    $destination = $file_location.'/tcc';
                 }
-                exec("sudo chmod 777 -R /var/www/html/das");
+                exec("sudo chmod 777 -R /var/www/html/tcc");
 
                 $this->copyFolder($file_location.'/package_temp/package/das',$destination); //複製資料夾
                 
@@ -965,10 +966,7 @@ class Settings extends Controller
 
             }else{
                 $message = 'version not match';
-                // $message .= ', package device match version = '.$match_gtcs_version;
-                // $message .= ', package db match version = '.$match_gtcs_db_version;
-                // $message .= ', controller device version = '.$current_device_info['device_version'];
-                // $message .= ', controller db version = '.$current_device_info['tcscondb_version'];
+            
             }
 
             $this->deleteFolder($file_location.'package_temp'); //刪除資料夾
