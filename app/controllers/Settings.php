@@ -23,6 +23,10 @@ class Settings extends Controller
         $lang = $this->MiscellaneousModel->details('lang');
         $controller_info = $this->SettingModel->GetControllerInfo();
         $active_session = $this->AdminModel->GetActiveSession();
+        $iDas_Vesion = $this->AdminModel->Get_Das_Config('idas_version');
+
+
+     
 
         /*$isMobile = $this->isMobileCheck();
         $Controller_Info = $this->SettingModel->GetControllerInfo();
@@ -70,7 +74,8 @@ class Settings extends Controller
         $data = array(
             'lang_arr' =>$lang,
             'controller_info' => $controller_info,
-            'active_session' => $active_session
+            'active_session'  => $active_session,
+            'iDas_Vesion'     => $iDas_Vesion,
 
         );
         $this->view('setting/index', $data);
