@@ -69,8 +69,26 @@ class Sequences extends Controller
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : 0;
             $torque_unit_val = isset($_POST['torque_unit_val']) ? intval($_POST['torque_unit_val']) : 0;
             $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
-            $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;      
+            $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
+            
+            
+            if ($k_value < 1.5 || $k_value > 999.8){
+                $k_value = 100.0;
+            }
 
+            if($ok_time < 0.0 || $ok_time > 9.9){
+                $ok_time  = 9.9;
+            }
+
+            if($okall_alarm_time < 0.0 || $okall_alarm_time > 9.9){
+                $okall_alarm_tim = 1.0;
+            }
+
+            if ($offset < -254 || $offset > 254) {
+                $offset = 0; 
+            }
+
+            $offset = sprintf("%+03d", $offset);
 
             $jobdata = array(
                 'job_id' => $jobid,
@@ -148,6 +166,26 @@ class Sequences extends Controller
             $torque_unit_val = isset($_POST['torque_unit']) ? intval($_POST['torque_unit']) : 0;
             $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
+
+            if ($k_value < 1.5 || $k_value > 999.8){
+                $k_value = 100.0;
+            }
+
+            if($ok_time < 0.0 || $ok_time > 9.9){
+                $ok_time  = 9.9;
+            }
+
+            if($okall_alarm_time < 0.0 || $okall_alarm_time > 9.9){
+                $okall_alarm_tim = 1.0;
+            }
+
+            if ($offset < -254 || $offset > 254) {
+                $offset = 0; 
+            }
+
+            $offset = sprintf("%+03d", $offset);
+
+
             
             $seq_count = $this->sequenceModel->countseq($jobid);
             $seq_count = intval($seq_count);
