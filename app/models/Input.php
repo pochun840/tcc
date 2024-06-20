@@ -165,9 +165,8 @@ class Input{
 
     //set input_alljob
     public function set_input_alljob($input_job_id){
-
         $sql = "UPDATE device SET device_input_all_job = ?";
-        $statement = $this->db_iDas->prepare($sql);
+        $statement = $this->db_iDas_device->prepare($sql);
         $results   = $statement->execute([$input_job_id]);
         return $results;
     }
