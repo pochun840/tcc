@@ -38,8 +38,12 @@ class Outputs extends Controller
             
         );
 
-
-        $this->view('output/index', $data);
+        if($isMobile){
+            $this->view('output/index_m', $data);
+        }else{
+            $this->view('output/index', $data);
+        }
+        
     }
 
     // get_input_by_job_id
@@ -73,11 +77,32 @@ class Outputs extends Controller
                         $tempA[] = $vv['output_event'];
                     }
 
-                    $job_outputlist .= "<tr class='".$vv['output_event']."'>";
-                    $job_outputlist .= '<td>'.$event_output[$vv['output_event']].'</td>';
-                    $job_outputlist .= $this->OutputModel->generateTableCell($vv['output_pin'],$vv['wave']);
-                    $job_outputlist .= '<td>'.$vv['wave_on'].'</td>';
-                    $job_outputlist .= '</tr>';
+                    $isMobile = $this->isMobileCheck();
+                    if($isMobile){
+
+                        if($vv['wave'] == 1){
+                            $img = '<img src="./img/signal01.png" style="max-width: 50px;">';
+                        }else if($vv['wave'] == 2){
+                            $img = '<img src="./img/signal02.png" style="max-width: 50px;">';
+                        }else{
+                            $img = '<img src="./img/signal03.png" style="max-width: 50px;">';
+                        }   
+
+                        $job_outputlist .= "<tr class='".$vv['output_event']."'>";
+                        $job_outputlist .= '<td>'.$event_output[$vv['output_event']].'</td>';
+                        $job_outputlist .= '<td>'.$vv['output_pin'].'</td>';
+                        $job_outputlist .= '<td>'.$img.'</td>';
+                        $job_outputlist .= '<td>'.$vv['wave_on'].'</td>';
+                        $job_outputlist .= '</tr>';
+                    }else{
+                        $job_outputlist .= "<tr class='".$vv['output_event']."'>";
+                        $job_outputlist .= '<td>'.$event_output[$vv['output_event']].'</td>';
+                        $job_outputlist .= $this->OutputModel->generateTableCell($vv['output_pin'],$vv['wave']);
+                        $job_outputlist .= '<td>'.$vv['wave_on'].'</td>';
+                        $job_outputlist .= '</tr>';
+                    }
+
+                   
                 }
 
             }

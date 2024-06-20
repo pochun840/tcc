@@ -46,7 +46,7 @@ function includecss_file($part, $cssFileName) {
         if ($isMobile){
             includecss_file("Tools", "tcc_tool.css");
             includecss_file("Inputs", "tcc_input_m.css");
-            //includecss_file("Outputs", "tcc_output.css");
+            includecss_file("Outputs", "tcc_output_m.css");
             includecss_file("Sequences", "tcc_seq_m.css");
             includecss_file("Jobs", "tcc_jobs_m.css");
             includecss_file("Step", "tcc_step_m.css");
@@ -66,6 +66,7 @@ function includecss_file($part, $cssFileName) {
         }
         # 載入js 
         includecss_file("Inputs", "inputs.js");
+        includecss_file("Outputs", "outputs.js");
         includecss_file("Jobs", "jobs.js");
         includecss_file("Data", "data.js");
 

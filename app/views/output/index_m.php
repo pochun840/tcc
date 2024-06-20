@@ -18,66 +18,55 @@
     <div class="main-content">
         <div class="center-content">
             <div class="topnav">
-                <label style="font-size:2.5vmin;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;
-                <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="" disabled style="height:30px; font-size:2.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
+                <label style="font-size:3vmin;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;
+                <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="1" disabled style="height:30px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
                 <button id="Button_Select" type="button" onclick="document.getElementById('JobSelect').style.display='block'">Select</button>
             </div>
 
             <!-- Job Select Modal -->
-            <div id="JobSelect" class="modal">
-                <form class="w3-modal-content w3-card-4 w3-animate-zoom" style="width: 400px; top: 12%; left: -20%" action="">
+            <div id="JobSelect" class="modal" style="width: 325px;">
+                <form class="w3-modal-content w3-animate-zoom" style="top: 13%;" action="">
                     <div class="w3-light-grey">
                         <header class="w3-container w3-dark-grey" style="height: 48px">
                             <span onclick="document.getElementById('JobSelect').style.display='none'" class="w3-button w3-red w3-large w3-display-topright" style="margin: 2px">&times;</span>
                             <h3 style="margin: 5px">Job Select</h3>
                         </header>
-                        <table id="Job_Select">
-                            <tr>
-                                <td>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-2 t2" style="margin-left: 3px">
                                     <select style="margin: center" id="JobNameSelect" name="JobNameSelect" size="200">
                                         <?php foreach($data['job_list'] as $key =>$val){?>
                                             <option value="<?php echo $val['job_id'];?>"><?php echo $val['job_name'];?></option>
                                         <?php }?>                                                                                                                                
                                      </select>
-                                </td>
-                            </tr>
-                        </table>
+                                </div>
+                            </div>
+                        </div>    
                     </div>
                     <div class="modal-footer justify-content-center w3-dark-grey" style="height: 48px">
                         <button id="select_confirm" type="button" class="btn btn-primary" onclick='job_confirm()'>Confirm</button>
-                        <button id="select_close" type="button" class="btn btn-secondary" onclick="document.getElementById('JobSelect').style.display='none'">Close</button>
+                        <button id="select_close" type="button" class="btn btn-secondary" onclick="document.getElementById('JobSelect').style.display='none'" >Close</button>
                     </div>
                 </form>
             </div>
 
             <!-- Table Input -->
-            <!---./img/signal01.png持續 -->
-            <!---./img/signal02.png單一週期 -->
-            <!---./img/trigger.png起子trigger觸發-->
             <div id="TableOutputSetting">
-                <div class="table-output">
+                <div class="table-container">
                     <div class="scrollbar" id="style-outputtable">
-                        <div class="scrollbar-force-overflow">
+                        <div class="force-overflow">
                             <table id="output_table" class="table w3-table-all w3-hoverable">
-                                <thead class="header-table">
-                                    <tr class="w3-dark-grey">
-                                        <th>Event</th>
-                                        <th>1</th>
-                                        <th>2</th>
-                                        <th>3</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>6</th>
-                                        <th>7</th>
-                                        <th>8</th>
-                                        <th>9</th>
-                                        <th>10</th>
-                                        <th>11</th>
-                                        <th>Time</th>
+                                <thead id="header-table">
+                                    <tr class="w3-dark-grey" style="font-size: 2.6vmin">
+                                        <th class="w3-center">Event</th>
+                                        <th class="w3-center">Pin</th>
+                                        <th class="w3-center"></th>
+                                        <th class="w3-center">Time</th>
                                     </tr>
-                                </thead>
+                               </thead>
 
-                                <tbody id="output_jobid_select" style="font-size: 1.8vmin;text-align: center;"></tbody>
+                                <tbody style="font-size: 2.5vmin;text-align: center;" id="output_jobid_select" >
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -96,16 +85,16 @@
 
             <!-- Add New Output -->
             <div id="new_output" class="modal">
-                <div class="modal-dialog modal-lg" style="top: 3%;">
-                    <div class="modal-content w3-animate-zoom" style="width:65%">
+                <div class="modal-dialog modal-lg" style="top: 6%;">
+                    <div class="modal-content w3-animate-zoom" style="width: auto">
                         <header class="w3-container modal-header">
                             <span onclick="document.getElementById('new_output').style.display='none'"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                             <h3 id='modal_title'>Create Event</h3>
                         </header>
 
-                        <div class="modal-body">
-                            <form id="new_output_form" style="padding-left: 5%">
+                        <div class="modal-body" id="new_output">
+                            <form id="new_output_from" style="padding-left: 2%; padding-right: 1%">
                                 <div class="row">
                                     <div for="event" class="col-3 t1">Event :</div>
                                     <div class="col-2 t2">
@@ -118,201 +107,201 @@
                                 </div>
 
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">1:</div>
-                    			    <div class="col-sm-2 t2 form-check form-check-inline">
-                    				    <input class="form-check-input" type="radio" name="pin_option" id="pin1_1" value="1">
+                                    <div class="col t1">1:</div>
+                    			    <div class="col t2 form-check form-check-inline">
+                    				    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin1_1" value="1">
                     				    <label class="form-check-label" for="pin1_signal01"><img src="./img/signal01.png"></label>
                     				</div>
-                    				<div class="col-sm-2 t2 form-check form-check-inline">
-                    				    <input class="form-check-input" type="radio" name="pin_option" id="pin1_2" value="2">
+                    				<div class="col t2 form-check form-check-inline">
+                    				    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin1_2" value="2" >
                     				    <label class="form-check-label" for="pin1_signal02"><img src="./img/signal02.png"></label>
                     				</div>
-                    				<div class="col-sm-2 t2 form-check form-check-inline">
-                    				    <input class="form-check-input" type="radio" name="pin_option" id="pin1_3" value="3">
+                    				<div class="col t2 form-check form-check-inline">
+                    				    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin1_3" value="3">
                     				    <label class="form-check-label" for="pin1_trigger"><img src="./img/trigger.png"></label>
                     				</div>
-                  				    <div class="col-sm-2 t2">
-                				        <input type="text" class="form-control" id="time1" placeholder="ms" value=""  style="height: 28px;text-align: center;">
+                  				    <div class="col-3 t2">
+                				        <input type="text" class="t4 form-control" id="time1" placeholder="ms" value="" >
                    				    </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">2:</div>
-                  			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_1" value="1">
+                                    <div class="col t1">2:</div>
+                  			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin2_1" value="1">
                    					    <label class="form-check-label" for="pin2_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin2_2" value="2">
                    					    <label class="form-check-label" for="pin2_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin2_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin2_3" value="3">
                    					    <label class="form-check-label" for="pin2_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-            				            <input type="text" class="form-control" id="time2" placeholder="ms"  style="height: 28px; text-align: center;">
+              				        <div class="col-3 t2">
+            				            <input type="text" class="t4 form-control" id="time2" placeholder="ms" value="" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">3:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_1" value="1">
+                                    <div class="col t1">3:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin3_1" value="1">
                    					    <label class="form-check-label" for="pin3_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin3_2" value="2">
                    					    <label class="form-check-label" for="pin3_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin3_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin3_3" value="3">
                    					    <label class="form-check-label" for="pin3_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="time3" placeholder="ms" value=""  style="height: 28px;text-align: center;">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="time3" placeholder="ms" value="" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">4:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_1" value="1">
+                                    <div class="col t1">4:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin4_1" value="1">
                    					    <label class="form-check-label" for="pin4_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin4_2" value="2">
                    					    <label class="form-check-label" for="pin4_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin4_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin4_3" value="3">
                    					    <label class="form-check-label" for="pin4_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="time4" placeholder="ms"  style="height: 28px;text-align: center;">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="time4" value="" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">5:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_1" value="1">
+                                    <div class="col t1">5:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin5_1" value="1">
                    					    <label class="form-check-label" for="pin5_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin5_2" value="2">
                    					    <label class="form-check-label" for="pin5_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin5_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin5_3" value="3">
                    					    <label class="form-check-label" for="pin5_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="time5" placeholder="ms"  style="height: 28px;text-align: center;">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="time5" value="" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">6:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_1" value="1">
+                                    <div class="col t1">6:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin6_1" value="1">
                    					    <label class="form-check-label" for="pin6_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin6_2" value="2">
                    					    <label class="form-check-label" for="pin6_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin6_3" value="3">
                    					    <label class="form-check-label" for="pin6_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="time6" placeholder="ms"  style="height: 28px;text-align: center;">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="time6" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">7:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_1" value="1">
+                                    <div class="col t1">7:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin7_1" value="1">
                    					    <label class="form-check-label" for="pin7_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin7_2" value="2">
                    					    <label class="form-check-label" for="pin7_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin7_3" value="3">
                    					    <label class="form-check-label" for="pin7_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="time7" placeholder="ms"  style="height: 28px;text-align: center;">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="time7" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">8:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_1" value="1">
+                                    <div class="col t1">8:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin8_1" value="1">
                    					    <label class="form-check-label" for="pin8_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin8_2" value="2">
                    					    <label class="form-check-label" for="pin8_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin8_3" value="3">
                    					    <label class="form-check-label" for="pin8_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="time8" placeholder="ms" value=""  style="height: 28px;text-align: center">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="time8" placeholder="ms" value="" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">9:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_1" value="1">
+                                    <div class="col t1">9:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin9_1" value="1">
                    					    <label class="form-check-label" for="pin9_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin9_2" value="2">
                    					    <label class="form-check-label" for="pin9_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin9_3" value="3">
                    					    <label class="form-check-label" for="pin9_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="time9" placeholder="ms"  style="height: 28px;text-align: center">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="time9" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">10:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_1" value="1">
-                   					    <label class="form-check-label" for="pin10_signal01"><img src="./img/signal01.png"></label>
+                                    <div class="col t1">10:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin10_1" value="1">
+                   					    <label class="form-check-label" for="pin10_signal01"><img src="./img/signal01.png"></label> 
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin10_2" value="2">
                    					    <label class="form-check-label" for="pin10_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin10_3" value="3">
                    					    <label class="form-check-label" for="pin10_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="time10" placeholder="ms"  style="height: 28px;text-align: center">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="time10" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">11:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_1" value="1">
+                                    <div class="col t1">11:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_1" value="1">
                    					    <label class="form-check-label" for="pin11_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_2" value="2">
                    					    <label class="form-check-label" for="pin11_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_3" value="3">
                    					    <label class="form-check-label" for="pin11_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="time11" placeholder="ms"  style="height: 28px;text-align: center">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="time11" placeholder="ms" >
                				        </div>
                                 </div>
 
@@ -330,16 +319,16 @@
 
             <!-- Edit Output -->
             <div id="edit_output" class="modal">
-                <div class="modal-dialog modal-lg" style="top: 3%;">
-                    <div class="modal-content w3-animate-zoom" style="width:65%">
+                <div class="modal-dialog modal-lg" style="top: 6%;">
+                    <div class="modal-content w3-animate-zoom" style="width: auto">
                         <header class="w3-container modal-header">
                             <span onclick="document.getElementById('edit_output').style.display='none'"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                             <h3 id='modal_title'>Edit Event</h3>
                         </header>
 
-                        <div class="modal-body">
-                            <form id="new_output_form" style="padding-left: 5%">
+                        <div class="modal-body" id="new_output">
+                            <form id="new_output_from" style="padding-left: 2%; padding-right: 1%">
                                 <div class="row">
                                     <div for="event" class="col-3 t1">Event :</div>
                                     <div class="col-2 t2">
@@ -352,201 +341,201 @@
                                 </div>
 
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">1:</div>
-                    			    <div class="col-sm-2 t2 form-check form-check-inline">
-                    				    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin1_1" value="1">
+                                    <div class="col t1">1:</div>
+                    			    <div class="col t2 form-check form-check-inline">
+                    				    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin1_1" value="1">
                     				    <label class="form-check-label" for="pin1_signal01"><img src="./img/signal01.png"></label>
                     				</div>
-                    				<div class="col-sm-2 t2 form-check form-check-inline">
-                    				    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin1_2" value="2">
+                    				<div class="col t2 form-check form-check-inline">
+                    				    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin1_2" value="2" >
                     				    <label class="form-check-label" for="pin1_signal02"><img src="./img/signal02.png"></label>
                     				</div>
-                    				<div class="col-sm-2 t2 form-check form-check-inline">
-                    				    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin1_3" value="3">
+                    				<div class="col t2 form-check form-check-inline">
+                    				    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin1_3" value="3">
                     				    <label class="form-check-label" for="pin1_trigger"><img src="./img/trigger.png"></label>
                     				</div>
-                  				    <div class="col-sm-2 t2">
-                				        <input type="text" class="form-control" id="edit_time1" placeholder="ms" value=""  style="height: 28px;text-align: center;">
+                  				    <div class="col-3 t2">
+                				        <input type="text" class="t4 form-control" id="edit_time1" placeholder="ms" value="" >
                    				    </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">2:</div>
-                  			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_1" value="1">
+                                    <div class="col t1">2:</div>
+                  			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_1" value="1">
                    					    <label class="form-check-label" for="pin2_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_2" value="2">
                    					    <label class="form-check-label" for="pin2_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin2_3" value="3">
                    					    <label class="form-check-label" for="pin2_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-            				            <input type="text" class="form-control" id="edit_time2" placeholder="ms"  style="height: 28px; text-align: center;">
+              				        <div class="col-3 t2">
+            				            <input type="text" class="t4 form-control" id="edit_time2" placeholder="ms" value="" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">3:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_1" value="1">
+                                    <div class="col t1">3:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_1" value="1">
                    					    <label class="form-check-label" for="pin3_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_2" value="2">
                    					    <label class="form-check-label" for="pin3_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin3_3" value="3">
                    					    <label class="form-check-label" for="pin3_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="edit_time3" placeholder="ms" value=""  style="height: 28px;text-align: center;">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="edit_time3" placeholder="ms" value="" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">4:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_1" value="1">
+                                    <div class="col t1">4:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_1" value="1">
                    					    <label class="form-check-label" for="pin4_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_2" value="2">
                    					    <label class="form-check-label" for="pin4_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin4_3" value="3">
                    					    <label class="form-check-label" for="pin4_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="edit_time4" placeholder="ms"  style="height: 28px;text-align: center;">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="edit_time4" value="" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">5:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_1" value="1">
+                                    <div class="col t1">5:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_1" value="1">
                    					    <label class="form-check-label" for="pin5_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_2" value="2">
                    					    <label class="form-check-label" for="pin5_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin5_3" value="3">
                    					    <label class="form-check-label" for="pin5_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="edit_time5" placeholder="ms"  style="height: 28px;text-align: center;">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="edit_time5" value="" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">6:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_1" value="1">
+                                    <div class="col t1">6:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_1" value="1">
                    					    <label class="form-check-label" for="pin6_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_2" value="2">
                    					    <label class="form-check-label" for="pin6_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin6_3" value="3">
                    					    <label class="form-check-label" for="pin6_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="edit_time6" placeholder="ms"  style="height: 28px;text-align: center;">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="edit_time6" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">7:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_1" value="1">
+                                    <div class="col t1">7:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_1" value="1">
                    					    <label class="form-check-label" for="pin7_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_2" value="2">
                    					    <label class="form-check-label" for="pin7_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_3" value="3">
                    					    <label class="form-check-label" for="pin7_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="edit_time7" placeholder="ms"  style="height: 28px;text-align: center;">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="edit_time7" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">8:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_1" value="1">
+                                    <div class="col t1">8:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_1" value="1">
                    					    <label class="form-check-label" for="pin8_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_2" value="2">
                    					    <label class="form-check-label" for="pin8_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin8_3" value="3">
                    					    <label class="form-check-label" for="pin8_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="edit_time8" placeholder="ms" value=""  style="height: 28px;text-align: center">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="edit_time8" placeholder="ms" value="" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">9:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_1" value="1">
+                                    <div class="col t1">9:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_1" value="1">
                    					    <label class="form-check-label" for="pin9_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_2" value="2">
                    					    <label class="form-check-label" for="pin9_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin9_3" value="3">
                    					    <label class="form-check-label" for="pin9_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="edit_time9" placeholder="ms"  style="height: 28px;text-align: center">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="edit_ime9" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">10:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_1" value="1">
-                   					    <label class="form-check-label" for="pin10_signal01"><img src="./img/signal01.png"></label>
+                                    <div class="col t1">10:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_1" value="1">
+                   					    <label class="form-check-label" for="pin10_signal01"><img src="./img/signal01.png"></label> 
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_2" value="2">
                    					    <label class="form-check-label" for="pin10_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin10_3" value="3">
                    					    <label class="form-check-label" for="pin10_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="edit_time10" placeholder="ms"  style="height: 28px;text-align: center">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="edit_time10" placeholder="ms" >
                				        </div>
                                 </div>
                                 <div class="row output-pin">
-                                    <div class="col-sm-2 t1">11:</div>
-                   			      	<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin11_1" value="1">
+                                    <div class="col t1">11:</div>
+                   			      	<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin11_1" value="1">
                    					    <label class="form-check-label" for="pin11_signal01"><img src="./img/signal01.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin11_2" value="2">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="edit_pin11_2" value="2">
                    					    <label class="form-check-label" for="pin11_signal02"><img src="./img/signal02.png"></label>
                    					</div>
-                   					<div class="col-sm-2 t2 form-check form-check-inline">
-                   					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin11_3" value="3">
+                   					<div class="col t2 form-check form-check-inline">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="edit_pin11_3" value="3">
                    					    <label class="form-check-label" for="pin11_trigger"><img src="./img/trigger.png"></label>
                    					</div>
-              				        <div class="col-sm-2 t2">
-              				            <input type="text" class="form-control" id="edit_time11" placeholder="ms"  style="height: 28px;text-align: center">
+              				        <div class="col-3 t2">
+              				            <input type="text" class="t4 form-control" id="edit_time11" placeholder="ms" >
                				        </div>
                                 </div>
 
@@ -565,7 +554,7 @@
             <!-- Copy Output -->
             <div id="copy_output" class="modal">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content w3-animate-zoom" style="width: 60%;">
+                    <div class="modal-content w3-animate-zoom" style="width: auto">
                         <header class="w3-container modal-header">
                             <span onclick="document.getElementById('copy_output').style.display='none'"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
@@ -604,7 +593,7 @@
                 				        </div>
                 				    </div>
                 			    </div>
-                			  </form>
+                 			</form>
                         </div>
 
                         <div class="modal-footer justify-content-center">
@@ -629,7 +618,6 @@ var output_job;
 var all_job;
 $(document).ready(function () {
     highlight_row('output_table');
-
     var all_output_job = '<?php echo $data['device_data']['device_output_all_job']?>';
     job_id = all_output_job ;
     output_job = all_output_job;
@@ -638,19 +626,17 @@ $(document).ready(function () {
         document.getElementById('Button_Select').disabled = true;
         document.getElementById('job_id').style.backgroundColor = 'yellow';
     }
+
 });
 
 
-var modal = document.getElementById('newinput');
 
+var modal = document.getElementById('newinput');
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
-
-
-
 
 function crud_job_event(argument){
     if(argument == 'del'){
@@ -733,14 +719,19 @@ function crud_job_event(argument){
                 options[i].classList.add('disabled_input'); 
             }
         }
+
+
         document.getElementById('copy_output').style.display='block';
+        
+
     }
 
     if(argument == 'unified' && job_id != ''){
         enableButton();
         resetBackgroundColor();
-        //console.log('output_job 有值:', output_job);
-        //console.log('job_id 有值:', job_id);
+        console.log('output_job 有值:', output_job);
+        console.log('job_id 有值:', job_id);
+
         if(output_job != job_id){
             alignsubmit(job_id);  
         }else{
@@ -750,7 +741,6 @@ function crud_job_event(argument){
     }
 }
 </script>
-
 
 </body>
 

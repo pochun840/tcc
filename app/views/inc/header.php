@@ -47,6 +47,7 @@
             .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
             .t2{font-size: 17px; margin: 5px 0px;}
             .t3{font-size: 17px; margin: 3px 0px;}
+            .t4{height: 28px;text-align: center;}   
             .selected { background-color: #9AC0CD !important;}
             .input-pin img{ height: 25px; width: 40px}
             .output-pin img{ height: 25px; width: 45px}
