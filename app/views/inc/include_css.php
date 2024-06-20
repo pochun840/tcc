@@ -36,8 +36,6 @@ function includecss_file($part, $cssFileName) {
     <script src="<?php echo URLROOT; ?>js/flatpickr_zh.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
 
-
-    
     <?php 
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         $isMobile = preg_match('/Mobile|Android|Silk|Kindle|BlackBerry|Opera Mini|Opera Mobi/', $userAgent);
@@ -70,4 +68,5 @@ function includecss_file($part, $cssFileName) {
         includecss_file("Jobs", "jobs.js");
         includecss_file("Data", "data.js");
         includecss_file("Sequences", "seq.js");
+        includecss_file("Step", "step.js");
 

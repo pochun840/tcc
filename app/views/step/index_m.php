@@ -848,15 +848,7 @@ function add_step(){
     }
 }
 
-function copy_step(stepid){
-    document.getElementById('copystep').style.display = 'block';   
-    copy_step_by_id();
 
-}
-
-document.getElementById("copyButton").addEventListener("click", function() {
-    copy_step_by_id();
-});
 
 function copy_step_by_id(){
     var stepid = readFromLocalStorage("stepid");
@@ -927,12 +919,6 @@ function del_stepid(step_id){
 
 }
 
-function disableElements(elements, value) {
-    elements.forEach(function(element) {
-        element.disabled = value;
-        element.value = value === true ? 0 : ''; 
-    });
-}
 
 var rowInfoArray = [];
 <?php foreach($data['step'] as $key =>$val) {?>

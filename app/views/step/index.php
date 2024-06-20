@@ -864,15 +864,7 @@ function add_step(){
     }
 }
 
-function copy_step(stepid){
-    document.getElementById('copystep').style.display = 'block';   
-    copy_step_by_id();
 
-}
-
-document.getElementById("copyButton").addEventListener("click", function() {
-    copy_step_by_id();
-});
 
 function copy_step_by_id(){
     var stepid = readFromLocalStorage("stepid");
