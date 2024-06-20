@@ -1,3 +1,10 @@
+
+document.getElementById('back_btn').onclick = function()
+{
+    window.location.href = '?url=Jobs/index';
+};
+
+
 function cound_job(argument){
     var table = document.getElementById('seq_table');
     var selectedRow = table.querySelector('.selected');

@@ -438,12 +438,6 @@ window.onclick = function(event) {
 }
 
 
-
-// Button Return
-document.getElementById('back_btn').onclick = function()
-{
-    window.location.href = '?url=Jobs/index';
-};
 var rowInfoArray = [];
 <?php foreach($data['sequences'] as $key =>$val) {?>
         var sequenceId = "<?php echo $val['sequence_id'];?>";

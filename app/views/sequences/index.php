@@ -430,8 +430,6 @@ $(document).ready(function () {
     highlight_row('seq_table');
 });
 
-
-
 // Get the modal
 var modal = document.getElementById('newseq');
 window.onclick = function(event) {
@@ -440,13 +438,6 @@ window.onclick = function(event) {
     }
 }
 
-
-
-// Button Return
-document.getElementById('back_btn').onclick = function()
-{
-    window.location.href = '?url=Jobs/index';
-};
 var rowInfoArray = [];
 <?php foreach($data['sequences'] as $key =>$val) {?>
         var sequenceId = "<?php echo $val['sequence_id'];?>";
@@ -658,8 +649,6 @@ function edit_seq_save(){
                 join_val:join_val,
                 okall_stop_val: okall_stop_val,
                 opt_val: opt_val
-
-
 
             },
             success: function(response) {
