@@ -6,10 +6,10 @@ function includecss_file($part, $cssFileName) {
     $firstPart = $parts[0];
     $extension = pathinfo($cssFileName, PATHINFO_EXTENSION);
 
-    if ($firstPart == $part) {
-        if ($extension == 'css') { ?>
-            <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>">
-        <?php } elseif ($extension == 'js') { ?>
+    if($firstPart == $part){
+        if($extension == 'css'){ ?>
+            <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi');?>">
+        <?php }elseif($extension == 'js'){ ?>
             <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi'); ?>"></script>
         <?php }
     }
@@ -18,7 +18,7 @@ function includecss_file($part, $cssFileName) {
 
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
+ 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/datatables.min.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css">
@@ -50,7 +50,7 @@ function includecss_file($part, $cssFileName) {
             includecss_file("Step", "tcc_step_m.css");
             includecss_file("Dashboards","tcc_operation_m.css");
             includecss_file("Data","tcc_data.css");
-            //includecss_file("Settings","tcc_setting.css");
+            includecss_file("Settings","tcc_setting.css");
         }else{
             includecss_file("Tools", "tcc_tool.css");
             includecss_file("Inputs", "tcc_input.css");
@@ -69,4 +69,5 @@ function includecss_file($part, $cssFileName) {
         includecss_file("Data", "data.js");
         includecss_file("Sequences", "seq.js");
         includecss_file("Step", "step.js");
+        includecss_file("Settings", "settings.js");
 

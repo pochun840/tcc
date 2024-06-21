@@ -49,18 +49,15 @@ class Admins extends Controller
     public function EditMaxLink()
     {
         $result = false;
-        $error_message = '';
         if (isset($_POST['max_user']) && is_numeric($_POST['max_user'])  && $_POST['max_user'] >= 1 ) {
             $max_user = $_POST['max_user'];
             $result = $this->AdminModel->Edit_Max_Link($max_user);
-        }
-
-        if(!$result){
-            echo json_encode(array('error' => 'fail'));
-            exit();
-        }else{
-            echo json_encode(array('error' => ''));
-            exit();
+            if($result){
+                $res_msg = 'Edit: Number of Connection  success';
+            }else{
+                $res_msg = 'Edit: Number of Connection  fail';
+            }
+            echo $res_msg;
         }
     }
 
@@ -107,33 +104,31 @@ class Admins extends Controller
             $ip = $_POST['ip'];
             $result = $this->AdminModel->Set_Agent_Ip($ip);
         }
-
-        if(!$result){
-            echo json_encode(array('error' => 'fail'));
-            exit();
+        if($result){
+            $res_msg = 'Edit: IP  success';
         }else{
-            echo json_encode(array('error' => ''));
-            exit();
+            $res_msg = 'Edit: IP  fail';
         }
+        echo $res_msg;
+
+      
     }
 
     //
     public function SetAgentType()
     {
         $result = false;
-        $error_message = '';
         if (isset($_POST['agent_type']) && $_POST['agent_type']>=0 && $_POST['agent_type'] <=2 ) {
             $agent_type = $_POST['agent_type'];
             $result = $this->AdminModel->Set_Das_Config('agent_type',$agent_type);
         }
-
-        if(!$result){
-            echo json_encode(array('error' => 'fail'));
-            exit();
+        
+        if($result){
+            $res_msg = 'Edit: AgentType  success';
         }else{
-            echo json_encode(array('error' => ''));
-            exit();
+            $res_msg = 'Edit: AgentType  fail';
         }
+        echo $res_msg;
     }
 
     public function AgentTest()
@@ -171,19 +166,20 @@ class Admins extends Controller
         sleep(1);
 
         if ($agent_type == 1) {
-            $this->StartService("/var/www/html/das/service/agent_client.php");
+            $this->StartService("/var/www/html/tcc/service/agent_client.php");
         }
 
         if ($agent_type == 2) {
-            $this->StartService("/var/www/html/das/service/agent_server.php");
+            $this->StartService("/var/www/html/tcc/service/agent_server.php");
             sleep(1);
-            $this->StartService("/var/www/html/das/service/agent_client.php");
+            $this->StartService("/var/www/html/tcc/service/agent_client.php");
         }
 
         $message['server_status'] = $this->ProcessCheck('agent_server.php');//1.檢測server.php
         $message['client_status'] = $this->ProcessCheck('agent_client.php');//2.檢測client.php
 
         echo json_encode($message);
+        
         
     }
 

@@ -150,46 +150,7 @@
                                         <td>1</td>
                                         <td>20</td>
                                     </tr>
-                                    <tr>
-                                        <td style="text-align: center; vertical-align: middle;">
-                                            <input class="form-check-input" type="checkbox" name="barcode_check" id="" value="" style="zoom:1.2">
-                                        </td>
-                                        <td>2</td>
-                                        <td>Sample Job 2</td>
-                                        <td>940204722394636407524</td>
-                                        <td>1</td>
-                                        <td>18</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; vertical-align: middle;">
-                                            <input class="form-check-input" type="checkbox" name="barcode_check" id="" value="" style="zoom:1.2">
-                                        </td>
-                                        <td>3</td>
-                                        <td>Sample Job 3</td>
-                                        <td>402472394364074854721232</td>
-                                        <td>1</td>
-                                        <td>20</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; vertical-align: middle;">
-                                            <input class="form-check-input" type="checkbox" name="barcode_check" id="" value="" style="zoom:1.2">
-                                        </td>
-                                        <td>4</td>
-                                        <td>Sample Job 4</td>
-                                        <td>402472394364074854721232</td>
-                                        <td>1</td>
-                                        <td>20</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; vertical-align: middle;">
-                                            <input class="form-check-input" type="checkbox" name="barcode_check" id="" value="" style="zoom:1.2">
-                                        </td>
-                                        <td>5</td>
-                                        <td>Sample Job 5</td>
-                                        <td>402472394364074854721232</td>
-                                        <td>1</td>
-                                        <td>20</td>
-                                    </tr>
+                                  
                                 </tbody>
                             </table>
                         </div>
@@ -240,8 +201,8 @@
                     <div class="col t2">
                         <form id="edit_max_link" style="margin: 3px 0px" method="post">
                             <input type="text" name="max_user" id="max_user" inputmode="numeric" pattern="[0-9]*" min='1' size="15" maxlength="2" required class="t3 w3-submit w3-border w3-round">&nbsp;
-                            <span>maximum number of connect : 5</span>
-                            <input type="submit" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                            <span>maximum number of connect : <?php echo $data['max_user']; ?></span>
+                            <input type="button" onclick="set_max_link()" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                         </form>
                     </div>
                 </div>
@@ -260,7 +221,7 @@
                     <div class="col t2">
                         <form id="agent_ip" style="margin: 3px 0px" method="post">
                             <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" required class="t3 w3-submit w3-border w3-round">&nbsp;
-                            <span>Agent IP : 192.168.0.186</span>
+                            <span>Agent IP : <?php echo $data['agent_server_ip']; ?></span>
                             <input type="submit" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                         </form>
                     </div>
@@ -268,7 +229,7 @@
                 <div class="row t2">
                     <div class="col-3 t1">Agent Type:</div>
                     <div class="col t2">
-                        <form id="agent_type_form" onsubmit="set_agent_type();return false;" method="post">
+                        <form id="agent_type_form" method="post">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0">
                                 <label class="form-check-label" for="agent_type_0">None</label>
@@ -282,7 +243,7 @@
                                 <label class="form-check-label" for="agent_type_2">Server</label>
                             </div>
 
-                            <input type="submit" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                            <input type="button" onclick="set_agent_type()" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                         </form>
                     </div>
                     <div class="row">
@@ -291,9 +252,9 @@
                             <span>Client Status:<div id="c_status" style="display:inline-block;"></div></span>
                             <span>Server Status:<div id="s_status" style="display:inline-block;"></div></span>
 
-                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px">Check</button>
-                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px;">START</button>
-                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px">STOP</button>
+                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck()" >Check</button>
+                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px;" onclick="StatusCheck('start')" >START</button>
+                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck('stop')" >STOP</button>
                         </div>
                     </div>
                 </div>
@@ -330,9 +291,9 @@
                             </div>    
                         </div>  
                     </div>
-
-                    <input type="submit" value="Delete" class="all-btn w3-submit w3-border w3-round-large" style="float: right;">
-
+                    <?php  if($_SESSION['privilege'] == 'admin'){?>
+                            <input type="submit" value="Delete" class="all-btn w3-submit w3-border w3-round-large" style="float: right;">
+                    <?php } ?>
                 </form>
             </div>
 
@@ -366,136 +327,8 @@
 </div>
 
 <script>
-// Button mode setting
-function OpenButton(ButtonMode)
-{
-    if (ButtonMode == "Controller")
-    {
-        document.getElementById('Controller_Setting').style.display = "";
-        document.getElementById('System_Setting').style.display = "none";
-        document.getElementById('Barcode_Setting').style.display = "none";
-        document.getElementById('Connect_Setting').style.display = "none";
-        document.getElementById('iDas-Update_Setting').style.display = "none";
-        document.getElementById('bnt1').classList.add("active");
-        document.getElementById('bnt2').classList.remove("active");   
-        document.getElementById('bnt3').classList.remove("active");
-        document.getElementById('bnt4').classList.remove("active");
-        document.getElementById('bnt5').classList.remove("active");
-    }
-    else if (ButtonMode == "System")
-    {
-        document.getElementById('System_Setting').style.display = "";
-        document.getElementById('Controller_Setting').style.display = "none";
-        document.getElementById('Barcode_Setting').style.display = "none";
-        document.getElementById('Connect_Setting').style.display = "none";
-        document.getElementById('iDas-Update_Setting').style.display = "none";
-        document.getElementById('bnt2').classList.add("active");
-        document.getElementById('bnt1').classList.remove("active");
-        document.getElementById('bnt3').classList.remove("active");
-        document.getElementById('bnt4').classList.remove("active");
-        document.getElementById('bnt5').classList.remove("active");
-
-    }
-    else if (ButtonMode == "Barcode")
-    {
-        document.getElementById('Barcode_Setting').style.display = "";
-        document.getElementById('System_Setting').style.display = "none";
-        document.getElementById('Controller_Setting').style.display = "none";
-        document.getElementById('Connect_Setting').style.display = "none";
-        document.getElementById('iDas-Update_Setting').style.display = "none";
-        document.getElementById('bnt3').classList.add("active");
-        document.getElementById('bnt2').classList.remove("active");
-        document.getElementById('bnt1').classList.remove("active");
-        document.getElementById('bnt4').classList.remove("active");
-        document.getElementById('bnt5').classList.remove("active");
-    }
-    else if (ButtonMode == "Connect")
-    {
-        document.getElementById('Connect_Setting').style.display = "";
-        document.getElementById('Barcode_Setting').style.display = "none";
-        document.getElementById('System_Setting').style.display = "none";
-        document.getElementById('Controller_Setting').style.display = "none";
-        document.getElementById('iDas-Update_Setting').style.display = "none";
-        document.getElementById('bnt4').classList.add("active");
-        document.getElementById('bnt3').classList.remove("active");
-        document.getElementById('bnt2').classList.remove("active");
-        document.getElementById('bnt1').classList.remove("active");
-        document.getElementById('bnt5').classList.remove("active");
-    }
-    else if (ButtonMode == "Update")
-    {
-        document.getElementById('iDas-Update_Setting').style.display = "";
-        document.getElementById('Connect_Setting').style.display = "none";
-        document.getElementById('Barcode_Setting').style.display = "none";
-        document.getElementById('System_Setting').style.display = "none";
-        document.getElementById('Controller_Setting').style.display = "none";
-        document.getElementById('bnt5').classList.add("active");
-        document.getElementById('bnt4').classList.remove("active");
-        document.getElementById('bnt3').classList.remove("active");
-        document.getElementById('bnt2').classList.remove("active");
-        document.getElementById('bnt1').classList.remove("active");
-    }
-    else
-    {
-        alert("Function ["+ ButtonMode +"] is under constructing ...");
-    }
-}
-
-function getCookie(name) 
-{
-    var nameEQ = name + "=";
-    //alert(document.cookie);
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1);
-        if (c.indexOf(nameEQ) != -1) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-}
 
 
-function cc_save(){
-    //
-    var control_id = document.getElementById('control_id').value;
-    if (isNaN(control_id) || control_id < 1 || control_id > 250) {
-        return false;
-    }
-
-    var control_name = document.getElementById('control_name').value;
-    var selectElement = document.getElementById('select_language');
-    var selectedValue = selectElement.value;
-    var batch_val = document.querySelector('input[name="batch-mode-option"]:checked').value;
-    var buzzer_val = document.querySelector('input[name="buzzer-option"]:checked').value;
-
-    if(control_id){
-        $.ajax({
-            url: "?url=Settings/control_setting",
-            method: "POST",
-            data:{ 
-                control_id: control_id,
-                control_name: control_name,
-                lang_val: selectedValue,
-                batch_val:batch_val,
-                buzzer_val:buzzer_val
-
-            },
-            success: function(response) {
-                console.log( response);
-                //history.go(0);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });   
-    }
-
-
-
-
-
-
-}
 function edit_password(){
     var new_password = document.getElementById('new_password').value;
     var comfirm_password = document.getElementById('comfirm_password').value;
@@ -553,105 +386,6 @@ function time_save(){
 
 }
 
-function updateTime() {
-    var currentTime = new Date();
-    var hours = currentTime.getHours();
-    var minutes = currentTime.getMinutes();
-    var seconds = currentTime.getSeconds();
-    var period = hours >= 12 ? 'PM' : 'AM';
-
-    hours = hours % 12;
-    hours = hours ? hours : 12; // 0 should be 12
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    seconds = seconds < 10 ? '0'+seconds : seconds;
-
-    var timeString = currentTime.getFullYear() + '-' + 
-                        ('0' + (currentTime.getMonth() + 1)).slice(-2) + '-' + 
-                        ('0' + currentTime.getDate()).slice(-2) + ' ' + 
-                        ('0' + hours).slice(-2) + ':' + 
-                        ('0' + minutes).slice(-2) + ':' + 
-                        ('0' + seconds).slice(-2) + ' ' + period;
-
-    document.getElementById('currentSystemTime').innerText = timeString;
-}
-
-updateTime();
-// 每秒更新一次時間
-setInterval(updateTime, 1000);
-
-function Export_SystemConfig(argument) {
-
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = "blob";
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var a = document.createElement("a");
-            a.href = window.URL.createObjectURL(xhr.response);
-            a.download = "data.cfg"; 
-            a.style.display = "none";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-    };
-
-    xhr.open("GET", "?url=Settings/export_sysytem_config", true);
-    xhr.send();
-}
-function Import_SystemConfig(){
-
-        var bbs = document.getElementById("import-file-uploader").files[0];
-        var form = new FormData();
-        form.append("file", bbs)
-        var url = '?url=Settings/Import_Config';        
-
-        if(bbs == undefined){
-            
-        }else{
-            $.ajax({ // 提醒
-                type: "POST",
-                processData: false,
-                cache: false,
-                contentType: false,
-                data: form,
-                dataType: "json",
-                url: url,
-                beforeSend: function() {
-                    $('#overlay').removeClass('hidden');
-                },
-            }).done(function(result) { //成功且有回傳值才會執行
-                $('#overlay').addClass('hidden');
-                document.getElementById("import-file-uploader").value = '';
-            });
-        }
-}
-
-function Firmware_Update() {
-    var bb_file = document.getElementById("firmware-file-uploader").files[0];
-    if (bb_file == undefined) {
-        return;
-    }
-
-    var form = new FormData();
-    form.append("file", bb_file);
-    var url = '?url=Settings/FirmwareUpdate';
-
-    $.ajax({
-        type: "POST",
-        processData: false,
-        cache: false,
-        contentType: false,
-        data: form,
-        dataType: "json",
-        url: url,
-        beforeSend: function() {
-            $('#overlay').removeClass('hidden');
-        },
-    }).done(function(result) {
-        $('#overlay').addClass('hidden');
-        document.getElementById("firmware-file-uploader").value = '';
-    });
-}
 
 function button_save_password_gust(){
 
@@ -660,7 +394,9 @@ function button_save_password_gust(){
     var pass_guest1 = document.getElementById('new_password_guest').value;
     var pass_guest2 = document.getElementById('comfirm_password_guest').value;
 
-    if(pass_guest1 == pass_guest2){
+    //正規化 密碼格式(1個英文+1個數字,長度:4)
+    var pattern = /^(?=.*[A-Za-z])(?=.*\d).{4,}$/;
+    if(pass_guest1 == pass_guest2 && pattern.test(pass_guest1)){
         $.ajax({
             url: "?url=Admins/EditGuestPwd",
             method: "POST",
@@ -678,11 +414,13 @@ function button_save_password_gust(){
                 
             }
         });   
+    }else{
+        alert('密碼格式不符合要求');
     }
     
 }
 
-const fileUploader = document.querySelector('#file-uploader');
+/*const fileUploader = document.querySelector('#file-uploader');
 
 function idas_update() {
     let ff = document.querySelector('#file-uploader').files;
@@ -717,7 +455,7 @@ function idas_update() {
         document.getElementById("file-uploader").value = '';
         
     });
-}
+}*/
 </script>    
 
 </body>

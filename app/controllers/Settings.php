@@ -24,6 +24,9 @@ class Settings extends Controller
         $controller_info = $this->SettingModel->GetControllerInfo();
         $active_session = $this->AdminModel->GetActiveSession();
         $iDas_Vesion = $this->AdminModel->Get_Das_Config('idas_version');
+        $max_user = $this->AdminModel->Get_Das_Config('max_concurrent_users');
+        $agent_server_ip = $this->AdminModel->Get_Das_Config('agent_server_ip');
+        $agent_type = $this->AdminModel->Get_Das_Config('agent_type');
 
 
      
@@ -72,13 +75,22 @@ class Settings extends Controller
         $this->view('setting/index', $data);*/
         $data = array();
         $data = array(
-            'lang_arr' =>$lang,
+            'lang_arr'        => $lang,
             'controller_info' => $controller_info,
             'active_session'  => $active_session,
             'iDas_Vesion'     => $iDas_Vesion,
+            'max_user'        => $max_user,
+            'agent_server_ip' => $agent_server_ip,
+            'agent_type'      => $agent_type,
 
         );
-        $this->view('setting/index', $data);
+
+        if($isMobile){
+            $this->view('setting/index_m', $data);
+        }else{
+            $this->view('setting/index', $data);
+        }
+       
 
     }
 
