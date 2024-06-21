@@ -827,20 +827,17 @@ class Settings extends Controller
       
 
         if($input_check){
+
             $barcode_result = $this->SettingModel->Update_Barcode($barcode);
             if ($result) { // copy DB
-                //$copy_result = $this->copyDB_to_RamdiskDB();
-                if ($copy_result) {
-                    $this->logMessage('edit barcode job:'.$Job_Select.',barcodes:'.$barcode_name.' copyDB success');
-                } else {
-                    $this->logMessage('edit barcode job:'.$Job_Select.',barcodes:'.$barcode_name.' copyDB fail');
+
+                $this->logMessage('edit barcode job:'.$Job_Select.',barcodes:'.$barcode_name.' copyDB success');
+                $this->logMessage('edit barcode job:'.$Job_Select.',barcodes:'.$barcode_name.' copyDB fail');
                 }
-                /*$data = [
-                    'result' => 'success',
-                    'error_message' => $error_message
-                ];*/
-            }
+            
     
+        }
+          
 
         //echo json_encode($data);
     }
