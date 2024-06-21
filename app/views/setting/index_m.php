@@ -185,10 +185,18 @@
                                         </thead>
 
                                         <tbody style="font-size: 2.2vmin;text-align: center;">
-                                          
-                                            
-                                            
-                                            
+                                        <?php foreach ($data['barcodes'] as $k_b =>$v_b){?>
+                                            <tr>
+                                                <td style="text-align: center; vertical-align: middle;">
+                                                    <input class="form-check-input" type="checkbox" name="barcode_check" id="barcode_check" value="<?php echo $v_b['barcode_selected_job'];?>" style="zoom:1.2">
+                                                </td> 
+                                                <td><?php echo $v_b['barcode_selected_job'];?></td>
+                                                <td><?php echo $v_b['job_name'];?></td>
+                                                <td><?php echo $v_b['barcode'];?></td>
+                                                <td><?php echo $v_b['barcode_range_from'];?></td>
+                                                <td><?php echo $v_b['barcode_range_count'];?></td>
+                                            </tr>
+                                        <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -218,20 +226,22 @@
                         <div class="row t2">
                             <div class="col-4 t1">Select Job:</div>
                             <div class="col-5 t2">
-                                <select class="form-select" id="barcode_mode" style="height: 32px">
-                                    <option value="-1">Please Select Job</option>
-                                    <option value="1">Sample Job 1</option>
-                                    <option value="2">Sample Job 2</option>
-                                    <option value="3">Sample Job 3</option>
-                                </select>
+                            <select class="form-select" id="barcode_job" name="barcode_job">
+                                <option value="-1">Please Select Job</option>
+                                    <?php
+                                    foreach ($data['job_list'] as $key => $value) {?>
+                                        <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
+                                    <?php }?>
+                                    
+                            </select>
                             </div>
                         </div>
                     </div>
                 </div>    
                         
                 <div style="text-align: center;margin-top: 30px;">
-                    <button class="all-btn w3-button w3-border w3-round-large">Save</button>&nbsp;&nbsp;
-                    <button class="all-btn w3-button w3-border w3-round-large">Delete</button>
+                    <button class="all-btn w3-button w3-border w3-round-large" onclick="update_barcode()" >Save</button>&nbsp;&nbsp;
+                    <button class="all-btn w3-button w3-border w3-round-large" onclick="delete_barcode()" >Delete</button>
                 </div>               
             </div>
 

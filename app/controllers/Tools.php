@@ -72,7 +72,4 @@ class Tools extends Controller
         }
     }
 
-
-
-    
 }

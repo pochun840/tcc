@@ -27,7 +27,8 @@ class Settings extends Controller
         $max_user = $this->AdminModel->Get_Das_Config('max_concurrent_users');
         $agent_server_ip = $this->AdminModel->Get_Das_Config('agent_server_ip');
         $agent_type = $this->AdminModel->Get_Das_Config('agent_type');
-
+        $job_list = $this->SettingModel->get_job_list();
+        $barcodes = $this->GetBarcodes();
 
      
 
@@ -70,9 +71,15 @@ class Settings extends Controller
             'Tool_Info' => $Tool_Info,
             'device_info' => $device_info
         ];
-
+        
         
         $this->view('setting/index', $data);*/
+
+        foreach($barcodes as $kk =>$vv){
+            $barcodes[$kk]['barcode_range_from']  = $barcodes[$kk]['barcode_mask_from'];
+            $barcodes[$kk]['barcode_range_count'] = $barcodes[$kk]['barcode_mask_count'];
+        }
+        
         $data = array();
         $data = array(
             'lang_arr'        => $lang,
@@ -82,8 +89,16 @@ class Settings extends Controller
             'max_user'        => $max_user,
             'agent_server_ip' => $agent_server_ip,
             'agent_type'      => $agent_type,
+            'job_list'        => $job_list,
+            'barcodes'        => $barcodes
 
         );
+
+
+     
+
+    
+
 
         if($isMobile){
             $this->view('setting/index_m', $data);
@@ -782,71 +797,52 @@ class Settings extends Controller
     public function Update_Barcode()
     {
         $input_check = true;
-        $error_message = '';
+        $barcode = array();
+        //$error_message = '';
         if( !empty($_POST['barcode_name']) && isset($_POST['barcode_name'])  ){
-            $barcode_name = $_POST['barcode_name'];
+            $barcode['barcode_name'] = $_POST['barcode_name'];
         }else{ 
             $input_check = false;
-            $error_message .= "barcode_name,";
+            //$error_message .= "barcode_name,";
         }
-        if( !empty($_POST['barcode_from']) && isset($_POST['barcode_from'])  ){
-            $barcode_from = $_POST['barcode_from'];
+        if( !empty($_POST['barcode_range_from']) && isset($_POST['barcode_range_from'])  ){
+            $barcode['barcode_range_from'] = $_POST['barcode_range_from'];
         }else{ 
             $input_check = false;
-            $error_message .= "barcode_from,";
+            //$error_message .= "barcode_from,";
         }
-        if( !empty($_POST['barcode_count']) && isset($_POST['barcode_count'])  ){
-            $barcode_count = $_POST['barcode_count'];
+        if( !empty($_POST['barcode_range_count']) && isset($_POST['barcode_range_count'])  ){
+            $barcode['barcode_range_count'] = $_POST['barcode_range_count'];
         }else{ 
             $input_check = false;
-            $error_message .= "barcode_count,";
+            //$error_message .= "barcode_count,";
         }
-        if(  isset($_POST['barcode_mode'])  ){
-            $barcode_mode = $_POST['barcode_mode'];
+        
+        if( isset($_POST['barcode_job'])  ){
+            $barcode['barcode_job'] = $_POST['barcode_job'];
         }else{ 
             $input_check = false;
-            $error_message .= "barcode_mode,";
+            ///$error_message .= "Job_Select,";
         }
-        if(  isset($_POST['Job_Select'])  ){
-            $Job_Select = $_POST['Job_Select'];
-        }else{ 
-            $input_check = false;
-            $error_message .= "Job_Select,";
-        }
-        if(  isset($_POST['Seq_Select'])  ){
-            $Seq_Select = $_POST['Seq_Select'];
-        }else{ 
-            $input_check = false;
-            $error_message .= "Seq_Select,";
-        }
+      
 
         if($input_check){
-            $barcode_result = $this->SettingModel->Update_Barcode($barcode_name,$barcode_from,$barcode_count,$barcode_mode,$Job_Select,$Seq_Select);
-            if ($barcode_result) { // copy DB
-                $copy_result = $this->copyDB_to_RamdiskDB();
+            $barcode_result = $this->SettingModel->Update_Barcode($barcode);
+            if ($result) { // copy DB
+                //$copy_result = $this->copyDB_to_RamdiskDB();
                 if ($copy_result) {
                     $this->logMessage('edit barcode job:'.$Job_Select.',barcodes:'.$barcode_name.' copyDB success');
                 } else {
                     $this->logMessage('edit barcode job:'.$Job_Select.',barcodes:'.$barcode_name.' copyDB fail');
                 }
-                $data = [
+                /*$data = [
                     'result' => 'success',
                     'error_message' => $error_message
-                ];
-            }else{
-                $data = [
-                    'result' => 'fail',
-                    'error_message' => $error_message
-                ];
+                ];*/
             }
-        }else{
-            $data = [
-                'result' => 'fail',
-                'error_message' => $error_message
-            ];
-        }
+    
 
-        echo json_encode($data);
+        //echo json_encode($data);
     }
 
     public function GetJobSeq()

@@ -241,7 +241,7 @@ function set_max_link(argument) {
             success: function(response) {
                 console.log(response);
                 alert(response);
-                history.go(0);
+                //history.go(0);
             },
             error: function(xhr, status, error) {
                 
@@ -265,7 +265,7 @@ function set_agent_ip(){
             success: function(response) {
                 console.log(response);
                 alert(response);
-                history.go(0);
+                //history.go(0);
             },
             error: function(xhr, status, error) {
                 
@@ -383,4 +383,42 @@ function idas_update() {
         document.getElementById("file-uploader").value = '';
         
     });*/
+}
+
+
+function update_barcode(){
+    var barcode_name  = document.getElementById("barcode_name").value;
+    var barcode_from  = document.getElementById("barcode_from").value;
+    var barcode_count = document.getElementById("barcode_count").value;
+    var barcode_job   = document.querySelector("select[name='barcode_job']").value;
+    
+    //console.log(barcode_name);
+    //console.log(barcode_job);
+
+    if(barcode_name){
+        $.ajax({
+            url: "?url=Settings/Update_Barcode",
+            method: "POST",
+            data:{ 
+                barcode_name: barcode_name,
+                barcode_from: barcode_from,
+                barcode_count: barcode_count,
+                barcode_job: barcode_job
+
+            },
+            success: function(response) {
+                console.log(response);
+                alert(response);
+                //history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });   
+
+    }
+
+
+
+    
 }

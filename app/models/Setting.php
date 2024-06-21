@@ -247,45 +247,39 @@ class Setting{
     public function GetAllBarcodes()
     {
         $sql = "SELECT barcode.*,job.job_name FROM barcode left join `job` on barcode_selected_job = job_id order by barcode_selected_job";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);
 
         return $rows;
     }
 
-    public function Update_Barcode($barcode_name,$barcode_from,$barcode_count,$barcode_mode,$job_id,$Seq_Select)
+    public function Update_Barcode($barcode)
     {
-        if( $this->check_barcode_conflict($job_id) ){ //已存在，用update
+        if( $this->check_barcode_conflict($barcode['barcode_job']) ){ //已存在，用update
 
             $sql = "UPDATE `barcode` 
                     SET barcode = :barcode,
-                        barcode_mask_from = :barcode_mask_from,
-                        barcode_mask_count = :barcode_mask_count,
-                        barcode_enable = :barcode_enable,
-                        barcode_selected_seq = :barcode_selected_seq
+                        barcode_range_from  = :barcode_range_from,
+                        barcode_range_count = :barcode_range_count,
                     WHERE barcode_selected_job = :barcode_selected_job ";
-            $statement = $this->db->prepare($sql);
-            $statement->bindValue(':barcode', $barcode_name);
-            $statement->bindValue(':barcode_mask_from', $barcode_from);
-            $statement->bindValue(':barcode_mask_count', $barcode_count);
-            $statement->bindValue(':barcode_enable', $barcode_mode);
-            $statement->bindValue(':barcode_selected_seq', $Seq_Select);
-            $statement->bindValue(':barcode_selected_job', $job_id);
+            $statement = $this->db_iDas->prepare($sql);
+            $statement->bindValue(':barcode', $barcode['barcode_name']);
+            $statement->bindValue(':barcode_range_from', $barcode['barcode_range_from']);
+            $statement->bindValue(':barcode_range_count', $barcode['barcode_range_count']);
+            $statement->bindValue(':barcode_selected_job',$barcode['barcode_job']);
             $results = $statement->execute();
 
 
         }else{ //不存在，用insert
 
-            $sql = "INSERT INTO `barcode` ('barcode','barcode_mask_from','barcode_mask_count','barcode_selected_job','barcode_enable','barcode_selected_seq' )
-                    VALUES (:barcode,:barcode_mask_from,:barcode_mask_count,:barcode_selected_job,:barcode_enable,:barcode_selected_seq)";
-            $statement = $this->db->prepare($sql);
-            $statement->bindValue(':barcode', $barcode_name);
-            $statement->bindValue(':barcode_mask_from', $barcode_from);
-            $statement->bindValue(':barcode_mask_count', $barcode_count);
-            $statement->bindValue(':barcode_enable', $barcode_mode);
-            $statement->bindValue(':barcode_selected_seq', $Seq_Select);
-            $statement->bindValue(':barcode_selected_job', $job_id);
+            $sql = "INSERT INTO `barcode` ('barcode','barcode_range_from','barcode_range_count','barcode_selected_job')
+                    VALUES (:barcode,:barcode_range_from,:barcode_range_count,:barcode_selected_job )";
+            $statement = $this->db_iDas->prepare($sql);
+            $statement->bindValue(':barcode', $barcode['barcode_name']);
+            $statement->bindValue(':barcode_range_from', $barcode['barcode_range_from']);
+            $statement->bindValue(':barcode_range_count', $barcode['barcode_range_count']);
+            $statement->bindValue(':barcode_selected_job', $barcode['barcode_job']);
             $results = $statement->execute();
 
         }
@@ -293,10 +287,10 @@ class Setting{
         return $results;
     }
 
-    public function check_barcode_conflict($job_id)
-    {
+    public function check_barcode_conflict($job_id){
+        
         $sql = "SELECT count(*) as count FROM barcode WHERE barcode_selected_job = :barcode_selected_job";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':barcode_selected_job', $job_id);
         $results = $statement->execute();
         $rows = $statement->fetch();
@@ -306,13 +300,15 @@ class Setting{
         }else{
             return false; // job event不存在
         }
+
     }
+
 
     //get all job
     public function get_job_list()
     {
         $sql = "SELECT * FROM job ORDER BY job_id";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);
 
