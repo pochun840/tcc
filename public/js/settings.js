@@ -328,25 +328,59 @@ function StatusCheck(action) {
         });   
     }
 
-    /*$.ajax({ // 提醒
+}
+
+function idas_update() {
+    var ff = document.querySelector('#file-uploader').files;
+    var bb = document.getElementById("file-uploader").files[0];
+    var form = new FormData();
+    form.append("file", bb);
+
+    var url = '?url=Settings/iDas_Update';
+    if(url){
+        $.ajax({
+            type: "POST",
+            processData: false,
+            cache: false,
+            contentType: false,
+            data: form,
+            dataType: "json",
+            url: url,
+            success: function(response) {
+                console.log(response);
+                alert(response);
+                document.getElementById("file-uploader").value = '';
+                //history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });      
+    }
+    /*$.ajax({
         type: "POST",
-        data: { },
+        processData: false,
+        cache: false,
+        contentType: false,
+        data: form,
         dataType: "json",
         url: url,
         beforeSend: function() {
             $('#overlay').removeClass('hidden');
         },
-    }).done(function(result) { //成功且有回傳值才會執行
+    }).done(function(result) {
         $('#overlay').addClass('hidden');
-        if(result.server_status == "true"){
-            document.getElementById('s_status').innerHTML = work_icon;
-        }else{
-            document.getElementById('s_status').innerHTML = not_work_icon;
+
+        if (result.message != '') {
+            Swal.fire({
+                title: 'Error',
+                text: result.message,
+            });
+        } else {
+            Swal.fire('', '', 'success');
+            setTimeout(function() { history.go(0); }, 2000);
         }
-        if(result.client_status == "true"){
-            document.getElementById('c_status').innerHTML = work_icon;
-        }else{
-            document.getElementById('c_status').innerHTML = not_work_icon;
-        }
+        document.getElementById("file-uploader").value = '';
+        
     });*/
 }
