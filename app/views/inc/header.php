@@ -42,7 +42,17 @@
             .t2{font-size: 17px; margin: 5px 0px;}
             .t3{font-size: 17px; margin: 3px 0px;}
         </style> 
-        <?php } else if($firstPart =="Tools"){  ?>
+        <?php } else if($firstPart =="Inputs" && $isMobile  ){  ?>
+
+            <style>
+                .t1{font-size: 17px; margin: 4px 0px; display: flex; align-items: center;}
+                .t2{font-size: 17px; margin: 4px 0px;}
+                .t3{font-size: 17px; margin: 4px 0px;}
+                .input-pin img{ height: 25px; width: 40px}
+                .zoom{zoom:1.2; vertical-align: middle}
+
+            </style>
+
 
         <?}else{?>
 

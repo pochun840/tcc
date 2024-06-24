@@ -29,13 +29,6 @@ function includecss_file($part, $cssFileName) {
 
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/flatpickr.min.css" type="text/css">
 
-    <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=202406131200"></script>
-    <script src="<?php echo URLROOT; ?>js/tcc_data.js?v=202406131200"></script>
-    <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-    <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
-    <script src="<?php echo URLROOT; ?>js/flatpickr_zh.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
-
     <?php 
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         $isMobile = preg_match('/Mobile|Android|Silk|Kindle|BlackBerry|Opera Mini|Opera Mobi/', $userAgent);
@@ -70,4 +63,15 @@ function includecss_file($part, $cssFileName) {
         includecss_file("Sequences", "seq.js");
         includecss_file("Step", "step.js");
         includecss_file("Settings", "settings.js");
+
+        
+    ?>
+
+    
+    <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=202406131200"></script>
+    <script src="<?php echo URLROOT; ?>js/tcc_data.js?v=202406131200"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr_zh.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
 
