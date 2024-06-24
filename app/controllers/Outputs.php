@@ -85,7 +85,7 @@ class Outputs extends Controller
                         }else if($vv['wave'] == 2){
                             $img = '<img src="./img/signal02.png" style="max-width: 50px;">';
                         }else{
-                            $img = '<img src="./img/signal03.png" style="max-width: 50px;">';
+                            $img = '<img src="./img/trigger.png" style="max-width: 50px;">';
                         }   
 
                         $job_outputlist .= "<tr class='".$vv['output_event']."'>";
@@ -328,7 +328,7 @@ class Outputs extends Controller
             $input_check = false; 
         }
 
-        if( !empty($_POST['old_output_event']) && isset($_POST['old_output_event'])  ){
+        if(!empty($_POST['old_output_event']) && isset($_POST['old_output_event'])  ){
             $jobdata['old_output_event'] = $_POST['old_output_event'];
         }
         

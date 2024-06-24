@@ -42,7 +42,9 @@
             .t2{font-size: 17px; margin: 5px 0px;}
             .t3{font-size: 17px; margin: 3px 0px;}
         </style> 
-        <?php } else {  ?>
+        <?php } else if($firstPart =="Tools"){  ?>
+
+        <?}else{?>
 
         <style>
             .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
