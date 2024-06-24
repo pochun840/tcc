@@ -740,6 +740,9 @@ function crud_job_event(argument){
         
     }
 }
+
+
+
 </script>
 
 </body>

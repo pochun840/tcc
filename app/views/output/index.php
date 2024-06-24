@@ -739,8 +739,6 @@ function crud_job_event(argument){
     if(argument == 'unified' && job_id != ''){
         enableButton();
         resetBackgroundColor();
-        //console.log('output_job 有值:', output_job);
-        //console.log('job_id 有值:', job_id);
         if(output_job != job_id){
             alignsubmit(job_id);  
         }else{
@@ -749,6 +747,8 @@ function crud_job_event(argument){
         
     }
 }
+
+
 </script>
 
 
