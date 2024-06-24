@@ -924,23 +924,27 @@ class Settings extends Controller
         }
     }
 
-    public function delete_barcodes()
-    {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $data = json_decode(file_get_contents("php://input"), true);
-            $filesToDelete = $data["jobs"];
+    public function delete_barcodes(){
 
-            $result = ["message" => ""];
-
-            foreach ($filesToDelete as $job_id) {
-                $this->SettingModel->delete_job_barcode($job_id);
-            }
-
-            echo json_encode($result);
-        } else {
-            echo json_encode(["message" => "無效的請求方法"]);
+        $input_check = true;
+        $barcode = array();
+        if(!empty($_POST['del_barcode_id']) && isset($_POST['del_barcode_id'])){
+            $barcode = $_POST['del_barcode_id'];
+        }else{ 
+            $input_check = false;
+            
         }
+        if($input_check){
+           $res = $this->SettingModel->delete_job_barcode($barcode);
 
+           if($res){
+                $res_msg = 'delete  barcode :'. $barcode[0].' success';
+           }else{
+                $res_msg = 'delete  barcode :'. $barcode[0].' fail';
+           }
+           echo $res_msg;
+        }
+      
     }
 
     public function iDas_Update()

@@ -398,3 +398,40 @@ function update_barcode(){
     }  
 }
 
+function delete_barcode() {
+    var del_barcode_id = [];
+    var checkboxes = document.querySelectorAll('input[name="barcode_check"]:checked');
+    
+    checkboxes.forEach(function (checkbox) {
+        del_barcode_id.push(checkbox.value);
+    });
+    
+    if(del_barcode_id){
+        $.ajax({
+            url: "?url=Settings/delete_barcodes",
+            method: "POST",
+            data:{ 
+                del_barcode_id: del_barcode_id
+
+            },
+            success: function(response) {
+                console.log(response);
+                alert(response);
+                $.ajax({
+                    url: "?url=Settings/show_Barcodes",
+                    method: "GET",
+                    success: function(html) {
+                        $('#total_barcodes').html(html);  
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching barcodes:", error);
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });   
+    }
+    
+}

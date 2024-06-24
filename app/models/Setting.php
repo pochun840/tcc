@@ -341,12 +341,16 @@ class Setting{
     }
 
     //delete job barcdoe
-    public function delete_job_barcode($job_id)
+    public function delete_job_barcode($barcode)
     {
-        $sql = "DELETE FROM barcode WHERE barcode_selected_job = :job_id ";
-        $statement = $this->db->prepare($sql);
-        $statement->bindValue(':job_id', $job_id);
-        $results = $statement->execute();
+        foreach($barcode as $key =>$val){
+            $sql = "DELETE FROM barcode WHERE barcode_selected_job = :job_id ";
+            $statement = $this->db_iDas->prepare($sql);
+            $statement->bindValue(':job_id', $val);
+            $results = $statement->execute();
+    
+            
+        }
 
         return $results;
     }
