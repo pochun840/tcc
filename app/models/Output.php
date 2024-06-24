@@ -2,7 +2,6 @@
 
 class Output{
     private $db;//condb control box
-    private $db_data;//devdb tool
     private $dbh;
 
     // 在建構子將 Database 物件實例化
@@ -10,9 +9,6 @@ class Output{
     {
         $this->db = new Database;
         $this->db = $this->db->getDb();
-
-        $this->db_data = new Database;
-        $this->db_data = $this->db_data->getDb_data();
 
         $this->dbh = new Database;
 
@@ -139,7 +135,7 @@ class Output{
 
         return $results;
     }
-    //pin2_signal02
+    
     public function generateTableCell($value,$value2) {
         if($value >= 1 && $value <= 11){
             $tableCells = "";

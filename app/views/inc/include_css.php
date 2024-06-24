@@ -64,13 +64,10 @@ function includecss_file($part, $cssFileName) {
         includecss_file("Step", "step.js");
         includecss_file("Settings", "settings.js");
 
-        
     ?>
-
-    
     <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=202406131200"></script>
     <script src="<?php echo URLROOT; ?>js/tcc_data.js?v=202406131200"></script>
     <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
     <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
-    <script src="<?php echo URLROOT; ?>js/jazip.js?v=202406241500"></script>
+    <script src="<?php echo URLROOT; ?>js/jszip.js?v=202406241500"></script>
 
