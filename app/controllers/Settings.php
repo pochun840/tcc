@@ -839,6 +839,9 @@ class Settings extends Controller
         //$error_message = '';
         if( !empty($_POST['barcode_name']) && isset($_POST['barcode_name'])  ){
             $barcode['barcode_name'] = $_POST['barcode_name'];
+            if (strlen($barcode['barcode_name']) > 54) {
+                $input_check = false;
+            }
         }else{ 
             $input_check = false;
             //$error_message .= "barcode_name,";
