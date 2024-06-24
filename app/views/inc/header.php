@@ -28,20 +28,16 @@
       $isMobile = preg_match('/Mobile|Android|Silk|Kindle|BlackBerry|Opera Mini|Opera Mobi/', $userAgent);
 
       if($firstPart =="Tools"){?>
-
-        <style>
-
-            .t1{font-size: 15px; margin: 5px 0px; display: flex; align-items: center;padding-left: 7%}
-            .t2{font-size: 14px; margin: 5px 0px;}
-
-        </style>
-
+            <style>
+                .t1{font-size: 15px; margin: 5px 0px; display: flex; align-items: center;padding-left: 7%}
+                .t2{font-size: 14px; margin: 5px 0px;}
+            </style>
       <?php } else if($firstPart =="Data"){?>
-        <style>
-            .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
-            .t2{font-size: 17px; margin: 5px 0px;}
-            .t3{font-size: 17px; margin: 3px 0px;}
-        </style> 
+            <style>
+                .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
+                .t2{font-size: 17px; margin: 5px 0px;}
+                .t3{font-size: 17px; margin: 3px 0px;}
+            </style> 
         <?php } else if($firstPart =="Inputs" && $isMobile  ){  ?>
 
             <style>
@@ -50,7 +46,6 @@
                 .t3{font-size: 17px; margin: 4px 0px;}
                 .input-pin img{ height: 25px; width: 40px}
                 .zoom{zoom:1.2; vertical-align: middle}
-
             </style>
 
 
@@ -60,31 +55,24 @@
                 .t2{font-size: 17px; margin: 4px 0px;}
                 .t3{font-size: 17px; margin: 4px 0px;}
                 .t4{height: 28px;text-align: center;}   /* Output pin, time style */
-
                 .output-pin img{ height: 25px; width: 45px}
                 .zoom{zoom:1.1; vertical-align: middle}
 
             </style>
 
         <?php } else {?>
-        <style>
-            .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
-            .t2{font-size: 17px; margin: 5px 0px;}
-            .t3{font-size: 17px; margin: 3px 0px;}
-            .t4{height: 28px;text-align: center;}   
-            .selected { background-color: #9AC0CD !important;}
-            .input-pin img{ height: 25px; width: 40px}
-            .output-pin img{ height: 25px; width: 45px}
-            .disabled_input{ color: #999; pointer-events: none;}
-            .zoom{zoom:1.2; vertical-align: middle}
-        </style>
+            <style>
+                .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
+                .t2{font-size: 17px; margin: 5px 0px;}
+                .t3{font-size: 17px; margin: 3px 0px;}
+                .t4{height: 28px;text-align: center;}   
+                .selected { background-color: #9AC0CD !important;}
+                .input-pin img{ height: 25px; width: 40px}
+                .output-pin img{ height: 25px; width: 45px}
+                .disabled_input{ color: #999; pointer-events: none;}
+                .zoom{zoom:1.2; vertical-align: middle}
+            </style>
         
 
-    <?php } ?>
-    
-   
-
-
-
-        
+    <?php } ?>        
 </head>
