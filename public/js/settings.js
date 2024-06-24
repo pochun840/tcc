@@ -315,12 +315,11 @@ function StatusCheck(action) {
             url: url,
             method: "POST",
             data:{ 
-                //agent_type: agent_type
+           
             },
             success: function(response) {
                 console.log(response);
-                //alert(response);
-                //history.go(0);
+        
             },
             error: function(xhr, status, error) {
                 
@@ -350,39 +349,13 @@ function idas_update() {
                 console.log(response);
                 alert(response);
                 document.getElementById("file-uploader").value = '';
-                //history.go(0);
             },
             error: function(xhr, status, error) {
                 
             }
         });      
     }
-    /*$.ajax({
-        type: "POST",
-        processData: false,
-        cache: false,
-        contentType: false,
-        data: form,
-        dataType: "json",
-        url: url,
-        beforeSend: function() {
-            $('#overlay').removeClass('hidden');
-        },
-    }).done(function(result) {
-        $('#overlay').addClass('hidden');
-
-        if (result.message != '') {
-            Swal.fire({
-                title: 'Error',
-                text: result.message,
-            });
-        } else {
-            Swal.fire('', '', 'success');
-            setTimeout(function() { history.go(0); }, 2000);
-        }
-        document.getElementById("file-uploader").value = '';
-        
-    });*/
+   
 }
 
 
@@ -392,9 +365,6 @@ function update_barcode(){
     var barcode_count = document.getElementById("barcode_count").value;
     var barcode_job   = document.querySelector("select[name='barcode_job']").value;
     
-    //console.log(barcode_name);
-    //console.log(barcode_job);
-
     if(barcode_name){
         $.ajax({
             url: "?url=Settings/Update_Barcode",
@@ -409,16 +379,22 @@ function update_barcode(){
             success: function(response) {
                 console.log(response);
                 alert(response);
-                //history.go(0);
+                $.ajax({
+                    url: "?url=Settings/show_Barcodes",
+                    method: "GET",
+                    success: function(html) {
+                        $('#total_barcodes').html(html);  
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching barcodes:", error);
+                    }
+                });
             },
             error: function(xhr, status, error) {
                 
             }
         });   
 
-    }
-
-
-
-    
+    }  
 }
+

@@ -139,11 +139,11 @@
                                     </tr>
                                 </thead>
 
-                                <tbody style="font-size: 1.8vmin;text-align: center;">
+                                <tbody style="font-size: 1.8vmin;text-align: center;" id='total_barcodes'>
                                   
                                     <?php foreach ($data['barcodes'] as $k_b =>$v_b){?>
                                         <tr>
-                                            <td style="text-align: center; vertical-align: middle;">
+                                            <td style="text-align: center; vertical-align: middle;" >
                                                 <input class="form-check-input" type="checkbox" name="barcode_check" id="barcode_check" value="<?php echo $v_b['barcode_selected_job'];?>" style="zoom:1.2">
                                             </td> 
                                             <td><?php echo $v_b['barcode_selected_job'];?></td>

@@ -74,11 +74,6 @@ class Settings extends Controller
         
         
         $this->view('setting/index', $data);*/
-
-        foreach($barcodes as $kk =>$vv){
-            $barcodes[$kk]['barcode_range_from']  = $barcodes[$kk]['barcode_mask_from'];
-            $barcodes[$kk]['barcode_range_count'] = $barcodes[$kk]['barcode_mask_count'];
-        }
         
         $data = array();
         $data = array(
@@ -793,6 +788,49 @@ class Settings extends Controller
         return $barcodes;
     }
 
+    public function show_Barcodes(){
+
+        $isMobile = $this->isMobileCheck();
+        $barcode_list = '';
+        $barcodes = $this->SettingModel->GetAllBarcodes();
+        if(!empty($barcodes)){
+            
+            if(!$isMobile){
+
+                foreach($barcodes as $kk =>$vv){
+                    $barcode_list = '<tr style="text-align: center; vertical-align: middle;" >';
+                    $barcode_list .= "<td><input class='form-check-input' type='checkbox' name='barcode_check' id='barcode_check' style='zoom:1.2' value='".$vv['barcode_selected_job']."'></td>";
+                    $barcode_list .= '<td>'.$vv['barcode_selected_job'].'</td>';
+                    $barcode_list .= '<td>'.$vv['job_name'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_range_from'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_range_count'].'</td>';
+                    $barcode_list .= '<tr>';
+    
+                    echo $barcode_list;
+                }
+
+            }else{
+                foreach($barcodes as $kk =>$vv){
+                    $barcode_list = '<tr style="text-align: center; vertical-align: middle;" >';
+                    $barcode_list .= "<td><input class='form-check-input' type='checkbox' name='barcode_check' id='barcode_check' style='zoom:1.2' value='".$vv['barcode_selected_job']."'></td>";
+                    $barcode_list .= '<td>'.$vv['barcode_selected_job'].'</td>';
+                    $barcode_list .= '<td>'.$vv['job_name'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_range_from'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_range_count'].'</td>';
+                    $barcode_list .= '<tr>';
+    
+                    echo $barcode_list;
+                }
+
+            }
+          
+
+        }
+
+    }
+
     //update barcode
     public function Update_Barcode()
     {
@@ -805,14 +843,14 @@ class Settings extends Controller
             $input_check = false;
             //$error_message .= "barcode_name,";
         }
-        if( !empty($_POST['barcode_range_from']) && isset($_POST['barcode_range_from'])  ){
-            $barcode['barcode_range_from'] = $_POST['barcode_range_from'];
+        if( !empty($_POST['barcode_from']) && isset($_POST['barcode_from'])  ){
+            $barcode['barcode_range_from'] = $_POST['barcode_from'];
         }else{ 
             $input_check = false;
             //$error_message .= "barcode_from,";
         }
-        if( !empty($_POST['barcode_range_count']) && isset($_POST['barcode_range_count'])  ){
-            $barcode['barcode_range_count'] = $_POST['barcode_range_count'];
+        if( !empty($_POST['barcode_count']) && isset($_POST['barcode_count'])  ){
+            $barcode['barcode_range_count'] = $_POST['barcode_count'];
         }else{ 
             $input_check = false;
             //$error_message .= "barcode_count,";
@@ -824,22 +862,16 @@ class Settings extends Controller
             $input_check = false;
             ///$error_message .= "Job_Select,";
         }
-      
-
+        
         if($input_check){
-
             $barcode_result = $this->SettingModel->Update_Barcode($barcode);
-            if ($result) { // copy DB
-
-                $this->logMessage('edit barcode job:'.$Job_Select.',barcodes:'.$barcode_name.' copyDB success');
-                $this->logMessage('edit barcode job:'.$Job_Select.',barcodes:'.$barcode_name.' copyDB fail');
-                }
-            
-    
+            if($barcode_result){
+                $res_msg = 'edit barcode :'. $barcode['barcode_name'].' success';
+            }else{
+                $res_msg = 'edit barcode :'. $barcode['barcode_name'].' fail';
+            }
+            echo $res_msg;    
         }
-          
-
-        //echo json_encode($data);
     }
 
     public function GetJobSeq()
@@ -879,7 +911,7 @@ class Settings extends Controller
         }
 
         if($input_check){
-            $result = $this->SettingModel->get_job_barcode($job_id);
+            $result = $this->SettingModel->e($job_id);
             echo json_encode($result);
             exit();
         }else{

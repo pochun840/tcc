@@ -70,9 +70,9 @@ class Jobs extends Controller
     
                 $res = $this->jobModel->create_job($mode,$jobdata);
                 if($res){
-                    $res_msg = 'insert job:'. $jobdata['job_id'].'success';
+                    $res_msg = 'insert job:'. $jobdata['job_id'].' success';
                 }else{
-                    $res_msg = 'insert job:'. $jobdata['job_id'].'fail';
+                    $res_msg = 'insert job:'. $jobdata['job_id'].' fail';
                 }
                 echo $res_msg;
             }

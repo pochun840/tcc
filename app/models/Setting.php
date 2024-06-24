@@ -256,8 +256,9 @@ class Setting{
 
     public function Update_Barcode($barcode)
     {
-        if( $this->check_barcode_conflict($barcode['barcode_job']) ){ //已存在，用update
+        if( $this->check_barcode_conflict($barcode['barcode_job']) ){ 
 
+        
             $sql = "UPDATE `barcode` 
                     SET barcode = :barcode,
                         barcode_range_from  = :barcode_range_from,
@@ -294,7 +295,7 @@ class Setting{
         $statement->bindValue(':barcode_selected_job', $job_id);
         $results = $statement->execute();
         $rows = $statement->fetch();
-
+        
         if ($rows['count'] > 0) {
             return true; // job event已存在
         }else{

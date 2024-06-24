@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
   
     <script src="<?php echo URLROOT; ?>js/all.js?v=202406131200"></script>
-    <script src="<?php echo URLROOT; ?>js/settings.js?v=202406210900"></script>
+    <script src="<?php echo URLROOT; ?>js/settings.js?v=202406241200"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <style>
@@ -184,10 +184,11 @@
                                             </tr>
                                         </thead>
 
-                                        <tbody style="font-size: 2.2vmin;text-align: center;">
+                                        <tbody style="font-size: 2.2vmin;text-align: center;" id='total_barcodes'>
                                         <?php foreach ($data['barcodes'] as $k_b =>$v_b){?>
-                                            <tr>
-                                                <td style="text-align: center; vertical-align: middle;">
+                                            <tr >
+
+                                                <td style="text-align: center; vertical-align: middle;" >
                                                     <input class="form-check-input" type="checkbox" name="barcode_check" id="barcode_check" value="<?php echo $v_b['barcode_selected_job'];?>" style="zoom:1.2">
                                                 </td> 
                                                 <td><?php echo $v_b['barcode_selected_job'];?></td>
