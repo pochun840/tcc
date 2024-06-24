@@ -2,7 +2,6 @@
 
 class Miscellaneous{
     private $db;//condb control box
-    private $db_dev;//devdb tool
     private $db_data;//devdb tool
     private $dbh;
 

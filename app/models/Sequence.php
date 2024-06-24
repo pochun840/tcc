@@ -2,7 +2,6 @@
 
 class Sequence{
     private $db;//condb control box
-    private $db_dev;//devdb tool
     private $dbh;
     private $tool_max_rpm;
     private $tool_min_rpm;
