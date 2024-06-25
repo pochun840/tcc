@@ -23,9 +23,11 @@
       $queryStringWithoutUrl = str_replace('url=', '', $queryString);
       $parts = explode('/', $queryStringWithoutUrl);
       $firstPart = $parts[0];
+      $_SESSION['firstPart'] = $firstPart;
 
       $userAgent = $_SERVER['HTTP_USER_AGENT'];
       $isMobile = preg_match('/Mobile|Android|Silk|Kindle|BlackBerry|Opera Mini|Opera Mobi/', $userAgent);
+
 
       if($firstPart =="Tools"){?>
             <style>
