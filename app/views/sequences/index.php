@@ -446,7 +446,7 @@ var rowInfoArray = [];
         var rowInfo = {
             sequence_id: sequenceId,
             sequence_name: sequenceName
-        };-
+        };
         
         rowInfoArray.push(rowInfo);
 <?php } ?>

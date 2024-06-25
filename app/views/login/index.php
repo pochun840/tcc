@@ -1,10 +1,10 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
-
+<?php echo "eeeeeeeeeeee";?>
 <div class="container-ms">
     <div class="buttonbox" style="text-align: right; margin: 10px">
-        <input type="button" name="" value="简中" onclick="language_change('zh-cn');" >
-        <input type="button" name="" value="繁中" onclick="language_change('zh-tw');">
-        <input type="button" name="" value="English" onclick="language_change('en-us');">
+        <input type="button" name="" value="简中" data-language="zh-cn" onclick="language_change();" >
+        <input type="button" name="" value="繁中" data-language="zh-tw" onclick="language_change();">
+        <input type="button" name="" value="English" data-language="en-us" onclick="language_change();">
     </div>
     <div>
         <h1 class="col-ms-3 pt-3" style="font-size: 50px; text-align: center; color: #fff"><?php echo $text['login_text']; ?></h1>
@@ -17,18 +17,26 @@
 </div>
 
   <script>
-    function language_change(language) {
-        $.ajax({
-          type: "POST",
-          url: "?url=Dashboards/change_language",
-          data: {'language':language},
-          dataType: "json",
-          encode: true,
-          async: false,//等待ajax完成
-        }).done(function (data) {//成功且有回傳值才會執行
-            window.location = window.location.href;
-        });
+    function language_change() {
+        
+        alert('ssswwe');
+        /*$.ajax({
+            type: "POST",
+            url: "?url=Dashboards/change_language",
+            data: { 'language': language },
+            dataType: "json",
+            encode: true,
+            success: function(data) {
+                // 成功回调函数
+                window.location.reload(); // 刷新当前页面
+            },
+            error: function(xhr, status, error) {
+                // 错误处理
+                console.error("AJAX请求失败:", error);
+            }
+        });*/
     }
+
 
     $(document).ready(function () {
         <?php 

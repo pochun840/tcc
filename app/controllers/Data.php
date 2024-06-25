@@ -12,7 +12,7 @@ class Data extends Controller
     // 取得所有Jobs
     public function index(){
 
-
+            
         $type ='ALL';
         $isMobile = $this->isMobileCheck();
         $res_data = $this->DataModel->getData('ALL');

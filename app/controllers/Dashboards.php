@@ -150,20 +150,24 @@ class Dashboards extends Controller
 
     public function change_language()
     {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if( !empty($_POST['language']) && isset($_POST['language'])  ){
             $language = $_POST['language'];
         }else{ 
             $input_check = false; 
             $error_message .= "language,";
         }
-
-        $_SESSION['language'] = $language;
+        $_SESSION['language_change'] = $language;
+        /*$_SESSION['language'] = $language;
 
         $response = array(
             'language' => $language,
             'result' => true,
         );
-        echo json_encode($response);
+        echo json_encode($response);*/
 
     }
 

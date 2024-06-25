@@ -1,6 +1,6 @@
 
 <?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>/css/tcc_main.css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_main.css">
 
 <body>
 <div class="container-ms">
@@ -8,9 +8,9 @@
         <div class="center-content w3-center">
             <div style="text-shadow:3px 5px 0 #444;" class="wrapper w3-center w3-text-red">
                 <div class="buttonbox" style=" top: 2%;right: 10px;text-align: right;position: absolute;">
-                    <input type="button" name="" value="简中" onclick="language_change('zh-cn');" >
-                    <input type="button" name="" value="繁中" onclick="language_change('zh-tw');">
-                    <input type="button" name="" value="English" onclick="language_change('en-us');">
+                <input type="button" name="" value="简中" data-language="zh-cn" onclick="language_change('zh-cn');" >
+                <input type="button" name="" value="繁中" data-language="zh-tw" onclick="language_change('zh-tw');">
+                <input type="button" name="" value="English" data-language="en-us" onclick="language_change('en-us');">
                 </div>
 
                 <div style=" margin-top: 5%">
@@ -47,3 +47,28 @@
 </body>
 
 </html>
+<script>
+   function language_change(language) {
+    if( language){
+        $.ajax({
+            url: "?url=Dashboards/change_language",
+            method: "POST",
+            data:{ 
+                language: language
+
+            },
+            success: function(response) {
+                console.log( response);
+                alert(response);
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+
+
+    }
+
+}
+</script>
