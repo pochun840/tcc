@@ -86,12 +86,12 @@
                     <div class="footer" id='input_menu'>
                         <div class="buttonbox">
                                         <!--document.getElementById('copyinput').style.display='block'-->
-                            <input id="S1" name="New_Submit" type="button" value="New" tabindex="1" onclick="crud_job_event('new')">
-                            <input id="S2" name="Edit_Submit" type="button" value="Edit" tabindex="1" onclick="crud_job_event('edit')">
-                            <input id="S3" name="Copy_Submit" type="button" value="Copy" tabindex="1" onclick="crud_job_event('copy')">
-                            <input id="S4" name="Delete_Submit" type="button" value="Delete" tabindex="1" onclick="crud_job_event('del')">
-                            <input id="S5" name="Table_Submit" type="button" value="Table" tabindex="1" onclick="tablesubmit('show')">
-                            <input id="S6" name="Align_Submit" type="button" value="Unified" tabindex="1" onclick="crud_job_event('unified')" >
+                            <input id="S1" name="New_Submit" type="button" value="<?php echo $text['New'];?>" tabindex="1" onclick="crud_job_event('new')">
+                            <input id="S2" name="Edit_Submit" type="button" value="<?php echo $text['Edit'];?>" tabindex="1" onclick="crud_job_event('edit')">
+                            <input id="S3" name="Copy_Submit" type="button" value="<?php echo $text['Copy'];?>" tabindex="1" onclick="crud_job_event('copy')">
+                            <input id="S4" name="Delete_Submit" type="button" value="<?php echo $text['Delete'];?>" tabindex="1" onclick="crud_job_event('del')">
+                            <input id="S5" name="Table_Submit" type="button" value="<?php echo $text['Table'];?>" tabindex="1" onclick="tablesubmit('show')">
+                            <input id="S6" name="Align_Submit" type="button" value="<?php echo $text['Align'];?>" tabindex="1" onclick="crud_job_event('unified')" >
                         </div>
                     </div>
                 </div>
