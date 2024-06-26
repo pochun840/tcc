@@ -51,7 +51,7 @@
                             </div>
                         </div>    
                         <div class="row t2">
-                            <div class="col-4 t1">Torque (<?php echo $text['Nm'];?>):</div>
+                            <div class="col-4 t1"><?php echo $text['torque'];?> (<?php echo $text['Nm'];?>):</div>
                             <div class="col t2">
                                 <div></div>
                             </div>

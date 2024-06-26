@@ -24,13 +24,13 @@
                         <table id="job_table"  class="table w3-table-all w3-hoverable">
                             <thead id="header-table">
                                 <tr class="w3-dark-grey">
-                                    <th>Job ID</th>
-                                    <th>Job Name</th>
+                                    <th><?php echo $text['job_id'];?></th>
+                                    <th><?php echo $text['job_name'];?></th>
                                     <th>Unscrew Direction</th>
                                     <th>Unscrew RPM</th>
                                     <th>Unscrew Power</th>
-                                    <th>Total Seq</th>
-                                    <th>Add Seq</th>
+                                    <th><?php echo $text['total_seq'];?></th>
+                                    <th><?php echo $text['add_step'];?></th>
                                 </tr>
                             </thead>
 
