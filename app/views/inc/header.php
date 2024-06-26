@@ -76,5 +76,16 @@
             </style>
         
 
-    <?php } ?>        
+    <?php } ?>
+    
+    <?php if(session_status() == PHP_SESSION_NONE) {
+                session_start();
+          }
+          $lanuage = $_SESSION['language'];
+          if(file_exists('../app/language/' . $lanuage . '.php')){
+            require_once '../app/language/' . $lanuage . '.php';
+          } else { //預設採用簡體中文
+            require_once '../app/language/en-us.php';
+          }
+    ?>
 </head>

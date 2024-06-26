@@ -1,5 +1,4 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
-<?php echo "eeeeeeeeeeee";?>
 <div class="container-ms">
     <div class="buttonbox" style="text-align: right; margin: 10px">
         <input type="button" name="" value="简中" data-language="zh-cn" onclick="language_change();" >
@@ -18,9 +17,8 @@
 
   <script>
     function language_change() {
-        
-        alert('ssswwe');
-        /*$.ajax({
+    
+        $.ajax({
             type: "POST",
             url: "?url=Dashboards/change_language",
             data: { 'language': language },
@@ -34,7 +32,7 @@
                 // 错误处理
                 console.error("AJAX请求失败:", error);
             }
-        });*/
+        });
     }
 
 

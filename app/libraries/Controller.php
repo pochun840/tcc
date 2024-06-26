@@ -23,10 +23,11 @@ class Controller
         $data = array_merge($data,$privilege);
         // var_dump($data);
         // 如果檔案存在就引入它
+        
         if(file_exists('../app/language/' . $data['language'] . '.php')){
             require_once '../app/language/' . $data['language'] . '.php';
         } else { //預設採用簡體中文
-            require_once '../app/language/zh-cn.php';
+            require_once '../app/language/en-us.php';
         }
 
         // 如果檔案存在就引入它

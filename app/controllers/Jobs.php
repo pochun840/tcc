@@ -12,17 +12,20 @@ class Jobs extends Controller
         $this->jobModel = $this->model('Job');
         $this->DashboardModel = $this->model('Dashboard');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
+        
     }
 
     // 取得所有Jobs
     public function index(){
+
 
         $data = array();
 
         $isMobile = $this->isMobileCheck();
         $jobs = $this->jobModel->getJobs();
         $direction = $this->MiscellaneousModel->details('unscrew_direction');
-        
+
+   
         $lastRow = end($jobs);
         $jobIdInt = intval($lastRow['job_id']) + 1 ;
       

@@ -58,8 +58,8 @@
 
             },
             success: function(response) {
-                console.log( response);
-                alert(response);
+                //console.log( response);
+                //alert(response);
                 history.go(0);
             },
             error: function(xhr, status, error) {

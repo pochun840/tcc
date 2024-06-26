@@ -1,6 +1,4 @@
 <?php
-
-
 // App 根目錄，這是引入 app 資料夾裡的資源用的
 define('APPROOT', dirname(dirname(__FILE__)) . '/');
 
@@ -34,6 +32,7 @@ if($brand_code == false || $brand_code == 'BF01'){ //Kilews or Windows
 
 // iDAS出貨版本 0:Kilews 2:上海 shanhai 4:MyTorque 5:晶元SUMAKE 6:DELTA 7:白牌 6:
 define('ICONMODE', $brand);
+
 
 switch ( ICONMODE ) {
 	case '0': // Kilews
