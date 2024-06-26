@@ -60,10 +60,10 @@
         </div>
 
         <div class="buttonbox">
-            <input id="S3" name="Step_Manager_Submit" type="button" value="New"    tabindex="1"  onclick="cound_step('new');" >
-            <input id="S6" name="Step_Manager_Submit" type="button" value="Edit"   tabindex="1" onclick="cound_step('edit')">
-            <input id="S5" name="Step_Manager_Submit" type="button" value="Copy"   tabindex="1"  onclick="cound_step('copy');">
-            <input id="S4" name="Step_Manager_Submit" type="button" value="Delete" tabindex="1" onclick="cound_step('del');" >
+            <input id="S3" name="Step_Manager_Submit" type="button" value="<?php echo $text['New'];?>"    tabindex="1"  onclick="cound_step('new');" >
+            <input id="S6" name="Step_Manager_Submit" type="button" value="<?php echo $text['Edit'];?>"   tabindex="1" onclick="cound_step('edit')">
+            <input id="S5" name="Step_Manager_Submit" type="button" value="<?php echo $text['Copy'];?>"   tabindex="1"  onclick="cound_step('copy');">
+            <input id="S4" name="Step_Manager_Submit" type="button" value="<?php echo $text['Delete'];?>" tabindex="1" onclick="cound_step('del');" >
         </div>
     </div>
 
