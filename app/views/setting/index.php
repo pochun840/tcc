@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div style="text-align: center;margin-top: 50px;">
-                    <button class="all-btn w3-button w3-border w3-round-large" id="cc_save" onclick="cc_save()">Save</button>
+                    <button class="all-btn w3-button w3-border w3-round-large" id="cc_save" onclick="cc_save()"><?php echo $text['save'];?></button>
                 </div>
             </div>
 
@@ -194,7 +194,7 @@
                     </div>
                 </div>
                 <div style="text-align: center;margin-top: 50px;">
-                    <button class="all-btn w3-button w3-border w3-round-large" onclick="update_barcode()" >Save</button>&nbsp;&nbsp;
+                    <button class="all-btn w3-button w3-border w3-round-large" onclick="update_barcode()" ><?php echo $text['save'];?></button>&nbsp;&nbsp;
                     <button class="all-btn w3-button w3-border w3-round-large" onclick="delete_barcode()" >Delete</button>
                 </div>               
             </div>

@@ -223,8 +223,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="" class="button-modal" onclick="saveseq();">Save</button>
-                    <button id="" class="button-modal" onclick="hideElementById('newseq');"  class="closebtn">Close</button>
+                    <button id="" class="button-modal" onclick="saveseq();"><?php echo $text['save'];?></button>
+                    <button id="" class="button-modal" onclick="hideElementById('newseq');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -361,8 +361,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="" class="button-modal" onclick="edit_seq_save();">Save</button>
-                    <button id="" class="button-modal" onclick="hideElementById('editseq');"  class="closebtn">Close</button>
+                    <button id="" class="button-modal" onclick="edit_seq_save();"><?php echo $text['save'];?></button>
+                    <button id="" class="button-modal" onclick="hideElementById('editseq');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -415,8 +415,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="" class="button-modal" onclick="copy_seq_by_id()">Save</button>
-                    <button id="" class="button-modal" onclick="hideElementById('copyseq');" class="closebtn">Close</button>
+                    <button id="" class="button-modal" onclick="copy_seq_by_id()"><?php echo $text['save'];?></button>
+                    <button id="" class="button-modal" onclick="hideElementById('copyseq');" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>

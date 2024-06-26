@@ -45,7 +45,7 @@
                     </div>
                     <div class="modal-footer justify-content-center w3-dark-grey" style="height: 48px">
                         <button id="select_confirm" type="button" class="btn btn-primary" onclick='job_confirm()'>Confirm</button>
-                        <button id="select_close" type="button" class="btn btn-secondary" onclick="document.getElementById('JobSelect').style.display='none'" >Close</button>
+                        <button id="select_close" type="button" class="btn btn-secondary" onclick="document.getElementById('JobSelect').style.display='none'" ><?php echo $text['close'];?></button>
                     </div>
                 </form>
             </div>
@@ -310,8 +310,8 @@
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <button id="" class="button-modal" onclick="create_output_id()">Save</button>
-                            <button id="" class="button-modal" onclick="document.getElementById('new_output').style.display='none'" class="closebtn">Close</button>
+                            <button id="" class="button-modal" onclick="create_output_id()"><?php echo $text['save'];?></button>
+                            <button id="" class="button-modal" onclick="document.getElementById('new_output').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
                         </div>
                     </div>
                 </div>
@@ -544,8 +544,8 @@
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <button id="" class="button-modal" onclick="edit_output_id()">Save</button>
-                            <button id="" class="button-modal" onclick="document.getElementById('edit_output').style.display='none'" class="closebtn">Close</button>
+                            <button id="" class="button-modal" onclick="edit_output_id()"><?php echo $text['save'];?></button>
+                            <button id="" class="button-modal" onclick="document.getElementById('edit_output').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
                         </div>
                     </div>
                 </div>
@@ -597,8 +597,8 @@
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <button id="" class="button-modal" onclick="copy_output_id()">Save</button>
-                            <button id="" class="button-modal" onclick="document.getElementById('copy_output').style.display='none'" class="closebtn">Close</button>
+                            <button id="" class="button-modal" onclick="copy_output_id()"><?php echo $text['save'];?></button>
+                            <button id="" class="button-modal" onclick="document.getElementById('copy_output').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
                         </div>
                     </div>
                 </div>

@@ -182,8 +182,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="" class="button-modal" onclick="add_step()" >Save</button>
-                    <button id="" class="button-modal" onclick="hideElementById('newstep');"  class="closebtn">Close</button>
+                    <button id="" class="button-modal" onclick="add_step()" ><?php echo $text['save'];?></button>
+                    <button id="" class="button-modal" onclick="hideElementById('newstep');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -297,8 +297,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="" class="button-modal" onclick="edit_step_save()" >Save</button>
-                    <button id="" class="button-modal" onclick="hideElementById('edittep');"  class="closebtn">Close</button>
+                    <button id="" class="button-modal" onclick="edit_step_save()" ><?php echo $text['save'];?></button>
+                    <button id="" class="button-modal" onclick="hideElementById('edittep');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -339,8 +339,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="copyButton" class="button-modal" onclick="copy_step_by_id_ajax()" >Save</button>
-                    <button id="" class="button-modal" onclick="document.getElementById('copystep').style.display='none'" class="closebtn">Close</button>
+                    <button id="copyButton" class="button-modal" onclick="copy_step_by_id_ajax()" ><?php echo $text['save'];?></button>
+                    <button id="" class="button-modal" onclick="document.getElementById('copystep').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>

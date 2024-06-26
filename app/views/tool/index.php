@@ -19,45 +19,45 @@
             <div class="tool-setting">
                 <div class="scrollbar" id="style-tool">
                     <div class="force-overflow">
-                        <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%">Tool Information</div>
+                        <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['tool_info'];?></div>
                         <div class="row t2">
-                            <div class="col-4 t1">Tool Type:</div>
+                            <div class="col-4 t1"><?php echo $text['tool_type'];?>:</div>
                             <div class="col t2">
                                 <div</div>
                             </div>
                         </div>    
                         <div class="row t2">
-                            <div class="col-4 t1">Tool SN:</div>
+                            <div class="col-4 t1"><?php echo $text['tool_sn'];?>:</div>
                             <div class="col t2">
                                 <div></div>
                             </div>
                         </div> 
                         <div class="row t2">
-                            <div class="col-4 t1">Calibration Time:</div>
+                            <div class="col-4 t1"><?php echo $text['calibration_value'];?>:</div>
                             <div class="col t2">
                                 <div></div>
                             </div>
                         </div>    
                         <div class="row t2">
-                            <div class="col-4 t1">Total Count:</div>
+                            <div class="col-4 t1"><?php echo $text['total_counts'];?>:</div>
                             <div class="col t2">
                                 <div></div>
                             </div>
                         </div>    
                         <div class="row t2">
-                            <div class="col-4 t1">RPM:</div>
+                            <div class="col-4 t1"><?php echo $text['rpm'];?>:</div>
                             <div class="col t2">
                                 <div></div>
                             </div>
                         </div>    
                         <div class="row t2">
-                            <div class="col-4 t1">Torque (N-m):</div>
+                            <div class="col-4 t1">Torque (<?php echo $text['Nm'];?>):</div>
                             <div class="col t2">
                                 <div></div>
                             </div>
                         </div>    
                         <div class="row t2">    
-                            <div class="col-4 t1">F/W Version:</div>
+                            <div class="col-4 t1"><?php echo $text['sw_version'];?>:</div>
                             <div class="col t2">
                                 <div></div>
                             </div>
@@ -65,39 +65,39 @@
                         
                         <hr>
                         
-                        <div class="col t1" style="padding-left: 3%;font-weight: bold">Controller</div>            
+                        <div class="col t1" style="padding-left: 3%;font-weight: bold"><?php echo $text['controller_info'];?></div>            
                         <div class="row t2">
-                            <div class="col-4 t1">Controller SN:</div>
+                            <div class="col-4 t1"><?php echo $text['controller_sn'];?>:</div>
                             <div class="col t2">
                                 <div></div>
                             </div>
                         </div>    
                         <div class="row t2">
-                            <div class="col-4 t1">Controller Version:</div>
+                            <div class="col-4 t1"><?php echo $text['controller_version'];?>:</div>
                             <div class="col t2">
                                 <div></div>
                             </div>
                         </div>    
                         <div class="row t2">
-                            <div class="col-4 t1">MCB Version:</div>
+                            <div class="col-4 t1"><?php echo $text['mcb_version'];?>:</div>
                             <div class="col t2">
                                 <div></div>
                             </div>
                         </div>    
                         <div class="row t2">
-                            <div class="col-4 t1">Image Version:</div>
+                            <div class="col-4 t1"><?php echo $text['image_version'];?>:</div>
                             <div class="col t2">
                                 <div></div>
                             </div>
                         </div>    
                         <div class="row t2">
-                            <div class="col-4 t1">Network IP:</div>
+                            <div class="col-4 t1"><?php echo $text['network_ip'];?>:</div>
                             <div class="col t2">
                                 <div><?php echo $data['IP'];?></div>
                             </div>
                         </div>    
                         <div class="row t2">
-                            <div class="col-4 t1">Mac:</div>
+                            <div class="col-4 t1"><?php echo $text['Mac'];?>:</div>
                             <div class="col t2">
                                 <div><?php echo $data['MAC'];?></div>
                             </div>
