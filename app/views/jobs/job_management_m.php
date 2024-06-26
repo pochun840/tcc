@@ -81,7 +81,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('newjob').style.display='none'"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px; margin: 3px; font-size: 4.5vmin">&times;</span>
-                    <h3 id='modal_title'>New Job</h3>
+                    <h3 id='modal_title'><?php echo $text['new_job'];?></h3>
                 </header>
 
                 <div class="modal-body">
@@ -142,7 +142,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('editjob').style.display='none'"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px; margin: 3px; font-size: 4.5vmin">&times;</span>
-                    <h3 id='modal_title'>Edit Job</h3>
+                    <h3 id='modal_title'><?php echo $text['edit_job'];?></h3>
                 </header>
 
                 <div class="modal-body">
