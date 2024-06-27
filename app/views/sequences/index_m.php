@@ -25,8 +25,8 @@
                         <table id="seq_table" class="table w3-table-all w3-hoverable">
                             <thead id="header-table">
                                 <tr class="w3-dark-grey" style="font-size: 2.4vmin">
-                                    <th>Seq ID</th>
-                                    <th>Seq Name</th>
+                                    <th><?php echo $text['seq_id'];?></th>
+                                    <th><?php echo $text['seq_name'];?></th>
                                     <th>Unit</th>
                                     <th>TR</th>
                                     <th>Ena</th>
@@ -103,13 +103,13 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="seq-id" class="col-6 t1">Seq ID:</div>
+                                    <div for="seq-id" class="col-6 t1"><?php echo $text['seq_id'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="seq_id" maxlength="" value="<?php echo $data['seq_id'];?>">
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="seq-name" class="col-6 t1">Seq Name:</div>
+                                    <div for="seq-name" class="col-6 t1"><?php echo $text['seq_name'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="seq_name" maxlength="" >
                                     </div>
@@ -244,13 +244,13 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="seq-id" class="col-6 t1">Seq ID:</div>
+                                    <div for="seq-id" class="col-6 t1"><?php echo $text['seq_id'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="old_seqid" maxlength="" value="">
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="seq-name" class="col-6 t1">Seq Name:</div>
+                                    <div for="seq-name" class="col-6 t1"><?php echo $text['seq_name'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_seq_name" maxlength="" >
                                     </div>
@@ -378,13 +378,13 @@
         	            <label for="from_seq_id" class="col col-form-label" style="font-weight: bold">Copy From</label>
         	            <div style="padding-left: 10%">
         		            <div class="row">
-        				        <label for="from_seq_id" class="t1 col-4 col-form-label">Seq ID:</label>
+        				        <label for="from_seq_id" class="t1 col-4 col-form-label"><?php echo $text['seq_id'];?> :</label>
         				        <div class="col-5 t2 ">
         				            <input type="text" class="form-control" id="from_seq_id" disabled>
         				        </div>
         				    </div>
         				    <div class="row">
-        				        <label for="from_seq_name" class="t1 col-4 col-form-label">Seq Name:</label>
+        				        <label for="from_seq_name" class="t1 col-4 col-form-label"><?php echo $text['seq_name'];?> :</label>
         				        <div class="t2 col-5">
         				            <input type="text" class="form-control" id="from_seq_name" disabled>
         				        </div>
@@ -394,13 +394,13 @@
         			    <label for="from_seq_id" class="col col-form-label" style="font-weight: bold">Copy To</label>
         			    <div style="padding-left: 10%">
         				    <div class="row">
-        				        <label for="to_seq_id" class="t1 col-4 col-form-label">Seq ID:</label>
+        				        <label for="to_seq_id" class="t1 col-4 col-form-label"><?php echo $text['seq_id'];?> :</label>
         				        <div class="t2 col-5">
         				            <input type="number" class="form-control" id="to_seq_id">
         				        </div>
         				    </div>
         				    <div class="row">
-        				        <label for="to_seq_name" class="t1 col-4 col-form-label">Seq Name:</label>
+        				        <label for="to_seq_name" class="t1 col-4 col-form-label"><?php echo $text['seq_name'];?> :</label>
         				        <div class="t2 col-5">
         				            <input type="text" class="form-control" id="to_seq_name">
         				        </div>
