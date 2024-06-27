@@ -35,7 +35,7 @@ $text['page_of'] = 'of';
 $text['new_job'] = 'New job';
 $text['edit_job'] = 'Edit Job';
 
-$text['unfasten_direction'] = 'Unfasten direction';
+$text['unfasten_direction'] = 'Unfasten direction'; //
 $text['unfasten_rpm'] = 'Unfasten RPM';
 $text['unfasten_force'] = 'Unfasten Force';
 

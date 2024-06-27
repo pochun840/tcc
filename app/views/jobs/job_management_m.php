@@ -28,8 +28,8 @@
                                     <th>Unscrew Direction</th>
                                     <th>Unscrew RPM</th>
                                     <th>Unscrew Power</th>
-                                    <th>Total Seq</th>
-                                    <th>Add Seq</th>
+                                    <th><?php echo $text['total_seq'];?></th>
+                                    <th><?php echo $text['add_step'];?></th>
                                 </tr>
                             </thead>
 

@@ -90,7 +90,7 @@
                         <header class="w3-container modal-header">
                             <span onclick="document.getElementById('new_output').style.display='none'"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
-                            <h3 id='modal_title'>Create Event</h3>
+                            <h3 id='modal_title'><?php echo $text['new_event'];?></h3>
                         </header>
 
                         <div class="modal-body" id="new_output">
@@ -324,7 +324,7 @@
                         <header class="w3-container modal-header">
                             <span onclick="document.getElementById('edit_output').style.display='none'"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
-                            <h3 id='modal_title'>Edit Event</h3>
+                            <h3 id='modal_title'><?php echo $text['edit_event'];?></h3>
                         </header>
 
                         <div class="modal-body" id="new_output">
@@ -558,7 +558,7 @@
                         <header class="w3-container modal-header">
                             <span onclick="document.getElementById('copy_output').style.display='none'"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
-                            <h3 id='modal_title'>Copy Input</h3>
+                            <h3 id='modal_title'><?php echo $text['copy_input'];?></h3>
                         </header>
 
                         <div class="modal-body">

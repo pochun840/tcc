@@ -18,8 +18,8 @@
     <div class="main-content">
         <div class="center-content">
             <div class="w3-center" style="position: relative; padding-right: 10px">
-                <button id="bnt1" name="History_Display" class="button active" onclick="OpenButton('History')">History</button>
-                <button id="bnt2" name="Export_Data_Display" class="button" onclick="OpenButton('Exportdata')">Export</button>
+                <button id="bnt1" name="History_Display" class="button active" onclick="OpenButton('History')"><?php echo $text['data_history'];?></button>
+                <button id="bnt2" name="Export_Data_Display" class="button" onclick="OpenButton('Exportdata')"><?php echo $text['data_export'];?></button>
                 <div style="position:absolute;z-index: 9;right: 1px;top: 10px;">
                     <select id="data_select" class="form-select" onchange="DataMode(this)">
                         <option value="ALL">ALL</option>
@@ -150,7 +150,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div style="max-width: 450px;margin: auto;text-align: center;">
-                                    <label for="start" style="font-size:20px;">📅 Start date :</label>
+                                    <label for="start" style="font-size:20px;">📅 <?php echo $text['start_date'];?> :</label>
                                     <div class="mb-3">
                                         <input type="text" id="start_date" placeholder="Select datetime" class="form-control" style="background-color: #fff;display:none;">
                                     </div>
@@ -158,7 +158,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div style="max-width: 450px;margin: auto;text-align: center;">
-                                    <label for="start" style="font-size:20px;">📅 End date :</label>
+                                    <label for="start" style="font-size:20px;">📅 <?php echo $text['end_date'];?> :</label>
                                     <div class="mb-3">
                                         <input type="text" id="end_date" placeholder="Select datetime" class="form-control" style="background-color: #fff;display: none;">
                                     </div>
