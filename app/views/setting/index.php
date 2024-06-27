@@ -132,7 +132,7 @@
                                     <tr class="w3-dark-grey">
                                         <th></th>
                                         <th>Job ID</th>
-                                        <th>Job Name</th>
+                                        <th><?php echo $text['job_name'];?></th>
                                         <th>Barcode</th>
                                         <th>From</th>
                                         <th>Count</th>

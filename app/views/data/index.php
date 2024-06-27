@@ -6,7 +6,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>Data</h3>
+                    <h3><?php echo $text['data'];?></h3>
                 </td>
                 <td>
                     <img src="./img/btn_home.png" style="margin-right: 10px"  onclick="window.location.href = '?url=In';">
@@ -32,23 +32,23 @@
             <div id="DataButtonMode">
                 <div id="HistoryDisplay">
                     <!-- Data ALL -->
-                    <div  id ='res_title' style="font-weight: bold; font-size: 20px; padding-left: 1%">Data</div>
+                    <div  id ='res_title' style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data_history_success'];?></div>
                     <div class="table-container">
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
                                 <table id="fasten_log_all" class="table w3-table-all w3-hoverable">
                                     <thead id="header-table">
                                         <tr>
-                                            <th>No</th>
-                                            <th>Date Time</th>
-                                            <th>Job Name</th>
-                                            <th>Seq Name</th>
-                                            <th>Torque</th>
-                                            <th>Unit</th>
-                                            <th>Angle</th>
-                                            <th>Total</th>
-                                            <th>Count</th>
-                                            <th>Status</th>
+                                            <th><?php echo $text['column_no'];?></th>
+                                            <th><?php echo $text['column_datetime'];?></th>
+                                            <th><?php echo $text['job_name'];?></th>
+                                            <th><?php echo $text['seq_name'];?></th>
+                                            <th><?php echo $text['torque'];?></th>
+                                            <th><?php echo $text['column_unit'];?></th>
+                                            <th><?php echo $text['angle'];?></th>
+                                            <th><?php echo $text['column_total'];?></th>
+                                            <th><?php echo $text['column_count'];?></th>
+                                            <th><?php echo $text['column_status'];?></th>
                                         </tr>
                                     </thead>
 
@@ -89,22 +89,22 @@
                     
                     <!-- Data OK -->
                     <div class="table-container" style="display: none;">
-                        <div style="font-weight: bold; font-size: 20px; padding-left: 1%">Data</div>
+                        <div style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data'];?></div>
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
                                 <table id="fasten_log" class="table w3-table-all w3-hoverable">
                                     <thead id="header-table">
                                         <tr>
-                                            <th>No</th>
-                                            <th>Date Time</th>
-                                            <th>Job Name</th>
-                                            <th>Seq Name</th>
-                                            <th>Torque</th>
-                                            <th>Unit</th>
-                                            <th>Angle</th>
-                                            <th>Total</th>
-                                            <th>Count</th>
-                                            <th>Status</th>
+                                            <th><?php echo $text['column_no'];?></th>
+                                            <th><?php echo $text['column_datetime'];?></th>
+                                            <th><?php echo $text['job_name'];?></th>
+                                            <th><?php echo $text['seq_name'];?></th>
+                                            <th><?php echo $text['torque'];?></th>
+                                            <th><?php echo $text['column_unit'];?></th>
+                                            <th><?php echo $text['angle'];?></th>
+                                            <th><?php echo $text['column_total'];?></th>
+                                            <th><?php echo $text['column_count'];?></th>
+                                            <th><?php echo $text['column_status'];?></th>
                                         </tr>
                                     </thead>
 
@@ -117,22 +117,22 @@
                     
                     <!-- Data NG -->
                     <div class="table-container" id='res_ng' style="display: none;">
-                        <div style="font-weight: bold; font-size: 20px; padding-left: 1%">Error</div>
+                        <div style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data'];?></div>
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
                                 <table id="error_fasten_log" class="table w3-table-all w3-hoverable">
                                     <thead id="header-table">
                                         <tr>
-                                            <th>No</th>
-                                            <th>Date Time</th>
-                                            <th>Job Name</th>
-                                            <th>Seq Name</th>
-                                            <th>Torque</th>
-                                            <th>Unit</th>
-                                            <th>Angle</th>
-                                            <th>Total</th>
-                                            <th>Count</th>
-                                            <th>Status</th>
+                                            <th><?php echo $text['column_no'];?></th>
+                                            <th><?php echo $text['column_datetime'];?></th>
+                                            <th><?php echo $text['job_name'];?></th>
+                                            <th><?php echo $text['seq_name'];?></th>
+                                            <th><?php echo $text['torque'];?></th>
+                                            <th><?php echo $text['column_unit'];?></th>
+                                            <th><?php echo $text['angle'];?></th>
+                                            <th><?php echo $text['column_total'];?></th>
+                                            <th><?php echo $text['column_count'];?></th>
+                                            <th><?php echo $text['column_status'];?></th>
                                         </tr>
                                     </thead>
 
@@ -146,7 +146,7 @@
                 
                 <div id="ExportdataDisplay" style="display:none;">
                     <div class="data-export" style="background-color: #F2F1F1;">
-                        <h2>Export Data</h2>
+                        <h2><?php echo $text['data_export'];?></h2>
                         <div class="row">
                             <div class="col-sm-6">
                                 <div style="max-width: 450px;margin: auto;text-align: center;">
@@ -181,7 +181,7 @@
                         </div>
                         
                         <div style="text-align: center;margin-top: 20px;">
-                            <button class="btn-export w3-button w3-border w3-round" onclick="exportData()">Export</button>
+                            <button class="btn-export w3-button w3-border w3-round" onclick="exportData()"><?php echo $text['data_export'];?></button>
                         </div>
                     </div>
                 </div>
@@ -206,6 +206,39 @@
         maxDate: String(yy)+'-12-31',
         // maxDate: new Date().fp_incr(0) // 14 days from now
     });
+
+    function DataMode(){
+
+    var mode = document.getElementById("data_select").value;
+    var error1 = '<?php echo $text['data_history_success']?>';
+    var error = '<?phP echo $text['data_history_fail']?>';
+
+    if(mode){
+        $.ajax({
+            url: "?url=Data/search_info",
+            method: "POST",
+            data: { 
+                mode: mode
+            },
+            success: function(response) {
+                console.log(response);
+                document.getElementById("res_data").innerHTML = response;
+
+                if(mode == "NOK"){
+                    document.getElementById('res_title').textContent =  error;
+                }else{
+                    document.getElementById('res_title').textContent =  error1;
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+            }
+        });     
+
+    }
+
+}
+
 </script>
 
 

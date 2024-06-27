@@ -225,7 +225,7 @@
                 				            <input type="number" class="form-control" id="from_job_id" disabled>
                 				        </div>
 
-                				        <label for="from_job_name" class="t1 col-4 col-form-label">Job Name :</label>
+                				        <label for="from_job_name" class="t1 col-4 col-form-label"><?php echo $text['job_name'];?> :</label>
                 				        <div class="col-5 t2 ">
                 				            <input type="text" class="form-control" id="from_job_name" disabled>
                 				        </div>

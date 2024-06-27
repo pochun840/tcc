@@ -194,7 +194,7 @@ $text['UDEFINE2'] = 'UserDefine2';
 
 $text['OK'] = 'OK';
 $text['NG'] = 'NG';
-$text['NG_HIGH'] = 'NG-High';
+$text['NG-High'] = 'NG-High';
 $text['NG_LOW'] = 'NG-Low';
 $text['OK_SEQ'] = 'OK-Sequence';
 $text['OK_JOB'] = 'OK-JOB';

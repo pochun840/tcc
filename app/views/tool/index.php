@@ -5,7 +5,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>Tool</h3>
+                    <h3><?php echo $text['tool_info'];?></h3>
                 </td>
                 <td>
                 <img src="./img/btn_home.png" style="margin-right: 10px" onclick="window.location.href = '?url=In';">

@@ -1,31 +1,3 @@
-function DataMode(){
-
-    var mode = document.getElementById("data_select").value;
-    if(mode){
-        $.ajax({
-            url: "?url=Data/search_info",
-            method: "POST",
-            data: { 
-                mode: mode
-            },
-            success: function(response) {
-                console.log(response);
-                document.getElementById("res_data").innerHTML = response;
-
-                if(mode == "NOK"){
-                    document.getElementById('res_title').textContent = "Error";
-                }else{
-                    document.getElementById('res_title').textContent = "Data";
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-            }
-        });     
-
-    }
-
-}
 
 function exportData() {
     var radioButtons = document.querySelectorAll('input[name="export-option"]');
