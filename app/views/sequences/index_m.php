@@ -4,7 +4,7 @@
     <div class="w3-text-white w3-center">
         <div class="w3-text-white w3-center">
             <header id="header">
- 	            <h3> Sequence Management</h3>
+ 	            <h3><?php echo $text['seq_management'];?></h3>
             </header>
         </div>
     </div>

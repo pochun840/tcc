@@ -56,8 +56,9 @@ $text['rev_count'] = '拆螺丝计数';
 $text['rev_tor_threshold'] = '拆螺丝门槛点扭力';
 
 //job sequence management
-$text['normal_seq_management'] = '快速工作 - 工序管理';
-$text['advanced_seq_management'] = '进阶工作 - 工序管理';
+//$text['normal_seq_management'] = '快速工作 - 工序管理';
+//$text['advanced_seq_management'] = '进阶工作 - 工序管理';
+$text['seq_management'] = '工序管理';
 $text['seq_id'] = '工序ID';
 $text['seq_name'] = '工序名称';
 $text['target_type'] = '工序目标';

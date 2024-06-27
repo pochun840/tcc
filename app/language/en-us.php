@@ -56,8 +56,9 @@ $text['rev_count'] = 'Reverse Count';
 $text['rev_tor_threshold'] = 'Rev. Threshold Tor.';
 
 //job sequence management
-$text['normal_seq_management'] = 'Normal Job- Sequence Management';
-$text['advanced_seq_management'] = 'Advanced Job - Sequence Management';
+//$text['normal_seq_management'] = 'Normal Job- Sequence Management';
+//$text['advanced_seq_management'] = 'Advanced Job - Sequence Management';
+$text['seq_management'] = 'Sequence Management';
 $text['seq_id'] = 'Seq ID';
 $text['seq_name'] = 'Seq name';
 $text['target_type'] = 'Target Type';
