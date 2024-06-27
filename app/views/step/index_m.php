@@ -131,7 +131,7 @@
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CW" value="0">
-            					  <label class="form-check-label" for="direction_CW">CW</label>
+            					  <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">

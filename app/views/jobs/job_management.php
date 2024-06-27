@@ -87,13 +87,13 @@
                 <div class="modal-body">
                     <form id="new_job_form" style="padding-left: 5%">
                         <div class="row">
-                            <div for="job-id" class="col-6 t1">Job ID :</div>
+                            <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="job_id" maxlength=""  value='<?php echo $data['jobint'];?>'>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="job-name" class="col-6 t1">Job Name :</div>
+                            <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="job_name" maxlength="" >
                             </div>
@@ -103,11 +103,11 @@
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="direction" id="unfasten_direction_CW" value="0">
-            					  <label class="form-check-label" for="unfasten_direction_CW">CW</label>
+            					  <label class="form-check-label" for="unfasten_direction_CW"><?php echo $text['CW'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="direction" id="unfasten_direction_CCW" value="1">
-            					  <label class="form-check-label" for="unfasten_direction_CCW">CCW</label>
+            					  <label class="form-check-label" for="unfasten_direction_CCW"><?php echo $text['CCW'];?></label>
             					</div>
                             </div>
                         </div>
