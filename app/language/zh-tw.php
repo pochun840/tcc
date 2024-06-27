@@ -13,8 +13,9 @@ $text['cover_confirm_text'] = 'job id已存在，是否要覆蓋?';
 $text['cover_text'] = '覆蓋';
 
 //job management
-$text['normal_job_management'] = '智能工作管理';
-$text['advanced_job_management'] = '進階工作管理';
+//$text['normal_job_management'] = '智能工作管理';
+//$text['advanced_job_management'] = '進階工作管理';
+$text['job_management'] = '工作管理';
 $text['job_id'] = '工作ID';
 $text['job_name'] = '工作名稱';
 $text['job_ok'] = '完工信號';
@@ -35,9 +36,9 @@ $text['page_of'] = '之';
 $text['new_job'] = '新增工作';
 $text['edit_job'] = '編輯工作';
 
-$text['unfasten_direction'] = '拆螺絲方向';
-$text['unfasten_rpm'] = '拆螺絲轉速';
-$text['unfasten_force'] = '拆螺絲力道';
+$text['Unscrew_direction'] = '拆螺絲方向';
+$text['Unscrew_rpm'] = '拆螺絲轉速';
+$text['Unscrew_power'] = '拆螺絲力道';
 
 $text['enable'] = '啟用';
 $text['disable'] = '禁用';

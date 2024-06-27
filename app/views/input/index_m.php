@@ -99,11 +99,11 @@
                         <table class="table w3-table-all w3-hoverable" style="font-size: 2vmin">
                             <tr>
                                 <td class="w3-left-align">1-50 SW Job ID</td>
-                                <td class="w3-left-align">101 Disable</td>
-                                <td class="w3-left-align">102 Enable</td>
+                                <td class="w3-left-align">101 <?php echo $text['disable'];?></td>
+                                <td class="w3-left-align">102 <?php echo $text['enable'];?></td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">103 Clear</td>
+                                <td class="w3-left-align">103 <?php echo $text['CLEAR'];?></td>
                                 <td class="w3-left-align">104 Confirm</td>                             
                                 <td class="w3-left-align">105 Start-IN(Remote)</td>
                             </tr>

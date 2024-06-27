@@ -6,7 +6,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>Job Management</h3>
+                    <h3><?php echo $text['job_management'];?></h3>
                 </td>
                 <td>
                     <img src="./img/btn_home.png" style="margin-right: 10px" onclick="window.location.href = '?url=In';">
@@ -23,11 +23,11 @@
                         <table id="job_table" class="table w3-table-all w3-hoverable">
                             <thead id="header-table">
                                 <tr class="w3-dark-grey" style="font-size: 2.5vmin">
-                                    <th>Job ID</th>
-                                    <th>Job Name</th>
-                                    <th>Unscrew Direction</th>
-                                    <th>Unscrew RPM</th>
-                                    <th>Unscrew Power</th>
+                                    <th><?php echo $text['job_id'];?></th>
+                                    <th><?php echo $text['job_name'];?></th>
+                                    <th><?php echo $text['Unscrew_direction'];?></th>
+                                    <th><?php echo $text['Unscrew_rpm'];?></th>
+                                    <th><?php echo $text['Unscrew_power'];?></th>
                                     <th><?php echo $text['total_seq'];?></th>
                                     <th><?php echo $text['add_step'];?></th>
                                 </tr>
@@ -87,19 +87,19 @@
                 <div class="modal-body">
                     <form id="new_job_form" style="padding-left: 5%">
                         <div class="row">
-                            <div for="job-id" class="col-6 t1">Job ID:</div>
+                            <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?>:</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="job_id" maxlength="" value='<?php echo $data['jobint'];?>'>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="job-name" class="col-6 t1">Job Name:</div>
+                            <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?>:</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="job_name" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1">Unscrew Direction:</div>
+                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['Unscrew_direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="unfasten_direction_option" id="unfasten_direction_CW" value="1">
@@ -112,13 +112,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="unscrew-RPM" class="col-6 t1">Unscrew RPM(1=10%):</div>
+                            <div for="unscrew-RPM" class="col-6 t1"><?php echo $text['Unscrew_rpm'];?>(1=10%):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="unscrew_RPM" maxlength="" required>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="unscrew-power" class="col-6 t1">Unscrew Power(1=10%):</div>
+                            <div for="unscrew-power" class="col-6 t1"><?php echo $text['Unscrew_power'];?>(1=10%):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="unscre_power" maxlength="">
                             </div>
@@ -160,26 +160,26 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1">Unscrew Direction:</div>
+                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['Unscrew_direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_direction" id="unfasten_direction_CW" value="0">
-            					  <label class="form-check-label" for="unfasten_direction_CW">CW</label>
+            					  <label class="form-check-label" for="unfasten_direction_CW"><?php echo $text['CW'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_direction" id="unfasten_direction_CCW" value="1">
-            					  <label class="form-check-label" for="unfasten_direction_CCW">CCW</label>
+            					  <label class="form-check-label" for="unfasten_direction_CCW"><?php echo $text['CCW'];?></label>
             					</div>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="unscrew-RPM" class="col-6 t1">Unscrew RPM(1=10%):</div>
+                            <div for="unscrew-RPM" class="col-6 t1"><?php echo $text['Unscrew_rpm'];?>(1=10%):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_unscrew_rpm" maxlength="" required>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="unscrew-power" class="col-6 t1">Unscrew Power(1=10%):</div>
+                            <div for="unscrew-power" class="col-6 t1"><?php echo $text['Unscrew_power'];?>(1=10%):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_unscrew_power" maxlength="">
                             </div>
@@ -209,32 +209,32 @@
 
                 <div class="modal-body">
                     <form id="new_job_form">
-        	            <label for="from_job_id" class="col col-form-label" style="font-weight: bold">Copy From</label>
+        	            <label for="from_job_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_from'];?></label>
         	            <div style="padding-left: 10%;">
         		            <div class="row">
-        				        <label for="from_job_id" class="t1 col-4 col-form-label">Job ID:</label>
+        				        <label for="from_job_id" class="t1 col-4 col-form-label"><?php echo $text['job_id'];?> :</label>
         				        <div class="col-5 t2 ">
         				            <input type="number" class="form-control" id="from_job_id" disabled>
         				        </div>
         				    </div>
         				    <div class="row">
-        				        <label for="from_job_name" class="t1 col-4 col-form-label">Job Name:</label>
+        				        <label for="from_job_name" class="t1 col-4 col-form-label"><?php echo $text['job_name'];?> :</label>
         				        <div class="t2 col-5">
         				            <input type="text" class="form-control" id="from_job_name" disabled>
         				        </div>
         				    </div>
         			    </div>
 
-        			    <label for="from_job_id" class="col col-form-label" style="font-weight: bold">Copy To</label>
+        			    <label for="from_job_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_to'];?></label>
         			    <div style="padding-left: 10%;">
         				    <div class="row">
-        				        <label for="to_job_id" class="t1 col-4 col-form-label">Job ID</label>
-        				        <div class="t2 col-5">
+        				        <label for="to_job_id" class="t1 col-4 col-form-label"><?php echo $text['job_id'];?> :</label>
+        				        <div class="t2 col-5" >
         				            <input type="number" class="form-control" id="to_job_id">
         				        </div>
         				    </div>
         				    <div class="row">
-        				        <label for="to_job_name" class="t1 col-4 col-form-label">Job Name</label>
+        				        <label for="to_job_name" class="t1 col-4 col-form-label"><?php echo $text['job_name'];?> :</label>
         				        <div class="t2 col-5">
         				            <input type="text" class="form-control" id="to_job_name">
         				        </div>

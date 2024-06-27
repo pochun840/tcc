@@ -13,8 +13,9 @@ $text['cover_confirm_text'] = 'The job id already exists, do you want to overwri
 $text['cover_text'] = 'Cover';
 
 //job management
-$text['normal_job_management'] = 'Normal Job Management';
-$text['advanced_job_management'] = 'Advanced Job Management';
+//$text['normal_job_management'] = 'Normal Job Management';
+//$text['advanced_job_management'] = 'Advanced Job Management';
+$text['job_management'] = 'Job Management';
 $text['job_id'] = 'Job ID';
 $text['job_name'] = 'Job Name';
 $text['job_ok'] = 'Ok Job';
@@ -35,9 +36,9 @@ $text['page_of'] = 'of';
 $text['new_job'] = 'New job';
 $text['edit_job'] = 'Edit Job';
 
-$text['unfasten_direction'] = 'Unfasten direction'; //
-$text['unfasten_rpm'] = 'Unfasten RPM';
-$text['unfasten_force'] = 'Unfasten Force';
+$text['Unscrew_direction'] = 'Unscrew direction'; //
+$text['Unscrew_rpm'] = 'Unscrew RPM';
+$text['Unscrew_power'] = 'Unscrew Power';
 
 $text['enable'] = 'Enable';
 $text['disable'] = 'Disable';
