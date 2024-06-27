@@ -496,7 +496,7 @@
                 				    </div>
                 			    </div>
 
-                			    <label for="from_job_id" class="col col-form-label" style="font-weight: bold;padding-left: 5%;">Copy To</label>
+                			    <label for="from_job_id" class="col col-form-label" style="font-weight: bold;padding-left: 5%;"><?php echo $text['copy_to'];?></label>
                 			    <div style="padding-left: 10%">
                 				    <div class="row">
                 				        <label for="to_step_id" class="t1 col-4 col-form-label">Job :</label>

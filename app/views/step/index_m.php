@@ -316,7 +316,7 @@
         				    </div>
         			    </div>
 
-        			    <label for="from_step_id" class="col col-form-label" style="font-weight: bold">Copy To</label>
+        			    <label for="from_step_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_to'];?></label>
         			    <div style="padding-left: 10%">
         				    <div class="row">
         				        <label for="to_step_id" class="t1 col-4 col-form-label">Step ID</label>
