@@ -61,7 +61,7 @@
                             <table id="output_table" class="table w3-table-all w3-hoverable">
                                 <thead class="header-table">
                                     <tr class="w3-dark-grey">
-                                        <th>Event</th>
+                                        <th><?php echo $text['event'];?></th>
                                         <th>1</th>
                                         <th>2</th>
                                         <th>3</th>
@@ -217,7 +217,7 @@
 
                         <div class="modal-body">
                             <form id="new_output_form">
-                	            <label for="from_job_id" class="col col-form-label" style="font-weight: bold;padding-left: 5%;">Copy From</label>
+                	            <label for="from_job_id" class="col col-form-label" style="font-weight: bold;padding-left: 5%;"><?php echo $text['copy_from'];?></label>
                 	            <div style="padding-left: 10%;">
                 		            <div class="row">
                 				        <label for="from_job_id" class="t1 col-4 col-form-label">Job ID :</label>

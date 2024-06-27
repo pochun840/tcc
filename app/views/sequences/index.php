@@ -78,7 +78,7 @@
     <div class="footer">
         <div id="TotalPage">
             <div id="TotalSeqTable">
-                <div style="color:black; float: right; margin: 2px"><?echo echo $text['total_seq'];?> :
+                <div style="color:black; float: right; margin: 2px"><?php echo $text['total_seq']; ?> :
                     <label id="RecordCnt" name="RecordCnt" type="text" style="margin-right: 20px"><?php echo count($data['sequences']); ?></label>
                 </div>
             </div>
@@ -380,7 +380,7 @@
 
                 <div class="modal-body">
                     <form id="new_seq_form">
-        	            <label for="from_seq_id" class="col col-form-label" style="font-weight: bold">Copy From</label>
+        	            <label for="from_seq_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_from'];?></label>
         	            <div style="padding-left: 10%">
         		            <div class="row">
         				        <label for="from_seq_id" class="t1 col-4 col-form-label"><?php echo $text['seq_id'];?> :</label>

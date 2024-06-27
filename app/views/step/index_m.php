@@ -306,7 +306,7 @@
 
                 <div class="modal-body">
                     <form id="new_step_form">
-        	            <label for="from_step_id" class="col col-form-label" style="font-weight: bold">Copy From</label>
+        	            <label for="from_step_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_from'];?></label>
         	            <div style="padding-left: 10%">
         		            <div class="row">
         				        <label for="from_step_id" class="t1 col-4 col-form-label">Step ID :</label>
