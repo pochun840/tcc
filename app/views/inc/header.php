@@ -30,16 +30,9 @@
 
 
       if($firstPart =="Tools"){?>
-            <style>
-                .t1{font-size: 15px; margin: 5px 0px; display: flex; align-items: center;padding-left: 7%}
-                .t2{font-size: 14px; margin: 5px 0px;}
-            </style>
+        
       <?php } else if($firstPart =="Data"){?>
-            <style>
-                .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
-                .t2{font-size: 17px; margin: 5px 0px;}
-                .t3{font-size: 17px; margin: 3px 0px;}
-            </style> 
+          
         <?php } else if($firstPart =="Inputs" && $isMobile  ){  ?>
 
             <style>

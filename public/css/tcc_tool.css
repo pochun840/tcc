@@ -43,3 +43,6 @@
     background-color: #FCFCFC;
     box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.2);    
 }
+
+.t1{font-size: 15px; margin: 5px 0px; display: flex; align-items: center;padding-left: 7%}
+.t2{font-size: 14px; margin: 5px 0px;}
