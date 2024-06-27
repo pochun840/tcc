@@ -20,7 +20,7 @@
             <div class="topnav">
                 <label style="font-size:3vmin;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;
                 <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="1" disabled style="height:30px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
-                <button id="Button_Select" type="button" onclick="document.getElementById('JobSelect').style.display='block'">Select</button>
+                <button id="Button_Select" type="button" onclick="document.getElementById('JobSelect').style.display='block'"><?php echo $text['select'];?></button>
             </div>
 
             <!-- Job Select Modal -->
@@ -29,7 +29,7 @@
                     <div class="w3-light-grey">
                         <header class="w3-container w3-dark-grey" style="height: 48px">
                             <span onclick="document.getElementById('JobSelect').style.display='none'" class="w3-button w3-red w3-large w3-display-topright" style="margin: 2px">&times;</span>
-                            <h3 style="margin: 5px" onclick="get_job_list()">Job Select</h3>
+                            <h3 style="margin: 5px" onclick="get_job_list()"><?php echo $text['job_select'];?></h3>
                         </header>
                         <div class="modal-body">
                             <div class="row">
@@ -44,7 +44,7 @@
                         </div>    
                     </div>
                     <div class="modal-footer justify-content-center w3-dark-grey" style="height: 48px">
-                        <button id="select_confirm" type="button" class="btn btn-primary" onclick="job_confirm()">Confirm</button>
+                        <button id="select_confirm" type="button" class="btn btn-primary" onclick="job_confirm()"><?php echo $text['confirm'];?></button>
                         <button id="select_close" type="button" class="btn btn-secondary" onclick="document.getElementById('JobSelect').style.display='none'" ><?php echo $text['close'];?></button>
                     </div>
                 </form>
