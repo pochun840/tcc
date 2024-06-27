@@ -33,6 +33,8 @@ class Controller
         // 如果檔案存在就引入它
         if(file_exists('../app/views/' . $view . '.php')){
 
+            //<?php require APPROOT . 'views/inc/header.php'; 
+            require_once '../app/views/inc/header.php';
             require_once '../app/views/' . $view . '.php';
             require_once '../app/views/inc/footer.php';
             
