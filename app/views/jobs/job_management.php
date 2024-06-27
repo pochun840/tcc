@@ -1,7 +1,5 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
-
 <body>
-
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -60,7 +58,7 @@
     <div class="footer">
         <div id="TotalPage">
             <div id="TotalJobTable">
-                <div style="color:black; float: right; margin: 2px">Total Jobs :
+                <div style="color:black; float: right; margin: 2px"><?php echo $text['total_job'];?> :
                     <label id="RecordCnt" name="RecordCnt" type="text" style="margin-right: 20px"><?php echo count($data['jobs']);?></label>
                 </div>
             </div>
@@ -204,7 +202,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="hideElementById('copyjob');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
-                    <h3 id='modal_title'>Copy Job</h3>
+                    <h3 id='modal_title'><?php echo $text['copy_job'];?></h3>
                 </header>
 
                 <div class="modal-body">

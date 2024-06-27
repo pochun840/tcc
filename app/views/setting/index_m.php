@@ -33,7 +33,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>Setting</h3>
+                    <h3><?php echo $text['setting'];?></h3>
                 </td>
                 <td>
                     <img src="./img/btn_home.png" style="margin-right: 10px" onclick="window.location.href = '?url=In';">
@@ -177,7 +177,7 @@
                                             <tr class="w3-dark-grey">
                                                 <th></th>
                                                 <th>Job ID</th>
-                                                <th>Job Name</th>
+                                                <th><?php echo $text['job_name'];?></th>
                                                 <th>Barcode</th>
                                                 <th>From</th>
                                                 <th>Count</th>

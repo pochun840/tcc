@@ -359,7 +359,7 @@ function edit_password(){
             }
         });   
     }else{
-        alert("請確認密碼");
+        //alert("請確認密碼");
         return false;
     }
 }
@@ -462,6 +462,80 @@ function idas_update() {
         
     });
 }*/
+
+function OpenButton(ButtonMode){
+
+    if (ButtonMode == "Controller")
+    {
+        document.getElementById('Controller_Setting').style.display = "";
+        document.getElementById('System_Setting').style.display = "none";
+        document.getElementById('Barcode_Setting').style.display = "none";
+        document.getElementById('Connect_Setting').style.display = "none";
+        document.getElementById('iDas-Update_Setting').style.display = "none";
+        document.getElementById('bnt1').classList.add("active");
+        document.getElementById('bnt2').classList.remove("active");   
+        document.getElementById('bnt3').classList.remove("active");
+        document.getElementById('bnt4').classList.remove("active");
+        document.getElementById('bnt5').classList.remove("active");
+    }
+    else if (ButtonMode == "System")
+    {
+        document.getElementById('System_Setting').style.display = "";
+        document.getElementById('Controller_Setting').style.display = "none";
+        document.getElementById('Barcode_Setting').style.display = "none";
+        document.getElementById('Connect_Setting').style.display = "none";
+        document.getElementById('iDas-Update_Setting').style.display = "none";
+        document.getElementById('bnt2').classList.add("active");
+        document.getElementById('bnt1').classList.remove("active");
+        document.getElementById('bnt3').classList.remove("active");
+        document.getElementById('bnt4').classList.remove("active");
+        document.getElementById('bnt5').classList.remove("active");
+
+    }
+    else if (ButtonMode == "Barcode")
+    {
+        document.getElementById('Barcode_Setting').style.display = "";
+        document.getElementById('System_Setting').style.display = "none";
+        document.getElementById('Controller_Setting').style.display = "none";
+        document.getElementById('Connect_Setting').style.display = "none";
+        document.getElementById('iDas-Update_Setting').style.display = "none";
+        document.getElementById('bnt3').classList.add("active");
+        document.getElementById('bnt2').classList.remove("active");
+        document.getElementById('bnt1').classList.remove("active");
+        document.getElementById('bnt4').classList.remove("active");
+        document.getElementById('bnt5').classList.remove("active");
+    }
+    else if (ButtonMode == "Connect")
+    {
+        document.getElementById('Connect_Setting').style.display = "";
+        document.getElementById('Barcode_Setting').style.display = "none";
+        document.getElementById('System_Setting').style.display = "none";
+        document.getElementById('Controller_Setting').style.display = "none";
+        document.getElementById('iDas-Update_Setting').style.display = "none";
+        document.getElementById('bnt4').classList.add("active");
+        document.getElementById('bnt3').classList.remove("active");
+        document.getElementById('bnt2').classList.remove("active");
+        document.getElementById('bnt1').classList.remove("active");
+        document.getElementById('bnt5').classList.remove("active");
+    }
+    else if (ButtonMode == "Update")
+    {
+        document.getElementById('iDas-Update_Setting').style.display = "";
+        document.getElementById('Connect_Setting').style.display = "none";
+        document.getElementById('Barcode_Setting').style.display = "none";
+        document.getElementById('System_Setting').style.display = "none";
+        document.getElementById('Controller_Setting').style.display = "none";
+        document.getElementById('bnt5').classList.add("active");
+        document.getElementById('bnt4').classList.remove("active");
+        document.getElementById('bnt3').classList.remove("active");
+        document.getElementById('bnt2').classList.remove("active");
+        document.getElementById('bnt1').classList.remove("active");
+    }
+    else
+    {
+        //alert("Function ["+ ButtonMode +"] is under constructing ...");
+    }
+}
 </script>    
 
 </body>

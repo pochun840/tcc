@@ -60,7 +60,7 @@ $text['rev_tor_threshold'] = 'Rev. Threshold Tor.';
 //$text['advanced_seq_management'] = 'Advanced Job - Sequence Management';
 $text['seq_management'] = 'Sequence Management';
 $text['seq_id'] = 'Seq ID';
-$text['seq_name'] = 'Seq name';
+$text['seq_name'] = 'Sequence Name';
 $text['target_type'] = 'Target Type';
 $text['tightening_repeat'] = 'TR';
 

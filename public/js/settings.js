@@ -140,8 +140,8 @@ function Firmware_Update() {
 
 
 
-function OpenButton(ButtonMode)
-{
+function OpenButton(ButtonMode){
+
     if (ButtonMode == "Controller")
     {
         document.getElementById('Controller_Setting').style.display = "";
@@ -210,9 +210,10 @@ function OpenButton(ButtonMode)
     }
     else
     {
-        alert("Function ["+ ButtonMode +"] is under constructing ...");
+        //alert("Function ["+ ButtonMode +"] is under constructing ...");
     }
 }
+
 
 
 function getCookie(name) 

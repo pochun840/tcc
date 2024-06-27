@@ -5,7 +5,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3> <?php echo $text['step_management']; ?></h3>
+                    <h3><?php echo $text['step_management']; ?></h3>
                 </td>
                 <!--<td>
                     <img src="./img/btn_home.png" style="margin-right: 10px">
@@ -316,10 +316,10 @@
 
                 <div class="modal-body">
                     <form id="new_step_form">
-        	            <label for="from_step_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_from'];?></label>
+        	            <label for="from_step_id" class="col col-form-label" style="font-weight: bold">Copy From</label>
         	            <div style="padding-left: 10%">
         		            <div class="row">
-        				        <label for="from_step_id" class="t1 col-4 col-form-label"><?php echo $text['step_id'];?> :</label>
+        				        <label for="from_step_id" class="t1 col-4 col-form-label">Step ID :</label>
         				        <div class="col-5 t2 ">
         				            <input type="number" class="form-control" id="from_step_id" disabled>
         				        </div>
@@ -329,7 +329,7 @@
         			    <label for="from_step_id" class="col col-form-label" style="font-weight: bold">Copy To</label>
         			    <div style="padding-left: 10%">
         				    <div class="row">
-        				        <label for="to_step_id" class="t1 col-4 col-form-label"><?php echo $text['step_id'];?> :</label>
+        				        <label for="to_step_id" class="t1 col-4 col-form-label">Step ID</label>
         				        <div class="t2 col-5">
         				            <input type="number" class="form-control" id="to_step_id">
         				        </div>

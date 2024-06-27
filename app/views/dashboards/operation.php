@@ -16,20 +16,20 @@
     <div class="main-content">
         <div class="center-content">
             <div class="topnav">
-                <label style="font-size:18px;color: #fff; padding-left: 1%" for="job_name">Job Name :</label>&nbsp;
-                <input type="text" id="Job_Name" name="Job_Name" size="15" maxlength="20" value="1-Sample Job 1" disabled>
+                <label style="font-size:18px;color: #fff; padding-left: 1%" for="job_name"><?php echo $text['job_name'];?> :</label>&nbsp;
+                <input type="text" id="Job_Name" name="Job_Name" size="15" maxlength="20" value="" disabled>
 
-                <label style="font-size:18px;color: #fff; padding-left: 2%" for="seq_name">Sequence Name :</label>&nbsp;
-                <input type="text" id="Seq_Name" name="Seq_Name" size="15" maxlength="20" value="3-Sample Seq 3" disabled>
+                <label style="font-size:18px;color: #fff; padding-left: 2%" for="seq_name"><?php echo $text['seq_name'];?> :</label>&nbsp;
+                <input type="text" id="Seq_Name" name="Seq_Name" size="15" maxlength="20" value="" disabled>
 
-                <label style="font-size:18px;color: #fff; padding-left: 2%" for="screw"><?php echo $text['screws'];?>:</label>&nbsp;
-                <input type="text" id="Screws" name="Screws" size="4" maxlength="20" value="2/5" disabled>
+                <label style="font-size:18px;color: #fff; padding-left: 2%" for="screw"><?php echo $text['screws'];?> :</label>&nbsp;
+                <input type="text" id="Screws" name="Screws" size="4" maxlength="20" value="" disabled>
             </div>
             
             <div class="operation-setting">
                 <div class="column">
                     <div class="item-target-torque w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red">TORQUE (N-m)</div>
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_torque'] ;?>(N-m)</div>
                         <div id="Target_Torque" class="w3-display-middle" style="font-size: 6vmin"></div>
                     </div>
                     <div class="item-result w3-display-container">
@@ -39,8 +39,8 @@
                 </div>
                 <div class="column">
                     <div class="item-targer-angle w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red">ANGLE (Deg)</div>
-                        <div id="Target_Angle" class="w3-display-middle" style="font-size: 6vmin">195</div>                        
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_angle'];?></div>
+                        <div id="Target_Angle" class="w3-display-middle" style="font-size: 6vmin"></div>                        
                     </div>
                     <div class="item-message w3-display-container">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_message'];?></div>
