@@ -221,6 +221,7 @@ $text['data_history_success'] = 'Data';
 $text['data_history_fail'] = 'Error';
 $text['start_date'] = 'Start date';
 $text['end_date'] = 'End date';
+$text['Export Format'] = 'Export Format';
 
 $text['column_no'] = 'No';
 $text['column_datetime'] = 'Date Time';

@@ -221,6 +221,7 @@ $text['data_history_success'] = '歷史紀錄資料';
 $text['data_history_fail'] = '鎖附失敗資料';
 $text['start_date'] = '開始日期';
 $text['end_date'] = '結束日期';
+$text['Export Format'] = '匯出格式';
 
 $text['column_no'] = '編號';
 $text['column_datetime'] = '時間';

@@ -126,8 +126,8 @@ $text['Nm'] = '牛顿.米';
 $text['Threshold_Type'] = '门槛选项';
 $text['Threshold_Angle'] = '门槛点角度';
 
-//advanced step
-$text['advancedstep_management'] = '进阶工序 - 步骤管理';
+//step
+$text['step_management'] = '步骤管理';
 
 $text['step_id'] = '步骤ID';
 $text['step_name'] = '步骤名称';
@@ -191,6 +191,8 @@ $text['GATE_TWICE'] = '二次感应';
 $text['REBOOT'] = '重启';
 $text['UDEFINE1'] = '自定义1';
 $text['UDEFINE2'] = '自定义2';
+$text['UDEFINE'] = '自定义';
+
 
 $text['OK'] = 'OK';
 $text['NG'] = 'NG';
@@ -220,6 +222,7 @@ $text['data_history_success'] = '全部拧紧数据';
 $text['data_history_fail'] = '拧紧失败数据';
 $text['start_date'] = '开始日期';
 $text['end_date'] = '结束日期';
+$text['Export Format'] = '导出格式';
 
 $text['column_no'] = '编号';
 $text['column_datetime'] = '时间';

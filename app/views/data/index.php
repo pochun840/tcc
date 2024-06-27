@@ -167,7 +167,7 @@
                         </div>
                         
                         <div class="row" style="padding-left: 30%">
-                            <div class="col-4 t1">Export Format:</div>
+                            <div class="col-4 t1"><?php echo $text['Export Format'];?>:</div>
                             <div class="col t2">
                                 <div class="form-check form-check-inline">
                                     <input class="t2 form-check-input" type="radio" name="export-option" id="export-csv" value="0" style="zoom:1.2; vertical-align: middle">
