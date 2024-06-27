@@ -3,7 +3,7 @@
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <header id="header">
- 	        <h3> Step Management</h3>
+ 	        <h3> <?php echo $text['step_management'];?> </h3>
         </header>
     </div>
 

@@ -5,7 +5,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>Step Management</h3>
+                    <h3> <?php echo $text['step_management']; ?></h3>
                 </td>
                 <!--<td>
                     <img src="./img/btn_home.png" style="margin-right: 10px">

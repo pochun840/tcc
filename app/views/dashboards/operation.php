@@ -5,7 +5,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>Operation</h3>
+                    <h3><?php echo $text['operation_result'];?></h3>
                 </td>
                 <td>
                     <img src="./img/btn_home.png" style="margin-right: 10px"  onclick="window.location.href = '?url=In';">
@@ -22,7 +22,7 @@
                 <label style="font-size:18px;color: #fff; padding-left: 2%" for="seq_name">Sequence Name :</label>&nbsp;
                 <input type="text" id="Seq_Name" name="Seq_Name" size="15" maxlength="20" value="3-Sample Seq 3" disabled>
 
-                <label style="font-size:18px;color: #fff; padding-left: 2%" for="screw">Screw :</label>&nbsp;
+                <label style="font-size:18px;color: #fff; padding-left: 2%" for="screw"><?php echo $text['screws'];?>:</label>&nbsp;
                 <input type="text" id="Screws" name="Screws" size="4" maxlength="20" value="2/5" disabled>
             </div>
             
@@ -30,11 +30,11 @@
                 <div class="column">
                     <div class="item-target-torque w3-display-container">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red">TORQUE (N-m)</div>
-                        <div id="Target_Torque" class="w3-display-middle" style="font-size: 6vmin">0.011</div>
+                        <div id="Target_Torque" class="w3-display-middle" style="font-size: 6vmin"></div>
                     </div>
                     <div class="item-result w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-black">RESULT</div>
-                        <div id="Torque_Result" class="w3-display-middle" style="font-size: 6vmin">OK-JOB</div>            
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-black"><?php echo $text['final_result'];?></div>
+                        <div id="Torque_Result" class="w3-display-middle" style="font-size: 6vmin"></div>            
                     </div>
                 </div>
                 <div class="column">
@@ -43,8 +43,8 @@
                         <div id="Target_Angle" class="w3-display-middle" style="font-size: 6vmin">195</div>                        
                     </div>
                     <div class="item-message w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red">MESSAGE</div>
-                        <div id="Message" class="w3-display-middle" style="font-size: 28px">No Error</div>                                    
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_message'];?></div>
+                        <div id="Message" class="w3-display-middle" style="font-size: 28px"></div>                                    
                     </div>
                 </div>
             </div>

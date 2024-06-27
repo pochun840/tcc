@@ -6,7 +6,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>Operation</h3>
+                    <h3><?php echo $text['operation_result'];?></h3>
                 </td>
                 <td>
                     <img id="back_home" src="./img/btn_home.png" style="margin-right: 10px"  onclick="window.location.href = '?url=In';">
@@ -23,7 +23,7 @@
                 <label style="color: #fff;" for="seq_name">Seq:</label>
                 <input type="text" id="Seq_Name" name="Seq_Name" size="16" maxlength="20" value="3-Sample Seq3" disabled>
 
-                <label style="color: #fff;" for="screw">Screw:</label>
+                <label style="color: #fff;" for="screw"><?php echo $text['screws'];?>:</label>
                 <input type="text" id="Screws" name="Screws" size="4" maxlength="20" value="2/5" disabled>
             </div>
             
@@ -45,7 +45,7 @@
                     </div>
                     <div class="item-message w3-display-container">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red">MESSAGE</div>
-                        <div id="Message" class="w3-display-middle" style="font-size: 5vmin; margin: 5px 0">No Error</div>                                    
+                        <div id="Message" class="w3-display-middle" style="font-size: 5vmin; margin: 5px 0"></div>                                    
                     </div>
                 </div>
             </div>

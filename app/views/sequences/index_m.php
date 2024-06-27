@@ -28,11 +28,11 @@
                                     <th><?php echo $text['seq_id'];?></th>
                                     <th><?php echo $text['seq_name'];?></th>
                                     <th>Unit</th>
-                                    <th>TR</th>
+                                    <th><?php echo $text['tightening_repeat'];?></th>
                                     <th>Ena</th>
-                                    <th>Up</th>
-                                    <th>Down</th>
-                                    <th>Total Step</th>
+                                    <th><?php echo $text['up'];?></th>
+                                    <th><?php echo $text['down'];?></th>
+                                    <th><?php echo $text['total_step'];?></th>
                                     <th>Add Step</th>
                                 </tr>
                             </thead>
@@ -69,7 +69,7 @@
     <div class="footer">
         <div id="TotalPage">
             <div id="TotalSeqTable">
-                <div style="color:black; float: right; margin: 2px">Total Sequence :
+                <div style="color:black; float: right; margin: 2px"><?echo $text['total_seq'];?> :
                     <label id="RecordCnt" name="RecordCnt" type="text" style="margin-right: 20px"><?php echo count($data['sequences']); ?></label>
                 </div>
             </div>
@@ -155,7 +155,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="NG-stop" class="col-6 t1">NG Stop:</div>
+                                    <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?>:</div>
                                     <div class="col-4 t2">
                                         <select id="NG_stop" class="col custom-file">
                                             <option value="0">0</option>
@@ -296,7 +296,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="NG-stop" class="col-6 t1">NG Stop:</div>
+                                    <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?>:</div>
                                     <div class="col-4 t2">
                                         <select id="edit_ng_stop" class="col custom-file">
                                             <option value="0">0</option>

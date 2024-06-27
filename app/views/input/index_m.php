@@ -57,7 +57,7 @@
                             <table id="input_table" class="table w3-table-all w3-hoverable">
                                 <thead id="header-table">
                                     <tr class="w3-dark-grey" style="font-size: 2.6vmin">
-                                        <th width="60%">Event</th>
+                                        <th width="60%"><?php echo $text['event'];?></th>
                                         <th style="display: none;">2</th>
                                         <th style="display: none;">3</th>
                                         <th style="display: none;">4</th>
@@ -143,7 +143,7 @@
                         <div class="modal-body">
                             <form id="new_input_form" style="padding-left: 5%">
                                 <div class="row">
-                                    <div for="event" class="col-3 t1">Event :</div>
+                                    <div for="event" class="col-3 t1"><?php echo $text['event'];?> :</div>
                                     <div class="col-2 t2">
                                         <select id="Event_Option" name ="Event_Option" class="col custom-file">
                                                 <?php foreach($data['event'] as $key =>$val){?>
@@ -214,7 +214,7 @@
                         <div class="modal-body">
                             <form id="new_input_form" style="padding-left: 5%">
                                 <div class="row">
-                                    <div for="event" class="col-3 t1">Event :</div>
+                                    <div for="event" class="col-3 t1"><?php echo $text['event'];?>:</div>
                                     <div class="col-2 t2">
                                         <select id="edit_Event_Option" name ="edit_Event_Option" class="col custom-file">
                                                 <?php foreach($data['event'] as $key =>$val){?>

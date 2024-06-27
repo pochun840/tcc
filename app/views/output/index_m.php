@@ -58,7 +58,7 @@
                             <table id="output_table" class="table w3-table-all w3-hoverable">
                                 <thead id="header-table">
                                     <tr class="w3-dark-grey" style="font-size: 2.6vmin">
-                                        <th class="w3-center">Event</th>
+                                        <th class="w3-center"><?php echo $text['event'];?></th>
                                         <th class="w3-center">Pin</th>
                                         <th class="w3-center"></th>
                                         <th class="w3-center">Time</th>

@@ -126,8 +126,8 @@ $text['Nm'] = 'Nm';
 $text['Threshold_Type'] = 'Threshold Type';
 $text['Threshold_Angle'] = 'Threshold Angle';
 
-//advanced step
-$text['advancedstep_management'] = 'Advanced Step Management';
+//step
+$text['step_management'] = 'Step Management';
 
 $text['step_id'] = 'Step ID';
 $text['step_name'] = 'Step name';
@@ -189,6 +189,7 @@ $text['SEQ_CLEAR'] = 'Sequence Clear';
 $text['GATE_ONCE'] = 'Gate Once';
 $text['GATE_TWICE'] = 'Gate Twice';
 $text['REBOOT'] = 'Reboot';
+$text['UDEFINE'] = 'UserDefine';
 $text['UDEFINE1'] = 'UserDefine1';
 $text['UDEFINE2'] = 'UserDefine2';
 

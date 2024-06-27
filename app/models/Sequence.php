@@ -30,7 +30,7 @@ class Sequence{
     #透過job_id 取的當前的step數量 
     public function getStep_by_job_id($job_id){
 
-        $sql = "SELECT  count(job_id)  as total_step FROM step  WHERE job_id ='".$job_id."'";
+        $sql = "SELECT  count(job_id)  as total_step FROM step  WHERE job_id ='".$job_id."' ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute();
         return $statement->fetchall();
@@ -45,6 +45,9 @@ class Sequence{
         $result = $statement->fetch();
         return $result['count'];
     }
+
+
+    //public function 
 
 
     #新增sequence

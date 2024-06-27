@@ -126,8 +126,8 @@ $text['Nm'] = '牛頓.公尺';
 $text['Threshold_Type'] = '門檻選項';
 $text['Threshold_Angle'] = '門檻點角度';
 
-//advanced step
-$text['advancedstep_management'] = '進階工序 - 步驟管理';
+//step
+$text['step_management'] = '步驟管理';
 
 $text['step_id'] = '步驟ID';
 $text['step_name'] = '步驟名稱';
@@ -189,6 +189,7 @@ $text['SEQ_CLEAR'] = '工序清除';
 $text['GATE_ONCE'] = '一次感應';
 $text['GATE_TWICE'] = '二次感應';
 $text['REBOOT'] = '重啟';
+$text['UDEFINE'] = '自定義';
 $text['UDEFINE1'] = '自定義1';
 $text['UDEFINE2'] = '自定義2';
 

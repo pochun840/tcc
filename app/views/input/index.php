@@ -104,7 +104,7 @@
                         <table class="w3-table-all">
                             <tr>
                                 <td class="w3-left-align">1-50 SW Job ID</td>
-                                <td class="w3-left-align">101 Disable</td>
+                                <td class="w3-left-align">101 <?php echo $text['DISABLE'];?></td>
                                 <td class="w3-left-align">102 Enable</td>
                                 <td class="w3-left-align">103 Clear</td>
                                 <td class="w3-left-align">104 Confirm </td>
@@ -117,11 +117,11 @@
                                 <td class="w3-left-align">109 Gate Once</td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">110 UsreDefine1</td>
-                                <td class="w3-left-align">111 UsreDefine2</td>
-                                <td class="w3-left-align">112 UsreDefine3</td>
-                                <td class="w3-left-align">113 UsreDefine4</td>
-                                <td class="w3-left-align">114 UsreDefine5</td>
+                                <td class="w3-left-align">110 <?php echo $text['UDEFINE'];?>1</td>
+                                <td class="w3-left-align">111 <?php echo $text['UDEFINE'];?>2</td>
+                                <td class="w3-left-align">112 <?php echo $text['UDEFINE'];?>3</td>
+                                <td class="w3-left-align">113 <?php echo $text['UDEFINE'];?>4</td>
+                                <td class="w3-left-align">114 <?php echo $text['UDEFINE'];?>5</td>
                             </tr>
                         </table>
                     </div>
