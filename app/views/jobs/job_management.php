@@ -30,7 +30,7 @@
                                     <th><?php echo $text['Unscrew_rpm'];?></th>
                                     <th><?php echo $text['Unscrew_power'];?></th>
                                     <th><?php echo $text['total_seq'];?></th>
-                                    <th><?php echo $text['add_step'];?></th>
+                                    <th><?php echo $text['add_seq'];?></th>
                                 </tr>
                             </thead>
 
