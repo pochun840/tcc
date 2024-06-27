@@ -18,7 +18,7 @@
     <div class="main-content">
         <div class="center-content">
             <div class="topnav">
-                <label style="font-size:2.5vmin;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;
+                <label style="font-size:2.5vmin;color: #000; padding-left: 2%" for="job_id"><?php echo $text['job_id'];?> :</label>&nbsp;
                 <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="" disabled style="height:30px; font-size:2.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
                 <button id="Button_Select" type="button" onclick="document.getElementById('JobSelect').style.display='block'"><?php echo $text['select'];?></button>
             </div>
@@ -62,18 +62,11 @@
                                 <thead class="header-table">
                                     <tr class="w3-dark-grey">
                                         <th><?php echo $text['event'];?></th>
-                                        <th>1</th>
-                                        <th>2</th>
-                                        <th>3</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>6</th>
-                                        <th>7</th>
-                                        <th>8</th>
-                                        <th>9</th>
-                                        <th>10</th>
-                                        <th>11</th>
-                                        <th>Time</th>
+                                        <?php $io = 1; for($io = 1; $io <= 11;$io++){?>
+                                            <th><?php echo $io;?></th>
+                                        <?php } ?>
+                                        
+                                        <th><?php echo $text['time'];?></th>
                                     </tr>
                                 </thead>
 
@@ -107,7 +100,7 @@
                         <div class="modal-body">
                             <form id="new_output_form" style="padding-left: 5%">
                                 <div class="row">
-                                    <div for="event" class="col-3 t1">Event :</div>
+                                    <div for="event" class="col-3 t1"><?php echo $text['event'];?> :</div>
                                     <div class="col-2 t2">
                                         <select id="Event_Option" class="col custom-file">
                                            <?php foreach($data['event_output'] as $key =>$val){?>
@@ -162,7 +155,7 @@
                         <div class="modal-body">
                             <form id="new_output_form" style="padding-left: 5%">
                                 <div class="row">
-                                    <div for="event" class="col-3 t1">Event :</div>
+                                    <div for="event" class="col-3 t1"><?php echo $text['event'];?> :</div>
                                     <div class="col-2 t2">
                                         <select id="edit_event_option" name='edit_event_option' class="col custom-file">
                                            <?php foreach($data['event_output'] as $key =>$val){?>
@@ -220,7 +213,7 @@
                 	            <label for="from_job_id" class="col col-form-label" style="font-weight: bold;padding-left: 5%;"><?php echo $text['copy_from'];?></label>
                 	            <div style="padding-left: 10%;">
                 		            <div class="row">
-                				        <label for="from_job_id" class="t1 col-4 col-form-label">Job ID :</label>
+                				        <label for="from_job_id" class="t1 col-4 col-form-label"><?php echo $text['job_id'];?> :</label>
                 				        <div class="col-5 t2 ">
                 				            <input type="number" class="form-control" id="from_job_id" disabled>
                 				        </div>
@@ -235,7 +228,7 @@
                 			    <label for="from_job_id" class="col col-form-label" style="font-weight: bold;padding-left: 5%;"><?php echo $text['copy_to'];?></label>
                 			    <div style="padding-left: 10%">
                 				    <div class="row">
-                				        <label for="to_step_id" class="t1 col-4 col-form-label">Job :</label>
+                				        <label for="to_step_id" class="t1 col-4 col-form-label"><?php echo $text['job'];?> :</label>
                 				        <div class="t2 col-6">
                                             <select id="JobSelect1" class="col custom-file" style="margin: center; width: 160px">
                                                 <?php foreach($data['job_list'] as $kk => $vv){?>

@@ -1,31 +1,4 @@
-<!DOCTYPE HTML>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/css/datatables.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/css/w3.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>//css/tcc_setting_m.css?v=202406210900">
-    <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
- 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-  
-    <script src="<?php echo URLROOT; ?>js/all.js?v=202406131200"></script>
-    <script src="<?php echo URLROOT; ?>js/settings.js?v=202406241200"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<style>
-
-.t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;padding-left: 5%}
-.t2{font-size: 17px; margin: 5px 0px;}
-.t3{font-size: 17px; height: 30px; margin-bottom:2px}
-
-</style>
-
-</head>
+<?php require APPROOT . 'views/inc/header.php'; ?>
 
 <body>
 <div class="container-ms">
@@ -55,19 +28,19 @@
             <div id="Controller_Setting" class="divMode">
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%">Controller Setting</div>
                 <div class="row t2">
-                    <div class="col-5 t1">ID:</div>
+                    <div class="col-5 t1"><?php echo $text['system_id'];?>:</div>
                     <div class="col-4 t2">
                         <input id="control_id" name="control_id" type="number" max=250 min=1 maxlength="3" value="<?php echo $data['controller_info']['device_id'];?>" class="t3 form-control"  required>
                     </div>
                 </div>    
                 <div class="row t2">
-                    <div class="col-5 t1">Name:</div>
+                    <div class="col-5 t1"><?php echo $text['system_name'];?>:</div>
                     <div class="col-5 t2">
                         <input id="control_name" name="control_name" maxlength="14" type="text" value="<?php echo $data['controller_info']['device_name'];?>"  class="t3 form-control"  required>
                     </div>
                 </div>    
                 <div class="row t2">
-                    <div class="col-5 t1">Language:</div>
+                    <div class="col-5 t1"><?php echo $text['system_language'];?>:</div>
                     <div class="col-5 t2">
                         <select class="form-select" id="select_language" name="select_language">
                             <?php foreach($data['lang_arr'] as $k_lang =>$v_lang){?>
@@ -77,20 +50,20 @@
                     </div>
                 </div>    
                 <div class="row t2">
-                    <div class="col-5 t1">Batch Mode:</div>
+                    <div class="col-5 t1"><?php echo $text['system_batch'];?>:</div>
                     <div class="col t2" >
       			      	<div class="col-3 form-check form-check-inline">
         				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="1" <?php echo $data['controller_info']['batch'] == 1 ? 'checked="checked"' : ''; ?> >
-            				<label class="form-check-label" for="dec">DEC</label>
+            				<label class="form-check-label" for="dec"><?php echo $text['system_dec'];?></label>
             			</div>
             			<div class="form-check form-check-inline">
             			    <input class="form-check-input" type="radio" name="batch-mode-option" id="inc" value="2" <?php echo $data['controller_info']['batch'] == 2 ? 'checked="checked"' : ''; ?>>
-            				<label class="form-check-label" for="inc">INC</label>
+            				<label class="form-check-label" for="inc"><?php echo $text['system_inc'];?></label>
             			</div>
                     </div>
                 </div>
                 <div class="row t2">
-                    <div class="col-5 t1">Buzzer:</div>
+                    <div class="col-5 t1"><?php echo $text['system_buzzer'];?>:</div>
                     <div class="col t2">
       			      	<div class="col-3 form-check form-check-inline">
            				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
@@ -109,7 +82,7 @@
             
             <!-- System Setting -->
             <div id="System_Setting" class="divMode" style="display: none">
-                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%;">System Setting</div>
+                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%;"><?php echo $text['system_setting'];?></div>
                 <div class="system-scrollbar" id="style-system">
                     <div class="system-force-overflow">
                         <div class="col t1">Password:</div>
@@ -480,7 +453,79 @@ function button_save_password_gust(){
     }
 
 }
+function OpenButton(ButtonMode){
 
+    if (ButtonMode == "Controller")
+    {
+        document.getElementById('Controller_Setting').style.display = "";
+        document.getElementById('System_Setting').style.display = "none";
+        document.getElementById('Barcode_Setting').style.display = "none";
+        document.getElementById('Connect_Setting').style.display = "none";
+        document.getElementById('iDas-Update_Setting').style.display = "none";
+        document.getElementById('bnt1').classList.add("active");
+        document.getElementById('bnt2').classList.remove("active");   
+        document.getElementById('bnt3').classList.remove("active");
+        document.getElementById('bnt4').classList.remove("active");
+        document.getElementById('bnt5').classList.remove("active");
+    }
+    else if (ButtonMode == "System")
+    {
+        document.getElementById('System_Setting').style.display = "";
+        document.getElementById('Controller_Setting').style.display = "none";
+        document.getElementById('Barcode_Setting').style.display = "none";
+        document.getElementById('Connect_Setting').style.display = "none";
+        document.getElementById('iDas-Update_Setting').style.display = "none";
+        document.getElementById('bnt2').classList.add("active");
+        document.getElementById('bnt1').classList.remove("active");
+        document.getElementById('bnt3').classList.remove("active");
+        document.getElementById('bnt4').classList.remove("active");
+        document.getElementById('bnt5').classList.remove("active");
+
+    }
+    else if (ButtonMode == "Barcode")
+    {
+        document.getElementById('Barcode_Setting').style.display = "";
+        document.getElementById('System_Setting').style.display = "none";
+        document.getElementById('Controller_Setting').style.display = "none";
+        document.getElementById('Connect_Setting').style.display = "none";
+        document.getElementById('iDas-Update_Setting').style.display = "none";
+        document.getElementById('bnt3').classList.add("active");
+        document.getElementById('bnt2').classList.remove("active");
+        document.getElementById('bnt1').classList.remove("active");
+        document.getElementById('bnt4').classList.remove("active");
+        document.getElementById('bnt5').classList.remove("active");
+    }
+    else if (ButtonMode == "Connect")
+    {
+        document.getElementById('Connect_Setting').style.display = "";
+        document.getElementById('Barcode_Setting').style.display = "none";
+        document.getElementById('System_Setting').style.display = "none";
+        document.getElementById('Controller_Setting').style.display = "none";
+        document.getElementById('iDas-Update_Setting').style.display = "none";
+        document.getElementById('bnt4').classList.add("active");
+        document.getElementById('bnt3').classList.remove("active");
+        document.getElementById('bnt2').classList.remove("active");
+        document.getElementById('bnt1').classList.remove("active");
+        document.getElementById('bnt5').classList.remove("active");
+    }
+    else if (ButtonMode == "Update")
+    {
+        document.getElementById('iDas-Update_Setting').style.display = "";
+        document.getElementById('Connect_Setting').style.display = "none";
+        document.getElementById('Barcode_Setting').style.display = "none";
+        document.getElementById('System_Setting').style.display = "none";
+        document.getElementById('Controller_Setting').style.display = "none";
+        document.getElementById('bnt5').classList.add("active");
+        document.getElementById('bnt4').classList.remove("active");
+        document.getElementById('bnt3').classList.remove("active");
+        document.getElementById('bnt2').classList.remove("active");
+        document.getElementById('bnt1').classList.remove("active");
+    }
+    else
+    {
+        //alert("Function ["+ ButtonMode +"] is under constructing ...");
+    }
+}
 
 </script>    
 

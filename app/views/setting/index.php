@@ -24,21 +24,21 @@
             </div>
         
             <div id="Controller_Setting" class="divMode">
-                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%">Controller Setting</div>
+                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['controller_setting'];?></div>
                 <div class="row t2">
-                    <div class="col-3 t1">ID:</div>
+                    <div class="col-3 t1"><?php echo $text['system_id'];?>:</div>
                     <div class="col-3 t2">
                         <input id="control_id" name="control_id" type="number" max=250 min=1 maxlength="3" value="<?php echo $data['controller_info']['device_id'];?>" class="t3 form-control"  required>
                     </div>
                 </div>    
                 <div class="row t2">
-                    <div class="col-3 t1">Name:</div>
+                    <div class="col-3 t1"><?php echo $text['system_name'];?>:</div>
                     <div class="col-3 t2">
                         <input id="control_name" name="control_name" maxlength="12" type="text" value="<?php echo $data['controller_info']['device_name'];?>" class="t3 form-control"  required>
                     </div>
                 </div>    
                 <div class="row t2">
-                    <div class="col-3 t1">Language:</div>
+                    <div class="col-3 t1"><?php echo $text['system_language'];?>:</div>
                     <div class="col-3 t2">
                         <select class="form-select" id="select_language" name="select_language">
                             <?php foreach($data['lang_arr'] as $k_lang =>$v_lang){?>
@@ -48,20 +48,20 @@
                     </div>
                 </div>    
                 <div class="row t2">
-                    <div class="col-3 t1">Batch Mode:</div>
+                    <div class="col-3 t1"><?php echo $text['system_batch'];?>:</div>
                     <div class="col t2" >
       			      	<div class="col-1 form-check form-check-inline">
         				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="1"  <?php echo $data['controller_info']['batch'] == 1 ? 'checked="checked"' : ''; ?>>
-            				<label class="form-check-label" for="dec">DEC</label>
+            				<label class="form-check-label" for="dec"><?php echo $text['system_dec'];?></label>
             			</div>
             			<div class="form-check form-check-inline">
             			    <input class="form-check-input" type="radio" name="batch-mode-option" id="inc" value="2"  <?php echo $data['controller_info']['batch'] == 2 ? 'checked="checked"' : ''; ?> >
-            				<label class="form-check-label" for="inc">INC</label>
+            				<label class="form-check-label" for="inc"><?php echo $text['system_inc'];?></label>
             			</div>
                     </div>
                 </div>
                 <div class="row t2">
-                    <div class="col-3 t1">Buzzer:</div>
+                    <div class="col-3 t1"><?php echo $text['system_buzzer'];?>:</div>
                     <div class="col t2">
       			      	<div class="col-1 form-check form-check-inline">
            				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
@@ -79,7 +79,7 @@
             </div>
 
             <div id="System_Setting" class="divMode" style="display: none">
-                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%">System Setting</div>
+                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_setting'];?></div>
                 <div class="row t2">
                     <div class="col-3 t1">Password:</div>
                     <div class="col t2">

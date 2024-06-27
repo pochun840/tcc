@@ -351,3 +351,6 @@ th, td
     background: linear-gradient(left, #8391A6, #536175);
 }
 
+.t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;padding-left: 5%}
+.t2{font-size: 17px; margin: 5px 0px;}
+.t3{font-size: 17px; height: 30px; margin-bottom:2px}
