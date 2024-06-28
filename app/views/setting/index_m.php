@@ -64,11 +64,11 @@
                     <div class="col t2">
       			      	<div class="col-3 form-check form-check-inline">
            				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
-               				<label class="form-check-label" for="buzzer-on">ON</label>
+               				<label class="form-check-label" for="buzzer-on"><?php echo $text['switch_on'];?></label>
                			</div>
               			<div class="form-check form-check-inline">
                			    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-off" value="2" <?php echo $data['controller_info']['buzzer_mode'] == 2 ? 'checked="checked"' : ''; ?>>
-               				<label class="form-check-label" for="buzzer-off">OFF</label>
+               				<label class="form-check-label" for="buzzer-off"><?php echo $text['switch_off'];?></label>
                			</div>
                     </div>
                 </div>
@@ -105,9 +105,9 @@
                             </div>        
                         </div>          
                         <div class="row t2 border-bottom">
-                            <div class="col t1">Export Config:</div>
+                            <div class="col t1"><?php echo $text['system_export_config'];?>:</div>
                             <div class="col t2">
-                                <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Export_SystemConfig();">Export Config</button>
+                                <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Export_SystemConfig();"><?php echo $text['system_export_config'];?></button>
                             </div>        
                         </div> 
                         

@@ -15,7 +15,7 @@
     <div class="main-content">
         <div class="center-content">
             <div class="topnav">
-                <label style="font-size:20px;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;&nbsp;
+                <label style="font-size:20px;color: #000; padding-left: 2%" for="job_id"><?php echo $text['job_id'];?> :</label>&nbsp;&nbsp;
                 <input type="text" id="job_id" name="job_id" size="10" maxlength="20" value="<?php echo $data['job_id'];?>" disabled
                 style="height:28px; font-size:20px;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
@@ -102,7 +102,7 @@
                 <div class="modal-body">
                     <form id="new_seq_form" style="padding-left: 5%">
                         <div class="row">
-                            <div for="job-id" class="col-6 t1">Job ID :</div>
+                            <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="job_id" maxlength="" value="<?php echo $data['job_id'];?>" >
                             </div>
@@ -240,7 +240,7 @@
                 <div class="modal-body">
                     <form id="new_seq_form" style="padding-left: 5%">
                         <div class="row">
-                            <div for="job-id" class="col-6 t1">Job ID :</div>
+                            <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="job_id" maxlength="" value="<?php echo $data['job_id'];?>" >
                             </div>
