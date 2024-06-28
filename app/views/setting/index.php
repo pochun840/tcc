@@ -84,7 +84,7 @@
                         <form id="edit_password"  style="margin: 3px 0px">
                             <input type="password" id="new_password" size="15" placeholder="<?php echo $text['system_new_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
                             <input type="password" id="comfirm_password" size="15" placeholder="<?php echo $text['system_confirm_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">
-                            <input type="button" value="Save" onclick="edit_password()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                            <input type="button" value="<?php echo $text['save'];?>" onclick="edit_password()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                         </form>
                     </div>        
                 </div>          
@@ -94,7 +94,7 @@
                         <form style="margin: 3px 0px">
                             <span id="currentSystemTime"></span>&nbsp;
                             <input type="datetime-local" id="newTime" value="" required class="t3 w3-submit w3-border w3-round">
-                            <input type="button" value="time_save" class="all-btn w3-submit w3-border w3-round-large" style="float: right" onclick="time_save()">
+                            <input type="button" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right" onclick="time_save()">
                         </form>
                     </div>        
                 </div>          
@@ -132,7 +132,7 @@
                                         <th><?php echo $text['job_id'];?></th>
                                         <th><?php echo $text['job_name'];?></th>
                                         <th><?php echo $text['system_barcode'];?></th>
-                                        <th>From</th>
+                                        <th><?php echo $text['system_barcode_from'];?></th>
                                         <th>Count</th>
                                     </tr>
                                 </thead>
@@ -161,13 +161,13 @@
                 <hr>
                                
                 <div class="row t2">
-                    <div class="col-3 t1">Barcode:</div>
+                    <div class="col-3 t1"><?php echo $text['system_barcode'];?>:</div>
                     <div class="col-6 t2">
                         <input id="barcode_name" name="barcode_name" style="height: 32px" type="text" value="" maxlength="54" class="form-control" required>
                     </div>
                 </div>
                 <div class="row t2">
-                    <div class="col-3 t1">From:</div>
+                    <div class="col-3 t1"><?php echo $text['system_barcode_from'];?>:</div>
                     <div class="col-3 t2">
                         <input id="barcode_from" name="barcode_from" style="height: 32px" type="text" value="" class="form-control">
                     </div>

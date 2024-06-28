@@ -162,6 +162,12 @@ $text['final_angle'] = 'ANGLE (Deg)';//ANGLE (Deg)
 $text['final_result'] = 'RESULT';//RESULT
 $text['final_message'] = 'MESSAGE';//MESSAGE
 
+$text['Torque Time'] = "Torque / Time";
+$text['Angle Time'] = "Angle / Time";
+$text['RPM Time'] = "RPM / Timee";
+$text['Torque Angle'] = "Torque / Angle";
+
+
 // Input/Output
 $text['input'] = 'Input'; //I/O INPUT
 $text['output'] = 'Output'; //I/O OUTPUT
@@ -378,6 +384,9 @@ $text['img_tool'] = '../public/img/home_tool_en.png';
 $text['img_tool_hover'] = '../public/img/home_m_tool_en.png';
 $text['img_setting'] = '../public/img/home_setting_en.png';
 $text['img_setting_hover'] = '../public/img/home_m_setting_en.png';
+
+
+
 
 
 //------------------------------------------------ -------------------------------------------------- ------------

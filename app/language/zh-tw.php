@@ -162,6 +162,11 @@ $text['final_angle'] = '角度(度)';
 $text['final_result'] = '結果';
 $text['final_message'] = '訊息';
 
+$text['Torque Time'] = "扭力 / 時間";
+$text['Angle Time'] = "角度 / 時間";
+$text['RPM Time'] = "轉速 / 時間";
+$text['Torque Angle'] = "扭力 / 角度";
+
 // Input/Output
 $text['input'] = '輸入'; //I/O INPUT
 $text['output'] = '輸出'; //I/O OUTPUT

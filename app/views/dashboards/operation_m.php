@@ -30,7 +30,7 @@
             <div class="operation-setting">
                 <div class="column">
                     <div class="item-target-torque w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_torque'] ;?>(N-m)</div>
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_torque'] ;?>(<?php echo $text['unit_status_1'];?>)</div>
                         <div id="Target_Torque" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0;"></div>
                     </div>
                     <div class="item-result w3-display-container">
@@ -53,7 +53,7 @@
             <div class="chart-setting">
                 <div class="button-chart">
                     <?php foreach($data['chart_menu_arr'] as $k_menu =>$v_menu){?>
-                            <button type="button" <?php if($data['chart_mode'] == $k_menu){ echo $class ='class="btn-chart active"';}else { echo $class ='class="btn-chart"'; }?>   id= '<?php echo $v_menu['id'];?>' onclick="chart_type('<?php echo $v_menu['id'];?>')" ><?php echo $v_menu['name'];?></button>
+                            <button type="button" <?php if($data['chart_mode'] == $k_menu){ echo $class ='class="btn-chart active"';}else { echo $class ='class="btn-chart"'; }?>   id= '<?php echo $v_menu['id'];?>' onclick="chart_type('<?php echo $v_menu['id'];?>')" ><?php echo $text[$v_menu['name']];?></button>
                     <?php }?>
                 </div>
                 <div id="graph" class="display-chart">
