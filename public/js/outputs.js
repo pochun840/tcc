@@ -113,6 +113,82 @@ function collectPinValues(selector) {
 
     return selectedValues;
 }
+function create_output_id() {
+    var output_event = document.getElementById("Event_Option").value;
+    var pinval = collectPinValues('input[name="pin_option"]');
+
+    if (pinval.length > 0) {
+        var pin_old = pinval[0]['id']; 
+        var wave = pinval[0]['value'];
+        
+        var match = pin_old.match(/\d+/); 
+        var output_pin = match ? parseInt(match[0]) : null;
+        
+        var time_ms = 'time'+ output_pin;
+        var wave_on =  document.getElementById(time_ms).value;
+
+        if (job_id) {
+            $.ajax({
+                url: "?url=Outputs/create_output_event",
+                method: "POST",
+                data: { 
+                    job_id: job_id,
+                    output_pin: output_pin,
+                    output_event: output_event,
+                    wave: wave,
+                    wave_on: wave_on
+                },
+                success: function(response) {
+                    console.log(response);
+                    alert(response);
+                    get_output_by_job_id(job_id);
+                    document.getElementById('new_output').style.display = 'none';
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                }
+            });
+        }
+    } else {
+        console.error("No pinval found or pinval[0] is undefined.");
+    }
+}
+
+function edit_output_id(){
+    var output_event = document.getElementById("edit_event_option").value;
+    var pinval       = collectPinValues('input[name="edit_pin_option"]');
+    var pin_old      = pinval[0]['id'];
+    var wave         = pinval[0]['value'];
+    var match        = pin_old.match(/\d+/); 
+    var output_pin   = match ? parseInt(match[0]) : null;
+
+    var time_ms = 'edit_time'+ output_pin;
+    var wave_on =  document.getElementById(time_ms).value;
+    if(job_id){
+        $.ajax({
+            url: "?url=Outputs/edit_output_event",
+            method: "POST",
+            data: { 
+                job_id: job_id,
+                output_pin: output_pin,
+                output_event: output_event,
+                wave: wave,
+                wave_on: wave_on,
+                old_output_event: old_output_event
+            },
+            success: function(response) {
+                console.log(response);
+                alert(response);
+                get_output_by_job_id(job_id);
+                document.getElementById('edit_output').style.display='none';
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+            }
+        });         
+    }
+
+}
 
 function resetalignsubmit(job_id) {
 
@@ -245,82 +321,8 @@ function get_output_info(job_id,output_event){
 
  //update
  //var old_output_event = document.getElementById("some_element_id").value;
- function edit_output_id(){
-    var output_event = document.getElementById("edit_event_option").value;
-    var pinval       = collectPinValues('input[name="edit_pin_option"]');
-    var pin_old      = pinval[0]['id'];
-    var wave         = pinval[0]['value'];
-    var match        = pin_old.match(/\d+/); 
-    var output_pin   = match ? parseInt(match[0]) : null;
 
-    var time_ms = 'edit_time'+ output_pin;
-    var wave_on =  document.getElementById(time_ms).value;
-    if(job_id){
-        $.ajax({
-            url: "?url=Outputs/edit_output_event",
-            method: "POST",
-            data: { 
-                job_id: job_id,
-                output_pin: output_pin,
-                output_event: output_event,
-                wave: wave,
-                wave_on: wave_on,
-                old_output_event: old_output_event
-            },
-            success: function(response) {
-                console.log(response);
-                alert(response);
-                get_output_by_job_id(job_id);
-                document.getElementById('edit_output').style.display='none';
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-            }
-        });         
-    }
 
-}
-
-function create_output_id() {
-    var output_event = document.getElementById("Event_Option").value;
-    var pinval = collectPinValues('input[name="pin_option"]');
-    
-    if (pinval.length > 0) {
-        var pin_old = pinval[0]['id']; 
-        var wave = pinval[0]['value'];
-        
-        var match = pin_old.match(/\d+/); 
-        var output_pin = match ? parseInt(match[0]) : null;
-        
-        var time_ms = 'time'+ output_pin;
-        var wave_on =  document.getElementById(time_ms).value;
-
-        if (job_id) {
-            $.ajax({
-                url: "?url=Outputs/create_output_event",
-                method: "POST",
-                data: { 
-                    job_id: job_id,
-                    output_pin: output_pin,
-                    output_event: output_event,
-                    wave: wave,
-                    wave_on: wave_on
-                },
-                success: function(response) {
-                    console.log(response);
-                    alert(response);
-                    get_output_by_job_id(job_id);
-                    document.getElementById('new_output').style.display = 'none';
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX request failed:", status, error);
-                }
-            });
-        }
-    } else {
-        console.error("No pinval found or pinval[0] is undefined.");
-    }
-}
 
 
 

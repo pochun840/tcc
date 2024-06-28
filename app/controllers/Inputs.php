@@ -35,6 +35,10 @@ class Inputs extends Controller
             
         );
 
+
+        
+        
+       // var_dump($text);die();
         if($isMobile){
             $this->view('input/index_m', $data);
         }else{
@@ -44,6 +48,7 @@ class Inputs extends Controller
 
     // get_input_by_job_id
     public function get_input_by_job_id($job_id){
+
         $event = $this->MiscellaneousModel->details('io_input');
     
         $input_check = true;
@@ -52,7 +57,6 @@ class Inputs extends Controller
         } else {
             $input_check = false; 
         }
-
         if ($input_check) {
             $job_inputs = $this->InputModel->get_input_by_job_id($job_id);
             $temp  = array(); 
@@ -60,6 +64,7 @@ class Inputs extends Controller
             $job_inputlist = ''; 
             
          
+            
             if (!empty($job_inputs)) {
                 foreach ($job_inputs as $kk => $vv) {
                     if (!empty($vv['input_pin'])) {

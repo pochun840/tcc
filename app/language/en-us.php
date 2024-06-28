@@ -185,19 +185,25 @@ $text['gate_confirm'] = 'Workpiece Ready Confirm';
 $text['YES'] = 'YES';
 $text['NO'] = 'NO';
 
-$text['START_IN'] = 'Start IN(Remote)';
+$text['Start-IN(Remote)'] = 'Start IN(Remote)';
+$text['Unscrew(Remote)'] = 'Unscrew(Remote)';
 $text['REVERSE_IN'] = 'Reverse(Remote)';
-$text['DISABLE'] = 'Disable';
-$text['ENABLE'] = 'Enable';
-$text['CONFIRM'] = 'Confirm';
-$text['CLEAR'] = 'Clear';
-$text['SEQ_CLEAR'] = 'Sequence Clear';
-$text['GATE_ONCE'] = 'Gate Once';
+$text['Disable'] = 'Disable';
+$text['Enable'] = 'Enable';
+$text['Confirm'] = 'Confirm';
+$text['Clear'] = 'Clear';
+$text['Sequence Clear'] = 'Sequence Clear';
+$text['Gate Once'] = 'Gate Once';
 $text['GATE_TWICE'] = 'Gate Twice';
-$text['REBOOT'] = 'Reboot';
+$text['Reboot'] = 'Reboot';
 $text['UDEFINE'] = 'UserDefine';
-$text['UDEFINE1'] = 'UserDefine1';
-$text['UDEFINE2'] = 'UserDefine2';
+$text['UserDefine1'] = 'UserDefine1';
+$text['UserDefine2'] = 'UserDefine2';
+$text['UserDefine3'] = 'UserDefine3';
+$text['UserDefine4'] = 'UserDefine4';
+$text['UserDefine5'] = 'UserDefine5';
+
+
 
 $text['OK'] = 'OK';
 $text['NG'] = 'NG';
@@ -218,6 +224,27 @@ $text['input_delete_notice'] = 'Do you want to delete';
 $text['delete_success'] = 'Delete completed';
 $text['copy_success'] = 'Copy completed';
 $text['select_job'] = 'select job';
+
+
+
+/*$array = array(
+	101 => 'Disable',
+	102 => 'Enable',
+	103 => 'Clear',
+	104 => 'Confirm',
+	105 => 'Start-IN(Remote)',
+	106 => 'Unscrew(Remote)',
+	107 => 'Sequence Clear',
+	108 => 'Reboot',
+	109 => 'Gate Once',
+	110 => 'UserDefine1',
+	111 => 'UserDefine2',
+	112 => 'UserDefine3',
+	113 => 'UserDefine4',
+	114 => 'UserDefine5',
+);*/
+
+
 
 // Data
 $text['data'] = 'Data';

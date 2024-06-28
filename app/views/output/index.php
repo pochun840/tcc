@@ -112,15 +112,15 @@
 									<div class="row output-pin">
 										<div class="col-sm-2 t1"><?php echo $i; ?>:</div>
 										<div class="col-sm-2 t2 form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="pin_option<?php echo $i; ?>" id="pin<?php echo $i; ?>_1" value="1">
+											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_1" value="1">
 											<label class="form-check-label" for="pin<?php echo $i; ?>_signal01"><img src="./img/signal01.png"></label>
 										</div>
 										<div class="col-sm-2 t2 form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="pin_option<?php echo $i; ?>" id="pin<?php echo $i; ?>_2" value="2">
+											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_2" value="2">
 											<label class="form-check-label" for="pin<?php echo $i; ?>_signal02"><img src="./img/signal02.png"></label>
 										</div>
 										<div class="col-sm-2 t2 form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="pin_option<?php echo $i; ?>" id="pin<?php echo $i; ?>_3" value="3">
+											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_3" value="3">
 											<label class="form-check-label" for="pin<?php echo $i; ?>_trigger"><img src="./img/trigger.png"></label>
 										</div>
 										<div class="col-sm-2 t2">
@@ -380,6 +380,26 @@ function crud_job_event(argument){
         
     }
 }
+
+function collectPinValues(selector) {
+    var pinOptions = document.querySelectorAll(selector);
+    var selectedValues = [];
+
+    pinOptions.forEach(function(option) {
+        if (option.checked){ 
+            var radioInfo = {
+                id: option.id,
+                value: option.value
+            };
+            selectedValues.push(radioInfo);
+        }
+    });
+
+    return selectedValues;
+}
+
+
+
 
 
 </script>

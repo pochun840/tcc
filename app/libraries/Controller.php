@@ -24,14 +24,21 @@ class Controller
         // var_dump($data);
         // 如果檔案存在就引入它
         
-        if(file_exists('../app/language/' . $data['language'] . '.php')){
+        /*if(file_exists('../app/language/' . $data['language'] . '.php')){
             require_once '../app/language/' . $data['language'] . '.php';
         } else { //預設採用簡體中文
             require_once '../app/language/en-us.php';
-        }
+        }*/
 
         // 如果檔案存在就引入它
         if(file_exists('../app/views/' . $view . '.php')){
+
+            if(file_exists('../app/language/' . $data['language'] . '.php')){
+                require_once '../app/language/' . $data['language'] . '.php';
+            } else { //預設採用簡體中文
+                require_once '../app/language/en-us.php';
+            }
+
 
             require_once '../app/views/inc/header.php';
             require_once '../app/views/' . $view . '.php';

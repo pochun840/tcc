@@ -184,19 +184,27 @@ $text['gate_confirm'] = '工件复归确认';
 $text['YES'] = '是';
 $text['NO'] = '否';
 
-$text['START_IN'] = '启动';
+$text['Start-IN(Remote)'] = '启动';
 $text['REVERSE_IN'] = '拆螺丝';
-$text['DISABLE'] = '禁用';
-$text['ENABLE'] = '启用';
-$text['CONFIRM'] = '确认';
-$text['CLEAR'] = '颗数清除';
-$text['SEQ_CLEAR'] = '工序清除';
-$text['GATE_ONCE'] = '一次感应';
+$text['Unscrew(Remote)'] = '拆螺丝';
+$text['Disable'] = '禁用';
+$text['Enable'] = '启用';
+$text['Confirm'] = '确认';
+$text['Clear'] = '颗数清除';
+$text['Sequence Clear'] = '工序清除';
+$text['Gate Once'] = '一次感应';
 $text['GATE_TWICE'] = '二次感应';
-$text['REBOOT'] = '重启';
+$text['Reboot'] = '重启';
 $text['UDEFINE1'] = '自定义1';
 $text['UDEFINE2'] = '自定义2';
 $text['UDEFINE'] = '自定义';
+
+
+$text['UserDefine1'] = '自定义1';
+$text['UserDefine2'] = '自定义2';
+$text['UserDefine3'] = '自定义3';
+$text['UserDefine4'] = '自定义4';
+$text['UserDefine5'] = '自定义5';
 
 
 $text['OK'] = 'OK';

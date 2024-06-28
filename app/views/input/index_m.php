@@ -3,7 +3,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>I/O Input</h3>
+                    <h3><?php echo $text['input'];?></h3>
                 </td>
                 <td>
                     <img src="./img/btn_home.png" style="margin-right: 10px"  onclick="window.location.href = '?url=In';">
@@ -100,24 +100,24 @@
                                 <td class="w3-left-align">102 <?php echo $text['enable'];?></td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">103 <?php echo $text['CLEAR'];?></td>
-                                <td class="w3-left-align">104 Confirm</td>                             
-                                <td class="w3-left-align">105 Start-IN(Remote)</td>
+                                <td class="w3-left-align">103 <?php echo $text['Clear'];?></td>
+                                <td class="w3-left-align">104 <?php echo $text['Confirm'];?></td>                             
+                                <td class="w3-left-align">105 <?php echo $text['Start-IN(Remote)'];?></td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">106 Unscrew(Remote)</td>
-                                <td class="w3-left-align">107 Sequence Clear</td>
-                                <td class="w3-left-align">108 Reboot</td>
+                                <td class="w3-left-align">106 <?php echo $text['Unscrew(Remote)'];?></td>
+                                <td class="w3-left-align">107 <?php echo $text['Sequence Clear'];?></td>
+                                <td class="w3-left-align">108 <?php echo $text['Reboot'];?></td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">109 Gate Once</td>
-                                <td class="w3-left-align">110 UsreDefine1</td>
-                                <td class="w3-left-align">111 UsreDefine2</td>
+                                <td class="w3-left-align">109 <?php echo $text['Gate Once'];?></td>
+                                <td class="w3-left-align">110 <?php echo $text['UDEFINE'];?>1</td>
+                                <td class="w3-left-align">111 <?php echo $text['UDEFINE'];?>2</td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">112 UsreDefine3</td>
-                                <td class="w3-left-align">113 UsreDefine4</td>
-                                <td class="w3-left-align">114 UsreDefine5</td>
+                                <td class="w3-left-align">112 <?php echo $text['UDEFINE'];?>3</td>
+                                <td class="w3-left-align">113 <?php echo $text['UDEFINE'];?>4</td>
+                                <td class="w3-left-align">114 <?php echo $text['UDEFINE'];?>5</td>
                             </tr>
                         </table>                            
                     </div>
@@ -144,7 +144,7 @@
                                     <div class="col-2 t2">
                                         <select id="Event_Option" name ="Event_Option" class="col custom-file">
                                                 <?php foreach($data['event'] as $key =>$val){?>
-                                                    <option value ='<?php echo $key;?>'><?php echo $val;?></option>
+                                                    <option value ='<?php echo $key;?>'><?php echo $text[$val];?></option>
                                                 <?php } ?>
                                         
                                         </select>
@@ -168,16 +168,16 @@
                                 <?php } ?>
                                 
                                 <div class="row input-pin"  id='work_goc'style="display: none;">
-                                    <div class="col-2 t1" class="col-3 t1">WRC:</div>
+                                    <div class="col-2 t1" class="col-3 t1"><?php echo $text['gate_confirm'];?>:</div>
                                     <div class="col t2">
                     			      	<div class="col-4 form-check form-check-inline">
                                           <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_0" value="0" checked>
-                                          <label class="form-check-label">NO</label>
+                                          <label class="form-check-label"><?php echo $text['NO'];?></label>
                     					  
                     					</div>
                     					<div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_1" value="1" >
-                                            <label class="form-check-label">YES</label>
+                                            <label class="form-check-label"><?php echo $text['YES'];?></label>
                     					    
                     					</div>
                                     </div>
@@ -215,7 +215,7 @@
                                     <div class="col-2 t2">
                                         <select id="edit_Event_Option" name ="edit_Event_Option" class="col custom-file">
                                                 <?php foreach($data['event'] as $key =>$val){?>
-                                                    <option value ='<?php echo $key;?>'><?php echo $val;?></option>
+                                                    <option value ='<?php echo $key;?>'><?php echo $text[$val];?></option>
                                                 <?php } ?>
                                         
                                         </select>
@@ -243,12 +243,12 @@
                                     <div class="col t2">
                     			      	<div class="col-4 form-check form-check-inline">
                                           <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" value="0" checked>
-                                          <label class="form-check-label">NO</label>
+                                          <label class="form-check-label"><?php echo $text['NO'];?></label>
                     					  
                     					</div>
                     					<div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_1" value="1" >
-                                            <label class="form-check-label">YES</label>
+                                            <label class="form-check-label"><?php echo $text['YES'];?></label>
                     					    
                     					</div>
                                     </div>
