@@ -127,6 +127,8 @@ function getCookie(cookieName) {
     return '';
 }
 
+
+
 function language_change(language) {
     if( language){
         $.ajax({
@@ -139,15 +141,12 @@ function language_change(language) {
             success: function(response) {
                 //console.log( response);
                 //alert(response);
-                history.go(0);
+                //history.go(0);
             },
             error: function(xhr, status, error) {
                 
             }
         });
-
-
     }
-
 }
 

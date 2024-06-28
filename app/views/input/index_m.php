@@ -1,5 +1,3 @@
-<?php require APPROOT . 'views/inc/header.php'; ?>
-<body>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -476,9 +474,6 @@ function crud_job_event(argument){
     if(argument == 'unified' && job_id != ''){
         enableButton();
         resetBackgroundColor();
-        //console.log('input_job 有值:', input_job);
-        //console.log('job_id 有值:', job_id);
-
         if(input_job != job_id){
             alignsubmit(job_id);  
         }else{
@@ -487,8 +482,3 @@ function crud_job_event(argument){
     }
 }
 </script>
-
-
-</body>
-
-</html>

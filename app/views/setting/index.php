@@ -1,5 +1,3 @@
-<?php require APPROOT . 'views/inc/header.php'; ?>
-<body>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -16,9 +14,9 @@
     <div class="main-content">
         <div class="center-content">
             <div class="w3-center">
-                <button id="bnt1" name="Controller_Display" class="button active" onclick="OpenButton('Controller')">Controller</button>
-                <button id="bnt2" name="System_Display" class="button" onclick="OpenButton('System')">System</button>
-                <button id="bnt3" name="Barcode_Display" class="button" onclick="OpenButton('Barcode')">Barcode</button>
+                <button id="bnt1" name="Controller_Display" class="button active" onclick="OpenButton('Controller')"><?php echo $text['controller_setting'];?></button>
+                <button id="bnt2" name="System_Display" class="button" onclick="OpenButton('System')"><?php echo $text['system_setting'];?></button>
+                <button id="bnt3" name="Barcode_Display" class="button" onclick="OpenButton('Barcode')"><?php echo $text['system_barcode_setting'] ;?></button>
                 <button id="bnt4" name="Connect_Display" class="button" onclick="OpenButton('Connect')">Connection</button>
                 <button id="bnt5" name="iDas_Display" class="button" onclick="OpenButton('Update')">iDAS</button>
             </div>
@@ -81,17 +79,17 @@
             <div id="System_Setting" class="divMode" style="display: none">
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_setting'];?></div>
                 <div class="row t2">
-                    <div class="col-3 t1">Password:</div>
+                    <div class="col-3 t1"><?php echo $text['system_password'];?>:</div>
                     <div class="col t2">
                         <form id="edit_password"  style="margin: 3px 0px">
-                            <input type="password" id="new_password" size="15" placeholder="New Password" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
-                            <input type="password" id="comfirm_password" size="15" placeholder="Confirm Password" maxlength="10" required class="t3 w3-submit w3-border w3-round">
+                            <input type="password" id="new_password" size="15" placeholder="<?php echo $text['system_new_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
+                            <input type="password" id="comfirm_password" size="15" placeholder="<?php echo $text['system_confirm_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">
                             <input type="button" value="Save" onclick="edit_password()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                         </form>
                     </div>        
                 </div>          
                 <div class="row t2">
-                    <div class="col-3 t1">System Date(UTC):</div>
+                    <div class="col-3 t1"><?php echo $text['system_sys_date'];?>(UTC):</div>
                     <div class="col t2">
                         <form style="margin: 3px 0px">
                             <span id="currentSystemTime"></span>&nbsp;
@@ -133,7 +131,7 @@
                                         <th></th>
                                         <th>Job ID</th>
                                         <th><?php echo $text['job_name'];?></th>
-                                        <th>Barcode</th>
+                                        <th><?php echo $text['system_barcode'];?></th>
                                         <th>From</th>
                                         <th>Count</th>
                                     </tr>
@@ -212,7 +210,7 @@
                     </div>
                 </div>
                 <div class="row t2">
-                    <div class="col-3 t1">Guest Password:</div>
+                    <div class="col-3 t1"><?php echo $text['system_connect_guest_pwd'];?>:</div>
                     <div class="col t2">
                         <form id="edit_guest_password" method="post" style="margin: 3px 0px">
                             <input type="password" id="new_password_guest" size="15" placeholder="New Password" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
@@ -537,7 +535,3 @@ function OpenButton(ButtonMode){
     }
 }
 </script>    
-
-</body>
-
-</html>

@@ -9,7 +9,6 @@
         <h1 class="col-ms-3 pt-3" style="font-size: 50px; text-align: center; color: #fff"><?php echo $text['login_text']; ?></h1>
     </div>
     <form class="pt-4" action="?url=Logins" method="POST">
-      <!-- <input type="text" name="username" placeholder="Username" required> -->
       <input type="password" name="password" placeholder="<?php echo $text['password_text']; ?>" required>
       <button type="submit"><?php echo $text['login_text']; ?></button>
     </form>
@@ -144,5 +143,3 @@ button:hover
     background: #007BA5;
 }
 </style>
-
-<?php require APPROOT . 'views/inc/footer.php'; ?>

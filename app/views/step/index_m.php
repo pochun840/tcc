@@ -1,5 +1,3 @@
-<?php require APPROOT . 'views/inc/header.php'; ?>
-<body>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <header id="header">
@@ -961,8 +959,3 @@ function sendRowInfoArray() {
 }
 
 </script>
-
-
-</body>
-
-</html>

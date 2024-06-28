@@ -1,6 +1,3 @@
-<?php require APPROOT . 'views/inc/header.php'; ?>
-
-<body>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -748,12 +745,6 @@ function updateValue(checkbox){
 }
 
 </script>
-
-
-</body>
-
-</html>
-
 <script>
     
 <?php foreach($data['sequences'] as $key =>$val) {?>

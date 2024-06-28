@@ -12,9 +12,7 @@
 
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <?php
-        include_once 'include_css.php';
-    ?>
+    <?php include_once 'include_css.php';?>
     <title><?php echo SITENAME; ?></title>    
     <?php if(session_status() == PHP_SESSION_NONE) {
                 session_start();
@@ -27,3 +25,4 @@
           }
     ?>
 </head>
+<body>
