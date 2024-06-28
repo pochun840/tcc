@@ -15,8 +15,8 @@
         <div class="center-content">
             <div class="w3-center">
                 <button id="bnt1" name="Controller_Display" class="button active" onclick="OpenButton('Controller')"><?php echo $text['controller_setting'];?></button>
-                <button id="bnt2" name="System_Display" class="button" onclick="OpenButton('System')">System</button>
-                <button id="bnt3" name="Barcode_Display" class="button" onclick="OpenButton('Barcode')">Barcode</button>
+                <button id="bnt2" name="System_Display" class="button" onclick="OpenButton('System')"><?php echo $text['system_setting'];?></button>
+                <button id="bnt3" name="Barcode_Display" class="button" onclick="OpenButton('Barcode')"><?php echo $text['system_barcode_setting'] ;?></button>
                 <button id="bnt4" name="Connect_Display" class="button" onclick="OpenButton('Connect')">Connection</button>
                 <button id="bnt5" name="iDas_Display" class="button" onclick="OpenButton('Update')">iDAS</button>
             </div>
@@ -195,10 +195,10 @@
                             </div>
                         </div>
                         <div class="row t2">
-                            <div class="col-4 t1">Select Job:</div>
+                            <div class="col-4 t1"><?php echo $text['select_job'];?>:</div>
                             <div class="col-5 t2">
                             <select class="form-select" id="barcode_job" name="barcode_job">
-                                <option value="-1">Please Select Job</option>
+                                <option value="-1"><?php echo $text['system_barcode_select_job_m'];?></option>
                                     <?php
                                     foreach ($data['job_list'] as $key => $value) {?>
                                         <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>

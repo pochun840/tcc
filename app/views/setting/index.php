@@ -179,10 +179,10 @@
                     </div>
                 </div>
                 <div class="row t2">
-                    <div class="col-3 t1">Select Job:</div>
+                    <div class="col-3 t1"><?php echo $text['select_job'];?>:</div>
                     <div class="col-3 t2">
                         <select class="form-select" id="barcode_job" name="barcode_job">
-                            <option value="-1">Please Select Job</option>
+                            <option value="-1"><?php echo $text['system_barcode_select_job_m'];?></option>
                                 <?php
                                 foreach ($data['job_list'] as $key => $value) {?>
                                     <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>

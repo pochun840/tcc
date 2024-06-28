@@ -3,7 +3,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>I/O Input</h3>
+                    <h3>I/O <?php echo $text['input'];?></h3>
                 </td>
                 <td>
                     <img src="./img/btn_home.png" style="margin-right: 10px"  onclick="window.location.href = '?url=In';">
@@ -273,7 +273,7 @@
                                 </div>
 
                                 <div class="row" id='work_goc'  style="display: none;">
-                                    <div for="Workpice Ready Confirm" class="col-6 t1">Workpice Ready Confirm :</div>
+                                    <div for="Workpice Ready Confirm" class="col-6 t1"><?php echo $text['gate_confirm'];?> :</div>
                                     <div class="col t2" >
                                         <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_0" value="0" checked>
