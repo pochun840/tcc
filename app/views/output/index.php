@@ -4,7 +4,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>I/O Output</h3>
+                    <h3><?php echo $text['output'];?></h3>
                 </td>
                 <td>
                     <img src="./img/btn_home.png" style="margin-right: 10px" onclick="window.location.href = '?url=In';">

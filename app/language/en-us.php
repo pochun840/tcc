@@ -78,7 +78,7 @@ $text['Choose_option'] = 'Option';
 $text['OK_Sequence'] = 'OK Sequence';
 $text['OK_Sequence_Stop'] = 'OK Sequence Stop';
 $text['Timeout'] = 'Timeout';
-$text['total_step'] = 'Total steps';
+$text['total_step'] = 'Total step';
 $text['add_step'] = 'Add step';
 
 $text['switch_on'] = 'ON';

@@ -113,7 +113,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="Tighten-Repeat" class="col-6 t1">Tighten Repeat:</div>
+                                    <div for="Tighten-Repeat" class="col-6 t1"><?php echo $text['tightening_repeat'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="tighten_repeat" maxlength="" >
                                     </div>

@@ -50,6 +50,9 @@ class Inputs extends Controller
     public function get_input_by_job_id($job_id){
 
         $event = $this->MiscellaneousModel->details('io_input');
+
+
+
     
         $input_check = true;
         if (!empty($_POST['jobid']) && isset($_POST['jobid'])) {
@@ -57,6 +60,7 @@ class Inputs extends Controller
         } else {
             $input_check = false; 
         }
+
         if ($input_check) {
             $job_inputs = $this->InputModel->get_input_by_job_id($job_id);
             $temp  = array(); 
@@ -80,6 +84,7 @@ class Inputs extends Controller
                     }
                     
                     $isMobile = $this->isMobileCheck();
+                    $language_type = $this->language_detect();
                     if($isMobile){
 
                         if($vv['input_wave'] == 1){
@@ -96,6 +101,7 @@ class Inputs extends Controller
 
 
                     }else{
+               
                         $job_inputlist .= "<tr class='".$vv['input_event']."'>";
                         $job_inputlist .= '<td>'.$event[$vv['input_event']].'</td>';
                         $job_inputlist .= $this->InputModel->generateTableCell($vv['input_pin'],$vv['input_wave']);
@@ -115,6 +121,7 @@ class Inputs extends Controller
             'job_inputlist' => $job_inputlist,
             'temp' => $temp,
             'tempA' => $tempA,
+            
         );
         echo json_encode($response);
     }

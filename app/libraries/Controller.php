@@ -21,7 +21,8 @@ class Controller
         //權限
         $privilege = array("privilege"=>$_SESSION['privilege']);
         $data = array_merge($data,$privilege);
-        // var_dump($data);
+
+
         // 如果檔案存在就引入它
         
         /*if(file_exists('../app/language/' . $data['language'] . '.php')){
@@ -35,10 +36,9 @@ class Controller
 
             if(file_exists('../app/language/' . $data['language'] . '.php')){
                 require_once '../app/language/' . $data['language'] . '.php';
-            } else { //預設採用簡體中文
+            } else { //預設採用英文
                 require_once '../app/language/en-us.php';
             }
-
 
             require_once '../app/views/inc/header.php';
             require_once '../app/views/' . $view . '.php';
@@ -68,11 +68,42 @@ class Controller
     }
 
 
+    public function language_detect($value=''){
+
+        if( !isset($_SESSION['language']) || $_SESSION['language'] == '' ){
+            $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 4);
+            if (preg_match("/zh-cn/i", $lang)){
+                $_SESSION['language'] = 'zh-cn';
+            }else if(preg_match("/zh-tw/i", $lang)){
+                $_SESSION['language'] = 'zh-tw';
+            }else if(preg_match("/en/i", $lang)){
+                $_SESSION['language'] = 'en-us';
+            }else{//預設
+                $_SESSION['language'] = 'en-us';
+            }
+
+            $language = $_SESSION['language'];
+
+        }else{
+            $language = $data['language']; 
+
+        }
+        
+        if(!empty($language)){
+            if(file_exists('../app/language/' . $language . '.php')){
+                require_once '../app/language/' . $language . '.php';
+            } else { //預設採用英文
+                require_once '../app/language/en-us.php';
+            }
+        }
+    }
+
+
 
     public function logMessage($message) {
         $timestamp = date("Y-m-d H:i:s");
         $logMessage = "[$timestamp] $message\n";
-        // file_put_contents("../log/logfile.log", $logMessage, FILE_APPEND);
+       
     }
 
     public function isMobileCheck($value='')

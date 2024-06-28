@@ -12,7 +12,7 @@
                 <input type="text" id="job_id" name="job_id" size="5" maxlength="20" value="<?php echo $data['job_id'];?>" disabled
                 style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
-                <label style="font-size:3vmin;color: #000; padding-left: 2%" for="seq_id">Seq ID :</label>&nbsp;
+                <label style="font-size:3vmin;color: #000; padding-left: 2%" for="seq_id"><?php echo $text['seq_id'];?> :</label>&nbsp;
                 <input type="text" id="seq_id" name="seq_id" size="5" maxlength="20" value="1" disabled
                 style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
@@ -23,11 +23,11 @@
                 <table id="step_table" class="table w3-table-all w3-hoverable">
                     <thead id="header-table" style="2.5vmin">
                         <tr class="w3-dark-grey">
-                            <th>Step ID</th>
-                            <th>Target Option</th>
+                            <th><?php echo $text['step_id'];?></th>
+                            <th><?php echo $text['step_target_type'];?></th>
                             <th><?php echo $text['direction'];?></th>
-                            <th>Up</th>
-                            <th>Down</th>
+                            <th><?php echo $text['up'];?></th>
+                            <th><?php echo $text['down'];?></th>
                         </tr>
                     </thead>
 
@@ -51,7 +51,7 @@
     <div class="footer">
         <div id="TotalPage">
             <div id="TotalStepTable">
-                <div style="color:black; float: right; margin: 2px">Total Step :
+                <div style="color:black; float: right; margin: 2px"><?php echo $text['total_step'];?> :
                     <label id="RecordCnt" name="RecordCnt" type="text" style="margin-right: 20px"><?php echo count($data['step']);?></label>
                 </div>
             </div>
@@ -72,13 +72,13 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('newstep').style.display='none'"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
-                    <h3 id='modal_title'>New Step</h3>
+                    <h3 id='modal_title'><?php echo $text['new_step'];?></h3>
                 </header>
 
                 <div class="modal-body">
                     <form id="new_step_form" style="padding-left: 5%">
                         <div class="row">
-                            <div for="target-option" class="col-6 t1">Target Option :</div>
+                            <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col-3 t2">
                                 <select id="target_option" name="target_option" class="col custom-file">
                                     <?php foreach($data['target_option'] as $key => $val){?>
@@ -89,13 +89,13 @@
                         </div>
 
                         <div class="row">
-                            <div for="target-torque" class="col-6 t1">Target Torque (<?php echo $data['unit'];?>):</div>
+                            <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="hi-torque" class="col-6 t1">Hi Torque (<?php echo $data['unit'];?>):</div>
+                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="hi_torque" maxlength="" >
                             </div>
@@ -107,25 +107,25 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="hi-angle" class="col-6 t1">Hi Angle (degree):</div>
+                            <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="hi_angle" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="lo-angle" class="col-6 t1">Lo Angle (degree):</div>
+                            <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="lo_angle" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="RPM" class="col-6 t1">RPM:</div>
+                            <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="rpm" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="direction" class="col-6 t1">Direction:</div>
+                            <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CW" value="0">
@@ -133,7 +133,7 @@
             					</div>
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">
-            					  <label class="form-check-label" for="direction_CCW">CWW</label>
+            					  <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
             					</div>
                             </div>
                         </div>
@@ -185,7 +185,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('editstep').style.display='none'"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
-                    <h3 id='modal_title'>Edit Step</h3>
+                    <h3 id='modal_title'><?php echo $text['edit_step'];?></h3>
                 </header>
 
                 <div class="modal-body">
@@ -202,31 +202,31 @@
                         </div>
 
                         <div class="row">
-                            <div for="edit_target-torque" class="col-6 t1">Target Torque (<?php echo $data['unit'];?>):</div>
+                            <div for="edit_target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_target_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="hi-torque" class="col-6 t1">Hi Torque (<?php echo $data['unit'];?>):</div>
+                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_hi_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="lo-torque" class="col-6 t1">Lo Torque (<?php echo $data['unit'];?>):</div>
+                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_lo_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="hi-angle" class="col-6 t1">Hi Angle (degree):</div>
+                            <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_hi_angle" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="lo-angle" class="col-6 t1">Lo Angle (degree):</div>
+                            <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_lo_angle" maxlength="" >
                             </div>
@@ -299,7 +299,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('copystep').style.display='none'"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
-                    <h3 id='modal_title'>Copy Step</h3>
+                    <h3 id='modal_title'><?php echo $text['copy_step'];?></h3>
                 </header>
 
                 <div class="modal-body">
@@ -307,7 +307,7 @@
         	            <label for="from_step_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_from'];?></label>
         	            <div style="padding-left: 10%">
         		            <div class="row">
-        				        <label for="from_step_id" class="t1 col-4 col-form-label">Step ID :</label>
+        				        <label for="from_step_id" class="t1 col-4 col-form-label"><?php echo $text['step_id'];?> :</label>
         				        <div class="col-5 t2 ">
         				            <input type="number" class="form-control" id="from_step_id" disabled>
         				        </div>
@@ -317,7 +317,7 @@
         			    <label for="from_step_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_to'];?></label>
         			    <div style="padding-left: 10%">
         				    <div class="row">
-        				        <label for="to_step_id" class="t1 col-4 col-form-label">Step ID</label>
+        				        <label for="to_step_id" class="t1 col-4 col-form-label"><?php echo $text['step_id'];?> :</label>
         				        <div class="t2 col-5">
         				            <input type="number" class="form-control" id="to_step_id">
         				        </div>
