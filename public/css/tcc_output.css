@@ -321,3 +321,12 @@ select
     transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
+.t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
+.t2{font-size: 17px; margin: 5px 0px;}
+.t3{font-size: 17px; margin: 3px 0px;}
+.t4{height: 28px;text-align: center;}   
+.selected { background-color: #9AC0CD !important;}
+.input-pin img{ height: 25px; width: 40px}
+.output-pin img{ height: 25px; width: 45px}
+.disabled_input{ color: #999; pointer-events: none;}
+.zoom{zoom:1.2; vertical-align: middle}

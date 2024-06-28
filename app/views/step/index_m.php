@@ -27,7 +27,7 @@
                         <tr class="w3-dark-grey">
                             <th>Step ID</th>
                             <th>Target Option</th>
-                            <th>Direction</th>
+                            <th><?php echo $text['direction'];?></th>
                             <th>Up</th>
                             <th>Down</th>
                         </tr>

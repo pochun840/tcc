@@ -78,7 +78,7 @@
     <div class="footer">
         <div id="TotalPage">
             <div id="TotalSeqTable">
-                <div style="color:black; float: right; margin: 2px"><?php echo $text['total_seq']; ?> :
+                <div style="color:black; float: right; margin: 2px"><?php  echo $text['total_seq']; ?> :
                     <label id="RecordCnt" name="RecordCnt" type="text" style="margin-right: 20px"><?php echo count($data['sequences']); ?></label>
                 </div>
             </div>
