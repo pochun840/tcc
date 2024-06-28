@@ -127,5 +127,27 @@ function getCookie(cookieName) {
     return '';
 }
 
+function language_change(language) {
+    if( language){
+        $.ajax({
+            url: "?url=Dashboards/change_language",
+            method: "POST",
+            data:{ 
+                language: language
 
+            },
+            success: function(response) {
+                //console.log( response);
+                //alert(response);
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+
+
+    }
+
+}
 

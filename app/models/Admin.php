@@ -2,7 +2,6 @@
 
 class Admin{
     private $db;//condb control box
-    private $db_dev;//devdb tool
     private $db_data;//devdb tool
     private $dbh;
     private $db_iDas;//iDas db
@@ -12,9 +11,6 @@ class Admin{
     {
         $this->db = new Database;
         $this->db = $this->db->getDb();
-
-        $this->db_dev = new Database;
-        $this->db_dev = $this->db_dev->getDb_dev();
 
         $this->db_data = new Database;
         $this->db_data = $this->db_data->getDb_data();
@@ -125,7 +121,7 @@ class Admin{
     public function Change_Screw_Local($tool_type)
     {   
         //先清空
-        $del_sql = 'DELETE FROM `tool_info`';
+        /*$del_sql = 'DELETE FROM `tool_info`';
         $statement = $this->db_dev->prepare($del_sql);
         $del_result = $statement->execute();
 
@@ -233,7 +229,7 @@ class Admin{
             return true;
         }else{
             return false;
-        }
+        }*/
 
     }
 
