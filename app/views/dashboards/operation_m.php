@@ -18,13 +18,13 @@
         <div class="center-content">
             <div class="topnav">
                 <label style="color: #fff;" for="job_name"><?php echo $text['job'];?>:</label>
-                <input type="text" id="Job_Name" name="Job_Name" size="16" maxlength="20" value="1-Sample Job1" disabled>
+                <input type="text" id="Job_Name" name="Job_Name" size="16" maxlength="20" value="" disabled>
 
                 <label style="color: #fff;" for="seq_name"><?php echo $text['sequence'];?>:</label>
-                <input type="text" id="Seq_Name" name="Seq_Name" size="16" maxlength="20" value="3-Sample Seq3" disabled>
+                <input type="text" id="Seq_Name" name="Seq_Name" size="16" maxlength="20" value="" disabled>
 
                 <label style="color: #fff;" for="screw"><?php echo $text['screws'];?>:</label>
-                <input type="text" id="Screws" name="Screws" size="4" maxlength="20" value="2/5" disabled>
+                <input type="text" id="Screws" name="Screws" size="4" maxlength="20" value="" disabled>
             </div>
             
             <div class="operation-setting">
@@ -49,7 +49,6 @@
                     </div>
                 </div>
             </div>
-            ˋ
             <div class="chart-setting">
                 <div class="button-chart">
                     <?php foreach($data['chart_menu_arr'] as $k_menu =>$v_menu){?>
