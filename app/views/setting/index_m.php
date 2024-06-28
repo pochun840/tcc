@@ -17,7 +17,7 @@
                 <button id="bnt1" name="Controller_Display" class="button active" onclick="OpenButton('Controller')"><?php echo $text['controller_setting'];?></button>
                 <button id="bnt2" name="System_Display" class="button" onclick="OpenButton('System')"><?php echo $text['system_setting'];?></button>
                 <button id="bnt3" name="Barcode_Display" class="button" onclick="OpenButton('Barcode')"><?php echo $text['system_barcode_setting'] ;?></button>
-                <button id="bnt4" name="Connect_Display" class="button" onclick="OpenButton('Connect')">Connection</button>
+                <button id="bnt4" name="Connect_Display" class="button" onclick="OpenButton('Connect')"><?php echo $text['system_connect_setting'];?></button>
                 <button id="bnt5" name="iDas_Display" class="button" onclick="OpenButton('Update')">iDAS</button>
             </div>
             
@@ -183,13 +183,13 @@
                             </div>
                         </div>
                         <div class="row t2">
-                            <div class="col-4 t1"><?php echo $text['system_barcode_from'];?>:</div>
+                            <div class="col-4 t1"><?php echo $text['system_barcode_match_from'];?>:</div>
                             <div class="col-5 t2">
                                 <input id="barcode_from" name="barcode_from" style="height: 32px" type="text" value="" class="form-control">
                             </div>
                         </div>
                         <div class="row t2">
-                            <div class="col-4 t1">Count:</div>
+                            <div class="col-4 t1"><?php echo $text['system_barcode_match_to'];?>:</div>
                             <div class="col-5 t2">
                                 <input id="barcode_count" name="barcode_count" style="height: 32px" type="text" value="" class="form-control">
                             </div>
@@ -212,21 +212,21 @@
                         
                 <div style="text-align: center;margin-top: 30px;">
                     <button class="all-btn w3-button w3-border w3-round-large" onclick="update_barcode()" ><?php echo $text['save'];?></button>&nbsp;&nbsp;
-                    <button class="all-btn w3-button w3-border w3-round-large" onclick="delete_barcode()" >Delete</button>
+                    <button class="all-btn w3-button w3-border w3-round-large" onclick="delete_barcode()" ><?php echo $text['delete_text'];?></button>
                 </div>               
             </div>
 
             <!-- Connection Setting -->
             <div id="Connect_Setting" class="divMode" style="display: none">
-                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%">Connection Setting</div>
+                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_connect_setting'];?></div>
                 <div class="connect-scrollbar" id="style-connection">
                     <div class="connect-force-overflow">
-                        <div class="col t1">Number of Connection:</div>
+                        <div class="col t1"><?php echo $text['system_connect_number'];?>:</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
                                 <form id="edit_max_link" style="margin: 3px 0px; margin-left: 14%" method="post">
                                     <input type="text" name="max_user" id="max_user" inputmode="numeric" pattern="[0-9]*" min='1' size="15" maxlength="2" required class="t3 w3-submit w3-border w3-round"><br>
-                                    <span>max number of connect : <?php echo $data['max_user']; ?></span>
+                                    <span><?php echo $text['system_connect_max_number'];?> : <?php echo $data['max_user']; ?></span>
                                     <input type="button" onclick="set_max_link()" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                                 </form>
                             </div>
@@ -236,8 +236,8 @@
                         <div class="row t2 border-bottom">
                             <div class="col t2">
                                 <form  style="margin: 3px 0px; margin-left: 14%">
-                                    <input type="password" id="new_password_guest" size="15" placeholder="New Password" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
-                                    <input type="password" id="comfirm_password_guest" size="15" placeholder="Confirm Password" maxlength="10" required class="t3 w3-submit w3-border w3-round">
+                                    <input type="password" id="new_password_guest" size="15" placeholder="<?php echo $text['system_new_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
+                                    <input type="password" id="comfirm_password_guest" size="15" placeholder="<?php echo $text['system_confirm_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">
                                     <input type="button" value="Save" onclick ="button_save_password_gust()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                                 </form>
                             </div>        
@@ -293,10 +293,10 @@
                                         <table class="table w3-table-all w3-hoverable">
                                             <thead id="header-table" style="font-size: 2.3vmin;text-align: center;">
                                                 <tr class="w3-dark-grey">
-                                                    <th>Select</th>
-                                                    <th>User</th>
+                                                    <th><?php echo $text['select'];?></th>
+                                                    <th><?php echo $text['system_connect_username'];?></th>
                                                     <th>IP</th>
-                                                    <th>Last Connection</th>
+                                                    <th><?php echo $text['system_connect_timestamp'];?></th>
                                                 </tr>
                                             </thead>
                                             <tbody style="font-size: 2.2vmin;text-align: center;">
@@ -320,7 +320,7 @@
                                         </table>
                                     </div>    
                                 </div>
-                                <input type="submit" value="Delete" class="all-btn w3-submit w3-border w3-round-large" style="float: right; margin-top: 10px">                              
+                                <input type="submit" value="<?php echo $text['Delete'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right; margin-top: 10px">                              
                             </div>
                         </form>
                     </div>
