@@ -114,23 +114,23 @@
                             </div>        
                         </div> 
                         
-                        <div class="col t1">Import Config:</div>         
+                        <div class="col t1"><?php echo $text['system_import_config'];?>:</div>         
                         <div class="row t2 border-bottom">
                             <div class="col t2" style="margin-left: 15%">
                                 <input type="file" id="import-file-uploader" data-target="import-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round" style="width: 250px">
                             </div>        
                             <div class="col t2">
-                                <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Import_SystemConfig();">Import Config</button>
+                                <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Import_SystemConfig();"><?php echo $text['system_import_config'];?></button>
                             </div>
                         </div>          
                         
-                        <div class="col t1">Firmware Update:</div>
+                        <div class="col t1"><?php echo $text['system_firmware_update'];?>:</div>
                         <div class="row t2">
                             <div class="col t2" style="margin-left: 15%">
                                 <input type="file" id="firmware-file-uploader" data-target="firmware-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round" style="width: 250px">
                             </div>        
                             <div class="col t2">
-                                <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Firmware_Update();" >Firmware Update<</button>
+                                <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Firmware_Update();" ><?php echo $text['system_firmware_update'];?></button>
                             </div>
                         </div>  
                     </div>
@@ -139,7 +139,7 @@
 
             <!-- barcode Setting -->
             <div id="Barcode_Setting" class="divMode" style="display: none">
-                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%">Barcode Setting</div>
+                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_barcode_setting'] ;?></div>
                 <div class="barcode-scrollbar" id="style-barcode">
                     <div class="barcode-force-overflow">                
                         <div class="table-container" style="padding: 0px 10px;">
@@ -149,7 +149,7 @@
                                         <thead id="header-table" style="font-size: 2.3vmin;text-align: center;">
                                             <tr class="w3-dark-grey">
                                                 <th></th>
-                                                <th>Job ID</th>
+                                                <th><?php echo $text['job_id'];?></th>
                                                 <th><?php echo $text['job_name'];?></th>
                                                 <th>Barcode</th>
                                                 <th>From</th>

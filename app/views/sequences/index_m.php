@@ -12,11 +12,11 @@
     <div class="main-content">
         <div class="center-content">
             <div class="topnav">
-                <label style="font-size:3vmin;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;&nbsp;
+                <label style="font-size:3vmin;color: #000; padding-left: 2%" for="job_id"><?php echo $text['job_id'];?> :</label>&nbsp;&nbsp;
                 <input type="text" id="job_id" name="job_id" size="10" maxlength="20" value="<?php echo $data['job_id'];?>" disabled
                 style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
-                <button id="back_btn" type="button">Return</button>
+                <button id="back_btn" type="button"><?php echo $text['return'];?></button>
             </div>
 
             <div class="table-container">
@@ -27,13 +27,13 @@
                                 <tr class="w3-dark-grey" style="font-size: 2.4vmin">
                                     <th><?php echo $text['seq_id'];?></th>
                                     <th><?php echo $text['seq_name'];?></th>
-                                    <th>Unit</th>
+                                    <th><?php echo $text['column_unit'];?></th>
                                     <th><?php echo $text['tightening_repeat'];?></th>
-                                    <th>Ena</th>
+                                    <th><?php echo $text['enable'];?></th>
                                     <th><?php echo $text['up'];?></th>
                                     <th><?php echo $text['down'];?></th>
                                     <th><?php echo $text['total_step'];?></th>
-                                    <th>Add Step</th>
+                                    <th><?php echo $text['add_step'];?></th>
                                 </tr>
                             </thead>
 
@@ -90,14 +90,14 @@
                 <header class="w3-container modal-header">
                     <span onclick="hideElementById('newseq');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px;font-size: 4.5vmin; margin: 3px">&times;</span>
-                    <h3 id='modal_title'>New Seq</h3>
+                    <h3 id='modal_title'><?php echo $text['new_seq'];?></h3>
                 </header>
                 <div class="scrollbar-newseq" id="style-newseq">
                     <div class="newseq-force-overflow">
                         <div class="modal-body" style="font-size: 14px">
                             <form id="new_seq_form" style="padding-left: 5%">
                                 <div class="row">
-                                    <div for="job-id" class="col-6 t1">Job ID:</div>
+                                    <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="job_id" maxlength="" value ="<?php echo $data['job_id'];?>">
                                     </div>

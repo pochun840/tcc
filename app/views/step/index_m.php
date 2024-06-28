@@ -10,7 +10,7 @@
     <div class="main-content">
         <div class="center-content">
             <div class="topnav">
-                <label style="font-size:3vmin;color: #000; padding-left: 2%" for="job_id">Job ID :</label>&nbsp;
+                <label style="font-size:3vmin;color: #000; padding-left: 2%" for="job_id"><?php echo $text['job_id'];?> :</label>&nbsp;
                 <input type="text" id="job_id" name="job_id" size="5" maxlength="20" value="<?php echo $data['job_id'];?>" disabled
                 style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
@@ -18,7 +18,7 @@
                 <input type="text" id="seq_id" name="seq_id" size="5" maxlength="20" value="1" disabled
                 style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
-                <button id="back_btn" type="button" onclick="window.history.back()">Return</button>
+                <button id="back_btn" type="button" onclick="window.history.back()"><?php echo $text['return'];?></button>
             </div>
 
             <div class="table-container">

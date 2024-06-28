@@ -107,23 +107,23 @@
                     </div>        
                 </div>          
                 <div class="row t2">
-                    <div class="col-3 t1">Import Config:</div>
+                    <div class="col-3 t1"><?php echo $text['system_import_config'];?>:</div>
                     <div class="col t2">
                         <input type="file" id="import-file-uploader" data-target="import-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round">
-                        <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Import_SystemConfig();">Import Config</button>
+                        <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Import_SystemConfig();"><?php echo $text['system_import_config'];?></button>
                     </div>        
                 </div>          
                 <div class="row t2">
-                    <div class="col-3 t1">Firmware Update:</div>
+                    <div class="col-3 t1"><?php echo $text['system_firmware_update'];?>:</div>
                     <div class="col t2">
                         <input type="file" id="firmware-file-uploader" data-target="firmware-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round">
-                        <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Firmware_Update();">Firmware Update</button>
+                        <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Firmware_Update();"><?php echo $text['system_firmware_update'];?></button>
                     </div>        
                 </div>          
             </div>
 
             <div id="Barcode_Setting" class="divMode" style="display: none">
-                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%">Barcode Setting</div>
+                <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_barcode_setting'] ;?></div>
                 <div class="table-container">
                     <div class="scrollbar" id="style-table">
                         <div class="scrollbar-force-overflow">

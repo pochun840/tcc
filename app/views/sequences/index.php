@@ -22,7 +22,7 @@
                 <input type="text" id="job_id" name="job_id" size="10" maxlength="20" value="<?php echo $data['job_id'];?>" disabled
                 style="height:28px; font-size:20px;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
-                <button id="back_btn" type="button" onclick="window.history.back()">Return</button>
+                <button id="back_btn" type="button" onclick="window.history.back()"><?php echo $text['return'];?></button>
             </div>
 
             <div class="table-container">
@@ -33,13 +33,13 @@
                                 <tr class="w3-dark-grey">
                                     <th><?php echo $text['seq_id'];?></th>
                                     <th><?php echo $text['seq_name'];?></th>
-                                    <th>Unit</th>
+                                    <th><?php echo $text['column_unit'];?></th>
                                     <th><?php echo $text['tightening_repeat'];?></th>
-                                    <th>Enable</th>
+                                    <th><?php echo $text['enable'];?></th>
                                     <th><?php echo $text['up'];?></th>
                                     <th><?php echo $text['down'];?></th>
                                     <th><?php echo $text['total_step'];?></th>
-                                    <th>Add Step</th>
+                                    <th><?php echo $text['add_step'];?></th>
                                 </tr>
                             </thead>
 
@@ -99,7 +99,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="hideElementById('newseq');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
-                    <h3 id='modal_title'>New Seq</h3>
+                    <h3 id='modal_title'><?php echo $text['new_seq'];?></h3>
                 </header>
 
                 <div class="modal-body">

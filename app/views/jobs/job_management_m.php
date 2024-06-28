@@ -101,12 +101,12 @@
                             <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['Unscrew_direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="unfasten_direction_option" id="unfasten_direction_CW" value="1">
-            					  <label class="form-check-label" for="unfasten_direction_CW"><?php echo $text['CW'];?></label>
+            					  <input class="form-check-input" type="radio" name="unfasten_direction_option" id="unfasten_direction_CW" value="0">
+            					  <label class="form-check-label" for="unfasten_direction_CW"><?php echo $text['CW']; ?></label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="unfasten_direction_option" id="unfasten_direction_CCW" value="2">
-            					  <label class="form-check-label" for="unfasten_direction_CCW"><?php echo $text['CCW'];?></label>
+            					  <input class="form-check-input" type="radio" name="unfasten_direction_option" id="unfasten_direction_CCW" value="1">
+            					  <label class="form-check-label" for="unfasten_direction_CCW"><?php echo $text['CCW']."中文"; ?></label>
             					</div>
                             </div>
                         </div>

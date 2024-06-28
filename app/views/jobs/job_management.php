@@ -37,7 +37,9 @@
 										<tr >
 											<td id='job_id' ><?php echo $val['job_id'];?></td>
 											<td><?php echo $val['job_name'];?></td>
-											<td><?php echo $data['direction'][$val['unscrew_direction']];?></td>
+											<td>
+                                                <?php echo $text[$data['direction'][$val['unscrew_direction']]];?></td>
+
 											<td><?php echo $val['unscrew_rpm'];?></td>
 											<td><?php echo $val['unscrew_power'];?></td>
 											<td><?php echo $val['total_seq'];?></td>
@@ -101,11 +103,11 @@
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="direction" id="unfasten_direction_CW" value="0">
-            					  <label class="form-check-label" for="unfasten_direction_CW"><?php echo $text['CW'];?></label>
+            					  <label class="form-check-label" for="unfasten_direction_CW"><?php  echo $text['CW']; ?></label>
             					</div>
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="direction" id="unfasten_direction_CCW" value="1">
-            					  <label class="form-check-label" for="unfasten_direction_CCW"><?php echo $text['CCW'];?></label>
+            					  <label class="form-check-label" for="unfasten_direction_CCW"> <?php  echo $text['CCW']; ?></label>
             					</div>
                             </div>
                         </div>
