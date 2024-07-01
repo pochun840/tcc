@@ -184,6 +184,8 @@ $text['gate_confirm'] = '工件复归确认';
 $text['YES'] = '是';
 $text['NO'] = '否';
 
+$text['mode'] = '模式';
+
 $text['Start-IN(Remote)'] = '启动';
 $text['REVERSE_IN'] = '拆螺丝';
 $text['Unscrew(Remote)'] = '拆螺丝';
@@ -209,16 +211,19 @@ $text['UserDefine5'] = '自定义5';
 
 $text['OK'] = 'OK';
 $text['NG'] = 'NG';
-$text['NG_HIGH'] = '超出上限';
-$text['NG_LOW'] = '低于下限';
-$text['OK_SEQ'] = '工序完成信号';
-$text['OK_JOB'] = '工作任务完成信号';
-$text['TOOL_RUNNING'] = '马达信号';
-$text['TOOL_TRIGGER'] = '启动信号';
-$text['REVERSE'] = '拆螺丝';
+$text['NG-High'] = '超出上限';
+$text['NG-Low'] = '低于下限';
+$text['OK-Sequence'] = '工序完成信号';
+$text['OK-Job'] = '工作任务完成信号';
+$text['Tool Runing'] = '马达信号';
+$text['Tool Trigger'] = '启动信号';
+$text['Reverse'] = '拆螺丝';
 $text['UDEFINE1'] = '自定义1';
 $text['UDEFINE2'] = '自定义2';
 $text['SYS_READY'] = '系統就緒';
+$text['BS'] = 'BS';
+$text['system_barcode'] = '条码';
+
 
 $text['output_replace_notice'] = '若设定已存在，将会取代原有设定';
 $text['input_replace_notice'] = '若设定已存在，将会取代原有设定';

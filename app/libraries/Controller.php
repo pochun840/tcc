@@ -65,6 +65,11 @@ class Controller
             }
         }
 
+        setcookie('language', $_SESSION['language'], time() + (365 * 24 * 60 * 60), '/');
+        
+
+
+
     }
 
 

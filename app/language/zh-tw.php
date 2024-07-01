@@ -33,6 +33,8 @@ $text['total_seq'] = '總工序數';
 $text['page'] = '頁數';
 $text['page_of'] = '之';
 
+$text['mode'] = '模式';
+
 $text['new_job'] = '新增工作';
 $text['edit_job'] = '編輯工作';
 
@@ -207,16 +209,18 @@ $text['UserDefine5'] = '自定義5';
 
 $text['OK'] = 'OK';
 $text['NG'] = 'NG';
-$text['NG_HIGH'] = '超出上限';
-$text['NG_LOW'] = '低於下限';
-$text['OK_SEQ'] = '工序完成信號';
-$text['OK_JOB'] = '完工信號';
-$text['TOOL_RUNNING'] = '馬達信號';
-$text['TOOL_TRIGGER'] = '啟動信號';
-$text['REVERSE'] = '拆螺絲';
+$text['NG-High'] = '超出上限';
+$text['NG-Low'] = '低於下限';
+$text['OK-Sequence'] = '工序完成信號';
+$text['OK-Job'] = '完工信號';
+$text['Tool Runing'] = '馬達信號';
+$text['Tool Trigger'] = '啟動信號';
+$text['Reverse'] = '拆螺絲';
 $text['UDEFINE1'] = '自定義1';
 $text['UDEFINE2'] = '自定義2';
 $text['SYS_READY'] = '系統就緒';
+$text['BS'] = 'BS';
+$text['Barcode'] = '條碼';
 
 $text['output_replace_notice'] = '若設定已存在，將會取代原有設定';
 $text['input_replace_notice'] = '若設定已存在，將會取代原有設定';

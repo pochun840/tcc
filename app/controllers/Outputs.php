@@ -34,8 +34,7 @@ class Outputs extends Controller
             'job_list'     => $joblist,
             'event_output' => $event_output,
             'job_list_new' => $job_list_new,
-            'device_data'  => $device_data
-            
+            'device_data'  => $device_data,
         );
 
         if($isMobile){
@@ -89,14 +88,14 @@ class Outputs extends Controller
                         }   
 
                         $job_outputlist .= "<tr class='".$vv['output_event']."'>";
-                        $job_outputlist .= '<td>'.$event_output[$vv['output_event']].'</td>';
+                        $job_outputlist .= "<td id='".$vv['output_event']."'>".$event_output[$vv['output_event']]."</td>";
                         $job_outputlist .= '<td>'.$vv['output_pin'].'</td>';
                         $job_outputlist .= '<td>'.$img.'</td>';
                         $job_outputlist .= '<td>'.$vv['wave_on'].'</td>';
                         $job_outputlist .= '</tr>';
                     }else{
                         $job_outputlist .= "<tr class='".$vv['output_event']."'>";
-                        $job_outputlist .= '<td>'.$event_output[$vv['output_event']].'</td>';
+                        $job_outputlist .= "<td id='".$vv['output_event']."'>".$event_output[$vv['output_event']]."</td>";
                         $job_outputlist .= $this->OutputModel->generateTableCell($vv['output_pin'],$vv['wave']);
                         $job_outputlist .= '<td>'.$vv['wave_on'].'</td>';
                         $job_outputlist .= '</tr>';
@@ -112,6 +111,7 @@ class Outputs extends Controller
             'job_outputlist' => $job_outputlist,
             'temp' => $temp,
             'tempA' => $tempA,
+            'languange' => $_SESSION['language']
         );
         echo json_encode($response);
         

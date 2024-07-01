@@ -35,7 +35,7 @@
 										<tr >
 											<td id='job_id' ><?php echo $val['job_id'];?></td>
 											<td><?php echo $val['job_name'];?></td>
-											<td><?php echo $data['direction'][$val['unscrew_direction']];?></td>
+											<td><?php echo $text[$data['direction'][$val['unscrew_direction']]];?></td>
 											<td><?php echo $val['unscrew_rpm'];?></td>
 											<td><?php echo $val['unscrew_power'];?></td>
 											<td><?php echo $val['total_seq'];?></td>

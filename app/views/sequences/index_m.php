@@ -40,7 +40,7 @@
                                     <tr>
                                         <td class="seq-id"> <?php echo $val['sequence_id'];?></td>
                                         <td class="seq-name"><?php echo $val['sequence_name'];?></td>
-                                        <td><?php echo $data['unit_arr'][$val['torque_unit']];?></td>
+                                        <td><?php echo $text[$data['unit_arr'][$val['torque_unit']]];?></td>
                                         <td><?php echo $val['tightening_repeat'];?></td>
                                         <td>
                                             <?php if($val['sequence_enable']== 1){?>
@@ -327,25 +327,25 @@
                                     <div for="okall-stop" class="col-6 t1">OK All Stop:</div>
                                     <div class="col t2" >
                     			      	<div class="col-4 form-check form-check-inline">
-                                          <input class="form-check-input" type="radio" name="edit_okall_stop_option" id="Okall_FF" value="0">
-                    					  <label class="form-check-label" for="Okall_ON">ON</label>
+                                          <input class="form-check-input" type="radio" name="edit_okall_stop_option" id="Okall_OFF" value="0">
+                    					  <label class="form-check-label" for="Okall_OFF"><?php echo $text['switch_off'];?></label>
                     					</div>
                     					<div class="form-check form-check-inline">
                                           <input class="form-check-input" type="radio" name="edit_okall_stop_option" id="Okall_ON" value="1" >
-                    					  <label class="form-check-label" for="Okall_OFF">OFF</label>
+                    					  <label class="form-check-label" for="Okall_ON"><?php echo $text['switch_on'];?></label>
                     					</div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="OPT" class="col-6 t1">OPT:</div>
+                                    <div for="OPT" class="col-6 t1"><?php echo $text['Joint_Offset'];?>:</div>
                                     <div class="col t2" >
                     			      	<div class=" col-4 form-check form-check-inline">
                     					  <input class="form-check-input" type="radio" name="edit_opt_option" id="OPT_ON" value="0">
-                    					  <label class="form-check-label" for="OPT_ON">ON</label>
+                    					  <label class="form-check-label" for="OPT_ON"><?php echo $text['switch_on'];?></label>
                     					</div>
                     					<div class="form-check form-check-inline">
                     					  <input class="form-check-input" type="radio" name="edit_opt_option" id="OPT_OFF" value="1">
-                    					  <label class="form-check-label" for="OPT_OFF">OFF</label>
+                    					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
                     					</div>
                                     </div>
                                 </div>
@@ -368,7 +368,7 @@
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('copyseq').style.display='none'"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px;font-size: 4.5vmin; margin: 3px">&times;</span>
-                    <h3 id='modal_title'>Copy Seq</h3>
+                    <h3 id='modal_title'><?php echo $text['Copy_Sequence'];?></h3>
                 </header>
 
                 <div class="modal-body">
@@ -652,7 +652,6 @@ function edit_seq_save(){
             success: function(response) {
                 console.log( response);
                 alert(response);
-                //localStorage.removeItem("seqid");
                 history.go(0);
             },
             error: function(xhr, status, error) {

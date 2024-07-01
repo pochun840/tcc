@@ -32,6 +32,7 @@ $text['total_job'] = 'Total Jobs';
 $text['total_seq'] = 'Total Seq';
 $text['page'] = 'Page';
 $text['page_of'] = 'of';
+$text['mode'] = 'Mode';
 
 $text['new_job'] = 'New job';
 $text['edit_job'] = 'Edit Job';
@@ -203,20 +204,44 @@ $text['UserDefine3'] = 'UserDefine3';
 $text['UserDefine4'] = 'UserDefine4';
 $text['UserDefine5'] = 'UserDefine5';
 
+/*
+if($mode =="io_output"){
+            $array = array(
+                1   => 'OK',
+                2   => 'NG',
+                3   => 'NG-High',
+                4   => 'NG-Low',
+                5   => 'OK-Sequence',
+                6   => 'OK-Job',
+                7   => 'Tool Runing',
+                8   => 'Tool Trigger',
+                9   => 'Reverse',
+                10  => 'BS',
+                11  => 'Barcode',
+                12  => 'UserDefine1',
+                13  => 'UserDefine2',
+                14  => 'UserDefine3',
+                15  => 'UserDefine4',
+                16  => 'UserDefine5',
+            );
+        }
 
+*/
 
 $text['OK'] = 'OK';
 $text['NG'] = 'NG';
 $text['NG-High'] = 'NG-High';
-$text['NG_LOW'] = 'NG-Low';
-$text['OK_SEQ'] = 'OK-Sequence';
-$text['OK_JOB'] = 'OK-JOB';
-$text['TOOL_RUNNING'] = 'Tool Running';
-$text['TOOL_TRIGGER'] = 'Tool Trigger';
-$text['REVERSE'] = 'Reverse';
+$text['NG-Low'] = 'NG-Low';
+$text['OK-Sequence'] = 'OK-Sequence';
+$text['OK-Job'] = 'OK-JOB';
+$text['Tool Runing'] = 'Tool Running';
+$text['Tool Trigger'] = 'Tool Trigger';
+$text['Reverse'] = 'Reverse';
 $text['UDEFINE1'] = 'UserDefine1';
 $text['UDEFINE2'] = 'UserDefine2';
 $text['SYS_READY'] = 'System Ready';
+$text['BS'] = 'BS';//BS
+$text['Barcode'] = 'Barcode';
 
 $text['output_replace_notice'] = 'If the job output already exists, it will replace the original setting';
 $text['input_replace_notice'] = 'If the job input already exists, it will replace the original setting';

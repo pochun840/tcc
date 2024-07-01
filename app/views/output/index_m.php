@@ -98,7 +98,7 @@
                                     <div class="col-2 t2">
                                         <select id="Event_Option" class="col custom-file">
                                            <?php foreach($data['event_output'] as $key =>$val){?>
-                                                <option value ='<?php echo $key;?>'><?php echo $val;?></option>
+                                                <option value ='<?php echo $key;?>'><?php echo $text[$val];?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -332,7 +332,7 @@
                                     <div class="col-2 t2">
                                         <select id="edit_event_option" name='edit_event_option' class="col custom-file">
                                            <?php foreach($data['event_output'] as $key =>$val){?>
-                                                <option value ='<?php echo $key;?>'><?php echo $val;?></option>
+                                                <option value ='<?php echo $key;?>'><?php echo $text[$val];?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
