@@ -101,7 +101,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="lo-torque" class="col-6 t1">Lo Torque (<?php echo $data['unit'];?>):</div>
+                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?>  (<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="lo_torque" maxlength="" >
                             </div>
@@ -138,7 +138,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift" class="col-6 t1">Downshift:</div>
+                            <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="downshift_option" id="downshift_ON" value="0" checked="checked">
@@ -163,7 +163,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-rpm" class="col-6 t1">Downshift RPM:</div>
+                            <div for="downshift-rpm" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="downshift_rpm" maxlength="" >
                             </div>
@@ -276,7 +276,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-rpm" class="col-6 t1">Downshift RPM:</div>
+                            <div for="edit_downshift-rpm" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_rpm" maxlength="" >
                             </div>

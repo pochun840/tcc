@@ -154,7 +154,7 @@
                             <div class="col-4 t2">
                                 <select id="torque_unit" class="col custom-file">
                                    <?php foreach($data['unit_arr'] as $k_unit => $v_unit){?>
-                                      <option value="<?php echo $k_unit;?>"><?php echo $v_unit;?></option>
+                                      <option value="<?php echo $k_unit;?>"><?php echo $text[$v_unit]                                                                      ;?></option>
                                    <?php }?>
                                 </select>
                             </div>
@@ -195,11 +195,11 @@
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_OFF" value="0">
-            					  <label class="form-check-label" for="Okall_OFF">OFF</label>
+            					  <label class="form-check-label" for="Okall_OFF"><?php echo $text['switch_off'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_ON" value="1" checked="checked">
-            					  <label class="form-check-label" for="Okall_ON">ON</label>
+            					  <label class="form-check-label" for="Okall_ON"><?php echo $text['switch_on'];?></label>
             					</div>
                             </div>
                         </div>
@@ -208,11 +208,11 @@
                             <div class="col t2" >
             			      	<div class=" col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_OFF" value="0">
-            					  <label class="form-check-label" for="OPT_OFF">OFF</label>
+            					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1" checked="checked">
-            					  <label class="form-check-label" for="OPT_ON">ON</label>
+            					  <label class="form-check-label" for="OPT_ON"><?php echo $text['switch_on'];?></label>
             					</div>
                             </div>
                         </div>

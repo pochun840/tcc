@@ -151,6 +151,7 @@ $text['skip'] = '不計';
 
 $text['Acceleration_Slope'] = '加速度斜率';
 $text['Interrupt_Alarm'] = '中斷警告';
+$text['Downshift'] = '降速';
 
 
 //operation

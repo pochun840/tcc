@@ -146,7 +146,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift" class="col-6 t1">Downshift:</div>
+                            <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="downshift_option" id="downshift_ON" value="0" checked="checked">
@@ -171,7 +171,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-rpm" class="col-6 t1">Downshift RPM:</div>
+                            <div for="downshift-rpm" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="downshift_rpm" maxlength="" >
                             </div>
@@ -230,19 +230,19 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="hi-angle" class="col-6 t1">Hi Angle (degree):</div>
+                            <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_hi_angle" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="lo-angle" class="col-6 t1">Lo Angle (degree):</div>
+                            <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_lo_angle" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="RPM" class="col-6 t1">RPM:</div>
+                            <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_rpm" maxlength="" >
                             </div>
@@ -252,16 +252,16 @@
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CW" value="0">
-            					  <label class="form-check-label" for="direction_CW">CW</label>
+            					  <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CCW" value="1">
-            					  <label class="form-check-label" for="direction_CCW">CCW</label>
+            					  <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
             					</div>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift" class="col-6 t1">Downshift:</div>
+                            <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_ON" value="1">
@@ -286,7 +286,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-rpm" class="col-6 t1">Downshift RPM:</div>
+                            <div for="edit_downshift-rpm" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_rpm" maxlength="" >
                             </div>
