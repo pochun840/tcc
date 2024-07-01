@@ -340,7 +340,6 @@ $(document).ready(function () {
     highlight_row('step_table');
 });
 
-// Get the modal
 var modal = document.getElementById('newstep');
 
 window.onclick = function(event) {
