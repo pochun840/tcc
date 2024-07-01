@@ -242,10 +242,10 @@ $text['column_total'] = '總數';
 $text['column_count'] = '顆數';
 $text['column_status'] = '狀態';
 
-$text['unit_status_0'] = '公斤公尺';
-$text['unit_status_1'] = '牛頓公尺';
-$text['unit_status_2'] = '公斤公分';
-$text['unit_status_3'] = '英磅英吋';
+$text['kgf.m'] = '公斤公尺';
+$text['N.m'] = '牛頓公尺';
+$text['kgf.cm'] = '公斤公分';
+$text['lbf.in'] = '英磅英吋';
 
 //fasten_status
 $text['fasten_status_0'] = 'INIT';

@@ -263,10 +263,13 @@ $text['column_total'] = 'Total';
 $text['column_count'] = 'Count';
 $text['column_status'] = 'Status';
 
-$text['unit_status_0'] = 'Kgf-m';
-$text['unit_status_1'] = 'N-m';
-$text['unit_status_2'] = 'Kgf-cm';
-$text['unit_status_3'] = 'In-lbs';
+$text['kgf.m'] = 'Kgf-m';
+$text['N.m'] = 'N-m';
+$text['kgf.cm'] = 'Kgf-cm';
+$text['lbf.in'] = 'In-lbs';
+
+
+
 
 //fasten_status
 $text['fasten_status_0'] = 'INIT';

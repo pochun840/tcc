@@ -244,10 +244,12 @@ $text['column_total'] = '总数';
 $text['column_count'] = '颗数';
 $text['column_status'] = '状态';
 
-$text['unit_status_0'] = '公斤米';
-$text['unit_status_1'] = '牛頓米';
-$text['unit_status_2'] = '公斤公分';
-$text['unit_status_3'] = '英磅英吋';
+$text['kgf.m'] = '公斤米';
+$text['N.m'] = '牛頓米';
+$text['kgf.cm'] = '公斤公分';
+$text['lbf.in'] = '英磅英吋';
+
+
 
 //fasten_status
 $text['fasten_status_0'] = 'INIT';

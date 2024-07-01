@@ -71,7 +71,7 @@
                                                     <td><?php echo $val['job_name'];?></td>
                                                     <td><?php echo $val['sequence_name'];?></td>
                                                     <td><?php echo $val['fasten_torque'];?></td>
-                                                    <td><?php echo $data['unit_arr'][$val['torque_unit']];?></td>
+                                                    <td><?php echo $text[$data['unit_arr'][$val['torque_unit']]];?></td>
                                                     <td><?php echo $val['fasten_angle'];?></td>
                                                     <td><?php echo $val['total_screw_count'];?></td>
                                                     <td><?php echo $val['last_screw_count'];?></td>
