@@ -138,15 +138,15 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
+                            <div for="downshift" class="col-6 t1"><?php  echo $text['Downshift'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="downshift_option" id="downshift_ON" value="0" checked="checked">
-            					  <label class="form-check-label" for="downshift_ON">ON</label>
+            					  <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="downshift_option" id="downshift_OFF" value="1">
-            					  <label class="form-check-label" for="downshift_OFF">OFF</label>
+            					  <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
             					</div>
                             </div>
                         </div>
@@ -255,11 +255,11 @@
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_ON" value="1">
-            					  <label class="form-check-label" for="downshift_ON">ON</label>
+            					  <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_OFF" value="0">
-            					  <label class="form-check-label" for="downshift_OFF">OFF</label>
+            					  <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
             					</div>
                             </div>
                         </div>
