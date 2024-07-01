@@ -165,7 +165,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-torque" class="col-6 t1">Downshift Torque(<?php echo $data['unit'];?>):</div>
+                            <div for="downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="downshift_torque" maxlength="" >
                             </div>
@@ -248,7 +248,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="direction" class="col-6 t1">Direction:</div>
+                            <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CW" value="0">
@@ -280,7 +280,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-torque" class="col-6 t1">Downshift Torque(<?php echo $data['unit'];?>):</div>
+                            <div for="edit_downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_torque" maxlength="" >
                             </div>
@@ -314,7 +314,7 @@
 
                 <div class="modal-body">
                     <form id="new_step_form">
-        	            <label for="from_step_id" class="col col-form-label" style="font-weight: bold">Copy From</label>
+        	            <label for="from_step_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_from'];?></label>
         	            <div style="padding-left: 10%">
         		            <div class="row">
         				        <label for="from_step_id" class="t1 col-4 col-form-label"><?php echo $text['step_id'];?> :</label>
@@ -324,7 +324,7 @@
         				    </div>
         			    </div>
 
-        			    <label for="from_step_id" class="col col-form-label" style="font-weight: bold">Copy To</label>
+        			    <label for="from_step_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_to'];?></label>
         			    <div style="padding-left: 10%">
         				    <div class="row">
         				        <label for="to_step_id" class="t1 col-4 col-form-label"><?php echo $text['step_id'];?> :</label>
@@ -382,8 +382,6 @@ function cound_step(argument){
     var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
     var stepid = selectedRowData || null;
     localStorage.setItem("stepid", stepid);
-
-
 
     if(argument == 'del'){
         del_stepid(stepid);

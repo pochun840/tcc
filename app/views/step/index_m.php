@@ -157,7 +157,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-torque" class="col-6 t1">Downshift Torque(<?php echo $data['unit'];?>):</div>
+                            <div for="downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="downshift_torque" maxlength="" >
                             </div>
@@ -238,15 +238,15 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="direction" class="col-6 t1">Direction:</div>
+                            <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CW" value="0">
-            					  <label class="form-check-label" for="direction_CW">CW</label>
+            					  <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
                                   <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CCW" value="1">
-            					  <label class="form-check-label" for="direction_CCW">CWW</label>
+            					  <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
             					</div>
                             </div>
                         </div>
@@ -270,7 +270,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-torque" class="col-6 t1">Downshift Torque(<?php echo $data['unit'];?>):</div>
+                            <div for="edit_downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $data['unit'];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_torque" maxlength="" >
                             </div>
