@@ -93,7 +93,9 @@ $text['Second'] = '秒';
 
 
 $text['Copy_Sequence'] = '複製工序';
-
+$text['OK_All_Stop'] = 'OK All 禁止起子啟動';
+$text['ok_all_alarm_time'] = 'OK All 持續時間';
+$text['tighten_repeat'] = '鎖附顆數';
 
 //normalstep
 
@@ -132,6 +134,13 @@ $text['Joint_Offset'] = '扭力補償值';
 $text['Nm'] = '牛頓.公尺';
 $text['Threshold_Type'] = '門檻選項';
 $text['Threshold_Angle'] = '門檻點角度';
+$text['torque_unit'] = '扭力單位';
+
+$text['join'] ='結合';
+$text['opt'] = '最佳化';
+$text['soft'] = '軟';
+$text['hard'] = '硬';
+$text['ok_time'] = "OK one持續時間";
 
 //step
 $text['step_management'] = '步驟管理';

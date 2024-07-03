@@ -91,8 +91,15 @@ $text['Second'] = '秒';
 
 
 $text['Copy_Sequence'] = '复制工序';
-
-
+$text['OK_All_Stop'] = 'OK All 禁止起子启动';
+$text['torque_unit'] = '扭力单位';
+$text['join'] ='结合';
+$text['opt'] = '最佳化';
+$text['soft'] = '軟';
+$text['hard'] = '硬';
+$text['ok_all_alarm_time'] = 'OK All 持续时间';
+$text['tighten_repeat'] = '锁附颗数';
+$text['ok_time'] = "OK one持续时间";
 //normalstep
 $text['normal_step'] = '快速工序目标';
 $text['torque'] = '扭力';

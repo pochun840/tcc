@@ -498,7 +498,25 @@ function edit_step(){
 
                 if(target_option == 0){
                     var name = '<?php echo $text['Target_Torque']; ?>';
+                    const unitTranslations = {
+                        "zh-cn": {
+                            "kgf.cm": "公斤公分",
+                            "kgf.m": "公斤米",
+                            "N.m": "牛頓米",
+                            "default": "英磅英吋"
+                        },
+                        "zh-tw": {
+                            "kgf.cm": "公斤公分",
+                            "kgf.m": "公斤米",
+                            "N.m": "牛頓米",
+                            "default": "英磅英吋"
+                        }
+                        
+                    };
 
+                    if (language === "zh-cn" || language === "zh-tw") {
+                        unit = unitTranslations[language][unit] || unitTranslations[language]["default"];
+                    } 
                     document.querySelector('div[for="edit_target-torque"]').textContent = name + "(" + unit + ")" ;
                     document.getElementById("edit_target_torque").value = target_torque;
                 }

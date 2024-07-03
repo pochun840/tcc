@@ -113,19 +113,19 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="Tighten-Repeat" class="col-6 t1"><?php echo $text['tightening_repeat'];?>:</div>
+                                    <div for="Tighten-Repeat" class="col-6 t1"><?php echo $text['tighten_repeat'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="tighten_repeat" maxlength="" >
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="ok-time" class="col-6 t1">OK Time (sec):</div>
+                                    <div for="ok-time" class="col-6 t1"><?php echo $text['ok_time'];?> (sec):</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="ok_time" maxlength="" >
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="okall-alarm" class="col-6 t1">OK All Alarm Time (sec):</div>
+                                    <div for="okall-alarm" class="col-6 t1"><?php echo $text['ok_all_alarm_time'];?> (sec):</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="okall-alarm" maxlength="" >
                                     </div>
@@ -137,17 +137,17 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="offset" class="col-6 t1">Offset:</div>
+                                    <div for="offset" class="col-6 t1"><?php echo $text['Joint_Offset'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="offset" maxlength="" >
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="torque-unit" class="col-6 t1">Torque Unit:</div>
+                                    <div for="torque-unit" class="col-6 t1"><?php echo $text['torque_unit'];?>:</div>
                                     <div class="col-4 t2">
                                     <select id="torque_unit" class="col custom-file">
                                         <?php foreach($data['unit_arr'] as $k_unit => $v_unit){?>
-                                            <option value="<?php echo $k_unit;?>"><?php echo $v_unit;?></option>
+                                            <option value="<?php echo $k_unit;?>"><?php echo $text[$v_unit];?></option>
                                         <?php }?>
                                     </select>
                                     </div>
@@ -156,55 +156,48 @@
                                     <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?>:</div>
                                     <div class="col-4 t2">
                                         <select id="NG_stop" class="col custom-file">
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
+                                            <?php for($i=0;$i<=9;$i++) {?>
+                                                <option value="<?php echo $i;?>"><?php echo $i;?></option>
+                                            <?php } ?> 
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="join" class="col-6 t1">Join:</div>
+                                    <div for="join" class="col-6 t1"><?php echo $text['join'];?>:</div>
                                     <div class="col t2" >
                     			      	<div class="col-4 form-check form-check-inline">
                     					  <input class="form-check-input" type="radio" name="join_option" id="soft" value="1">
-                    					  <label class="form-check-label" for="soft">Soft</label>
+                    					  <label class="form-check-label" for="soft"><?php echo $text['soft'];?></label>
                     					</div>
                     					<div class="form-check form-check-inline">
                     					  <input class="form-check-input" type="radio" name="join_option" id="hard" value="2" checked="checked">
-                    					  <label class="form-check-label" for="hard">Hard</label>
+                    					  <label class="form-check-label" for="hard"><?php echo $text['hard'];?></label>
                     					</div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="okall-stop" class="col-6 t1">OK All Stop:</div>
+                                    <div for="okall-stop" class="col-6 t1"><?php echo $text['OK_All_Stop'];?>:</div>
                                     <div class="col t2" >
                     			      	<div class="col-4 form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_ON" value="1">
-                    					  <label class="form-check-label" for="Okall_ON">ON</label>
+                    					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_OFF" value="0">
+                    					  <label class="form-check-label" for="Okall_OFF"><?php echo $text['switch_off'];?></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_OFF" value="2" checked="checked">
-                    					  <label class="form-check-label" for="Okall_OFF">OFF</label>
+                    					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_ON" value="1" checked="checked">
+                    					  <label class="form-check-label" for="Okall_ON"><?php echo $text['switch_on'];?></label>
                     					</div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="OPT" class="col-6 t1">OPT:</div>
+                                    <div for="OPT" class="col-6 t1"><?php echo $text['opt'];?> :</div>
                                     <div class="col t2" >
                     			      	<div class=" col-4 form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1">
-                    					  <label class="form-check-label" for="OPT_ON">ON</label>
+                    					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_OFF" value="0">
+                    					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_OFF" value="2" checked="checked">
-                    					  <label class="form-check-label" for="OPT_OFF">OFF</label>
+                    					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1" checked="checked">
+                    					  <label class="form-check-label" for="OPT_ON"><?php echo $text['switch_on'];?></label>
                     					</div>
                                     </div>
                                 </div>
@@ -236,7 +229,7 @@
                         <div class="modal-body" style="font-size: 14px">
                             <form id="new_seq_form" style="padding-left: 5%">
                                 <div class="row">
-                                    <div for="job-id" class="col-6 t1">Job ID:</div>
+                                    <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?></div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="job_id" maxlength="" value ="<?php echo $data['job_id'];?>">
                                     </div>
@@ -254,19 +247,19 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="Tighten-Repeat" class="col-6 t1">Tighten Repeat:</div>
+                                    <div for="Tighten-Repeat" class="col-6 t1"><?php echo $text['tightening_repeat'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_tighten_repeat" maxlength="" >
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="ok-time" class="col-6 t1">OK Time (sec):</div>
+                                    <div for="ok-time" class="col-6 t1"><?php echo $text['ok_time'];?> (sec):</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_ok_time" maxlength="" >
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="okall-alarm" class="col-6 t1">OK All Alarm Time (sec):</div>
+                                    <div for="okall-alarm" class="col-6 t1"><?php echo $text['ok_all_alarm_time'];?> (sec):</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_okall_alarm" maxlength="" >
                                     </div>
@@ -278,17 +271,17 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="offset" class="col-6 t1">Offset:</div>
+                                    <div for="offset" class="col-6 t1"><?php echo $text['Joint_Offset'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_offset" maxlength="" >
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="edit_torque_unit" class="col-6 t1">Torque Unit:</div>
+                                    <div for="edit_torque_unit" class="col-6 t1"><?php echo $text['torque_unit'];?>:</div>
                                     <div class="col-4 t2">
                                     <select id="edit_torque_unit" class="col custom-file">
                                         <?php foreach($data['unit_arr'] as $k_unit => $v_unit){?>
-                                            <option value="<?php echo $k_unit;?>"><?php echo $v_unit;?></option>
+                                            <option value="<?php echo $k_unit;?>"><?php echo $text[$v_unit];?></option>
                                         <?php }?>
                                     </select>
                                     </div>
@@ -297,34 +290,27 @@
                                     <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?>:</div>
                                     <div class="col-4 t2">
                                         <select id="edit_ng_stop" class="col custom-file">
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
+                                            <?php for($i=0;$i<=9;$i++) {?>
+                                            <option value="<?php echo $i;?>"><?php echo $i;?></option>
+                                            <?php } ?>    
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="join" class="col-6 t1">Join:</div>
+                                    <div for="join" class="col-6 t1"><?php echo $text['join'];?>:</div>
                                     <div class="col t2" >
                     			      	<div class="col-4 form-check form-check-inline">
                     					  <input class="form-check-input" type="radio" name="edit_join_option" id="soft" value="0">
-                    					  <label class="form-check-label" for="soft">Soft</label>
+                    					  <label class="form-check-label" for="soft"><?php echo $text['soft'];?></label>
                     					</div>
                     					<div class="form-check form-check-inline">
                                           <input class="form-check-input" type="radio" name="edit_join_option" id="hard" value="1" >
-                    					  <label class="form-check-label" for="hard">Hard</label>
+                    					  <label class="form-check-label" for="hard"><?php echo $text['hard'];?></label>
                     					</div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="okall-stop" class="col-6 t1">OK All Stop:</div>
+                                    <div for="okall-stop" class="col-6 t1"><?php echo $text['OK_All_Stop'];?>:</div>
                                     <div class="col t2" >
                     			      	<div class="col-4 form-check form-check-inline">
                                           <input class="form-check-input" type="radio" name="edit_okall_stop_option" id="Okall_OFF" value="0">
@@ -337,7 +323,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div for="OPT" class="col-6 t1"><?php echo $text['Joint_Offset'];?>:</div>
+                                    <div for="OPT" class="col-6 t1"><?php echo $text['opt'];?>:</div>
                                     <div class="col t2" >
                     			      	<div class=" col-4 form-check form-check-inline">
                     					  <input class="form-check-input" type="radio" name="edit_opt_option" id="OPT_ON" value="0">

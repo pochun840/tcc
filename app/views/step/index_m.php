@@ -191,11 +191,11 @@
                 <div class="modal-body">
                     <form id="new_step_form" style="padding-left: 5%">
                         <div class="row">
-                            <div for="target-option" class="col-6 t1">Target Option :</div>
+                            <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col-3 t2">
                                 <select id="edit_target_option" name="edit_target_option" class="col custom-file">
                                     <?php foreach($data['target_option'] as $key => $val){?>
-                                        <option value="<?php echo $key;?>"><?php echo $val;?></option>
+                                        <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
                                     <?php }?>     
                                 </select>
                             </div>
