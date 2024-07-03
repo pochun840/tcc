@@ -35,7 +35,7 @@
                         <?php foreach($data['step'] as $key =>$val){?>
                             <tr>
                                 <td><?php echo $val['step_id'];?></td>
-                                <td><?php echo $data['target_option'][$val['target_option']];?></td>
+                                <td><?php echo $text[$data['target_option'][$val['target_option']]];?></td>
                                 <td><?php echo $data['direction'][$val['direction']];?></td>
                                 <td><img src="./img/btn_up.png" onclick="MoveUp(this);"></td>
                                 <td><img src="./img/btn_down.png"onclick="MoveDown(this);"></td>
@@ -82,26 +82,26 @@
                             <div class="col-3 t2">
                                 <select id="target_option" name="target_option" class="col custom-file">
                                     <?php foreach($data['target_option'] as $key => $val){?>
-                                        <option value="<?php echo $key;?>"><?php echo $val;?></option>
+                                        <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
                                     <?php }?> 
                                 </select>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $data['unit'];?>):</div>
+                            <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $data['unit'];?>):</div>
+                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="hi_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?>  (<?php echo $data['unit'];?>):</div>
+                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?>  (<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="lo_torque" maxlength="" >
                             </div>
@@ -151,13 +151,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-threshold" class="col-6 t1">Downshift Threshold(<?php echo $data['unit'];?>):</div>
+                            <div for="downshift-threshold" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="downshift_threshold" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $data['unit'];?>):</div>
+                            <div for="downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="downshift_torque" maxlength="" >
                             </div>
@@ -202,19 +202,19 @@
                         </div>
 
                         <div class="row">
-                            <div for="edit_target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $data['unit'];?>):</div>
+                            <div for="edit_target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_target_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $data['unit'];?>):</div>
+                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_hi_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $data['unit'];?>):</div>
+                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_lo_torque" maxlength="" >
                             </div>
@@ -232,7 +232,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="RPM" class="col-6 t1">RPM:</div>
+                            <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_rpm" maxlength="" >
                             </div>
@@ -251,7 +251,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift" class="col-6 t1">Downshift:</div>
+                            <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_ON" value="1">
@@ -264,13 +264,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-threshold" class="col-6 t1">Downshift Threshold(<?php echo $data['unit'];?>):</div>
+                            <div for="edit_downshift-threshold" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_threshold" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $data['unit'];?>):</div>
+                            <div for="edit_downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_torque" maxlength="" >
                             </div>
@@ -394,6 +394,7 @@ function edit_step(){
     var stepid = readFromLocalStorage("stepid");
 
     var unit = '<?php echo $data['unit']?>';
+    var language = getCookie('language');
 
     if(jobid){
         $.ajax({
@@ -448,8 +449,8 @@ function edit_step(){
                 setRadioButtonValue(radioButtons2, downshift);
 
                 if(target_option == 2){
-
-                    document.querySelector('div[for="edit_target-torque"]').textContent = "Target Delay Time";
+                    var name1 = '<?php echo $text['Target Delay Time']?>';
+                    document.querySelector('div[for="edit_target-torque"]').textContent = name1;
                     document.getElementById("edit_target_torque").value = target_delaytime;
                     document.getElementById('edit_hi_torque').disabled = true; 
                     document.getElementById('edit_lo_torque').disabled = true; 
@@ -476,7 +477,27 @@ function edit_step(){
                 }
 
                 if(target_option == 0){
-                    document.querySelector('div[for="edit_target-torque"]').textContent = "Target Torque (" + unit+")";
+                    var name = '<?php echo $text['Target_Torque']?>';
+                    const unitTranslations = {
+                        "zh-cn": {
+                            "kgf.cm": "公斤公分",
+                            "kgf.m": "公斤米",
+                            "N.m": "牛頓米",
+                            "default": "英磅英吋"
+                        },
+                        "zh-tw": {
+                            "kgf.cm": "公斤公分",
+                            "kgf.m": "公斤米",
+                            "N.m": "牛頓米",
+                            "default": "英磅英吋"
+                        }
+                        
+                    };
+
+                    if (language === "zh-cn" || language === "zh-tw") {
+                        unit = unitTranslations[language][unit] || unitTranslations[language]["default"];
+                    } 
+                    document.querySelector('div[for="edit_target-torque"]').textContent = name + "(" + unit+")";
                     document.getElementById("edit_target_torque").value = target_torque;
                 }
 
@@ -517,8 +538,8 @@ function edit_step(){
                         document.querySelectorAll('input[name="edit_downshift_option"]').forEach(function(radioButton) {
                             radioButton.disabled = true;
                         });
-
-                        document.querySelector('div[for="edit_target-torque"]').textContent = "Target Delay Time";
+                        var name1 = '<?php echo $text['Target Delay Time']?>';
+                        document.querySelector('div[for="edit_target-torque"]').textContent = name1;
                     } 
                     
                     if (selectedValue == 1 || selectedValue == 0) {
@@ -564,7 +585,28 @@ function edit_step(){
                     }
 
                     if(selectedValue == 0){
-                        document.querySelector('div[for="edit_target-torque"]').textContent = "Target Torque (" + unit + ")";
+                        var name = '<?php echo $text['Target_Torque']?>';
+                        const unitTranslations = {
+                            "zh-cn": {
+                                "kgf.cm": "公斤公分",
+                                "kgf.m": "公斤米",
+                                "N.m": "牛頓米",
+                                "default": "英磅英吋"
+                            },
+                            "zh-tw": {
+                                "kgf.cm": "公斤公分",
+                                "kgf.m": "公斤米",
+                                "N.m": "牛頓米",
+                                "default": "英磅英吋"
+                            }
+                            
+                        };
+
+                        if (language === "zh-cn" || language === "zh-tw") {
+                            unit = unitTranslations[language][unit] || unitTranslations[language]["default"];
+                        } 
+
+                        document.querySelector('div[for="edit_target-torque"]').textContent = name  +"(" + unit + ")";
 
                     }
                 });
@@ -697,6 +739,7 @@ function create_step() {
     document.getElementById('newstep').style.display = 'block';
 
     var unit = '<?php echo $data['unit']?>';
+    var language = getCookie('language');
 
     var targetoptionselect = document.getElementById('target_option');
 
@@ -729,7 +772,8 @@ function create_step() {
         downshiftOptions.forEach(radioButton => radioButton.disabled = false);
 
         if (targetOptionValue == 2) {
-            document.querySelector('div[for="target-torque"]').textContent = "Target Delay Time";
+            var name1 = '<?php echo $text['Target Delay Time']?>';
+            document.querySelector('div[for="target-torque"]').textContent = name1;
             
             hiTorqueElement.disabled = true;
             loTorqueElement.disabled = true;
@@ -743,11 +787,32 @@ function create_step() {
             downshiftOptions.forEach(radioButton => radioButton.disabled = true);
             
         } else if (targetOptionValue == 1) {
-            document.querySelector('div[for="target-torque"]').textContent = "Target Angle (degree)";
+            var name = '<?php echo $text['Target_Angle']?>';
+            document.querySelector('div[for="target-torque"]').textContent = name;;
         }
 
         else if (targetOptionValue == 0) {
-            document.querySelector('div[for="target-torque"]').textContent = "Target Torque (" + unit + ")";
+            var name = '<?php echo $text['Target_Torque']?>';
+            const unitTranslations = {
+                "zh-cn": {
+                    "kgf.cm": "公斤公分",
+                    "kgf.m": "公斤米",
+                    "N.m": "牛頓米",
+                    "default": "英磅英吋"
+                },
+                "zh-tw": {
+                    "kgf.cm": "公斤公分",
+                    "kgf.m": "公斤米",
+                    "N.m": "牛頓米",
+                    "default": "英磅英吋"
+                }
+                
+            };
+
+            if (language === "zh-cn" || language === "zh-tw") {
+                unit = unitTranslations[language][unit] || unitTranslations[language]["default"];
+            } 
+            document.querySelector('div[for="target-torque"]').textContent = name + "(" + unit + ")";
         }
     });
 

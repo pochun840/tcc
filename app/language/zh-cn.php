@@ -97,12 +97,16 @@ $text['Copy_Sequence'] = '复制工序';
 $text['normal_step'] = '快速工序目标';
 $text['torque'] = '扭力';
 $text['angle'] = '角度';
+$text['Torque'] = '扭力';
+$text['Angle'] = '角度';
 $text['time'] = '时间';
 $text['rpm'] = '转速';
 $text['delay_time'] = '延迟时间';
+$text['Delay Time'] = '延迟时间';
 $text['Tool_Max_Torque'] = '工具最大扭力';
 $text['Target_Torque'] = '目标扭力';
-$text['Target_Angle'] = '目标角度';
+$text['Target_Angle'] = '目标角度 (度)';
+$text['Target Delay Time'] = '目标延迟时间';
 
 $text['Run_Down_Speed'] = '转速(圈/分钟)';
 
@@ -149,6 +153,7 @@ $text['skip'] = '不计';
 
 $text['Acceleration_Slope'] = '加速度斜率';
 $text['Interrupt_Alarm'] = '中斷警告';
+$text['Downshift'] = '降速';
 
 
 //operation

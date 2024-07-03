@@ -98,12 +98,16 @@ $text['Copy_Sequence'] = 'Copy Sequence';
 $text['normal_step'] = 'Normal Step';
 $text['torque'] = 'Torque';
 $text['angle'] = 'Angle';
+$text['Torque'] = 'Torque';
+$text['Angle'] = 'Angle';
 $text['time'] = 'Time';
 $text['rpm'] = 'RPM';
 $text['delay_time'] = 'Delay time';
+$text['Delay Time'] = 'Delay Time';
 $text['Tool_Max_Torque'] = 'Tool Max Torque';
 $text['Target_Torque'] = 'Target Torque';
-$text['Target_Angle'] = 'Target Angle';
+$text['Target_Angle'] = 'Target Angle ( &#870 )';
+$text['Target Delay Time'] = 'Target Delay Time';
 
 $text['Run_Down_Speed'] = 'Run Down Speed';
 
