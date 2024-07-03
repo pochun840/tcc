@@ -18,24 +18,13 @@ class Sequence{
     #取得所有sequences
     public function getSequences_by_job_id($job_id){
 
-        $sql ="SELECT * FROM sequence  
-                LEFT JOIN  job  on  sequence.job_id = job.job_id 
-                WHERE sequence.job_id = '".$job_id."' group by sequence.job_id,sequence.sequence_id  ";
+        $sql ="SELECT seq.*,count(ns.sequence_id) as total_step FROM sequence as seq LEFT JOIN step as ns ON seq.sequence_id = ns.sequence_id AND seq.job_id = ns.job_id WHERE seq.job_id = '".$job_id."' group by seq.job_id,seq.sequence_id ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute();
         return $statement->fetchall();
 
     }
 
-    #透過job_id 取的當前的step數量 
-    public function getStep_by_job_id($job_id){
-
-        $sql = "SELECT  count(job_id)  as total_step FROM step  WHERE job_id ='".$job_id."' ";
-        $statement = $this->db_iDas->prepare($sql);
-        $statement->execute();
-        return $statement->fetchall();
-
-    }
 
     #透過 job_id  取得當前有幾個seq
     public function countseq($jobid ){

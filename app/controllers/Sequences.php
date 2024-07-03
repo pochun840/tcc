@@ -20,7 +20,6 @@ class Sequences extends Controller
 
    
         $sequences  = $this->sequenceModel->getSequences_by_job_id($job_id);
-        $total_step = $this->sequenceModel->getStep_by_job_id($job_id)[0]['total_step'] ?? 0;
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
 
         if(empty($sequences)){
@@ -36,7 +35,6 @@ class Sequences extends Controller
         $data = array(
             'sequences' => $sequences,
             'job_id' => $job_id,
-            'total_step' => $total_step,
             'unit_arr' => $unit_arr,
             'seq_id' => $seq_id,
             'old_seqid' => '',

@@ -58,7 +58,7 @@
                                     </td>
                                     <td><img src="./img/btn_up.png"   onclick="MoveUp(this);"></td>
                                     <td><img src="./img/btn_down.png" onclick="MoveDown(this);"></td>
-                                    <td><?php echo $data['total_step'];?></td>
+                                    <td><?php echo $val['total_step'];?></td>
                                     <?php $url ='?url=Step/index/'.$data['job_id']."/".$val['sequence_id'];?>
                                     <td><img id="Add_Step" src="./img/btn_plus.png" onclick="location.href='<?php echo $url;?>'"></td>
                                 </tr>
