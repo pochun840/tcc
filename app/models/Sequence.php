@@ -35,10 +35,6 @@ class Sequence{
         return $result['count'];
     }
 
-
-    //public function 
-
-
     #新增sequence
     public function create_seq($mode, $jobdata) {
 
