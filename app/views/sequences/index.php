@@ -220,6 +220,7 @@
         </div>
     </div>
 
+    
     <!-- edit Sequence -->
     <div id="editseq" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">

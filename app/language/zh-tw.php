@@ -244,6 +244,7 @@ $text['delete_success'] = '刪除完成';
 $text['copy_success'] = '複製完成';
 $text['select_job'] = '選擇工作';
 
+
 // Data
 $text['data'] = '資料';
 $text['data_history'] = '歷史資料';

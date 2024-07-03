@@ -595,7 +595,6 @@ function edit_seq(seqid) {
     }
 }
 
-
 function edit_seq_save(){
 
     var jobid = '<?php echo $data['job_id']?>';
@@ -645,7 +644,6 @@ function edit_seq_save(){
             }
         });
     }
-
 
 }
 

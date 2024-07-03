@@ -90,7 +90,6 @@ $text['CCW'] = 'CCW';
 $text['option_no'] = 'No';
 $text['Second'] = 'Sec';
 
-
 $text['Copy_Sequence'] = 'Copy Sequence';
 $text['OK_All_Stop'] = 'OK All Stop';
 $text['torque_unit'] = 'Torque unit';
@@ -102,8 +101,6 @@ $text['hard'] = 'Hard';
 $text['ok_all_alarm_time'] = 'OK All Alarm Time';
 $text['tighten_repeat'] = 'Tighten Repeat';
 $text['ok_time'] = "OK Time";
-
-
 
 //normal step
 $text['normal_step'] = 'Normal Step';

@@ -387,6 +387,7 @@ function cound_step(argument){
 }
 
 
+
 function edit_step(){
 
     var jobid = '<?php echo $data['job_id']?>';

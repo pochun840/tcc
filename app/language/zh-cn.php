@@ -195,7 +195,6 @@ $text['copy_output'] = '复制输出';
 $text['gate_confirm'] = '工件复归确认';
 $text['YES'] = '是';
 $text['NO'] = '否';
-
 $text['mode'] = '模式';
 
 $text['Start-IN(Remote)'] = '启动';
