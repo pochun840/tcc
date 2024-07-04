@@ -50,7 +50,7 @@ function job_confirm(){
                 });
 
                 var language = getCookie('language');
-                if(language === "zh-cn"){
+                if(language == "zh-cn"){
 
                     document.getElementById('101') && (document.getElementById('101').textContent = '禁用');
                     document.getElementById('102') && (document.getElementById('102').textContent = '启用');
@@ -67,7 +67,7 @@ function job_confirm(){
                     document.getElementById('113') && (document.getElementById('113').textContent = '自定义4');
                     document.getElementById('114') && (document.getElementById('114').textContent = '自定义5');
                 
-                }else if(language === "zh-tw"){
+                }else if(language =="zh-tw"){
                     document.getElementById('101') && (document.getElementById('101').textContent = '禁用');
                     document.getElementById('102') && (document.getElementById('102').textContent = 'Enable');
                     document.getElementById('103') && (document.getElementById('103').textContent = '清除顆數');

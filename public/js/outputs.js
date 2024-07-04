@@ -33,7 +33,7 @@ function job_confirm(){
                 });
 
                 var language = getCookie('language');
-                if(language === "zh-cn"){
+                if(language == "zh-cn"){
                     document.getElementById('1') && (document.getElementById('1').textContent = 'OK');
                     document.getElementById('2') && (document.getElementById('2').textContent = 'NG');
                     document.getElementById('3') && (document.getElementById('3').textContent = '超出上限');
@@ -52,7 +52,7 @@ function job_confirm(){
                     document.getElementById('16') && (document.getElementById('16').textContent = '自定义5');
 
                 } 
-                else if(anguage === "zh-tw"){
+                else if(language == "zh-tw"){
                     document.getElementById('1') && (document.getElementById('1').textContent = 'OK');
                     document.getElementById('2') && (document.getElementById('2').textContent = 'NG');
                     document.getElementById('3') && (document.getElementById('3').textContent = '超出上限');
