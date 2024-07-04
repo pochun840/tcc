@@ -207,52 +207,42 @@
         // maxDate: new Date().fp_incr(0) // 14 days from now
     });
 
-    function DataMode(){
-
+    function DataMode() {
     var mode = document.getElementById("data_select").value;
     var error1 = '<?php echo $text['data_history_success']?>';
-    var error = '<?phP echo $text['data_history_fail']?>';
+    var error = '<?php echo $text['data_history_fail']?>';
     var language = getCookie('language');
 
-    if(mode){
+    if (mode) {
         $.ajax({
             url: "?url=Data/search_info",
             method: "POST",
-            data: { 
+            data: {
                 mode: mode
             },
             success: function(response) {
-            
                 document.getElementById("res_data").innerHTML = response;
+                if (language == "zh-cn" || language == "zh-tw") {
+                    
+                 
 
-                if(language == "zh-cn"){
-                    document.getElementById('lbf.in') && (document.getElementById('lbf.in').textContent = '英磅英吋');
-                    //document.getElementById('2') && (document.getElementById('2').textContent = '公斤公尺');
-                    //document.getElementById('3') && (document.getElementById('3').textContent = '牛頓公尺');
-                    //document.getElementById('0') && (document.getElementById('0').textContent = '公斤公分');
+                    document.getElementById('lbf.in').textContent = '英磅英吋';
+                    // 可以根據需要設置其他語言的內容
                 }
 
-                else if(language == "zh-tw"){
-                    document.getElementById('lbf.in') && (document.getElementById('lbf.in').textContent = '英磅英吋');
-                    //document.getElementById('2') && (document.getElementById('2').textContent = '公斤公尺');
-                    //document.getElementById('3') && (document.getElementById('3').textContent = '牛頓公尺');
-                    //document.getElementById('0') && (document.getElementById('0').textContent = '公斤公分');*/
-                }
-
-                if(mode == "NOK"){
-                    document.getElementById('res_title').textContent =  error;
-                }else{
-                    document.getElementById('res_title').textContent =  error1;
+                if (mode == "NOK") {
+                    document.getElementById('res_title').textContent = error;
+                } else {
+                    document.getElementById('res_title').textContent = error1;
                 }
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
             }
-        });     
-
+        });
     }
-
 }
+
 
 </script>
 

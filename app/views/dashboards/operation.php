@@ -142,6 +142,9 @@ var y_data_val = <?php echo  $data['chart_info']['y_val']; ?>;
 var x_title    = '<?php echo addslashes($data['echart_name'][1]); ?>';
 var y_title    = '<?php echo addslashes($data['echart_name'][0]); ?>';
 
+
+var language = getCookie('language');
+
 var option = {
     title: {
         text: ''

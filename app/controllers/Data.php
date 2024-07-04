@@ -33,34 +33,32 @@ class Data extends Controller
     }
 
 
-    public function search_info(){
-
-        $unit_arr    = $this->MiscellaneousModel->details('torque_unit');
-        $status_arr  = $this->MiscellaneousModel->details('status');
-
+    public function search_info() {
+        $unit_arr = $this->MiscellaneousModel->details('torque_unit');
+        $status_arr = $this->MiscellaneousModel->details('status');
+    
         $input_check = true;
-        if( !empty($_POST['mode']) && isset($_POST['mode'])  ){
+        if (!empty($_POST['mode']) && isset($_POST['mode'])) {
             $mode = $_POST['mode'];
-        }else{ 
-            $input_check = false; 
+        } else {
+            $input_check = false;
         }
-        
-        if($input_check){
+    
+        if ($input_check) {
             $res_data = $this->DataModel->getData($mode);
-            if(!empty($res_data)){
+            if (!empty($res_data)) {
                 $info_data = '';
-                foreach($res_data as $ke => $ve){
-                    
-                    if($ve['fasten_status'] == 7 || $ve['fasten_status'] == 8 ){
+                foreach ($res_data as $ve) {
+                    if ($ve['fasten_status'] == 7 || $ve['fasten_status'] == 8) {
                         $style = 'style="background: red"';
-                    }else if($ve['fasten_status'] == 5 || $ve['fasten_status'] == 6){
-                        $style ='style="background: #FFEF62"';
-                    }else{
+                    } else if ($ve['fasten_status'] == 5 || $ve['fasten_status'] == 6) {
+                        $style = 'style="background: #FFEF62"';
+                    } else {
                         $style = 'style="background: green"';
                     }
-                    //#FFEF62
-                    $info_data  ='<tr>';
-                    $info_data .= "<td id='system_sn'>".$ve['system_sn']."</td>";
+    
+                    $info_data .= '<tr>';
+                    $info_data .= "<td>".$ve['system_sn']."</td>";
                     $info_data .= "<td>".$ve['data_time']."</td>";
                     $info_data .= "<td>".$ve['job_name']."</td>";
                     $info_data .= "<td>".$ve['sequence_name']."</td>";
@@ -69,17 +67,16 @@ class Data extends Controller
                     $info_data .= "<td>".$ve['fasten_angle']."</td>";
                     $info_data .= "<td>".$ve['total_screw_count']."</td>";
                     $info_data .= "<td>".$ve['last_screw_count']."</td>";
-                    $info_data .= "<td $style >". $status_arr[$ve['fasten_status']]."</td>";
-                    $info_data  .='</tr>';
-
-                    echo $info_data;
+                    $info_data .= "<td $style>".$status_arr[$ve['fasten_status']]."</td>";
+                    $info_data .= '</tr>';
                 }
-
+    
+                // 將所有資料一次性輸出
+                echo $info_data;
             }
-
         }
-
     }
+    
 
    
     public function exportData() {

@@ -48,7 +48,7 @@
 
 </html>
 <script>
-   function language_change(language) {
+function language_change(language){
     if( language){
         $.ajax({
             url: "?url=Dashboards/change_language",

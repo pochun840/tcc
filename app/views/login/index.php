@@ -24,6 +24,28 @@
         ?>
     });
 
+    function language_change(language){
+    if( language){
+        $.ajax({
+            url: "?url=Dashboards/change_language",
+            method: "POST",
+            data:{ 
+                language: language
+
+            },
+            success: function(response) {
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+
+
+    }
+
+}
+
   </script>
 <style>
 .container-ms
