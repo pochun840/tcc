@@ -17,8 +17,6 @@ function edit_handleEventChange(selectedValue) {
 }
 
 
-
-
 function job_confirm(){
     var jobid = document.getElementById("JobNameSelect").value;
     localStorage.setItem("jobid", jobid);
