@@ -65,7 +65,7 @@ class Data extends Controller
                     $info_data .= "<td>".$ve['job_name']."</td>";
                     $info_data .= "<td>".$ve['sequence_name']."</td>";
                     $info_data .= "<td>".$ve['fasten_torque']."</td>";
-                    $info_data .= "<td>".$unit_arr[$ve['torque_unit']]."</td>";
+                    $info_data .= "<td id='".$unit_arr[$ve['torque_unit']]."'>".$unit_arr[$ve['torque_unit']]."</td>";
                     $info_data .= "<td>".$ve['fasten_angle']."</td>";
                     $info_data .= "<td>".$ve['total_screw_count']."</td>";
                     $info_data .= "<td>".$ve['last_screw_count']."</td>";

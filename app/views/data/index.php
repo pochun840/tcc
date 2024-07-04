@@ -212,6 +212,7 @@
     var mode = document.getElementById("data_select").value;
     var error1 = '<?php echo $text['data_history_success']?>';
     var error = '<?phP echo $text['data_history_fail']?>';
+    var language = getCookie('language');
 
     if(mode){
         $.ajax({
@@ -221,8 +222,22 @@
                 mode: mode
             },
             success: function(response) {
-                console.log(response);
+            
                 document.getElementById("res_data").innerHTML = response;
+
+                if(language == "zh-cn"){
+                    document.getElementById('lbf.in') && (document.getElementById('lbf.in').textContent = '英磅英吋');
+                    //document.getElementById('2') && (document.getElementById('2').textContent = '公斤公尺');
+                    //document.getElementById('3') && (document.getElementById('3').textContent = '牛頓公尺');
+                    //document.getElementById('0') && (document.getElementById('0').textContent = '公斤公分');
+                }
+
+                else if(language == "zh-tw"){
+                    document.getElementById('lbf.in') && (document.getElementById('lbf.in').textContent = '英磅英吋');
+                    //document.getElementById('2') && (document.getElementById('2').textContent = '公斤公尺');
+                    //document.getElementById('3') && (document.getElementById('3').textContent = '牛頓公尺');
+                    //document.getElementById('0') && (document.getElementById('0').textContent = '公斤公分');*/
+                }
 
                 if(mode == "NOK"){
                     document.getElementById('res_title').textContent =  error;
