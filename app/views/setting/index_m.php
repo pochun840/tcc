@@ -376,9 +376,7 @@ function time_save(){
 
             },
             success: function(response) {
-                console.log( response);
                 alert(response);
-                //history.go(0);
             },
             error: function(xhr, status, error) {
                 

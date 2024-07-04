@@ -22,6 +22,7 @@ function includecss_file($part, $cssFileName) {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/datatables.min.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css">
+
     <script src="<?php echo URLROOT; ?>js/all.js?v=202406131200"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>

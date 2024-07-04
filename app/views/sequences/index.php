@@ -481,7 +481,6 @@ function copy_seq_by_id(){
 
                 },
                 success: function(response) {
-                    console.log( response);
                     alert(response);
                     history.go(0);
                 },
@@ -512,7 +511,6 @@ function delete_seqid(jobid,seqid){
                 seqid: seqid
             },
             success: function(response) {
-                console.log( response);
                 alert(response);
                 history.go(0);
             },
@@ -636,9 +634,7 @@ function edit_seq_save(){
 
             },
             success: function(response) {
-                console.log( response);
-                alert(response);
-                //localStorage.removeItem("seqid");
+                alert(response);;
                 history.go(0);
             },
             error: function(xhr, status, error) {
@@ -717,7 +713,6 @@ function updateValue(checkbox){
 
             },
             success: function(response) {
-                console.log( response);
                 history.go(0);
             },
             error: function(xhr, status, error) {

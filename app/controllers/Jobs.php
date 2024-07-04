@@ -123,12 +123,25 @@ class Jobs extends Controller
         if(!empty($jobid)){
             $res = $this->jobModel->delete_job_by_id($jobid);
             if($res){
-                $res_msg = 'delete job:'. $jobid.'success';
-            }else{
-                $res_msg = 'delete job:'. $jobid.'fail';
-            }
 
-            echo $res_msg;
+                $response = array(
+                    'success' => true,
+                    'message' => 'delete job:'. $jobid.'success'
+                );
+
+                //$res_msg = 'delete job:'. $jobid.'success';
+            }else{
+
+                $response = array(
+                    'success' => false,
+                    'message' => 'delete job:'. $jobid.'fail'
+                );
+
+               
+            }
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            //echo $res_msg;
         }
    
     }
