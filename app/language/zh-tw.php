@@ -86,6 +86,9 @@ $text['add_step'] = '新增步驟';
 $text['switch_on'] = 'ON';
 $text['switch_off'] = 'OFF';
 
+$text['success'] = '成功';
+$text['fail'] = '失敗';
+
 $text['CW'] = 'CW';
 $text['CCW'] = 'CCW';
 $text['option_no'] = 'No';

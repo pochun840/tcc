@@ -250,6 +250,17 @@ class Miscellaneous{
     }
 
 
+    public function lang_load() {
+        $language = $_COOKIE['language'] ?? 'en-us';
+        $language = preg_replace('/[^a-zA-Z0-9_-]/', '', $language); 
+    
+        $language_file = '../app/language/' . $language . '.php';
+    
+        return  $language_file;
+    }
+
+
+
 
 
 

@@ -1,17 +1,19 @@
 <?php
-
 class Jobs extends Controller
 {
     private $jobModel;
     private $DashboardModel;
     private $ToolModel;
     private $SettingModel;
+    private $languageText; 
+
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
         $this->jobModel = $this->model('Job');
         $this->DashboardModel = $this->model('Dashboard');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
+    
         
     }
 
@@ -25,7 +27,6 @@ class Jobs extends Controller
         $jobs = $this->jobModel->getJobs();
         $direction = $this->MiscellaneousModel->details('unscrew_direction');
 
-   
         $lastRow = end($jobs);
         $jobIdInt = intval($lastRow['job_id']) + 1 ;
       
@@ -46,6 +47,13 @@ class Jobs extends Controller
 
     #create 
     public function create_job(){
+
+        
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
 
         if(isset($_POST['jobidnew'])){
             $jobdata = array(
@@ -73,9 +81,9 @@ class Jobs extends Controller
     
                 $res = $this->jobModel->create_job($mode,$jobdata);
                 if($res){
-                    $res_msg = 'insert job:'. $jobdata['job_id'].' success';
+                    $res_msg = $text['New'].$text['job'].':'. $jobdata['job_id'].$text['success'];
                 }else{
-                    $res_msg = 'insert job:'. $jobdata['job_id'].' fail';
+                    $res_msg = $text['New'].$text['job'].':'.$jobdata['job_id'].$text['fail'];
                 }
                 echo $res_msg;
             }
@@ -86,6 +94,13 @@ class Jobs extends Controller
 
 
     public function update_job(){
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+        
         $jobdata  = array();
         if(isset($_POST['jobid'])){
             $jobdata = array(
@@ -104,9 +119,9 @@ class Jobs extends Controller
                 
                 $res = $this->jobModel->update_job_by_id($jobdata);
                 if($res){
-                    $res_msg = 'update job:'. $jobdata['job_id'].'success';
+                    $res_msg = $text['Edit']. $text['job'].':'. $jobdata['job_id']. $text['success'];
                 }else{
-                    $res_msg = 'update job:'. $jobdata['job_id'].'fail';
+                    $res_msg = $text['Edit']. $text['job'].':'. $jobdata['job_id'].$text['fail'];
                 }
 
                 echo $res_msg;  
@@ -118,15 +133,20 @@ class Jobs extends Controller
 
     #delete 
     public function delete_jobid() {
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
  
         $jobid = $_POST['jobid'] ?? null;
         if(!empty($jobid)){
             $res = $this->jobModel->delete_job_by_id($jobid);
             if($res){
                 
-                $res_msg = 'delete job:'. $jobid.'success';
+                $res_msg = $text['Delete'].$text['job'].':'. $jobid.$text['success'];
             }else{
-                $res_msg = 'delete job:'. $jobid.'fail';
+                $res_msg = $text['Delete'].$text['job'].':'. $jobid.$text['fail'];
             }
 
             echo $res_msg;
@@ -144,12 +164,13 @@ class Jobs extends Controller
 
     #copy 
     public function copy_job(){
-        /*
-         old_jobid: old_jobid,
-                old_jobname: old_jobname,
-                new_jobid: new_jobid,
-                new_jobname: new_jobname
-        */
+
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
         $jobdata = array();
         $old_jobid = $_POST['old_jobid'] ?? null;
         if(!empty($old_jobid)){
@@ -177,13 +198,16 @@ class Jobs extends Controller
                 $mode = "copy";
                 $res = $this->jobModel->create_job($mode,$jobdata);
                 if($res){
-                    $res_msg = 'copy:'. $_POST['new_jobid'].'success';
+                    $res_msg = $text['Copy'].':'. $_POST['new_jobid'].$text['success'];
+                    
                 }else{
-                    $res_msg = 'copy:'. $_POST['new_jobid'].'fail';
+                    $res_msg = $text['Copy'].':'. $_POST['new_jobid'].$text['fail'];
                 }
     
                 echo $res_msg;
             }
         }
     }
+
+    
 }

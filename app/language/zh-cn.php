@@ -84,6 +84,9 @@ $text['add_step'] = '新增步骤';
 $text['switch_on'] = '开';
 $text['switch_off'] = '关';
 
+$text['success'] = '成功';
+$text['fail'] = '失败';
+
 $text['CW'] = '顺时针';
 $text['CCW'] = '逆时针';
 $text['option_no'] = '否';
