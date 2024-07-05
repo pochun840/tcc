@@ -210,6 +210,7 @@ function copy_input_id(){
 
                 document.getElementById('newinput').style.display='none';
                 console.log(response);
+                //alert(response);
                 get_input_by_job_id(job_id);
             },
             error: function(xhr, status, error) {

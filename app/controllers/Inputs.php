@@ -284,9 +284,9 @@ class Inputs extends Controller
             }
 
             if($res){
-                $res_msg = 'edit input job:'.$jobdata['input_job_id'].',event_id:'.$jobdata['input_event'].$text['success'];
+                $res_msg = $text['edit_event'].$text['job'].':'.$jobdata['input_job_id'].','.$text['event'].'_id:'.$jobdata['input_event'].$text['success'];
             } else {
-                $res_msg = 'edit input job:'.$jobdata['input_job_id'].',event_id:'.$jobdata['input_event'].$text['fail'];
+                $res_msg = $text['edit_event'].$text['job'].':'.$jobdata['input_job_id'].','.$text['event'].'id:'.$jobdata['input_event'].$text['fail'];
             }
             echo $res_msg;            
         }
@@ -333,6 +333,14 @@ class Inputs extends Controller
                     $jobdata[$key]['pagemode'] = $val['pagemode'];
                     $jobdata[$key]['input_seqid'] = 0;
                     $res = $this->InputModel->create_input($jobdata[$key]);
+    
+                    if($res){
+                        $res_msg = $text['copy_input'].$text['success'];
+                    } else {
+                        $res_msg = $text['copy_input'].$text['fail'];
+                    }
+                    echo $res_msg;         
+                    
 
                 }
                
