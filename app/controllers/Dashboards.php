@@ -33,8 +33,7 @@ class Dashboards extends Controller
     public function operation(){
 
         $isMobile = $this->isMobileCheck();
-
-
+    
         $chart_mode = !empty($_GET['chart']) ? $_GET['chart'] : 1;
         if ($chart_mode < 1 || $chart_mode > 4) {
             $chart_mode = 1;
@@ -61,7 +60,6 @@ class Dashboards extends Controller
             'echart_name' => $echart_name,
             'chart_mode'  => $chart_mode,
             'chart_menu_arr' => $chart_menu_arr
-
         ];
 
         if($isMobile){
