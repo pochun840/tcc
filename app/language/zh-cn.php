@@ -151,6 +151,7 @@ $text['total_step'] = '总步骤数';
 
 $text['new_step'] = '新增步骤';
 $text['edit_step'] = '编辑步骤';
+$text['del_step'] = '刪除步驟';
 $text['direction'] = '起子运转方向';
 $text['Monitor_Mode'] = '监控模式';
 $text['Window'] = '等比例';

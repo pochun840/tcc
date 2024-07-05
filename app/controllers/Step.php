@@ -61,6 +61,12 @@ class Step extends Controller
     #create step 
     public function create_step(){
 
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+
         if(isset($_POST['jobid'])){
 
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
@@ -124,9 +130,9 @@ class Step extends Controller
             $mode = "create"; 
             $res = $this->stepModel->create_step($mode,$jobdata);
             if($res){
-                $res_msg = 'create:'.$stepid.'success';
+                $res_msg = $text['new_step'].':'.$stepid.$text['success'];
             }else{
-                $res_msg = 'create:'.$stepid.'fail';
+                $res_msg = $text['new_step'].':'.$stepid.$text['fail'];
             }
             echo $res_msg;
         }
@@ -135,6 +141,13 @@ class Step extends Controller
 
     #update step
     public function edit_step(){
+
+        
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
         if(isset($_POST['jobid'])){
 
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
@@ -187,9 +200,9 @@ class Step extends Controller
 
             $res = $this->stepModel->update_step_by_id($jobdata);
             if($res){
-                $res_msg = 'update step:'. $stepid.' success';
+                $res_msg = $text['edit_step'].':'. $stepid.$text['success'];
             }else{
-                $res_msg = 'update step:'. $stepid.' fail';
+                $res_msg = $text['edit_step'].':'. $stepid.$text['fail'];
             }
             echo $res_msg;
         }
@@ -199,6 +212,11 @@ class Step extends Controller
     #delete step
     public function delete_step(){
 
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+        
         if(isset($_POST['stepid'])){
             
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
@@ -206,9 +224,9 @@ class Step extends Controller
             $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0;        
             $res = $this->stepModel->delete_step_id($jobid, $seqid, $stepid);
             if($res){
-                $res_msg = 'delete step:'. $stepid.' success';
+                $res_msg = $text['del_step'].':'. $stepid.$text['success'];
             }else{
-                $res_msg = 'delete step:'. $stepid.' fail';
+                $res_msg = $text['del_step'].':'. $stepid.$text['fail'];
             }
             echo $res_msg;
         
@@ -217,6 +235,12 @@ class Step extends Controller
     }
 
     public function copy_step(){
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
 
         if(isset($_POST['jobid'])){
 
@@ -259,9 +283,9 @@ class Step extends Controller
                 $mode = "copy"; 
                 $res = $this->stepModel->create_step($mode,$jobdata);
                 if($res){
-                    $res_msg = 'copy:'.$stepid_new.'success';
+                    $res_msg = $text['copy_step'].':'.$stepid_new.$text['success'];
                 }else{
-                    $res_msg = 'copy:'.$stepid_new.'fail';
+                    $res_msg = $text['copy_step'].':'.$stepid_new.$text['fail'];
                 }
     
                 echo $res_msg;

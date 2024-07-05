@@ -73,7 +73,7 @@ $text['setting'] = 'Setting';
 
 $text['new_seq'] = 'New Sequence';
 $text['edit_seq'] = 'Edit Sequence';
-
+$text['del_seq'] = 'Delete Sequence';
 $text['NG_Stop'] = 'NG Stop';
 $text['Choose_option'] = 'Option';
 $text['OK_Sequence'] = 'OK Sequence';
@@ -152,6 +152,7 @@ $text['total_step'] = 'Total steps';
 
 $text['new_step'] = 'New step';
 $text['edit_step'] = 'Edit Step';
+$text['del_step'] = 'Delete Step';
 $text['direction'] = 'Direction';
 $text['Monitor_Mode'] = 'Monitor Mode';
 $text['Window'] = 'Window';
