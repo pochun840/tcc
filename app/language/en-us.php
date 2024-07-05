@@ -196,6 +196,7 @@ $text['Table'] = 'Table';
 $text['Align'] = 'Unified';
 $text['new_event'] = 'Create Event';
 $text['edit_event'] = 'Edit Event';
+$text['del_event'] = 'Delete Event';
 $text['copy_input'] = 'Copy input';
 $text['copy_output'] = 'Copy output';
 $text['gate_confirm'] = 'Workpiece Ready Confirm';

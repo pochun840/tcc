@@ -193,6 +193,7 @@ $text['Table'] = '表格';
 $text['Align'] = 'Unified';
 $text['new_event'] = '建立事件';
 $text['edit_event'] = '编辑事件';
+$text['del_event'] = '刪除事件';
 $text['copy_input'] = '复制输入';
 $text['copy_output'] = '复制输出';
 $text['gate_confirm'] = '工件复归确认';
@@ -214,6 +215,7 @@ $text['Reboot'] = '重启';
 $text['UDEFINE1'] = '自定义1';
 $text['UDEFINE2'] = '自定义2';
 $text['UDEFINE'] = '自定义';
+$text['Barcode'] = '条码';
 
 
 $text['UserDefine1'] = '自定义1';

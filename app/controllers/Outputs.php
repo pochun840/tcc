@@ -143,6 +143,13 @@ class Outputs extends Controller
 
     public function create_output_event()
     {
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+
         $input_check = true;
         $jobdata = array();
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
@@ -178,9 +185,9 @@ class Outputs extends Controller
         if($input_check){
             $res = $this->OutputModel->create_output($jobdata);
             if($res){
-                $res_msg = 'create input from job:'.$jobdata['output_job_id'].',event_id:'.$jobdata['output_event'].'  success';
+                $res_msg = $text['new_event'].$text['job'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$jobdata['output_event'].$text['success'];
             }else{
-                $res_msg = 'create input from job:'.$jobdata['output_job_id'].',event_id:'.$jobdata['output_event'].'  fail';
+                $res_msg = $text['new_event'].$text['job'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$jobdata['output_event'].$text['fail'];
             }
             echo $res_msg;
         }
@@ -220,12 +227,27 @@ class Outputs extends Controller
 
                     $res = $this->OutputModel->create_output($jobdata[$key]);
 
+                    if($res){
+                        $res_msg = $text['copy_output'].$text['success'];
+                    }else{
+                        $res_msg = $text['copy_output'].$text['fail'];
+                    }
+        
+                    echo $res_msg;
+
+
                 }
             }
         }
     }
 
     public function delete_output(){
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
             $output_job_id	 = $_POST['job_id'];
@@ -240,11 +262,14 @@ class Outputs extends Controller
 
         if($input_check){
             $res = $this->OutputModel->delete_output_event_by_id($output_job_id,$output_event);
-            if ($res) {
-                $res_msg = 'delete output from job:'.$output_job_id.',event_id:'.$output_event.'  success';
-            } else {
-                $res_msg = 'delete output from job:'.$output_job_id.',event_id:'.$output_event.'  fail';
+
+            if($res){
+                $res_msg = $text['del_event'].$text['job'].':'.$output_job_id.','.$text['event'].':'.$output_event.$text['success'];
+            }else{
+                $res_msg = $text['del_event'].$text['job'].':'.$output_job_id.','.$text['event'].':'.$output_event.$text['fail'];
             }
+
+
             echo $res_msg;
         }
     }
@@ -296,6 +321,14 @@ class Outputs extends Controller
 
 
     public function edit_output_event(){
+
+        
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+
         
         $input_check = true;
         $jobdata = array();
@@ -342,11 +375,13 @@ class Outputs extends Controller
             $res  = $this->OutputModel->edit_output($jobdata);
         } 
         
+    
         if($res){
-            $res_msg = 'edit input job:'.$jobdata['output_job_id'].',event_id:'.$jobdata['output_event'].' copyDB success';
-        } else {
-            $res_msg = 'edit input job:'.$jobdata['output_job_id'].',event_id:'.$jobdata['output_event'].' copyDB fail';
+            $res_msg = $text['edit_event'].$text['job'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$jobdata['output_event'].$text['success'];
+        }else{
+            $res_msg = $text['edit_event'].$text['job'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$jobdata['output_event'].$text['fail'];
         }
+
         echo $res_msg;     
     }
 }
