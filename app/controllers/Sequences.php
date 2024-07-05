@@ -52,6 +52,14 @@ class Sequences extends Controller
     #create 
     public function create_seq(){
 
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+
+
         if(isset($_POST['jobid'])){
             
             #如果 POST 中沒有，則使用預設值
@@ -108,9 +116,9 @@ class Sequences extends Controller
             $mode = "create";
             $res = $this->sequenceModel->create_seq($mode,$jobdata);
             if($res){
-                $res_msg = 'insert seq:'. $jobdata['sequence_id'].'success';
+                $res_msg = $text['new_seq'].':'. $jobdata['sequence_id'].$text['success'];
             }else{
-                $res_msg = 'insert seq:'. $jobdata['sequence_id'].'fail';
+                $res_msg = $text['new_seq'].':'. $jobdata['sequence_id'].$text['fail'];
             }
             echo $res_msg;
         }
@@ -119,6 +127,12 @@ class Sequences extends Controller
 
     public function delete_seq(){
 
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+        
+
         $jobid = $_POST['jobid'] ?? null;
         $seqid = $_POST['seqid'] ?? null;
 
@@ -126,9 +140,9 @@ class Sequences extends Controller
 
             $res = $this->sequenceModel->delete_seq_by_id($jobid,$seqid);
             if($res){
-                $res_msg = 'delete seq:'. $seqid.'success';
+                $res_msg = $text['del_seq'].':'. $seqid.$text['success'];
             }else{
-                $res_msg = 'delete seq:'. $seqid.'fail';
+                $res_msg = $text['del_seq'].':'. $seqid.$text['fail'];
             }
             echo $res_msg;
         }
@@ -148,6 +162,14 @@ class Sequences extends Controller
     }
 
     public function edit_seq(){
+
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+
 
         if(isset($_POST['jobid'])){
 
@@ -213,9 +235,9 @@ class Sequences extends Controller
            
             $res = $this->sequenceModel->update_seq_by_id($jobdata);
             if($res){
-                $res_msg = 'update seq:'. $seqid.'success';
+                $res_msg = $text['edit_seq'].':'. $seqid.$text['success'];
             }else{
-                $res_msg = 'update seq:'. $seqid.'fail';
+                $res_msg = $text['edit_seq'].':'. $seqid.$text['fail'];
             }
             echo $res_msg;
 
@@ -244,6 +266,10 @@ class Sequences extends Controller
 
     public function copy_seq(){
 
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
 
         $jobdata = array();
         $mode = "copy"; 
@@ -289,9 +315,9 @@ class Sequences extends Controller
 
                 $res = $this->sequenceModel->create_seq($mode,$jobdata);
                 if($res){
-                    $res_msg = 'copy:'.$newseqid.'success';
+                    $res_msg = $text['Copy_Sequence'].':'.$newseqid.$text['success'];
                 }else{
-                    $res_msg = 'copy:'.$newseqid.'fail';
+                    $res_msg = $text['Copy_Sequence'].':'.$newseqid.$text['fail'];
                 }
     
                 echo $res_msg;

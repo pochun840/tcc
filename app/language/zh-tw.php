@@ -74,6 +74,7 @@ $text['setting'] = '設定';
 
 $text['new_seq'] = '新增工序';
 $text['edit_seq'] = '編輯工序';
+$text['del_seq'] = '刪除工序';
 
 $text['NG_Stop'] = 'NG停止';
 $text['Choose_option'] = '選項';
@@ -198,6 +199,7 @@ $text['Table'] = '表格';
 $text['Align'] = 'Unified';
 $text['new_event'] = '建立事件';
 $text['edit_event'] = '編輯事件';
+$text['del_event'] = '刪除事件';
 $text['copy_input'] = '複製輸入';
 $text['copy_output'] = '複製輸出';
 $text['gate_confirm'] = '工件復歸確認';
