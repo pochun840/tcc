@@ -196,6 +196,11 @@ class Outputs extends Controller
 
     public function copy_output()
     {
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+        
         $input_check = true;
         if( !empty($_POST['from_job_id']) && isset($_POST['from_job_id'])  ){
             $output_job_id = $_POST['from_job_id'];
