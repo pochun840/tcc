@@ -97,6 +97,9 @@ function chart_type(argument){
 
     var chartIndex = currentUrl.indexOf('chart=');
 
+
+
+
     var chart;
 
     if(argument == "torque_time"){
@@ -135,6 +138,7 @@ function chart_type(argument){
     xhttp.send();
 }
 
+var language = getCookie('language');
 
 var myChart = echarts.init(document.getElementById('chart'));
 var x_data_val = <?php echo  $data['chart_info']['x_val']; ?>;
@@ -142,6 +146,57 @@ var y_data_val = <?php echo  $data['chart_info']['y_val']; ?>;
 var x_title    = '<?php echo addslashes($data['echart_name'][1]); ?>';
 var y_title    = '<?php echo addslashes($data['echart_name'][0]); ?>';
 
+if(language =="zh-tw"){
+    if(x_title =="Time(MS)"){
+        x_title ="時間";
+    }
+
+    if(x_title =="Angle"){
+        x_title ="角度";
+    }
+    if(x_title =="Torque"){
+        x_title ="扭力";
+    }
+
+    if(y_title =="Angle"){
+        y_title ="角度";
+    }
+    if(y_title =="Torque"){
+        y_title ="扭力";
+    }
+
+    if(y_title =="RPM"){
+        y_title ="轉速";
+    }
+
+}
+
+if(language =="zh-cn"){
+    if(x_title =="Time(MS)"){
+        x_title ="时间";
+    }
+
+    if(x_title =="Angle"){
+        x_title ="角度";
+    }
+    if(x_title =="Torque"){
+        x_title ="扭力";
+    }
+
+    if(y_title =="Angle"){
+        y_title ="角度";
+    }
+    if(y_title =="Torque"){
+        y_title ="扭力";
+    }
+
+    if(y_title =="RPM"){
+        y_title ="转速";
+    }
+
+}
+
+console.log (x_title);
 
 var language = getCookie('language');
 
