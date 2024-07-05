@@ -16,6 +16,8 @@ class Data extends Controller
         $type ='ALL';
         $isMobile = $this->isMobileCheck();
         $res_data = $this->DataModel->getData('ALL');
+        $res_data_ok = $this->DataModel->getData('OK');
+        $res_data_nok = $this->DataModel->getData('NOK');
 
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
         $status_arr = $this->MiscellaneousModel->details('status');
@@ -23,6 +25,8 @@ class Data extends Controller
         $data = [
             'isMobile' => $isMobile,
             'res_data' => $res_data,
+            'res_data_ok' => $res_data_ok,
+            'res_data_nok' => $res_data_nok,
             'device_info' => $device_info,
             'unit_arr' => $unit_arr,
             'status_arr' => $status_arr

@@ -1,5 +1,19 @@
 
 <?php require APPROOT . 'views/inc/header.php'; ?>
+<?php 
+    if($_SESSION['language'] == 'en-us'){
+        $calendar_lang = '';
+    }else if($_SESSION['language'] == 'zh-cn'){
+        $calendar_lang = 'zh_cn';
+    }else if($_SESSION['language'] == 'zh-tw'){
+        $calendar_lang = 'zh_tw';
+    }else{
+        $calendar_lang = '';
+    }
+
+    //var_dump($calendar_lang);
+?>
+
 <body>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -33,7 +47,7 @@
                 <div id="HistoryDisplay">
                     <!-- Data ALL -->
                     <div  id ='res_title' style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data_history_success'];?></div>
-                    <div class="table-container">
+                    <div class="table-container" id='res_data_all'>
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
                                 <table id="fasten_log_all" class="table w3-table-all w3-hoverable">
@@ -88,7 +102,7 @@
                     </div>
                     
                     <!-- Data OK -->
-                    <div class="table-container" style="display: none;">
+                    <div class="table-container"  id ='res_data_ok'style="display: none;">
                         <div style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data'];?></div>
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
@@ -109,6 +123,30 @@
                                     </thead>
 
                                     <tbody style="font-size: 1.8vmin;text-align: center;">
+                                        <?php foreach($data['res_data_ok'] as $key_ok =>$val_ok){?>
+
+                                            <?php ////#FFEF62
+                                                if($val_ok['fasten_status'] == 7 || $val_ok['fasten_status'] == 8 ){
+                                                    $style ='style="background: red"';
+                                                }else if($val_ok['fasten_status'] == 5 || $val_ok['fasten_status'] == 6){
+                                                    $style ='style="background: #FFEF62"';
+                                                }else{
+                                                    $style ='style="background: green"';
+                                                }
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $val_ok['system_sn'];?></td>
+                                                <td><?php echo $val_ok['data_time'];?></td>
+                                                <td><?php echo $val_ok['job_name'];?></td>
+                                                <td><?php echo $val_ok['sequence_name'];?></td>
+                                                <td><?php echo $val_ok['fasten_torque'];?></td>
+                                                <td><?php echo $text[$data['unit_arr'][$val_ok['torque_unit']]];?></td>
+                                                <td><?php echo $val_ok['fasten_angle'];?></td>
+                                                <td><?php echo $val_ok['total_screw_count'];?></td>
+                                                <td><?php echo $val_ok['last_screw_count'];?></td>
+                                                <td <?php echo $style;?>><?php echo $data['status_arr'][$val_ok['fasten_status']];?></td>
+                                            </tr>
+                                        <?php }?>
                                     </tbody>
                                 </table>
                             </div>
@@ -116,7 +154,7 @@
                     </div>
                     
                     <!-- Data NG -->
-                    <div class="table-container" id='res_ng' style="display: none;">
+                    <div class="table-container" id='res_data_nok' style="display: none;">
                         <div style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data'];?></div>
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
@@ -137,6 +175,30 @@
                                     </thead>
 
                                     <tbody style="font-size: 1.8vmin;text-align: center;" >
+                                        <?php foreach($data['res_data_nok'] as $key_nok =>$val_nok){?>
+
+                                            <?php ////#FFEF62
+                                                if($val_nok['fasten_status'] == 7 || $val_nok['fasten_status'] == 8 ){
+                                                    $style ='style="background: red"';
+                                                }else if($val_nok['fasten_status'] == 5 || $val_nok['fasten_status'] == 6){
+                                                    $style ='style="background: #FFEF62"';
+                                                }else{
+                                                    $style ='style="background: green"';
+                                                }
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $val_nok['system_sn'];?></td>
+                                                <td><?php echo $val_nok['data_time'];?></td>
+                                                <td><?php echo $val_nok['job_name'];?></td>
+                                                <td><?php echo $val_nok['sequence_name'];?></td>
+                                                <td><?php echo $val_nok['fasten_torque'];?></td>
+                                                <td><?php echo $text[$data['unit_arr'][$val_nok['torque_unit']]];?></td>
+                                                <td><?php echo $val_nok['fasten_angle'];?></td>
+                                                <td><?php echo $val_nok['total_screw_count'];?></td>
+                                                <td><?php echo $val_nok['last_screw_count'];?></td>
+                                                <td <?php echo $style;?>><?php echo $data['status_arr'][$val_nok['fasten_status']];?></td>
+                                            </tr>
+                                        <?php }?>
                                     </tbody>
                                 </table>
                             </div>
@@ -190,8 +252,15 @@
     </div>    
 
 </div>
+<!-- 加載 flatpickr 的核心文件 -->
+<script src="path/to/flatpickr.js"></script>
+
+<!-- 加載簡體中文語言包 -->
+<script src="path/to/l10n/zh.js"></script>
+
 
 <script>
+
     // Button Home
     const moonLanding = new Date();
     let yy = moonLanding.getFullYear();
@@ -200,53 +269,70 @@
         static: true,
         inline:true,
         dateFormat: "Y-m-d H:i",
-        //locale: "", // 設定語言為繁體中文
+        //locale: "<?php //echo $calendar_lang; ?>",
         disableMobile: "true",
         // minDate: String(yy),
         maxDate: String(yy)+'-12-31',
         // maxDate: new Date().fp_incr(0) // 14 days from now
     });
 
-    function DataMode() {
-    var mode = document.getElementById("data_select").value;
-    var error1 = '<?php echo $text['data_history_success']?>';
-    var error = '<?php echo $text['data_history_fail']?>';
-    var language = getCookie('language');
 
-    if (mode) {
-        $.ajax({
-            url: "?url=Data/search_info",
-            method: "POST",
-            data: {
-                mode: mode
-            },
-            success: function(response) {
-                document.getElementById("res_data").innerHTML = response;
-                if (language == "zh-cn" || language == "zh-tw") {
-                    
-                 
+    function DataMode() {    
+    var mode = document.getElementById("data_select").value; 
+    var error1 = '<?php echo $text['data_history_success']?>'; 
+    var error = '<?php echo $text['data_history_fail']?>'; 
+    var language = getCookie('language'); 
 
-                    document.getElementById('lbf.in').textContent = '英磅英吋';
-                    // 可以根據需要設置其他語言的內容
-                }
 
-                if (mode == "NOK") {
-                    document.getElementById('res_title').textContent = error;
-                } else {
-                    document.getElementById('res_title').textContent = error1;
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-            }
-        });
+    if(mode =="OK"){
+        document.getElementById('res_data_all').style.display = 'none';
+        document.getElementById('res_data_ok').style.display = 'block';
+        document.getElementById('res_data_nok').style.display = 'none';
+    }else if(mode =="NOK"){
+        document.getElementById('res_data_all').style.display = 'none';
+        document.getElementById('res_data_ok').style.display = 'none';
+        document.getElementById('res_data_nok').style.display = 'block';
+    }else{
+        document.getElementById('res_data_all').style.display = 'block';
+        document.getElementById('res_data_ok').style.display = 'none';
+        document.getElementById('res_data_nok').style.display = 'none';
+
     }
-}
+
+        /*if (mode) {
+            $.ajax({
+                url: "?url=Data/search_info", // 發送AJAX請求的URL
+                method: "POST", // 使用POST方法
+                data: {
+                    mode: mode // 發送的數據，這裡只包括模式
+                },
+                success: function(response) {
+                    document.getElementById("res_data").innerHTML = response; // 將響應內容放入res_data元素中
+                    if (language == "zh-cn") { // 如果語言設置為簡體中文
+                        document.getElementById('lbf.in').textContent = '英磅英吋'; // 將特定元素lbf.in的文本內容設置為英磅英吋
+                    }
+
+                    if (mode == "NOK") { // 如果模式是NOK
+                        document.getElementById('res_title').textContent = error; // 將結果標題設置為失敗錯誤消息
+                    } else {
+                        document.getElementById('res_title').textContent = error1; // 將結果標題設置為成功錯誤消息
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed:", status, error); // 如果AJAX請求失敗，打印錯誤信息到控制台
+                }
+            });
+        }*/
+    }
+
 
 
 </script>
 
+<script>
 
+
+</script>
 </body>
 
 </html>
