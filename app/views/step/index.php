@@ -921,7 +921,6 @@ function add_step(){
 
             },
             success: function(response) {
-                console.log( response);
                 alert(response);
                 history.go(0);
             },
@@ -963,7 +962,6 @@ function copy_step_by_id_ajax(){
                 stepid_new: stepid_new
             },
             success: function(response) {
-                console.log( response);
                 alert(response);
                 history.go(0);
             },
@@ -990,7 +988,6 @@ function del_stepid(step_id){
                 seqid:seqid
             },
             success: function(response) {
-                console.log( response);
                 alert(response);
                 history.go(0);
             },
@@ -1040,7 +1037,7 @@ function sendRowInfoArray() {
             method: "POST",
             data: dataToSend,
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 history.go(0); 
             },
             error: function(xhr, status, error) {

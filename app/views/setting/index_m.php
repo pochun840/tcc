@@ -402,7 +402,7 @@ function edit_password(){
 
             },
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 alert(response);
                 history.go(0);
             },
@@ -435,7 +435,7 @@ function button_save_password_gust(){
 
             },
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 alert(response);
                 history.go(0);
             },

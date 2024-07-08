@@ -32,7 +32,7 @@ function delete_jobid(jobid) {
             method: "POST",
             data: { jobid: jobid },
             success: function(response) {
-                console.log( response);
+
                 alert(response);
                 history.go(0);
             },
@@ -110,8 +110,6 @@ function updatejob(){
                 localStorage.setItem('unscrew_rpm', rpmvalue);
                 localStorage.setItem('unscre_power', powervalue);
                 localStorage.setItem('direction', directionValue);
-
-                console.log( response);
                 history.go(0);
             },
             error: function(xhr, status, error) {

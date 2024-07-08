@@ -900,7 +900,6 @@ function add_step(){
 
             },
             success: function(response) {
-                console.log( response);
                 alert(response);
                 history.go(0);
             },
@@ -942,7 +941,6 @@ function copy_step_by_id_ajax(){
                 stepid_new: stepid_new
             },
             success: function(response) {
-                console.log( response);
                 alert(response);
                 history.go(0);
             },
@@ -968,8 +966,7 @@ function del_stepid(step_id){
                 jobid:jobid,
                 seqid:seqid
             },
-            success: function(response) {
-                console.log( response);
+            success: function(response){
                 alert(response);
                 history.go(0);
             },

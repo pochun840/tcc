@@ -376,8 +376,7 @@ function time_save(){
                 newTime: newTime
 
             },
-            success: function(response) {
-                console.log( response);
+            success: function(response){
                 alert(response);
                 //history.go(0);
             },

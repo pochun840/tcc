@@ -22,15 +22,6 @@ class Controller
         $privilege = array("privilege"=>$_SESSION['privilege']);
         $data = array_merge($data,$privilege);
 
-
-        // 如果檔案存在就引入它
-        
-        /*if(file_exists('../app/language/' . $data['language'] . '.php')){
-            require_once '../app/language/' . $data['language'] . '.php';
-        } else { //預設採用簡體中文
-            require_once '../app/language/en-us.php';
-        }*/
-
         // 如果檔案存在就引入它
         if(file_exists('../app/views/' . $view . '.php')){
 
@@ -67,13 +58,10 @@ class Controller
 
         setcookie('language', $_SESSION['language'], time() + (365 * 24 * 60 * 60), '/');
         
-
-
-
     }
 
 
-    public function language_detect($value=''){
+    /*public function language_detect($value=''){
 
         if( !isset($_SESSION['language']) || $_SESSION['language'] == '' ){
             $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 4);
@@ -101,7 +89,7 @@ class Controller
                 require_once '../app/language/en-us.php';
             }
         }
-    }
+    }*/
 
 
 

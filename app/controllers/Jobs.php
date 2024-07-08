@@ -17,6 +17,7 @@ class Jobs extends Controller
         
     }
 
+
     // 取得所有Jobs
     public function index(){
 
@@ -198,10 +199,10 @@ class Jobs extends Controller
                 $mode = "copy";
                 $res = $this->jobModel->create_job($mode,$jobdata);
                 if($res){
-                    $res_msg = $text['Copy'].':'. $_POST['new_jobid'].$text['success'];
+                    $res_msg = $text['Copy'].$text['job'].':'. $_POST['new_jobid'].$text['success'];
                     
                 }else{
-                    $res_msg = $text['Copy'].':'. $_POST['new_jobid'].$text['fail'];
+                    $res_msg = $text['Copy'].$text['job'].':'. $_POST['new_jobid'].$text['fail'];
                 }
     
                 echo $res_msg;

@@ -320,8 +320,9 @@ function savejob() {
                 direction_val: direction_val
             },
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 alert(response);
+                
                 history.go(0);
             },
             error: function(xhr, status, error) {
@@ -357,7 +358,6 @@ function copy_job_by_id(jobid){
                 new_jobname: new_jobname
             },
             success: function(response) {
-                console.log(response);
                 alert(response);
                 history.go(0);
             },

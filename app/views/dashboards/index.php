@@ -13,7 +13,9 @@
                 <input type="button" name="" value="English" data-language="en-us" onclick="language_change('en-us');">
                 </div>
 
+       
                 <div style=" margin-top: 5%">
+                    
                     <h1 class="col" style="font-size: 50px;">KILEWS</h1>
                     <div style="text-shadow:2px 2px 0 #444; font-size: 30px" class="text w3-center w3-text-yellow">iDAS FOR TCC</div>
                 </div>
