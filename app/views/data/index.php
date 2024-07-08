@@ -10,8 +10,6 @@
     }else{
         $calendar_lang = '';
     }
-
-    //var_dump($calendar_lang);
 ?>
 
 <body>
@@ -103,7 +101,7 @@
                     
                     <!-- Data OK -->
                     <div class="table-container"  id ='res_data_ok'style="display: none;">
-                        <div style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data'];?></div>
+                        <div style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data_history_success'];?></div>
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
                                 <table id="fasten_log" class="table w3-table-all w3-hoverable">
@@ -155,7 +153,7 @@
                     
                     <!-- Data NG -->
                     <div class="table-container" id='res_data_nok' style="display: none;">
-                        <div style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data'];?></div>
+                        <div style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data_history_fail'];?></div>
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
                                 <table id="error_fasten_log" class="table w3-table-all w3-hoverable">
@@ -269,7 +267,7 @@
         static: true,
         inline:true,
         dateFormat: "Y-m-d H:i",
-        //locale: "<?php //echo $calendar_lang; ?>",
+        locale: "<?php echo $calendar_lang; ?>",
         disableMobile: "true",
         // minDate: String(yy),
         maxDate: String(yy)+'-12-31',
@@ -288,14 +286,18 @@
         document.getElementById('res_data_all').style.display = 'none';
         document.getElementById('res_data_ok').style.display = 'block';
         document.getElementById('res_data_nok').style.display = 'none';
+        document.getElementById('res_title').style.display = 'none';
+        
     }else if(mode =="NOK"){
         document.getElementById('res_data_all').style.display = 'none';
         document.getElementById('res_data_ok').style.display = 'none';
         document.getElementById('res_data_nok').style.display = 'block';
+        document.getElementById('res_title').style.display = 'none';
     }else{
         document.getElementById('res_data_all').style.display = 'block';
         document.getElementById('res_data_ok').style.display = 'none';
         document.getElementById('res_data_nok').style.display = 'none';
+        document.getElementById('res_title').style.display = 'block';
 
     }
 
@@ -325,11 +327,6 @@
         }*/
     }
 
-
-
-</script>
-
-<script>
 
 
 </script>
