@@ -166,21 +166,22 @@
                                             </div>
                                         </div>
                                 <?php } ?>
-                                
-                                <div class="row input-pin"  id='work_goc'style="display: none;">
-                                    <div class="col-2 t1" class="col-3 t1"><?php echo $text['gate_confirm'];?>:</div>
+                                <div id="work_goc" style="display: none;">
+                                <div class="row" style="display: flex; align-items: center;">
+                                    <div class="col t1"><?php echo $text['gate_confirm'];?>:</div>
                                     <div class="col t2">
-                    			      	<div class="col-4 form-check form-check-inline">
-                                          <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_0" value="0" checked>
-                                          <label class="form-check-label"><?php echo $text['NO'];?></label>
-                    					  
-                    					</div>
-                    					<div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_1" value="1" >
-                                            <label class="form-check-label"><?php echo $text['YES'];?></label>
-                    					    
-                    					</div>
-                                    </div>
+                                                <div class="col form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_0" 
+                                                        value="0" checked="">
+                                                        <label class="form-check-label"><?php echo $text['NO'];?></label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_1" 
+                                                        value="1">
+                                                        <label class="form-check-label"><?php echo $text['YES'];?></label>
+                                                    </div>
+                                        </div>
+                                </div>
                                 </div>
 
 
@@ -238,20 +239,20 @@
                                     </div>
                                 <?php } ?>
                                 
-                                <div class="row input-pin"  id='work_goc'style="display: none;">
-                                    <div class="col-2 t1" class="col-3 t1">WRC:</div>
+                                <div class="row" style="display: flex; align-items: center;">
+                                    <div class="col t1"><?php echo $text['gate_confirm'];?>:</div>
                                     <div class="col t2">
-                    			      	<div class="col-4 form-check form-check-inline">
-                                          <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" value="0" checked>
-                                          <label class="form-check-label"><?php echo $text['NO'];?></label>
-                    					  
-                    					</div>
-                    					<div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_1" value="1" >
-                                            <label class="form-check-label"><?php echo $text['YES'];?></label>
-                    					    
-                    					</div>
-                                    </div>
+                                                <div class="col form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" 
+                                                        value="0" checked="">
+                                                        <label class="form-check-label"><?php echo $text['NO'];?></label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_1" 
+                                                        value="1">
+                                                        <label class="form-check-label"><?php echo $text['YES'];?></label>
+                                                    </div>
+                                        </div>
                                 </div>
                             </form>
                         </div>
