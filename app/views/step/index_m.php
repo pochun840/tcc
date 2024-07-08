@@ -386,8 +386,6 @@ function cound_step(argument){
 
 }
 
-
-
 function edit_step(){
 
     var jobid = '<?php echo $data['job_id']?>';
@@ -641,9 +639,6 @@ function edit_step(){
                     });
                 }
 
-
-
-
             },
             error: function(xhr, status, error) {
                 
@@ -847,9 +842,7 @@ function create_step() {
         });
     }
 
-
 }
-
 
 function add_step(){
 
@@ -908,8 +901,6 @@ function add_step(){
         });
     }
 }
-
-
 
 function copy_step_by_id(){
     var stepid = readFromLocalStorage("stepid");

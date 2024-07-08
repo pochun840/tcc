@@ -12,6 +12,15 @@ define('SITENAME', 'iDAS');
 define('IDASMODE', '1');
 
 
+// 設定語言狀態
+$language = array(
+	0=>array('简中','zh-cn'),
+	1=>array('繁中','zh-tw'),
+	2=>array('English','en-us'),
+);
+define('LANGUAGE',$language);
+
+
 // 抓取APP的檔案名稱，判斷是哪一個品牌
 $brand_code = get_brand_code();
 $brand = '0';//預設值帶kilews
