@@ -53,7 +53,6 @@ function cc_save(){
 
             },
             success: function(response) {
-                console.log( response);
                 //history.go(0);
             },
             error: function(xhr, status, error) {

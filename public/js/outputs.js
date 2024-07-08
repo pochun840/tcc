@@ -91,7 +91,6 @@ function delete_output_id(job_id,output_event){
              
             },
             success: function(response) {
-                console.log(response);
                 alert(response);
                 get_output_by_job_id(job_id);
             },
@@ -218,7 +217,6 @@ function create_output_id() {
                     wave_on: wave_on
                 },
                 success: function(response) {
-                    console.log(response);
                     alert(response);
                     get_output_by_job_id(job_id);
                     document.getElementById('new_output').style.display = 'none';
@@ -256,7 +254,6 @@ function edit_output_id(){
                 old_output_event: old_output_event
             },
             success: function(response) {
-                console.log(response);
                 alert(response);
                 get_output_by_job_id(job_id);
                 document.getElementById('edit_output').style.display='none';
@@ -280,7 +277,6 @@ function resetalignsubmit(job_id) {
                 job_id_new: job_id_new
             },
             success: function (response) {
-                console.log(response);
                 get_output_by_job_id(job_id);
             },
             error: function (xhr, status, error) {
@@ -300,7 +296,6 @@ function alignsubmit(job_id) {
                 job_id: job_id
             },
             success: function (response) {
-                console.log(response);
                 get_output_by_job_id(job_id);
             
                 buttonDisabled = !buttonDisabled;
@@ -336,7 +331,6 @@ function copy_output_id(){
             success: function(response) {
 
                 document.getElementById('copy_output').style.display='none';
-                console.log(response);
                 get_output_by_job_id(job_id);
             },
             error: function(xhr, status, error) {
@@ -383,7 +377,6 @@ function get_output_info(job_id,output_event){
                  }
                  
                  document.querySelector("select[name='edit_event_option']").value = output_event;
- 
                  document.getElementById("edit_event_option").onchange = function() {
                      var selectedValue = this.value; 
                  };
@@ -395,12 +388,7 @@ function get_output_info(job_id,output_event){
     }
  
  
- }
-
-
- //update
- //var old_output_event = document.getElementById("some_element_id").value;
-
+}
 
 
 

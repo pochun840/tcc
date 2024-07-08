@@ -14,7 +14,7 @@
                 <input type="text" id="job_id" name="job_id" size="10" maxlength="20" value="<?php echo $data['job_id'];?>" disabled
                 style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
-                <button id="back_btn" type="button"><?php echo $text['return'];?></button>
+                <button id="back_btn" type="button" onclick="window.history.back()" ><?php echo $text['return'];?></button>
             </div>
 
             <div class="table-container">
@@ -679,7 +679,6 @@ function saveseq(){
 
             },
             success: function(response) {
-                console.log(response);
                 alert(response);
                 history.go(0);
             },
@@ -755,7 +754,6 @@ function sendRowInfoArray() {
         method: "POST",
         data: dataToSend,
         success: function(response) {
-            console.log(response);
             history.go(0); 
         },
         error: function(xhr, status, error) {

@@ -132,7 +132,6 @@ function delete_input_id(jobid,input_event){
              
             },
             success: function(response) {
-                console.log(response);
                 alert(response);
                 get_input_by_job_id(job_id);
             },
@@ -180,7 +179,6 @@ function create_input_id(){
             success: function(response) {
 
                 document.getElementById('newinput').style.display='none';
-                console.log(response);
                 alert(response);
                 get_input_by_job_id(job_id);
             },
@@ -209,8 +207,7 @@ function copy_input_id(){
             success: function(response) {
 
                 document.getElementById('newinput').style.display='none';
-                console.log(response);
-                //alert(response);
+                alert(response);
                 get_input_by_job_id(job_id);
             },
             error: function(xhr, status, error) {
@@ -236,7 +233,6 @@ function resetalignsubmit(job_id) {
                 job_id_new: job_id_new
             },
             success: function (response) {
-                console.log(response);
                 get_input_by_job_id(job_id);
             },
             error: function (xhr, status, error) {
@@ -258,16 +254,14 @@ function alignsubmit(job_id) {
                 job_id: job_id
             },
             success: function (response) {
-                console.log(response);
                 get_input_by_job_id(job_id);
-            
                 buttonDisabled = !buttonDisabled;
                 document.getElementById('Button_Select').disabled = buttonDisabled;
      
                 backgroundColorYellow = !backgroundColorYellow;
-                if (backgroundColorYellow) {
+                if (backgroundColorYellow){
                     document.getElementById('job_id').style.backgroundColor = 'yellow';
-                } else {
+                }else{
                     document.getElementById('job_id').style.backgroundColor = '';
                 }
             },
@@ -452,7 +446,6 @@ function edit_input_id(){
             success: function(response) {
 
                 document.getElementById('edit_input').style.display='none';
-                console.log(response);
                 alert(response);
                 get_input_by_job_id(job_id);
             },

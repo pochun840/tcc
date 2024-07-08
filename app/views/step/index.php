@@ -745,7 +745,6 @@ function edit_step_save() {
             method: "POST",
             data: requestData,
             success: function(response) {
-                console.log(response);
                 alert(response);
                 history.go(0);
             },
@@ -1037,7 +1036,6 @@ function sendRowInfoArray() {
             method: "POST",
             data: dataToSend,
             success: function(response) {
-                //console.log(response);
                 history.go(0); 
             },
             error: function(xhr, status, error) {
