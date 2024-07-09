@@ -15,9 +15,6 @@
     </form>
 </div>
 
-
-</script>
-
   <script>
 
     function language_change() {
