@@ -22,7 +22,7 @@
             </div>
 
             <div class="button col pt-5">
-                <button class="menu-item blue" id="job_manager" style="font-size: 20px;" onclick="window.location.href='?url=Jobs/index'">Job</button>
+                <button class="menu-item blue" id="job_manager" style="font-size: 20px;" onclick="window.location.href='?url=Jobs/index'"><span style="visibility: hidden;">Job</span></button>
                 <button class="menu-item green" id="io_input" style="font-size: 20px;"   onclick="window.location.href='?url=Inputs/index'">IO Input</button>
                 <button class="menu-item orange" id="io_output" style="font-size: 20px"  onclick="window.location.href='?url=Outputs/index'">IO Output</button>
                 <br><br>
@@ -72,3 +72,14 @@ function language_change(language){
 
 }
 </script>
+
+
+<style>
+    #job_manager {
+        background: url("<?php echo $text['img_job']; ?>") no-repeat;
+    }
+    #job_manager:hover {
+        background: url("<?php echo $text['img_job_hover']; ?>") no-repeat;
+    }
+    
+</style>

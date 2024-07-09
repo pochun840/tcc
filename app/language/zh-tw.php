@@ -400,9 +400,10 @@ $text['system_connect_timestamp'] = '最後連線時間';
 $text['csv_file_path'] = '檔案路徑';
 
 //main 主畫面image url
-$text['img_normal_job'] = '../public/img/home_norjob_tw.png';
-$text['img_normal_job_hover'] = '../public/img/home_m_norjob_tw.png';
-$text['img_advanced_job'] = '../public/img/home_advjob_tw.png';
+$text['img_job'] = '../public/img/home_job_tw.png';
+$text['img_job_hover'] = '../public/img/home_job_m_tw.png';
+
+/*$text['img_advanced_job'] = '../public/img/home_advjob_tw.png';
 $text['img_advanced_job_hover'] = '../public/img/home_m_advjob_tw.png';
 $text['img_io_input'] = '../public/img/home_input_tw.png';
 $text['img_io_input_hover'] = '../public/img/home_m_input_tw.png';
@@ -415,7 +416,7 @@ $text['img_data_hover'] = '../public/img/home_m_data_tw.png';
 $text['img_tool'] = '../public/img/home_tool_tw.png';
 $text['img_tool_hover'] = '../public/img/home_m_tool_tw.png';
 $text['img_setting'] = '../public/img/home_setting_tw.png';
-$text['img_setting_hover'] = '../public/img/home_m_setting_tw.png';
+$text['img_setting_hover'] = '../public/img/home_m_setting_tw.png';*/
 
 
 
