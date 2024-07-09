@@ -420,9 +420,16 @@ function edit_input_id(){
     var input_wave  = pinval[0]['value'];
     var pagemode    = 1;
     var input_seqid = 0;
-
-
     var input_pin = pin_old.match(/\d+/)[0];
+
+    
+    if(input_event == 109){
+        var selectedOption = document.querySelector('input[name="edit_gateconfirm"]:checked');
+        var gateconfirm    = selectedOption ? selectedOption.value : 0;
+    }else{
+        var gateconfirm	 = 0;
+    }
+
     if(job_id){
         $.ajax({
             url: "?url=Inputs/edit_input_event",
