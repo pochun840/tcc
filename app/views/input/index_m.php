@@ -242,17 +242,15 @@
                                     <div class="row" style="display: flex; align-items: center;">
                                         <div class="col t1"><?php echo $text['gate_confirm'];?>:</div>
                                         <div class="col t2">
-                                                    <div class="col form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" 
-                                                            value="0" checked="">
-                                                            <label class="form-check-label"><?php echo $text['NO'];?></label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_1" 
-                                                            value="1">
-                                                            <label class="form-check-label"><?php echo $text['YES'];?></label>
-                                                        </div>
+                                            <div class="col form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" value="0">
+                                                <label class="form-check-label"><?php echo $text['NO'];?></label>
                                             </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_1"  value="1">
+                                                <label class="form-check-label"><?php echo $text['YES'];?></label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -328,6 +326,7 @@ var job_id;
 var input_event;
 var temp;
 var tempA;
+var tempB;
 var selectedValue;
 var old_input_event;
 var all_job;
@@ -451,10 +450,16 @@ function crud_job_event(argument){
         handleEventChange(input_event); 
         document.getElementById('edit_input').style.display='block';
 
-        console.log(input_event);
-
-        if(input_event ==109){
+        if(input_event == 109){
             document.getElementById('edit_work_goc').style.display='block';
+            var gateconfirm = temp[19];
+            var result = gateconfirm.replace("check_", "");
+
+            if (result == "0") {
+                document.getElementById('edit_gateconfirm_0').checked = true;
+            } else if (result == "1") {
+                document.getElementById('edit_gateconfirm_1').checked = true;
+            }
         }
        
     }

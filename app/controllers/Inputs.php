@@ -63,6 +63,7 @@ class Inputs extends Controller
             $job_inputs = $this->InputModel->get_input_by_job_id($job_id);
             $temp  = array(); 
             $tempA = array();
+            $tempB = array();
             $job_inputlist = ''; 
             
     
@@ -70,15 +71,20 @@ class Inputs extends Controller
                 foreach ($job_inputs as $kk => $vv) {
                     if (!empty($vv['input_pin'])) {
                         $pin_number = $vv['input_pin'];
+                        $gateconfirm = $vv['gateconfirm'];
                         $temp[] = "pin" . $pin_number . "_high";
                         $temp[] = "pin" . $pin_number . "_low";
                         $temp[] = "edit_pin" . $pin_number . "_high";
                         $temp[] = "edit_pin" . $pin_number . "_low";
+                        $temp[] = "check_".$gateconfirm;
+
                     }
 
                     if (!empty($vv['input_event'])) {
                         $tempA[] = $vv['input_event'];
                     }
+
+                
                     
                     $isMobile = $this->isMobileCheck();
 
@@ -117,6 +123,7 @@ class Inputs extends Controller
             'job_inputlist' => $job_inputlist,
             'temp' => $temp,
             'tempA' => $tempA,
+            'tempB' => $tempB
             
         );
         echo json_encode($response);

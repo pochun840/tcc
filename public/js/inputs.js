@@ -331,6 +331,8 @@ function get_input_info(){
                     var selectedValue = this.value; 
                     edit_handleEventChange(selectedValue); 
                 };
+
+             
             },
             error: function(xhr, status, error) {
                 
@@ -351,8 +353,6 @@ function get_input_by_job_id(jobid){
         },
         success: function(response) {
 
-            
-            
             var data = JSON.parse(response);
             var job_inputlist = data.job_inputlist;
             temp = data.temp;
@@ -421,12 +421,6 @@ function edit_input_id(){
     var pagemode    = 1;
     var input_seqid = 0;
 
-    if(input_event == 109){
-        var selectedOption = document.querySelector('input[name="edit_gateconfirm"]:checked');
-        var gateconfirm    = selectedOption ? selectedOption.value : 0;
-    }else{
-        var gateconfirm	 = 0;
-    }
 
     var input_pin = pin_old.match(/\d+/)[0];
     if(job_id){

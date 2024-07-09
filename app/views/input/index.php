@@ -442,15 +442,15 @@
                             </div>
 
                             <div class="row" id='edit_work_goc'  style="display: none;">
-                                <div for="Workpice Ready Confirm" class="col-6 t1">Workpice Ready Confirm :</div>
+                                <div for="Workpice Ready Confirm" class="col-6 t1"><?php echo $text['gate_confirm'];?> :</div>
                                 <div class="col t2" >
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" value="0" checked>
-                                    <label class="form-check-label">NO</label>
+                                    <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" value="0">
+                                    <label class="form-check-label"><?php echo $text['NO'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_1" value="1">
-                                    <label class="form-check-label" >YES</label>
+                                    <label class="form-check-label" ><?php echo $text['YES'];?></label>
                                     </div>
                                 </div>
                             </div>
@@ -530,6 +530,7 @@ var job_id;
 var input_event;
 var temp;
 var tempA;
+var tempB;
 var selectedValue;
 var old_input_event;
 var all_job;
@@ -555,9 +556,6 @@ document.getElementById("Event_Option").onchange = function() {
     var selectedValue = this.value; 
     handleEventChange(selectedValue); 
 };
-
-
-
 
 // Div Mode
 function toggleDivs() {
@@ -617,16 +615,12 @@ function crud_job_event(argument){
             });
         }
 
-
-
         document.getElementById('newinput').style.display='block';
     } 
     
     if(argument == 'del'){
         delete_input_id(job_id,input_event);
     }
-
-
 
     if(argument == 'edit' && job_id != '' && input_event != ''){
 
@@ -648,10 +642,24 @@ function crud_job_event(argument){
                 }
             });
         }
+
+
         get_input_info(job_id,input_event);
         handleEventChange(input_event); 
         document.getElementById('edit_input').style.display='block';
-       
+
+        if(input_event ==109){
+            document.getElementById('edit_work_goc').style.display='block';
+            var gateconfirm = temp[19];
+            var result = gateconfirm.replace("check_", "");
+
+            if (result == "0") {
+                document.getElementById('edit_gateconfirm_0').checked = true;
+            } else if (result == "1") {
+                document.getElementById('edit_gateconfirm_1').checked = true;
+            }
+         
+        }
     }
 
     if(argument == 'copy' && job_id != ''){
