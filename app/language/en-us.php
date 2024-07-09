@@ -475,6 +475,7 @@ $error_message['to_seq_name'] = 'Sequence name input error';
 
 //normal step
 $text['delete_step_confirm_text'] = 'Do you want to delete step id: ';
+$text['check_step_target'] = 'There are already other step goals. Target torque is established';
 $error_message['Hi_Torque'] = 'Out of range. Must be greater than '.$text['Target_Torque'].' and less than Tool Max Torque ';
 $error_message['Low_Torque'] = 'Out of range, must be less than '.$text['Target_Torque'];
 $error_message['Threshold_Torque'] = 'Out of range, must be less than '.$text['Target_Torque'];

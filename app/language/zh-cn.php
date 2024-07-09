@@ -464,6 +464,7 @@ $error_message['to_seq_name'] = '工序名称输入有误';
 
 //normal step
 $text['delete_step_confirm_text'] = '是否要删除 步骤 id: ';
+$text['check_step_target'] = '已有其他的步骤目标 建立了目标扭力';
 $error_message['Hi_Torque'] = '超出范围 需大于 '.$text['Target_Torque'].' 且 小于 Tool Max Torque ';
 $error_message['Low_Torque'] = '超出范围 需小于 '.$text['Target_Torque'];
 $error_message['Threshold_Torque'] = '超出范围 需小于 '.$text['Target_Torque'];

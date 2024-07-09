@@ -459,6 +459,7 @@ $error_message['to_seq_name'] = '工序名稱輸入有誤';
 
 //normal step
 $text['delete_step_confirm_text'] = '是否要刪除 步驟 id: ';
+$text['check_step_target'] = '已有其他的步驟目標 建立了目標扭力';
 $error_message['Hi_Torque'] = '超出範圍 需大於 '.$text['Target_Torque'].' 且 小於 Tool Max Torque ';
 $error_message['Low_Torque'] = '超出範圍 需小於 '.$text['Target_Torque'];
 $error_message['Threshold_Torque'] = '超出範圍 需小於 '.$text['Target_Torque'];
@@ -476,6 +477,7 @@ $error_message['Low_Angle'] = '超出範圍 ';//範圍交給js
 $error_message['Pre_Run_RPM'] = '超出範圍 60 - tool_maxrpm';
 $error_message['Pre_Run_Angle'] = '超出範圍 1 - 30600';
 $error_message['Target_Angle'] = '超出範圍 1 - 30600';
+
 if(isset($data['tool_info'])){
 	// $error_message['Hi_Torque'] = '需大於 Target_Torque 且小於'.$data['tool_info']['tool_maxtorque'];
 	$error_message['Hi_Torque'] = '超出範圍 ';//range交給javascript
@@ -498,6 +500,8 @@ $error_message['Torque_Window_Subtraction'] = '';
 $error_message['Angle_Window_Add'] = '超出範圍 上下限需介於0 - 30600';
 $error_message['Angle_Window_Subtraction'] = '';
 $error_message['Delay_Time'] = '超出範圍 0.0 - 10.0';
+
+
 
 
 if(isset($data['tool_info'])){

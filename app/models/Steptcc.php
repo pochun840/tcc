@@ -46,6 +46,16 @@ class Steptcc{
 
     }
 
+    #檢查同一個seq中所建立的Step Target Torque 只能有一個
+    public function check_step_target($jobid,$seqid){
+
+        $sql = "SELECT COUNT(*) AS count_records FROM step WHERE job_id = ? AND sequence_id = ?  AND target_option = '0'  ";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid, $seqid]);
+        return $statement->fetchAll();
+    }
+
+
 
     #透過 job_id 及 seq_id 及 step_id 刪除對應的資料
     public function delete_step_id($jobid,$seqid,$stepid){

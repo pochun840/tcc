@@ -88,6 +88,7 @@
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col-3 t2">
                                 <select id="target_option" name="target_option" class="col custom-file">
+                                    <option>請選擇</option>
                                     <?php foreach($data['target_option'] as $key => $val){?>
                                         <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
                                     <?php }?>

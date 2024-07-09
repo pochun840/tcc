@@ -26,6 +26,8 @@ class Step extends Controller
         $direction = $this->MiscellaneousModel->details('unscrew_direction');
         $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
         $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
+        $check     = $this->stepModel->check_step_target($job_id,$seq_id);
+
 
         $unit = $unit_arr[$seqinfo[0]['torque_unit']];
   
@@ -45,8 +47,10 @@ class Step extends Controller
             'seq_id' => $seq_id,
             'stepid_new' => $stepid_new,
             'unit_arr' => $unit_arr,
-            'unit' => $unit
+            'unit' => $unit,
+            'check' => $check
         );
+        
 
         if($isMobile){
             $this->view('step/index_m', $data);
@@ -66,7 +70,6 @@ class Step extends Controller
             include $file;
         }
 
-
         if(isset($_POST['jobid'])){
 
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
@@ -84,6 +87,17 @@ class Step extends Controller
             $threshold_torque = isset($_POST['threshold_torque'])? intval($_POST['threshold_torque']) : 0;
             $downshift_torque = isset($_POST['downshift_torque'])? intval($_POST['downshift_torque']) : 0;
             $downshift_rpm = isset($_POST['downshift_rpm'])? intval($_POST['downshift_rpm']) : 100;
+
+            #同一個step 只能有一個Target Torque
+            $check = $this->stepModel->check_step_target($jobid,$seqid);
+            $check = intval($check[0]['count_records']);
+            if($check <= 1){
+                $status_msg ='';
+                $status_msg = $text['check_step_target'];
+                echo $status_msg;
+                exit();
+
+            }
 
             if($target_option == 2){
                 $target_delaytime = $target_torque; 
@@ -176,6 +190,17 @@ class Step extends Controller
 
             }
 
+            #同一個step 只能有一個Target Torque
+            $check = $this->stepModel->check_step_target($jobid,$seqid);
+            $check = intval($check[0]['count_records']);
+            if($check <= 1){
+                $status_msg ='';
+                $status_msg = $text['check_step_target'];
+                echo $status_msg;
+                exit();
+
+            }
+
         
             $jobdata = array(
                 'job_id'           => $jobid,
@@ -258,40 +283,51 @@ class Step extends Controller
             }
 
             
-            $old_res= $this->stepModel->getStepNo($jobid,$seqid,$stepid);
-            if(!empty($old_res)){
-                $jobdata = array(
-                    'job_id'           => $jobid,
-                    'sequence_id'      => $seqid,
-                    'step_id'          => $stepid_new,
-                    'target_option'    => $old_res[0]['target_option'],
-                    'target_torque'    => $old_res[0]['target_torque'],
-                    'target_angle'     => $old_res[0]['target_angle'],
-                    'target_delaytime' => $old_res[0]['target_delaytime'],
-                    'hi_torque'        => $old_res[0]['hi_torque'],
-                    'lo_torque'        => $old_res[0]['lo_torque'],
-                    'hi_angle'         => $old_res[0]['hi_angle'],
-                    'lo_angle'         => $old_res[0]['lo_angle'],
-                    'rpm'              => $old_res[0]['rpm'],
-                    'direction'        => $old_res[0]['direction'],
-                    'downshift'        => $old_res[0]['downshift'],
-                    'threshold_torque' => $old_res[0]['threshold_torque'],
-                    'downshift_torque' => $old_res[0]['downshift_torque'],
-                    'downshift_rpm'    => $old_res[0]['downshift_rpm']
-                );
+            #同一個step 只能有一個Target Torque
+            $check = $this->stepModel->check_step_target($jobid,$seqid);
+            $check = intval($check[0]['count_records']);
+            if($check <= 1){
+                $status_msg ='';
+                $status_msg = $text['check_step_target'];
+                echo $status_msg;
+                exit();
 
-                $mode = "copy"; 
-                $res = $this->stepModel->create_step($mode,$jobdata);
-                if($res){
-                    $res_msg = $text['copy_step'].':'.$stepid_new.$text['success'];
-                }else{
-                    $res_msg = $text['copy_step'].':'.$stepid_new.$text['fail'];
-                }
+            }else{
+                $old_res= $this->stepModel->getStepNo($jobid,$seqid,$stepid);
+                if(!empty($old_res)){
+                    $jobdata = array(
+                        'job_id'           => $jobid,
+                        'sequence_id'      => $seqid,
+                        'step_id'          => $stepid_new,
+                        'target_option'    => $old_res[0]['target_option'],
+                        'target_torque'    => $old_res[0]['target_torque'],
+                        'target_angle'     => $old_res[0]['target_angle'],
+                        'target_delaytime' => $old_res[0]['target_delaytime'],
+                        'hi_torque'        => $old_res[0]['hi_torque'],
+                        'lo_torque'        => $old_res[0]['lo_torque'],
+                        'hi_angle'         => $old_res[0]['hi_angle'],
+                        'lo_angle'         => $old_res[0]['lo_angle'],
+                        'rpm'              => $old_res[0]['rpm'],
+                        'direction'        => $old_res[0]['direction'],
+                        'downshift'        => $old_res[0]['downshift'],
+                        'threshold_torque' => $old_res[0]['threshold_torque'],
+                        'downshift_torque' => $old_res[0]['downshift_torque'],
+                        'downshift_rpm'    => $old_res[0]['downshift_rpm']
+                    );
     
-                echo $res_msg;
+                    $mode = "copy"; 
+                    $res = $this->stepModel->create_step($mode,$jobdata);
+                    if($res){
+                        $res_msg = $text['copy_step'].':'.$stepid_new.$text['success'];
+                    }else{
+                        $res_msg = $text['copy_step'].':'.$stepid_new.$text['fail'];
+                    }
+        
+                    echo $res_msg;
+                }
+     
             }
-
-
+           
         }
 
     }
