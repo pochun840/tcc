@@ -23,13 +23,13 @@
 
             <div class="button col pt-5">
                 <button class="menu-item blue" id="job_manager" style="font-size: 20px;" onclick="window.location.href='?url=Jobs/index'"><span style="visibility: hidden;">Job</span></button>
-                <button class="menu-item green" id="io_input" style="font-size: 20px;"   onclick="window.location.href='?url=Inputs/index'">IO Input</button>
-                <button class="menu-item orange" id="io_output" style="font-size: 20px"  onclick="window.location.href='?url=Outputs/index'">IO Output</button>
+                <button class="menu-item green" id="io_input" style="font-size: 20px;"   onclick="window.location.href='?url=Inputs/index'"><span style="visibility: hidden;">IO Input</span></button>
+                <button class="menu-item orange" id="io_output" style="font-size: 20px"  onclick="window.location.href='?url=Outputs/index'"><span style="visibility: hidden;">IO Output</span></button>
                 <br><br>
-                <button class="menu-item purple" id="operation" style="font-size: 20px" onclick="window.location.href='?url=Dashboards/operation'">Operation</button>
-                <button class="menu-item lightblue" id="data" style="font-size: 20px" onclick="window.location.href='?url=Data/index'">Data</button>
-                <button class="menu-item pink" id="tool" style="font-size: 20px" onclick="window.location.href='?url=Tools/index'">Tool</button>
-                <button class="menu-item PaleGreen" id="setting" style="font-size: 20px;" onclick="window.location.href='?url=Settings/index'">Setting</button>
+                <button class="menu-item purple" id="operation" style="font-size: 20px" onclick="window.location.href='?url=Dashboards/operation'"><span style="visibility: hidden;">Operation</span></button>
+                <button class="menu-item lightblue" id="data" style="font-size: 20px" onclick="window.location.href='?url=Data/index'"><span style="visibility: hidden;">Data</span></button>
+                <button class="menu-item pink" id="tool" style="font-size: 20px" onclick="window.location.href='?url=Tools/index'"><span style="visibility: hidden;">Tool</span></button>
+                <button class="menu-item PaleGreen" id="setting" style="font-size: 20px;" onclick="window.location.href='?url=Settings/index'"><span style="visibility: hidden;">Setting</span></button>
                 <br><br>
                 <?php if($_SESSION['privilege'] == 'admin'){?>
                 <div>
@@ -80,6 +80,48 @@ function language_change(language){
     }
     #job_manager:hover {
         background: url("<?php echo $text['img_job_hover']; ?>") no-repeat;
+    }
+
+    #io_input {
+        background: url("<?php echo $text['img_io_input']; ?>") no-repeat;
+    }
+    #io_input:hover {
+        background: url("<?php echo $text['img_io_input_hover']; ?>") no-repeat;
+    }
+
+    #io_output {
+        background: url("<?php echo $text['img_io_output']; ?>") no-repeat;
+    }
+    #io_output:hover {
+        background: url("<?php echo $text['img_io_output_hover']; ?>") no-repeat;
+    }
+
+    #operation {
+        background: url("<?php echo $text['img_operation']; ?>") no-repeat;
+    }
+    #operation:hover {
+        background: url("<?php echo $text['img_operation_hover']; ?>") no-repeat;
+    }
+    
+    #data {
+        background: url("<?php echo $text['img_data']; ?>") no-repeat;
+    }
+    #data:hover {
+        background: url("<?php echo $text['img_data_hover']; ?>") no-repeat;
+    }
+
+    #tool {
+        background: url("<?php echo $text['img_tool']; ?>") no-repeat;
+    }
+    #tool:hover {
+        background: url("<?php echo $text['img_tool_hover']; ?>") no-repeat;
+    }
+
+    #setting {
+        background: url("<?php echo $text['img_setting']; ?>") no-repeat;
+    }
+    #setting:hover {
+        background: url("<?php echo $text['img_setting_hover']; ?>") no-repeat;
     }
     
 </style>

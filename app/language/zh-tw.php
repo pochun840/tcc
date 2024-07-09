@@ -402,22 +402,18 @@ $text['csv_file_path'] = '檔案路徑';
 //main 主畫面image url
 $text['img_job'] = '../public/img/home_job_tw.png';
 $text['img_job_hover'] = '../public/img/home_job_m_tw.png';
-
-/*$text['img_advanced_job'] = '../public/img/home_advjob_tw.png';
-$text['img_advanced_job_hover'] = '../public/img/home_m_advjob_tw.png';
-$text['img_io_input'] = '../public/img/home_input_tw.png';
-$text['img_io_input_hover'] = '../public/img/home_m_input_tw.png';
-$text['img_io_output'] = '../public/img/home_output_tw.png';
-$text['img_io_output_hover'] = '../public/img/home_m_output_tw.png';
+$text['img_io_input'] = '../public/img/home_input_cn.png';
+$text['img_io_input_hover'] = '../public/img/home_m_input_cn.png';
+$text['img_io_output'] = '../public/img/home_output_cn.png';
+$text['img_io_output_hover'] = '../public/img/home_m_output_cn.png';
 $text['img_operation'] = '../public/img/home_operation_tw.png';
 $text['img_operation_hover'] = '../public/img/home_m_operation_tw.png';
 $text['img_data'] = '../public/img/home_data_tw.png';
 $text['img_data_hover'] = '../public/img/home_m_data_tw.png';
-$text['img_tool'] = '../public/img/home_tool_tw.png';
-$text['img_tool_hover'] = '../public/img/home_m_tool_tw.png';
+$text['img_tool'] = '../public/img/home_tool_cn.png';
+$text['img_tool_hover'] = '../public/img/home_m_tool_cn.png';
 $text['img_setting'] = '../public/img/home_setting_tw.png';
-$text['img_setting_hover'] = '../public/img/home_m_setting_tw.png';*/
-
+$text['img_setting_hover'] = '../public/img/home_m_setting_tw.png';
 
 
 
@@ -541,33 +537,3 @@ $error_message['ERR_PROC_NOT_FINISH'] = '操作未完成';
 $error_message['SEQ_COMPLETED'] = '工序完成按確認';
 $error_message['JOB_COMPLETED'] = '工作完成按確認';
 $error_message['WORKPIECE_RECOVERY'] = '工件復歸按確認';
-//上海展先全部用簡中
-// $error_message['NO_ERROR'] = '';
-// $error_message['ERR_CONT_TEMP'] = 'ERR-CONT-TEMP';
-// $error_message['ERR_MOT_TEMP'] = 'ERR_MOT_TEMP';
-// $error_message['ERR_MOT_CURR'] = '马达电流过高';
-// $error_message['ERR_MOT_PEAK_CURR'] = '马达峰值电流过高';
-// $error_message['ERR_HIGH_TORQUE'] = '扭力超出上限';
-// $error_message['ERR_DEADLOCK'] = '马达运转异常';
-// $error_message['ERR_PROC_MINTIME'] = '锁附时间低于下限';
-// $error_message['ERR_PROC_MAXTIME'] = '超时锁附';
-// $error_message['ERR_ENCODER'] = '编码器无脉波';
-// $error_message['ERR_HALL'] = '霍尔传感器无脉波';
-// $error_message['ERR_BUSVOLT_HIGH'] = '母线电压过高';
-// $error_message['ERR_BUSVOLT_LOW'] = '母线电压过低';
-// $error_message['ERR_PROC_NA'] = '设定工序异常';
-// $error_message['ERR_STEP_NA'] = '设定步骤异常';
-// $error_message['ERR_DMS_COMM'] = '起子控制器通讯异常';
-// $error_message['ERR_FLASH'] = '控制器Flash验证码错误';
-// $error_message['ERR_FRAM'] = '控制器Fram验证码错误';
-// $error_message['ERR_HIGH_ANGLE'] = '角度超出上限';
-// $error_message['ERR_PROTECT_CIRCUIT'] = '硬体保护异常';
-// $error_message['ERR_SWITCH_CONFIG'] = '启动开关设置错误';
-// $error_message['ERR_STEP_NOT_REC'] = '步骤数设置不一致';
-// $error_message['ERR_TMD_FRAM'] = '起子基板FRAM异常';
-// $error_message['ERR_LOW_TORQUE'] = '扭力低于下限';
-// $error_message['ERR_LOW_ANGLE'] = '角度低于下限';
-// $error_message['ERR_PROC_NOT_FINISH'] = '操作未完成';
-// $error_message['SEQ_COMPLETED'] = '工序完成按确认';
-// $error_message['JOB_COMPLETED'] = '工作完成按确认';
-// $error_message['WORKPIECE_RECOVERY'] = '工件复归按确认';

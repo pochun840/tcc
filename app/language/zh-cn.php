@@ -407,9 +407,6 @@ $text['csv_file_path'] = '档案路径';
 //main 主畫面image url
 $text['img_job'] = '../public/img/home_job_cn.png';
 $text['img_job_hover'] = '../public/img/home_job_m_cn.png';
-
-/*$text['img_advanced_job'] = '../public/img/home_advjob_cn.png';
-$text['img_advanced_job_hover'] = '../public/img/home_m_advjob_cn.png';
 $text['img_io_input'] = '../public/img/home_input_cn.png';
 $text['img_io_input_hover'] = '../public/img/home_m_input_cn.png';
 $text['img_io_output'] = '../public/img/home_output_cn.png';
@@ -421,7 +418,8 @@ $text['img_data_hover'] = '../public/img/home_m_data_cn.png';
 $text['img_tool'] = '../public/img/home_tool_cn.png';
 $text['img_tool_hover'] = '../public/img/home_m_tool_cn.png';
 $text['img_setting'] = '../public/img/home_setting_cn.png';
-$text['img_setting_hover'] = '../public/img/home_m_setting_cn.png';*/
+$text['img_setting_hover'] = '../public/img/home_m_setting_cn.png';
+
 
 
 //--------------------------------------------------------------------------------------------------------------
