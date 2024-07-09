@@ -23,6 +23,7 @@ class Step extends Controller
         $isMobile = $this->isMobileCheck();
         $step = $this->stepModel->getStep($job_id, $seq_id);
         $target_option = $this->MiscellaneousModel->details("target_option");
+        $target_option_change = $this->MiscellaneousModel->details("target_option_change");
         $direction = $this->MiscellaneousModel->details('unscrew_direction');
         $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
         $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
@@ -37,11 +38,13 @@ class Step extends Controller
         }else{
             $stepid_new = count($step) + 1 ;
         }
-        
+
+
         $data = array(
             'isMobile' => $isMobile,
             'step' => $step,
             'target_option' => $target_option,
+            'target_option_change' =>$target_option_change,
             'direction' => $direction,
             'job_id' => $job_id,
             'seq_id' => $seq_id,
@@ -50,7 +53,7 @@ class Step extends Controller
             'unit' => $unit,
             'check' => $check
         );
-        
+
 
         if($isMobile){
             $this->view('step/index_m', $data);
@@ -91,7 +94,7 @@ class Step extends Controller
             #同一個step 只能有一個Target Torque
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
-            if($check <= 1){
+            if($check == 1){
                 $status_msg ='';
                 $status_msg = $text['check_step_target'];
                 echo $status_msg;
@@ -193,7 +196,7 @@ class Step extends Controller
             #同一個step 只能有一個Target Torque
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
-            if($check <= 1){
+            if($check == 1){
                 $status_msg ='';
                 $status_msg = $text['check_step_target'];
                 echo $status_msg;
@@ -286,7 +289,7 @@ class Step extends Controller
             #同一個step 只能有一個Target Torque
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
-            if($check <= 1){
+            if($check == 1){
                 $status_msg ='';
                 $status_msg = $text['check_step_target'];
                 echo $status_msg;

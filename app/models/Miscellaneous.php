@@ -46,6 +46,14 @@ class Miscellaneous{
             );
         }
 
+        if($mode == "target_option_change" ){
+            $array = array(
+                1 => 'Angle',
+                2 => 'Delay Time',
+                
+            );
+        }
+
         if($mode =="io_input"){
             $array = array(
                 101 => 'Disable',
