@@ -82,9 +82,9 @@
                                                     <td><?php echo $val['data_time'];?></td>
                                                     <td><?php echo $val['job_name'];?></td>
                                                     <td><?php echo $val['sequence_name'];?></td>
-                                                    <td><?php echo $val['fasten_torque'];?></td>
+                                                    <td><?php echo $val['target_torque'];?></td>
                                                     <td><?php echo $text[$data['unit_arr'][$val['torque_unit']]];?></td>
-                                                    <td><?php echo $val['fasten_angle'];?></td>
+                                                    <td><?php echo $val['target_angle'];?></td>
                                                     <td><?php echo $val['total_screw_count'];?></td>
                                                     <td><?php echo $val['last_screw_count'];?></td>
                                                     <td <?php echo $style;?>><?php echo $data['status_arr'][$val['fasten_status']];?></td>
@@ -137,9 +137,9 @@
                                                 <td><?php echo $val_ok['data_time'];?></td>
                                                 <td><?php echo $val_ok['job_name'];?></td>
                                                 <td><?php echo $val_ok['sequence_name'];?></td>
-                                                <td><?php echo $val_ok['fasten_torque'];?></td>
+                                                <td><?php echo $val_ok['target_torque'];?></td>
                                                 <td><?php echo $text[$data['unit_arr'][$val_ok['torque_unit']]];?></td>
-                                                <td><?php echo $val_ok['fasten_angle'];?></td>
+                                                <td><?php echo $val_ok['target_angle'];?></td>
                                                 <td><?php echo $val_ok['total_screw_count'];?></td>
                                                 <td><?php echo $val_ok['last_screw_count'];?></td>
                                                 <td <?php echo $style;?>><?php echo $data['status_arr'][$val_ok['fasten_status']];?></td>
@@ -189,9 +189,9 @@
                                                 <td><?php echo $val_nok['data_time'];?></td>
                                                 <td><?php echo $val_nok['job_name'];?></td>
                                                 <td><?php echo $val_nok['sequence_name'];?></td>
-                                                <td><?php echo $val_nok['fasten_torque'];?></td>
+                                                <td><?php echo $val_nok['target_torque'];?></td>
                                                 <td><?php echo $text[$data['unit_arr'][$val_nok['torque_unit']]];?></td>
-                                                <td><?php echo $val_nok['fasten_angle'];?></td>
+                                                <td><?php echo $val_nok['target_angle'];?></td>
                                                 <td><?php echo $val_nok['total_screw_count'];?></td>
                                                 <td><?php echo $val_nok['last_screw_count'];?></td>
                                                 <td <?php echo $style;?>><?php echo $data['status_arr'][$val_nok['fasten_status']];?></td>
