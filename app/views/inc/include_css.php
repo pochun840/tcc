@@ -1,4 +1,5 @@
 <?php 
+
 function includecss_file($part, $cssFileName) {
     $queryString = $_SERVER['QUERY_STRING'];
     $queryStringWithoutUrl = str_replace('url=', '', $queryString);
@@ -56,6 +57,7 @@ function includecss_file($part, $cssFileName) {
             includecss_file("Data","tcc_data.css");
             includecss_file("Settings","tcc_setting.css");            
         }
+
         # 載入js 
         includecss_file("Inputs", "inputs.js");
         includecss_file("Outputs", "outputs.js");

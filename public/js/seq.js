@@ -1,8 +1,15 @@
 
-document.getElementById('back_btn').onclick = function()
-{
-    window.location.href = '?url=Jobs/index';
-};
+document.addEventListener('DOMContentLoaded', function() {
+    var backButton = document.getElementById('back_btn');
+    if (backButton) {
+        backButton.onclick = function() {
+            window.location.href = '?url=Jobs/index';
+        };
+    } else {
+        //console.error('Element with ID "back_btn" not found.');
+    }
+});
+
 
 
 function cound_job(argument){
