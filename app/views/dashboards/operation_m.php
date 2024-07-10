@@ -1,6 +1,5 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
 
-<body>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -78,9 +77,7 @@ function chart_type(argument){
     activeButton.classList.add("active");
 
     var chartIndex = currentUrl.indexOf('chart=');
-
     var chart;
-
     if(argument == "torque_time"){
         chart = 1;
     }

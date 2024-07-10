@@ -13,16 +13,8 @@
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <?php include_once 'include_css.php';?>
-    <title><?php echo SITENAME; ?></title>    
-    <?php if(session_status() == PHP_SESSION_NONE) {
-                session_start();
-          }
-          $lanuage = $_SESSION['language'];
-          if(file_exists('../app/language/' . $lanuage . '.php')){
-            require_once '../app/language/' . $lanuage . '.php';
-          } else { //預設採用簡體中文
-            require_once '../app/language/en-us.php';
-          }
-    ?>
+    <title><?php echo SITENAME; ?></title>  
+      
 </head>
+
 <body>
