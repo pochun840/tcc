@@ -64,12 +64,9 @@ function language_change(language){
             }
         });
 
-
     }
-
 }
 </script>
-
 
 <style>
     #job_manager {
