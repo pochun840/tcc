@@ -70,10 +70,10 @@ function includecss_file($part, $cssFileName) {
 
     ?>
 
-        <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=202406131200"></script>
-        <script src="<?php echo URLROOT; ?>js/tcc_data.js?v=202406131200"></script>
-        <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-        <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
-        <script src="<?php echo URLROOT; ?>js/jszip.js?v=202406241500"></script>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=202406131200"></script>
+    <script src="<?php echo URLROOT; ?>js/tcc_data.js?v=202406131200"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
+    <script src="<?php echo URLROOT; ?>js/jszip.js?v=202406241500"></script>
+
 
