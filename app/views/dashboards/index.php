@@ -1,8 +1,3 @@
-
-<?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_main.css">
-
-<body>
 <div class="container-ms">
     <div class="main-content">
         <div class="center-content w3-center">
