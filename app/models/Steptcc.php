@@ -55,6 +55,16 @@ class Steptcc{
         return $statement->fetchAll();
     }
 
+    #COPY專用 檢查被複製的Step_id 有沒有設置Target Torque
+    public function check_copy_step($jobid,$seqid,$stepid){
+        
+        $sql = "SELECT target_option  FROM step WHERE job_id = ? AND sequence_id = ?  AND step_id = ? ";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid,$seqid,$stepid]);
+        return $statement->fetchAll();
+    }
+
+
 
 
     #透過 job_id 及 seq_id 及 step_id 刪除對應的資料

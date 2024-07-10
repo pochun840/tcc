@@ -105,10 +105,19 @@
                         </div>
 
                         <div class="row">
-                            <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
+                            <?php if($data['check'][0]['count_records'] == "1"){?>
+                                <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Angle'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
+                                </div>
+
+                            <?php } else{?>
+                                <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
                             </div>
+                            <?php } ?>
+                          
                         </div>
                         <div class="row">
                             <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
@@ -468,6 +477,10 @@ function edit_step(){
                 var radioButtons1 = document.getElementsByName("edit_direction_option");
                 var radioButtons2 = document.getElementsByName("edit_downshift_option");
 
+                //紀錄old  target_option
+                document.cookie = `target_option_bk=${encodeURIComponent(target_option)}; max-age=${60 * 60 * 24 * 365}; path=/`;
+                document.cookie="target_option_bk=target_option";
+            
                 setRadioButtonValue(radioButtons1, direction);
                 setRadioButtonValue(radioButtons2, downshift);
 
@@ -774,6 +787,8 @@ function create_step() {
     targetoptionselect.addEventListener('change', function() {
         var targetOptionValue = targetoptionselect.value;
         localStorage.setItem('target_option', targetOptionValue);
+        console.log(targetOptionValue);
+   
 
         var targetTorqueElement = document.getElementById('target_torque');
         var hiTorqueElement = document.getElementById('hi_torque');
@@ -799,6 +814,7 @@ function create_step() {
         directionOptions.forEach(radioButton => radioButton.disabled = false);
         downshiftOptions.forEach(radioButton => radioButton.disabled = false);
 
+
         if (targetOptionValue == 2) {
             var name1 = '<?php echo $text['Target Delay Time']?>';
             document.querySelector('div[for="target-torque"]').textContent = name1;
@@ -814,7 +830,7 @@ function create_step() {
             directionOptions.forEach(radioButton => radioButton.disabled = true);
             downshiftOptions.forEach(radioButton => radioButton.disabled = true);
             
-        } else if (targetOptionValue == 1) {
+        } else if (targetOptionValue == 1 || targetOptionValue == '') {
             var name = '<?php echo $text['Target_Angle']?>';
             document.querySelector('div[for="target-torque"]').textContent = name;
         }
@@ -842,8 +858,15 @@ function create_step() {
             } 
 
             document.querySelector('div[for="target-torque"]').textContent = name1 +"(" + unit + ")";
+        }else{
+           
+            var name = '<?php echo $text['Target_Angle']?>';
+            document.querySelector('div[for="target-torque"]').textContent = name;
+
         }
     });
+
+
 
     var downshiftOptionRadios = document.getElementsByName("downshift_option");
   

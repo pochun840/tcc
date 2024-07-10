@@ -89,10 +89,20 @@
                         </div>
 
                         <div class="row">
-                            <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
-                            </div>
+                            <?php if($data['check'][0]['count_records'] == "1"){ ?>
+                                <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Angle'];?> (<?php echo $text[$data['unit']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
+                                </div>
+
+                            <?php }else {?>
+                                <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
+                                </div>
+
+                            <?php } ?>
+                           
                         </div>
                         <div class="row">
                             <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
@@ -447,6 +457,10 @@ function edit_step(){
                 setRadioButtonValue(radioButtons1, direction);
                 setRadioButtonValue(radioButtons2, downshift);
 
+                //紀錄old  target_option
+                document.cookie = `target_option_bk=${encodeURIComponent(target_option)}; max-age=${60 * 60 * 24 * 365}; path=/`;
+                document.cookie="target_option_bk=target_option";
+                
                 if(target_option == 2){
                     var name1 = '<?php echo $text['Target Delay Time']?>';
                     document.querySelector('div[for="edit_target-torque"]').textContent = name1;

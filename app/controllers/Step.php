@@ -171,6 +171,7 @@ class Step extends Controller
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
             $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0; 
             $target_option = isset($_POST['target_option'])? intval($_POST['target_option']) : 0; 
+
             $target_torque = isset($_POST['target_torque'])? floatval($_POST['target_torque']) : 0; 
             $target_angle = isset($_POST['target_angle'])? intval($_POST['target_angle']) : 0; 
             $target_delaytime = isset($_POST['target_delaytime'])? intval($_POST['target_delaytime']) : 0; 
@@ -196,7 +197,8 @@ class Step extends Controller
             #同一個step 只能有一個Target Torque
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
-            if($check == 1){
+
+            if($check > 1){
                 $status_msg ='';
                 $status_msg = $text['check_step_target'];
                 echo $status_msg;
@@ -204,7 +206,6 @@ class Step extends Controller
 
             }
 
-        
             $jobdata = array(
                 'job_id'           => $jobid,
                 'sequence_id'      => $seqid,
@@ -235,7 +236,6 @@ class Step extends Controller
             echo $res_msg;
         }
     }
-
 
     #delete step
     public function delete_step(){
@@ -269,7 +269,6 @@ class Step extends Controller
             include $file;
         }
 
-
         if(isset($_POST['jobid'])){
 
             #如果 POST 中沒有，則使用預設值
@@ -286,10 +285,10 @@ class Step extends Controller
             }
 
             
-            #同一個step 只能有一個Target Torque
-            $check = $this->stepModel->check_step_target($jobid,$seqid);
-            $check = intval($check[0]['count_records']);
-            if($check == 1){
+            #檢查被複製的那個step 是不是  Target Torque
+            $check = $this->stepModel->check_copy_step($jobid,$seqid,$stepid);
+            $check = intval($check[0]['target_option']);
+            if($check == 0 ){
                 $status_msg ='';
                 $status_msg = $text['check_step_target'];
                 echo $status_msg;
