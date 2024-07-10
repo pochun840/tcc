@@ -42,6 +42,8 @@ if($brand_code == false || $brand_code == 'BF01'){ //Kilews or Windows
 // iDAS出貨版本 0:Kilews 2:上海 shanhai 4:MyTorque 5:晶元SUMAKE 6:DELTA 7:白牌 6:
 define('ICONMODE', $brand);
 
+//define('TITLE_INDEX',       'KILEWS');
+//define('SUBTITLE_INDEX',    'iDAS FOR KILEWS');
 
 switch ( ICONMODE ) {
 	case '0': // Kilews
