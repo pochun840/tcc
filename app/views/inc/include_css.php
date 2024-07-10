@@ -4,30 +4,32 @@ function includecss_file($part, $cssFileName) {
     $queryString = $_SERVER['QUERY_STRING'];
     $queryStringWithoutUrl = str_replace('url=', '', $queryString);
     $parts = explode('/', $queryStringWithoutUrl);
-    $firstPart = $parts[0];+
+    $firstPart = $parts[0];
     $extension = pathinfo($cssFileName, PATHINFO_EXTENSION);
 
     if($firstPart == $part){
-
         if($extension == 'css'){ ?>
             <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi');?>">
         <?php }elseif($extension == 'js'){ ?>
             <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi'); ?>"></script>
-        <?php }?>
-    <?php }?>
-
-
-<?php }?>
+        <?php }
+    }
+}
+?>
 
 
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>/css/jquery_dataTables.css?v=202407101530">
+ 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/datatables.min.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css">
+
     <script src="<?php echo URLROOT; ?>js/all.js?v=202406131200"></script>
-    <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=202407101500"></script>
-    <script src="<?php echo URLROOT; ?>js/jquery_dataTables.js?v=202407101550"></script>
+    <script src="<?php echo URLROOT; ?>js/echarts_min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/flatpickr.min.css" type="text/css">
 
     <?php 
@@ -68,9 +70,10 @@ function includecss_file($part, $cssFileName) {
 
     ?>
 
-    <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=202406131200"></script>
-    <script src="<?php echo URLROOT; ?>js/tcc_data.js?v=202406131200"></script>
-    <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-    <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
-    <script src="<?php echo URLROOT; ?>js/jszip.js?v=202406241500"></script>
+        <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=202406131200"></script>
+        <script src="<?php echo URLROOT; ?>js/tcc_data.js?v=202406131200"></script>
+        <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
+        <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
+        <script src="<?php echo URLROOT; ?>js/jszip.js?v=202406241500"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
