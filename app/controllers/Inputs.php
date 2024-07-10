@@ -35,10 +35,6 @@ class Inputs extends Controller
             
         );
 
-
-        
-        
-       // var_dump($text);die();
         if($isMobile){
             $this->view('input/index_m', $data);
         }else{

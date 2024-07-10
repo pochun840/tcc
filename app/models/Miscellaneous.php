@@ -26,7 +26,6 @@ class Miscellaneous{
             );
         }
 
-
         if($mode == "torque_unit"){
             $array = array(
                 0 => 'kgf.cm',
@@ -258,13 +257,25 @@ class Miscellaneous{
     }
 
 
-    public function lang_load() {
+    public function lang_load(){
+
         $language = $_COOKIE['language'] ?? 'en-us';
         $language = preg_replace('/[^a-zA-Z0-9_-]/', '', $language); 
     
         $language_file = '../app/language/' . $language . '.php';
-    
         return  $language_file;
+        /*if(file_exists($language_file)){
+            
+            ob_start();
+            include $language_file;
+            ob_end_clean();
+
+            return true;
+        }else{
+            return false;
+        }*/
+    
+        //return  $language_file;
     }
 
 

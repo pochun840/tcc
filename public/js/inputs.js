@@ -205,10 +205,9 @@ function copy_input_id(){
                 to_job_id: to_job_id
             },
             success: function(response) {
-
-                document.getElementById('newinput').style.display='none';
                 alert(response);
                 get_input_by_job_id(job_id);
+                document.getElementById('newinput').style.display='none';
             },
             error: function(xhr, status, error) {
                 

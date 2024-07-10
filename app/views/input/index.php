@@ -473,7 +473,7 @@
                         <header class="w3-container modal-header">
                             <span onclick="document.getElementById('copyinput').style.display='none'"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
-                            <h3 id='modal_title'><?php echo $text['copy_input'];?>t</h3>
+                            <h3 id='modal_title'><?php echo $text['copy_input'];?></h3>
                         </header>
 
                         <div class="modal-body">
