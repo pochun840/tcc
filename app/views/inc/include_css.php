@@ -14,7 +14,8 @@ function includecss_file($part, $cssFileName) {
             <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHi'); ?>"></script>
         <?php }
     }
-}?>
+}
+?>
 
 
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
@@ -27,7 +28,6 @@ function includecss_file($part, $cssFileName) {
     <script src="<?php echo URLROOT; ?>js/all.js?v=202406131200"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/flatpickr.min.css" type="text/css">
 
