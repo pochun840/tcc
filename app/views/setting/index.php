@@ -3,7 +3,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3>Setting</h3>
+                    <h3><?php echo $text['setting'];?></h3>
                 </td>
                 <td>
                  <img src="./img/btn_home.png" style="margin-right: 10px" onclick="window.location.href = '?url=In';">
