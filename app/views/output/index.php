@@ -1,4 +1,3 @@
-<body>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -397,9 +396,5 @@ function collectPinValues(selector) {
 
     return selectedValues;
 }
-
-
-
-
 
 </script>
