@@ -115,12 +115,22 @@ class Sequences extends Controller
            
             $mode = "create";
             $res = $this->sequenceModel->create_seq($mode,$jobdata);
+            $result = array();
             if($res){
-                $res_msg = $text['new_seq'].':'. $jobdata['sequence_id']."  ".$text['success'];
+                $res_type = 'Success';
+                $res_msg  = $text['new_seq'].':'. $jobdata['sequence_id']."  ".$text['success'];
             }else{
-                $res_msg = $text['new_seq'].':'. $jobdata['sequence_id']."  ".$text['fail'];
+                $res_type = 'Error';
+                $res_msg  = $text['new_seq'].':'. $jobdata['sequence_id']."  ".$text['fail'];
             }
-            echo $res_msg;
+            
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
+
+            echo json_encode($result);
+
         }
 
     }
@@ -137,14 +147,23 @@ class Sequences extends Controller
         $seqid = $_POST['seqid'] ?? null;
 
         if(!empty($jobid)){
-
+            $result = array();
             $res = $this->sequenceModel->delete_seq_by_id($jobid,$seqid);
             if($res){
-                $res_msg = $text['del_seq'].':'. $seqid."  ".$text['success'];
+                $res_type = 'Success';
+                $res_msg  = $text['del_seq'].':'. $seqid."  ".$text['success'];
             }else{
-                $res_msg = $text['del_seq'].':'. $seqid."  ".$text['fail'];
+                $res_type = 'Error';
+                $res_msg  = $text['del_seq'].':'. $seqid."  ".$text['fail'];
             }
-            echo $res_msg;
+
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
+
+            echo json_encode($result);
+
         }
     }
 
@@ -234,12 +253,21 @@ class Sequences extends Controller
             );
            
             $res = $this->sequenceModel->update_seq_by_id($jobdata);
+            $result = array();
             if($res){
-                $res_msg = $text['edit_seq'].':'. $seqid."  ".$text['success'];
+                $res_type = 'Success';
+                $res_msg  = $text['edit_seq'].':'. $seqid."  ".$text['success'];
             }else{
-                $res_msg = $text['edit_seq'].':'. $seqid."  ".$text['fail'];
+                $res_type = 'Error';
+                $res_msg  = $text['edit_seq'].':'. $seqid."  ".$text['fail'];
             }
-            echo $res_msg;
+
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
+
+            echo json_encode($result);
 
         }
     }
@@ -314,13 +342,21 @@ class Sequences extends Controller
                 );
 
                 $res = $this->sequenceModel->create_seq($mode,$jobdata);
+                $result = array();
                 if($res){
-                    $res_msg = $text['Copy_Sequence'].':'.$newseqid."  ".$text['success'];
+                    $res_type = 'Success';
+                    $res_msg  = $text['Copy_Sequence'].':'.$newseqid."  ".$text['success'];
                 }else{
-                    $res_msg = $text['Copy_Sequence'].':'.$newseqid."  ".$text['fail'];
+                    $res_type = 'Error';
+                    $res_msg  = $text['Copy_Sequence'].':'.$newseqid."  ".$text['fail'];
                 }
+
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
     
-                echo $res_msg;
+                echo json_encode($result);
 
             }
         }
