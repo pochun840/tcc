@@ -116,9 +116,9 @@ class Sequences extends Controller
             $mode = "create";
             $res = $this->sequenceModel->create_seq($mode,$jobdata);
             if($res){
-                $res_msg = $text['new_seq'].':'. $jobdata['sequence_id'].$text['success'];
+                $res_msg = $text['new_seq'].':'. $jobdata['sequence_id']."  ".$text['success'];
             }else{
-                $res_msg = $text['new_seq'].':'. $jobdata['sequence_id'].$text['fail'];
+                $res_msg = $text['new_seq'].':'. $jobdata['sequence_id']."  ".$text['fail'];
             }
             echo $res_msg;
         }
@@ -140,9 +140,9 @@ class Sequences extends Controller
 
             $res = $this->sequenceModel->delete_seq_by_id($jobid,$seqid);
             if($res){
-                $res_msg = $text['del_seq'].':'. $seqid.$text['success'];
+                $res_msg = $text['del_seq'].':'. $seqid."  ".$text['success'];
             }else{
-                $res_msg = $text['del_seq'].':'. $seqid.$text['fail'];
+                $res_msg = $text['del_seq'].':'. $seqid."  ".$text['fail'];
             }
             echo $res_msg;
         }
@@ -235,9 +235,9 @@ class Sequences extends Controller
            
             $res = $this->sequenceModel->update_seq_by_id($jobdata);
             if($res){
-                $res_msg = $text['edit_seq'].':'. $seqid.$text['success'];
+                $res_msg = $text['edit_seq'].':'. $seqid."  ".$text['success'];
             }else{
-                $res_msg = $text['edit_seq'].':'. $seqid.$text['fail'];
+                $res_msg = $text['edit_seq'].':'. $seqid."  ".$text['fail'];
             }
             echo $res_msg;
 
@@ -315,9 +315,9 @@ class Sequences extends Controller
 
                 $res = $this->sequenceModel->create_seq($mode,$jobdata);
                 if($res){
-                    $res_msg = $text['Copy_Sequence'].':'.$newseqid.$text['success'];
+                    $res_msg = $text['Copy_Sequence'].':'.$newseqid."  ".$text['success'];
                 }else{
-                    $res_msg = $text['Copy_Sequence'].':'.$newseqid.$text['fail'];
+                    $res_msg = $text['Copy_Sequence'].':'.$newseqid."  ".$text['fail'];
                 }
     
                 echo $res_msg;

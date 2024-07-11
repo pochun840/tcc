@@ -481,8 +481,9 @@ function copy_seq_by_id(){
 
                 },
                 success: function(response) {
-                    alert(response);
-                    history.go(0);
+                    alertify.alert('', response, function() {
+                        history.go(0);
+                    });  
                 },
                 error: function(xhr, status, error) {
                     
@@ -511,8 +512,9 @@ function delete_seqid(jobid,seqid){
                 seqid: seqid
             },
             success: function(response) {
-                alert(response);
-                history.go(0);
+                alertify.alert('', response, function() {
+                    history.go(0);
+                });  
             },
             error: function(xhr, status, error) {
                 
@@ -634,8 +636,9 @@ function edit_seq_save(){
 
             },
             success: function(response) {
-                alert(response);;
-                history.go(0);
+                alertify.alert('', response, function() {
+                    history.go(0);
+                });  
             },
             error: function(xhr, status, error) {
                 
@@ -683,8 +686,9 @@ function saveseq(){
 
             },
             success: function(response) {
-                alert(response);
-                history.go(0);
+                alertify.alert('', response, function() {
+                    history.go(0);
+                });  
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
