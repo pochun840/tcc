@@ -431,6 +431,11 @@ $text['img_tool'] = '../public/img/home_tool_en.png';
 $text['img_tool_hover'] = '../public/img/home_m_tool_en.png';
 $text['img_setting'] = '../public/img/home_setting_en.png';
 $text['img_setting_hover'] = '../public/img/home_m_setting_en.png';
+$text['img_load'] = '../public/img/home_load_en.png';
+$text['img_load_hover'] = '../public/img/home_m_load_en.png';
+$text['img_save'] = '../public/img/home_save_en.png';
+$text['img_save_hover'] = '../public/img/home_m_save_en.png';
+
 
 
 //------------------------------------------------ -------------------------------------------------- ------------

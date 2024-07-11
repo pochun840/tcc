@@ -30,13 +30,14 @@
                 <button class="menu-item pink" id="tool" style="font-size: 20px" onclick="window.location.href='?url=Tools/index'"><span style="visibility: hidden;">Tool</span></button>
                 <button class="menu-item PaleGreen" id="setting" style="font-size: 20px;" onclick="window.location.href='?url=Settings/index'"><span style="visibility: hidden;">Setting</span></button>
                 <br><br>
-                <?php if($_SESSION['privilege'] == 'admin'){?>
+               
+                <?php if($_SESSION['privilege'] == 'admin'){ ?>
                 <div>
-                <?php if($data['agent_type'] == '2'){ ?>
-                <!--<button class="menu-item lime" id="" style="font-size: 24px" onclick="window.location.href='?url=Agents'">Agent</button>-->
-                <?php } ?>
-                <button class="menu-item blue" id="download" style="font-size: 20px" //onclick="DB_sync('C2D')">Load</button>
-                <button class="menu-item green" id="upload" style="font-size: 20px;" //onclick="DB_sync('D2C')">Save</button>
+                    <?php if($data['agent_type'] == '2'){ ?>
+                            <button class="menu-item lime" id="" style="font-size: 24px" onclick="window.location.href='?url=Agents'">Agent</button>
+                    <?php } ?>
+                            <button class="menu-item indigo" id="load" style="font-size: 24px" onclick="DB_sync('C2D')"><span style="visibility: hidden;">Load</span></button>
+                            <button class="menu-item deep-orange" id="save" style="font-size: 24px;" onclick="DB_sync('D2C')"><span style="visibility: hidden;">Save</span></button>
                 </div>
                 <?php } ?>
 
@@ -119,5 +120,20 @@ function language_change(language){
     #setting:hover {
         background: url("<?php echo $text['img_setting_hover']; ?>") no-repeat;
     }
+
+    #load {
+        background: url("<?php echo $text['img_load']; ?>") no-repeat;
+    }
+    #load:hover {
+        background: url("<?php echo $text['img_load_hover']; ?>") no-repeat;
+    }
+
     
+    #save {
+        background: url("<?php echo $text['img_save']; ?>") no-repeat;
+    }
+    #save:hover {
+        background: url("<?php echo $text['img_save_hover']; ?>") no-repeat;
+    }
+            
 </style>
