@@ -91,8 +91,11 @@ function delete_output_id(job_id,output_event){
              
             },
             success: function(response) {
-                alert(response);
-                get_output_by_job_id(job_id);
+                var responseData = JSON.parse(response);
+                console.log(responseData);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                    get_output_by_job_id(job_id);
+                });
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -217,9 +220,13 @@ function create_output_id() {
                     wave_on: wave_on
                 },
                 success: function(response) {
-                    alert(response);
-                    get_output_by_job_id(job_id);
+                    var responseData = JSON.parse(response);
+                    console.log(responseData);
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        get_output_by_job_id(job_id);
+                    });
                     document.getElementById('new_output').style.display = 'none';
+
                 },
                 error: function(xhr, status, error) {
                     console.error("AJAX request failed:", status, error);
@@ -254,9 +261,14 @@ function edit_output_id(){
                 old_output_event: old_output_event
             },
             success: function(response) {
-                alert(response);
-                get_output_by_job_id(job_id);
+                var responseData = JSON.parse(response);
+                console.log(responseData);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                    get_output_by_job_id(job_id);
+                });
+                
                 document.getElementById('edit_output').style.display='none';
+                
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);

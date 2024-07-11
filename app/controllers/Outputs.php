@@ -149,7 +149,7 @@ class Outputs extends Controller
             include $file;
         }
 
-
+        $event = $this->MiscellaneousModel->details('io_output');
         $input_check = true;
         $jobdata = array();
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
@@ -184,12 +184,21 @@ class Outputs extends Controller
 
         if($input_check){
             $res = $this->OutputModel->create_output($jobdata);
+            $result = array();
             if($res){
-                $res_msg = $text['new_event'].$text['job'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$jobdata['output_event'].$text['success'];
+                $res_type = 'Success';
+                $res_msg = $text['new_event'].$text['job_id'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['success'];
             }else{
-                $res_msg = $text['new_event'].$text['job'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$jobdata['output_event'].$text['fail'];
+                $res_type = 'Error';
+                $res_msg = $text['new_event'].$text['job_id'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['fail'];
             }
-            echo $res_msg;
+            
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
+
+            echo json_encode($result);
         }
        
     }
@@ -231,14 +240,21 @@ class Outputs extends Controller
                     $jobdata[$key]['wave_on'] = $val['wave_on'];
 
                     $res = $this->OutputModel->create_output($jobdata[$key]);
-
+                    $result = array();
                     if($res){
-                        $res_msg = $text['copy_output'].$text['success'];
+                        $res_type = 'Success';
+                        $res_msg = $text['copy_output']."  ".$text['success'];
                     }else{
-                        $res_msg = $text['copy_output'].$text['fail'];
+                        $res_type = 'Error';
+                        $res_msg = $text['copy_output']."  ".$text['fail'];
                     }
         
-                    echo $res_msg;
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+        
+                    echo json_encode($result);
 
 
                 }
@@ -252,6 +268,9 @@ class Outputs extends Controller
         if(!empty($file)){
             include $file;
         }
+
+        $event    = $this->MiscellaneousModel->details('io_output');
+
 
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
@@ -267,15 +286,21 @@ class Outputs extends Controller
 
         if($input_check){
             $res = $this->OutputModel->delete_output_event_by_id($output_job_id,$output_event);
-
+            $result = array();
             if($res){
-                $res_msg = $text['del_event'].$text['job'].':'.$output_job_id.','.$text['event'].':'.$output_event.$text['success'];
+                $res_type = 'Success';
+                $res_msg  = $text['del_event'].$text['job_id'].':'.$output_job_id.','.$text['event'].':'.$text[$event[$output_event]]."  ".$text['success'];
             }else{
-                $res_msg = $text['del_event'].$text['job'].':'.$output_job_id.','.$text['event'].':'.$output_event.$text['fail'];
+                $res_type = 'Error';
+                $res_msg  = $text['del_event'].$text['job_id'].':'.$output_job_id.','.$text['event'].':'.$text[$event[$output_event]]."  ".$text['fail'];
             }
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
 
-
-            echo $res_msg;
+            echo json_encode($result);
+            //echo $res_msg;
         }
     }
 
@@ -333,7 +358,8 @@ class Outputs extends Controller
             include $file;
         }
 
-
+        $event  = $this->MiscellaneousModel->details('io_output');
+        $result = array();
         
         $input_check = true;
         $jobdata = array();
@@ -380,14 +406,21 @@ class Outputs extends Controller
             $res  = $this->OutputModel->edit_output($jobdata);
         } 
         
-    
+        
         if($res){
-            $res_msg = $text['edit_event'].$text['job'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$jobdata['output_event'].$text['success'];
+            $res_type = 'Success';
+            $res_msg = $text['edit_event'].$text['job_id'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['success'];
         }else{
-            $res_msg = $text['edit_event'].$text['job'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$jobdata['output_event'].$text['fail'];
+            $res_type = 'Error';
+            $res_msg = $text['edit_event'].$text['job_id'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['fail'];
         }
 
-        echo $res_msg;     
+        $result = array(
+            'res_type' => $res_type,
+            'res_msg'  => $res_msg 
+        );
+
+        echo json_encode($result);
     }
 }
 

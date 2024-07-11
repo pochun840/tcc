@@ -128,7 +128,6 @@ function language_change(language){
         background: url("<?php echo $text['img_load_hover']; ?>") no-repeat;
     }
 
-    
     #save {
         background: url("<?php echo $text['img_save']; ?>") no-repeat;
     }
