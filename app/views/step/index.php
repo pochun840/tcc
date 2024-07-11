@@ -766,9 +766,10 @@ function edit_step_save() {
             method: "POST",
             data: requestData,
             success: function(response) {
-                alertify.alert('', response, function() {
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
-                }); 
+                });
             },
             error: function(xhr, status, error) {
 
@@ -952,9 +953,10 @@ function add_step(){
 
             },
             success: function(response) {
-                alertify.alert('', response, function() {
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
-                }); 
+                });
             },
             error: function(xhr, status, error) {
                 
@@ -994,9 +996,10 @@ function copy_step_by_id_ajax(){
                 stepid_new: stepid_new
             },
             success: function(response) {
-                alertify.alert('', response, function() {
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
-                }); 
+                });
             },
             error: function(xhr, status, error) {
                 
@@ -1021,9 +1024,10 @@ function del_stepid(step_id){
                 seqid:seqid
             },
             success: function(response) {
-                alertify.alert('', response, function() {
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
-                }); 
+                });
             },
             error: function(xhr, status, error) {
                 

@@ -94,7 +94,8 @@ class Step extends Controller
             #同一個step 只能有一個Target Torque
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
-            if($check == 1){
+
+            if($check > 1){
                 $status_msg ='';
                 $status_msg = $text['check_step_target'];
                 echo $status_msg;
@@ -146,12 +147,21 @@ class Step extends Controller
 
             $mode = "create"; 
             $res = $this->stepModel->create_step($mode,$jobdata);
+            $result = array();
             if($res){
+                $res_type = 'Success';
                 $res_msg = $text['new_step'].':'.$stepid."  ".$text['success'];
             }else{
+                $res_type = 'Error';
                 $res_msg = $text['new_step'].':'.$stepid."  ".$text['fail'];
             }
-            echo $res_msg;
+
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
+
+            echo json_encode($result);
         }
 
     }
@@ -228,12 +238,20 @@ class Step extends Controller
             );
 
             $res = $this->stepModel->update_step_by_id($jobdata);
+            $result = array();
             if($res){
-                $res_msg = $text['edit_step'].':'. $stepid."  ".$text['success'];
+                $res_type = 'Success';
+                $res_msg  = $text['edit_step'].':'. $stepid."  ".$text['success'];
             }else{
-                $res_msg = $text['edit_step'].':'. $stepid."  ".$text['fail'];
+                $res_type = 'Error';
+                $res_msg  = $text['edit_step'].':'. $stepid."  ".$text['fail'];
             }
-            echo $res_msg;
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
+
+            echo json_encode($result);
         }
     }
 
@@ -251,12 +269,20 @@ class Step extends Controller
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
             $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0;        
             $res = $this->stepModel->delete_step_id($jobid, $seqid, $stepid);
+            $result = array();
             if($res){
+                $res_type = 'Success';
                 $res_msg = $text['del_step'].':'. $stepid."  ".$text['success'];
             }else{
+                $res_type = 'Error';
                 $res_msg = $text['del_step'].':'. $stepid."  ".$text['fail'];
             }
-            echo $res_msg;
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
+
+            echo json_encode($result);
         
         }
     
@@ -319,13 +345,21 @@ class Step extends Controller
     
                     $mode = "copy"; 
                     $res = $this->stepModel->create_step($mode,$jobdata);
+
                     if($res){
-                        $res_msg = $text['copy_step'].':'.$stepid_new."  ".$text['success'];
+                        $res_type = 'Success';
+                        $res_msg  = $text['copy_step'].':'.$stepid_new."  ".$text['success'];
                     }else{
-                        $res_msg = $text['copy_step'].':'.$stepid_new."  ".$text['fail'];
+                        $res_type = 'Error';
+                        $res_msg  = $text['copy_step'].':'.$stepid_new."  ".$text['fail'];
                     }
         
-                    echo $res_msg;
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+        
+                    echo json_encode($result);
                 }
      
             }
