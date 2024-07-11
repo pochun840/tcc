@@ -303,7 +303,6 @@ class Inputs extends Controller
             include $file;
         }
 
-
         $input_check = true;
         if (!empty($_POST['from_job_id']) && isset($_POST['from_job_id'])) {
             $input_job_id = $_POST['from_job_id'];
@@ -328,7 +327,6 @@ class Inputs extends Controller
                         continue; 
                     }
 
-                 
                     $jobdata[$key]['input_event'] = $val['input_event'];
                     $jobdata[$key]['input_pin'] = $val['input_pin'];
                     $jobdata[$key]['input_wave'] = $val['input_wave'];
@@ -406,3 +404,5 @@ class Inputs extends Controller
         }
     }    
 }
+
+?>

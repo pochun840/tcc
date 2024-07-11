@@ -496,7 +496,7 @@
                 			    <label for="from_job_id" class="col col-form-label" style="font-weight: bold;padding-left: 5%;"><?php echo $text['copy_to'];?></label>
                 			    <div style="padding-left: 10%">
                 				    <div class="row">
-                				        <label for="to_step_id" class="t1 col-4 col-form-label">Job :</label>
+                				        <label for="to_step_id" class="t1 col-4 col-form-label"><?php echo $text['job'];?> :</label>
                 				        <div class="t2 col-6">
                                         <select id="JobSelect1" class="col custom-file" style="margin: center; width: 153px">
                                             <option value="-1" disabled selected><?php echo $text['Choose_option']; ?></option>

@@ -212,8 +212,6 @@ class Dashboards extends Controller
         }
         $chart_info['x_val'] = json_encode(array_keys($csvdata_arr));
         
-    
-        //$chart_info['chat_title'] = $chat_mode_arr[(int)$chat_mode] ?? '';
         return $chart_info;
     }
 

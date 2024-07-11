@@ -11,8 +11,7 @@ class Data extends Controller
 
     // 取得所有Jobs
     public function index(){
-
-            
+  
         $type ='ALL';
         $isMobile = $this->isMobileCheck();
         $res_data = $this->DataModel->getData('ALL');
@@ -35,7 +34,6 @@ class Data extends Controller
         $this->view('data/index', $data);
 
     }
-
 
     public function search_info() {
         $unit_arr = $this->MiscellaneousModel->details('torque_unit');

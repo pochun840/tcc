@@ -342,7 +342,5 @@ class Sequences extends Controller
             echo $res_msg;
         }
     }
-
-
-    
 }
+?>

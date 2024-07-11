@@ -390,3 +390,5 @@ class Outputs extends Controller
         echo $res_msg;     
     }
 }
+
+?>

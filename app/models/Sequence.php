@@ -87,7 +87,6 @@ class Sequence{
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$jobid, $seqid]);
 
-
         if ($seqid != 50 ) {
             $sql_update = "UPDATE sequence  SET sequence_id = sequence_id - 1 WHERE job_id = ? AND sequence_id > ?";
             $statement_update = $this->db_iDas->prepare($sql_update);

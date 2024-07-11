@@ -13,7 +13,6 @@ class Jobs extends Controller
         $this->jobModel = $this->model('Job');
         $this->DashboardModel = $this->model('Dashboard');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
-    
         
     }
 
@@ -135,10 +134,10 @@ class Jobs extends Controller
     #delete 
     public function delete_jobid() {
 
-        $file = $this->MiscellaneousModel->lang_load();
+        /*$file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
-        }
+        }*/
  
         $jobid = $_POST['jobid'] ?? null;
         if(!empty($jobid)){
@@ -208,7 +207,7 @@ class Jobs extends Controller
                 echo $res_msg;
             }
         }
-    }
-
-    
+    }    
 }
+
+?>

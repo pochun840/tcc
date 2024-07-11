@@ -104,9 +104,8 @@ class Settings extends Controller
 
     }
 
-    public function job_tree()
-    {   
-        // var_dump(PDO::ATTR_EMULATE_PREPARES);
+    public function job_tree(){   
+     
         //select all job
         $jobs = $this->SettingModel->GetAllJobs();
         //select all sequence

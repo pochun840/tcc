@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_main.css" type="text/css">
+
 <div class="container-ms">
     <div class="main-content">
         <div class="center-content w3-center">
