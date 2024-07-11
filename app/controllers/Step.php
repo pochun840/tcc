@@ -147,9 +147,9 @@ class Step extends Controller
             $mode = "create"; 
             $res = $this->stepModel->create_step($mode,$jobdata);
             if($res){
-                $res_msg = $text['new_step'].':'.$stepid.$text['success'];
+                $res_msg = $text['new_step'].':'.$stepid."  ".$text['success'];
             }else{
-                $res_msg = $text['new_step'].':'.$stepid.$text['fail'];
+                $res_msg = $text['new_step'].':'.$stepid."  ".$text['fail'];
             }
             echo $res_msg;
         }
@@ -229,9 +229,9 @@ class Step extends Controller
 
             $res = $this->stepModel->update_step_by_id($jobdata);
             if($res){
-                $res_msg = $text['edit_step'].':'. $stepid.$text['success'];
+                $res_msg = $text['edit_step'].':'. $stepid."  ".$text['success'];
             }else{
-                $res_msg = $text['edit_step'].':'. $stepid.$text['fail'];
+                $res_msg = $text['edit_step'].':'. $stepid."  ".$text['fail'];
             }
             echo $res_msg;
         }
@@ -252,9 +252,9 @@ class Step extends Controller
             $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0;        
             $res = $this->stepModel->delete_step_id($jobid, $seqid, $stepid);
             if($res){
-                $res_msg = $text['del_step'].':'. $stepid.$text['success'];
+                $res_msg = $text['del_step'].':'. $stepid."  ".$text['success'];
             }else{
-                $res_msg = $text['del_step'].':'. $stepid.$text['fail'];
+                $res_msg = $text['del_step'].':'. $stepid."  ".$text['fail'];
             }
             echo $res_msg;
         
@@ -320,9 +320,9 @@ class Step extends Controller
                     $mode = "copy"; 
                     $res = $this->stepModel->create_step($mode,$jobdata);
                     if($res){
-                        $res_msg = $text['copy_step'].':'.$stepid_new.$text['success'];
+                        $res_msg = $text['copy_step'].':'.$stepid_new."  ".$text['success'];
                     }else{
-                        $res_msg = $text['copy_step'].':'.$stepid_new.$text['fail'];
+                        $res_msg = $text['copy_step'].':'.$stepid_new."  ".$text['fail'];
                     }
         
                     echo $res_msg;

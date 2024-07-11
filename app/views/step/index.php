@@ -766,8 +766,9 @@ function edit_step_save() {
             method: "POST",
             data: requestData,
             success: function(response) {
-                alert(response);
-                history.go(0);
+                alertify.alert('', response, function() {
+                    history.go(0);
+                }); 
             },
             error: function(xhr, status, error) {
 
@@ -951,8 +952,9 @@ function add_step(){
 
             },
             success: function(response) {
-                alert(response);
-                history.go(0);
+                alertify.alert('', response, function() {
+                    history.go(0);
+                }); 
             },
             error: function(xhr, status, error) {
                 
@@ -992,8 +994,9 @@ function copy_step_by_id_ajax(){
                 stepid_new: stepid_new
             },
             success: function(response) {
-                alert(response);
-                history.go(0);
+                alertify.alert('', response, function() {
+                    history.go(0);
+                }); 
             },
             error: function(xhr, status, error) {
                 
@@ -1018,8 +1021,9 @@ function del_stepid(step_id){
                 seqid:seqid
             },
             success: function(response) {
-                alert(response);
-                history.go(0);
+                alertify.alert('', response, function() {
+                    history.go(0);
+                }); 
             },
             error: function(xhr, status, error) {
                 
