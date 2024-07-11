@@ -239,8 +239,6 @@ function copy_input_id(){
         }
     });
 
-
-
 }
 
 function resetalignsubmit(job_id) {
@@ -265,9 +263,6 @@ function resetalignsubmit(job_id) {
         });
     }
 }
-
-
-
 
 function alignsubmit(job_id) {
     if (job_id) {
@@ -295,8 +290,6 @@ function alignsubmit(job_id) {
         });
     }
 }
-
-
 
 function enableButton() {
     var button = document.getElementById('Button_Select');
@@ -446,7 +439,6 @@ function edit_input_id(){
     var input_seqid = 0;
     var input_pin = pin_old.match(/\d+/)[0];
 
-    
     if(input_event == 109){
         var selectedOption = document.querySelector('input[name="edit_gateconfirm"]:checked');
         var gateconfirm    = selectedOption ? selectedOption.value : 0;
@@ -484,5 +476,3 @@ function edit_input_id(){
 
     }
 }
-
-

@@ -170,5 +170,3 @@ function edit_job(jobid) {
    
 }
 
-
-

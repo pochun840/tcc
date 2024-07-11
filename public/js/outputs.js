@@ -420,8 +420,3 @@ function get_output_info(job_id,output_event){
  
  
 }
-
-
-
-
-
