@@ -157,6 +157,7 @@ class Inputs extends Controller
             include $file;
         }
 
+        $event    = $this->MiscellaneousModel->details('io_input');
 
         $input_check = true;
         $jobdata = array();
@@ -209,9 +210,9 @@ class Inputs extends Controller
                
                 $res  = $this->InputModel->create_input($jobdata);
                 if($res){
-                    $res_msg = $text['new_event'].$text['job'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$jobdata['input_event'].$text['success'];
+                    $res_msg = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
                 }else{
-                    $res_msg = $text['new_event'].$text['job'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$jobdata['input_event'].$text['fail'];
+                    $res_msg = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
                 }
                 echo $res_msg;
             }
@@ -227,7 +228,8 @@ class Inputs extends Controller
             include $file;
         }
 
-
+        $event    = $this->MiscellaneousModel->details('io_input');
+        
         $input_check = true;
         $jobdata = array();
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
@@ -287,9 +289,9 @@ class Inputs extends Controller
             }
 
             if($res){
-                $res_msg = $text['edit_event'].$text['job'].':'.$jobdata['input_job_id'].','.$text['event'].'_id:'.$jobdata['input_event'].$text['success'];
+                $res_msg = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
             } else {
-                $res_msg = $text['edit_event'].$text['job'].':'.$jobdata['input_job_id'].','.$text['event'].'id:'.$jobdata['input_event'].$text['fail'];
+                $res_msg = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
             }
             echo $res_msg;            
         }
@@ -359,6 +361,7 @@ class Inputs extends Controller
             include $file;
         }
 
+        $event    = $this->MiscellaneousModel->details('io_input');
 
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
@@ -375,9 +378,9 @@ class Inputs extends Controller
         if($input_check){
             $res = $this->InputModel->delete_input_event_by_id($job_id,$input_event);
             if ($res) {
-                $res_msg = $text['del_event'].$text['job'].':'.$job_id.','.$text['event'].':'.$input_event.$text['success'];
+                $res_msg = $text['del_event']."  ".$text['job_id'].':'.$job_id.','.$text['event'].':'.$text[$event[$input_event]]."  ".$text['success'];
             } else {
-                $res_msg = $text['del_event'].$text['job'].':'.$job_id.','.$text['event'].':'.$input_event.$text['fail'];
+                $res_msg = $text['del_event']."  ".$text['job_id'].':'.$job_id.','.$text['event'].':'.$text[$event[$input_event]]."  ".$text['fail'];
             }
             echo $res_msg;
         }     

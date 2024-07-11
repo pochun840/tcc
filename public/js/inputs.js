@@ -132,8 +132,9 @@ function delete_input_id(jobid,input_event){
              
             },
             success: function(response) {
-                alert(response);
-                get_input_by_job_id(job_id);
+                alertify.alert('', response, function() {
+                    get_input_by_job_id(job_id);
+                });
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -179,8 +180,10 @@ function create_input_id(){
             success: function(response) {
 
                 document.getElementById('newinput').style.display='none';
-                alert(response);
-                get_input_by_job_id(job_id);
+                alertify.alert('', response, function() {
+                    get_input_by_job_id(job_id);
+                });
+
             },
             error: function(xhr, status, error) {
                 
@@ -205,9 +208,14 @@ function copy_input_id(){
                 to_job_id: to_job_id
             },
             success: function(response) {
-                alert(response);
-                get_input_by_job_id(job_id);
+                //alert(response);
+                //get_input_by_job_id(job_id);
                 document.getElementById('newinput').style.display='none';
+                alertify.alert('', response, function() {
+                    get_input_by_job_id(job_id);
+                });
+
+
             },
             error: function(xhr, status, error) {
                 
@@ -446,8 +454,9 @@ function edit_input_id(){
             success: function(response) {
 
                 document.getElementById('edit_input').style.display='none';
-                alert(response);
-                get_input_by_job_id(job_id);
+                alertify.alert('', response, function() {
+                    get_input_by_job_id(job_id);
+                });
             },
             error: function(xhr, status, error) {
                 
