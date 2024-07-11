@@ -115,7 +115,6 @@ class Sequence{
             return false; 
         }
 
-
         $sql = "UPDATE `sequence` SET  sequence_name = :sequence_name,
                                   tightening_repeat = :tightening_repeat, 
                                   ng_stop = :ng_stop, 

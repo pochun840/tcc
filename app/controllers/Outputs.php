@@ -300,7 +300,6 @@ class Outputs extends Controller
             );
 
             echo json_encode($result);
-            //echo $res_msg;
         }
     }
 

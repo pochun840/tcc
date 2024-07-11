@@ -209,12 +209,22 @@ class Inputs extends Controller
             if(!$count){
                
                 $res  = $this->InputModel->create_input($jobdata);
+                $result = array();
                 if($res){
-                    $res_msg = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
+                    $res_type = 'Success';
+                    $res_msg  = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
                 }else{
-                    $res_msg = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
+                    $res_type = 'Error';
+                    $res_msg  = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
                 }
-                echo $res_msg;
+                
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+    
+                echo json_encode($result);
+
             }
         }
     }
@@ -287,13 +297,21 @@ class Inputs extends Controller
             }else if($count > 0 && $jobdata['input_event'] == $jobdata['old_input_event']) {
                 $res  = $this->InputModel->edit_input($jobdata);
             }
-
+            $result = array();
             if($res){
-                $res_msg = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
+                $res_type = 'Success';
+                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
             } else {
-                $res_msg = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
+                $res_type = 'Error';
+                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
             }
-            echo $res_msg;            
+            
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
+
+            echo json_encode($result);
         }
     }
 
@@ -336,16 +354,23 @@ class Inputs extends Controller
                     $jobdata[$key]['pagemode'] = $val['pagemode'];
                     $jobdata[$key]['input_seqid'] = 0;
                     $res = $this->InputModel->create_input($jobdata[$key]);
-    
-                    if($res){
-                        $res_msg = $text['copy_input'].$text['success'];
-                    } else {
-                        $res_msg = $text['copy_input'].$text['fail'];
-                    }
-                    echo $res_msg;         
-                    
-
+             
                 }
+
+                $result = array();
+                if($res){
+                    $res_type = 'Success';
+                    $res_msg  = $text['copy_input'].$text['success'];
+                } else {
+                    $res_type = 'Error';
+                    $res_msg  = $text['copy_input'].$text['fail'];
+                }
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+    
+                echo json_encode($result);      
                
 
             }
@@ -377,12 +402,21 @@ class Inputs extends Controller
 
         if($input_check){
             $res = $this->InputModel->delete_input_event_by_id($job_id,$input_event);
+            $result = array();
             if ($res) {
-                $res_msg = $text['del_event']."  ".$text['job_id'].':'.$job_id.','.$text['event'].':'.$text[$event[$input_event]]."  ".$text['success'];
+                $res_type = 'Success';
+                $res_msg  = $text['del_event']."  ".$text['job_id'].':'.$job_id.','.$text['event'].':'.$text[$event[$input_event]]."  ".$text['success'];
             } else {
-                $res_msg = $text['del_event']."  ".$text['job_id'].':'.$job_id.','.$text['event'].':'.$text[$event[$input_event]]."  ".$text['fail'];
+                $res_type = 'Error';
+                $res_msg  = $text['del_event']."  ".$text['job_id'].':'.$job_id.','.$text['event'].':'.$text[$event[$input_event]]."  ".$text['fail'];
             }
-            echo $res_msg;
+            
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
+
+            echo json_encode($result);
         }     
     }
 

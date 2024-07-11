@@ -92,7 +92,6 @@ function delete_output_id(job_id,output_event){
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                console.log(responseData);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_output_by_job_id(job_id);
                 });
@@ -221,7 +220,6 @@ function create_output_id() {
                 },
                 success: function(response) {
                     var responseData = JSON.parse(response);
-                    console.log(responseData);
                     alertify.alert(responseData.res_type, responseData.res_msg, function() {
                         get_output_by_job_id(job_id);
                     });
@@ -262,11 +260,10 @@ function edit_output_id(){
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                console.log(responseData);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_output_by_job_id(job_id);
                 });
-                
+
                 document.getElementById('edit_output').style.display='none';
                 
             },
@@ -331,26 +328,48 @@ function alignsubmit(job_id) {
 
 //copy
 function copy_output_id(){
-    var to_job_id = document.getElementById("JobSelect1").value;
-    if(to_job_id){
-        $.ajax({
-            url: "?url=Outputs/copy_output",
-            method: "POST",
-            data: { 
-                from_job_id: job_id,
-                to_job_id: to_job_id
-            },
-            success: function(response) {
 
-                document.getElementById('copy_output').style.display='none';
-                get_output_by_job_id(job_id);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
+    var language = getCookie('language');
+    if(language == "zh-cn"){
+        var text_info ='若设定已存在，将会取代原有设定';
+    }else if(language == "zh-tw"){
+        var text_info ='若設定已存在，將會取代原有設定';
+    }else{
+        var text_info ='If the job input already exists, it will replace the original setting';
+    }
+    alertify.confirm( text_info, function (e) {
+        if (e) {
+            var to_job_id = document.getElementById("JobSelect1").value;
+            if(to_job_id){
+                $.ajax({
+                    url: "?url=Outputs/copy_output",
+                    method: "POST",
+                    data: { 
+                        from_job_id: job_id,
+                        to_job_id: to_job_id
+                    },
+                    success: function(response) {
 
-    }    
+                        var responseData = JSON.parse(response);
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            get_output_by_job_id(job_id);
+                        });
+
+                        document.getElementById('copy_output').style.display='none';
+
+                    },
+                    error: function(xhr, status, error) {
+                        
+                    }
+                });
+        
+            } 
+        } else {
+            // cancel
+        }
+    });
+
+   
 }
 
 function get_output_info(job_id,output_event){
