@@ -499,6 +499,7 @@
                 				        <label for="to_step_id" class="t1 col-4 col-form-label">Job :</label>
                 				        <div class="t2 col-6">
                                         <select id="JobSelect1" class="col custom-file" style="margin: center; width: 153px">
+                                            <option value="-1" disabled selected><?php echo $text['Choose_option']; ?></option>
                                             <?php foreach($data['job_list'] as $kk => $vv){?>
                                                 <option id ='job_list_option' value="<?php echo $vv['job_id']; ?>">
                                                     <?php echo $vv['job_id'] . " - " . $vv['job_name']; ?>

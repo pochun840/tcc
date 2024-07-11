@@ -166,7 +166,5 @@ class Data extends Controller
         }
     }
     
-    
-    
-    
 }
+?>

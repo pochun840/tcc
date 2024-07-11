@@ -45,8 +45,7 @@ function includecss_file($part, $cssFileName) {
             includecss_file("Dashboards","tcc_operation_m.css");
             includecss_file("Data","tcc_data.css");
             includecss_file("Settings","tcc_setting_m.css");
-            includecss_file("In","tcc_main.css");
-
+    
         }else{
             includecss_file("Tools", "tcc_tool.css");
             includecss_file("Inputs", "tcc_input.css");
@@ -56,8 +55,7 @@ function includecss_file($part, $cssFileName) {
             includecss_file("Step", "tcc_step.css");
             includecss_file("Dashboards","tcc_operation.css");
             includecss_file("Data","tcc_data.css");
-            includecss_file("Settings","tcc_setting.css"); 
-            includecss_file("In","tcc_main.css");           
+            includecss_file("Settings","tcc_setting.css");           
         }
 
         # 載入js 

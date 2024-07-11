@@ -31,12 +31,11 @@ class Tools extends Controller
             //'device_info' => $device_info
         ];
 
-        
         $this->view('tool/index', $data);
     }
 
-    public function getMacAddress()
-    {
+    public function getMacAddress(){
+
         if( PHP_OS_FAMILY == 'Linux'){
             $output = shell_exec("ip link show");
 
@@ -73,3 +72,4 @@ class Tools extends Controller
     }
 
 }
+?>
