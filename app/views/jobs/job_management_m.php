@@ -319,8 +319,10 @@ function copy_job_by_id(jobid){
                 new_jobname: new_jobname
             },
             success: function(response) {
-                alert(response);
-                history.go(0);
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                    history.go(0);
+                });
             },
             error: function(xhr, status, error) {
                 

@@ -319,9 +319,10 @@ function savejob() {
                 direction_val: direction_val
             },
             success: function(response) {
-                alertify.alert('', response, function() {
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
-                });           
+                });         
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -353,10 +354,12 @@ function copy_job_by_id(jobid){
                 new_jobid: new_jobid,
                 new_jobname: new_jobname
             },
-            success: function(response) {
-                alertify.alert('', response, function() {
+            success: function(response) {      
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
-                });     
+                });
+
             },
             error: function(xhr, status, error) {
                 
