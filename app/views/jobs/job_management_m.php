@@ -99,12 +99,12 @@
                             <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['Unscrew_direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="unfasten_direction_option" id="unfasten_direction_CW" value="0">
+            					  <input class="form-check-input" type="radio" name="direction" id="unfasten_direction_CW" value="0">
             					  <label class="form-check-label" for="unfasten_direction_CW"><?php echo $text['CW']; ?></label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="unfasten_direction_option" id="unfasten_direction_CCW" value="1">
-            					  <label class="form-check-label" for="unfasten_direction_CCW"><?php echo $text['CCW']."中文"; ?></label>
+            					  <input class="form-check-input" type="radio" name="direction" id="unfasten_direction_CCW" value="1">
+            					  <label class="form-check-label" for="unfasten_direction_CCW"><?php echo $text['CCW']; ?></label>
             					</div>
                             </div>
                         </div>
@@ -346,9 +346,9 @@ function savejob() {
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log(xhr.responseText);
-                alert(xhr.responseText);
-                history.go(0);
+                alertify.alert('', xhr.responseText, function() {
+                    history.go(0);
+                });       
             }
         };
         var params = "jobidnew=" + jobidnew +

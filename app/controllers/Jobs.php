@@ -65,8 +65,6 @@ class Jobs extends Controller
             );
             $mode = "create";
 
-            #驗證
-
             $result  = $this->MiscellaneousModel->validateName($jobdata['job_name']);
             $result1 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_power']);
             $result2 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_rpm']);
@@ -81,9 +79,9 @@ class Jobs extends Controller
     
                 $res = $this->jobModel->create_job($mode,$jobdata);
                 if($res){
-                    $res_msg = $text['New'].$text['job'].':'. $jobdata['job_id'].$text['success'];
+                    $res_msg = $text['New']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['success'];
                 }else{
-                    $res_msg = $text['New'].$text['job'].':'.$jobdata['job_id'].$text['fail'];
+                    $res_msg = $text['New']."  ".$text['job_id'].':'.$jobdata['job_id']."  ".$text['fail'];
                 }
                 echo $res_msg;
             }
@@ -119,9 +117,9 @@ class Jobs extends Controller
                 
                 $res = $this->jobModel->update_job_by_id($jobdata);
                 if($res){
-                    $res_msg = $text['Edit']. $text['job'].':'. $jobdata['job_id']. $text['success'];
+                    $res_msg = $text['Edit']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['success'];
                 }else{
-                    $res_msg = $text['Edit']. $text['job'].':'. $jobdata['job_id'].$text['fail'];
+                    $res_msg = $text['Edit']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['fail'];
                 }
 
                 echo $res_msg;  
@@ -134,19 +132,19 @@ class Jobs extends Controller
     #delete 
     public function delete_jobid() {
 
-        /*$file = $this->MiscellaneousModel->lang_load();
+        $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
-        }*/
+        }
  
         $jobid = $_POST['jobid'] ?? null;
         if(!empty($jobid)){
             $res = $this->jobModel->delete_job_by_id($jobid);
             if($res){
                 
-                $res_msg = $text['Delete'].$text['job'].':'. $jobid.$text['success'];
+                $res_msg = $text['Delete']."  ".$text['job_id'].':'. $jobid."  ".$text['success'];
             }else{
-                $res_msg = $text['Delete'].$text['job'].':'. $jobid.$text['fail'];
+                $res_msg = $text['Delete']."  ".$text['job_id'].':'. $jobid."  ".$text['fail'];
             }
 
             echo $res_msg;
@@ -198,10 +196,10 @@ class Jobs extends Controller
                 $mode = "copy";
                 $res = $this->jobModel->create_job($mode,$jobdata);
                 if($res){
-                    $res_msg = $text['Copy'].$text['job'].':'. $_POST['new_jobid'].$text['success'];
+                    $res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['success'];
                     
                 }else{
-                    $res_msg = $text['Copy'].$text['job'].':'. $_POST['new_jobid'].$text['fail'];
+                    $res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['fail'];
                 }
     
                 echo $res_msg;

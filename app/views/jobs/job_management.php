@@ -307,7 +307,6 @@ function savejob() {
     
     var directionElement = document.querySelector('input[name="direction"]:checked');
     var direction_val = directionElement ? directionElement.value : null;
-
     if (jobname_val && unscrew_rpm_val && unscre_power_val && direction_val) {
         $.ajax({
             url: "?url=Jobs/create_job",
@@ -320,8 +319,9 @@ function savejob() {
                 direction_val: direction_val
             },
             success: function(response) {
-                alert(response);            
-                history.go(0);
+                alertify.alert('', response, function() {
+                    history.go(0);
+                });           
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -329,8 +329,6 @@ function savejob() {
         });
     }
 }
-
-
 
 function copy_job_by_id(jobid){
 
@@ -356,8 +354,9 @@ function copy_job_by_id(jobid){
                 new_jobname: new_jobname
             },
             success: function(response) {
-                alert(response);
-                history.go(0);
+                alertify.alert('', response, function() {
+                    history.go(0);
+                });     
             },
             error: function(xhr, status, error) {
                 

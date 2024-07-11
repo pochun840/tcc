@@ -32,9 +32,10 @@ function delete_jobid(jobid) {
             method: "POST",
             data: { jobid: jobid },
             success: function(response) {
-
-                alert(response);
-                history.go(0);
+                
+                alertify.alert('', response, function() {
+                    history.go(0);
+                });     
             },
             error: function(xhr, status, error) {
                 
@@ -104,13 +105,16 @@ function updatejob(){
                 directionValue: directionValue
             },
             success: function(response) {
+                alertify.alert('', response, function() {
+                    localStorage.setItem('jobid', jobid);
+                    localStorage.setItem('jobname', jobname);
+                    localStorage.setItem('unscrew_rpm', rpmvalue);
+                    localStorage.setItem('unscre_power', powervalue);
+                    localStorage.setItem('direction', directionValue);
+                    history.go(0);
+                });     
 
-                localStorage.setItem('jobid', jobid);
-                localStorage.setItem('jobname', jobname);
-                localStorage.setItem('unscrew_rpm', rpmvalue);
-                localStorage.setItem('unscre_power', powervalue);
-                localStorage.setItem('direction', directionValue);
-                history.go(0);
+        
             },
             error: function(xhr, status, error) {
                 
