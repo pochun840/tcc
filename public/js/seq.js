@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     var backButton = document.getElementById('back_btn');
     if (backButton) {
@@ -11,19 +10,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var table = document.getElementById('seq_table');
 
-    table.addEventListener('click', function(event) {
-        var target = event.target;
-        
-        if (target.classList.contains('seq-id')) {
-            seqid = target.textContent.trim();
-         
-        }
-    });
+    if (table) {
+        table.addEventListener('click', function(event) {
+            var target = event.target;
+            
+            if (target.classList.contains('seq-id')) {
+                seqid = target.textContent.trim();
+            }
+        });
+    } else {
+        //console.error('Element with ID "seq_table" not found.');
+    }
 });
-var seqid = '';
 
-
-
+var seqid = ''; 
 
 function cound_job(argument){
     var table = document.getElementById('seq_table');
