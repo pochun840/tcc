@@ -8,7 +8,20 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         //console.error('Element with ID "back_btn" not found.');
     }
+
+    var table = document.getElementById('seq_table');
+
+    table.addEventListener('click', function(event) {
+        var target = event.target;
+        
+        if (target.classList.contains('seq-id')) {
+            seqid = target.textContent.trim();
+         
+        }
+    });
 });
+var seqid = '';
+
 
 
 
@@ -25,6 +38,7 @@ function cound_job(argument){
     }
 
     if(argument =="edit" && seqid != null){
+        
         edit_seq(seqid);
     }
 

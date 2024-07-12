@@ -28,6 +28,5 @@ class Agents extends Controller
         $this->view('agent/index', $data);
     }
 
-    
 }
 ?>

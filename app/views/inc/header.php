@@ -3,8 +3,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <link rel="apple-touch-icon" sizes="60x60" href="<?php echo ICON_NORMAL_APPLE; ?>">
-    <link rel="icon" sizes="192x192" href="<?php echo ICON_NORMAL; ?>">
+    <link rel="apple-touch-icon" sizes="60x60" href="<?php echo URLROOT; ?>img/60.png">
+    <link rel="icon" sizes="192x192" href="<?php echo URLROOT; ?>img/192.png">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">

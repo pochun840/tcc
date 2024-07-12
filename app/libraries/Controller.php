@@ -61,38 +61,6 @@ class Controller
     }
 
 
-    /*public function language_detect($value=''){
-
-        if( !isset($_SESSION['language']) || $_SESSION['language'] == '' ){
-            $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 4);
-            if (preg_match("/zh-cn/i", $lang)){
-                $_SESSION['language'] = 'zh-cn';
-            }else if(preg_match("/zh-tw/i", $lang)){
-                $_SESSION['language'] = 'zh-tw';
-            }else if(preg_match("/en/i", $lang)){
-                $_SESSION['language'] = 'en-us';
-            }else{//預設
-                $_SESSION['language'] = 'en-us';
-            }
-
-            $language = $_SESSION['language'];
-
-        }else{
-            $language = $data['language']; 
-
-        }
-        
-        if(!empty($language)){
-            if(file_exists('../app/language/' . $language . '.php')){
-                require_once '../app/language/' . $language . '.php';
-            } else { //預設採用英文
-                require_once '../app/language/en-us.php';
-            }
-        }
-    }*/
-
-
-
     public function logMessage($message) {
         $timestamp = date("Y-m-d H:i:s");
         $logMessage = "[$timestamp] $message\n";
@@ -124,6 +92,7 @@ class Controller
             return false;
         }
     }
+
 
     //權限驗證function
     public function LoginCheck($value='')

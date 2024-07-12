@@ -115,7 +115,7 @@ class Data extends Controller
             #整理$dataset 格式內容
             foreach($dataset as $key =>$val){
 
-                $dataset[$key]['torque_unit']     = $unit_arr[$val['torque_unit']];
+                $dataset[$key]['torque_unit']    = $unit_arr[$val['torque_unit']];
                 $dataset[$key]['fasten_status']  = $status_arr[$val['fasten_status']];
             }
     

@@ -5,7 +5,6 @@ class Jobs extends Controller
     private $DashboardModel;
     private $ToolModel;
     private $SettingModel;
-    private $languageText; 
 
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
@@ -16,18 +15,15 @@ class Jobs extends Controller
         
     }
 
-
     // 取得所有Jobs
     public function index(){
-
-
         $data = array();
 
-        $isMobile = $this->isMobileCheck();
-        $jobs = $this->jobModel->getJobs();
+        $isMobile  = $this->isMobileCheck();
+        $jobs      = $this->jobModel->getJobs();
         $direction = $this->MiscellaneousModel->details('unscrew_direction');
 
-        $lastRow = end($jobs);
+        $lastRow  = end($jobs);
         $jobIdInt = intval($lastRow['job_id']) + 1 ;
       
         $data = array(
@@ -48,7 +44,6 @@ class Jobs extends Controller
     #create 
     public function create_job(){
 
-        
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
@@ -56,6 +51,7 @@ class Jobs extends Controller
 
 
         if(isset($_POST['jobidnew'])){
+
             $jobdata = array(
                 'job_id' => $_POST['jobidnew'],
                 'job_name' => $_POST['jobname_val'],
@@ -63,13 +59,13 @@ class Jobs extends Controller
                 'unscrew_rpm' => $_POST['unscrew_rpm_val'],
                 'unscrew_direction' => $_POST['direction_val'],
             );
-            $mode = "create";
 
-            $result  = $this->MiscellaneousModel->validateName($jobdata['job_name']);
+            $mode = "create";
+            $result3  = $this->MiscellaneousModel->validateName($jobdata['job_name']);
             $result1 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_power']);
             $result2 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_rpm']);
 
-            if ($result == true  && $result1 == true && $result2 == true) {
+            if ($result3 == true  && $result1 == true && $result2 == true) {
 
                 $job_count = $this->jobModel->countjob();
                 if($job_count >= 50) {
@@ -78,18 +74,24 @@ class Jobs extends Controller
                 }
     
                 $res = $this->jobModel->create_job($mode,$jobdata);
+                $result = array();
                 if($res){
-                    $res_msg = $text['New']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['success'];
+                    $res_type = 'Success';
+                    $res_msg  = $text['New']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['success'];
                 }else{
-                    $res_msg = $text['New']."  ".$text['job_id'].':'.$jobdata['job_id']."  ".$text['fail'];
+                    $res_type = 'Error';
+                    $res_msg  = $text['New']."  ".$text['job_id'].':'.$jobdata['job_id']."  ".$text['fail'];
                 }
-                echo $res_msg;
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+    
+                echo json_encode($result);
             }
-           
-           
+                      
         }
     }
-
 
     public function update_job(){
 
@@ -101,6 +103,7 @@ class Jobs extends Controller
         
         $jobdata  = array();
         if(isset($_POST['jobid'])){
+
             $jobdata = array(
                 'job_id' => $_POST['jobid'],
                 'job_name' => $_POST['jobname'],
@@ -147,6 +150,7 @@ class Jobs extends Controller
  
         $jobid = $_POST['jobid'] ?? null;
         if(!empty($jobid)){
+
             $res = $this->jobModel->delete_job_by_id($jobid);
             $result = array();
             if($res){
@@ -183,7 +187,8 @@ class Jobs extends Controller
         if(!empty($file)){
             include $file;
         }
-
+        
+  
         $jobdata = array();
         $old_jobid = $_POST['old_jobid'] ?? null;
         if(!empty($old_jobid)){
@@ -198,7 +203,8 @@ class Jobs extends Controller
             
             $old_res = $this->jobModel->search_jobinfo($old_jobid);
             if(!empty($old_res)){
-                  #取得 unscrew_power && 	unscrew_rpm && unscrew_direction
+
+                #取得 unscrew_power && 	unscrew_rpm && unscrew_direction
                 $jobdata = array(
                     'new_jobid'   => $_POST['new_jobid'],
                     'new_jobname' => $_POST['new_jobname'],
@@ -207,6 +213,7 @@ class Jobs extends Controller
                     'unscrew_direction' => $old_res['unscrew_direction'],  
 
                 );
+
                 #取得 unscrew_power && 	unscrew_rpm && unscrew_direction
                 $mode = "copy";
                 $result = array();
@@ -225,8 +232,6 @@ class Jobs extends Controller
                 );
     
                 echo json_encode($result);
-    
-                //echo $res_msg;
             }
         }
     }    

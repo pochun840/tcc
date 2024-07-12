@@ -532,9 +532,8 @@ function create_seq() {
 }
 
 function edit_seq(seqid) {
-    var seqid = readFromLocalStorage("seqid");
     var jobid = '<?php echo $data['job_id']?>';
-
+   
     if(jobid){
         $.ajax({
             url: "?url=Sequences/search_seqinfo",
@@ -600,7 +599,6 @@ function edit_seq(seqid) {
 function edit_seq_save(){
 
     var jobid = '<?php echo $data['job_id']?>';
-    var seqid = readFromLocalStorage("seqid");
 
     var seq_name = document.getElementById("edit_seq_name").value;
     var tightening_repeat = document.getElementById("edit_tighten_repeat").value;
