@@ -21,7 +21,7 @@ class Data extends Controller
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
         $status_arr = $this->MiscellaneousModel->details('status');
         $device_info = $this->Device_Info();
-        $data = [
+        $data = array(
             'isMobile' => $isMobile,
             'res_data' => $res_data,
             'res_data_ok' => $res_data_ok,
@@ -29,7 +29,7 @@ class Data extends Controller
             'device_info' => $device_info,
             'unit_arr' => $unit_arr,
             'status_arr' => $status_arr
-        ];
+        );
         
         $this->view('data/index', $data);
 
@@ -109,7 +109,9 @@ class Data extends Controller
             $end_date = str_replace('-', "", $end_date);
             $dataset = $this->DataModel->get_range_data($start_date, $end_date);
     
+            #取出1萬筆的資料
             $dataset = array_slice($dataset, 0, 10000);
+
             #整理$dataset 格式內容
             foreach($dataset as $key =>$val){
 
@@ -119,7 +121,6 @@ class Data extends Controller
     
             if ($dataset && $expert_val == "0") {
 
-              
                 $csv_headers = array_keys($dataset[0]);
                 header('Content-Type: text/csv; charset=utf-8');
                 header('Content-Disposition: attachment; filename=data.csv');
@@ -162,7 +163,6 @@ class Data extends Controller
                 }
             }
         }
-    }
-    
+    }  
 }
 ?>

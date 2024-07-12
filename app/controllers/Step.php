@@ -64,8 +64,6 @@ class Step extends Controller
         
     }
 
-
-    #create step 
     public function create_step(){
 
         $file = $this->MiscellaneousModel->lang_load();
@@ -166,10 +164,8 @@ class Step extends Controller
 
     }
 
-    #update step
     public function edit_step(){
 
-        
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
@@ -255,7 +251,7 @@ class Step extends Controller
         }
     }
 
-    #delete step
+
     public function delete_step(){
 
         $file = $this->MiscellaneousModel->lang_load();

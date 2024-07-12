@@ -439,9 +439,7 @@ $text['img_agent'] = '../public/img/home_agent_en.png';
 $text['img_agent_hover'] = '../public/img/home_m_agent_en.png';
 
 
-
 //------------------------------------------------ -------------------------------------------------- ------------
-
 
 //error message
 $error_message = array();
@@ -523,13 +521,11 @@ $error_message['Angle_Window_Add'] = 'Out of range 1 - 30600';
 $error_message['Angle_Window_Subtraction'] = 'Out of range 0 - 30599';
 $error_message['Delay_Time'] = 'Out of range 0.0 - 10.0';
 
-
 if(isset($data['tool_info'])){
 	$error_message['Pre_Run_RPM'] = 'Out of range '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
 	$error_message['Torque_Window_Add'] = 'Out of range '.$data['tool_info']['tool_mintorque'].' - '.round($data['tool_info']['tool_maxtorque']*1.1,4) ;
 	$error_message['Torque_Window_Subtraction'] = 'Out of range '.$text['Hi-Lo'].' must greater than or equal to';
 }
-
 
 //operation error message
 $error_message['NO_ERROR'] = '';
@@ -561,5 +557,3 @@ $error_message['ERR_PROC_NOT_FINISH'] = 'ERR-PROC-NOT-FINISH';
 $error_message['SEQ_COMPLETED'] = 'SEQ-COMPLETED';
 $error_message['JOB_COMPLETED'] = 'JOB-COMPLETED';
 $error_message['WORKPIECE_RECOVERY'] = 'WORKPIECE-RECOVERY';
-
-

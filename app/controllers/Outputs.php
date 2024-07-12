@@ -45,8 +45,6 @@ class Outputs extends Controller
         
     }
 
-    // get_input_by_job_id
-
     public function get_output_by_job_id(){
 
         $event_output = $this->MiscellaneousModel->details('io_output');

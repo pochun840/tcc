@@ -8,7 +8,7 @@ class Database
     private $error;
 
     private $db_con;// db con
-    private $db_dev;// db dev
+    //private $db_dev;// db dev
     private $db_data;// db dev
     private $db_iDas;//iDas db
     private $db_iDas_login;
@@ -25,6 +25,17 @@ class Database
         // 透過 PHP_OS_FAMILY 判斷，目前執行的系統，決定要採用的DB路徑
         $Year = date("Y");// data db 用西元年命名
         $data_db_name = "data".$Year.".db";
+
+
+        /*if(PHP_OS_FAMILY != 'Linux' ){
+            //local
+
+
+
+        }else{
+            //linux
+
+        }*/
         if( PHP_OS_FAMILY == 'Linux'){
 
             $this->db_con = new PDO('sqlite:/var/www/html/database/iDas-data.db');
@@ -33,6 +44,7 @@ class Database
                 $this->db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); //local
             }else{
                 $this->db_data = new PDO('sqlite:/var/www/html/das/data.db'); //local
+
             }
             
             $this->db_iDas = new PDO('sqlite:/var/www/html/database/data.db'); //local
@@ -43,7 +55,7 @@ class Database
             $this->db_con = new PDO('sqlite:../data.db'); //local
             //$this->db_dev = new PDO('sqlite:../data.db'); //local
             if(file_exists('../'.$data_db_name)){
-                $this->db_data = new PDO('sqlite:../'.$data_db_name); 
+                $this->db_data = new PDO('sqlite:../'.$data_db_name); //local
             }else{
                 $this->db_data = new PDO('sqlite:../data.db'); //local
             }
@@ -53,6 +65,7 @@ class Database
 
         }
         $this->db_con->exec('set names utf-8'); 
+        //$this->db_dev->exec('set names utf-8'); 
         $this->db_data->exec('set names utf-8'); 
         $this->db_iDas->exec('set names utf-8'); 
         $this->db_iDas_login->exec('set names utf-8'); 
@@ -102,7 +115,7 @@ class Database
     }
 
 
-    public function get_tool_rpm()
+    /*public function get_tool_rpm()
     {
         $sql = "SELECT tool_maxrpm,tool_minrpm FROM tool_info";
         $statement = $this->db_dev->prepare($sql);
@@ -110,7 +123,7 @@ class Database
         $rows = $statement->fetch();
 
         return $rows;
-    }
+    }*/
 
     private function iDasDB_Initail()
     {

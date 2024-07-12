@@ -422,8 +422,6 @@ $text['img_agent'] = '../public/img/home_agent_tw.png';
 $text['img_agent_hover'] = '../public/img/home_m_agent_tw.png';
 
 
-
-
 //--------------------------------------------------------------------------------------------------------------
 
 
@@ -506,8 +504,6 @@ $error_message['Torque_Window_Subtraction'] = '';
 $error_message['Angle_Window_Add'] = '超出範圍 上下限需介於0 - 30600';
 $error_message['Angle_Window_Subtraction'] = '';
 $error_message['Delay_Time'] = '超出範圍 0.0 - 10.0';
-
-
 
 
 if(isset($data['tool_info'])){
