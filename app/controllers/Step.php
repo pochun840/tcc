@@ -365,6 +365,7 @@ class Step extends Controller
     }
 
 
+    #查詢step data
     public function search_stepinfo(){
         if(isset($_POST['stepid'])){
             
@@ -377,21 +378,16 @@ class Step extends Controller
         }
 
     }
-
-
         
+    #排序step
     public function adjustment_order(){
         if (isset($_POST['jobid']) && isset($_POST['rowInfoArray'])) {
             $jobid = $_POST['jobid'];
             $rowInfoArray = $_POST['rowInfoArray'];
 
             $this->stepModel->swapupdate($jobid,$rowInfoArray);
-            
-            //var_dump($jobid);die();
-            //echo json_encode(['success' => true]);
         } else {
-            // 如果缺少必要的数据，返回一个错误的响应
-            //echo json_encode(['error' => 'Missing data']);
+            
         }
         
     }

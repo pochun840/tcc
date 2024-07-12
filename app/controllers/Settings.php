@@ -239,7 +239,6 @@ class Settings extends Controller
             $error_message .= "Permission_Barcode,";
         }
 
-
         if($input_check){
 
             $priviledge[12] = $Permission_Confirm;
@@ -337,8 +336,7 @@ class Settings extends Controller
             $input_check = false; 
         }
         
-     
-        
+
         if($input_check){
           $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
           if($res['count'] =="1"){
@@ -934,7 +932,6 @@ class Settings extends Controller
             $barcode = $_POST['del_barcode_id'];
         }else{ 
             $input_check = false;
-            
         }
         if($input_check){
            $res = $this->SettingModel->delete_job_barcode($barcode);
