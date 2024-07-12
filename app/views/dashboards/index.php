@@ -34,7 +34,8 @@
                 <?php if($_SESSION['privilege'] == 'admin'){ ?>
                 <div>
                     <?php if($data['agent_type'] == '2'){ ?>
-                            <button class="menu-item lime" id="" style="font-size: 24px" onclick="window.location.href='?url=Agents'">Agent</button>
+                            <!--<button class="menu-item lime" id="" style="font-size: 24px" onclick="window.location.href='?url=Agents'">Agent</button>-->
+                            <button class="menu-item lime" id="agent" style="font-size: 24px" ><span style="visibility: hidden;">Agent</span></button>
                     <?php } ?>
                             <button class="menu-item indigo" id="load" style="font-size: 24px" onclick="DB_sync('C2D')"><span style="visibility: hidden;">Load</span></button>
                             <button class="menu-item deep-orange" id="save" style="font-size: 24px;" onclick="DB_sync('D2C')"><span style="visibility: hidden;">Save</span></button>
@@ -133,6 +134,13 @@ function language_change(language){
     }
     #save:hover {
         background: url("<?php echo $text['img_save_hover']; ?>") no-repeat;
+    }
+
+    #agent {
+        background: url("<?php echo $text['img_agent']; ?>") no-repeat;
+    }
+    #agent:hover {
+        background: url("<?php echo $text['img_agent_hover']; ?>") no-repeat;
     }
             
 </style>

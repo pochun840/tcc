@@ -1,3 +1,15 @@
+
+<?php 
+    if($_SESSION['language'] == 'en-us'){
+        $calendar_lang = '';
+    }else if($_SESSION['language'] == 'zh-cn'){
+        $calendar_lang = 'zh';
+    }else if($_SESSION['language'] == 'zh-tw'){
+        $calendar_lang = 'zh_tw';
+    }else{
+        $calendar_lang = '';
+    }
+?>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -235,11 +247,6 @@
     </div>    
 
 </div>
-<!-- 加載 flatpickr 的核心文件 -->
-<script src="path/to/flatpickr.js"></script>
-
-<!-- 加載簡體中文語言包 -->
-<script src="path/to/l10n/zh.js"></script>
 
 
 <script>
@@ -264,7 +271,7 @@
         var mode = document.getElementById("data_select").value; 
         var error1 = '<?php echo $text['data_history_success']?>'; 
         var error = '<?php echo $text['data_history_fail']?>'; 
-        
+
         if(mode =="OK"){
             document.getElementById('res_data_all').style.display = 'none';
             document.getElementById('res_data_ok').style.display = 'block';
