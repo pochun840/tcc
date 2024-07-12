@@ -148,3 +148,7 @@ function language_change(language) {
     }
 }
 
+
+function back() {
+    window.location.href = '?url=In';
+}
