@@ -167,7 +167,7 @@ class Sequences extends Controller
         }
     }
 
-
+    #查詢seq data
     public function search_seqinfo(){
 
         $jobid = $_POST['jobid'] ?? null;
@@ -187,8 +187,6 @@ class Sequences extends Controller
         if(!empty($file)){
             include $file;
         }
-
-
 
         if(isset($_POST['jobid'])){
 
@@ -224,8 +222,6 @@ class Sequences extends Controller
 
             $offset = sprintf("%+03d", $offset);
 
-
-            
             $seq_count = $this->sequenceModel->countseq($jobid);
             $seq_count = intval($seq_count);
            
@@ -363,6 +359,7 @@ class Sequences extends Controller
 
     }
     
+    #seq 排序
     public function adjustment_order(){
 
         if(isset($_POST['jobid'])){

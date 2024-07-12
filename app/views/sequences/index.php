@@ -596,12 +596,9 @@ function edit_seq(seqid) {
     }
 }
 
-
-function (){
+function edit_seq_save(){
 
     var jobid = '<?php echo $data['job_id']?>';
-
-
     var seq_name = document.getElementById("edit_seq_name").value;
     var tightening_repeat = document.getElementById("edit_tighten_repeat").value;
     var ok_time = document.getElementById("edit_ok_time").value;
@@ -614,7 +611,7 @@ function (){
     var okall_stop_val = document.querySelector('input[name="edit_okall_stop_option"]:checked').value;
     var opt_val = document.querySelector('input[name="edit_opt_option"]:checked').value;
     
-    console.log(seq_name);
+    
     if(seq_name){
         $.ajax({
             url: "?url=Sequences/edit_seq",

@@ -306,7 +306,6 @@ class Step extends Controller
                 return;
             }
 
-            
             #檢查被複製的那個step 是不是  Target Torque
             $check = $this->stepModel->check_copy_step($jobid,$seqid,$stepid);
             $check = intval($check[0]['target_option']);
@@ -357,13 +356,10 @@ class Step extends Controller
         
                     echo json_encode($result);
                 }
-     
             }
-           
         }
 
     }
-
 
     #查詢step data
     public function search_stepinfo(){
