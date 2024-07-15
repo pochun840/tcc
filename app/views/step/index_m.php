@@ -359,13 +359,14 @@ window.onclick = function(event) {
 }
 
 var rows = document.getElementsByTagName("tr");
+var stepid = '';
 for (var i = 0; i < rows.length; i++) {
     (function(row) {
         var cells = row.getElementsByTagName("td");
         if (cells.length > 0) {
             cells[0].addEventListener("click", function() {
            
-                var stepid   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
+                stepid   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
                 localStorage.setItem("stepid", stepid);
             });
         }
@@ -400,7 +401,7 @@ function edit_step(){
 
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
-    var stepid = readFromLocalStorage("stepid");
+    //var stepid = readFromLocalStorage("stepid");
 
     var unit = '<?php echo $data['unit']?>';
     var language = getCookie('language');
@@ -668,7 +669,7 @@ function edit_step_save() {
 
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
-    var stepid = readFromLocalStorage("stepid");
+    //var stepid = readFromLocalStorage("stepid");
     var target_option = document.getElementById("edit_target_option").value;
 
     var target_torque = 0;
@@ -923,7 +924,7 @@ function add_step(){
 }
 
 function copy_step_by_id(){
-    var stepid = readFromLocalStorage("stepid");
+    //var stepid = readFromLocalStorage("stepid");
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
     var seqidnew = '<?php echo $data['stepid_new']?>';
@@ -935,7 +936,7 @@ function copy_step_by_id(){
 }
 
 function copy_step_by_id_ajax(){
-    var stepid = readFromLocalStorage("stepid");
+    //var stepid = readFromLocalStorage("stepid");
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
     var stepid_new  = '<?php echo $data['stepid_new']?>';
@@ -965,7 +966,7 @@ function copy_step_by_id_ajax(){
 
 
 function del_stepid(step_id){
-    var stepid = readFromLocalStorage("stepid");
+    //var stepid = readFromLocalStorage("stepid");
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
     if(stepid) {
