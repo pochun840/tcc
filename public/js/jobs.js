@@ -1,4 +1,6 @@
 var jobid ='';
+var jobname = '';
+
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
     (function(row) {
@@ -12,6 +14,7 @@ for (var i = 0; i < rows.length; i++) {
                 var rpmvalue = cells[3] ? (cells[3].textContent || cells[3].innerText) : null;
                 var powervalue = cells[4] ? (cells[4].textContent || cells[4].innerText) : null;
                 jobid = jobid;
+                jobname = secondCellValue;
         
                 localStorage.setItem("jobid", jobid );
                 localStorage.setItem("jobname", secondCellValue);
@@ -124,8 +127,6 @@ function updatejob(){
 }
 
 function edit_job(jobid) {
-    var jobid = readFromLocalStorage("jobid");
-    console.log(jobid);
     if(jobid){
         $.ajax({
             url: "?url=Jobs/search_job",

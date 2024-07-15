@@ -264,6 +264,7 @@ window.onclick = function(event) {
 
     
 var jobid ='';
+var jobname = '';
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
     (function(row) {
@@ -277,6 +278,7 @@ for (var i = 0; i < rows.length; i++) {
                 var rpmvalue = cells[3] ? (cells[3].textContent || cells[3].innerText) : null;
                 var powervalue = cells[4] ? (cells[4].textContent || cells[4].innerText) : null;
                 jobid = jobid;
+                jobname = secondCellValue;
         
                 localStorage.setItem("jobid", jobid );
                 localStorage.setItem("jobname", secondCellValue);
@@ -293,8 +295,8 @@ for (var i = 0; i < rows.length; i++) {
 
 function copy_job_by_id(jobid){
 
-    var old_jobid = readFromLocalStorage("jobid");
-    var old_jobname = readFromLocalStorage("jobname");
+    var old_jobid = jobid;
+    var old_jobname = jobname;
     var new_jobid = '<?php echo $data['jobint']?>';
 
     var new_jobname = document.getElementById("to_job_name").value;
