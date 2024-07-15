@@ -23,7 +23,7 @@ class Login{
     public function getpwd()
     {
         $sql = "SELECT operator_loginflag,operator_adminpwd,operator_priviledge FROM operator";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas_login->prepare($sql);
         $statement->execute();
 
         return $statement->fetch();
