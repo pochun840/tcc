@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (table) {
         table.addEventListener('click', function(event) {
             var target = event.target;
-            
             if (target.classList.contains('seq-id')) {
                 seqid = target.textContent.trim();
             }
@@ -49,6 +48,5 @@ function cound_job(argument){
     if(argument =="copy" && seqid != null){
         copy_seq(seqid);
     }
-
 
 }

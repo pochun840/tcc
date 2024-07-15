@@ -30,24 +30,24 @@ class Database
             $this->db_con = new PDO('sqlite:/var/www/html/database/iDas-data.db');
             //$this->db_dev = new PDO('sqlite:/var/www/html/database/iDas-data.db'); 
             if( file_exists('/var/www/html/database/'.$data_db_name) ){
-                $this->db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); //local
+                $this->db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); 
             }else{
-                $this->db_data = new PDO('sqlite:/var/www/html/das/tccinfo.db'); //local
+                $this->db_data = new PDO('sqlite:/var/www/html/das/tccinfo.db'); 
             }
             
-            $this->db_iDas = new PDO('sqlite:/var/www/html/database/tccinfo.db'); //local
+            $this->db_iDas = new PDO('sqlite:/var/www/html/database/tccinfo.db'); 
             $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/das.db'); 
             $this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db'); 
             
         }else{
-            $this->db_con = new PDO('sqlite:../tccinfo.db'); //local
+            $this->db_con = new PDO('sqlite:../tccinfo.db'); 
             if(file_exists('../'.$data_db_name)){
                 $this->db_data = new PDO('sqlite:../'.$data_db_name); 
             }else{
-                $this->db_data = new PDO('sqlite:../tccinfo.db'); //local
+                $this->db_data = new PDO('sqlite:../tccinfo.db'); 
             }
-            $this->db_iDas = new PDO('sqlite:../tccinfo.db'); //local
-            $this->db_iDas_login = new PDO('sqlite:../das.db'); //local
+            $this->db_iDas = new PDO('sqlite:../tccinfo.db'); 
+            $this->db_iDas_login = new PDO('sqlite:../das.db'); 
             $this->db_iDas_device = new PDO('sqlite:../data_device.db'); 
 
         }

@@ -47,7 +47,6 @@ function delete_jobid(jobid) {
 
 function cound_job(argument){
 
- 
     var table = document.getElementById('job_table');
     var selectedRow = table.querySelector('.selected');
     var jobid = selectedRow ? selectedRow.cells[0].innerText : null;
@@ -68,9 +67,7 @@ function cound_job(argument){
         copy_job(jobid);
     }
 
-
 }
-
 
 function readFromLocalStorage(key) {
     return localStorage.getItem(key);
@@ -140,12 +137,9 @@ function edit_job(jobid) {
                 var responseJSON = JSON.stringify(response);
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
-
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, jobname] = cleanString.match(/\[job_name]\s*=>\s*([^ ]+)/) || [, null];
-
                 var [, unscrew_direction] = cleanString.match(/\[unscrew_direction]\s*=>\s*([^ ]+)/) || [, null];
-
                 var [, unscrew_power] = cleanString.match(/\[unscrew_power]\s*=>\s*([^ ]+)/) || [, null];
                 var [, unscrew_rpm] = cleanString.match(/\[unscrew_rpm]\s*=>\s*([^ ]+)/) || [, null];
           
@@ -166,7 +160,5 @@ function edit_job(jobid) {
                 
             }
         });
-    }
-   
+    }   
 }
-

@@ -103,7 +103,6 @@ function delete_output_id(job_id,output_event){
     }   
 }
 
-
 function get_output_by_job_id(job_id){
     $.ajax({
         url: "?url=Outputs/get_output_by_job_id",
