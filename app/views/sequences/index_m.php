@@ -436,7 +436,7 @@ var rowInfoArray = [];
 <?php } ?>
 
 var seqid = ''; 
-
+var seqname = '';
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
     (function(row) {
@@ -444,7 +444,8 @@ for (var i = 0; i < rows.length; i++) {
         if (cells.length > 0) {
             cells[0].addEventListener("click", function() {
                 seqid = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
-                var seqname = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
+                seqname = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
+            
                 localStorage.setItem("seqid", seqid);
                 localStorage.setItem("seqname", seqname);
             });
@@ -458,8 +459,9 @@ function copy_seq_by_id(){
 
     var jobid = '<?php echo $data['job_id']?>';
     var newseqid = '<?php echo $data['seq_id']?>';
-    var oldseqid = readFromLocalStorage("seqid");
-    var oldseqname = readFromLocalStorage("seqname");
+    var oldseqid = seqid;
+    var oldseqname = seqname;
+    
 
     document.getElementById("from_seq_name").value = oldseqname;
     document.getElementById('to_seq_id').value = newseqid;

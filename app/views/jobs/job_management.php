@@ -341,7 +341,6 @@ function copy_job_by_id(jobid){
     document.getElementById("from_job_name").value = old_jobname;
     document.getElementById("to_job_id").value = new_jobid;
 
-
     if(new_jobname){
         $.ajax({
             url: "?url=Jobs/copy_job",
