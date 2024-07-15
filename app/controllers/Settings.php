@@ -467,8 +467,8 @@ class Settings extends Controller
         }else{//windows
             
             header("Content-type: text/html; charset=utf-8");
-            $file="../data.db"; // 實際檔案的路徑+檔名
-            $filename="data.cfg"; // 下載的檔名
+            $file="../tccinfo.db"; // 實際檔案的路徑+檔名
+            $filename="tccinfo.cfg"; // 下載的檔名
             //指定類型
             header("Content-type: ".filetype("$file"));
             //指定下載時的檔名
@@ -1137,7 +1137,7 @@ class Settings extends Controller
 
         }else{
             // $this->logMessage('Import config start');
-            $destination = "../data.db";
+            $destination = "../tccinfo.db";
             $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
             if($result){
                 echo json_encode(["error" => '']);
