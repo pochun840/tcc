@@ -332,7 +332,7 @@ function savejob() {
 function copy_job_by_id(jobid){
 
     var old_jobid = jobid;
-    var old_jobname = jobname;
+    var old_jobname = readFromLocalStorage('jobname');
     var new_jobid = '<?php echo $data['jobint']?>';
 
     var new_jobname = document.getElementById("to_job_name").value;
