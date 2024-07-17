@@ -279,8 +279,6 @@ window.onclick = function(event) {
     }
 }
 
-
-
 function crud_job_event(argument){
     if(argument == 'del'){
         delete_output_id(job_id,output_event);

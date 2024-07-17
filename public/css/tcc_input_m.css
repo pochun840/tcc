@@ -428,3 +428,4 @@ select
 .t3{font-size: 17px; margin: 4px 0px;}
 .input-pin img{ height: 25px; width: 40px}
 .zoom{zoom:1.2; vertical-align: middle}
+.selected { background-color: #9AC0CD !important;}
