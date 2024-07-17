@@ -258,7 +258,7 @@ var backgroundColorYellow = false;
 var output_job;
 var all_job;
 $(document).ready(function () {
-    highlight_row('output_table');
+    highlight_row_input('output_table');
 
     var all_output_job = '<?php echo $data['device_data']['device_output_all_job']?>';
     job_id = all_output_job ;

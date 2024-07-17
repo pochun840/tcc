@@ -536,7 +536,7 @@ var backgroundColorYellow = false;
 var input_job;
 
 $(document).ready(function () {
-    highlight_row('input_table');
+    highlight_row_input('input_table');
  
     var all_input_job = '<?php echo $data['device_data']['device_input_all_job']?>';
     job_id = all_input_job;
@@ -693,3 +693,8 @@ function crud_job_event(argument){
     }
 }
 </script>
+<style>
+    .selected {
+    background-color: yellow; /* 选中时的背景颜色，可以根据需要调整 */
+}
+</style>

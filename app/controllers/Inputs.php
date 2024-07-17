@@ -91,8 +91,9 @@ class Inputs extends Controller
                         }else{
                             $img = '<img src="./img/low.png" style="max-width: 50px;">';
                         }
+                        
 
-                        $job_inputlist .= "<tr class='".$vv['input_event']."'>";
+                        $job_inputlist .= "<tr data-event = '".$vv['input_event']."' >";
                         $job_inputlist .= "<td id='".$vv['input_event']."'>".$event[$vv['input_event']]."</td>";
                         $job_inputlist .= '<td>'.$vv['input_pin'].'</td>';
                         $job_inputlist .= '<td>'.$img.'</td>';
@@ -100,7 +101,7 @@ class Inputs extends Controller
                         
                     }else{
                
-                        $job_inputlist .= "<tr class='".$vv['input_event']."'>";
+                        $job_inputlist .= "<tr data-event = '".$vv['input_event']."' >";
                         $job_inputlist .= "<td id='".$vv['input_event']."'>".$event[$vv['input_event']]."</td>";
                         $job_inputlist .= $this->InputModel->generateTableCell($vv['input_pin'],$vv['input_wave']);
                         $job_inputlist .= '<td>NO</td>';
