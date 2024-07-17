@@ -924,9 +924,7 @@ function add_step(){
 }
 
 function copy_step_by_id(){
-    //var stepid = readFromLocalStorage("stepid");
     var jobid = '<?php echo $data['job_id']?>';
-    var seqid = '<?php echo $data['seq_id']?>';
     var seqidnew = '<?php echo $data['stepid_new']?>';
 
     document.getElementById('from_step_id').value = stepid;    
