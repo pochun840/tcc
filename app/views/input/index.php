@@ -693,8 +693,3 @@ function crud_job_event(argument){
     }
 }
 </script>
-<style>
-    .selected {
-    background-color: yellow; /* 选中时的背景颜色，可以根据需要调整 */
-}
-</style>
