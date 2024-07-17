@@ -17,7 +17,6 @@ function includecss_file($part, $cssFileName) {
 }
 ?>
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
  
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/datatables.min.css">
@@ -26,7 +25,6 @@ function includecss_file($part, $cssFileName) {
     <script src="<?php echo URLROOT; ?>js/all.js?v=202406131200"></script>
     <script src="<?php echo URLROOT; ?>js/echarts_min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/flatpickr.min.css" type="text/css">
 

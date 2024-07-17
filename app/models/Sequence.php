@@ -151,13 +151,13 @@ class Sequence{
     }
 
     #修改單筆的sequence的狀態
-    public function check_seq_type($jobid, $seqname, $type_value) {
-        $sql = "UPDATE `sequence` SET sequence_enable = :sequence_enable WHERE job_id = :job_id AND sequence_name = :sequence_name ";
+    public function check_seq_type($jobid, $seqid, $type_value) {
+        $sql = "UPDATE `sequence` SET sequence_enable = :sequence_enable WHERE job_id = :job_id AND sequence_id = :sequence_id ";
         $statement = $this->db_iDas->prepare($sql);
     
         $statement->bindValue(':sequence_enable', $type_value);
         $statement->bindValue(':job_id', $jobid);
-        $statement->bindValue(':sequence_name', $seqname);
+        $statement->bindValue(':sequence_id', $seqid);
         
         $success = $statement->execute();
     

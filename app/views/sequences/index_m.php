@@ -44,9 +44,9 @@
                                         <td><?php echo $val['tightening_repeat'];?></td>
                                         <td>
                                             <?php if($val['sequence_enable']== 1){?>
-                                                <input class="seq_enable" style="zoom:1.5; vertical-align: middle" id="sequence_enable"   value="1"  type="checkbox" onclick="updateValue(this)"  checked>
+                                                <input class="seq_enable" style="zoom:1.5; vertical-align: middle" data-sequence-id="<?php echo $val['sequence_id'];?>" id="sequence_enable"   value="1"  type="checkbox" onclick="updateValue(this)"  checked>
                                             <?php }else{?>
-                                                <input class="seq_enable" style="zoom:1.5; vertical-align: middle" id="sequence_enable"   value="0"  type="checkbox" onclick="updateValue(this)">
+                                                <input class="seq_enable" style="zoom:1.5; vertical-align: middle" data-sequence-id="<?php echo $val['sequence_id'];?>" id="sequence_enable"   value="0"  type="checkbox" onclick="updateValue(this)">
                                             <?php }?>
                                         </td>
                                         <td><img src="./img/btn_up.png"   onclick="MoveUp(this);"></td>
@@ -435,7 +435,7 @@ var rowInfoArray = [];
         rowInfoArray.push(rowInfo);
 <?php } ?>
 
-var seqid = ''; 
+/*var seqid = ''; 
 var seqname = '';
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
@@ -451,7 +451,7 @@ for (var i = 0; i < rows.length; i++) {
             });
         }
     })(rows[i]);
-}
+}*/
 
 
 
@@ -701,17 +701,16 @@ function saveseq(){
 
 function updateValue(checkbox){
     var jobid = '<?php echo $data['job_id']?>';
-    var tr = checkbox.closest('tr');
-    if (tr) {
-        var seqname = tr.querySelector('.seq-name').textContent;
-        var type_value = checkbox.checked ? 1 : 0;
-        if (jobid) {
+    var check_seqid = checkbox.getAttribute('data-sequence-id');
+    var type_value = checkbox.checked ? 1 : 0;
+
+    if(type_value){
             $.ajax({
             url: "?url=Sequences/check_seq_type",
             method: "POST",
             data:{ 
                 jobid: jobid,
-                seqname: seqname,
+                seqid: check_seqid,
                 type_value:type_value
 
             },
@@ -722,11 +721,7 @@ function updateValue(checkbox){
                 
             }
         });
-            
-        }
-    } else {
-        
-    }
+    } 
 }
 
 </script>

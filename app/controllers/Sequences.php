@@ -272,11 +272,11 @@ class Sequences extends Controller
     public function check_seq_type(){
 
         $jobid = $_POST['jobid'] ?? null;
-        $seqname = $_POST['seqname'] ?? null;
+        $seqid = $_POST['seqid'] ?? null;
         $type_value = $_POST['type_value'] ?? 0;
 
         if(!empty($jobid)){
-            $res = $this->sequenceModel->check_seq_type($jobid,$seqname,$type_value);
+            $res = $this->sequenceModel->check_seq_type($jobid,$seqid,$type_value);
             if($res){ 
                 //$res_msg = 'update seq:'. $seqid.'success';
             }else{
