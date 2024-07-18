@@ -1,7 +1,8 @@
-
+seq_id = '';
 function cound_job(argument){
     var table = document.getElementById('seq_table');
-    var seqid = readFromLocalStorage('seqid');
+    var selectedRow = table.querySelector('.selected');
+    seq_id = selectedRow ? selectedRow.cells[0].innerText : null;
   
     if(argument == 'del' && seqid != null){
         delete_seqid(seqid);
