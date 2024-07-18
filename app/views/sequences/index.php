@@ -432,7 +432,7 @@ var rowInfoArray = [];
 
 
 
-/*var seqid = ''; 
+var seqid = ''; 
 var seqname = '';
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
@@ -441,17 +441,14 @@ for (var i = 0; i < rows.length; i++) {
         if (cells.length > 0) {
             cells[0].addEventListener("click", function() {
            
-                //seqid   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
-                //seqname = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
                 seqid = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
                 seqname  = seqname = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
                 localStorage.setItem("seqid", seqid);
                 localStorage.setItem("seqname", seqname);
-
             });
         }
     })(rows[i]);
-}*/
+}
 
 function copy_seq_by_id(){
 
@@ -533,6 +530,7 @@ function create_seq() {
 
 function edit_seq(seqid) {
     var jobid = '<?php echo $data['job_id']?>';
+    var seqid = readFromLocalStorage('seqid');
     if(jobid){
         $.ajax({
             url: "?url=Sequences/search_seqinfo",

@@ -435,7 +435,7 @@ var rowInfoArray = [];
         rowInfoArray.push(rowInfo);
 <?php } ?>
 
-/*var seqid = ''; 
+var seqid = ''; 
 var seqname = '';
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
@@ -451,7 +451,7 @@ for (var i = 0; i < rows.length; i++) {
             });
         }
     })(rows[i]);
-}*/
+}
 
 
 
@@ -535,7 +535,7 @@ function create_seq() {
 
 function edit_seq(seqid) {
     var jobid = '<?php echo $data['job_id']?>';
-   
+    var seqid = readFromLocalStorage('seqid');
     if(jobid){
         $.ajax({
             url: "?url=Sequences/search_seqinfo",
