@@ -698,8 +698,9 @@ function updateValue(checkbox){
     var jobid = '<?php echo $data['job_id']?>';
     var check_seqid = checkbox.getAttribute('data-sequence-id');
     var type_value = checkbox.checked ? 1 : 0;
-
-    if(type_value){
+    console.log(check_seqid);
+    console.log(type_value);
+    if(jobid){
             $.ajax({
             url: "?url=Sequences/check_seq_type",
             method: "POST",
