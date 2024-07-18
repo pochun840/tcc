@@ -292,18 +292,14 @@ for (var i = 0; i < rows.length; i++) {
 }
 
 
-
 function copy_job_by_id(jobid){
 
-    var old_jobid = jobid;
-    //var old_jobname = jobname;
+    //var old_jobid = jobid;
     var new_jobid = '<?php echo $data['jobint']?>';
-    console.log(old_jobname);
-
     var new_jobname = document.getElementById("to_job_name").value;
 
     document.getElementById("from_job_id").value = old_jobid;
-    document.getElementById("from_job_name").value = old_jobname;
+    document.getElementById("from_job_name").value = oldjobname;
     document.getElementById("to_job_id").value = new_jobid;
 
     if(new_jobname){
@@ -312,11 +308,12 @@ function copy_job_by_id(jobid){
             method: "POST",
             data: { 
                 old_jobid: old_jobid,
-                old_jobname: old_jobname,
+                old_jobname: oldjobname,
                 new_jobid: new_jobid,
                 new_jobname: new_jobname
             },
             success: function(response) {
+                console.log(response);
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);

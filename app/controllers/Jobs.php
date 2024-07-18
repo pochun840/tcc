@@ -60,7 +60,7 @@ class Jobs extends Controller
                 'unscrew_direction' => $_POST['direction_val'],
             );
 
-            $mode = "create";
+            //$mode = "create";
             $result3  = $this->MiscellaneousModel->validateName($jobdata['job_name']);
             $result1 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_power']);
             $result2 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_rpm']);
@@ -76,12 +76,12 @@ class Jobs extends Controller
             if ($result3 == true  && $result1 == true && $result2 == true) {
 
                 $job_count = $this->jobModel->countjob();
-                if($job_count >= 50) {
+                /*if($job_count >= 50) {
                     echo "The maximum number of steps has been reached, unable to continue copying jobs";
                     return;
-                }
+                }*/
     
-                $res = $this->jobModel->create_job($mode,$jobdata);
+                $res = $this->jobModel->create_job($jobdata);
                 $result = array();
                 if($res){
                     $res_msg  = $text['New']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['success'];
@@ -182,52 +182,47 @@ class Jobs extends Controller
     #copy 
     public function copy_job(){
 
-
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
         }
         
-  
         $jobdata = array();
         $old_jobid = $_POST['old_jobid'] ?? null;
         if(!empty($old_jobid)){
-
-
             $job_count = $this->jobModel->countjob();
             if($job_count >= 50) {
-                echo "The maximum number of steps has been reached, unable to continue copying jobs";
-                return;
+                //$res_msg = $error_message['job_id'];
+                //$this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
             }
+            else{  
+                $old_res = $this->jobModel->search_jobinfo($old_jobid);
+                if(!empty($old_res)){
 
-            
-            $old_res = $this->jobModel->search_jobinfo($old_jobid);
-            if(!empty($old_res)){
+                    #取得 unscrew_power && 	unscrew_rpm && unscrew_direction
+                    $jobdata = array(
+                        'job_id'   => $_POST['new_jobid'],
+                        'job_name' => $_POST['new_jobname'],
+                        'unscrew_power' => $old_res['unscrew_power'],
+                        'unscrew_rpm' => $old_res['unscrew_rpm'],  
+                        'unscrew_direction' => $old_res['unscrew_direction'],  
 
-                #取得 unscrew_power && 	unscrew_rpm && unscrew_direction
-                $jobdata = array(
-                    'new_jobid'   => $_POST['new_jobid'],
-                    'new_jobname' => $_POST['new_jobname'],
-                    'unscrew_power' => $old_res['unscrew_power'],
-                    'unscrew_rpm' => $old_res['unscrew_rpm'],  
-                    'unscrew_direction' => $old_res['unscrew_direction'],  
+                    );
 
-                );
-
-                #取得 unscrew_power && 	unscrew_rpm && unscrew_direction
-                $mode = "copy";
-                $result = array();
-                $res = $this->jobModel->create_job($mode,$jobdata);
-                if($res){
-                    $res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['success'];
-                    $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg );
-                }else{
-                    $res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['fail'];
-                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
+                    $res = $this->jobModel->create_job($jobdata);
+                    if($res){
+                        $res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['success'];
+                        $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg );
+                    }else{
+                        //$res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['fail'];
+                        //$this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
+                    }
+                    
                 }
 
             }
         }
+
     }    
 }
 

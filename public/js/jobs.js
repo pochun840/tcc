@@ -18,13 +18,15 @@ function delete_jobid(jobid) {
         });
     }
 }
-
+var oldjobname ='';
+var old_jobid  = '';
 function cound_job(argument){
 
     var table = document.getElementById('job_table');
     var selectedRow = table.querySelector('.selected');
-    var jobid = selectedRow ? selectedRow.cells[0].innerText : null;
-
+    var jobid  = selectedRow ? selectedRow.cells[0].innerText : null;
+    oldjobname = selectedRow ? selectedRow.cells[1].innerText : null;
+    old_jobid  = selectedRow ? selectedRow.cells[0].innerText : null;
     if(argument == 'del' && jobid != null){
         delete_jobid(jobid);
     }

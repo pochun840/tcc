@@ -53,33 +53,21 @@ class Job{
 
 
     #新增JOB
-    public function create_job($mode, $jobdata){
-        
-        $sql = "INSERT INTO `job`(job_id, job_name, unscrew_power, unscrew_rpm, unscrew_direction)";
-        $sql .= "VALUES(:job_id, :job_name, :unscrew_power, :unscrew_rpm, :unscrew_direction);";
+    public function create_job($jobdata){
+        $sql = "INSERT INTO `job` (job_id, job_name, unscrew_power, unscrew_rpm, unscrew_direction)";
+        $sql .= " VALUES (:job_id, :job_name, :unscrew_power, :unscrew_rpm, :unscrew_direction);";
+    
+        $jobdata['job_id'] = intval($jobdata['job_id']);
+    
         $statement = $this->db_iDas->prepare($sql);
     
-    
-        if($mode == "create"){
-
-            if (($jobdata['job_id'] = intval($jobdata['job_id'])) > 50) return false;
-
-            $statement->bindValue(':job_id', $jobdata['job_id']);
-            $statement->bindValue(':job_name', $jobdata['job_name']);
-        } else {
-
-             if (($jobdata['new_jobid'] = intval($jobdata['new_jobid'])) > 50) return false;
-
-            $statement->bindValue(':job_id', $jobdata['new_jobid']);
-            $statement->bindValue(':job_name', $jobdata['new_jobname']);
-        }
-    
+        $statement->bindValue(':job_id', $jobdata['job_id']);
+        $statement->bindValue(':job_name', $jobdata['job_name']);
         $statement->bindValue(':unscrew_power', $jobdata['unscrew_power']);
         $statement->bindValue(':unscrew_rpm', $jobdata['unscrew_rpm']);
         $statement->bindValue(':unscrew_direction', $jobdata['unscrew_direction']);
     
-        $results = $statement->execute();
-    
+        $results = $statement->execute();    
         return $results;
     }
     
