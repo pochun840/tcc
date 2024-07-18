@@ -619,6 +619,7 @@ function crud_job_event(argument){
         delete_input_id(job_id,input_event);
     }
 
+
     if(argument == 'edit' && job_id != '' && input_event != ''){
 
         var selectElement = document.getElementById('edit_Event_Option');

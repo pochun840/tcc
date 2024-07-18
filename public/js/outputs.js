@@ -91,6 +91,7 @@ function delete_output_id(job_id,output_event){
              
             },
             success: function(response) {
+                //console.log(response);
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_output_by_job_id(job_id);

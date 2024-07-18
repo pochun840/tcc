@@ -39,7 +39,7 @@ function highlight_row(tableId)
     }
 }
 
-
+var input_event = '';
 function highlight_row_input(tableId) {
     var table = document.getElementById(tableId);
 
@@ -58,15 +58,40 @@ function highlight_row_input(tableId) {
             clickedRow.classList.add('selected');
 
             // 获取并处理事件值
-            var eventValue = clickedRow.getAttribute('data-event');
-            console.log('Clicked event:', eventValue);
-            console.log(clickedRow);
+            input_event  = clickedRow.getAttribute('data-event');
+
         } else {
-            console.log(target); 
+           //console.log(target); 
         }
     });
 }
 
+var output_event = '';
+function highlight_row_output(tableId) {
+    var table = document.getElementById(tableId);
+
+    // 使用事件委托处理点击事件
+    table.addEventListener('click', function(event) {
+        var target = event.target;
+        if (target.tagName === 'TD' && target.parentNode.tagName === 'TR' && target.parentNode.getAttribute('data-event')) {
+            // 先移除其他行的 'selected' 类
+            var rows = table.getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].classList.remove('selected');
+            }
+
+            // 添加 'selected' 类到点击的行
+            var clickedRow = target.parentNode;
+            clickedRow.classList.add('selected');
+
+            // 获取并处理事件值
+            output_event  = clickedRow.getAttribute('data-event');
+
+        } else {
+           //console.log(target); 
+        }
+    });
+}
 
 
 function MoveUp(button) {

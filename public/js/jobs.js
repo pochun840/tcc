@@ -1,32 +1,3 @@
-var jobid ='';
-var jobname = '';
-
-var rows = document.getElementsByTagName("tr");
-for (var i = 0; i < rows.length; i++) {
-    (function(row) {
-        var cells = row.getElementsByTagName("td");
-        if (cells.length > 0) {
-            cells[0].addEventListener("click", function() {
-           
-                var jobid = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
-                var secondCellValue = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
-                var thirdCellValue = cells[2] ? (cells[2].textContent || cells[2].innerText) : null;
-                var rpmvalue = cells[3] ? (cells[3].textContent || cells[3].innerText) : null;
-                var powervalue = cells[4] ? (cells[4].textContent || cells[4].innerText) : null;
-                jobid = jobid;
-                jobname = secondCellValue;
-        
-                localStorage.setItem("jobid", jobid );
-                localStorage.setItem("jobname", secondCellValue);
-                localStorage.setItem("direction", thirdCellValue);
-                localStorage.setItem("powervalue", powervalue);
-                localStorage.setItem("rpmvalue", rpmvalue);
-
-            });
-        }
-    })(rows[i]);
-}
-
 
 function delete_jobid(jobid) {
     if (jobid) {

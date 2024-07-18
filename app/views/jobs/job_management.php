@@ -268,7 +268,7 @@ window.onclick = function(event) {
 <script>    
 
 var jobid ='';
-var jobname = '';
+var old_jobname = '';
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
     (function(row) {
@@ -282,7 +282,7 @@ for (var i = 0; i < rows.length; i++) {
                 var rpmvalue = cells[3] ? (cells[3].textContent || cells[3].innerText) : null;
                 var powervalue = cells[4] ? (cells[4].textContent || cells[4].innerText) : null;
                 jobid = jobid;
-                jobname = secondCellValue;
+                old_jobname = secondCellValue;
                 
                 localStorage.setItem("jobid", jobid );
                 localStorage.setItem("jobname", secondCellValue);
@@ -332,7 +332,7 @@ function savejob() {
 function copy_job_by_id(jobid){
 
     var old_jobid = jobid;
-    var old_jobname = readFromLocalStorage('jobname');
+    //var old_jobname = old_jobname;
     var new_jobid = '<?php echo $data['jobint']?>';
 
     var new_jobname = document.getElementById("to_job_name").value;
