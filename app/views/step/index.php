@@ -405,8 +405,12 @@ function cound_step(argument){
         copy_step(stepid);
     }
 
+
     if(argument =="new"){
-        create_step();
+        var step_count = countrows();
+        if(step_count  < 4){
+            create_step();
+        }
     }
 
     if(argument =="edit" && stepid != null){
@@ -1077,5 +1081,13 @@ function sendRowInfoArray() {
             }
         });
     }
+}
+
+function countrows() {
+    var tbody = document.querySelector('#step_table tbody');
+    var rows = tbody.querySelectorAll('tr');
+    var rowCount = rows.length;
+    console.log("共有 " + rowCount + " 行");
+    return rowCount;
 }
 </script>
