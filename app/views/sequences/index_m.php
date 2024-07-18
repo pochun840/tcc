@@ -459,13 +459,12 @@ function copy_seq_by_id(){
 
     var jobid = '<?php echo $data['job_id']?>';
     var newseqid = '<?php echo $data['seq_id']?>';
-    var oldseqid = seqid;
     var oldseqname = seqname;
     
 
     document.getElementById("from_seq_name").value = oldseqname;
     document.getElementById('to_seq_id').value = newseqid;
-    document.getElementById('from_seq_id').value = oldseqid;
+    document.getElementById('from_seq_id').value =  seqid;
 
   
     var newseqname = document.getElementById("to_seq_name").value;
@@ -476,8 +475,8 @@ function copy_seq_by_id(){
             method: "POST",
             data:{ 
                 jobid: jobid,
-                oldseqid: oldseqid,
-                oldseqname: oldseqname,
+                oldseqid: seqid,
+                oldseqname: seqname,
                 newseqid: newseqid,
                 newseqname: newseqname
 
@@ -535,7 +534,7 @@ function create_seq() {
 
 function edit_seq(seqid) {
     var jobid = '<?php echo $data['job_id']?>';
-    var seqid = readFromLocalStorage('seqid');
+    //var seqid = readFromLocalStorage('seqid');
     if(jobid){
         $.ajax({
             url: "?url=Sequences/search_seqinfo",

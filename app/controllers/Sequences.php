@@ -152,17 +152,14 @@ class Sequences extends Controller
             if($res){
                 $res_type = 'Success';
                 $res_msg  = $text['del_seq'].':'. $seqid."  ".$text['success'];
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg );
             }else{
                 $res_type = 'Error';
                 $res_msg  = $text['del_seq'].':'. $seqid."  ".$text['fail'];
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg );
             }
 
-            $result = array(
-                'res_type' => $res_type,
-                'res_msg'  => $res_msg 
-            );
-
-            echo json_encode($result);
+         
 
         }
     }
