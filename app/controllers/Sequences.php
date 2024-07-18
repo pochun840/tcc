@@ -78,6 +78,11 @@ class Sequences extends Controller
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
             
             
+            if ($tighten_repeat < 1 || $tighten_repeat > 99){
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tightening_repeat']);
+            }
+
+
             if ($k_value < 1.5 || $k_value > 999.8){
                 $k_value = 100.0;
             }
@@ -200,6 +205,13 @@ class Sequences extends Controller
             $torque_unit_val = isset($_POST['torque_unit']) ? intval($_POST['torque_unit']) : 0;
             $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
+
+
+            if ($tighten_repeat < 1 || $tighten_repeat > 99){
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tightening_repeat']);
+            }
+
+            
 
             if ($k_value < 1.5 || $k_value > 999.8){
                 $k_value = 100.0;
