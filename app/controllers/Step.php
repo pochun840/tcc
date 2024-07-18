@@ -94,18 +94,15 @@ class Step extends Controller
             $check = intval($check[0]['count_records']);
 
             if($check > 1){
-                $status_msg ='';
-                $status_msg = $text['check_step_target'];
-                echo $status_msg;
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
                 exit();
-
             }
 
             if($target_option == 2){
                 $target_delaytime = $target_torque; 
                 if ($target_torque < 0.1 || $target_torque > 9.9){
-                    echo "超過範圍";
-                    return;
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
+                    exit();
                 }else{
                     $target_torque = 0;
                     $target_angle  = 0;
@@ -149,17 +146,12 @@ class Step extends Controller
             if($res){
                 $res_type = 'Success';
                 $res_msg = $text['new_step'].':'.$stepid."  ".$text['success'];
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
             }else{
                 $res_type = 'Error';
                 $res_msg = $text['new_step'].':'.$stepid."  ".$text['fail'];
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
             }
-
-            $result = array(
-                'res_type' => $res_type,
-                'res_msg'  => $res_msg 
-            );
-
-            echo json_encode($result);
         }
 
     }
@@ -194,8 +186,8 @@ class Step extends Controller
 
             if($target_option == 2){
                 if ($target_delaytime < 0.1 || $target_delaytime > 9.9){
-                    echo "超過範圍";
-                    return;
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
+                    exit();
                 }
 
             }
@@ -205,9 +197,7 @@ class Step extends Controller
             $check = intval($check[0]['count_records']);
 
             if($check > 1){
-                $status_msg ='';
-                $status_msg = $text['check_step_target'];
-                echo $status_msg;
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
                 exit();
 
             }
@@ -269,17 +259,12 @@ class Step extends Controller
             if($res){
                 $res_type = 'Success';
                 $res_msg = $text['del_step'].':'. $stepid."  ".$text['success'];
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
             }else{
                 $res_type = 'Error';
                 $res_msg = $text['del_step'].':'. $stepid."  ".$text['fail'];
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
             }
-            $result = array(
-                'res_type' => $res_type,
-                'res_msg'  => $res_msg 
-            );
-
-            echo json_encode($result);
-        
         }
     
     }
@@ -310,10 +295,7 @@ class Step extends Controller
             $check = $this->stepModel->check_copy_step($jobid,$seqid,$stepid);
             $check = intval($check[0]['target_option']);
             if($check == 0 ){
-                $status_msg ='';
-                $status_msg = $text['check_step_target'];
-                echo $status_msg;
-                exit();
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target'] );
 
             }else{
                 $old_res= $this->stepModel->getStepNo($jobid,$seqid,$stepid);
@@ -344,17 +326,13 @@ class Step extends Controller
                     if($res){
                         $res_type = 'Success';
                         $res_msg  = $text['copy_step'].':'.$stepid_new."  ".$text['success'];
+                        $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
                     }else{
                         $res_type = 'Error';
                         $res_msg  = $text['copy_step'].':'.$stepid_new."  ".$text['fail'];
+                        $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
                     }
         
-                    $result = array(
-                        'res_type' => $res_type,
-                        'res_msg'  => $res_msg 
-                    );
-        
-                    echo json_encode($result);
                 }
             }
         }
