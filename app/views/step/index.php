@@ -388,13 +388,13 @@ for (var i = 0; i < rows.length; i++) {
     })(rows[i]);
 }
 
-
+var stepid = '';
 function cound_step(argument){
 
     var table = document.getElementById('step_table');
     var selectedRow = table.querySelector('.selected');
     var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
-    var stepid = selectedRowData || null;
+    stepid = selectedRowData || null;
     localStorage.setItem("stepid", stepid);
 
     if(argument == 'del'){

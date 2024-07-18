@@ -1,10 +1,7 @@
 
 function cound_job(argument){
     var table = document.getElementById('seq_table');
-    var selectedRow = table.querySelector('.selected');
-    //seq_id = selectedRow ? selectedRow.cells[0].innerText : null;
-    //seq_name = selectedRow ? selectedRow.cells[1].innerText : null;
-  
+    var selectedRow = table.querySelector('.selected');  
     if(argument == 'del' && seqid != null){
         delete_seqid(seqid);
     }
