@@ -65,6 +65,14 @@ class Jobs extends Controller
             $result1 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_power']);
             $result2 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_rpm']);
 
+            if($result1 == false || $result2  == false){
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
+            }
+
+            if($result3 == false){
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_job_name']);
+            }
+
             if ($result3 == true  && $result1 == true && $result2 == true) {
 
                 $job_count = $this->jobModel->countjob();
@@ -76,18 +84,12 @@ class Jobs extends Controller
                 $res = $this->jobModel->create_job($mode,$jobdata);
                 $result = array();
                 if($res){
-                    $res_type = 'Success';
                     $res_msg  = $text['New']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['success'];
+                    $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
                 }else{
-                    $res_type = 'Error';
                     $res_msg  = $text['New']."  ".$text['job_id'].':'.$jobdata['job_id']."  ".$text['fail'];
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-    
-                echo json_encode($result);
             }
                       
         }
@@ -116,24 +118,28 @@ class Jobs extends Controller
             $result1 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_power']);
             $result2 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_rpm']);
 
+            if($result1 == false || $result2  == false){
+
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
+            
+            }
+
+
+            if($result3 == false){
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_job_name']);
+            }
+
             if ($result3 == true  && $result1 == true && $result2 == true) {
                 
                 $res = $this->jobModel->update_job_by_id($jobdata);
                 $result = array();
                 if($res){
-                    $res_type = 'Success';
                     $res_msg = $text['Edit']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['success'];
+                    $this->MiscellaneousModel->generateErrorResponse('Succes', $res_msg );
                 }else{
-                    $res_type = 'Error';
                     $res_msg = $text['Edit']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['fail'];
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
                 }
-
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-    
-                echo json_encode($result);
 
             }
         } 
@@ -154,19 +160,13 @@ class Jobs extends Controller
             $res = $this->jobModel->delete_job_by_id($jobid);
             $result = array();
             if($res){
-                $res_type = 'Success';
                 $res_msg = $text['Delete']."  ".$text['job_id'].':'. $jobid."  ".$text['success'];
+                $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg );
             }else{
-                $res_type = 'Error';
                 $res_msg = $text['Delete']."  ".$text['job_id'].':'. $jobid."  ".$text['fail'];
+                $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
             }
 
-            $result = array(
-                'res_type' => $res_type,
-                'res_msg'  => $res_msg 
-            );
-
-            echo json_encode($result);
         }
    
     }
@@ -219,19 +219,13 @@ class Jobs extends Controller
                 $result = array();
                 $res = $this->jobModel->create_job($mode,$jobdata);
                 if($res){
-                    $res_type = 'Success';
                     $res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['success'];
+                    $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg );
                 }else{
-                    $res_type = 'Error';
                     $res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['fail'];
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
                 }
 
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-    
-                echo json_encode($result);
             }
         }
     }    

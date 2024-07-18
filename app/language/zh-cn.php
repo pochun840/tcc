@@ -425,7 +425,8 @@ $text['img_save'] = '../public/img/home_save_cn.png';
 $text['img_save_hover'] = '../public/img/home_save_m_cn.png';
 $text['img_agent'] = '../public/img/home_agent_cn.png';
 $text['img_agent_hover'] = '../public/img/home_m_agent_cn.png';
-
+$text['unfasten_force'] = '超出范围 1 - 10';
+$text['error_job_name'] = '工作名称输入有误';
 //--------------------------------------------------------------------------------------------------------------
 
 $error_message = array();

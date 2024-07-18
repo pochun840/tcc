@@ -421,7 +421,8 @@ $text['img_save_hover'] = '../public/img/home_save_m_tw.png';
 $text['img_agent'] = '../public/img/home_agent_tw.png';
 $text['img_agent_hover'] = '../public/img/home_m_agent_tw.png';
 
-
+$text['unfasten_force'] = '超出範圍 1 - 10';
+$text['error_job_name'] = 'JOB名稱輸入有誤';
 //--------------------------------------------------------------------------------------------------------------
 
 
@@ -438,7 +439,7 @@ $error_message['copy_to_name'] = 'JOB名稱輸入有誤';
 
 if(isset($data['tool_info'])){
 	$error_message['unfasten_RPM'] = '超出範圍 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
-	$error_message['unfasten_force'] = '超出範圍 1 - 110';
+	$error_message['unfasten_force'] = '超出範圍 1 - 10';
 }
 
 if(isset($data['job_type'])){
