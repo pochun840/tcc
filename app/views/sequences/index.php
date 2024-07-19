@@ -529,7 +529,7 @@ function create_seq() {
 
 function edit_seq(seqid) {
     var jobid = '<?php echo $data['job_id']?>';
-    //var seqid = readFromLocalStorage('seqid');
+    var seqid = readFromLocalStorage('seqid');
     if(jobid){
         $.ajax({
             url: "?url=Sequences/search_seqinfo",

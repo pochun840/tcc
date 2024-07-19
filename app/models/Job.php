@@ -42,12 +42,12 @@ class Job{
         $results = $statement->execute([$jobid]);
 
 
-        if($jobid != 50 ){
+        /*if($jobid != 50 ){
             $sql_update = "UPDATE job SET job_id = job_id - 1 WHERE job_id > ?";
             $statement_update = $this->db_iDas->prepare($sql_update);
             $statement_update->execute([$jobid]);
 
-        }
+        }*/
         return $results;
     }
 
