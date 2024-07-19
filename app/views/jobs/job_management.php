@@ -338,8 +338,31 @@ function copy_job_by_id(jobid){
     document.getElementById("from_job_name").value = oldjobname;
     document.getElementById("to_job_id").value = new_jobid;
 
-    if(new_jobname){
+    if(new_jobid){
+
+        //先去檢查job_id 是否存在(有存在的話 要詢問)
         $.ajax({
+            url: "?url=Jobs/check_job_type",
+            method: "POST",
+            data: { 
+                new_jobid: new_jobid,
+            },
+            success: function(response) {      
+                /*var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                    history.go(0);
+                });*/
+
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+
+
+
+
+        /*$.ajax({
             url: "?url=Jobs/copy_job",
             method: "POST",
             data: { 
@@ -359,7 +382,7 @@ function copy_job_by_id(jobid){
             error: function(xhr, status, error) {
                 
             }
-        });
+        });*/
 
     }
 }

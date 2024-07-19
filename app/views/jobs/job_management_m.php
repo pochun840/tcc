@@ -294,36 +294,74 @@ for (var i = 0; i < rows.length; i++) {
 
 function copy_job_by_id(jobid){
 
-    var new_jobid = document.getElementById("to_job_id").value;
-    var new_jobname = document.getElementById("to_job_name").value;
+var new_jobid = document.getElementById("to_job_id").value;
+var new_jobname = document.getElementById("to_job_name").value;
 
-    document.getElementById("from_job_id").value = old_jobid;
-    document.getElementById("from_job_name").value = oldjobname;
-    document.getElementById("to_job_id").value = new_jobid;
+document.getElementById("from_job_id").value = old_jobid;
+document.getElementById("from_job_name").value = oldjobname;
+document.getElementById("to_job_id").value = new_jobid;
 
-    if(new_jobname){
-        $.ajax({
-            url: "?url=Jobs/copy_job",
-            method: "POST",
-            data: { 
-                old_jobid: old_jobid,
-                old_jobname: oldjobname,
-                new_jobid: new_jobid,
-                new_jobname: new_jobname
-            },
-            success: function(response) {
-                console.log(response);
-                var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                });
-            },
-            error: function(xhr, status, error) {
-                
+if(new_jobid){
+
+    //先去檢查job_id 是否存在(有存在的話 要詢問)
+    $.ajax({
+        url: "?url=Jobs/check_job_type",
+        method: "POST",
+        data: { 
+            new_jobid: new_jobid,
+        },
+        success: function(response) {      
+            if(response == "TRUE"){
+                alertify.confirm('Confirmation', 'Are you sure?', 
+                    function() {
+                        // Yes button callback
+                        alert('eeqwwrt');
+                        history.go(0);
+                    }, 
+                    function() {
+                        // No button callback
+                        // Optionally handle cancel action here
+                    }
+                ).set('labels', {ok:'Yes', cancel:'No'});
+
             }
-        });
+            /*var responseData = JSON.parse(response);
+            alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                history.go(0);
+            });*/
 
-    }
+        },
+        error: function(xhr, status, error) {
+            console.log(error);
+        }
+    });
+
+
+
+
+    /*$.ajax({
+        url: "?url=Jobs/copy_job",
+        method: "POST",
+        data: { 
+            old_jobid: old_jobid,
+            old_jobname: oldjobname,
+            new_jobid: new_jobid,
+            new_jobname: new_jobname
+        },
+        success: function(response) {      
+            console.log(response);
+            var responseData = JSON.parse(response);
+            alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                history.go(0);
+            });
+
+        },
+        error: function(xhr, status, error) {
+            
+        }
+    });*/
+
+}
 }
 
 function savejob() {

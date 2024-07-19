@@ -179,6 +179,23 @@ class Jobs extends Controller
         }
     }
 
+
+    public function check_job_type(){
+        $jobid = $_POST['new_jobid'] ?? null;
+        
+        if(!empty($jobid)){
+            $res  = $this->jobModel->search_jobinfo($jobid);
+            if(!empty($res['job_id'])){
+                //$ans ="YES";
+                echo  "TRUE";
+            }else{
+                echo  "FALSE";
+            }
+        }
+
+
+    }
+
     #copy 
     public function copy_job(){
 
@@ -214,8 +231,8 @@ class Jobs extends Controller
                         $res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['success'];
                         $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg );
                     }else{
-                        //$res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['fail'];
-                        //$this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
+                        $res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['fail'];
+                        $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
                     }
                     
                 }
