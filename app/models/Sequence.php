@@ -96,6 +96,15 @@ class Sequence{
 
     }
 
+    public function delete_step_by_job_id($jobid,$seqid){
+
+        $sql= "DELETE FROM step WHERE  job_id = ? AND sequence_id = ? ";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$jobid, $seqid]);
+
+        return $results;
+    }
+
 
     #查詢 單筆的sequences
     public function search_seqinfo($jobid,$seqid){

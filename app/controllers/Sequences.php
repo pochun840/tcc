@@ -154,6 +154,7 @@ class Sequences extends Controller
         if(!empty($jobid)){
             $result = array();
             $res = $this->sequenceModel->delete_seq_by_id($jobid,$seqid);
+            $res11 = $this->sequenceModel->delete_step_by_job_id($jobid,$seqid);
             if($res){
                 $res_type = 'Success';
                 $res_msg  = $text['del_seq'].':'. $seqid."  ".$text['success'];

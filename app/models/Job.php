@@ -40,16 +40,29 @@ class Job{
         $sql= "DELETE FROM job WHERE job_id = ?";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$jobid]);
-
-
-        /*if($jobid != 50 ){
-            $sql_update = "UPDATE job SET job_id = job_id - 1 WHERE job_id > ?";
-            $statement_update = $this->db_iDas->prepare($sql_update);
-            $statement_update->execute([$jobid]);
-
-        }*/
         return $results;
     }
+
+    #刪除sequence
+    public function delete_sequence_by_job_id($jobid){
+
+        $sql= "DELETE FROM sequence WHERE job_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$jobid]);
+
+        return $results;
+    }
+
+    #刪除step 
+    public function delete_step_by_job_id($jobid){
+
+        $sql= "DELETE FROM step WHERE job_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$jobid]);
+
+        return $results;
+    }
+
 
 
     #新增JOB

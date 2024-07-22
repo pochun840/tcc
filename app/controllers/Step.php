@@ -28,11 +28,16 @@ class Step extends Controller
         $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
         $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
         $check     = $this->stepModel->check_step_target($job_id,$seq_id);
-
-
-        $unit = $unit_arr[$seqinfo[0]['torque_unit']];
-  
-
+        
+        if(!empty($seqinfo)){
+            
+            $unit = $unit_arr[$seqinfo[0]['torque_unit']];
+            
+        }else{
+            $unit = '';
+            $unit_arr = '';
+        }
+        
         if(empty($step)){
             $stepid_new = 1;
         }else{
