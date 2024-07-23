@@ -79,6 +79,38 @@ class Sequence{
 
     }
 
+    public function copy_seq_by_seq_id($new_temp_seq){
+
+        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, tightening_repeat, ng_stop, sequence_enable, screw_join, okall_stop, opt, torque_unit, k_value, ok_time, okall_alarm_time, offset)";
+        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :tightening_repeat, :ng_stop, :sequence_enable, :screw_join, :okall_stop, :opt, :torque_unit, :k_value, :ok_time, :okall_alarm_time, :offset)";
+
+        $statement = $this->db_iDas->prepare($sql);
+        $insertedrecords = 0; 
+        foreach ($new_temp_seq as $seq) {            
+            if ($statement->execute($seq)) {
+                $insertedrecords++;
+            }
+        }
+        return $insertedrecords;
+
+    }
+
+    public function copy_step_by_seq_id($new_temp_step){
+
+        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, 	downshift_torque,downshift_rpm )";
+        $sql .= " VALUES (:job_id,:sequence_id,:step_id,:target_option,:target_torque,:target_angle,:target_delaytime,:hi_torque,:lo_torque,:hi_angle,:lo_angle,:rpm,:direction,:downshift,:threshold_torque,:downshift_torque,:downshift_rpm )";
+
+        $statement = $this->db_iDas->prepare($sql);
+        $insertedrecords = 0; 
+        foreach ($new_temp_step as $seq) {            
+            if ($statement->execute($seq)) {
+                $insertedrecords++;
+            }
+        }
+        return $insertedrecords;
+
+    }
+
     #刪除sequences
     public function delete_seq_by_id($jobid,$seqid){
 
@@ -237,14 +269,17 @@ class Sequence{
     }
 
 
-    public function search_stepnfo($jobid,$seqid){
+    public function search_stepinfo($jobid,$seqid){
 
-    $sql= " SELECT *  FROM step WHERE job_id = ? AND sequence_id = ? ";
-    $statement = $this->db_iDas->prepare($sql);
-    $statement->execute([$jobid,$seqid]);
-    
-    return $statement->fetchall();
+        $sql= " SELECT *  FROM step WHERE job_id = ? AND sequence_id = ? ";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid,$seqid]);
+        
+        return $statement->fetchall();
 
     }
+
+
+
       
 }

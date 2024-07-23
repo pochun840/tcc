@@ -304,85 +304,81 @@ class Sequences extends Controller
             include $file;
         }
 
-        $jobdata = array();
-        $mode = "copy"; 
-
         $jobid = $_POST['jobid'] ?? null;
-        $seqid = $_POST['oldseqid'] ?? null;
+        $seqid = $_POST['seqid'] ?? null;
         $newseqid = $_POST['newseqid'] ?? null;
         $oldseqname = $_POST['oldseqname'] ?? null;
         $newseqname = $_POST['newseqname'] ?? null;
 
-        if(!empty($jobid && $seqid && $oldseqname )){
+        //用jobid 及 seqid 去找出 對應的資料
+        $old_res = $this->sequenceModel->search_seqinfo($jobid,$seqid);
+        $select_step = $this->sequenceModel->search_stepinfo($jobid,$seqid);
+        if(!empty($old_res)){
+            $new_temp_seq = array();
+            foreach($old_res as $kk =>$vv){
+                $new_temp_seq[$kk]['job_id'] = $vv['job_id'];
+                $new_temp_seq[$kk]['sequence_id'] = $newseqid;
+                $new_temp_seq[$kk]['sequence_name'] = $newseqname;
+                $new_temp_seq[$kk]['tightening_repeat'] = $vv['tightening_repeat'];
+                $new_temp_seq[$kk]['ng_stop'] = $vv['ng_stop']; 
+                $new_temp_seq[$kk]['sequence_enable'] = $vv['sequence_enable']; 
+                $new_temp_seq[$kk]['screw_join'] = $vv['screw_join']; 
+                $new_temp_seq[$kk]['okall_stop'] = $vv['okall_stop']; 
+                $new_temp_seq[$kk]['opt'] = $vv['opt']; 
+                $new_temp_seq[$kk]['torque_unit'] = $vv['torque_unit']; 
+                $new_temp_seq[$kk]['k_value'] = $vv['k_value']; 
+                $new_temp_seq[$kk]['ok_time'] = $vv['ok_time']; 
+                $new_temp_seq[$kk]['okall_alarm_time'] = $vv['okall_alarm_time']; 
+                $new_temp_seq[$kk]['offset'] = $vv['offset']; 
+            }  
 
-
-            $seq_count = $this->sequenceModel->countseq($jobid);
-            $seq_count = intval($seq_count);
-           
-            if($seq_count >= 50) {
-                echo "The maximum number of steps has been reached, unable to continue copying seqs";
-                return;
-            }
-
-            $old_res = $this->sequenceModel->search_old_data($jobid,$seqid,$oldseqname);
-
-
-            //var_dump($old_res);die();
-            if(!empty($old_res)){
-
-                $jobdata = array(
-                    'job_id'   => $jobid,
-                    'sequence_id' => $newseqid,
-                    'sequence_name' => $newseqname,
-                    'tightening_repeat' => $old_res['tightening_repeat'],  
-                    'ng_stop' => $old_res['ng_stop'],  
-                    'sequence_enable' => $old_res['sequence_enable'], 
-                    'screw_join' => $old_res['screw_join'], 
-                    'okall_stop' => $old_res['okall_stop'], 
-                    'opt' => $old_res['opt'], 
-                    'torque_unit' => $old_res['torque_unit'], 
-                    'k_value' => $old_res['k_value'], 
-                    'ok_time' => $old_res['ok_time'], 
-                    'okall_alarm_time' => $old_res['okall_alarm_time'], 
-                    'offset' => $old_res['offset'], 
-
-                );
-
-                $res = $this->sequenceModel->create_seq($mode,$jobdata);
-
-                echo $jobid;
-                echo "<br>";
-                echo $seqid;
-                die();
-                $select_step = $this->sequenceModel->search_stepnfo($jobid,$seqid);
-                echo "<pre>";
-                print_r($select_step);
-                echo "</pre>";
-                die();
-
-
-
-                /*$result = array();
-                if($res){
-                    $res_type = 'Success';
-                    $res_msg  = $text['Copy_Sequence'].':'.$newseqid."  ".$text['success'];
-                }else{
-                    $res_type = 'Error';
-                    $res_msg  = $text['Copy_Sequence'].':'.$newseqid."  ".$text['fail'];
-                }
-
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-    
-                echo json_encode($result);*/
+            $rows = $this->sequenceModel->copy_seq_by_seq_id($new_temp_seq);
+        }
+        if(!empty($select_step)){
+            $new_temp_step = array();
+            foreach($select_step as $k_step =>$v_step){
+                $new_temp_step[$k_step]['job_id'] = $v_step['job_id'];
+                $new_temp_step[$k_step]['sequence_id'] = $newseqid;
+                $new_temp_step[$k_step]['step_id'] = $v_step['step_id'];
+                $new_temp_step[$k_step]['target_option'] =$v_step['target_option'];
+                $new_temp_step[$k_step]['target_torque'] = $v_step['target_torque'];
+                $new_temp_step[$k_step]['target_angle'] = $v_step['target_angle'];
+                $new_temp_step[$k_step]['target_delaytime'] = $v_step['target_delaytime'];
+                $new_temp_step[$k_step]['hi_torque'] = $v_step['hi_torque'];
+                $new_temp_step[$k_step]['lo_torque'] = $v_step['lo_torque'];
+                $new_temp_step[$k_step]['hi_angle'] = $v_step['hi_angle'];
+                $new_temp_step[$k_step]['lo_angle'] = $v_step['lo_angle'];
+                $new_temp_step[$k_step]['rpm'] = $v_step['rpm'];
+                $new_temp_step[$k_step]['direction'] = $v_step['direction'];
+                $new_temp_step[$k_step]['downshift'] = $v_step['downshift'];
+                $new_temp_step[$k_step]['threshold_torque'] = $v_step['threshold_torque'];
+                $new_temp_step[$k_step]['downshift_torque'] = $v_step['downshift_torque'];
+                $new_temp_step[$k_step]['downshift_rpm'] = $v_step['downshift_rpm'];
 
             }
+
+            $rows_temp = $this->sequenceModel->copy_step_by_seq_id($new_temp_step);
+        
         }
 
-    }
+        if($rows){
+            $res_type = 'Success';
+            $res_msg  = $text['Copy_Sequence'].':'.$newseqid."  ".$text['success'];
+        }else{
+            $res_type = 'Error';
+            $res_msg  = $text['Copy_Sequence'].':'.$newseqid."  ".$text['fail'];
+        }
+
+        $result = array(
+            'res_type' => $res_type,
+            'res_msg'  => $res_msg 
+        );
+
+        echo json_encode($result);
     
+
+    }
+   
     #seq 排序
     public function adjustment_order(){
 

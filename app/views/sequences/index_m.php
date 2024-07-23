@@ -453,47 +453,69 @@ for (var i = 0; i < rows.length; i++) {
     })(rows[i]);
 }
 
+function copy_seq_by_id(){
 
-
-function copy_seq_by_id_bk(){
-
-    var jobid = '<?php echo $data['job_id']?>';
-    var newseqid = '<?php echo $data['seq_id']?>';
+    var jobid = '<?php echo $data['job_id'];?>';
     var oldseqname = seqname;
-    
-
+    var seqid = readFromLocalStorage('seqid');
     document.getElementById("from_seq_name").value = oldseqname;
-    document.getElementById('to_seq_id').value = newseqid;
-    document.getElementById('from_seq_id').value =  seqid;
+    var newseqid = document.getElementById('to_seq_id').value;
+    document.getElementById('from_seq_id').value=  seqid;
 
-  
-    var newseqname = document.getElementById("to_seq_name").value;
+    var newseqname = document.getElementById("to_seq_name").value;    
 
-   if(newseqname){
+    if(newseqname){
         $.ajax({
-            url: "?url=Sequences/copy_seq",
+            url: "?url=Sequences/check_seq_type",
             method: "POST",
             data:{ 
-                jobid: jobid,
-                oldseqid: seqid,
-                oldseqname: seqname,
-                newseqid: newseqid,
-                newseqname: newseqname
+                jobid:jobid,
+                newseqid: newseqid
 
             },
             success: function(response) {
-                var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                }); 
-            },
+                alertify.confirm("Are you sure?", function (result) {
+                if(result){
+                    $.ajax({
+                        url: "?url=Sequences/copy_seq_data",
+                        method: "POST",
+                        data:{ 
+                            jobid: jobid,
+                            seqid: seqid,
+                            oldseqname: oldseqname,
+                            newseqid: newseqid,
+                            newseqname: newseqname
+                        },
+                        success: function(response) {
+
+                            
+                            var responseData = JSON.parse(response);
+                            alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                history.go(0);
+                            });
+                            //console.log(response);
+                        },
+                        error: function(xhr, status, error) {
+                            
+                        }
+                    });
+
+                    //alert('eeew');
+                }else {
+                    alertify.error('Cancelled');
+                    // 用户点击取消按钮的处理逻辑
+                }
+                });
+                        },
             error: function(xhr, status, error) {
                 
             }
         });
+        
     }
 
 }
+
 function copy_seq(seqid){
     
     document.getElementById('copyseq').style.display = 'block';   
