@@ -2,6 +2,8 @@
 function cound_job(argument){
     var table = document.getElementById('seq_table');
     var selectedRow = table.querySelector('.selected');  
+
+    
     if(argument == 'del' && seqid != null){
         delete_seqid(seqid);
     }
@@ -18,5 +20,6 @@ function cound_job(argument){
     if(argument =="copy" && seqid != null){
         copy_seq(seqid);
     }
+
 
 }

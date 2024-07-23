@@ -140,6 +140,8 @@ class Sequences extends Controller
 
     }
 
+   
+
     public function delete_seq(){
 
         $file = $this->MiscellaneousModel->lang_load();
@@ -279,26 +281,23 @@ class Sequences extends Controller
     }
 
 
+
+
     public function check_seq_type(){
-
+        
         $jobid = $_POST['jobid'] ?? null;
-        $seqid = $_POST['seqid'] ?? null;
-        $type_value = $_POST['type_value'] ?? 0;
+        $seqid = $_POST['newseqid'] ?? null;
+        
 
-        if(!empty($jobid)){
-            $res = $this->sequenceModel->check_seq_type($jobid,$seqid,$type_value);
-            if($res){ 
-                //$res_msg = 'update seq:'. $seqid.'success';
-            }else{
-                //$res_msg = 'update seq:'. $seqid.'fail';
-            }
-            $res_msg ="";
-            echo $res_msg;
+        if(!empty($seqid)){
+            $res  = $this->sequenceModel->sequence_id_repeat($jobid,$seqid);
+            echo  $res;
         }
+      
 
     }
 
-    public function copy_seq(){
+    public function copy_seq_data(){
 
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
@@ -327,6 +326,8 @@ class Sequences extends Controller
 
             $old_res = $this->sequenceModel->search_old_data($jobid,$seqid,$oldseqname);
 
+
+            //var_dump($old_res);die();
             if(!empty($old_res)){
 
                 $jobdata = array(
@@ -348,7 +349,20 @@ class Sequences extends Controller
                 );
 
                 $res = $this->sequenceModel->create_seq($mode,$jobdata);
-                $result = array();
+
+                echo $jobid;
+                echo "<br>";
+                echo $seqid;
+                die();
+                $select_step = $this->sequenceModel->search_stepnfo($jobid,$seqid);
+                echo "<pre>";
+                print_r($select_step);
+                echo "</pre>";
+                die();
+
+
+
+                /*$result = array();
                 if($res){
                     $res_type = 'Success';
                     $res_msg  = $text['Copy_Sequence'].':'.$newseqid."  ".$text['success'];
@@ -362,7 +376,7 @@ class Sequences extends Controller
                     'res_msg'  => $res_msg 
                 );
     
-                echo json_encode($result);
+                echo json_encode($result);*/
 
             }
         }

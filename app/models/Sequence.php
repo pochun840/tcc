@@ -219,4 +219,32 @@ class Sequence{
         return true;
    
     }
+
+
+    #驗證seq id是否重複
+    public function sequence_id_repeat($jobid,$seqid)
+    {
+        $sql = "SELECT count(*) as count FROM sequence WHERE 	job_id AND sequence_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$jobid,$seqid]);
+        $rows = $statement->fetch();
+
+        if ($rows['count'] > 0) {
+            return "True"; // sequence_id已存在
+        }else{
+            return "False"; // sequence_id不存在
+        }
+    }
+
+
+    public function search_stepnfo($jobid,$seqid){
+
+    $sql= " SELECT *  FROM step WHERE job_id = ? AND sequence_id = ? ";
+    $statement = $this->db_iDas->prepare($sql);
+    $statement->execute([$jobid,$seqid]);
+    
+    return $statement->fetchall();
+
+    }
+      
 }

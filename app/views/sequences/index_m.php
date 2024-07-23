@@ -455,7 +455,7 @@ for (var i = 0; i < rows.length; i++) {
 
 
 
-function copy_seq_by_id(){
+function copy_seq_by_id_bk(){
 
     var jobid = '<?php echo $data['job_id']?>';
     var newseqid = '<?php echo $data['seq_id']?>';
