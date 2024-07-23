@@ -98,9 +98,7 @@ class Job{
 
         return $results;
 
-
     }
-
 
     #查詢JOB 
     public function search_jobinfo($jobid){
@@ -120,6 +118,76 @@ class Job{
         $statement->execute();
         $result = $statement->fetch();
         return $result['count'];
+    }
+
+
+    #驗證job id是否重複
+    public function job_id_repeat($jobid)
+    {
+        $sql = "SELECT count(*) as count FROM job WHERE job_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$jobid]);
+        $rows = $statement->fetch();
+
+        if ($rows['count'] > 0) {
+            return "True"; // job_id已存在
+        }else{
+            return "False"; // job_id不存在
+        }
+    }
+
+    #查詢job_id對應的seq
+    public function search_seqinfo($old_jobid){
+
+        $sql= " SELECT *  FROM sequence WHERE job_id = ? ";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$old_jobid]);
+        
+        return $statement->fetchall();
+
+    }
+
+
+    public function search_stepnfo($old_jobid){
+
+        $sql= " SELECT *  FROM step WHERE job_id = ? ";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$old_jobid]);
+        
+        return $statement->fetchall();     
+    }
+
+
+    
+
+    public function copy_sequence_by_job_id($new_temp_seq) {
+        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, tightening_repeat, ng_stop, sequence_enable, screw_join, okall_stop, opt, torque_unit, k_value, ok_time, okall_alarm_time, offset)";
+        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :tightening_repeat, :ng_stop, :sequence_enable, :screw_join, :okall_stop, :opt, :torque_unit, :k_value, :ok_time, :okall_alarm_time, :offset)";
+        
+        $statement = $this->db_iDas->prepare($sql);
+        $insertedrecords = 0; 
+        foreach ($new_temp_seq as $seq) {            
+            if ($statement->execute($seq)) {
+                $insertedrecords++;
+            }
+        }
+        return $insertedrecords;
+    }
+    
+
+    public function copy_step_by_job_id($new_temp_step){
+        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, 	downshift_torque,downshift_rpm )";
+        $sql .= " VALUES (:job_id,:sequence_id,:step_id,:target_option,:target_torque,:target_angle,:target_delaytime,:hi_torque,:lo_torque,:hi_angle,:lo_angle,:rpm,:direction,:downshift,:threshold_torque,:downshift_torque,:downshift_rpm )";
+        
+        $statement = $this->db_iDas->prepare($sql);
+        $insertedrecords = 0; 
+        foreach ($new_temp_step as $seq) {            
+            if ($statement->execute($seq)) {
+                $insertedrecords++;
+            }
+        }
+        return $insertedrecords;
+
     }
 
 

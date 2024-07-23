@@ -183,40 +183,45 @@ class Jobs extends Controller
         }
     }
 
-
     public function check_job_type(){
         $jobid = $_POST['new_jobid'] ?? null;
-        
-        if(!empty($jobid)){
-            $res  = $this->jobModel->search_jobinfo($jobid);
-            if(!empty($res['job_id'])){
-                //$ans ="YES";
-                echo  "TRUE";
-            }else{
-                echo  "FALSE";
-            }
-        }
 
+        if(!empty($jobid)){
+            $res  = $this->jobModel->job_id_repeat($jobid);
+            echo  $res;
+        }
+      
 
     }
 
     #copy 
-    public function copy_job(){
-
+    public function copy_job_data(){
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
         }
-        
-        $jobdata = array();
-        $old_jobid = $_POST['old_jobid'] ?? null;
+
+        /*
+         old_jobid: old_jobid,
+                            old_jobname: oldjobname,
+                            new_jobid: new_jobid,
+                            new_jobname: new_jobname
+
+        */
+
+        $old_jobid   = $_POST['old_jobid'] ?? null;
+        $old_jobname = $_POST['old_jobname'] ?? null;
+        $new_jobid   = $_POST['new_jobid'] ?? null;
+        $new_jobname = $_POST['new_jobname'] ?? null;
+
+
+
         if(!empty($old_jobid)){
             $job_count = $this->jobModel->countjob();
             if($job_count >= 50) {
-                //$res_msg = $error_message['job_id'];
-                //$this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
-            }
-            else{  
+          
+            }else{
+           
                 $old_res = $this->jobModel->search_jobinfo($old_jobid);
                 if(!empty($old_res)){
 
@@ -229,8 +234,60 @@ class Jobs extends Controller
                         'unscrew_direction' => $old_res['unscrew_direction'],  
 
                     );
-
                     $res = $this->jobModel->create_job($jobdata);
+                    //用job_id 找出對應的seq && step
+                    $select_seq  = $this->jobModel->search_seqinfo($old_jobid); 
+                    $select_step = $this->jobModel->search_stepnfo($old_jobid); 
+
+                    if(!empty($select_seq)){
+                        $new_temp_seq = array();
+                        foreach($select_seq as $key =>$val){
+                            $new_temp_seq[$key]['job_id'] = $new_jobid;
+                            $new_temp_seq[$key]['sequence_id'] = $val['sequence_id'];
+                            $new_temp_seq[$key]['sequence_name'] = $val['sequence_name'];
+                            $new_temp_seq[$key]['tightening_repeat'] = $val['tightening_repeat'];
+                            $new_temp_seq[$key]['ng_stop'] = $val['ng_stop'];
+                            $new_temp_seq[$key]['sequence_enable'] = $val['sequence_enable'];
+                            $new_temp_seq[$key]['screw_join'] = $val['screw_join'];
+                            $new_temp_seq[$key]['okall_stop'] = $val['okall_stop'];
+                            $new_temp_seq[$key]['opt'] = $val['opt'];
+                            $new_temp_seq[$key]['torque_unit'] = $val['torque_unit'];
+                            $new_temp_seq[$key]['k_value'] = $val['k_value'];
+                            $new_temp_seq[$key]['ok_time'] = $val['ok_time'];
+                            $new_temp_seq[$key]['okall_alarm_time'] = $val['okall_alarm_time'];
+                            $new_temp_seq[$key]['offset'] = $val['offset'];
+                        }
+
+                        $insertedrecords = $this->jobModel->copy_sequence_by_job_id($new_temp_seq);                
+                    }
+
+                    if(!empty($select_step)){
+                        $new_temp_step = array();
+                        
+                        foreach($select_step as $key_step =>$val_step){
+
+                            $new_temp_step[$key_step]['job_id'] = $new_jobid;
+                            $new_temp_step[$key_step]['sequence_id'] = $val_step['sequence_id'];
+                            $new_temp_step[$key_step]['step_id'] = $val_step['step_id'];
+                            $new_temp_step[$key_step]['target_option'] = $val_step['target_option']; 
+                            $new_temp_step[$key_step]['target_torque'] = $val_step['target_torque'];
+                            $new_temp_step[$key_step]['target_angle'] = $val_step['target_angle'];
+                            $new_temp_step[$key_step]['target_delaytime'] = $val_step['target_delaytime'];
+                            $new_temp_step[$key_step]['hi_torque'] = $val_step['hi_torque'];
+                            $new_temp_step[$key_step]['lo_torque'] = $val_step['lo_torque'];
+                            $new_temp_step[$key_step]['hi_angle'] = $val_step['hi_angle'];
+                            $new_temp_step[$key_step]['lo_angle'] = $val_step['lo_angle'];
+                            $new_temp_step[$key_step]['rpm'] = $val_step['rpm'];
+                            $new_temp_step[$key_step]['direction'] = $val_step['direction'];
+                            $new_temp_step[$key_step]['downshift'] = $val_step['downshift'];
+                            $new_temp_step[$key_step]['threshold_torque'] = $val_step['threshold_torque'];
+                            $new_temp_step[$key_step]['downshift_torque'] = $val_step['downshift_torque'];
+                            $new_temp_step[$key_step]['downshift_rpm'] = $val_step['downshift_rpm'];
+                        }
+
+                        $insertedrecords = $this->jobModel->copy_step_by_job_id($new_temp_step);  
+                    }
+                    
                     if($res){
                         $res_msg = $text['Copy']."  ".$text['job_id'].':'. $_POST['new_jobid']."  ".$text['success'];
                         $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg );
@@ -240,11 +297,12 @@ class Jobs extends Controller
                     }
                     
                 }
-
             }
+        
         }
 
-    }    
+    }
+
 }
 
 ?>

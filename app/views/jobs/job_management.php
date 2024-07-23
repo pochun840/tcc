@@ -254,15 +254,11 @@ $(document).ready(function () {
 
 // Get the modal
 var modal = document.getElementById('newjob');
-
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
-
-
-
 </script>
 
 <script>    
@@ -329,61 +325,60 @@ function savejob() {
     }
 }
 
+
 function copy_job_by_id(jobid){
 
-    var new_jobid = document.getElementById("to_job_id").value;
-    var new_jobname = document.getElementById("to_job_name").value;
+var new_jobid = document.getElementById("to_job_id").value;
+var new_jobname = document.getElementById("to_job_name").value;
 
-    document.getElementById("from_job_id").value = old_jobid;
-    document.getElementById("from_job_name").value = oldjobname;
-    document.getElementById("to_job_id").value = new_jobid;
+document.getElementById("from_job_id").value = old_jobid;
+document.getElementById("from_job_name").value = oldjobname;
+document.getElementById("to_job_id").value = new_jobid;
 
-    if(new_jobid){
+if(new_jobid){
+    //alert(new_jobid);
+    $.ajax({
+        url: "?url=Jobs/check_job_type",
+        method: "POST",
+        data:{ 
+            new_jobid: new_jobid,
 
-        //先去檢查job_id 是否存在(有存在的話 要詢問)
-        $.ajax({
-            url: "?url=Jobs/check_job_type",
-            method: "POST",
-            data: { 
-                new_jobid: new_jobid,
-            },
-            success: function(response) {      
-                /*var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                });*/
+        },
+        success: function(response) {
+            alertify.confirm("Are you sure?", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "?url=Jobs/copy_job_data",
+                    method: "POST",
+                    data:{ 
+                        old_jobid: old_jobid,
+                        old_jobname: oldjobname,
+                        new_jobid: new_jobid,
+                        new_jobname: new_jobname
 
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-
-
-
-
-        /*$.ajax({
-            url: "?url=Jobs/copy_job",
-            method: "POST",
-            data: { 
-                old_jobid: old_jobid,
-                old_jobname: oldjobname,
-                new_jobid: new_jobid,
-                new_jobname: new_jobname
-            },
-            success: function(response) {      
-                console.log(response);
-                var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
+                    },
+                    success: function(response) { 
+                        var responseData = JSON.parse(response);
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            history.go(0);
+                        }); 
+                    },
+                    error: function(xhr, status, error) {
+                        
+                    }
                 });
-
-            },
-            error: function(xhr, status, error) {
-                
+            } else {
+                alertify.error('Cancelled');
+                // 用户点击取消按钮的处理逻辑
             }
-        });*/
+            });
+                    },
+        error: function(xhr, status, error) {
+            
+        }
+    });
+    
 
-    }
+}
 }
 </script>
