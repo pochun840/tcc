@@ -85,9 +85,9 @@ class Step extends Controller
             $target_torque = isset($_POST['target_torque'])? floatval($_POST['target_torque']) : 0; 
             $hi_torque = isset($_POST['hi_torque'])? floatval($_POST['hi_torque']) : 0; 
             $lo_torque = isset($_POST['lo_torque'])? floatval($_POST['lo_torque']) : 0; 
-            $hi_angle  = isset($_POST['hi_angle'])? floatval($_POST['hi_angle']) : 0; 
-            $lo_angle  = isset($_POST['lo_angle'])? floatval($_POST['lo_angle']) : 0; 
-            $rpm       = isset($_POST['rpm'])? floatval($_POST['rpm']) : 0;
+            $hi_angle  = isset($_POST['hi_angle'])? intval($_POST['hi_angle']) : 0; 
+            $lo_angle  = isset($_POST['lo_angle'])? intval($_POST['lo_angle']) : 0; 
+            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 0;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
             $downshift = isset($_POST['downshift'])? intval($_POST['downshift']) : 0;
             $threshold_torque = isset($_POST['threshold_torque'])? intval($_POST['threshold_torque']) : 0;
@@ -97,6 +97,55 @@ class Step extends Controller
             #同一個step 只能有一個Target Torque
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
+
+
+            
+            #驗證hi_angle的範圍
+            if(!empty($hi_angle)){
+                $ans = $this->MiscellaneousModel->check_angle($hi_angle);
+                if($ans == FALSE){
+                    $res_type = 'Error';
+                    $res_msg  = $error_message['High_Angle'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
+                    exit();
+
+                }
+            }
+
+            #驗證lo_angle的範圍
+            if(!empty($lo_angle)){
+                $ans = $this->MiscellaneousModel->check_angle($lo_angle);
+                if($ans == FALSE){
+                    $res_type = 'Error';
+                    $res_msg  = $error_message['Low_Angle'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
+                    exit();
+
+                }
+            }
+
+
+            #最小角度 必須小於 最大角度
+            if($lo_angle > $hi_angle){
+                $res_type = 'Error';
+                $res_msg  =  $error_message['angle_error'];
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+                echo json_encode($result);
+                exit();
+
+            }
+
 
             if($check > 1){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
@@ -176,12 +225,12 @@ class Step extends Controller
             $target_option = isset($_POST['target_option'])? intval($_POST['target_option']) : 0; 
 
             $target_torque = isset($_POST['target_torque'])? floatval($_POST['target_torque']) : 0; 
-            $target_angle = isset($_POST['target_angle'])? intval($_POST['target_angle']) : 0; 
+            $target_angle = isset($_POST['target_angle'])? floatval($_POST['target_angle']) : 0; 
             $target_delaytime = isset($_POST['target_delaytime'])? intval($_POST['target_delaytime']) : 0; 
             $hi_torque = isset($_POST['hi_torque'])? floatval($_POST['hi_torque']) : 0; 
             $lo_torque = isset($_POST['lo_torque'])? floatval($_POST['lo_torque']) : 0; 
-            $hi_angle  = isset($_POST['hi_angle'])? floatval($_POST['hi_angle']) : 0; 
-            $lo_angle  = isset($_POST['lo_angle'])? floatval($_POST['lo_angle']) : 0; 
+            $hi_angle  = isset($_POST['hi_angle'])? intval($_POST['hi_angle']) : 0; 
+            $lo_angle  = isset($_POST['lo_angle'])? intval($_POST['lo_angle']) : 0; 
             $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 0;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
             $downshift = isset($_POST['downshift'])? intval($_POST['downshift']) : 0;
@@ -189,6 +238,54 @@ class Step extends Controller
             $downshift_torque = isset($_POST['downshift_torque'])? intval($_POST['downshift_torque']) : 0;
             $downshift_rpm = isset($_POST['downshift_rpm'])? intval($_POST['downshift_rpm']) : 100;
 
+
+            //驗證hi_angle的範圍
+            if(!empty($hi_angle)){
+                $ans = $this->MiscellaneousModel->check_angle($hi_angle);
+                if($ans == FALSE){
+                    $res_type = 'Error';
+                    $res_msg  = $error_message['High_Angle'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
+                    exit();
+
+                }
+            }
+
+            //驗證lo_angle的範圍
+            if(!empty($lo_angle)){
+                $ans = $this->MiscellaneousModel->check_angle($lo_angle);
+                if($ans == FALSE){
+                    $res_type = 'Error';
+                    $res_msg  = $error_message['Low_Angle'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
+                    exit();
+
+                }
+            }
+
+            #最小角度 必須小於 最大角度
+            if($lo_angle > $hi_angle){
+                $res_type = 'Error';
+                $res_msg  =  $error_message['angle_error'];
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+                echo json_encode($result);
+                exit();
+
+            }
+
+
+            
             if($target_option == 2){
                 if ($target_delaytime < 0.1 || $target_delaytime > 9.9){
                     $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);

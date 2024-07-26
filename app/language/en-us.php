@@ -522,8 +522,8 @@ $error_message['Angle_Window_Subtraction'] = 'Out of range 0 - 30599';
 $error_message['Delay_Time'] = 'Out of range 0.0 - 10.0';
 $error_message['ok_time'] = 'Out of range 0.0 - 9.9';
 $error_message['k_value'] = 'Out of range 30 - 300';
-$error_message['joint_offset_val'] = '超出範圍 -254 - 254';
-
+$error_message['joint_offset_val'] = 'Out of range -254 - 254';
+$error_message['angle_error'] = 'The hi angle cannot be lower than the lo angle';
 
 if(isset($data['tool_info'])){
 	$error_message['Pre_Run_RPM'] = 'Out of range '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];

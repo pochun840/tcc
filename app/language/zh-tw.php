@@ -483,6 +483,7 @@ $error_message['Pre_Run_RPM'] = '超出範圍 60 - tool_maxrpm';
 $error_message['Pre_Run_Angle'] = '超出範圍 1 - 30600';
 $error_message['Target_Angle'] = '超出範圍 1 - 30600';
 $text['error_tightening_repeat'] = '超出範圍 1 - 99';
+$error_message['angle_error'] = '最大角度 不可低於 最小角度';
 
 if(isset($data['tool_info'])){
 	// $error_message['Hi_Torque'] = '需大於 Target_Torque 且小於'.$data['tool_info']['tool_maxtorque'];
@@ -508,7 +509,7 @@ $error_message['Angle_Window_Subtraction'] = '';
 $error_message['Delay_Time'] = '超出範圍 0.0 - 10.0';
 $error_message['ok_time'] = '超出範圍 0.0 - 9.9';
 $error_message['k_value'] = '超出範圍 30 - 300';
-$error_message['joint_offset_val'] = '超出範圍 -254 - 254';
+$error_message['joint_offset_val'] = '超出范围 -254 - 254';
 
 if(isset($data['tool_info'])){
 	$error_message['Pre_Run_RPM'] = '超出範圍 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];

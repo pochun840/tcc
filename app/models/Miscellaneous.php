@@ -276,6 +276,40 @@ class Miscellaneous{
     }
 
 
+    public function check_angle($angle) {
+        
+        //驗證角度是否為數字 及範圍是否為0-9999
+        if (is_numeric($angle) && $angle >= 0 && $angle <= 9999) {
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    public function check_torque($torque){
+        
+        
+    }
+
+    /*public function validateTorqueAndAngle($maxTorque, $minTorque, $maxAngle, $minAngle) {
+        // 檢查扭力值是否正確
+        if ($maxTorque <= $minTorque) {
+            return "錯誤：最大扭力必須大於最小扭力。";
+        }
+        
+        // 檢查角度值是否正確
+        if ($maxAngle <= $minAngle) {
+            return "錯誤：最大角度必須大於最小角度。";
+        }
+        
+        // 如果所有檢查通過
+        return "驗證通過：扭力和角度值都有效。";
+    }*/
+
+
+
+
+
 
 
 

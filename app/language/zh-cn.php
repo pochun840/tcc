@@ -511,6 +511,8 @@ $error_message['ok_time'] = '超出范围 0.0 - 9.9';
 $error_message['k_value'] = '超出范围 30 - 300';
 $error_message['joint_offset_val'] = '超出范围 -254 - 254';
 
+$error_message['angle_error'] = '最大角度 不可低于 最小角度';
+
 if(isset($data['tool_info'])){
 	$error_message['Pre_Run_RPM'] = '超出范围 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
 	$error_message['Torque_Window_Add'] = '超出范围 '.$data['tool_info']['tool_mintorque'].' - '.round($data['tool_info']['tool_maxtorque']*1.1,4) ;
