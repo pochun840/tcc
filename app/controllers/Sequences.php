@@ -78,25 +78,56 @@ class Sequences extends Controller
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
             
             
-            if ($tighten_repeat < 1 || $tighten_repeat > 99){
-                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tightening_repeat']);
+            #驗證顆數
+            if($tighten_repeat < 1 || $tighten_repeat > 99){
+                
+                $res_type = 'Error';
+                $res_msg  = $error_message['tightening_repeat'];
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+                echo json_encode($result);
+                exit();
             }
 
-
-            if ($k_value < 1.5 || $k_value > 999.8){
-                $k_value = 100.0;
-            }
-
+            #驗證OK_time
             if($ok_time < 0.0 || $ok_time > 9.9){
-                $ok_time  = 9.9;
+                $res_type = 'Error';
+                $res_msg  = $error_message['ok_time'];
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+                echo json_encode($result);
+                exit();
+
             }
 
-            if($okall_alarm_time < 0.0 || $okall_alarm_time > 9.9){
-                $okall_alarm_tim = 1.0;
+
+            #驗證k_value
+            if ($k_value < 30 || $k_value > 300){
+                $res_type = 'Error';
+                $res_msg  = $error_message['ok_time'];
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+                echo json_encode($result);
+                exit();
             }
 
+            # 驗證offset
             if ($offset < -254 || $offset > 254) {
-                $offset = 0; 
+                $res_type = 'Error';
+                //$offset = 0; 
+                $res_msg = $error_message['joint_offset_val'];
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+                echo json_encode($result);
+                exit();
             }
 
             $offset = sprintf("%+03d", $offset);
@@ -210,27 +241,58 @@ class Sequences extends Controller
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
 
 
-            if ($tighten_repeat < 1 || $tighten_repeat > 99){
-                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tightening_repeat']);
+            //驗證顆數
+            if($tighten_repeat < 1 || $tighten_repeat > 99){
+                
+                $res_type = 'Error';
+                $res_msg  = $error_message['tightening_repeat'];
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+                echo json_encode($result);
+                exit();
             }
 
-            
-
-            if ($k_value < 1.5 || $k_value > 999.8){
-                $k_value = 100.0;
-            }
-
+            //驗證OK_time
             if($ok_time < 0.0 || $ok_time > 9.9){
-                $ok_time  = 9.9;
+                $res_type = 'Error';
+                $res_msg  = $error_message['ok_time'];
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+                echo json_encode($result);
+                exit();
+
             }
 
-            if($okall_alarm_time < 0.0 || $okall_alarm_time > 9.9){
-                $okall_alarm_tim = 1.0;
+            //驗證k_value
+            if ($k_value < 30 || $k_value > 300){
+                $res_type = 'Error';
+                $res_msg  = $error_message['ok_time'];
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+                echo json_encode($result);
+                exit();
             }
 
+            # 驗證offset
             if ($offset < -254 || $offset > 254) {
-                $offset = 0; 
+                $res_type = 'Error';
+                //$offset = 0; 
+                $res_msg = $error_message['joint_offset_val'];
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+                echo json_encode($result);
+                exit();
             }
+
+    
 
             $offset = sprintf("%+03d", $offset);
 
