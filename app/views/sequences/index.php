@@ -430,8 +430,6 @@ var rowInfoArray = [];
         rowInfoArray.push(rowInfo);
 <?php } ?>
 
-
-
 var seqid = ''; 
 var seqname = '';
 var rows = document.getElementsByTagName("tr");
@@ -495,8 +493,6 @@ function copy_seq_by_id(){
                             
                         }
                     });
-
-                    //alert('eeew');
                 }else {
                     alertify.error('Cancelled');
                     // 用户点击取消按钮的处理逻辑

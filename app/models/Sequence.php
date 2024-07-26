@@ -311,5 +311,29 @@ class Sequence{
             return false;
         }
     }
+
+    public function del_step_type($jobid, $newseqid){
+
+        #查詢資料是否存在
+        $sql = "SELECT COUNT(*) FROM step WHERE job_id = ? AND sequence_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid, $newseqid]);
+        $count = $statement->fetchColumn();
+        $count = intval($count);
+
+          //die();
+        if ($count > 0) {
+            #如果資料存在，則刪除
+            $delete_step_sql = "DELETE FROM step  WHERE job_id = ? AND sequence_id = ?";
+            $deleteStatement = $this->db_iDas->prepare($delete_step_sql);
+            $deleteStatement->execute([$jobid, $newseqid]);
+    
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     
 }

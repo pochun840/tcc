@@ -379,7 +379,7 @@ class Sequences extends Controller
         $old_res = $this->sequenceModel->search_seqinfo($jobid,$seqid);
         
         $this->sequenceModel->del_seq_type($jobid,$newseqid);
-
+        $this->sequenceModel->del_step_type($jobid,$newseqid);
 
         $select_step = $this->sequenceModel->search_stepinfo($jobid,$seqid);
         if(!empty($old_res)){
@@ -402,7 +402,7 @@ class Sequences extends Controller
             }  
 
             $rows = $this->sequenceModel->copy_seq_by_seq_id($new_temp_seq);
-            //var_dump($rows);die();
+     
         }
         if(!empty($select_step)){
             $new_temp_step = array();
