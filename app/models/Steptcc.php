@@ -131,6 +131,8 @@ class Steptcc{
 
 
     public function update_step_by_id($jobdata){
+
+
         $sql = "UPDATE `step` SET 
                     target_option = :target_option,
                     target_torque = :target_torque, 

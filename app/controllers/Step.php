@@ -185,8 +185,21 @@ class Step extends Controller
             if($target_option == 2){
                 $target_delaytime = $target_torque; 
                 if ($target_torque < 0.1 || $target_torque > 9.9){
-                    $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
-                    exit();
+                    if($target_option == 2){
+                        if ($target_delaytime < 0.1 || $target_delaytime > 9.9){
+        
+                            $res_type = 'Error';
+                            $res_msg  =  $text['check_step_target'];
+                            $result = array(
+                                'res_type' => $res_type,
+                                'res_msg'  => $res_msg 
+                            );
+                            echo json_encode($result);
+                            exit();
+                        }
+        
+                    }
+        
                 }else{
                     $target_torque = 0;
                     $target_angle  = 0;
@@ -256,7 +269,7 @@ class Step extends Controller
 
             $target_torque = isset($_POST['target_torque'])? floatval($_POST['target_torque']) : 0; 
             $target_angle = isset($_POST['target_angle'])? floatval($_POST['target_angle']) : 0; 
-            $target_delaytime = isset($_POST['target_delaytime'])? intval($_POST['target_delaytime']) : 0; 
+            $target_delaytime = isset($_POST['target_delaytime'])? floatval($_POST['target_delaytime']) : 0; 
             $hi_torque = isset($_POST['hi_torque'])? floatval($_POST['hi_torque']) : 0; 
             $lo_torque = isset($_POST['lo_torque'])? floatval($_POST['lo_torque']) : 0; 
             $hi_angle  = isset($_POST['hi_angle'])? intval($_POST['hi_angle']) : 0; 
@@ -349,7 +362,14 @@ class Step extends Controller
 
             if($target_option == 2){
                 if ($target_delaytime < 0.1 || $target_delaytime > 9.9){
-                    $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
+
+                    $res_type = 'Error';
+                    $res_msg  =  $text['check_step_target'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
                     exit();
                 }
 
