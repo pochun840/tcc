@@ -223,6 +223,11 @@ class Jobs extends Controller
             }else{
            
                 $old_res = $this->jobModel->search_jobinfo($old_jobid);
+
+                $this->jobModel->del_job_type($new_jobid);
+                $this->jobModel->del_seq_type($jobid);
+                $this->jobModel->del_step_type($jobid);
+         
                 if(!empty($old_res)){
 
                     #取得 unscrew_power && 	unscrew_rpm && unscrew_direction

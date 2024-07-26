@@ -361,7 +361,7 @@ function copy_job_by_id(jobid){
                             var responseData = JSON.parse(response);
                             alertify.alert(responseData.res_type, responseData.res_msg, function() {
                                 history.go(0);
-                            }); 
+                            });
                         },
                         error: function(xhr, status, error) {
                             

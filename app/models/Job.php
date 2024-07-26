@@ -129,8 +129,13 @@ class Job{
         $results = $statement->execute([$jobid]);
         $rows = $statement->fetch();
 
+        //var_dump($rows);die();
+
         if ($rows['count'] > 0) {
+            //$this->del_job_type($jobid);
+            
             return "True"; // job_id已存在
+
         }else{
             return "False"; // job_id不存在
         }
@@ -146,6 +151,8 @@ class Job{
         return $statement->fetchall();
 
     }
+
+
 
 
     public function search_stepnfo($old_jobid){
@@ -189,6 +196,74 @@ class Job{
         return $insertedrecords;
 
     }
+
+
+    #用 $jobid 尋找有沒有對應的資料
+    #有的話就刪除唷
+    public function del_job_type($new_jobid) {
+        #查詢資料是否存在
+        $sql = "SELECT COUNT(*) FROM job WHERE job_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$new_jobid]);
+        $count = $statement->fetchColumn();
+        $count = intval($count);
+       
+        if ($count > 0) {
+            #如果資料存在，則刪除
+            $deleteSql = "DELETE FROM job  WHERE job_id = ? ";
+            $deleteStatement = $this->db_iDas->prepare($deleteSql);
+            $deleteStatement->execute([$new_jobid]);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function del_seq_type($new_jobid) {
+        #查詢資料是否存在
+        $sql = "SELECT COUNT(*) FROM sequence WHERE job_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$new_jobid]);
+        $count = $statement->fetchColumn();
+        $count = intval($count);
+       
+        if ($count > 0) {
+            #如果資料存在，則刪除
+            $deleteSql = "DELETE FROM sequence  WHERE job_id = ? ";
+            $deleteStatement = $this->db_iDas->prepare($deleteSql);
+            $deleteStatement->execute([$new_jobid]);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function del_step_type($new_jobid) {
+        #查詢資料是否存在
+        $sql = "SELECT COUNT(*) FROM step WHERE job_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$new_jobid]);
+        $count = $statement->fetchColumn();
+        $count = intval($count);
+       
+        if ($count > 0) {
+            #如果資料存在，則刪除
+            $deleteSql = "DELETE FROM step  WHERE job_id = ? ";
+            $deleteStatement = $this->db_iDas->prepare($deleteSql);
+            $deleteStatement->execute([$new_jobid]);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
+
 
 
 }
