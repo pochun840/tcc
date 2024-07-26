@@ -445,12 +445,12 @@ $text['error_job_name'] = 'JOB name input error';
 $error_message = array();
 
 //------job manage
-$error_message['job_id'] = 'JOB ID out of range 1 - 99';
+$error_message['job_id'] = 'JOB ID out of range 1 - 50';
 $error_message['job_name'] = 'JOB name input error';
 $error_message['unfasten_RPM'] = 'Out of range';
 $error_message['unfasten_force'] = 'Out of range';
 
-$error_message['copy_to_id'] = 'JOB ID input error 1 - 99';
+$error_message['copy_to_id'] = 'JOB ID input error 1 - 50';
 $error_message['copy_to_name'] = 'JOB name input error';
 
 if(isset($data['tool_info'])){

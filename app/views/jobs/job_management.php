@@ -360,8 +360,10 @@ function copy_job_by_id(jobid){
                         success: function(response) { 
                             var responseData = JSON.parse(response);
                             alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                document.getElementById('copyjob').style.display = 'none';
                                 history.go(0);
-                            });
+                            }); 
+                            //history.go(0);
                         },
                         error: function(xhr, status, error) {
                             
@@ -377,7 +379,6 @@ function copy_job_by_id(jobid){
                 
             }
         });
-        
 
     }
 }

@@ -429,12 +429,12 @@ $text['error_job_name'] = 'JOB名稱輸入有誤';
 $error_message = array();
 
 //------job manage
-$error_message['job_id'] = 'JOB ID超出範圍 1 - 99';
+$error_message['job_id'] = 'JOB ID超出範圍 1 - 50';
 $error_message['job_name'] = 'JOB名稱輸入有誤';
 $error_message['unfasten_RPM'] = '超出範圍';
 $error_message['unfasten_force'] = '超出範圍';
 
-$error_message['copy_to_id'] = 'JOB ID輸入有誤 1 - 99';
+$error_message['copy_to_id'] = 'JOB ID輸入有誤 1 - 50';
 $error_message['copy_to_name'] = 'JOB名稱輸入有誤';
 
 if(isset($data['tool_info'])){

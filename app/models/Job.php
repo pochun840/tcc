@@ -44,26 +44,47 @@ class Job{
     }
 
     #刪除sequence
-    public function delete_sequence_by_job_id($jobid){
-
-        $sql= "DELETE FROM sequence WHERE job_id = ?";
-        $statement = $this->db_iDas->prepare($sql);
-        $results = $statement->execute([$jobid]);
-
-        return $results;
+    public function delete_sequence_by_job_id($jobid) {
+   
+        $sql_select = "SELECT COUNT(*) AS count FROM sequence WHERE job_id = ?";
+        $statement_select = $this->db_iDas->prepare($sql_select);
+        $statement_select->execute([$jobid]);
+        $row = $statement_select->fetch(PDO::FETCH_ASSOC);
+    
+        // 如果存在對應的資料，則刪除
+        if ($row['count'] > 0) {
+            $sql_delete = "DELETE FROM sequence WHERE job_id = ?";
+            $statement_delete = $this->db_iDas->prepare($sql_delete);
+            $results = $statement_delete->execute([$jobid]);
+    
+            return $results;
+        } else {
+          
+            return false; 
+        }
     }
-
+    
     #刪除step 
-    public function delete_step_by_job_id($jobid){
-
-        $sql= "DELETE FROM step WHERE job_id = ?";
-        $statement = $this->db_iDas->prepare($sql);
-        $results = $statement->execute([$jobid]);
-
-        return $results;
+    public function delete_step_by_job_id($jobid) {
+        
+        //首先查詢是否存在對應的資料
+        $sql_select = "SELECT COUNT(*) AS count FROM step WHERE job_id = ?";
+        $statement_select = $this->db_iDas->prepare($sql_select);
+        $statement_select->execute([$jobid]);
+        $row = $statement_select->fetch(PDO::FETCH_ASSOC);
+    
+        //如果存在對應的資料，則刪除
+        if ($row['count'] > 0) {
+            $sql_delete = "DELETE FROM step WHERE job_id = ?";
+            $statement_delete = $this->db_iDas->prepare($sql_delete);
+            $results = $statement_delete->execute([$jobid]);
+    
+            return $results;
+        } else {
+            return false; 
+        }
     }
-
-
+    
 
     #新增JOB
     public function create_job($jobdata){

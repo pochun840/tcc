@@ -12,7 +12,8 @@ class Jobs extends Controller
         $this->jobModel = $this->model('Job');
         $this->DashboardModel = $this->model('Dashboard');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
-        
+
+
     }
 
     // 取得所有Jobs
@@ -67,19 +68,21 @@ class Jobs extends Controller
 
             if($result1 == false || $result2  == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
+                exit();
             }
 
             if($result3 == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_job_name']);
+                exit();
             }
 
             if ($result3 == true  && $result1 == true && $result2 == true) {
 
                 $job_count = $this->jobModel->countjob();
-                /*if($job_count >= 50) {
-                    echo "The maximum number of steps has been reached, unable to continue copying jobs";
-                    return;
-                }*/
+                if($job_count >= 50) {
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['job_id']);
+                    exit();
+                }
     
                 $res = $this->jobModel->create_job($jobdata);
                 $result = array();
@@ -113,6 +116,8 @@ class Jobs extends Controller
                 'unscrew_rpm' => $_POST['rpmvalue'],
                 'unscrew_direction' => $_POST['directionValue'],
             );
+
+
             
             $result3  = $this->MiscellaneousModel->validateName($jobdata['job_name']);
             $result1 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_power']);
@@ -121,12 +126,14 @@ class Jobs extends Controller
             if($result1 == false || $result2  == false){
 
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
+                exit();
             
             }
 
 
             if($result3 == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_job_name']);
+                exit();
             }
 
             if ($result3 == true  && $result1 == true && $result2 == true) {
@@ -219,7 +226,8 @@ class Jobs extends Controller
         if(!empty($old_jobid)){
             $job_count = $this->jobModel->countjob();
             if($job_count >= 50) {
-          
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['job_id']);
+                exit();
             }else{
            
                 $old_res = $this->jobModel->search_jobinfo($old_jobid);

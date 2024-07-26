@@ -301,30 +301,21 @@ class Miscellaneous{
         
     }
 
-
+    function validateTorque($target_torque, $hi_torque, $lo_torque) {
+        // 檢查 $target_torque 是否為 0
+        if ($target_torque == 0) {
+            return "錯誤：目標扭力不得為 0。";
+        }
     
-
-    /*public function validateTorqueAndAngle($maxTorque, $minTorque, $maxAngle, $minAngle) {
-        // 檢查扭力值是否正確
-        if ($maxTorque <= $minTorque) {
-            return "錯誤：最大扭力必須大於最小扭力。";
+        // 檢查 $hi_torque 是否大於 $lo_torque
+        if ($hi_torque <= $lo_torque) {
+            return "錯誤：高扭力 ($hi_torque) 必須大於低扭力 ($lo_torque)。";
         }
-        
-        // 檢查角度值是否正確
-        if ($maxAngle <= $minAngle) {
-            return "錯誤：最大角度必須大於最小角度。";
-        }
-        
-        // 如果所有檢查通過
-        return "驗證通過：扭力和角度值都有效。";
-    }*/
-
-
-
-
-
-
-
+    
+        // 如果所有檢查都通過
+        return "驗證通過：扭力值有效。";
+    }
+    
 
 
     

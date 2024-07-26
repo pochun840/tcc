@@ -6,7 +6,7 @@ function delete_jobid(jobid) {
             method: "POST",
             data: { jobid: jobid },
             success: function(response) {
-                
+                console.log(response);
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
