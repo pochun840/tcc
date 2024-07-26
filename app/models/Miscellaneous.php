@@ -169,7 +169,7 @@ class Miscellaneous{
 
     public function validateUnscrewPower($unscrewPower) {
         if (is_numeric($unscrewPower)) {
-            if ($unscrewPower >= 0 && $unscrewPower <= 10) {
+            if ($unscrewPower > 0 && $unscrewPower <= 10) {
                 return true; 
             } else {
                 return false; 
