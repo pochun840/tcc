@@ -353,6 +353,9 @@ class Sequences extends Controller
 
         if(!empty($seqid)){
             $res  = $this->sequenceModel->sequence_id_repeat($jobid,$seqid);
+            if($res == "True"){
+
+            }
             echo  $res;
         }
       
@@ -374,6 +377,10 @@ class Sequences extends Controller
 
         //用jobid 及 seqid 去找出 對應的資料
         $old_res = $this->sequenceModel->search_seqinfo($jobid,$seqid);
+        
+        $this->sequenceModel->del_seq_type($jobid,$newseqid);
+
+
         $select_step = $this->sequenceModel->search_stepinfo($jobid,$seqid);
         if(!empty($old_res)){
             $new_temp_seq = array();
@@ -395,6 +402,7 @@ class Sequences extends Controller
             }  
 
             $rows = $this->sequenceModel->copy_seq_by_seq_id($new_temp_seq);
+            //var_dump($rows);die();
         }
         if(!empty($select_step)){
             $new_temp_step = array();

@@ -484,7 +484,7 @@ function copy_seq_by_id(){
                             newseqname: newseqname
                         },
                         success: function(response) {
-                            //console.log('eewww');
+                            console.log(response);
                             var responseData = JSON.parse(response);
                             alertify.alert(responseData.res_type, responseData.res_msg, function() {
                                 history.go(0);

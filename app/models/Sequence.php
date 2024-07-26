@@ -262,10 +262,18 @@ class Sequence{
         $rows = $statement->fetch();
 
         if ($rows['count'] > 0) {
+
+            //如果有的話
+            $sql_d = "DELETE FROM step WHERE  job_id = ? AND sequence_id = ? ";
+            $statement = $this->db_iDas->prepare($sql_d);
+            $results_d = $statement->execute([$jobid, $seqid]);
+
             return "True"; // sequence_id已存在
         }else{
             return "False"; // sequence_id不存在
         }
+
+
     }
 
 
@@ -280,6 +288,28 @@ class Sequence{
     }
 
 
-
-      
+    #用 $jobid,$newseqid 尋找有沒有對應的資料
+    #有的話就刪除唷
+    public function del_seq_type($jobid, $newseqid) {
+        #查詢資料是否存在
+        $sql = "SELECT COUNT(*) FROM sequence WHERE job_id = ? AND sequence_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid, $newseqid]);
+        $count = $statement->fetchColumn();
+        $count = intval($count);
+       
+        //var_dump($count);
+        //die();
+        if ($count > 0) {
+            #如果資料存在，則刪除
+            $deleteSql = "DELETE FROM sequence  WHERE job_id = ? AND sequence_id = ?";
+            $deleteStatement = $this->db_iDas->prepare($deleteSql);
+            $deleteStatement->execute([$jobid, $newseqid]);
+    
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 }
