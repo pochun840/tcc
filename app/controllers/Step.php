@@ -152,6 +152,36 @@ class Step extends Controller
                 exit();
             }
 
+            if($target_option  == 0 && $target_option  == 1){
+                #$target_torque 必填
+                if(empty($target_torque)){
+                    $res_type = 'Error';
+                    $res_msg  =  $error_message['target_torque_empty'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
+                    exit();
+                }
+
+                #最小扭力 必須小於 最大扭力
+                if($hi_torque < $lo_torque){
+                    $res_type = 'Error';
+                    $res_msg  =  $error_message['torque_error'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
+                    exit();
+                }
+
+                //if()
+            }
+
+
+
             if($target_option == 2){
                 $target_delaytime = $target_torque; 
                 if ($target_torque < 0.1 || $target_torque > 9.9){
@@ -239,7 +269,7 @@ class Step extends Controller
             $downshift_rpm = isset($_POST['downshift_rpm'])? intval($_POST['downshift_rpm']) : 100;
 
 
-            //驗證hi_angle的範圍
+            #驗證hi_angle的範圍
             if(!empty($hi_angle)){
                 $ans = $this->MiscellaneousModel->check_angle($hi_angle);
                 if($ans == FALSE){
@@ -255,7 +285,7 @@ class Step extends Controller
                 }
             }
 
-            //驗證lo_angle的範圍
+            #驗證lo_angle的範圍
             if(!empty($lo_angle)){
                 $ans = $this->MiscellaneousModel->check_angle($lo_angle);
                 if($ans == FALSE){
@@ -286,6 +316,37 @@ class Step extends Controller
 
 
             
+            if($target_option  == 0 && $target_option  == 1){
+
+                #$target_torque 必填
+                if(empty($target_torque)){
+                    $res_type = 'Error';
+                    $res_msg  =  $error_message['target_torque_empty'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
+                    exit();
+                }
+
+                #最小扭力 必須小於 最大扭力
+                if($hi_torque < $lo_torque){
+                    $res_type = 'Error';
+                    $res_msg  =  $error_message['torque_error'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
+                    exit();
+                }
+            }
+
+            if($target_option  == 1){
+            
+            }
+
             if($target_option == 2){
                 if ($target_delaytime < 0.1 || $target_delaytime > 9.9){
                     $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);

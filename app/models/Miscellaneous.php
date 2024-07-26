@@ -286,10 +286,23 @@ class Miscellaneous{
         }
     }
 
-    public function check_torque($torque){
-        
+    public function check_torque($target_torque, $hi_torque, $lo_torque){
+        if ($target_torque == 0) {
+            $ans1 = 'FALSE1';
+            return $ans1;
+        }
+
+        if ($hi_torque < $lo_torque) {
+            $ans1 = 'FALSE2';
+            return $ans1;
+        }
+
+        return TRUE;
         
     }
+
+
+    
 
     /*public function validateTorqueAndAngle($maxTorque, $minTorque, $maxAngle, $minAngle) {
         // 檢查扭力值是否正確

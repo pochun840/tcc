@@ -388,14 +388,14 @@ for (var i = 0; i < rows.length; i++) {
     })(rows[i]);
 }
 
-var stepid = '';
+
 function cound_step(argument){
 
     var table = document.getElementById('step_table');
     var selectedRow = table.querySelector('.selected');
     var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
-    stepid = selectedRowData || null;
-    localStorage.setItem("stepid", stepid);
+    //stepid = selectedRowData || null;
+    //localStorage.setItem("stepid", stepid);
 
     if(argument == 'del'){
         del_stepid(stepid);
@@ -422,9 +422,9 @@ function cound_step(argument){
 
 function edit_step(){
 
-    var jobid = '<?php echo $data['job_id']?>';
-    var seqid = '<?php echo $data['seq_id']?>';
-    //var stepid = readFromLocalStorage("stepid");
+    var jobid  = '<?php echo $data['job_id']?>';
+    var seqid  = '<?php echo $data['seq_id']?>';
+    var stepid = readFromLocalStorage("stepid");
 
     var unit = '<?php echo $data['unit']?>';
 
@@ -444,8 +444,6 @@ function edit_step(){
                 var responseJSON = JSON.stringify(response);
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
-
-
 
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
@@ -488,7 +486,6 @@ function edit_step(){
 
                 if(target_option == 2){
 
-      
                     var name1 = '<?php echo $text['Target Delay Time']?>';
                     document.querySelector('div[for="edit_target-torque"]').textContent = name1;
                     document.getElementById("edit_target_torque").value = target_delaytime;
@@ -653,8 +650,6 @@ function edit_step(){
                     }
                 });
 
-                
-
 
                 var downshiftOptionRadios = document.getElementsByName("edit_downshift_option");
                 for (var i = 0; i < downshiftOptionRadios.length; i++) {
@@ -684,9 +679,6 @@ function edit_step(){
                     });
                 }
 
-
-
-
             },
             error: function(xhr, status, error) {
                 
@@ -702,7 +694,7 @@ function edit_step_save() {
 
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
-    //var stepid = readFromLocalStorage("stepid");
+    var stepid = readFromLocalStorage("stepid");
 
     var target_option = document.getElementById("edit_target_option").value;
 

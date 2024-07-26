@@ -512,6 +512,7 @@ $error_message['k_value'] = '超出范围 30 - 300';
 $error_message['joint_offset_val'] = '超出范围 -254 - 254';
 
 $error_message['angle_error'] = '最大角度 不可低于 最小角度';
+$error_message['torque_error'] = '最大扭力 不可低于 最小扭力';
 
 if(isset($data['tool_info'])){
 	$error_message['Pre_Run_RPM'] = '超出范围 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
@@ -549,3 +550,4 @@ $error_message['ERR_PROC_NOT_FINISH'] = '操作未完成';
 $error_message['SEQ_COMPLETED'] = '工序完成按确认';
 $error_message['JOB_COMPLETED'] = '工作完成按确认';
 $error_message['WORKPIECE_RECOVERY'] = '工件复归按确认';
+$error_message['target_torque_empty'] = '目标扭力为必填栏位';

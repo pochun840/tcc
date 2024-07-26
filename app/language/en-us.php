@@ -524,6 +524,7 @@ $error_message['ok_time'] = 'Out of range 0.0 - 9.9';
 $error_message['k_value'] = 'Out of range 30 - 300';
 $error_message['joint_offset_val'] = 'Out of range -254 - 254';
 $error_message['angle_error'] = 'The hi angle cannot be lower than the lo angle';
+$error_message['torque_error'] = 'The hi torque cannot be lower than the lo torque';
 
 if(isset($data['tool_info'])){
 	$error_message['Pre_Run_RPM'] = 'Out of range '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
@@ -561,3 +562,4 @@ $error_message['ERR_PROC_NOT_FINISH'] = 'ERR-PROC-NOT-FINISH';
 $error_message['SEQ_COMPLETED'] = 'SEQ-COMPLETED';
 $error_message['JOB_COMPLETED'] = 'JOB-COMPLETED';
 $error_message['WORKPIECE_RECOVERY'] = 'WORKPIECE-RECOVERY';
+$error_message['target_torque_empty'] = 'target_torque is a required field';

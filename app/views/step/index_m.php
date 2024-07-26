@@ -365,7 +365,6 @@ for (var i = 0; i < rows.length; i++) {
         var cells = row.getElementsByTagName("td");
         if (cells.length > 0) {
             cells[0].addEventListener("click", function() {
-           
                 stepid   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
                 localStorage.setItem("stepid", stepid);
             });
@@ -373,13 +372,12 @@ for (var i = 0; i < rows.length; i++) {
     })(rows[i]);
 }
 
-var stepid = '';
+
 function cound_step(argument){
     var table = document.getElementById('step_table');
     var selectedRow = table.querySelector('.selected');
     var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
-    stepid = selectedRowData || null;
-    localStorage.setItem("stepid", stepid);
+
     if(argument == 'del'){
         del_stepid(stepid);
     }
@@ -405,7 +403,7 @@ function edit_step(){
 
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
-    //var stepid = readFromLocalStorage("stepid");
+    var stepid = readFromLocalStorage("stepid");
 
     var unit = '<?php echo $data['unit']?>';
     var language = getCookie('language');
@@ -673,7 +671,7 @@ function edit_step_save() {
 
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
-    //var stepid = readFromLocalStorage("stepid");
+    var stepid = readFromLocalStorage("stepid");
     var target_option = document.getElementById("edit_target_option").value;
 
     var target_torque = 0;
