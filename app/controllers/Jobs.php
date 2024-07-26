@@ -233,8 +233,8 @@ class Jobs extends Controller
                 $old_res = $this->jobModel->search_jobinfo($old_jobid);
 
                 $this->jobModel->del_job_type($new_jobid);
-                $this->jobModel->del_seq_type($jobid);
-                $this->jobModel->del_step_type($jobid);
+                $this->jobModel->del_seq_type($new_jobid);
+                $this->jobModel->del_step_type($new_jobid);
          
                 if(!empty($old_res)){
 

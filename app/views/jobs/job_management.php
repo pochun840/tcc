@@ -363,6 +363,8 @@ function copy_job_by_id(jobid){
                                 document.getElementById('copyjob').style.display = 'none';
                                 history.go(0);
                             }); 
+
+                            
                             //history.go(0);
                         },
                         error: function(xhr, status, error) {
@@ -379,7 +381,7 @@ function copy_job_by_id(jobid){
                 
             }
         });
-
+        document.getElementById('copyjob').style.display = 'none';
     }
 }
 </script>
