@@ -729,7 +729,7 @@ function updateValue(checkbox){
     console.log(type_value);
     if(jobid){
             $.ajax({
-            url: "?url=Sequences/check_seq_type",
+            url: "?url=Sequences/check_seq_enable",
             method: "POST",
             data:{ 
                 jobid: jobid,
