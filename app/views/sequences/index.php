@@ -99,13 +99,13 @@
                         <div class="row">
                             <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_id" maxlength="" value="<?php echo $data['job_id'];?>" >
+                                <input type="text" class="form-control input-ms" id="job_id" maxlength="" value="<?php echo $data['job_id'];?>" disabled >
                             </div>
                         </div>
                         <div class="row">
                             <div for="seq-id" class="col-6 t1"><?php echo $text['seq_id'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="seq_id" maxlength="" value="<?php echo $data['seq_id'];?>">
+                                <input type="text" class="form-control input-ms" id="seq_id" maxlength="" value="<?php echo $data['seq_id'];?>" disabled>
                             </div>
                         </div>
                         <div class="row">
@@ -231,13 +231,13 @@
                         <div class="row">
                             <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_id" maxlength="" value="<?php echo $data['job_id'];?>" >
+                                <input type="text" class="form-control input-ms" id="job_id" maxlength="" value="<?php echo $data['job_id'];?>" disabled>
                             </div>
                         </div>
                         <div class="row">
                             <div for="seq-id" class="col-6 t1"><?php echo $text['seq_id'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="old_seqid" maxlength="" value="">
+                                <input type="text" class="form-control input-ms" id="old_seqid" maxlength="" value="" disabled>
                             </div>
                         </div>
                         <div class="row">
@@ -548,7 +548,8 @@ function create_seq() {
 
 function edit_seq(seqid) {
     var jobid = '<?php echo $data['job_id']?>';
-    var seqid = readFromLocalStorage('seqid');
+    //var seqid = readFromLocalStorage('seqid');
+    
     if(jobid){
         $.ajax({
             url: "?url=Sequences/search_seqinfo",

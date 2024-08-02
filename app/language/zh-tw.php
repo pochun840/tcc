@@ -402,10 +402,10 @@ $text['csv_file_path'] = '檔案路徑';
 //main 主畫面image url
 $text['img_job'] = '../public/img/home_job_tw.png';
 $text['img_job_hover'] = '../public/img/home_job_m_tw.png';
-$text['img_io_input'] = '../public/img/home_input_cn.png';
-$text['img_io_input_hover'] = '../public/img/home_m_input_cn.png';
-$text['img_io_output'] = '../public/img/home_output_cn.png';
-$text['img_io_output_hover'] = '../public/img/home_m_output_cn.png';
+$text['img_io_input'] = '../public/img/home_input_tw.png';
+$text['img_io_input_hover'] = '../public/img/home_m_input_tw.png';
+$text['img_io_output'] = '../public/img/home_output_tw.png';
+$text['img_io_output_hover'] = '../public/img/home_m_output_tw.png';
 $text['img_operation'] = '../public/img/home_operation_tw.png';
 $text['img_operation_hover'] = '../public/img/home_m_operation_tw.png';
 $text['img_data'] = '../public/img/home_data_tw.png';
