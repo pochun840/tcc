@@ -967,7 +967,6 @@ function copy_step_by_id_ajax(){
 
 
 function del_stepid(step_id){
-    //var stepid = readFromLocalStorage("stepid");
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
     if(stepid) {

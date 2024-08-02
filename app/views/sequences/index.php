@@ -410,11 +410,39 @@ $(document).ready(function () {
 });
 
 // Get the modal
+var seqid = '';
 var modal = document.getElementById('newseq');
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
+}
+
+
+function cound_job(argument){
+    var table = document.getElementById('seq_table');
+    var selectedRow = table.querySelector('.selected');  
+    var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
+    seqid = selectedRowData;
+    
+    if(argument == 'del' && seqid != null){
+        delete_seqid(seqid);
+    }
+
+    if(argument =="edit" && seqid != null){
+        
+        edit_seq(seqid);
+    }
+
+    if(argument =="new"){
+        create_seq();
+    }
+
+    if(argument =="copy" && seqid != null){
+        copy_seq(seqid);
+    }
+
+
 }
 
 var rowInfoArray = [];
@@ -441,8 +469,8 @@ for (var i = 0; i < rows.length; i++) {
            
                 seqid = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
                 seqname  = seqname = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
-                localStorage.setItem("seqid", seqid);
-                localStorage.setItem("seqname", seqname);
+                //localStorage.setItem("seqid", seqid);
+                //localStorage.setItem("seqname", seqname);
             });
         }
     })(rows[i]);

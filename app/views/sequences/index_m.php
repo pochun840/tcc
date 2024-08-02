@@ -413,6 +413,7 @@ $(document).ready(function () {
 
 // Get the modal
 var modal = document.getElementById('newseq');
+var seqid = '';
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -420,7 +421,31 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+function cound_job(argument){
+    var table = document.getElementById('seq_table');
+    var selectedRow = table.querySelector('.selected');  
+    var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
+    seqid = selectedRowData;
+    
+    if(argument == 'del' && seqid != null){
+        delete_seqid(seqid);
+    }
 
+    if(argument =="edit" && seqid != null){
+        
+        edit_seq(seqid);
+    }
+
+    if(argument =="new"){
+        create_seq();
+    }
+
+    if(argument =="copy" && seqid != null){
+        copy_seq(seqid);
+    }
+
+
+}
 
 var rowInfoArray = [];
 <?php foreach($data['sequences'] as $key =>$val) {?>
