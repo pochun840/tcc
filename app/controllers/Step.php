@@ -410,10 +410,10 @@ class Step extends Controller
             $result = array();
             if($res){
                 $res_type = 'Success';
-                $res_msg  = $text['edit_step'].':'. $stepid."  ".$text['success'];
+                $res_msg  = $text['edit_step'].':'. $_POST['stepid']."  ".$text['success'];
             }else{
                 $res_type = 'Error';
-                $res_msg  = $text['edit_step'].':'. $stepid."  ".$text['fail'];
+                $res_msg  = $text['edit_step'].':'. $_POST['stepid']."  ".$text['fail'];
             }
             $result = array(
                 'res_type' => $res_type,
