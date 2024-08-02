@@ -58,9 +58,10 @@
         </div>
 
         <div class="buttonbox">
-            <input id="S3" name="Step_Manager_Submit" type="button" value="<?php echo $text['New'];?>"    tabindex="1"  onclick="cound_step('new');" >
+            <?php $status = count($data['step']) == 4 ? 'disabled' : ''; ?>
+            <input id="S3" name="Step_Manager_Submit" type="button" value="<?php echo $text['New'];?>"    tabindex="1"  onclick="cound_step('new');" <?php echo $status; ?>>
             <input id="S6" name="Step_Manager_Submit" type="button" value="<?php echo $text['Edit'];?>"   tabindex="1" onclick="cound_step('edit')">
-            <input id="S5" name="Step_Manager_Submit" type="button" value="<?php echo $text['Copy'];?>"   tabindex="1"  onclick="cound_step('copy');">
+            <input id="S5" name="Step_Manager_Submit" type="button" value="<?php echo $text['Copy'];?>"   tabindex="1"  onclick="cound_step('copy');" <?php echo $status; ?>>
             <input id="S4" name="Step_Manager_Submit" type="button" value="<?php echo $text['Delete'];?>" tabindex="1" onclick="cound_step('del');" >
         </div>
     </div>
@@ -84,7 +85,7 @@
                                     <?php foreach($data['target_option'] as $key => $val){?>
                                         <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
                                     <?php }?> 
-                                </select>
+                                </select>   
                             </div>
                         </div>
 
@@ -377,7 +378,7 @@ function cound_step(argument){
     var table = document.getElementById('step_table');
     var selectedRow = table.querySelector('.selected');
     var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
-
+    stepid = selectedRowData;
     if(argument == 'del'){
         del_stepid(stepid);
     }
@@ -403,7 +404,6 @@ function edit_step(){
 
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
-    var stepid = readFromLocalStorage("stepid");
 
     var unit = '<?php echo $data['unit']?>';
     var language = getCookie('language');
