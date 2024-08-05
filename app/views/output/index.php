@@ -393,3 +393,10 @@ function collectPinValues(selector) {
 }
 
 </script>
+<style>
+    #output_table td,
+    #output_table th {
+        width: 100px; 
+        padding: 10px;
+    }
+</style>

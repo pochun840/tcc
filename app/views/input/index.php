@@ -694,3 +694,10 @@ function crud_job_event(argument){
     }
 }
 </script>
+<style>
+    #input_table td,
+    #input_table th {
+        width: 100px; 
+        padding: 10px;
+    }
+</style>
