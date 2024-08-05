@@ -216,6 +216,7 @@ class Outputs extends Controller
         }
         if( !empty($_POST['to_job_id']) && isset($_POST['to_job_id'])  ){
             $to_job_id = $_POST['to_job_id'];
+            $this->OutputModel->delete_output_by_id($to_job_id);
         }else{ 
             $input_check = false; 
         }
