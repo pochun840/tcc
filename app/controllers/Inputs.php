@@ -126,8 +126,7 @@ class Inputs extends Controller
         echo json_encode($response);
     }
 
-    public function get_input_by_job_id_m(){}
-    
+
 
     public function check_job_event_conflict($value='')
     {
@@ -332,9 +331,11 @@ class Inputs extends Controller
         }
         if (!empty($_POST['to_job_id']) && isset($_POST['to_job_id'])) {
             $to_job_id = $_POST['to_job_id'];
+            $this->InputModel->delete_input_by_id($to_job_id);
         } else {
             $input_check = false;
         }
+        
 
         if ($input_check) {
             $job_inputs_from = $this->InputModel->check_job_event($input_job_id);
@@ -361,10 +362,10 @@ class Inputs extends Controller
                 $result = array();
                 if($res){
                     $res_type = 'Success';
-                    $res_msg  = $text['copy_input'].$text['success'];
+                    $res_msg  = $text['copy_input'].$to_job_id.$text['success'];
                 } else {
                     $res_type = 'Error';
-                    $res_msg  = $text['copy_input'].$text['fail'];
+                    $res_msg  = $text['copy_input'].$to_job_id.$text['fail'];
                 }
                 $result = array(
                     'res_type' => $res_type,
