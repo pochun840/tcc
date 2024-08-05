@@ -1,4 +1,5 @@
 var old_output_event; 
+var output_event;
 function job_confirm(){
     var jobid = document.getElementById("JobNameSelect").value;
     localStorage.setItem("jobid", jobid);
@@ -26,8 +27,11 @@ function job_confirm(){
                 var rows = document.querySelectorAll('#output_jobid_select tr');
                 rows.forEach(function(row) {
                     row.addEventListener('click', function() { 
-                        output_event = this.className; 
-                        old_output_event = this.className;
+
+                        row.getAttribute('data-event');
+                        output_event = row.getAttribute('data-event');
+                        console.log(output_event);
+                      
                     
                     });
                 });
@@ -177,6 +181,7 @@ function get_output_by_job_id(job_id){
 }
 
 
+
 function collectPinValues(selector) {
     var pinOptions = document.querySelectorAll(selector);
     var selectedValues = [];
@@ -193,6 +198,8 @@ function collectPinValues(selector) {
 
     return selectedValues;
 }
+
+
 function create_output_id() {
     var output_event = document.getElementById("Event_Option").value;
     var pinval = collectPinValues('input[name="pin_option"]');

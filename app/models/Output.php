@@ -110,7 +110,7 @@ class Output{
     //delete output by job_id
     public function delete_output_by_id($job_id){
 
-        $sql= "DELETE FROM output WHERE output_jobid = ?";
+        $sql= "DELETE FROM output WHERE output_job_id = ?";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$job_id]);
 

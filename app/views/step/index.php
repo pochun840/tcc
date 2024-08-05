@@ -509,12 +509,18 @@ function edit_step(){
                 if(target_option == 1){
               
                     var name = '<?php echo $text['Target_Angle']?>';
-                    document.querySelector('div[for="edit_target-torque"]').textContent = name;
-                    document.getElementById("edit_target_torque").value = target_angle;
+                    document.querySelector('div[for="edit_target-angle"]').textContent = name;
+                    document.getElementById("edit_target_angle").value = target_angle;
                     
                 }
 
-                if(target_option == 0){
+                else if(target_option == 2){
+                    var name = '<?php echo $text['Target Delay Time']?>';
+                    document.querySelector('div[for="edit_target_delaytime"]').textContent = name;
+                    document.getElementById("edit_target_delaytime").value = target_delaytime;
+                }
+
+                else if(target_option == 0){
                     var name = '<?php echo $text['Target_Torque']; ?>';
                     const unitTranslations = {
                         "zh-cn": {
@@ -1002,7 +1008,6 @@ function copy_step_by_id_ajax(){
 
 
 function del_stepid(step_id){
-    //var stepid = readFromLocalStorage("stepid");
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
     if(stepid) {

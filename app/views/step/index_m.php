@@ -487,8 +487,10 @@ function edit_step(){
                 }
 
                 if(target_option == 1){
-                    document.querySelector('div[for="edit_target-torque"]').textContent = "Target Angle (degree)";
-                    document.getElementById("edit_target_torque").value = target_angle;
+                    var name = '<?php echo $text['Target_Angle']?>';
+                    document.querySelector('div[for="edit_target-angle"]').textContent = name;
+                    document.getElementById("edit_target_angle").value = target_angle;
+                    //alert(target_angle);
                     
                 }
 

@@ -1,5 +1,5 @@
 
-function cound_job(argument){
+/*function cound_job(argument){
     var table = document.getElementById('seq_table');
     var selectedRow = table.querySelector('.selected');  
 
@@ -22,4 +22,4 @@ function cound_job(argument){
     }
 
 
-}
+}*/

@@ -271,7 +271,7 @@ class Outputs extends Controller
 
 
         $input_check = true;
-        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])){
             $output_job_id	 = $_POST['job_id'];
         }else{ 
             $input_check = false; 
@@ -283,6 +283,8 @@ class Outputs extends Controller
         }
 
         if($input_check){
+    
+            
             $res = $this->OutputModel->delete_output_event_by_id($output_job_id,$output_event);
             $result = array();
             if($res){
