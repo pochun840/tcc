@@ -311,34 +311,45 @@ function crud_job_event(argument){
             });
         }
 
+    
+
 
         document.getElementById('new_output').style.display='block';
+        var eventOption = document.getElementById('Event_Option');
+        eventOption.addEventListener('change', function() {
+            var selectedOptionId = eventOption.options[eventOption.selectedIndex].value;
+            if(selectedOptionId == 7 || selectedOptionId == 8 || selectedOptionId == 9){
+                toggleElementsInRange(1, 11, 2, true);
+            }else{
+                toggleElementsInRange(1, 11, 2, false);
+            }
+        });
+                
+
+       
     }
 
-    if(argument == 'edit'){
-
+    if (argument === 'edit') {
+ 
         var selectElement = document.getElementById('edit_event_option');
-        if(selectElement){
+        if (selectElement) {
             selectElement.disabled = true;
-            var options = selectElement.options;
-            for (var i = 0; i < options.length; i++) {
-                options[i].disabled = true;
-                options[i].classList.add('disabled_input');
-            }
+            Array.from(selectElement.options).forEach(option => {
+                option.disabled = true;
+                option.classList.add('disabled_input');
+            });
         }
-      
-        if (Array.isArray(temp)){ 
-            temp.forEach(function(element) {
-                var radio = document.getElementById(element);
+        if (Array.isArray(temp)) { 
+            temp.forEach(id => {
+                var radio = document.getElementById(id);
                 if (radio && radio.type === 'radio') { 
                     radio.disabled = true; 
                 }
             });
         }
-        
-        get_output_info(job_id,output_event);
-        document.getElementById('edit_output').style.display='block';
-        
+
+        get_output_info(job_id, output_event);
+        document.getElementById('edit_output').style.display = 'block';
     }
 
     if(argument == 'copy' && job_id != ''){
@@ -390,6 +401,18 @@ function collectPinValues(selector) {
     });
 
     return selectedValues;
+}
+
+function toggleElementsInRange(start, end, suffix, disable) {
+    for (var i = start; i <= end; i++) {
+        for (var j = 1; j <= suffix; j++) {
+            var id = 'pin' + i + '_' + j;
+            var element = document.getElementById(id);
+            if (element) {
+                element.disabled = disable; // 设置元素的 disabled 属性
+            }
+        }
+    }
 }
 
 </script>

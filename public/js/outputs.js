@@ -30,7 +30,7 @@ function job_confirm(){
 
                         row.getAttribute('data-event');
                         output_event = row.getAttribute('data-event');
-                        console.log(output_event);
+                        //console.log(output_event);
                       
                     
                     });
@@ -95,7 +95,7 @@ function delete_output_id(job_id,output_event){
              
             },
             success: function(response) {
-                //console.log(response);
+       
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_output_by_job_id(job_id);
@@ -203,6 +203,7 @@ function collectPinValues(selector) {
 function create_output_id() {
     var output_event = document.getElementById("Event_Option").value;
     var pinval = collectPinValues('input[name="pin_option"]');
+  
 
     if (pinval.length > 0) {
         var pin_old = pinval[0]['id']; 
@@ -266,6 +267,7 @@ function edit_output_id(){
                 old_output_event: old_output_event
             },
             success: function(response) {
+                //console.log(response);
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_output_by_job_id(job_id);
@@ -375,6 +377,8 @@ function copy_output_id(){
             // cancel
         }
     });
+
+    document.getElementById('copy_output').style.display='none';
 
    
 }

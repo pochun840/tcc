@@ -362,18 +362,19 @@ class Outputs extends Controller
         $result = array();
         
         $input_check = true;
+
         $jobdata = array();
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
             $jobdata['output_job_id'] = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
-        if( !empty($_POST['output_pin']) && isset($_POST['output_pin'])  ){
+        if( !empty($_POST['output_pin']) && isset($_POST['output_pin'])  ){ //new
             $jobdata['output_pin'] = $_POST['output_pin'];
         }else{ 
             $input_check = false; 
         }
-        if( !empty($_POST['output_event']) && isset($_POST['output_event'])  ){
+        if( !empty($_POST['output_event']) && isset($_POST['output_event'])  ){ //old
             $jobdata['output_event'] = $_POST['output_event'];
         }else{ 
             $input_check = false; 
@@ -392,20 +393,13 @@ class Outputs extends Controller
             $input_check = false; 
         }
 
-        if(!empty($_POST['old_output_event']) && isset($_POST['old_output_event'])  ){
-            $jobdata['old_output_event'] = $_POST['old_output_event'];
-        }
-        
-        $count = $this->OutputModel->check_job_event_conflict($jobdata['output_job_id'],$jobdata['old_output_event']);
-        if ($count > 0 && $jobdata['output_event'] != $jobdata['old_output_event']){
+     
+        $count = $this->OutputModel->check_event_conflict($jobdata['output_job_id'],$jobdata['output_event']);
+        if ($count > 0){
             //先移除舊的資料 再新增新的資料
-            $ans  = $this->OutputModel->delete_output_event_by_id($jobdata['output_job_id'],$jobdata['old_output_event']);
-            $res  = $this->OutputModel->create_output($jobdata);
+            $res   = $this->OutputModel->edit_output($jobdata);
 
-        }else if($count > 0 && $jobdata['output_event'] == $jobdata['old_output_event']){
-            $res  = $this->OutputModel->edit_output($jobdata);
-        } 
-        
+        }
         
         if($res){
             $res_type = 'Success';

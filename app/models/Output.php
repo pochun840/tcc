@@ -48,12 +48,22 @@ class Output{
 
     public function check_job_event_conflict($output_job_id,$output_event){
         
-        $sql = "SELECT *  FROM output WHERE output_job_id = ? AND output_event = ?";
+        $sql = "SELECT *   FROM output WHERE output_job_id = ? AND output_event = ? ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$output_job_id,$output_event]);
         $rows = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $rows;
+    }
+
+    public function check_event_conflict($output_job_id,$output_event){
+        
+        $sql = "SELECT count(*) FROM output WHERE output_job_id = ? AND output_event = ? ";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$output_job_id,$output_event]);
+        $count = $statement->fetchColumn();
+
+        return (int)$count;
     }
 
     public function create_output($jobdata){    
@@ -79,7 +89,7 @@ class Output{
             output_pin  = :output_pin,
             wave = :wave, 
             wave_on = :wave_on ";
-        $sql .= "WHERE output_event = :output_event  AND output_job_id = :output_job_id;";
+        $sql .= "WHERE output_event = :output_event  AND output_job_id = :output_job_id ";
 
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':output_job_id', $jobdata['output_job_id']);
