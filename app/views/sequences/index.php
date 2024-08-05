@@ -411,6 +411,7 @@ $(document).ready(function () {
 
 // Get the modal
 var seqid = '';
+var seq_name = '';
 var modal = document.getElementById('newseq');
 window.onclick = function(event) {
     if (event.target == modal) {
@@ -423,7 +424,9 @@ function cound_job(argument){
     var table = document.getElementById('seq_table');
     var selectedRow = table.querySelector('.selected');  
     var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
+    var selectedRowData_name = selectedRow ? selectedRow.cells[1].innerText : null;
     seqid = selectedRowData;
+    seqname = selectedRowData_name;
     
     if(argument == 'del' && seqid != null){
         delete_seqid(seqid);
@@ -480,11 +483,7 @@ function copy_seq_by_id(){
 
     var jobid = '<?php echo $data['job_id'];?>';
     var oldseqname = seqname;
-    var seqid = readFromLocalStorage('seqid');
-    document.getElementById("from_seq_name").value = oldseqname;
     var newseqid = document.getElementById('to_seq_id').value;
-    document.getElementById('from_seq_id').value=  seqid;
-
     var newseqname = document.getElementById("to_seq_name").value;    
 
     if(newseqname){
@@ -538,6 +537,8 @@ function copy_seq_by_id(){
 function copy_seq(seqid){
     
     document.getElementById('copyseq').style.display = 'block';   
+    document.getElementById('from_seq_id').value =seqid;
+    document.getElementById('from_seq_name').value =seqname;
     copy_seq_by_id(seqid);
 }
 
@@ -575,9 +576,7 @@ function create_seq() {
 }
 
 function edit_seq(seqid) {
-    var jobid = '<?php echo $data['job_id']?>';
-    //var seqid = readFromLocalStorage('seqid');
-    
+    var jobid = '<?php echo $data['job_id']?>';    
     if(jobid){
         $.ajax({
             url: "?url=Sequences/search_seqinfo",

@@ -98,6 +98,8 @@ class Step extends Controller
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
 
+            
+
 
             
             #驗證hi_angle的範圍
