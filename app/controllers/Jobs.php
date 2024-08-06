@@ -19,6 +19,7 @@ class Jobs extends Controller
     // 取得所有Jobs
     public function index(){
         $data = array();
+        
 
         $isMobile  = $this->isMobileCheck();
         $jobs      = $this->jobModel->getJobs();
@@ -50,7 +51,6 @@ class Jobs extends Controller
             include $file;
         }
 
-
         if(isset($_POST['jobidnew'])){
 
             $jobdata = array(
@@ -61,22 +61,25 @@ class Jobs extends Controller
                 'unscrew_direction' => $_POST['direction_val'],
             );
 
-            //$mode = "create";
-            $result3  = $this->MiscellaneousModel->validateName($jobdata['job_name']);
-            $result1 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_power']);
-            $result2 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_rpm']);
+   
 
-            if($result1 == false || $result2  == false){
+            $resultName = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
+            $resultPower = $this->MiscellaneousModel->validate($jobdata['unscrew_power'], 'unscrewPower');
+            $resultRpm = $this->MiscellaneousModel->validate($jobdata['unscrew_rpm'], 'unscrewPower');
+
+
+
+            if($resultPower == false || $resultRpm == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
                 exit();
             }
 
-            if($result3 == false){
+            if($resultName == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_job_name']);
                 exit();
             }
 
-            if ($result3 == true  && $result1 == true && $result2 == true) {
+            if ($resultName  == true  && $resultPower == true && $resultRpm == true) {
 
                 $job_count = $this->jobModel->countjob();
                 if($job_count >= 50) {
@@ -119,24 +122,21 @@ class Jobs extends Controller
 
 
             
-            $result3  = $this->MiscellaneousModel->validateName($jobdata['job_name']);
-            $result1 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_power']);
-            $result2 = $this->MiscellaneousModel->validateUnscrewPower($jobdata['unscrew_rpm']);
+            $resultName = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
+            $resultPower = $this->MiscellaneousModel->validate($jobdata['unscrew_power'], 'unscrewPower');
+            $resultRpm = $this->MiscellaneousModel->validate($jobdata['unscrew_rpm'], 'unscrewPower');
 
-            if($result1 == false || $result2  == false){
-
+            if($resultPower == false || $resultRpm == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
                 exit();
-            
             }
 
-
-            if($result3 == false){
+            if($resultName == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_job_name']);
                 exit();
             }
 
-            if ($result3 == true  && $result1 == true && $result2 == true) {
+            if ($resultName  == true  && $resultPower == true && $resultRpm == true) {
                 
                 $res = $this->jobModel->update_job_by_id($jobdata);
                 $result = array();
@@ -208,13 +208,8 @@ class Jobs extends Controller
             include $file;
         }
 
-        /*
-         old_jobid: old_jobid,
-                            old_jobname: oldjobname,
-                            new_jobid: new_jobid,
-                            new_jobname: new_jobname
-
-        */
+   
+        
 
         $old_jobid   = $_POST['old_jobid'] ?? null;
         $old_jobname = $_POST['old_jobname'] ?? null;

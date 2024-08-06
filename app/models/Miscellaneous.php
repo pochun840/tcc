@@ -179,6 +179,26 @@ class Miscellaneous{
         }
     }
 
+    public function validate($value, $type) {
+        switch ($type) {
+            case 'name':
+                // 验证 name
+                return !empty($value) && 
+                       preg_match('/^[a-zA-Z0-9-]+$/', $value) && 
+                       strlen($value) <= 12;
+                       
+            case 'unscrewPower':
+                // 验证 unscrewPower
+                return is_numeric($value) && 
+                       $value > 0 && 
+                       $value <= 10;
+                       
+            default:
+                return false;
+        }
+    }
+    
+
     #扭力單位轉換
     public function unitarr_change($torValues, $inputType, $TransType){
         
