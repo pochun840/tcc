@@ -30,8 +30,6 @@ function job_confirm(){
 
                         row.getAttribute('data-event');
                         output_event = row.getAttribute('data-event');
-                        //console.log(output_event);
-                      
                     
                     });
                 });
@@ -180,8 +178,6 @@ function get_output_by_job_id(job_id){
 
 }
 
-
-
 function collectPinValues(selector) {
     var pinOptions = document.querySelectorAll(selector);
     var selectedValues = [];
@@ -281,9 +277,7 @@ function edit_output_id(){
             }
         });         
     }
-
 }
-
 function resetalignsubmit(job_id) {
 
     var job_id_new = 0;
@@ -332,9 +326,6 @@ function alignsubmit(job_id) {
         });
     }
 }
-
-
-
 //copy
 function copy_output_id(){
 
@@ -377,10 +368,7 @@ function copy_output_id(){
             // cancel
         }
     });
-
     document.getElementById('copy_output').style.display='none';
-
-   
 }
 
 function get_output_info(job_id,output_event){
@@ -409,7 +397,26 @@ function get_output_info(job_id,output_event){
                  radioButton.removeAttribute('disabled');
  
                  var time_ms = 'edit_time'+ output_pin;
- 
+
+           
+                //完工信號 && 馬達信號 && 啟動信號
+                //alert(output_event);
+                if (output_event == 8  || output_event == 6 || output_event == 7 ) {
+                    for(let i = 1; i <= 11; i++) {
+                        let element1 = document.getElementById(`edit_pin${i}_1`);
+                        if (element1) {
+                            element1.disabled = true;
+                        }
+                
+                        let element2 = document.getElementById(`edit_pin${i}_2`);
+                        if (element2) {
+                            element2.disabled = true;
+                        }
+                    }
+
+                    //
+                }
+
                  document.getElementById(time_ms).value = wave_on;
  
                  old_output_even = output_event;
@@ -430,4 +437,50 @@ function get_output_info(job_id,output_event){
     }
  
  
+}
+
+
+function get_other_event_by_job_id(job_id){
+    if(job_id){
+
+
+    }
+
+}
+
+function disablePins() {
+    
+    alert('331');
+    /*for(let i = 1; i <= 11; i++) {
+        let element1 = document.getElementById('edit_pin${i}_1');
+        if (element1) {
+            element1.disabled = true;
+        }
+
+        let element2 = document.getElementById(`edit_pin${i}_2`);
+        if (element2) {
+            element2.disabled = true;
+        }
+    }*/
+
+    //
+    /*if(job_id){
+        $.ajax({
+            url: "?url=Outputs/get_other_event_by_job_id",
+            method: "POST",
+            data: {
+                job_id: job_id
+            },
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+
+            }
+        });
+
+
+    }*/
+
+
 }

@@ -494,10 +494,7 @@ function edit_step(){
                 var radioButtons1 = document.getElementsByName("edit_direction_option");
                 var radioButtons2 = document.getElementsByName("edit_downshift_option");
 
-                //紀錄old  target_option
-                //document.cookie = `target_option_bk=${encodeURIComponent(target_option)}; max-age=${60 * 60 * 24 * 365}; path=/`;
-                //document.cookie="target_option_bk=target_option";
-            
+       
                 setRadioButtonValue(radioButtons1, direction);
                 setRadioButtonValue(radioButtons2, downshift);
 

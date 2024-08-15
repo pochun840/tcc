@@ -458,7 +458,7 @@ function crud_job_event(argument){
         delete_output_id(job_id,output_event);
     }
 
-    if(argument == 'new'){
+    if(argument == 'new' && job_id != ''){
 
         if (Array.isArray(temp)){ 
             temp.forEach(function(element) {
@@ -502,7 +502,7 @@ function crud_job_event(argument){
         
     }
 
-    if (argument === 'edit') {
+    if (argument === 'edit' && job_id != '' && output_event != '' ) {
         var selectElement = document.getElementById('edit_event_option');
         if (selectElement) {
             selectElement.disabled = true;
@@ -552,9 +552,6 @@ function crud_job_event(argument){
     if(argument == 'unified' && job_id != ''){
         enableButton();
         resetBackgroundColor();
-        //console.log('output_job 有值:', output_job);
-        //console.log('job_id 有值:', job_id);
-
         if(output_job != job_id){
             alignsubmit(job_id);  
         }else{
@@ -574,7 +571,6 @@ function toggleElementsInRange(start, end, suffix, disable) {
             }
         }
     }
-}  }
-}
+}  
 
 </script>

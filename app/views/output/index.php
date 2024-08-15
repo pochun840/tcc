@@ -280,11 +280,13 @@ window.onclick = function(event) {
 }
 
 function crud_job_event(argument){
-    if(argument == 'del'){
+
+
+    if(argument == 'del' && job_id != '' && output_event != ''){
         delete_output_id(job_id,output_event);
     }
 
-    if(argument == 'new'){
+    if(argument == 'new' && job_id != ''){
 
         if (Array.isArray(temp)){ 
             temp.forEach(function(element) {
@@ -311,9 +313,6 @@ function crud_job_event(argument){
             });
         }
 
-    
-
-
         document.getElementById('new_output').style.display='block';
         var eventOption = document.getElementById('Event_Option');
         eventOption.addEventListener('change', function() {
@@ -323,13 +322,10 @@ function crud_job_event(argument){
             }else{
                 toggleElementsInRange(1, 11, 2, false);
             }
-        });
-                
-
-       
+        }); 
     }
 
-    if (argument === 'edit') {
+    if (argument === 'edit' && job_id != '' && output_event != '') {
  
         var selectElement = document.getElementById('edit_event_option');
         if (selectElement) {
@@ -409,7 +405,7 @@ function toggleElementsInRange(start, end, suffix, disable) {
             var id = 'pin' + i + '_' + j;
             var element = document.getElementById(id);
             if (element) {
-                element.disabled = disable; // 设置元素的 disabled 属性
+                element.disabled = disable;
             }
         }
     }
