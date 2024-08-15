@@ -227,12 +227,30 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" id="torque_option" style="display: none;">
                             <div for="edit_target-torque" class="col-6 t1"><?php  echo  $text['Target_Torque']; ?> (<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_target_torque" maxlength="" >
                             </div>
                         </div>
+
+                        <div class="row" id="angle_option" style="display: none;">
+                            <div for="edit_target-torque" class="col-6 t1"><?php  echo  $text['Target_Angle']; ?> :</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_target_angle" maxlength="">
+                            </div>
+                        </div>
+
+
+                        <div class="row" id='delaytime_option' style="display: none;">
+                            <div for="edit_target-torque" class="col-6 t1"><?php  echo  $text['Target Delay Time'] ; ?>:</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_target_delaytime" maxlength="" >
+                            </div>
+                        </div>
+
+
+
                         <div class="row">
                             <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2">
@@ -477,8 +495,8 @@ function edit_step(){
                 var radioButtons2 = document.getElementsByName("edit_downshift_option");
 
                 //紀錄old  target_option
-                document.cookie = `target_option_bk=${encodeURIComponent(target_option)}; max-age=${60 * 60 * 24 * 365}; path=/`;
-                document.cookie="target_option_bk=target_option";
+                //document.cookie = `target_option_bk=${encodeURIComponent(target_option)}; max-age=${60 * 60 * 24 * 365}; path=/`;
+                //document.cookie="target_option_bk=target_option";
             
                 setRadioButtonValue(radioButtons1, direction);
                 setRadioButtonValue(radioButtons2, downshift);
@@ -507,20 +525,19 @@ function edit_step(){
                 }
 
                 if(target_option == 1){
-              
+                    //alert('eeeeeeeeeee');
+
                     var name = '<?php echo $text['Target_Angle']?>';
                     document.querySelector('div[for="edit_target-angle"]').textContent = name;
-                    document.getElementById("edit_target_angle").value = target_angle;
+                    document.getElementById('angle_option').style.display = 'block';
+                    //angle_option
+                    //document.getElementById("edit_target_angle").value = target_angle;
                     
                 }
 
-                else if(target_option == 2){
-                    var name = '<?php echo $text['Target Delay Time']?>';
-                    document.querySelector('div[for="edit_target_delaytime"]').textContent = name;
-                    document.getElementById("edit_target_delaytime").value = target_delaytime;
-                }
+              
 
-                else if(target_option == 0){
+                if(target_option == 0){
                     var name = '<?php echo $text['Target_Torque']; ?>';
                     const unitTranslations = {
                         "zh-cn": {
@@ -560,6 +577,7 @@ function edit_step(){
                 var target_option = document.getElementById("edit_target_option");
                 target_option.addEventListener('change', function() {
                     var selectedValue = this.value;
+                    console.log(selectedValue);
                     if (selectedValue == 2) {
                         var elementsToDisable = [
                             document.getElementById('edit_hi_torque'),
@@ -626,6 +644,7 @@ function edit_step(){
                     if(selectedValue == 1){
                         var name = '<?php echo $text['Target_Angle']?>';
                         document.querySelector('div[for="edit_target-torque"]').textContent = name;
+                        document.getElementById("edit_target_angle").value = target_angle;
 
                     }
 

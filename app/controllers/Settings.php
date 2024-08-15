@@ -571,132 +571,7 @@ class Settings extends Controller
         // code...
     }
 
-    public function db_sync()
-    {
-        // session_start();
-        $this->language_auto(); //從瀏覽器帶入語系
-        //multi language
-        $language = array("language"=>$_SESSION['language']);
 
-        // 如果檔案存在就引入它
-        if(file_exists('../app/language/' . $language['language'] . '.php')){
-            require_once '../app/language/' . $language['language'] . '.php';
-        } else { //預設語系
-            require_once '../app/language/en-us.php';
-        }
-
-        $error_message = '';
-        if ( isset($_GET["way"]) ) {
-            $way = $_GET["way"];
-        }else if ( isset($_POST["way"]) ) {
-            $way = $_POST["way"];
-        }else{
-            echo json_encode(array('error' => 'noway'));
-            exit();
-        }
-
-        if($this->LoginCheck() == 1){
-            echo json_encode(array('error' => $text['system_sync_warning_login']));
-            exit();
-        }
-
-        // 1.先判斷系統linux才做事
-        // 2.再分C2D or D2C
-        //   C2D -> 把controller的db複製一份 並 取代目前iDas使用的db
-        //   D2C -> 把iDas目前使用的db複製一份到 ftp資料夾，並取名為iDas.cfg -> 使用modbus指令 讓控制器更新設定
-        if( PHP_OS_FAMILY == 'Linux'){
-
-            if($way == 'C2D'){
-                $this->logMessage('db_sync C2D start');
-                $source = "/var/www/html/database/tcscon.db";
-                $destination = "/var/www/html/database/iDas-tcscon.db";
-                $source1 = "/var/www/html/database/tcsdev.db";
-                $destination1 = "/var/www/html/database/iDas-tcsdev.db";
-                if( file_exists($source) ){
-                    copy($source, $destination);
-                }else{
-                    $error_message .= 'tcscon copy error,';
-                }
-                if( file_exists($source1) ){            
-                    copy($source1, $destination1);
-                }else{
-                    $error_message .= 'tcsdev copy error';
-                }
-
-                $this->logMessage('error message:'.$error_message);
-                $this->logMessage('db_sync C2D end');
-
-                $data = array('error' => $error_message);
-                echo json_encode($data);
-
-            }else if ($way == 'D2C') {
-
-                $check_result = $this->SyncCheck();
-                if($check_result['warning'] != ''){
-                    echo json_encode(array('error' => $check_result['warning']));
-                    exit();
-                }
-
-                //判斷iDas的DB版本是否小於控制器
-                // $C_DB_Version = $this->SettingModel->Get_Controller_DB_version();
-                // $Controller_Info = $this->SettingModel->GetControllerInfo();
-                // if($Controller_Info['tcscondb_version'] < $C_DB_Version){
-                //     echo json_encode(array('error' => 'iDas的DB版本小於控制器'));
-                //     exit();
-                // }
-
-                $this->logMessage('db_sync D2C start');
-                $source = "/var/www/html/database/iDas-tcscon.db";
-                $destination = "/mnt/ramdisk/FTP/iDas.cfg";
-                
-                if (copy($source, $destination)) {
-                    require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-                    $modbus = new ModbusMaster("127.0.0.1", "TCP");
-                    try {
-                        $modbus->port = 502;
-                        $modbus->timeout_sec = 10;
-                        $data = array(1, 26948, 24947);
-                        $dataTypes = array("INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT");
-
-                        // FC 3
-                        // $recData = $modbus->readMultipleRegisters(1, 4096, 6);
-
-                        // FC 16
-                        $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
-                        $this->logMessage('modbus write 506 ,array = '.implode("','",$data));
-                        $this->logMessage('modbus status:'.$modbus->status);
-                        echo json_encode(array('error' => ''));
-                        exit();
-
-                    }
-                    catch (Exception $e) {
-                        // Print error information if any
-                        // echo $modbus;
-                        // echo $e;
-                        $this->logMessage('modbus write 506 fail');
-                        $this->logMessage('modbus status:'.$modbus->status);
-                        $this->logMessage('db_sync D2C end');
-                        echo json_encode(array('error' => 'modbus error'));
-                        exit();
-                    }
-                }else{
-                    $this->logMessage('copy db error');
-                    $this->logMessage('db_sync D2C end');
-                    echo json_encode(array('error' => 'copy db error'));
-                    exit();
-                }
-       
-            }else{
-                echo json_encode(array('error' => 'wrongway'));
-                exit();
-            }
-
-        }else{
-            echo json_encode(array('error' => ''));
-            exit();
-        }
-
-    }
 
     //DB匯入提醒判斷
     public function SyncCheck($value='')
@@ -776,7 +651,7 @@ class Settings extends Controller
         }
 
     }
-
+    
     //get barcode
     public function GetBarcodes()
     {

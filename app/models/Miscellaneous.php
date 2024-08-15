@@ -182,13 +182,11 @@ class Miscellaneous{
     public function validate($value, $type) {
         switch ($type) {
             case 'name':
-                // 验证 name
                 return !empty($value) && 
                        preg_match('/^[a-zA-Z0-9-]+$/', $value) && 
                        strlen($value) <= 12;
                        
             case 'unscrewPower':
-                // 验证 unscrewPower
                 return is_numeric($value) && 
                        $value > 0 && 
                        $value <= 10;
@@ -197,7 +195,50 @@ class Miscellaneous{
                 return false;
         }
     }
+
+
+    public function seq_validate($value, $type) {
+        switch ($type) {
+            // Seq_name
+            case 'name':
+                return !empty($value) && 
+                       preg_match('/^[a-zA-Z0-9-]+$/', $value) && 
+                       strlen($value) <= 12;
     
+            // 顆數
+            case 'tightenRepeat':
+                return is_numeric($value) && 
+                       $value >= 1 && 
+                       $value <= 99;
+            
+            //join_val
+            case 'join_val':
+                return !empty($value);
+                
+
+            // OKTIME
+            case 'okTime':
+                return is_numeric($value) && 
+                       $value >= 0.0 && 
+                       $value <= 9.9;
+    
+            // K_value
+            case 'kValue':
+                return is_numeric($value) && 
+                       $value >= 30 && 
+                       $value <= 300;
+    
+            // offset
+            case 'offset':
+                return is_numeric($value) && 
+                       $value >= -254 && 
+                       $value <= 254;
+    
+            default:
+                return false;
+        }
+    }
+
 
     #扭力單位轉換
     public function unitarr_change($torValues, $inputType, $TransType){

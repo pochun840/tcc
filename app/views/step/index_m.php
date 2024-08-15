@@ -939,7 +939,7 @@ function copy_step_by_id(){
 }
 
 function copy_step_by_id_ajax(){
-    //var stepid = readFromLocalStorage("stepid");
+
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
     var stepid_new  = '<?php echo $data['stepid_new']?>';

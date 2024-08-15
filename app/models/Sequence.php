@@ -201,6 +201,8 @@ class Sequence{
         $statement->bindValue(':sequence_id', $seqid);
         
         $success = $statement->execute();
+
+        var_dump($success);die();
     
         return $success;
     }

@@ -168,11 +168,11 @@
                                     <div for="join" class="col-6 t1"><?php echo $text['join'];?>:</div>
                                     <div class="col t2" >
                     			      	<div class="col-4 form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="join_option" id="soft" value="1">
+                    					  <input class="form-check-input" type="radio" name="join_option" id="soft" value="0">
                     					  <label class="form-check-label" for="soft"><?php echo $text['soft'];?></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="join_option" id="hard" value="2" checked="checked">
+                    					  <input class="form-check-input" type="radio" name="join_option" id="hard" value="1">
                     					  <label class="form-check-label" for="hard"><?php echo $text['hard'];?></label>
                     					</div>
                                     </div>
@@ -185,7 +185,7 @@
                     					  <label class="form-check-label" for="Okall_OFF"><?php echo $text['switch_off'];?></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_ON" value="1" checked="checked">
+                    					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_ON" value="1" >
                     					  <label class="form-check-label" for="Okall_ON"><?php echo $text['switch_on'];?></label>
                     					</div>
                                     </div>
@@ -198,7 +198,7 @@
                     					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1" checked="checked">
+                    					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1" >
                     					  <label class="form-check-label" for="OPT_ON"><?php echo $text['switch_on'];?></label>
                     					</div>
                                     </div>
@@ -552,9 +552,9 @@ function copy_seq(seqid){
 
 
 
-function delete_seqid(jobid,seqid){
+function delete_seqid(seqid){
     var jobid = '<?php echo $data['job_id']?>';
-    var seqid = readFromLocalStorage('seqid');
+
     if (jobid) {
         $.ajax({
             url: "?url=Sequences/delete_seq",
@@ -582,6 +582,60 @@ function create_seq() {
     saveseq();
 
 }
+
+function saveseq(){
+
+    var jobid = '<?php echo $data['job_id']?>';
+    var seqid = '<?php echo $data['seq_id']?>';
+    var seq_name = document.getElementById("seq_name").value;
+    var tighten_repeat = document.getElementById("tighten_repeat").value;
+    var ok_time = document.getElementById("ok_time").value;
+    var okall_alarm = document.getElementById("okall-alarm").value;
+    var k_value = document.getElementById("K").value;
+    var torque_unit_val = document.getElementById('torque_unit').value;
+    var ng_stop = document.getElementById('ng_stop').value;
+    var join_val = getSelectedValue('join_option', null);
+    var okall_stop_val = getSelectedValue('okall_stop_option', null);
+    var opt_val = getSelectedValue('opt_option', null);
+    var offset = document.getElementById("offset").value;
+
+    if(seq_name){
+        $.ajax({
+            url: "?url=Sequences/create_seq",
+            method: "POST",
+            data: { 
+                jobid: jobid,
+                seqid: seqid,
+                seq_name: seq_name,
+                tighten_repeat: tighten_repeat,
+                ok_time: ok_time,
+                okall_alarm: okall_alarm,
+                k_value: k_value,
+                torque_unit_val: torque_unit_val,
+                join_val: join_val,
+                okall_stop_val: okall_stop_val,
+                opt_val: opt_val,
+                ng_stop: ng_stop,
+                offset: offset
+
+            },
+            success: function(response) {
+                //console.log(response);
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                    history.go(0);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+            }
+        });
+
+    }
+
+}
+
+
 
 function edit_seq(seqid) {
     var jobid = '<?php echo $data['job_id']?>';
@@ -685,7 +739,7 @@ function edit_seq_save(){
 
             },
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
@@ -699,83 +753,54 @@ function edit_seq_save(){
 
 }
 
-function saveseq(){
 
-    var jobid = '<?php echo $data['job_id']?>';
-    var seqid = '<?php echo $data['seq_id']?>';
-    var seq_name = document.getElementById("seq_name").value;
-    var tighten_repeat = document.getElementById("tighten_repeat").value;
-    var ok_time = document.getElementById("ok_time").value;
-    var okall_alarm = document.getElementById("okall-alarm").value;
-    var k_value = document.getElementById("K").value;
-    var torque_unit_val = document.getElementById('torque_unit').value;
-    var ng_stop = document.getElementById('ng_stop').value;
-    var join_val = document.querySelector('input[name="join_option"]:checked').value;
-    var okall_stop_val = document.querySelector('input[name="okall_stop_option"]:checked').value;
-    var opt_val = document.querySelector('input[name="opt_option"]:checked').value;
-    var offset = document.getElementById("offset").value;
 
-    if(seq_name){
-        $.ajax({
-            url: "?url=Sequences/create_seq",
-            method: "POST",
-            data: { 
-                jobid: jobid,
-                seqid: seqid,
-                seq_name: seq_name,
-                tighten_repeat: tighten_repeat,
-                ok_time: ok_time,
-                okall_alarm: okall_alarm,
-                k_value: k_value,
-                torque_unit_val: torque_unit_val,
-                join_val: join_val,
-                okall_stop_val: okall_stop_val,
-                opt_val: opt_val,
-                ng_stop: ng_stop,
-                offset: offset
-
-            },
-            success: function(response) {
-                var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                }); 
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-            }
-        });
-
-    }
-    
+function getSelectedValue(name, defaultValue = null) {
+    var selectedOption = document.querySelector(`input[name="${name}"]:checked`);
+    return selectedOption ? selectedOption.value : defaultValue;
 }
+
+
 
 function updateValue(checkbox){
     var jobid = '<?php echo $data['job_id']?>';
-    var check_seqid = checkbox.getAttribute('data-sequence-id');
     var type_value = checkbox.checked ? 1 : 0;
-    console.log(check_seqid);
-    console.log(type_value);
-    if(jobid){
-            $.ajax({
-            url: "?url=Sequences/check_seq_enable",
+    const selectedRow = document.querySelector('tr.selected');
+
+    if (selectedRow) {
+        // 查找该行中具有 'seq-id' 类的 <td> 元素
+        const seqIdElement = selectedRow.querySelector('.seq-id');
+        
+        if (seqIdElement) {
+            const check_seqid = seqIdElement.textContent.trim();
+            console.log('Seq ID:', check_seqid);
+        } else {
+            //console.error('找不到具有类 "seq-id" 的元素');
+        }
+    } else {
+        console.error('找不到具有类 "selected" 的行');
+    }
+    if(check_seqid){
+        alert(check_seqid);
+        $.ajax({
+            url: "?url=Sequences/check_seq_enable", 
             method: "POST",
-            data:{ 
+            data: { 
                 jobid: jobid,
                 seqid: check_seqid,
-                type_value:type_value
-
+                type_value: type_value
             },
             success: function(response) {
-                history.go(0);
+                console.log(response);
+                // 可选：重新加载页面或更新界面
+                // history.go(0);
             },
             error: function(xhr, status, error) {
-                
+                console.error('AJAX 错误:', status, error); 
             }
         });
     } 
 }
-
 </script>
 <script>
     

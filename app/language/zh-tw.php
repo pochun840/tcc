@@ -423,6 +423,7 @@ $text['img_agent_hover'] = '../public/img/home_m_agent_tw.png';
 
 $text['unfasten_force'] = '超出範圍 1 - 10';
 $text['error_job_name'] = 'JOB名稱輸入有誤';
+$text['error_seq_name'] = 'SEQ名稱輸入有誤';
 //--------------------------------------------------------------------------------------------------------------
 
 
@@ -461,6 +462,7 @@ $error_message['sequence_name'] = '工序名稱輸入有誤';
 $error_message['tightening_repeat'] = '超出範圍 1 - 99';
 $error_message['timeout'] = '超出範圍 0.1 - 60.0';
 $error_message['to_seq_name'] = '工序名稱輸入有誤';
+$error_message['jon_val'] = "欄位不得為空";
 
 //normal step
 $text['delete_step_confirm_text'] = '是否要刪除 步驟 id: ';

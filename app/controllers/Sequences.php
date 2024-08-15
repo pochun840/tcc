@@ -58,9 +58,10 @@ class Sequences extends Controller
             include $file;
         }
 
-
-
+        
         if(isset($_POST['jobid'])){
+
+            //echo "111";die();
             
             #如果 POST 中沒有，則使用預設值
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
@@ -70,72 +71,55 @@ class Sequences extends Controller
             $ok_time = isset($_POST['ok_time']) ? floatval($_POST['ok_time']) : 9.9;
             $okall_alarm_time = isset($_POST['okall_alarm']) ? floatval($_POST['okall_alarm']) : 1.0;
             $tighten_repeat = isset($_POST['tighten_repeat']) ? intval($_POST['tighten_repeat']) : 0;
-            $join_val = isset($_POST['join_val']) ? intval($_POST['join_val']) : 0;
-            $okall_stop_val = isset($_POST['okall_stop_val']) ? intval($_POST['okall_stop_val']) : 0;
-            $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : 0;
+            $join_val = isset($_POST['join_val']) ? intval($_POST['join_val']) : '';
+            $okall_stop_val = isset($_POST['okall_stop_val']) ? intval($_POST['okall_stop_val']) : '';
+            $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : '';
             $torque_unit_val = isset($_POST['torque_unit_val']) ? intval($_POST['torque_unit_val']) : 0;
             $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
+
+            $seq_name = $_POST['seq_name'];
             
-            
-            #驗證顆數
-            if($tighten_repeat < 1 || $tighten_repeat > 99){
-                
-                $res_type = 'Error';
-                $res_msg  = $error_message['tightening_repeat'];
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-                echo json_encode($result);
+           
+      
+            #驗證seq_name 
+            if(!$this->MiscellaneousModel->seq_validate($seq_name, 'name')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_seq_name']);
                 exit();
             }
+
+
+            #驗證顆數
+            //var_dump($tighten_repeat);die();
+            if(!$this->MiscellaneousModel->seq_validate($tighten_repeat, 'tightenRepeat')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tightening_repeat']);
+                exit();
+            }
+
+       
 
             #驗證OK_time
-            if($ok_time < 0.0 || $ok_time > 9.9){
-                $res_type = 'Error';
-                $res_msg  = $error_message['ok_time'];
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-                echo json_encode($result);
+            if(!$this->MiscellaneousModel->seq_validate($ok_time, 'okTime')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['ok_time']);
                 exit();
-
             }
-
 
             #驗證k_value
-            if ($k_value < 30 || $k_value > 300){
-                $res_type = 'Error';
-                $res_msg  = $error_message['ok_time'];
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-                echo json_encode($result);
+            if(!$this->MiscellaneousModel->seq_validate($k_value, 'kValue')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['ok_time']);
                 exit();
             }
 
-            # 驗證offset
-            if ($offset < -254 || $offset > 254) {
-                $res_type = 'Error';
-                //$offset = 0; 
-                $res_msg = $error_message['joint_offset_val'];
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-                echo json_encode($result);
+            #驗證offset
+            if(!$this->MiscellaneousModel->seq_validate($offset, 'offset')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['joint_offset_val']);
                 exit();
             }
-
-            $offset = sprintf("%+03d", $offset);
-
+            
             $jobdata = array(
                 'job_id' => $jobid,
                 'sequence_id' => $seqid,
-                'sequence_name' => $_POST['seq_name'],
+                'sequence_name' => $seq_name,
                 'tightening_repeat' => $tighten_repeat,
                 'ng_stop' => $ng_stop,
                 'sequence_enable' => 1,
@@ -148,6 +132,14 @@ class Sequences extends Controller
                 'okall_alarm_time' => $okall_alarm_time,
                 'offset' => $offset,
             );
+
+
+            if(!empty($jobdata['offset'])){
+                $jobdata['offset'] = sprintf("%+03d", $jobdata['offset']);
+            }
+           
+
+            
            
             $mode = "create";
             $res = $this->sequenceModel->create_seq($mode,$jobdata);
@@ -241,58 +233,39 @@ class Sequences extends Controller
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
 
 
-            //驗證顆數
-            if($tighten_repeat < 1 || $tighten_repeat > 99){
-                
-                $res_type = 'Error';
-                $res_msg  = $error_message['tightening_repeat'];
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-                echo json_encode($result);
+            $seq_name = $_POST['seq_name'];
+            #驗證seq_name 
+            if(!$this->MiscellaneousModel->seq_validate($seq_name, 'name')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_seq_name']);
                 exit();
             }
 
-            //驗證OK_time
-            if($ok_time < 0.0 || $ok_time > 9.9){
-                $res_type = 'Error';
-                $res_msg  = $error_message['ok_time'];
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-                echo json_encode($result);
-                exit();
 
-            }
-
-            //驗證k_value
-            if ($k_value < 30 || $k_value > 300){
-                $res_type = 'Error';
-                $res_msg  = $error_message['ok_time'];
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-                echo json_encode($result);
+            #驗證顆數
+            if(!$this->MiscellaneousModel->seq_validate($tighten_repeat, 'tightenRepeat')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tightening_repeat']);
                 exit();
             }
-
-            # 驗證offset
-            if ($offset < -254 || $offset > 254) {
-                $res_type = 'Error';
-                //$offset = 0; 
-                $res_msg = $error_message['joint_offset_val'];
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-                echo json_encode($result);
-                exit();
-            }
-
     
+
+            #驗證OK_time
+            if(!$this->MiscellaneousModel->seq_validate($ok_time, 'okTime')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['ok_time']);
+                exit();
+            }
+
+            #驗證k_value
+            if(!$this->MiscellaneousModel->seq_validate($k_value, 'kValue')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['ok_time']);
+                exit();
+            }
+
+            #驗證offset
+            if(!$this->MiscellaneousModel->seq_validate($offset, 'offset')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['joint_offset_val']);
+                exit();
+            }
+
 
             $offset = sprintf("%+03d", $offset);
 
@@ -353,6 +326,8 @@ class Sequences extends Controller
 
         if(!empty($seqid)){
             $res  = $this->sequenceModel->sequence_id_repeat($jobid,$seqid);
+
+            //var_dump($success);
             if($res == "True"){
 
             }

@@ -427,6 +427,7 @@ $text['img_agent'] = '../public/img/home_agent_cn.png';
 $text['img_agent_hover'] = '../public/img/home_m_agent_cn.png';
 $text['unfasten_force'] = '超出范围 1 - 10';
 $text['error_job_name'] = '工作名称输入有误';
+$text['error_seq_name'] = '工序名称输入有误';
 //--------------------------------------------------------------------------------------------------------------
 
 $error_message = array();
@@ -464,6 +465,7 @@ $error_message['sequence_name'] = '工序名称输入有误';
 $error_message['tightening_repeat'] = '超出范围 1 - 99';
 $error_message['timeout'] = '超出范围 0.1 - 60.0';
 $error_message['to_seq_name'] = '工序名称输入有误';
+$error_message['jon_val'] = "字段不能为空";
 
 //normal step
 $text['delete_step_confirm_text'] = '是否要删除 步骤 id: ';

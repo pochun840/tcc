@@ -371,7 +371,7 @@ if (jobname_val && unscrew_rpm_val && unscre_power_val && direction_val) {
             direction_val: direction_val
         },
         success: function(response) {
-            console.log(response);
+            //console.log(response);
 
             var responseData = JSON.parse(response);
             alertify.alert(responseData.res_type, responseData.res_msg, function() {

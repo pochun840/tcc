@@ -439,6 +439,7 @@ $text['img_agent'] = '../public/img/home_agent_en.png';
 $text['img_agent_hover'] = '../public/img/home_m_agent_en.png';
 $text['unfasten_force'] = 'Out of range 1 - 10';
 $text['error_job_name'] = 'JOB name input error';
+$text['error_seq_name'] = 'SEQ name input error';
 //------------------------------------------------ -------------------------------------------------- ------------
 
 //error message
@@ -477,6 +478,7 @@ $error_message['sequence_name'] = 'Sequence name input error';
 $error_message['tightening_repeat'] = 'Out of range 1 - 99';
 $error_message['timeout'] = 'Out of range 0.1 - 60.0';
 $error_message['to_seq_name'] = 'Sequence name input error';
+$error_message['jon_val'] = "Field cannot be empty";
 
 //normal step
 $text['delete_step_confirm_text'] = 'Do you want to delete step id: ';

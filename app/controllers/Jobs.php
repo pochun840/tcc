@@ -208,15 +208,10 @@ class Jobs extends Controller
             include $file;
         }
 
-   
-        
-
         $old_jobid   = $_POST['old_jobid'] ?? null;
         $old_jobname = $_POST['old_jobname'] ?? null;
         $new_jobid   = $_POST['new_jobid'] ?? null;
         $new_jobname = $_POST['new_jobname'] ?? null;
-
-
 
         if(!empty($old_jobid)){
             $job_count = $this->jobModel->countjob();
