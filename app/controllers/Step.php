@@ -264,26 +264,26 @@ class Step extends Controller
 
         if(isset($_POST['jobid'])){
 
-            $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
-            $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
-            $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0; 
-            $target_option = isset($_POST['target_option'])? intval($_POST['target_option']) : 0; 
+            $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : '';
+            $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : '';
+            $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : ''; 
+            $target_option = isset($_POST['target_option'])? intval($_POST['target_option']) : ''; 
 
-            $target_torque = isset($_POST['target_torque'])? floatval($_POST['target_torque']) : 0; 
-            $target_angle = isset($_POST['target_angle'])? floatval($_POST['target_angle']) : 0; 
-            $target_delaytime = isset($_POST['target_delaytime'])? floatval($_POST['target_delaytime']) : 0; 
-            $hi_torque = isset($_POST['hi_torque'])? floatval($_POST['hi_torque']) : 0; 
-            $lo_torque = isset($_POST['lo_torque'])? floatval($_POST['lo_torque']) : 0; 
-            $hi_angle  = isset($_POST['hi_angle'])? intval($_POST['hi_angle']) : 0; 
-            $lo_angle  = isset($_POST['lo_angle'])? intval($_POST['lo_angle']) : 0; 
-            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 0;
-            $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
-            $downshift = isset($_POST['downshift'])? intval($_POST['downshift']) : 0;
-            $threshold_torque = isset($_POST['threshold_torque'])? intval($_POST['threshold_torque']) : 0;
-            $downshift_torque = isset($_POST['downshift_torque'])? intval($_POST['downshift_torque']) : 0;
+            $target_torque = isset($_POST['target_torque'])? floatval($_POST['target_torque']) : ''; 
+            $target_angle = isset($_POST['target_angle'])? floatval($_POST['target_angle']) : ''; 
+            $target_delaytime = isset($_POST['target_delaytime'])? floatval($_POST['target_delaytime']) : ''; 
+            $hi_torque = isset($_POST['hi_torque'])? floatval($_POST['hi_torque']) : ''; 
+            $lo_torque = isset($_POST['lo_torque'])? floatval($_POST['lo_torque']) : ''; 
+            $hi_angle  = isset($_POST['hi_angle'])? intval($_POST['hi_angle']) : ''; 
+            $lo_angle  = isset($_POST['lo_angle'])? intval($_POST['lo_angle']) : ''; 
+            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : '';
+            $direction = isset($_POST['direction'])? intval($_POST['direction']) : '';
+            $downshift = isset($_POST['downshift'])? intval($_POST['downshift']) : '';
+            $threshold_torque = isset($_POST['threshold_torque'])? intval($_POST['threshold_torque']) : '';
+            $downshift_torque = isset($_POST['downshift_torque'])? intval($_POST['downshift_torque']) : '';
             $downshift_rpm = isset($_POST['downshift_rpm'])? intval($_POST['downshift_rpm']) : 100;
 
-
+            
             #驗證hi_angle的範圍
             if(!empty($hi_angle)){
                 $ans = $this->MiscellaneousModel->check_angle($hi_angle);
@@ -407,6 +407,8 @@ class Step extends Controller
                 'downshift_rpm'    => $downshift_rpm,
                 
             );
+
+            
 
             $res = $this->stepModel->update_step_by_id($jobdata);
             $result = array();
