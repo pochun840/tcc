@@ -83,44 +83,43 @@ class Data extends Controller
    
     public function exportData() {
         $input_check = true;
+    
+        // Check start_date
         if (!empty($_POST['start_date']) && isset($_POST['start_date'])) {
-            $start_date = $_POST['start_date'];
-        } else {
-            $input_check = false;
-        }
-        if (!empty($_POST['end_date']) && isset($_POST['end_date'])) {
-            $end_date = $_POST['end_date'];
+            $start_date = $_POST['start_date'] . ":00";
         } else {
             $input_check = false;
         }
     
-        if (!empty($_POST['expert_val']) && isset($_POST['expert_val'])) {
-            $expert_val = $_POST['expert_val'];
+        // Check end_date
+        if (!empty($_POST['end_date']) && isset($_POST['end_date'])) {
+            $end_date = $_POST['end_date'] . ":00";
         } else {
-            $expert_val = "0";
+            $input_check = false;
         }
+    
+        // Check expert_val
+        $expert_val = isset($_POST['expert_val']) ? $_POST['expert_val'] : "0";
     
         if ($input_check) {
-
-            $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
+            $unit_arr = $this->MiscellaneousModel->details('torque_unit');
             $status_arr = $this->MiscellaneousModel->details('status');
-
+    
             $start_date = str_replace('-', "", $start_date);
             $end_date = str_replace('-', "", $end_date);
             $dataset = $this->DataModel->get_range_data($start_date, $end_date);
     
-            #取出1萬筆的資料
+            // Limit dataset size
             $dataset = array_slice($dataset, 0, 10000);
-
-            #整理$dataset 格式內容
-            foreach($dataset as $key =>$val){
-
-                $dataset[$key]['torque_unit']    = $unit_arr[$val['torque_unit']];
-                $dataset[$key]['fasten_status']  = $status_arr[$val['fasten_status']];
+    
+            // Format dataset
+            foreach ($dataset as $key => $val) {
+                $dataset[$key]['torque_unit'] = $unit_arr[$val['torque_unit']];
+                $dataset[$key]['fasten_status'] = $status_arr[$val['fasten_status']];
             }
     
             if ($dataset && $expert_val == "0") {
-
+                // Generate CSV file
                 $csv_headers = array_keys($dataset[0]);
                 header('Content-Type: text/csv; charset=utf-8');
                 header('Content-Disposition: attachment; filename=data.csv');
@@ -135,7 +134,7 @@ class Data extends Controller
                 fclose($output);
                 exit();
             } elseif ($dataset && $expert_val == "1") {
-         
+                // Generate ZIP file with CSV
                 $csv_content = '';
                 $csv_headers = array_keys($dataset[0]);
                 $csv_content .= implode(',', $csv_headers) . "\n";
@@ -148,7 +147,6 @@ class Data extends Controller
                 $zip_filename = tempnam(sys_get_temp_dir(), 'exported_data') . '.zip';
     
                 if ($zip->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-                    
                     $zip->addFromString("data.csv", $csv_content);
                     $zip->close();
     
@@ -162,7 +160,10 @@ class Data extends Controller
                     echo "無法建立 ZIP 檔案";
                 }
             }
+        } else {
+            echo "輸入參數不正確";
         }
-    }  
+    }
+    
 }
 ?>

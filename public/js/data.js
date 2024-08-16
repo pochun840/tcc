@@ -1,4 +1,3 @@
-
 function exportData() {
     var radioButtons = document.querySelectorAll('input[name="export-option"]');
     var isChecked = false;
@@ -54,7 +53,6 @@ function exportData() {
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                
             },
             error: function(xhr, status, error) {
                 console.error("AJAX 請求失敗:", status, error);
@@ -63,5 +61,6 @@ function exportData() {
         });
     }
 }
+
 
 

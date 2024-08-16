@@ -43,9 +43,12 @@ class Datas{
     {
         $sql = "SELECT * FROM data 
                 WHERE data_time BETWEEN '".$start_date."' AND '".$end_date."'
-                ORDER BY data_time LIMIT 10000";
+                ORDER BY data_time DESC LIMIT 10000";
+
+     
         
         $statement = $this->db_data->prepare($sql);
+        
         if($statement != false){
             $results = $statement->execute();
             $row = $statement->fetchall(PDO::FETCH_ASSOC);
