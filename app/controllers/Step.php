@@ -436,20 +436,25 @@ class Step extends Controller
         
         if(isset($_POST['stepid'])){
             
-            $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
-            $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
-            $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0;        
-            $res = $this->stepModel->delete_step_id($jobid, $seqid, $stepid);
-            $result = array();
-            if($res){
-                $res_type = 'Success';
-                $res_msg = $text['del_step'].':'. $stepid."  ".$text['success'];
-                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
-            }else{
-                $res_type = 'Error';
-                $res_msg = $text['del_step'].':'. $stepid."  ".$text['fail'];
-                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+            $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : '';
+            $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : '';
+            $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : '';    
+            
+            if(!empty($stepid)){
+                $res = $this->stepModel->delete_step_id($jobid, $seqid, $stepid);
+                $result = array();
+                if($res){
+                    $res_type = 'Success';
+                    $res_msg = $text['del_step'].':'. $stepid."  ".$text['success'];
+                    $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+                }else{
+                    $res_type = 'Error';
+                    $res_msg = $text['del_step'].':'. $stepid."  ".$text['fail'];
+                    $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+                }
+
             }
+      
         }
     
     }
@@ -464,10 +469,10 @@ class Step extends Controller
         if(isset($_POST['jobid'])){
 
             #如果 POST 中沒有，則使用預設值
-            $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
-            $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
+            $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : '';
+            $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : '';
             $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0;
-            $stepid_new = isset($_POST['stepid_new']) ? intval($_POST['stepid_new']) : 0;
+            $stepid_new = isset($_POST['stepid_new']) ? intval($_POST['stepid_new']) : '';
             $step_count = $this->stepModel->countstep($jobid, $seqid);
             $step_count = intval($step_count);
 
@@ -526,15 +531,35 @@ class Step extends Controller
 
     #查詢step data
     public function search_stepinfo(){
-        if(isset($_POST['stepid'])){
-            
-            $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
-            $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
-            $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0;        
-            $res = $this->stepModel->getStepNo($jobid, $seqid, $stepid);
-            print_r($res[0]);
+
         
+        $input_check = true;
+        if(!empty($_POST['jobid']) && isset($_POST['jobid'])){
+            $jobid = $_POST['jobid'];
+        }else{
+            $input_check = false; 
         }
+
+        if(!empty($_POST['seqid']) && isset($_POST['seqid'])){
+            $seqid = $_POST['seqid'];
+        }else{
+            $input_check = false; 
+        }
+
+
+        if(!empty($_POST['stepid']) && isset($_POST['stepid'])){
+            $stepid  = $_POST['stepid'];
+        }else{
+            $input_check = false; 
+        }
+
+        if($input_check){
+            $res = $this->stepModel->getStepNo($jobid, $seqid, $stepid);
+            print_r($res);
+        }
+
+
+      
 
     }
         

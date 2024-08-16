@@ -39,11 +39,37 @@ class Steptcc{
     #透過job_id 及 seq_id 及 step_id取得對應的資料
     public function getStepNo($jobid,$seqid,$stepid){
 
-        $sql = "SELECT * FROM step WHERE job_id = ? AND sequence_id = ? AND step_id = ?";
-        $statement = $this->db_iDas->prepare($sql);
-        $statement->execute([$jobid, $seqid, $stepid]);
-        return $statement->fetchAll();
 
+        $result = [
+            'step_info' => [],
+        ];
+
+        $sqlStep = "SELECT * FROM step WHERE job_id = ? AND sequence_id = ? AND step_id = ?";
+        $statementStep = $this->db_iDas->prepare($sqlStep);
+        $statementStep->execute([$jobid, $seqid, $stepid]);
+        $result['step_info'] = $statementStep->fetchAll();
+
+        $sqlTorque = "SELECT COUNT(*) as count FROM step WHERE job_id = ? AND sequence_id = ? AND target_option = '0'";
+        $statementTorque = $this->db_iDas->prepare($sqlTorque);
+        $statementTorque->execute([$jobid, $seqid]);
+        $torqueResult = $statementTorque->fetch();
+        $count  = (int) $torqueResult['count'];
+
+        if(!empty($result['step_info'])){
+            $result['step_info'][0]['check_step_torque'] = $count;
+        }
+        return $result;
+
+    }
+
+
+    #透過job_id 及 seq_id 取得 當下的step 有無被設置扭力 
+    public function check_present_step_by_torque($jobid,$seqid){
+        $sql = "SELECT COUNT(*) as count FROM step WHERE job_id = ? AND sequence_id = ? AND target_option = '0' ";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid, $seqid]);
+        $result = $statement->fetch();
+        return $result['count'];
     }
 
     #檢查同一個seq中所建立的Step Target Torque 只能有一個
