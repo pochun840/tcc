@@ -84,21 +84,21 @@ class Data extends Controller
     public function exportData() {
         $input_check = true;
     
-        // Check start_date
+        #檢查開始日期
         if (!empty($_POST['start_date']) && isset($_POST['start_date'])) {
             $start_date = $_POST['start_date'] . ":00";
         } else {
             $input_check = false;
         }
     
-        // Check end_date
+        #檢查結束日期
         if (!empty($_POST['end_date']) && isset($_POST['end_date'])) {
             $end_date = $_POST['end_date'] . ":00";
         } else {
             $input_check = false;
         }
     
-        // Check expert_val
+        #確認是否有選擇類型 
         $expert_val = isset($_POST['expert_val']) ? $_POST['expert_val'] : "0";
     
         if ($input_check) {
@@ -109,17 +109,17 @@ class Data extends Controller
             $end_date = str_replace('-', "", $end_date);
             $dataset = $this->DataModel->get_range_data($start_date, $end_date);
     
-            // Limit dataset size
+
             $dataset = array_slice($dataset, 0, 10000);
     
-            // Format dataset
+
             foreach ($dataset as $key => $val) {
                 $dataset[$key]['torque_unit'] = $unit_arr[$val['torque_unit']];
                 $dataset[$key]['fasten_status'] = $status_arr[$val['fasten_status']];
             }
     
             if ($dataset && $expert_val == "0") {
-                // Generate CSV file
+               
                 $csv_headers = array_keys($dataset[0]);
                 header('Content-Type: text/csv; charset=utf-8');
                 header('Content-Disposition: attachment; filename=data.csv');
@@ -134,7 +134,7 @@ class Data extends Controller
                 fclose($output);
                 exit();
             } elseif ($dataset && $expert_val == "1") {
-                // Generate ZIP file with CSV
+               
                 $csv_content = '';
                 $csv_headers = array_keys($dataset[0]);
                 $csv_content .= implode(',', $csv_headers) . "\n";
