@@ -339,18 +339,19 @@ class Sequences extends Controller
 
     //check_seq_enable
     public function check_seq_enable(){
-        $jobid = $_POST['jobid'] ?? null;
-        $seqid = $_POST['seqid'] ?? null;
-        $type_value = $_POST['type_value'] ?? null;
 
-        if(!empty($type_value)){
-            $this->sequenceModel->check_seq_type($jobid,$seqid,$type_value);
-            if($res == "True"){
+        $input_check = true;
 
-            }
-            echo  $res;
+        if(!empty($_POST)){
+            $seq_data = array();
+            $seq_data = $_POST;
+        }else{
+            $input_check = false; 
         }
-
+    
+        if($input_check){
+            $this->sequenceModel->update_seq_type($seq_data) ;
+        }
     }
 
     public function copy_seq_data(){

@@ -200,12 +200,22 @@ class Sequence{
         $statement->bindValue(':job_id', $jobid);
         $statement->bindValue(':sequence_id', $seqid);
         
-        $success = $statement->execute();
-
-        var_dump($success);die();
-    
+        $success = $statement->execute();    
         return $success;
     }
+
+    public function update_seq_type($seq_data) {
+        $sql = "UPDATE `sequence` SET sequence_enable = :sequence_enable WHERE job_id = :job_id AND sequence_id = :sequence_id ";
+        $statement = $this->db_iDas->prepare($sql);
+    
+        $statement->bindValue(':sequence_enable', $seq_data['type_value']);
+        $statement->bindValue(':job_id', $seq_data['jobid']);
+        $statement->bindValue(':sequence_id', $seq_data['seqid']);
+        
+        $success = $statement->execute();    
+        return $success;
+    }
+
 
     #用jobid seqid oldseqname 查詢該筆的所有資料
     public function search_old_data($jobid,$seqid,$oldseqname){
@@ -241,13 +251,20 @@ class Sequence{
                     $update_id_sql = "UPDATE sequence SET sequence_id = ? WHERE job_id = ? AND sequence_name = ? ";
                     $update_id_statement = $this->db_iDas->prepare($update_id_sql);
                     $update_id_statement->execute([$updated_sequence_id, $jobid, $v_s['sequence_name']]);
+
+                    $sql_step = "UPDATE step SET sequence_id = '".$updated_sequence_id."' WHERE job_id = '".$jobid."' ";
+
                 }
+
+
             }
 
             //最終再次檢查 強制把 欄位sequence_id 不是數字的 通通移除
             $force_update_sql = "UPDATE sequence SET sequence_id = CAST(REPLACE(sequence_id, 'New_Value', '') AS UNSIGNED) WHERE job_id =  ? ";
             $force_update_statement = $this->db_iDas->prepare($force_update_sql);
             $force_update_statement->execute([$jobid]);
+            //echo  $sql_step;die();
+
 
         }
         return true;

@@ -486,7 +486,6 @@ function copy_seq_by_id(){
     var newseqid = document.getElementById('to_seq_id').value;
     var newseqname = document.getElementById("to_seq_name").value;    
 
-
     var language = getCookie('language');
     if(language == "zh-cn"){
         var text_info ='你确定吗？';
@@ -495,7 +494,7 @@ function copy_seq_by_id(){
     }else{
         var text_info ='Are you sure ?';
     }
-    
+
 
     if(newseqname){
         $.ajax({

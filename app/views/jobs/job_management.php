@@ -350,7 +350,6 @@ function copy_job_by_id(jobid){
             var text_info ='Are you sure ?';
         }
 
-    
         $.ajax({
             url: "?url=Jobs/check_job_type",
             method: "POST",
