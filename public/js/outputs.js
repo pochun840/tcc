@@ -30,7 +30,8 @@ function job_confirm(){
 
                         row.getAttribute('data-event');
                         output_event = row.getAttribute('data-event');
-                    
+                   
+ 
                     });
                 });
 
@@ -400,7 +401,6 @@ function get_output_info(job_id,output_event){
 
            
                 //完工信號 && 馬達信號 && 啟動信號
-                //alert(output_event);
                 if (output_event == 8  || output_event == 6 || output_event == 7 ) {
                     for(let i = 1; i <= 11; i++) {
                         let element1 = document.getElementById(`edit_pin${i}_1`);
@@ -414,7 +414,34 @@ function get_output_info(job_id,output_event){
                         }
                     }
 
-                    //
+                    if (Array.isArray(temp)) {
+                        //過濾出包含 "edit_pin" 的字串
+                        const filteredArray = temp.filter(item => item.includes("edit_pin"));
+                        
+                        const updatedArray = filteredArray.map(item => {
+                            // 如果字串為空，直接返回
+                            if (item.length === 0) {
+                                return item;
+                            }
+                            //強制字串的最後一個字元更換為 '3'
+                            return item.slice(0, -1) + '3';
+                        });
+                        
+                        console.log("Updated Array:", updatedArray);
+                        updatedArray.forEach(item => {
+                            const radio = document.getElementById(item);
+                            if (radio && radio.type === 'radio') {
+                                radio.disabled = true;
+                            }
+                        });
+
+                    }
+                    
+                    
+
+                    
+                   
+              
                 }
 
                  document.getElementById(time_ms).value = wave_on;
@@ -435,52 +462,5 @@ function get_output_info(job_id,output_event){
              }
      });      
     }
- 
- 
-}
-
-
-function get_other_event_by_job_id(job_id){
-    if(job_id){
-
-
-    }
-
-}
-
-function disablePins() {
-    
-    alert('331');
-    /*for(let i = 1; i <= 11; i++) {
-        let element1 = document.getElementById('edit_pin${i}_1');
-        if (element1) {
-            element1.disabled = true;
-        }
-
-        let element2 = document.getElementById(`edit_pin${i}_2`);
-        if (element2) {
-            element2.disabled = true;
-        }
-    }*/
-
-    //
-    /*if(job_id){
-        $.ajax({
-            url: "?url=Outputs/get_other_event_by_job_id",
-            method: "POST",
-            data: {
-                job_id: job_id
-            },
-            success: function (response) {
-                console.log(response);
-            },
-            error: function (xhr, status, error) {
-
-            }
-        });
-
-
-    }*/
-
-
+  
 }

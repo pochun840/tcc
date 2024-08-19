@@ -343,6 +343,7 @@ class Outputs extends Controller
         }
 
         if($input_check){
+            $job_outputs = array();
             $job_outputs = $this->OutputModel->check_job_event_conflict($output_job_id,$output_event);    
         }
         print_r($job_outputs);
@@ -416,6 +417,35 @@ class Outputs extends Controller
 
         echo json_encode($result);
     }
+
+    public function get_other_event_by_job_id(){
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }  
+        
+        $input_check = true;
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+            $output_job_id = $_POST['job_id'];
+        }else{ 
+            $input_check = false; 
+        }
+
+        if($input_check){
+            $res   = $this->OutputModel->check_event_conflict_by_job_id($output_job_id);
+            echo "<pre>";
+            print_r($res);
+            echo "</pre>";
+            die();
+
+        }
+
+
+
+    }
 }
+
+
 
 ?>

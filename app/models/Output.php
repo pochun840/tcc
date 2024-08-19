@@ -66,6 +66,16 @@ class Output{
         return (int)$count;
     }
 
+    public function check_event_conflict_by_job_id($output_job_id){
+        
+        $sql = "SELECT * FROM output WHERE output_job_id = ? AND output_event NOT IN('6','7','8') ";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$output_job_id]);
+        $rows = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $rows;
+    }
+
     public function create_output($jobdata){    
         $sql = "INSERT INTO `output` (output_job_id, output_pin, output_event, wave, wave_on) ";
         $sql .= "VALUES (:output_job_id, :output_pin, :output_event, :wave, :wave_on);";
