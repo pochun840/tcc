@@ -490,6 +490,15 @@ function copy_seq_by_id(){
     var newseqid = document.getElementById('to_seq_id').value;
     var newseqname = document.getElementById("to_seq_name").value;    
 
+    var language = getCookie('language');
+    if(language == "zh-cn"){
+        var text_info ='你确定吗？';
+    }else if(language == "zh-tw"){
+        var text_info ='你確定嗎 ?';
+    }else{
+        var text_info ='Are you sure ?';
+    }
+
     if(newseqname){
         $.ajax({
             url: "?url=Sequences/check_seq_type",
@@ -500,7 +509,7 @@ function copy_seq_by_id(){
 
             },
             success: function(response) {
-                alertify.confirm("Are you sure?", function (result) {
+                alertify.confirm(text_info, function (result) {
                 if(result){
                     $.ajax({
                         url: "?url=Sequences/copy_seq_data",
