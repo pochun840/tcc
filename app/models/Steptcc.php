@@ -225,19 +225,20 @@ class Steptcc{
                     $update_id_sql = "UPDATE step SET step_id = ? WHERE job_id = ? AND sequence_id = ? ";
                     $update_id_statement = $this->db_iDas->prepare($update_id_sql);
                     $update_id_statement->execute([$updated_step_id, $jobid, $v_s['sequence_id']]);
+
+
                 }
                 else{
-                    //echo "ewq";die();
+                   
                 }
             }else{
-                //echo "eew";die();
+              
             }
 
             //最終再次檢查 強制把 欄位step_id 不是數字的 通通移除
             $force_update_sql = "UPDATE step SET step_id = CAST(REPLACE(step_id, 'New_Value', '') AS UNSIGNED) WHERE job_id =  ? ";
             $force_update_statement = $this->db_iDas->prepare($force_update_sql);
             $force_update_statement->execute([$jobid]);
-
 
         }
         return true;
