@@ -362,38 +362,38 @@ function copy_job_by_id(jobid){
 
 function savejob() {
 
-var jobidnew = '<?php echo $data['jobint']?>';
+    var jobidnew = '<?php echo $data['jobint']?>';
 
-var jobname_val      = document.getElementById("job_name").value;
-var unscrew_rpm_val  = document.getElementById("unscrew_RPM").value;
-var unscre_power_val = document.getElementById("unscre_power").value;
+    var jobname_val      = document.getElementById("job_name").value;
+    var unscrew_rpm_val  = document.getElementById("unscrew_RPM").value;
+    var unscre_power_val = document.getElementById("unscre_power").value;
 
-var directionElement = document.querySelector('input[name="direction"]:checked');
-var direction_val = directionElement ? directionElement.value : null;
-if (jobname_val && unscrew_rpm_val && unscre_power_val && direction_val) {
-    $.ajax({
-        url: "?url=Jobs/create_job",
-        method: "POST",
-        data: { 
-            jobidnew: jobidnew,
-            jobname_val: jobname_val,
-            unscrew_rpm_val: unscrew_rpm_val,
-            unscre_power_val: unscre_power_val,
-            direction_val: direction_val
-        },
-        success: function(response) {
-            //console.log(response);
+    var directionElement = document.querySelector('input[name="direction"]:checked');
+    var direction_val = directionElement ? directionElement.value : null;
+    if (jobname_val && unscrew_rpm_val && unscre_power_val && direction_val) {
+        $.ajax({
+            url: "?url=Jobs/create_job",
+            method: "POST",
+            data: { 
+                jobidnew: jobidnew,
+                jobname_val: jobname_val,
+                unscrew_rpm_val: unscrew_rpm_val,
+                unscre_power_val: unscre_power_val,
+                direction_val: direction_val
+            },
+            success: function(response) {
+                //console.log(response);
 
-            var responseData = JSON.parse(response);
-            alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                history.go(0);
-            });         
-        },
-        error: function(xhr, status, error) {
-            console.error("AJAX request failed:", status, error);
-        }
-    });
-}
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                    history.go(0);
+                });         
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+            }
+        });
+    }
 }
 
 </script>

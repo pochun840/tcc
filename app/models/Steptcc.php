@@ -91,8 +91,6 @@ class Steptcc{
     }
 
 
-
-
     #透過 job_id 及 seq_id 及 step_id 刪除對應的資料
     public function delete_step_id($jobid,$seqid,$stepid){
 

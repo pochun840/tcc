@@ -759,46 +759,29 @@ function getSelectedValue(name, defaultValue = 0) {
 
 
 
-function updateValue(checkbox){
+function updateValue(element){
     var jobid = '<?php echo $data['job_id']?>';
-    var type_value = checkbox.checked ? 1 : 0;
-    const selectedRow = document.querySelector('tr.selected');
-
-    if (selectedRow) {
-        // 查找该行中具有 'seq-id' 类的 <td> 元素
-        const seqIdElement = selectedRow.querySelector('.seq-id');
-        
-        if (seqIdElement) {
-            const check_seqid = seqIdElement.textContent.trim();
-            console.log('Seq ID:', check_seqid);
-        } else {
-            //console.error('找不到具有类 "seq-id" 的元素');
-        }
-    } else {
-        console.error('找不到具有类 "selected" 的行');
-    }
-    if(check_seqid){
-        alert(check_seqid);
+    var type_value = element.checked ? 1 : 0;
+    var seqid = element.getAttribute('data-sequence-id');
+    
+    if(seqid){
         $.ajax({
             url: "?url=Sequences/check_seq_enable", 
             method: "POST",
             data: { 
                 jobid: jobid,
-                seqid: check_seqid,
+                seqid: seqid,
                 type_value: type_value
             },
             success: function(response) {
                 console.log(response);
-                // 可选：重新加载页面或更新界面
-                // history.go(0);
+                history.go(0);
             },
             error: function(xhr, status, error) {
                 console.error('AJAX 错误:', status, error); 
             }
-        });
-    }
-
-    
+        });    
+    } 
 }
 
 </script>
@@ -835,7 +818,7 @@ function sendRowInfoArray() {
         data: dataToSend,
         success: function(response) {
             console.log(response);
-            history.go(0); 
+            //history.go(0); 
         },
         error: function(xhr, status, error) {
             console.error('Error sending data:', error);

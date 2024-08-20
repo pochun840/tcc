@@ -377,8 +377,7 @@ function copy_job_by_id(jobid){
                                 history.go(0);
                             }); 
 
-                            
-                            //history.go(0);
+                    
                         },
                         error: function(xhr, status, error) {
                             
