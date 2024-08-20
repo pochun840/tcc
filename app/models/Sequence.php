@@ -240,8 +240,18 @@ class Sequence{
             if ($result) {
                 $new_val = 'New_Value'.($k_s + 1);
                 $update_sql = "UPDATE sequence SET sequence_id = ? WHERE job_id = ? AND sequence_name = ? ";
+
                 $update_statement = $this->db_iDas->prepare($update_sql);
                 $update_statement->execute([$new_val, $jobid, $v_s['sequence_name']]);
+
+
+                $sql_step = "UPDATE step SET sequence_id = :new_val WHERE job_id = :jobid AND sequence_id = :sequence_id";
+                $statement = $this->db_iDas->prepare($sql_step);
+                $statement->bindParam(':new_val', $new_val);
+                $statement->bindParam(':jobid', $jobid);
+                $statement->bindParam(':sequence_id', $v_s['sequence_id']);
+                $statement->execute();
+
                 
                 $rows_count = $update_statement->rowCount();
                 if ($rows_count  > 0){
@@ -250,12 +260,8 @@ class Sequence{
                     
                     $update_id_sql = "UPDATE sequence SET sequence_id = ? WHERE job_id = ? AND sequence_name = ? ";
                     $update_id_statement = $this->db_iDas->prepare($update_id_sql);
-                    $update_id_statement->execute([$updated_sequence_id, $jobid, $v_s['sequence_name']]);
-
-                    $sql_step = "UPDATE step SET sequence_id = '".$updated_sequence_id."' WHERE job_id = '".$jobid."' ";
-
+                    $update_id_statement->execute([$updated_sequence_id, $jobid, $v_s['sequence_name']]);                  
                 }
-
 
             }
 
@@ -263,9 +269,11 @@ class Sequence{
             $force_update_sql = "UPDATE sequence SET sequence_id = CAST(REPLACE(sequence_id, 'New_Value', '') AS UNSIGNED) WHERE job_id =  ? ";
             $force_update_statement = $this->db_iDas->prepare($force_update_sql);
             $force_update_statement->execute([$jobid]);
-            //echo  $sql_step;die();
 
-
+            $force_update_sql_step = "UPDATE step SET sequence_id = CAST(REPLACE(sequence_id, 'New_Value', '') AS UNSIGNED) WHERE job_id =  ? ";
+            $force_update_statement_step = $this->db_iDas->prepare( $force_update_sql_step);
+            $force_update_statement_step->execute([$jobid]);
+   
         }
         return true;
    

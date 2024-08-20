@@ -447,6 +447,12 @@ class Sequences extends Controller
         if(isset($_POST['jobid'])){
             $jobid = $_POST['jobid'];
             $rowInfoArray = $_POST['rowInfoArray'];
+
+            echo "<pre>";
+            print_r($rowInfoArray);
+            echo "</pre>";
+            //die();
+
             $res = $this->sequenceModel->swapupdate($jobid,$rowInfoArray);
 
             if($res){
