@@ -11,7 +11,6 @@ class Settings extends Controller
         $this->SettingModel = $this->model('Setting');
         $this->AdminModel = $this->model('Admin');
         $this->ToolModel = $this->model('Tool');
-
         $this->MiscellaneousModel = $this->model('Miscellaneous');
     }
 
@@ -420,7 +419,6 @@ class Settings extends Controller
     {
         header("Content-Type: text/plain; charset=utf-8");
         
-        // var_dump(date_default_timezone_get());
         date_default_timezone_set("GMT0");
         $systemTime = date('Y-m-d H:i:s');
         echo $systemTime;
@@ -577,7 +575,7 @@ class Settings extends Controller
     public function SyncCheck($value='')
     {
         // session_start();
-        $this->language_auto(); //從瀏覽器帶入語系
+        /*$this->language_auto(); //從瀏覽器帶入語系
         //multi language
         $language = array("language"=>$_SESSION['language']);
         // 如果檔案存在就引入它
@@ -648,8 +646,45 @@ class Settings extends Controller
         } else {
             // 这是内部调用
             return array('notice'=>$notice,'warning'=>$warning);
+        }*/
+        
+
+    }
+
+
+    public function  Sync_check_db(){
+        
+        
+        //$Das_DB_Location = '/var/www/html/database/iDas-tcscon.db';
+        //$Con_DB_Location = '/var/www/html/database/tcscon.db';
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+   
+        $input_check = true;
+        if (!empty($_POST['argument']) && isset($_POST['argument'])) {
+            $argument = $_POST['argument'];
+        } else {
+            $input_check = false; 
         }
 
+        if($input_check){
+            
+            $controller_ip = '192.168.0.186'; 
+            $username = 'kls';             
+            $password = '12345678rd';
+
+            if($argument=="D2C"){
+                //下載
+                $this->MiscellaneousModel->FTP_download($controller_ip,$username,$password);
+            }else{
+                //上傳
+                $this->MiscellaneousModel->FTP_upload($controller_ip, $username, $password);
+
+            }
+        }
     }
     
     //get barcode
