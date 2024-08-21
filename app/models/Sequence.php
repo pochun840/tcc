@@ -229,7 +229,7 @@ class Sequence{
     }
 
 
-    public function swapupdate($jobid, $rowInfoArray) {
+    public function swapupdate($jobid, $rowInfoArray,$new_info) {
         $temp = array();
         foreach ($rowInfoArray as $k_s => $v_s) {
             $sql = "SELECT sequence_id FROM sequence WHERE job_id = ? AND sequence_name = ? ";
@@ -245,13 +245,7 @@ class Sequence{
                 $update_statement->execute([$new_val, $jobid, $v_s['sequence_name']]);
 
 
-                $sql_step = "UPDATE step SET sequence_id = :new_val WHERE job_id = :jobid AND sequence_id = :sequence_id";
-                $statement = $this->db_iDas->prepare($sql_step);
-                $statement->bindParam(':new_val', $new_val);
-                $statement->bindParam(':jobid', $jobid);
-                $statement->bindParam(':sequence_id', $v_s['sequence_id']);
-                $statement->execute();
-
+            
                 
                 $rows_count = $update_statement->rowCount();
                 if ($rows_count  > 0){
@@ -269,15 +263,58 @@ class Sequence{
             $force_update_sql = "UPDATE sequence SET sequence_id = CAST(REPLACE(sequence_id, 'New_Value', '') AS UNSIGNED) WHERE job_id =  ? ";
             $force_update_statement = $this->db_iDas->prepare($force_update_sql);
             $force_update_statement->execute([$jobid]);
+            
 
-            $force_update_sql_step = "UPDATE step SET sequence_id = CAST(REPLACE(sequence_id, 'New_Value', '') AS UNSIGNED) WHERE job_id =  ? ";
-            $force_update_statement_step = $this->db_iDas->prepare( $force_update_sql_step);
-            $force_update_statement_step->execute([$jobid]);
-   
+
+        }
+
+        if(!empty($new_info)){
+
+            //var_dump($new_info);die();
+            foreach($new_info as $key =>$val){
+                $new_val = $key; // 使用陣列的鍵作為 new_val
+                $sequence_id = $val['sequence_id'];
+
+                $sql_select = "SELECT count(*) FROM step WHERE job_id = :jobid AND sequence_id = :sequence_id";
+                $select_statement = $this->db_iDas->prepare($sql_select);
+
+                $select_statement->bindValue(':jobid', $jobid);
+                $select_statement->bindValue(':sequence_id', $sequence_id);
+    
+                // 執行查詢
+                $select_statement->execute();
+                $count = $select_statement->fetchColumn();
+                if ($count > 0) {
+
+                    $sql_step = "UPDATE step SET sequence_id = '".$key."' WHERE job_id = '".$jobid."' AND sequence_id = '". $val['sequence_id']."' ";
+                    $update_statement = $this->db_iDas->prepare($sql_step);
+    
+                    $update_statement->execute();
+
+
+                    $sql_step = "UPDATE step SET sequence_id = :new_val WHERE job_id = :jobid AND sequence_id = :sequence_id";
+                    $update_statement = $pdo->prepare($sql_step);
+                    
+                    $update_statement->bindValue(':new_val', $key, PDO::PARAM_INT);
+                    $update_statement->bindValue(':jobid', $jobid, PDO::PARAM_INT);
+                    $update_statement->bindValue(':sequence_id', $sequence_id, PDO::PARAM_INT);
+        
+                    $update_statement->execute();
+
+                    
+                    //echo "Executed: ".$sql_step."\n";
+                }else{
+                    //echo "No record found for job_id ".$jobid."and sequence_id .".$sequence_id."\n";
+                }
+
+            }
+
         }
         return true;
    
     }
+    
+    
 
 
     #驗證seq id是否重複

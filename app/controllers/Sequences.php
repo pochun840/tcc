@@ -448,19 +448,28 @@ class Sequences extends Controller
             $jobid = $_POST['jobid'];
             $rowInfoArray = $_POST['rowInfoArray'];
 
-            echo "<pre>";
-            print_r($rowInfoArray);
-            echo "</pre>";
-            //die();
 
-            $res = $this->sequenceModel->swapupdate($jobid,$rowInfoArray);
 
-            if($res){
-                $res_msg = 'success';
-            }else{
-                $res_msg = 'fail';
+            if(!empty($rowInfoArray)){
+                $new_info = array();
+                $index = 1;
+                foreach ($rowInfoArray as $v_s) {
+                    $new_info[$index] = $v_s;
+                    $index++;
+                }
+                $res = $this->sequenceModel->swapupdate($jobid,$rowInfoArray,$new_info);
+                
+                if($res){
+                    $res_msg = 'success';
+                }else{
+                    $res_msg = 'fail';
+                }
+                echo $res_msg;
+                
             }
-            echo $res_msg;
+            
+
+
         }
     }
 }
