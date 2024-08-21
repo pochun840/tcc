@@ -39,37 +39,11 @@ class Steptcc{
     #透過job_id 及 seq_id 及 step_id取得對應的資料
     public function getStepNo($jobid,$seqid,$stepid){
 
-
-        $result = [
-            'step_info' => [],
-        ];
-
-        $sqlStep = "SELECT * FROM step WHERE job_id = ? AND sequence_id = ? AND step_id = ?";
-        $statementStep = $this->db_iDas->prepare($sqlStep);
-        $statementStep->execute([$jobid, $seqid, $stepid]);
-        $result['step_info'] = $statementStep->fetchAll();
-
-        $sqlTorque = "SELECT COUNT(*) as count FROM step WHERE job_id = ? AND sequence_id = ? AND target_option = '0'";
-        $statementTorque = $this->db_iDas->prepare($sqlTorque);
-        $statementTorque->execute([$jobid, $seqid]);
-        $torqueResult = $statementTorque->fetch();
-        $count  = (int) $torqueResult['count'];
-
-        if(!empty($result['step_info'])){
-            $result['step_info'][0]['check_step_torque'] = $count;
-        }
-        return $result;
-
-    }
-
-
-    #透過job_id 及 seq_id 取得 當下的step 有無被設置扭力 
-    public function check_present_step_by_torque($jobid,$seqid){
-        $sql = "SELECT COUNT(*) as count FROM step WHERE job_id = ? AND sequence_id = ? AND target_option = '0' ";
+        $sql = "SELECT * FROM step WHERE job_id = ? AND sequence_id = ? AND step_id = ?";
         $statement = $this->db_iDas->prepare($sql);
-        $statement->execute([$jobid, $seqid]);
-        $result = $statement->fetch();
-        return $result['count'];
+        $statement->execute([$jobid, $seqid, $stepid]);
+        return $statement->fetchAll();
+
     }
 
     #檢查同一個seq中所建立的Step Target Torque 只能有一個
@@ -89,6 +63,8 @@ class Steptcc{
         $statement->execute([$jobid,$seqid,$stepid]);
         return $statement->fetchAll();
     }
+
+
 
 
     #透過 job_id 及 seq_id 及 step_id 刪除對應的資料
@@ -223,20 +199,19 @@ class Steptcc{
                     $update_id_sql = "UPDATE step SET step_id = ? WHERE job_id = ? AND sequence_id = ? ";
                     $update_id_statement = $this->db_iDas->prepare($update_id_sql);
                     $update_id_statement->execute([$updated_step_id, $jobid, $v_s['sequence_id']]);
-
-
                 }
                 else{
-                   
+                    //echo "ewq";die();
                 }
             }else{
-              
+                //echo "eew";die();
             }
 
             //最終再次檢查 強制把 欄位step_id 不是數字的 通通移除
             $force_update_sql = "UPDATE step SET step_id = CAST(REPLACE(step_id, 'New_Value', '') AS UNSIGNED) WHERE job_id =  ? ";
             $force_update_statement = $this->db_iDas->prepare($force_update_sql);
             $force_update_statement->execute([$jobid]);
+
 
         }
         return true;
