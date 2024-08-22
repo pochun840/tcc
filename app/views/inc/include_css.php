@@ -76,5 +76,3 @@ function includecss_file($part, $cssFileName) {
     <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
     <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
     <script src="<?php echo URLROOT; ?>js/jszip.js?v=202406241500"></script>
-
-

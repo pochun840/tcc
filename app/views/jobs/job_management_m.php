@@ -350,7 +350,7 @@ function copy_job_by_id(jobid){
                     // 用户点击取消按钮的处理逻辑
                 }
                 });
-                        },
+            },
             error: function(xhr, status, error) {
                 
             }
