@@ -410,6 +410,19 @@ $(document).ready(function () {
     highlight_row('seq_table');
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      var headerElements = document.querySelectorAll('.ajs-header');
+      headerElements.forEach(function(headerElement) {
+        headerElement.parentNode.removeChild(headerElement);
+      });
+    });
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+});
+
 // Get the modal
 var seqid = '';
 var seq_name = '';

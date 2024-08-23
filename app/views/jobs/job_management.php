@@ -252,6 +252,18 @@ $(document).ready(function () {
     highlight_row('job_table');
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      var headerElements = document.querySelectorAll('.ajs-header');
+      headerElements.forEach(function(headerElement) {
+        headerElement.parentNode.removeChild(headerElement);
+      });
+    });
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+});
 
 // Get the modal
 var modal = document.getElementById('newjob');
@@ -344,12 +356,16 @@ function copy_job_by_id(jobid){
         var language = getCookie('language');
         if(language == "zh-cn"){
             var text_info ='你确定吗？';
+            var title = 'Copy Job';
         }else if(language == "zh-tw"){
             var text_info ='你確定嗎 ?';
+            var title = 'Copy Job';
         }else{
             var text_info ='Are you sure ?';
+            var title = 'Copy Job';
         }
-
+        
+        
         $.ajax({
             url: "?url=Jobs/check_job_type",
             method: "POST",
@@ -359,6 +375,8 @@ function copy_job_by_id(jobid){
             },
             success: function(response) {
                 alertify.confirm(text_info, function (result) {
+
+                
                 if (result) {
                     $.ajax({
                         url: "?url=Jobs/copy_job_data",
@@ -387,6 +405,8 @@ function copy_job_by_id(jobid){
                     alertify.error('Cancelled');
                    
                 }
+
+                
                 });
                         },
             error: function(xhr, status, error) {
