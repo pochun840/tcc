@@ -31,8 +31,7 @@ class Inputs extends Controller
             'job_list'     => $joblist,
             'event'        => $event,
             'job_list_new' => $job_list_new,
-            'device_data'  => $device_data,
-            
+            'device_data'  => $device_data,   
         );
 
         if($isMobile){

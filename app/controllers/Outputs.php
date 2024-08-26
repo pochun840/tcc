@@ -37,6 +37,8 @@ class Outputs extends Controller
             'device_data'  => $device_data,
         );
 
+
+      
         if($isMobile){
             $this->view('output/index_m', $data);
         }else{

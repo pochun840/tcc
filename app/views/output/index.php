@@ -360,7 +360,7 @@ function crud_job_event(argument){
         document.getElementById('edit_output').style.display = 'block';
     }
 
-    if(argument == 'copy' && job_id != ''){
+    if(argument == 'copy' && job_id != '' && output_event != ''){
 
         var jobinfo = <?php echo json_encode($data['job_list_new']); ?>;
         var from_job_name_bk = jobinfo[job_id]['job_name'];
