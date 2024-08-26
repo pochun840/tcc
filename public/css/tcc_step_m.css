@@ -275,3 +275,51 @@ select
 .output-pin img{ height: 25px; width: 45px}
 .disabled_input{ color: #999; pointer-events: none;}
 .zoom{zoom:1.2; vertical-align: middle}
+
+
+/* scrollbar style new step */
+.scrollbar-newstep
+{
+    float: left;
+    height: calc(50vh - 80px);
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.newstep-force-overflow
+{
+    min-height: 30vh;
+}
+
+#wrapper
+{
+    text-align: center;
+    margin: auto;
+}
+
+/**  STYLE New step */
+#style-newstep::-webkit-scrollbar
+{
+    display: none;
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+#style-newstep::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background: linear-gradient(left, #96A6BF, #63738C);
+    box-shadow: inset 0 0 1px 1px #5C6670;
+}
+
+#style-newstep::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    background: #eee;
+    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
+}
+
+#style-newstep::-webkit-scrollbar-thumb:hover
+{
+    background: linear-gradient(left, #8391A6, #536175);
+}

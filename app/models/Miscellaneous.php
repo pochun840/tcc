@@ -381,7 +381,7 @@ class Miscellaneous{
     {
         $remote_file = '/var/www/html/database/tcscon.db';             // 原始远程文件路径
         $copied_file = '/var/www/html/database/tcscon_copy_brian_test.db'; // 复制后的远程文件路径
-        $local_file = '../brian_test_20240821.db';                             // 本地文件路径
+        $local_file = '../brian_test_20240826_3.db';                             // 本地文件路径
         $local_file_copy = $local_file . '666';  
     
         // 打开本地文件以进行写入

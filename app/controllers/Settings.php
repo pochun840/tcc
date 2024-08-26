@@ -672,7 +672,7 @@ class Settings extends Controller
 
         if($input_check){
             
-            $controller_ip = '192.168.0.186'; 
+            $controller_ip = '192.168.0.105'; 
             $username = 'kls';             
             $password = '12345678rd';
 

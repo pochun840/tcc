@@ -69,13 +69,14 @@
     <!-- Add New Step -->
     <div id="newstep" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 80%">
+            <div class="modal-content w3-animate-zoom" style="width: auto;">
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('newstep').style.display='none'"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_step'];?></h3>
                 </header>
-
+                <div class="scrollbar-newstep" id="style-newstep">
+                <div class="newseq-force-overflow">
                 <div class="modal-body">
                     <form id="new_step_form" style="padding-left: 5%">
                         <div class="row">
@@ -181,6 +182,8 @@
                         </div>
                     </form>
                 </div>
+            </div>
+            </div>
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="add_step()" ><?php echo $text['save'];?></button>
@@ -192,13 +195,14 @@
     <!-- Edit Step -->
     <div id="editstep" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 80%">
+            <div class="modal-content w3-animate-zoom" style="width: auto;">
                 <header class="w3-container modal-header">
                     <span onclick="document.getElementById('editstep').style.display='none'"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['edit_step'];?></h3>
                 </header>
-
+                <div class="scrollbar-newstep" id="style-newstep">
+                <div class="newseq-force-overflow">
                 <div class="modal-body">
                     <form id="new_step_form" style="padding-left: 5%">
                         <div class="row">
@@ -313,6 +317,8 @@
                             </div>
                         </div>
                     </form>
+                </div>
+                </div>
                 </div>
 
                 <div class="modal-footer justify-content-center">
