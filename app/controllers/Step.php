@@ -381,7 +381,8 @@ class Step extends Controller
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
 
-            if($check > 1){
+
+            if($check >= 1){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
                 exit();
 

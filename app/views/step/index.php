@@ -229,7 +229,7 @@
 
                         
                         <div class="row">
-                            <div for="edit_target-torque" id="edit_target-torque_title"  class="col-6 t1" style="display: none;" ><?php echo $text['Target_Torque'];?>(<?php echo $text[$data['unit']];?>):</div>
+                            <div for="edit_target-torque" id="edit_target-torque_title"  class="col-6 t1" style="display: none;" ><?php echo $text['Target_Angle'];?>(<?php echo $text[$data['unit']];?>):</div>
                             <div class="col-3 t2" id="edit_target-torque_val" style="display:none;" >
                                 <input type="text" class="form-control input-ms" id="edit_target_torque" maxlength="" >
                             </div>
@@ -462,6 +462,15 @@ function edit_step(){
 
     var language = getCookie('language');
 
+    if(language == "zh-cn"){
+        var torque_title = '目标扭力';
+    }else if(language == "zh-tw"){
+        var torque_title = '目標扭力';
+    }else{
+        var torque_title ='Target Torque';
+    }
+
+
     if(jobid){
         $.ajax({
             url: "?url=Step/search_stepinfo",
@@ -526,7 +535,7 @@ function edit_step(){
                     }
                 }
 
-          
+
                 setRadioButtonValue(radioButtons1, direction);
                 setRadioButtonValue(radioButtons2, downshift);
 
@@ -575,15 +584,19 @@ function edit_step(){
                     document.getElementById('edit_target_delaytime').value = target_delaytime; 
                 }
 
+
+            
             
                 if(target_option == 0){
+
+
                     var name = '<?php echo $text['Target_Torque']; ?>';
                     const unitTranslations = {
                         "zh-cn": {
                             "kgf.cm": "公斤公分",
                             "kgf.m": "公斤米",
                             "N.m": "牛頓米",
-                            "default": "英磅英吋"
+                            "default": "英磅英吋",
                         },
                         "zh-tw": {
                             "kgf.cm": "公斤公分",
@@ -597,8 +610,9 @@ function edit_step(){
                     if (language === "zh-cn" || language === "zh-tw") {
                         unit = unitTranslations[language][unit] || unitTranslations[language]["default"];
                     } 
-                    document.querySelector('div[for="edit_target-torque"]').textContent = name + "(" + unit + ")" ;
-                    document.getElementById("edit_target_torque").value = target_torque;
+                    document.getElementById('edit_target-torque_title').style.display = 'block';
+                    //document.querySelector('div[for="edit_target-torque"]').textContent = torque_title + "(" + unit + ")" ;
+                    document.getElementById("edit_target_torque_val").value = '';
                 }
 
                 if(downshift == 0){
@@ -617,6 +631,9 @@ function edit_step(){
                 target_option.addEventListener('change', function() {
                     var selectedValue = this.value;
                     console.log(selectedValue);
+                   
+                    //console.log(target_option);
+
                     if (selectedValue == 2) {
                         var elementsToDisable = [
                             document.getElementById('edit_hi_torque'),
@@ -679,6 +696,50 @@ function edit_step(){
                         });
 
                     }
+
+                    if(selectedValue ==0){
+
+                        document.getElementById('edit_target-torque_title').style.display = 'block';
+                        document.getElementById('edit_target-torque_val').style.display = 'block';
+
+                        document.getElementById('edit_target-angle_title').style.display = 'none';
+                        document.getElementById('edit_target-angle_val').style.display = 'none';
+
+
+                        document.getElementById('edit_target-delaytime_title').style.display = 'none';
+                        document.getElementById('edit_target-delaytime_val').style.display = 'none';
+
+                    }
+
+
+                    if(selectedValue ==1){
+
+                        document.getElementById('edit_target-torque_title').style.display = 'none';
+                        document.getElementById('edit_target-torque_val').style.display = 'none';
+
+                        document.getElementById('edit_target-angle_title').style.display = 'block';
+                        document.getElementById('edit_target-angle_val').style.display = 'block';
+                  
+
+                        document.getElementById('edit_target-delaytime_title').style.display = 'none';
+                        document.getElementById('edit_target-delaytime_val').style.display = 'none';
+          
+                    }
+
+
+                    if(selectedValue ==2){
+
+                        document.getElementById('edit_target-torque_title').style.display = 'none';
+                        document.getElementById('edit_target-torque_val').style.display = 'none';
+
+                        document.getElementById('edit_target-angle_title').style.display = 'none';
+                        document.getElementById('edit_target-angle_val').style.display = 'none';
+                     
+                        document.getElementById('edit_target-delaytime_title').style.display = 'block';
+                        document.getElementById('edit_target-delaytime_val').style.display = 'block';
+
+                    }
+    
                     if(selectedValue == 0){
                         const unitTranslations = {
                             "zh-cn": {
@@ -699,7 +760,7 @@ function edit_step(){
                         if (language === "zh-cn" || language === "zh-tw") {
                             unit = unitTranslations[language][unit] || unitTranslations[language]["default"];
                         } 
-                        document.querySelector('div[for="edit_target-torque"]').textContent = name +"(" + unit + ")";
+                        document.querySelector('div[for="edit_target-torque"]').textContent = torque_title  +"(" + unit + ")";
 
                     }
                 });

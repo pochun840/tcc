@@ -441,6 +441,16 @@ function edit_step(){
     var unit = '<?php echo $data['unit']?>';
     var language = getCookie('language');
 
+    if(language == "zh-cn"){
+        var torque_title = '目标扭力';
+    }else if(language == "zh-tw"){
+        var torque_title = '目標扭力';
+    }else{
+        var torque_title ='Target Torque';
+    }
+
+
+
     if(jobid){
         $.ajax({
             url: "?url=Step/search_stepinfo",
@@ -661,6 +671,50 @@ function edit_step(){
                         });
 
                     }
+
+                    if(selectedValue ==0){
+
+                        document.getElementById('edit_target-torque_title').style.display = 'block';
+                        document.getElementById('edit_target-torque_val').style.display = 'block';
+
+                        document.getElementById('edit_target-angle_title').style.display = 'none';
+                        document.getElementById('edit_target-angle_val').style.display = 'none';
+
+
+                        document.getElementById('edit_target-delaytime_title').style.display = 'none';
+                        document.getElementById('edit_target-delaytime_val').style.display = 'none';
+
+                    }
+
+
+                    if(selectedValue ==1){
+
+                        document.getElementById('edit_target-torque_title').style.display = 'none';
+                        document.getElementById('edit_target-torque_val').style.display = 'none';
+
+                        document.getElementById('edit_target-angle_title').style.display = 'block';
+                        document.getElementById('edit_target-angle_val').style.display = 'block';
+
+
+                        document.getElementById('edit_target-delaytime_title').style.display = 'none';
+                        document.getElementById('edit_target-delaytime_val').style.display = 'none';
+
+                    }
+
+
+                    if(selectedValue ==2){
+
+                        document.getElementById('edit_target-torque_title').style.display = 'none';
+                        document.getElementById('edit_target-torque_val').style.display = 'none';
+
+                        document.getElementById('edit_target-angle_title').style.display = 'none';
+                        document.getElementById('edit_target-angle_val').style.display = 'none';
+
+                        document.getElementById('edit_target-delaytime_title').style.display = 'block';
+                        document.getElementById('edit_target-delaytime_val').style.display = 'block';
+
+                    }
+
 
                     if(selectedValue == 1){
                         document.querySelector('div[for="edit_target-torque"]').textContent = "Target Angle (degree)";
@@ -892,7 +946,7 @@ function create_step() {
             if (language === "zh-cn" || language === "zh-tw") {
                 unit = unitTranslations[language][unit] || unitTranslations[language]["default"];
             } 
-            document.querySelector('div[for="target-torque"]').textContent = name + "(" + unit + ")";
+            document.querySelector('div[for="target-torque"]').textContent = torque_title + "(" + unit + ")";
         }
     });
 
