@@ -283,6 +283,48 @@ class Job{
     }
 
 
+    public function del_input_type($new_jobid) {
+        #查詢資料是否存在
+        $sql = "SELECT COUNT(*) FROM input WHERE input_job_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$new_jobid]);
+        $count = $statement->fetchColumn();
+        $count = intval($count);
+       
+        if ($count > 0) {
+            #如果資料存在，則刪除
+            $deleteSql = "DELETE FROM input  WHERE input_job_id = ? ";
+            $deleteStatement = $this->db_iDas->prepare($deleteSql);
+            $deleteStatement->execute([$new_jobid]);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function del_output_type($new_jobid) {
+        #查詢資料是否存在
+        $sql = "SELECT COUNT(*) FROM output WHERE input_job_id = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$new_jobid]);
+        $count = $statement->fetchColumn();
+        $count = intval($count);
+       
+        if ($count > 0) {
+            #如果資料存在，則刪除
+            $deleteSql = "DELETE FROM output  WHERE  output_job_id	 = ? ";
+            $deleteStatement = $this->db_iDas->prepare($deleteSql);
+            $deleteStatement->execute([$new_jobid]);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 
 
 
