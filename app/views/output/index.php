@@ -294,8 +294,11 @@ window.onclick = function(event) {
 function crud_job_event(argument){
 
 
-    if(argument == 'del' && job_id != '' && output_event != ''){
+    if(argument == 'del' && job_id != '' ){
         delete_output_id(job_id,output_event);
+        //console.log(job_id);
+        //console.log(output_event);
+
     }
 
     if(argument == 'new' && job_id != ''){
@@ -337,7 +340,8 @@ function crud_job_event(argument){
         }); 
     }
 
-    if (argument === 'edit' && job_id != '' && output_event != '') {
+    //&& output_event != ''
+    if (argument === 'edit' && job_id != '' ) {
  
         var selectElement = document.getElementById('edit_event_option');
         if (selectElement) {
@@ -518,11 +522,13 @@ function delete_output_id(job_id,output_event){
              
             },
             success: function(response) {
-       
-                var responseData = JSON.parse(response);
+
+                console.log(response);
+                
+                /*var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_output_by_job_id(job_id);
-                });
+                });*/
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);

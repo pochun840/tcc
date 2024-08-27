@@ -466,8 +466,9 @@ window.onclick = function(event) {
 }
 
 function crud_job_event(argument){
-    if(argument == 'del'){
-        delete_output_id(job_id,output_event);
+    if(argument == 'del' && job_id != '' ){
+        //alert()
+        //delete_output_id(job_id,output_event);
     }
 
     if(argument == 'new' && job_id != ''){
@@ -513,7 +514,7 @@ function crud_job_event(argument){
                
         
     }
-
+    //&& output_event != '' 
     if (argument === 'edit' && job_id != '' && output_event != '' ) {
         var selectElement = document.getElementById('edit_event_option');
         if (selectElement) {
