@@ -358,10 +358,7 @@ class Step extends Controller
                 }
             }
 
-            if($target_option  == 1){
-            
-            }
-
+      
             if($target_option == 2){
                 if ($target_delaytime < 0.1 || $target_delaytime > 9.9){
 
@@ -382,7 +379,7 @@ class Step extends Controller
             $check = intval($check[0]['count_records']);
 
 
-            if($check >= 1){
+            if($check >= 2){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
                 exit();
 
