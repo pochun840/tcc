@@ -504,6 +504,13 @@ function edit_step(){
                 document.getElementById("edit_downshift_threshold").value = threshold_torque;
                 document.querySelector("select[name='edit_target_option']").value = target_option;
 
+                document.getElementById("edit_target_delaytime").value = target_delaytime;
+                document.getElementById("edit_target_torque").value = target_torque;
+                document.getElementById("edit_target_angle").value = target_angle;
+                document.getElementById("edit_target_delaytime").value = "112.3";
+                
+
+
                 var radioButtons1 = document.getElementsByName("edit_direction_option");
                 var radioButtons2 = document.getElementsByName("edit_downshift_option");
 
@@ -527,14 +534,8 @@ function edit_step(){
 
 
 
-                //紀錄old  target_option
-                document.cookie = `target_option_bk=${encodeURIComponent(target_option)}; max-age=${60 * 60 * 24 * 365}; path=/`;
-                document.cookie="target_option_bk=target_option";
-                
                 if(target_option == 2){
-                    var name1 = '<?php echo $text['Target Delay Time']?>';
-                    document.querySelector('div[for="edit_target-torque"]').textContent = name1;
-                    document.getElementById("edit_target_torque").value = target_delaytime;
+                    document.querySelector('div[for="edit_target-torque"]').textContent = '<?php echo $text['Target Delay Time']?>';
                     document.getElementById('edit_hi_torque').disabled = true; 
                     document.getElementById('edit_lo_torque').disabled = true; 
                     document.getElementById('edit_hi_angle').disabled = true; 
@@ -571,7 +572,7 @@ function edit_step(){
                 if(target_option == 2){
                     document.getElementById('edit_target-delaytime_title').style.display = 'block';
                     document.getElementById('edit_target-delaytime_val').style.display = 'block';
-                    document.getElementById('edit_target_delaytime').value = target_angle; 
+                    document.getElementById('edit_target_delaytime').value = target_delaytime; 
                 }
 
 
@@ -596,8 +597,9 @@ function edit_step(){
                     if (language === "zh-cn" || language === "zh-tw") {
                         unit = unitTranslations[language][unit] || unitTranslations[language]["default"];
                     } 
-                    document.querySelector('div[for="edit_target-torque"]').textContent = name + "(" + unit+")";
-                    document.getElementById("edit_target_torque").value = target_torque;
+                    document.getElementById('edit_target-torque_title').style.display = 'block';
+                    document.querySelector('div[for="edit_target-torque"]').textContent = torque_title + "(" + unit + ")" ;
+                    document.getElementById("edit_target_torque_val").value = '';
                 }
 
                 if(downshift == 0){
@@ -615,6 +617,8 @@ function edit_step(){
                 var target_option = document.getElementById("edit_target_option");
                 target_option.addEventListener('change', function() {
                     var selectedValue = this.value;
+        
+                    
                     if (selectedValue == 2) {
                         var elementsToDisable = [
                             document.getElementById('edit_hi_torque'),
