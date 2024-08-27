@@ -652,8 +652,9 @@ if(jobid){
                     document.querySelectorAll('input[name="edit_downshift_option"]').forEach(function(radioButton) {
                         radioButton.disabled = true;
                     });
-                    var name1 = '<?php echo $text['Target Delay Time']?>';
-                    document.querySelector('div[for="edit_target-torque"]').textContent = name1;
+               
+
+                    document.querySelector('div[for="edit_target-torque"]').textContent = '<?php echo $text['Target Delay Time']?>';
                 } 
                 
                 if (selectedValue == 1 || selectedValue == 0) {
@@ -702,9 +703,9 @@ if(jobid){
                     document.getElementById('edit_target-angle_title').style.display = 'none';
                     document.getElementById('edit_target-angle_val').style.display = 'none';
 
-
                     document.getElementById('edit_target-delaytime_title').style.display = 'none';
                     document.getElementById('edit_target-delaytime_val').style.display = 'none';
+                    document.querySelector('div[for="edit_target-torque"]').textContent = '<?php echo $text['Target_Torque'] ?>';
 
                 }
 
@@ -737,11 +738,6 @@ if(jobid){
 
                 }
 
-
-                if(selectedValue == 1){
-                    document.querySelector('div[for="edit_target-torque"]').textContent = "Target Angle (degree)";
-
-                }
 
                
             });

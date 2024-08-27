@@ -283,7 +283,7 @@ class Job{
     }
 
 
-    public function del_input_type($new_jobid) {
+    public function delete_input_by_job_id($new_jobid) {
         #查詢資料是否存在
         $sql = "SELECT COUNT(*) FROM input WHERE input_job_id = ?";
         $statement = $this->db_iDas->prepare($sql);
@@ -304,7 +304,7 @@ class Job{
     }
 
 
-    public function del_output_type($new_jobid) {
+    public function delete_output_by_job_id($new_jobid) {
         #查詢資料是否存在
         $sql = "SELECT COUNT(*) FROM output WHERE input_job_id = ?";
         $statement = $this->db_iDas->prepare($sql);
