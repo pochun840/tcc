@@ -400,7 +400,7 @@ document.getElementById("Event_Option").onchange = function() {
 
 
 function crud_job_event(argument){
-    if(argument == 'new' && job_id != '' && input_event != ''){
+    if(argument == 'new' && job_id != '' ){
         //針對已設定的pin角位disable
         if (Array.isArray(temp)){ 
             temp.forEach(function(element) {

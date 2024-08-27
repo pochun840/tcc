@@ -598,7 +598,7 @@ window.onclick = function(event) {
 }
 
 function crud_job_event(argument){
-    if(argument == 'new' && job_id != '' && input_event != ''){
+    if(argument == 'new' && job_id != ''){
         //針對已設定的pin角位disable
         if (Array.isArray(temp)){ 
             temp.forEach(function(element) {
@@ -749,12 +749,7 @@ function job_confirm(){
                 document.getElementById("job_id").value = jobid;
 
                 var s3Button = document.getElementById('S3');
-                /*if (!job_inputlist.trim()) {  // 检查 job_inputlist 是否为空或仅包含空白字符
-                    s3Button.disabled = true;
-                } else {
-                    s3Button.disabled = false;
-                }*/
-                
+          
             
                 var rows = document.querySelectorAll('#input_jobid_select tr');
                 rows.forEach(function(row) {
