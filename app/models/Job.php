@@ -306,7 +306,7 @@ class Job{
 
     public function delete_output_by_job_id($new_jobid) {
         #查詢資料是否存在
-        $sql = "SELECT COUNT(*) FROM output WHERE input_job_id = ?";
+        $sql = "SELECT COUNT(*) FROM output WHERE output_job_id  = ?";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$new_jobid]);
         $count = $statement->fetchColumn();
