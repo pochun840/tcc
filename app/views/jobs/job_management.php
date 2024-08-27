@@ -326,8 +326,6 @@ function savejob() {
                 direction_val: direction_val
             },
             success: function(response) {
-                //console.log(response);
-
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
