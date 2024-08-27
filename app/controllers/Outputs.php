@@ -272,7 +272,6 @@ class Outputs extends Controller
 
         $event    = $this->MiscellaneousModel->details('io_output');
 
-
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])){
             $output_job_id	 = $_POST['job_id'];
@@ -301,7 +300,7 @@ class Outputs extends Controller
                 'res_type' => $res_type,
                 'res_msg'  => $res_msg 
             );
-
+  
             echo json_encode($result);
         }
     }

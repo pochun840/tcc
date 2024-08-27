@@ -257,6 +257,7 @@ var buttonDisabled = false;
 var backgroundColorYellow = false;
 var output_job;
 var all_job;
+var del_output_val;
 $(document).ready(function () {
     highlight_row_input('output_table');
 
@@ -292,13 +293,15 @@ window.onclick = function(event) {
 }
 
 function crud_job_event(argument){
-
-
-    if(argument == 'del' && job_id != '' ){
-        delete_output_id(job_id,output_event);
-        //console.log(job_id);
-        //console.log(output_event);
-
+    var table = document.getElementById('output_table');
+    var selectedRow = table.querySelector('tr.selected');
+    if (selectedRow) {
+        var dataEventValue = selectedRow.getAttribute('data-event');
+        del_output_val = dataEventValue;
+    }
+    
+    if(argument == 'del' && job_id != '' &&  del_output_val){
+        delete_output_id(job_id,del_output_val);
     }
 
     if(argument == 'new' && job_id != ''){
@@ -511,24 +514,21 @@ function job_confirm(){
 }
 
 //delete
-function delete_output_id(job_id,output_event){
+function delete_output_id(job_id,del_output_val){
     if(job_id){
         $.ajax({
             url: "?url=Outputs/delete_output",
             method: "POST",
             data: { 
                 job_id: job_id,
-                output_event: output_event,
+                output_event: del_output_val,
              
             },
             success: function(response) {
-
-                console.log(response);
-                
-                /*var responseData = JSON.parse(response);
+                var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_output_by_job_id(job_id);
-                });*/
+                });
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);

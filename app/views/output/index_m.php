@@ -431,6 +431,7 @@ var buttonDisabled = false;
 var backgroundColorYellow = false;
 var output_job;
 var all_job;
+var del_output_val;
 $(document).ready(function () {
     highlight_row_input('output_table');
     var all_output_job = '<?php echo $data['device_data']['device_output_all_job']?>';
@@ -466,9 +467,16 @@ window.onclick = function(event) {
 }
 
 function crud_job_event(argument){
-    if(argument == 'del' && job_id != '' ){
-        //alert()
-        //delete_output_id(job_id,output_event);
+
+    var table = document.getElementById('output_table');
+    var selectedRow = table.querySelector('tr.selected');
+    if (selectedRow) {
+        var dataEventValue = selectedRow.getAttribute('data-event');
+        del_output_val = dataEventValue;
+    }
+
+    if(argument == 'del' && job_id != '' &&  del_output_val){
+        delete_output_id(job_id,del_output_val);
     }
 
     if(argument == 'new' && job_id != ''){
@@ -514,7 +522,7 @@ function crud_job_event(argument){
                
         
     }
-    //&& output_event != '' 
+
     if (argument === 'edit' && job_id != '' && output_event != '' ) {
         var selectElement = document.getElementById('edit_event_option');
         if (selectElement) {
@@ -670,14 +678,14 @@ function job_confirm(){
 }
 
 //delete
-function delete_output_id(job_id,output_event){
+function delete_output_id(job_id,del_output_val){
     if(job_id){
         $.ajax({
             url: "?url=Outputs/delete_output",
             method: "POST",
             data: { 
                 job_id: job_id,
-                output_event: output_event,
+                output_event: del_output_val,
              
             },
             success: function(response) {
