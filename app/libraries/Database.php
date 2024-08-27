@@ -32,21 +32,21 @@ class Database
             if( file_exists('/var/www/html/database/'.$data_db_name) ){
                 $this->db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); 
             }else{
-                $this->db_data = new PDO('sqlite:/var/www/html/das/tccinfo.db'); 
+                $this->db_data = new PDO('sqlite:/var/www/html/das/data.db'); 
             }
             
-            $this->db_iDas = new PDO('sqlite:/var/www/html/database/tccinfo.db'); 
+            $this->db_iDas = new PDO('sqlite:/var/www/html/database/data.db'); 
             $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/das.db'); 
             $this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db'); 
             
         }else{
-            $this->db_con = new PDO('sqlite:../tccinfo.db'); 
+            $this->db_con = new PDO('sqlite:../data.db'); 
             if(file_exists('../'.$data_db_name)){
                 $this->db_data = new PDO('sqlite:../'.$data_db_name); 
             }else{
-                $this->db_data = new PDO('sqlite:../tccinfo.db'); 
+                $this->db_data = new PDO('sqlite:../data.db'); 
             }
-            $this->db_iDas = new PDO('sqlite:../tccinfo.db'); 
+            $this->db_iDas = new PDO('sqlite:../data.db'); 
             $this->db_iDas_login = new PDO('sqlite:../das.db'); 
             $this->db_iDas_device = new PDO('sqlite:../data_device.db'); 
 
@@ -114,14 +114,14 @@ class Database
     private function iDasDB_Initail()
     {
         if( PHP_OS_FAMILY == 'Linux'){
-            $source = "/var/www/html/database/tccinfo.db";
+            $source = "/var/www/html/database/data.db";
             $destination = "/var/www/html/database/iDas-data.db";
-            $source1 = "/var/www/html/database/tccinfo.db";
+            $source1 = "/var/www/html/database/data.db";
             $destination1 = "/var/www/html/database/iDas-data.db";
         }else{
-            $source = "/var/www/html/database/tccinfo.db";
+            $source = "/var/www/html/database/data.db";
             $destination = "/var/www/html/database/iDasdata.db";
-            $source1 = "/var/www/html/database/tccinfo.db";
+            $source1 = "/var/www/html/database/data.db";
             $destination1 = "/var/www/html/database/iDas-data.db";
         }
 
