@@ -157,7 +157,7 @@
                                 <div class="row">
                                     <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?>:</div>
                                     <div class="col-4 t2">
-                                        <select id="NG_stop" class="col custom-file">
+                                        <select id="ng_stop" class="col custom-file">
                                             <?php for($i=0;$i<=9;$i++) {?>
                                                 <option value="<?php echo $i;?>"><?php echo $i;?></option>
                                             <?php } ?> 
