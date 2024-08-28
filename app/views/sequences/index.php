@@ -601,6 +601,8 @@ function create_seq() {
     document.getElementById('K').value = 100;
     document.getElementById('soft').checked = true;
     document.getElementById('Okall_OFF').checked = true;
+    document.getElementById('OPT_ON').checked = true;
+    document.getElementById('offset').value = 0;
     saveseq();
 
 }
