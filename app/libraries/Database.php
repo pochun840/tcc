@@ -27,17 +27,17 @@ class Database
         $data_db_name = "data".$Year.".db";
         if( PHP_OS_FAMILY == 'Linux'){
 
-            $this->db_con = new PDO('sqlite:/var/www/html/database/iDas-data.db');
-            //$this->db_dev = new PDO('sqlite:/var/www/html/database/iDas-data.db'); 
-            if( file_exists('/var/www/html/database/'.$data_db_name) ){
-                $this->db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); 
+            $this->db_con = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/iDas-data.db');
+        
+            if( file_exists('/home/kls/tcc/resource/db_emmc/'.$data_db_name) ){
+                $this->db_data = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/'.$data_db_name); 
             }else{
-                $this->db_data = new PDO('sqlite:/var/www/html/das/data.db'); 
+                $this->db_data = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data.db'); 
             }
             
-            $this->db_iDas = new PDO('sqlite:/var/www/html/database/data.db'); 
-            $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/das.db'); 
-            $this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db'); 
+            $this->db_iDas = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data.db'); 
+            $this->db_iDas_login = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/das.db'); 
+            $this->db_iDas_device = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data_device.db'); 
             
         }else{
             $this->db_con = new PDO('sqlite:../data.db'); 
@@ -114,15 +114,15 @@ class Database
     private function iDasDB_Initail()
     {
         if( PHP_OS_FAMILY == 'Linux'){
-            $source = "/var/www/html/database/data.db";
-            $destination = "/var/www/html/database/iDas-data.db";
-            $source1 = "/var/www/html/database/data.db";
-            $destination1 = "/var/www/html/database/iDas-data.db";
+            $source = "/home/kls/tcc/resource/db_emmc/data.db";
+            $destination = "/home/kls/tcc/resource/db_emmc/iDas-data.db";
+            $source1 = "/home/kls/tcc/resource/db_emmc/data.db";
+            $destination1 = "/home/kls/tcc/resource/db_emmc/iDas-data.db";
         }else{
-            $source = "/var/www/html/database/data.db";
+           /* $source = "/var/www/html/database/data.db";
             $destination = "/var/www/html/database/iDasdata.db";
             $source1 = "/var/www/html/database/data.db";
-            $destination1 = "/var/www/html/database/iDas-data.db";
+            $destination1 = "/var/www/html/database/iDas-data.db";*/
         }
 
         if( file_exists($source) && !file_exists($destination)){

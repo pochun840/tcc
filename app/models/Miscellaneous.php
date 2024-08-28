@@ -379,7 +379,7 @@ class Miscellaneous{
     
     public function FTP_download($controller_ip, $username, $password)
     {
-        $remote_file = '/var/www/html/database/tcscon.db';             // 原始远程文件路径
+        /*$remote_file = '/var/www/html/database/tcscon.db';             // 原始远程文件路径
         $copied_file = '/var/www/html/database/tcscon_copy_brian_test.db'; // 复制后的远程文件路径
         $local_file = '../brian_test_20240826_3.db';                             // 本地文件路径
         $local_file_copy = $local_file . '666';  
@@ -456,12 +456,12 @@ class Miscellaneous{
             } else {
                 echo "删除 $local_file_copy 失败。\n";
             }
-        }
+        }*/
     }
 
 
     public function FTP_upload($controller_ip, $username, $password){
-        $local_file = '../brian_test_20240821.db';       // 本地文件路径
+        /*$local_file = '../brian_test_20240821.db';       // 本地文件路径
         $remote_file = '/var/www/html/database/tcscon_copy_brian_test.db'; // 远程文件路径
 
         #確保檔案是否存在
@@ -507,7 +507,7 @@ class Miscellaneous{
 
         //unlink($backup_file);
         #關閉FTP
-        ftp_close($conn_id);
+        ftp_close($conn_id);*/
     }
     
     

@@ -223,7 +223,7 @@ class Setting{
     public function Get_Controller_DB_version()
     {
         // code...
-        $Controller_db_con = new PDO('sqlite:/var/www/html/database/tcscon.db'); //測試機
+        $Controller_db_con = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data.db'); //測試機
         $sql = "SELECT * FROM `device` ";
         $statement = $Controller_db_con->prepare($sql);
         $results = $statement->execute();
@@ -235,7 +235,7 @@ class Setting{
     public function Get_Controller_Device_version()
     {
         // code...
-        $Controller_db_con = new PDO('sqlite:/var/www/html/database/tcsdev.db'); //測試機
+        $Controller_db_con = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data.db'); //測試機
         $sql = "SELECT * FROM `device_info` ";
         $statement = $Controller_db_con->prepare($sql);
         $results = $statement->execute();

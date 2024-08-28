@@ -13,7 +13,7 @@ use function Swoole\Coroutine\run;
 // $data_db_name = "data".$Year.".db";
 // $db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); //鎖附結果DB
 
-$db_iDas = new PDO('sqlite:/var/www/html/database/das.db'); //das設定DB
+$db_iDas = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/das.db'); //das設定DB
 
 $result = $db_iDas->query("SELECT * FROM config WHERE config_name = 'agent_type' ");
 $rows = $result->fetch(PDO::FETCH_ASSOC);
@@ -64,13 +64,13 @@ function GetLastResult()
 {
     $Year = date("Y");// data db 用西元年命名
     $data_db_name = "data".$Year.".db";
-    if(file_exists('/var/www/html/database/'.$data_db_name)){
-        $db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); //鎖附結果DB
+    if(file_exists('/home/kls/tcc/resource/db_emmc/'.$data_db_name)){
+        $db_data = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/'.$data_db_name); //鎖附結果DB
         $result = $db_data->query("SELECT * FROM data ORDER BY system_sn DESC LIMIT 1");
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        if(file_exists('/var/www/html/database/tcscon.db')){
-            $db_tcscon = new PDO('sqlite:/var/www/html/database/tcscon.db'); //鎖附結果DB
+        if(file_exists('/home/kls/tcc/resource/db_emmc/tcscon.db')){
+            $db_tcscon = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/tcscon.db'); //鎖附結果DB
             $result = $db_tcscon->query("SELECT * FROM device");
             $device_info = $result->fetch(PDO::FETCH_ASSOC);
             $row['device_name'] = $device_info['device_name'];

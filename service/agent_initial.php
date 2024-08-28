@@ -1,7 +1,7 @@
 <?php
 
-if (file_exists('/var/www/html/database/das.db') && PHP_OS_FAMILY == 'Linux') {
-	$db_iDas = new PDO('sqlite:/var/www/html/database/das.db'); //das設定DB
+if (file_exists('/home/kls/tcc/resource/db_emmc/das.db') && PHP_OS_FAMILY == 'Linux') {
+	$db_iDas = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/das.db'); //das設定DB
 
 	
 	$result = $db_iDas->query("SELECT * FROM config WHERE config_name = 'agent_type' ");

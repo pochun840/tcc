@@ -479,7 +479,7 @@ class Settings extends Controller
 
     public function system_storage()
     {
-        $EMMC_BASE = "/var/www/html/database/"; //目標目錄路徑
+        $EMMC_BASE = "/home/kls/tcc/resource/db_emmc/"; //目標目錄路徑
         if( PHP_OS_FAMILY == 'Linux'){
             $size = 0;
             foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($EMMC_BASE)) as $file) {
@@ -502,12 +502,12 @@ class Settings extends Controller
         $year = date("Y");
 
         if( PHP_OS_FAMILY == 'Linux'){
-            $folderPath = "/var/www/html/database/"; // 修改為你的資料夾路徑
+            $folderPath = "/home/kls/tcc/resource/db_emmc/"; // 修改為你的資料夾路徑
         }else{
             $folderPath = "../"; // 修改為你的資料夾路徑
         }
 
-        $excludeFiles = ["tcscon.db", "tcsdev.db"]; // 要排除的檔案名稱 ,"data{$year}.db"
+        $excludeFiles = ["data.db", "tcsdev.db"]; // 要排除的檔案名稱 ,"data{$year}.db"
         $allowedExtensions = ["db"]; // 允許的附檔名
 
 
@@ -535,7 +535,7 @@ class Settings extends Controller
             $filesToDelete = $data["files"];
 
             if( PHP_OS_FAMILY == 'Linux'){
-                $folderPath = "/var/www/html/database"; // 修改為你的資料夾路徑
+                $folderPath = "/home/kls/tcc/resource/db_emmc"; // 修改為你的資料夾路徑
             }else{
                 $folderPath = "../"; // 修改為你的資料夾路徑
             }
@@ -1145,7 +1145,7 @@ class Settings extends Controller
     //DB欄位差異判斷
     function Database_Column_Diff()
     {
-        $dbPath1 = '/var/www/html/database/iDas-tcscon.db';
+        /*$dbPath1 = '/var/www/html/database/iDas-tcscon.db';
         $dbPath2 = '/var/www/html/database/tcscon.db';
 
         if ($this->validateTableStructure($dbPath1, $dbPath2)) {
@@ -1161,8 +1161,8 @@ class Settings extends Controller
             return false;
         }else{
             return true;
-        }
-
+        }*/
+        return true;
     }
 
 
