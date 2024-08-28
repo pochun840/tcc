@@ -1,4 +1,6 @@
 
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_data.css" type="text/css">
+
 <?php 
     if($_SESSION['language'] == 'en-us'){
         $calendar_lang = '';

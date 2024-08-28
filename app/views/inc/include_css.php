@@ -38,26 +38,26 @@ function includecss_file($part, $cssFileName) {
 
         #判斷是否為行動裝置 是的話就include 行動版的css
         if ($isMobile){
-            includecss_file("Tools", "tcc_tool.css");
-            includecss_file("Inputs", "tcc_input_m.css");
-            includecss_file("Outputs", "tcc_output_m.css");
-            includecss_file("Sequences", "tcc_seq_m.css");
-            includecss_file("Jobs", "tcc_jobs_m.css");
-            includecss_file("Step", "tcc_step_m.css");
-            includecss_file("Dashboards","tcc_operation_m.css");
-            includecss_file("Data","tcc_data.css");
-            includecss_file("Settings","tcc_setting_m.css");
+            //includecss_file("Tools", "tcc_tool.css");
+            //includecss_file("Inputs", "tcc_input_m.css");
+            //includecss_file("Outputs", "tcc_output_m.css");
+            //includecss_file("Sequences", "tcc_seq_m.css");
+            //includecss_file("Jobs", "tcc_jobs_m.css");
+            //includecss_file("Step", "tcc_step_m.css");
+           //includecss_file("Dashboards","tcc_operation_m.css");
+            //includecss_file("Data","tcc_data.css");
+            //includecss_file("Settings","tcc_setting_m.css");
     
         }else{
-            includecss_file("Tools", "tcc_tool.css");
-            includecss_file("Inputs", "tcc_input.css");
-            includecss_file("Outputs", "tcc_output.css");
-            includecss_file("Sequences", "tcc_seq.css");
-            includecss_file("Jobs", "tcc_jobs.css");
-            includecss_file("Step", "tcc_step.css");
-            includecss_file("Dashboards","tcc_operation.css");
-            includecss_file("Data","tcc_data.css");
-            includecss_file("Settings","tcc_setting.css");           
+            //includecss_file("Tools", "tcc_tool.css");
+            //includecss_file("Inputs", "tcc_input.css");
+            //includecss_file("Outputs", "tcc_output.css");
+            //includecss_file("Sequences", "tcc_seq.css");
+            //includecss_file("Jobs", "tcc_jobs.css");
+            //includecss_file("Step", "tcc_step.css");
+            //includecss_file("Dashboards","tcc_operation.css");
+            //includecss_file("Data","tcc_data.css");
+            //includecss_file("Settings","tcc_setting.css");           
         }
 
         # 載入js 

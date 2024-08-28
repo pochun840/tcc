@@ -1,4 +1,6 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_operation.css" type="text/css">
+
 <body>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
