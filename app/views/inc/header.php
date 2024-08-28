@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#000000">
 
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="<?php echo URLROOT; ?>js/jquery_dataTables_min.js"></script>
     <?php include_once 'include_css.php';?>
     <title><?php echo SITENAME; ?></title>    
     
