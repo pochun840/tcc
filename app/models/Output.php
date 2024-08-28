@@ -76,6 +76,19 @@ class Output{
         return $rows;
     }
 
+
+    
+    public function check_event_pin_by_job_id($output_job_id,$wave){
+        
+        $sql = "SELECT * FROM output WHERE output_job_id = ? AND  wave = ? ";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$output_job_id,$wave]);
+        $rows = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return !empty($rows);
+    }
+
+
     public function create_output($jobdata){    
         $sql = "INSERT INTO `output` (output_job_id, output_pin, output_event, wave, wave_on) ";
         $sql .= "VALUES (:output_job_id, :output_pin, :output_event, :wave, :wave_on);";

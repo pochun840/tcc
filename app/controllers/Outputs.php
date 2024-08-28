@@ -395,12 +395,17 @@ class Outputs extends Controller
             $input_check = false; 
         }
 
-     
         $count = $this->OutputModel->check_event_conflict($jobdata['output_job_id'],$jobdata['output_event']);
         if ($count > 0){
             //先移除舊的資料 再新增新的資料
-            $res   = $this->OutputModel->edit_output($jobdata);
 
+            //檢查 PIN 有無被使用 
+            /*$result = $this->OutputModel->check_event_pin_by_job_id($jobdata['output_job_id'],$jobdata['wave']);
+            if($result){
+                $res = $this->OutputModel->edit_output($jobdata);
+            }*/
+
+            $res = $this->OutputModel->edit_output($jobdata);
         }
         
         if($res){

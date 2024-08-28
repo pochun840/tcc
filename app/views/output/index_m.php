@@ -492,6 +492,39 @@ function crud_job_event(argument){
             });
         } 
 
+        var filtered_array = [];
+        temp.forEach(function(element) {
+            // 檢查是否是以 'pin' 開頭並且不包含 'edit_pin'
+            if (element.includes('pin') && !element.includes('edit_pin')) {
+                filtered_array.push(element);
+            }
+        });
+
+        filtered_array.forEach(function(id) {
+            
+            var match = id.match(/(pin\d+)_(\d+)/);
+            if (match) {
+                var basePinId = match[1]; 
+                var pinNumber = match[2]; 
+
+        
+                for (var i = 1; i <= 3; i++) {
+                    var pinElementId = basePinId + "_" + i;
+                    var pinElement = document.getElementById(pinElementId);
+                    if (pinElement && pinElement.type === 'radio') {
+                        pinElement.disabled = true;
+                    }
+                }
+
+                // 禁用 time 相關的元素
+                var timeElementId = 'time' + basePinId.slice(3); // 假設 time ID 的格式是 'time' + 數字部分
+                var timeElement = document.getElementById(timeElementId);
+                if (timeElement) {
+                    timeElement.disabled = true;
+                }
+            }
+        });
+
 
          //針對已設定的事件option做反灰+disable
          if (Array.isArray(tempA)){
