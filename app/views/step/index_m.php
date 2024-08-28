@@ -888,6 +888,11 @@ function create_step() {
     var unit = '<?php echo $data['unit']?>';
     var language = getCookie('language');
 
+    document.getElementById('rpm').value = 100;
+    document.getElementById('downshift_threshold').value = 0;
+    document.getElementById('downshift_torque').value = 0;
+
+
     var targetoptionselect = document.getElementById('target_option');
 
     targetoptionselect.addEventListener('change', function() {

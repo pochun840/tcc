@@ -871,13 +871,15 @@ function create_step() {
     var language = getCookie('language');
 
     document.getElementById('rpm').value = 100;
+    document.getElementById('downshift_threshold').value = 0;
+    document.getElementById('downshift_torque').value = 0;
+
+
     var targetoptionselect = document.getElementById('target_option');
     targetoptionselect.addEventListener('change', function() {
         var targetOptionValue = targetoptionselect.value;
         localStorage.setItem('target_option', targetOptionValue);
-        //console.log(targetOptionValue);
-   
-
+        
         var targetTorqueElement = document.getElementById('target_torque');
         var hiTorqueElement = document.getElementById('hi_torque');
         var loTorqueElement = document.getElementById('lo_torque');
