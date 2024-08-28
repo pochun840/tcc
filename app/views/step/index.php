@@ -873,7 +873,7 @@ function create_step() {
     document.getElementById('rpm').value = 100;
     document.getElementById('downshift_threshold').value = 0;
     document.getElementById('downshift_torque').value = 0;
-
+    document.getElementById('downshift_rpm').value =100;
 
     var targetoptionselect = document.getElementById('target_option');
     targetoptionselect.addEventListener('change', function() {
