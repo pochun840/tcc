@@ -282,15 +282,15 @@
                                 <div class="row output-pin">
                                     <div class="col t1">11:</div>
                    			      	<div class="col t2 form-check form-check-inline">
-                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_1" value="1">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_1" value="1" onclick="toggleOnputTime('pin<?php echo $i; ?>_1', this.checked,'1')" >
                    					    <label class="form-check-label" for="pin11_signal01"><img src="./img/signal01.png"></label>
                    					</div>
                    					<div class="col t2 form-check form-check-inline">
-                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_2" value="2">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_2" value="2" onclick="toggleOnputTime('pin<?php echo $i; ?>_2', this.checked,'2')">
                    					    <label class="form-check-label" for="pin11_signal02"><img src="./img/signal02.png"></label>
                    					</div>
                    					<div class="col t2 form-check form-check-inline">
-                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_3" value="3">
+                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_3" value="3" onclick="toggleOnputTime('pin<?php echo $i; ?>_3', this.checked,'3')">
                    					    <label class="form-check-label" for="pin11_trigger"><img src="./img/trigger.png"></label>
                    					</div>
               				        <div class="col-3 t2">
@@ -1096,4 +1096,36 @@ function get_output_info(job_id,output_event){
   
 }
 
+function toggleOnputTime(inputId, checked, option) {
+    var inputElement = document.getElementById(inputId);
+    
+    if (!inputElement) {
+        console.error(`Element with ID '${inputId}' not found.`);
+        return; // Exit if element is not found
+    }
+
+   
+    if (inputElement.type === 'checkbox' || inputElement.type === 'radio') {
+
+        if (inputElement.checked !== checked) {
+            console.warn(`The checked state of the element with ID '${inputId}' does not match the provided 'checked' value.`);
+        }
+    }
+
+    
+    if (option != '2') {
+        var newId = inputId.replace(/^pin(\d+)_\d+$/, 'time$1');
+        var element = document.getElementById(newId);
+        if (element) {
+            element.disabled = true;
+        }
+        //alert('eew');
+    } else { 
+        var newId = inputId.replace(/^pin(\d+)_\d+$/, 'time$1');
+        var element = document.getElementById(newId);
+        if (element) {
+            element.disabled = false;
+        }
+    }
+}
 </script>

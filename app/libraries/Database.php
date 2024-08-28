@@ -27,7 +27,7 @@ class Database
         $data_db_name = "data".$Year.".db";
         if( PHP_OS_FAMILY == 'Linux'){
 
-            $this->db_con = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/iDas-data.db');
+            $this->db_con = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data.db');
         
             if( file_exists('/home/kls/tcc/resource/db_emmc/'.$data_db_name) ){
                 $this->db_data = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/'.$data_db_name); 
@@ -119,10 +119,10 @@ class Database
             $source1 = "/home/kls/tcc/resource/db_emmc/data.db";
             $destination1 = "/home/kls/tcc/resource/db_emmc/iDas-data.db";
         }else{
-           /* $source = "/var/www/html/database/data.db";
+             $source = "/var/www/html/database/data.db";
             $destination = "/var/www/html/database/iDasdata.db";
             $source1 = "/var/www/html/database/data.db";
-            $destination1 = "/var/www/html/database/iDas-data.db";*/
+            $destination1 = "/var/www/html/database/iDas-data.db";
         }
 
         if( file_exists($source) && !file_exists($destination)){

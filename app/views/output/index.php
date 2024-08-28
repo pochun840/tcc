@@ -111,7 +111,7 @@
 											<label class="form-check-label" for="pin<?php echo $i; ?>_signal01"><img src="./img/signal01.png"></label>
 										</div>
 										<div class="col-sm-2 t2 form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_2" value="2"  >
+											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_2" value="2"  onclick="toggleOnputTime('pin<?php echo $i; ?>_2', this.checked,'2')">
 											<label class="form-check-label" for="pin<?php echo $i; ?>_signal02"><img src="./img/signal02.png"></label>
 										</div>
 										<div class="col-sm-2 t2 form-check form-check-inline">
@@ -988,7 +988,6 @@ function toggleOnputTime(inputId, checked, option) {
 
     
     if (option != '2') {
-        //inputElement.disabled = !checked; 
         var newId = inputId.replace(/^pin(\d+)_\d+$/, 'time$1');
         var element = document.getElementById(newId);
         if (element) {
@@ -996,14 +995,12 @@ function toggleOnputTime(inputId, checked, option) {
         }
         //alert('eew');
     } else { 
-        //inputElement.value = '';
-        //inputElement.disabled = checked; 
+        var newId = inputId.replace(/^pin(\d+)_\d+$/, 'time$1');
+        var element = document.getElementById(newId);
+        if (element) {
+            element.disabled = false;
+        }
     }
-
-    console.log(`Element ID: ${inputId}`);
-    console.log(newId);
-    console.log(`Checked state: ${inputElement.checked}`);
-    console.log(`Option: ${option}`);
 }
 
 
