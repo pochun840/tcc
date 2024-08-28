@@ -159,6 +159,7 @@
                             <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?> :</div>
                             <div class="col-4 t2">
                                 <select id="ng_stop" class="col custom-file">
+                                    <option value="-1"><?php echo "OFF";?></option>
                                     <?php for($i=0;$i<=9;$i++) {?>
                                                 <option value="<?php echo $i;?>"><?php echo $i;?></option>
                                     <?php } ?> 
@@ -291,6 +292,7 @@
                             <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?> :</div>
                             <div class="col-4 t2">
                                 <select id="edit_ng_stop" class="col custom-file">
+                                
                                     <?php for($i=0;$i<=9;$i++) {?>
                                         <option value="<?php echo $i;?>"><?php echo $i;?></option>
                                     <?php } ?> 
@@ -593,6 +595,12 @@ function delete_seqid(seqid){
 
 function create_seq() {
     document.getElementById('newseq').style.display = 'block';
+    document.getElementById('tighten_repeat').value = 0;
+    document.getElementById('ok_time').value = 9.9;
+    document.getElementById('okall-alarm').value = 1.0;
+    document.getElementById('K').value = 100;
+    document.getElementById('soft').checked = true;
+    document.getElementById('Okall_OFF').checked = true;
     saveseq();
 
 }

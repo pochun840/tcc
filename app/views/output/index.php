@@ -107,15 +107,15 @@
 									<div class="row output-pin">
 										<div class="col-sm-2 t1"><?php echo $i; ?>:</div>
 										<div class="col-sm-2 t2 form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_1" value="1">
+											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_1" value="1"  onclick="toggleOnputTime('pin<?php echo $i; ?>_1', this.checked,'1')">
 											<label class="form-check-label" for="pin<?php echo $i; ?>_signal01"><img src="./img/signal01.png"></label>
 										</div>
 										<div class="col-sm-2 t2 form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_2" value="2">
+											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_2" value="2"  >
 											<label class="form-check-label" for="pin<?php echo $i; ?>_signal02"><img src="./img/signal02.png"></label>
 										</div>
 										<div class="col-sm-2 t2 form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_3" value="3">
+											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_3" value="3" onclick="toggleOnputTime('pin<?php echo $i; ?>_3', this.checked,'3')">
 											<label class="form-check-label" for="pin<?php echo $i; ?>_trigger"><img src="./img/trigger.png"></label>
 										</div>
 										<div class="col-sm-2 t2">
@@ -340,7 +340,21 @@ function crud_job_event(argument){
             }else{
                 toggleElementsInRange(1, 11, 2, false);
             }
+
+
+            for(let i = 1; i <= 11; i++) {
+            let radioId = 'pin' + i + '_3';
+            let radioElement = document.getElementById(radioId);
+            
+            if (radioElement) {
+                radioElement.addEventListener('change', updateInputsBasedOnRadioSelection);
+            }
+        }
+            
         }); 
+
+
+        
     }
 
     //&& output_event != ''
@@ -429,6 +443,8 @@ function toggleElementsInRange(start, end, suffix, disable) {
         }
     }
 }
+
+
 var old_output_event; 
 var output_event;
 function job_confirm(){
@@ -694,7 +710,7 @@ function edit_output_id(){
                 old_output_event: old_output_event
             },
             success: function(response) {
-                //console.log(response);
+                
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_output_by_job_id(job_id);
@@ -802,6 +818,21 @@ function copy_output_id(){
     document.getElementById('copy_output').style.display='none';
 }
 
+function updateInputsBasedOnRadioSelection() {
+   
+    for (let i = 1; i <= 11; i++) {
+        let radioId = 'pin' + i + '_3';
+        let inputId = 'time' + i;
+        
+        let radioElement = document.getElementById(radioId);
+        let inputElement = document.getElementById(inputId);
+
+        if (radioElement && inputElement) {
+            inputElement.disabled = !radioElement.checked;
+        }
+    }
+}
+
 function get_output_info(job_id,output_event){
 
     if(job_id){
@@ -894,6 +925,44 @@ function get_output_info(job_id,output_event){
     }
   
 }
+
+function toggleOnputTime(inputId, checked, option) {
+    var inputElement = document.getElementById(inputId);
+    
+    if (!inputElement) {
+        console.error(`Element with ID '${inputId}' not found.`);
+        return; // Exit if element is not found
+    }
+
+   
+    if (inputElement.type === 'checkbox' || inputElement.type === 'radio') {
+
+        if (inputElement.checked !== checked) {
+            console.warn(`The checked state of the element with ID '${inputId}' does not match the provided 'checked' value.`);
+        }
+    }
+
+    
+    if (option != '2') {
+        //inputElement.disabled = !checked; 
+        var newId = inputId.replace(/^pin(\d+)_\d+$/, 'time$1');
+        var element = document.getElementById(newId);
+        if (element) {
+            element.disabled = true;
+        }
+        //alert('eew');
+    } else { 
+        //inputElement.value = '';
+        //inputElement.disabled = checked; 
+    }
+
+    console.log(`Element ID: ${inputId}`);
+    console.log(newId);
+    console.log(`Checked state: ${inputElement.checked}`);
+    console.log(`Option: ${option}`);
+}
+
+
 
 </script>
 <style>

@@ -377,13 +377,13 @@ class Step extends Controller
             #同一個step 只能有一個Target Torque
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
-
-
-            if($check >= 2){
+            
+            if($check >= 1){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
                 exit();
 
             }
+            
 
             $jobdata = array(
                 'job_id'           => $jobid,

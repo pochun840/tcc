@@ -53,6 +53,7 @@ function create_job() {
     document.getElementById('newjob').style.display = 'block';
     document.getElementById('unscrew_RPM').value = 1;
     document.getElementById('unscre_power').value = 1;
+    document.getElementById('unfasten_direction_CCW').checked = true;
     savejob();
 }
 

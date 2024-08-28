@@ -507,7 +507,7 @@ function edit_step(){
                 document.getElementById("edit_target_delaytime").value = target_delaytime;
                 document.getElementById("edit_target_torque").value = target_torque;
                 document.getElementById("edit_target_angle").value = target_angle;
-                document.getElementById("edit_target_delaytime").value = "112.3";
+                //document.getElementById("edit_target_delaytime").value = "112.3";
                 
 
 

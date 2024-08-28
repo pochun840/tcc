@@ -543,7 +543,6 @@ if(jobid){
                 }
             }
 
-            
             if(target_option == 2){
                 document.querySelector('div[for="edit_target-torque"]').textContent = '<?php echo $text['Target Delay Time']?>';
                 document.getElementById('edit_hi_torque').disabled = true; 
@@ -626,10 +625,8 @@ if(jobid){
 
             var target_option = document.getElementById("edit_target_option");
             target_option.addEventListener('change', function() {
-                var selectedValue = this.value;
+            var selectedValue = this.value;
                 
-                //alert(selectedValue);
-        
                 if (selectedValue == 2) {
                     var elementsToDisable = [
                         document.getElementById('edit_hi_torque'),
@@ -705,7 +702,7 @@ if(jobid){
 
                     document.getElementById('edit_target-delaytime_title').style.display = 'none';
                     document.getElementById('edit_target-delaytime_val').style.display = 'none';
-                    document.querySelector('div[for="edit_target-torque"]').textContent = '<?php echo $text['Target_Torque'] ?>';
+                    document.querySelector('div[for="edit_target-torque"]').textContent = '<?php echo $text['Target_Torque'] ?>' + "(" + unit + ")" ;
 
                 }
 
@@ -870,11 +867,12 @@ function create_step() {
     var unit = '<?php echo $data['unit']?>';
     var language = getCookie('language');
 
+    document.getElementById('rpm').value = 100;
     var targetoptionselect = document.getElementById('target_option');
     targetoptionselect.addEventListener('change', function() {
         var targetOptionValue = targetoptionselect.value;
         localStorage.setItem('target_option', targetOptionValue);
-        console.log(targetOptionValue);
+        //console.log(targetOptionValue);
    
 
         var targetTorqueElement = document.getElementById('target_torque');
