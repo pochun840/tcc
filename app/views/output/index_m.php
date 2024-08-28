@@ -473,6 +473,8 @@ function crud_job_event(argument){
     if (selectedRow) {
         var dataEventValue = selectedRow.getAttribute('data-event');
         del_output_val = dataEventValue;
+        output_event = del_output_val;
+
     }
 
     if(argument == 'del' && job_id != '' &&  del_output_val){
@@ -540,6 +542,7 @@ function crud_job_event(argument){
                 }
             });
         }
+        
 
         get_output_info(job_id, output_event);
         document.getElementById('edit_output').style.display = 'block';

@@ -298,6 +298,8 @@ function crud_job_event(argument){
     if (selectedRow) {
         var dataEventValue = selectedRow.getAttribute('data-event');
         del_output_val = dataEventValue;
+        output_event = del_output_val;
+
     }
     
     if(argument == 'del' && job_id != '' &&  del_output_val){
@@ -845,6 +847,8 @@ function get_output_info(job_id,output_event){
              },
              success: function(response) {
               
+                //console.log(response);
+
                  var responseJSON = JSON.stringify(response);
                  var cleanString = responseJSON.replace(/Array|\\n/g, '');
                  var cleanString = cleanString.substring(2, cleanString.length - 2);
@@ -915,7 +919,7 @@ function get_output_info(job_id,output_event){
                  
                  document.querySelector("select[name='edit_event_option']").value = output_event;
                  document.getElementById("edit_event_option").onchange = function() {
-                     var selectedValue = this.value; 
+                  var selectedValue = this.value; 
                  };
              },
              error: function(xhr, status, error) {
