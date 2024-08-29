@@ -19,7 +19,7 @@
                 <input type="text" id="seq_id" name="seq_id" size="5" maxlength="20" value="1" disabled
                 style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
-                <button id="back_btn" type="button" onclick="window.history.back()"><?php echo $text['return'];?></button>
+                <button id="back_btn" type="button" onclick="goToPage()"><?php echo $text['return'];?></button>
             </div>
 
             <div class="table-container">
@@ -1179,5 +1179,17 @@ function countrows() {
     var rowCount = rows.length;
     console.log("共有 " + rowCount + " 行");
     return rowCount;
+}
+
+
+function goToPage() {
+    // 获取 PHP 变量的值
+    var phpVariable = <?php echo json_encode($data['seq_id']); ?>;
+
+    // 构建 URL
+    var url = '?url=Sequences/index/' + phpVariable;
+
+    // 跳转到构建的 URL
+    window.location.href = url;
 }
 </script>

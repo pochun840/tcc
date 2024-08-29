@@ -56,7 +56,8 @@ class Step extends Controller
             'stepid_new' => $stepid_new,
             'unit_arr' => $unit_arr,
             'unit' => $unit,
-            'check' => $check
+            'check' => $check,
+            'seq_id' => $seq_id
         );
 
 

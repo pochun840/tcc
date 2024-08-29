@@ -432,7 +432,20 @@ function crud_job_event(argument){
                     radio.disabled = true; 
                 }
             });
+
+        
+
+            let tempC = tempA.slice(); 
+
+            console.log(tempA);
+            console.log(temp);
+
+
+
+
         }
+
+        
 
         get_output_info(job_id, output_event);
         document.getElementById('edit_output').style.display = 'block';

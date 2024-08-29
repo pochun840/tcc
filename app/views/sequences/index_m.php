@@ -17,7 +17,7 @@
                 <input type="text" id="job_id" name="job_id" size="10" maxlength="20" value="<?php echo $data['job_id'];?>" disabled
                 style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
-                <button id="back_btn" type="button" onclick="window.history.back()" ><?php echo $text['return'];?></button>
+                <button id="back_btn" type="button" onclick="window.location.href='?url=Jobs/index'"><?php echo $text['return'];?></button>
             </div>
 
             <div class="table-container">
@@ -771,7 +771,6 @@ function edit_seq_save(){
 
             },
             success: function(response) {
-                //console.log(response);
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
@@ -860,4 +859,18 @@ function sendRowInfoArray() {
         }
     });
 }
+
+function goBackAndReload() {
+           // 记录当前页面的 URL
+           const currentUrl = window.location.href;
+            // 用 replaceState 记录当前页面的状态
+            window.history.replaceState({}, '', currentUrl);
+            // 返回上一页
+            window.history.back();
+            // 设置标志来强制上一页刷新
+            setTimeout(() => {
+                // 刷新当前页，也就是上一页
+                window.location.href = document.referrer + (document.referrer.includes('?') ? '&' : '?') + 'refresh=' + new Date().getTime();
+            }, 100);
+        }
 </script>

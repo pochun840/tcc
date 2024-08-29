@@ -252,6 +252,9 @@
 </div>
 
 <script>
+
+
+
 $(document).ready(function () {
     highlight_row('job_table');
 });
