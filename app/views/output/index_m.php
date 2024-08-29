@@ -556,6 +556,18 @@ function crud_job_event(argument){
             }else{
                 toggleElementsInRange(1, 11, 2, false);
             }
+
+            let tempC = tempA.slice();
+            tempC.forEach(pin => {
+                for (let i = 1; i <= 3; i++) {
+                    let id = `pin${pin}_${i}`;
+                    let element = document.getElementById(id);
+                    if (element) {
+                        element.disabled = true; 
+                    }
+                }
+            });
+            
         });
                
         

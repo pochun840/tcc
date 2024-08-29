@@ -384,9 +384,6 @@ function crud_job_event(argument){
                 toggleElementsInRange(1, 11, 2, false);
             }
 
-
-
-
             for(let i = 1; i <= 11; i++) {
             let radioId = 'pin' + i + '_3';
             let radioElement = document.getElementById(radioId);
@@ -394,7 +391,20 @@ function crud_job_event(argument){
             if (radioElement) {
                 radioElement.addEventListener('change', updateInputsBasedOnRadioSelection);
             }
+
+            let tempC = tempA.slice();
+            tempC.forEach(pin => {
+                for (let i = 1; i <= 3; i++) {
+                    let id = `pin${pin}_${i}`;
+                    let element = document.getElementById(id);
+                    if (element) {
+                        element.disabled = true; 
+                    }
+                }
+            });
         }
+
+        
             
         }); 
 
