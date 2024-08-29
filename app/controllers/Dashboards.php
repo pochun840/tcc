@@ -1,6 +1,6 @@
 <?php
 
-class Dashboards extends Controller
+/*class Dashboards extends Controller
 {
     private $DashboardModel;
     private $AdminModel;
@@ -15,6 +15,7 @@ class Dashboards extends Controller
     // 取得所有Jobs
     public function index(){
 
+        
         $isMobile = $this->isMobileCheck();
         $agent_type = $this->AdminModel->Get_Das_Config('agent_type');
         $device_info = $this->Device_Info();
@@ -169,26 +170,7 @@ class Dashboards extends Controller
 
     }
 
-    /*function writeToCSV($input, $filePath) {
-        // 检查文件是否存在，如果不存在则创建一个新的文件
-        if (!file_exists($filePath)) {
-            $file = fopen($filePath, 'w');
-            fclose($file);
-        }
 
-        // 打开 CSV 文件并追加内容
-        $file = fopen($filePath, 'a');
-
-        // 将输入的内容写入 CSV 文件
-        if (is_array($input)) {
-            fputcsv($file, $input);
-        } else {
-            fwrite($file, $input . PHP_EOL); // 如果输入是字符串，则直接写入文件
-        }
-
-        // 关闭文件
-        fclose($file);
-    }*/
 
     private function ChartData($chat_mode, $csvdata_arr, $unitvalue, $chat_mode_arr){
         $chart_info = array();
@@ -216,5 +198,5 @@ class Dashboards extends Controller
     }
 
     
-}
+}*/
 ?>
