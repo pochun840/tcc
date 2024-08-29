@@ -19,43 +19,43 @@
                         <div class="row t2">
                             <div class="col-4 t1"><?php echo $text['tool_type'];?>:</div>
                             <div class="col t2">
-                                <div</div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div>    
                         <div class="row t2">
                             <div class="col-4 t1"><?php echo $text['tool_sn'];?>:</div>
                             <div class="col t2">
-                                <div></div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div> 
                         <div class="row t2">
                             <div class="col-4 t1"><?php echo $text['calibration_value'];?>:</div>
                             <div class="col t2">
-                                <div></div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div>    
                         <div class="row t2">
                             <div class="col-4 t1"><?php echo $text['total_counts'];?>:</div>
                             <div class="col t2">
-                                <div></div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div>    
                         <div class="row t2">
                             <div class="col-4 t1"><?php echo $text['rpm'];?>:</div>
                             <div class="col t2">
-                                <div></div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div>    
                         <div class="row t2">
                             <div class="col-4 t1"><?php echo $text['torque'];?> (<?php echo $text['Nm'];?>):</div>
                             <div class="col t2">
-                                <div></div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div>    
                         <div class="row t2">    
                             <div class="col-4 t1"><?php echo $text['sw_version'];?>:</div>
                             <div class="col t2">
-                                <div></div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div>    
                         
@@ -65,25 +65,25 @@
                         <div class="row t2">
                             <div class="col-4 t1"><?php echo $text['controller_sn'];?>:</div>
                             <div class="col t2">
-                                <div></div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div>    
                         <div class="row t2">
                             <div class="col-4 t1"><?php echo $text['controller_version'];?>:</div>
                             <div class="col t2">
-                                <div></div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div>    
                         <div class="row t2">
                             <div class="col-4 t1"><?php echo $text['mcb_version'];?>:</div>
                             <div class="col t2">
-                                <div></div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div>    
                         <div class="row t2">
                             <div class="col-4 t1"><?php echo $text['image_version'];?>:</div>
                             <div class="col t2">
-                                <div></div>
+                                <div>──────────────────────────────────────</div>
                             </div>
                         </div>    
                         <div class="row t2">

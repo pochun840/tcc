@@ -109,7 +109,7 @@ class Dashboards extends Controller
     }*/
 
     //return datalog csv for graph
-    public function get_datalog($sn = null)
+    /*public function get_datalog($sn = null)
     {
         if( isset($_GET['sn'])  ){
             $sn = (int)$_GET['sn'];
@@ -144,7 +144,7 @@ class Dashboards extends Controller
             return '';
         }
        
-    }
+    }*/
 
 
     public function change_language()
