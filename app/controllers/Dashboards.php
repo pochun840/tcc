@@ -1,6 +1,6 @@
 <?php
 
-/*class Dashboards extends Controller
+class Dashboards extends Controller
 {
     private $DashboardModel;
     private $AdminModel;
@@ -198,5 +198,5 @@
     }
 
     
-}*/
+}
 ?>
