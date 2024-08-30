@@ -657,9 +657,7 @@ function crud_job_event(argument){
         }
 
 
-        get_input_info(job_id,input_event);
-        handleEventChange(input_event); 
-        document.getElementById('edit_input').style.display='block';
+        //console.log(temp);
 
         if(input_event ==109){
             document.getElementById('edit_work_goc').style.display='block';
@@ -673,6 +671,12 @@ function crud_job_event(argument){
             }
          
         }
+        
+        get_input_info(job_id,input_event);
+        handleEventChange(input_event); 
+        document.getElementById('edit_input').style.display='block';
+
+    
     }
 
     if(argument == 'copy' && job_id != '' && input_event != ''){
@@ -1054,8 +1058,17 @@ function get_input_info(){
                 
                 if(radioButton){
                     radioButton.checked = true;
+                    if(wave == '_high'){
+                        var nstr = "edit_pin" + input_pin + '_low';
+                    }else{
+                        var nstr = "edit_pin" + input_pin + '_high';
+                    }
+                    var element = document.getElementById(nstr);
+                    if(element){
+                        element.disabled = false; 
+                    } 
                 }
-
+                
                 document.querySelector("select[name='edit_Event_Option']").value = input_event;
 
                 document.getElementById("edit_Event_Option").onchange = function() {
