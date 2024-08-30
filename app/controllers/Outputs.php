@@ -89,7 +89,7 @@ class Outputs extends Controller
 
                         $job_outputlist .= "<tr data-event ='".$vv['output_event']."'>";
                         $job_outputlist .= "<td id='".$vv['output_event']."'>".$event_output[$vv['output_event']]."</td>";
-                        $job_outputlist .= '<td>'.$vv['output_pin'].'</td>';
+                        $job_outputlist .=  "<td data-outputpin = '".$vv['output_pin']."' >".$vv['output_pin']."</td>";
                         $job_outputlist .= '<td>'.$img.'</td>';
                         $job_outputlist .= '<td>'.$vv['wave_on'].'</td>';
                         $job_outputlist .= '</tr>';

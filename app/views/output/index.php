@@ -262,6 +262,8 @@ var backgroundColorYellow = false;
 var output_job;
 var all_job;
 var del_output_val;
+var output_pinval;
+var dataoutput_pin_val;
 $(document).ready(function () {
     highlight_row_input('output_table');
 
@@ -303,6 +305,12 @@ function crud_job_event(argument){
         var dataEventValue = selectedRow.getAttribute('data-event');
         del_output_val = dataEventValue;
         output_event = del_output_val;
+
+        var dataOutputPinElement = selectedRow.querySelector('[data-outputpin]');
+        var dataOutputPinValue = dataOutputPinElement ? dataOutputPinElement.getAttribute('data-outputpin') : null;
+        output_pinval = dataOutputPinValue;
+
+
 
     }
     
@@ -424,9 +432,13 @@ function crud_job_event(argument){
                 option.classList.add('disabled_input');
             });
         }
+
+
         if (Array.isArray(temp)) { 
             temp.forEach(id => {
                 var radio = document.getElementById(id);
+                console.log(radio);
+
                 if (radio && radio.type === 'radio') { 
                     radio.disabled = true; 
                 }
@@ -434,7 +446,7 @@ function crud_job_event(argument){
 
             let tempC = temp.slice(); 
         
-           //console.log(tempC);
+   
             const filtered_C = tempC.filter(item => item.includes("edit_pin"));
             filtered_C.forEach(function(id) {
       
@@ -456,7 +468,7 @@ function crud_job_event(argument){
                     var timeElementId = 'edit_time' + basePinId.slice(3);
                     const toremove = "t_pin"; 
                     timeElementId = timeElementId.replace(toremove,'');
-                    console.log(timeElementId);
+                    //console.log(timeElementId);
                     
                     var timeElement = document.getElementById(timeElementId);
                     if (timeElement) {
@@ -469,7 +481,26 @@ function crud_job_event(argument){
 
         }
 
-        
+
+        //該事件的pin的 所有radio 及 input 全部都要可以填
+        if(output_pinval != ''){
+
+            const idsToDisable = [
+                `edit_pin${output_pinval}_1`,
+                `edit_pin${output_pinval}_2`,
+                `edit_pin${output_pinval}_3`,
+                `edit_time${output_pinval}`
+            ];
+
+            idsToDisable.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.disabled = false;
+                }
+            });
+            
+        }
+
 
         get_output_info(job_id, output_event);
         document.getElementById('edit_output').style.display = 'block';
@@ -939,24 +970,32 @@ function get_output_info(job_id,output_event){
              },
              success: function(response) {
               
-                //console.log(response);
+                var responseJSON = JSON.stringify(response);
+                var cleanString = responseJSON.replace(/Array|\\n/g, '');
+                var cleanString = cleanString.substring(2, cleanString.length - 2);
+                var [, job_id] = cleanString.match(/\[output_job_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, output_event] = cleanString.match(/\[output_event]\s*=>\s*([^ ]+)/) || [, null];
+                var [, output_pin] = cleanString.match(/\[output_pin]\s*=>\s*([^ ]+)/) || [, null];
+                var [, wave] = cleanString.match(/\[wave]\s*=>\s*([^ ]+)/) || [, null];
+                var [, wave_on] = cleanString.match(/\[wave_on]\s*=>\s*([^ ]+)/) || [, null];
 
-                 var responseJSON = JSON.stringify(response);
-                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
-                 var cleanString = cleanString.substring(2, cleanString.length - 2);
-                 var [, job_id] = cleanString.match(/\[output_job_id]\s*=>\s*([^ ]+)/) || [, null];
-                 var [, output_event] = cleanString.match(/\[output_event]\s*=>\s*([^ ]+)/) || [, null];
-                 var [, output_pin] = cleanString.match(/\[output_pin]\s*=>\s*([^ ]+)/) || [, null];
-                 var [, wave] = cleanString.match(/\[wave]\s*=>\s*([^ ]+)/) || [, null];
-                 var [, wave_on] = cleanString.match(/\[wave_on]\s*=>\s*([^ ]+)/) || [, null];
- 
-                 var edit_output_pin = "edit_pin" + output_pin + "_"+ wave;
-                 var radioButton = document.getElementById(edit_output_pin);
-                 radioButton.removeAttribute('disabled');
- 
-                 var time_ms = 'edit_time'+ output_pin;
+                var edit_output_pin = "edit_pin" + output_pin + "_"+ wave;
+                var radioButton = document.getElementById(edit_output_pin);
+                radioButton.removeAttribute('disabled');
 
-           
+                var time_ms = 'edit_time'+ output_pin;
+
+                if(wave != 2){
+                    var time_id = 'edit_time' + output_pin;
+                    var element = document.getElementById(time_id);
+                    
+                    if(element){
+                        element.disabled = true
+                    }
+                }
+
+
+                    
                 //完工信號 && 馬達信號 && 啟動信號
                 if (output_event == 8  || output_event == 6 || output_event == 7 ) {
                     for(let i = 1; i <= 11; i++) {

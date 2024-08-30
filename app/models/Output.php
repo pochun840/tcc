@@ -183,7 +183,7 @@ class Output{
                     }else{
                         $img = '';
                     }
-                    $tableCells .= "<td>".$img."</td>";
+                    $tableCells .= "<td  data-outputpin = '".$value."'>".$img."</td>";
                 }else{
                     $tableCells .= "<td></td>";
                 }

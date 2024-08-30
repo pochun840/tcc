@@ -436,6 +436,8 @@ var backgroundColorYellow = false;
 var output_job;
 var all_job;
 var del_output_val;
+var output_pinval;
+var dataoutput_pin_val;
 $(document).ready(function () {
     highlight_row_input('output_table');
     var all_output_job = '<?php echo $data['device_data']['device_output_all_job']?>';
@@ -478,6 +480,11 @@ function crud_job_event(argument){
         var dataEventValue = selectedRow.getAttribute('data-event');
         del_output_val = dataEventValue;
         output_event = del_output_val;
+
+        var dataOutputPinElement = selectedRow.querySelector('[data-outputpin]');
+        var dataOutputPinValue = dataOutputPinElement ? dataOutputPinElement.getAttribute('data-outputpin') : null;
+        output_pinval = dataOutputPinValue;
+
 
     }
 
@@ -623,6 +630,31 @@ function crud_job_event(argument){
 
             
         }
+
+
+        //該事件的pin的 所有radio 及 input 全部都要可以填
+        if(output_pinval != ''){
+
+            const idsToDisable = [
+                `edit_pin${output_pinval}_1`,
+                `edit_pin${output_pinval}_2`,
+                `edit_pin${output_pinval}_3`,
+                `edit_time${output_pinval}`
+            ];
+
+            idsToDisable.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.disabled = false;
+                }
+            });
+
+            var pin1Checkbox = document.getElementById(`edit_pin${output_event}_1`);
+            var pin3Checkbox = document.getElementById(`edit_pin${output_event}_3`);
+            var timeInput = document.getElementById(`edit_time${output_event}`);
+
+        }
+
         
 
         get_output_info(job_id, output_event);
@@ -1063,21 +1095,29 @@ function get_output_info(job_id,output_event){
              },
              success: function(response) {
               
-                 var responseJSON = JSON.stringify(response);
-                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
-                 var cleanString = cleanString.substring(2, cleanString.length - 2);
-                 var [, job_id] = cleanString.match(/\[output_job_id]\s*=>\s*([^ ]+)/) || [, null];
-                 var [, output_event] = cleanString.match(/\[output_event]\s*=>\s*([^ ]+)/) || [, null];
-                 var [, output_pin] = cleanString.match(/\[output_pin]\s*=>\s*([^ ]+)/) || [, null];
-                 var [, wave] = cleanString.match(/\[wave]\s*=>\s*([^ ]+)/) || [, null];
-                 var [, wave_on] = cleanString.match(/\[wave_on]\s*=>\s*([^ ]+)/) || [, null];
- 
-                 var edit_output_pin = "edit_pin" + output_pin + "_"+ wave;
-                 var radioButton = document.getElementById(edit_output_pin);
-                 radioButton.removeAttribute('disabled');
- 
-                 var time_ms = 'edit_time'+ output_pin;
+                var responseJSON = JSON.stringify(response);
+                var cleanString = responseJSON.replace(/Array|\\n/g, '');
+                var cleanString = cleanString.substring(2, cleanString.length - 2);
+                var [, job_id] = cleanString.match(/\[output_job_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, output_event] = cleanString.match(/\[output_event]\s*=>\s*([^ ]+)/) || [, null];
+                var [, output_pin] = cleanString.match(/\[output_pin]\s*=>\s*([^ ]+)/) || [, null];
+                var [, wave] = cleanString.match(/\[wave]\s*=>\s*([^ ]+)/) || [, null];
+                var [, wave_on] = cleanString.match(/\[wave_on]\s*=>\s*([^ ]+)/) || [, null];
 
+                var edit_output_pin = "edit_pin" + output_pin + "_"+ wave;
+                var radioButton = document.getElementById(edit_output_pin);
+                radioButton.removeAttribute('disabled');
+
+                var time_ms = 'edit_time'+ output_pin;
+
+                if(wave != 2){
+                    var time_id = 'edit_time' + output_pin;
+                    var element = document.getElementById(time_id);
+                    
+                    if(element){
+                        element.disabled = true
+                    }
+                }
            
                 //完工信號 && 馬達信號 && 啟動信號
                 if (output_event == 8  || output_event == 6 || output_event == 7 ) {
