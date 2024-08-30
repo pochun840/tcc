@@ -1183,13 +1183,8 @@ function countrows() {
 
 
 function goToPage() {
-    // 获取 PHP 变量的值
-    var phpVariable = <?php echo json_encode($data['seq_id']); ?>;
-
-    // 构建 URL
-    var url = '?url=Sequences/index/' + phpVariable;
-
-    // 跳转到构建的 URL
+    var seq_id = '<?php echo $data['seq_id'];?>';
+    var url = '?url=Sequences/index/' + seq_id;
     window.location.href = url;
 }
 </script>
