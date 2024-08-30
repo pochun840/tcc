@@ -330,7 +330,6 @@
                                     <div for="event" class="col-3 t1"><?php echo $text['event'];?> :</div>
                                     <div class="col-2 t2">
                                         <select id="edit_event_option" name='edit_event_option' class="col custom-file">
-                                        <option value="-1" disabled selected><?php echo $text['Choose_option']; ?></option>
                                            <?php foreach($data['event_output'] as $key =>$val){?>
                                                 <option value ='<?php echo $key;?>'><?php echo $text[$val];?></option>
                                             <?php } ?>
@@ -342,15 +341,15 @@
 									<div class="row output-pin">
 										<div class="col t1"><?php echo $i;?>:</div>
 										<div class="col t2 form-check form-check-inline">
-											<input class="zoom form-check-input" type="radio" name="edit_pin_option"  id="edit_pin<?php echo $i; ?>_1" value="1">
+											<input class="zoom form-check-input" type="radio" name="edit_pin_option"  id="edit_pin<?php echo $i; ?>_1" value="1" onclick="toggleOnputTime_edit('edit_pin<?php echo $i; ?>_1', this.checked,'1')"  >
 											<label class="form-check-label" for="pin1_signal01"><img src="./img/signal01.png"></label>
 										</div>
 										<div class="col t2 form-check form-check-inline">
-											<input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin<?php echo $i; ?>_2" value="2" >
+											<input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin<?php echo $i; ?>_2" value="2" onclick="toggleOnputTime_edit('edit_pin<?php echo $i; ?>_1', this.checked,'2')" >
 											<label class="form-check-label" for="pin1_signal02"><img src="./img/signal02.png"></label>
 										</div>
 										<div class="col t2 form-check form-check-inline">
-											<input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin<?php echo $i; ?>_3" value="3">
+											<input class="zoom form-check-input" type="radio" name="edit_pin_option" id="edit_pin<?php echo $i; ?>_3" value="3" onclick="toggleOnputTime_edit('edit_pin<?php echo $i; ?>_1', this.checked,'3')" >
 											<label class="form-check-label" for="pin1_trigger"><img src="./img/trigger.png"></label>
 										</div>
 										<div class="col-3 t2">
@@ -591,6 +590,38 @@ function crud_job_event(argument){
                     radio.disabled = true; 
                 }
             });
+
+            let tempC = temp.slice(); 
+            const filtered_C = tempC.filter(item => item.includes("edit_pin"));
+            filtered_C.forEach(function(id) {
+                var match = id.match(/(edit_pin\d+)_(\d+)/);
+                if (match) {
+                    var basePinId = match[1]; 
+                    var pinNumber = match[2]; 
+
+                    for (var i = 1; i <= 3; i++) {
+                        var pinElementId = basePinId + "_" + i;
+                        var pinElement = document.getElementById(pinElementId);
+                        if (pinElement && pinElement.type === 'radio') {
+                            pinElement.disabled = true;
+                        }
+                    }
+
+                    // 禁用 edit_time 相關的元素
+                    var timeElementId = 'edit_time' + basePinId.slice(3);
+                    const toremove = "t_pin"; 
+                    timeElementId = timeElementId.replace(toremove,'');
+                    console.log(timeElementId);
+                    
+                    var timeElement = document.getElementById(timeElementId);
+                    if (timeElement) {
+                        timeElement.disabled = true;
+                    }
+                }
+            });
+
+
+            
         }
         
 
@@ -1085,11 +1116,6 @@ function get_output_info(job_id,output_event){
 
                     }
                     
-                    
-
-                    
-                   
-              
                 }
 
                  document.getElementById(time_ms).value = wave_on;
@@ -1145,4 +1171,36 @@ function toggleOnputTime(inputId, checked, option) {
         }
     }
 }
+
+function toggleOnputTime_edit(inputId, checked, option) {
+    var inputElement = document.getElementById(inputId);
+    
+    if (!inputElement) {
+        console.error(`Element with ID '${inputId}' not found.`);
+        return; // Exit if element is not found
+    }
+
+    if (inputElement.type === 'checkbox' || inputElement.type === 'radio') {
+
+        if (inputElement.checked !== checked) {
+            console.warn(`The checked state of the element with ID '${inputId}' does not match the provided 'checked' value.`);
+        }
+    }
+
+    if (option != '2') {
+        var newId = inputId.replace(/^edit_pin(\d+)_\d+$/, 'edit_time$1');
+        var element = document.getElementById(newId);
+        if (element) {
+            element.disabled = true;
+        }
+        
+    } else { 
+        var newId = inputId.replace(/^edit_pin(\d+)_\d+$/, 'edit_time$1');
+        var element = document.getElementById(newId);
+        if (element) {
+            element.disabled = false;
+        }
+    }
+}
+
 </script>
