@@ -688,7 +688,16 @@ class Settings extends Controller
                 $backupFile = '/var/www/html/database/idas_data_bk.db';
                 $destinationFile = '/var/www/html/database/data.db';
 
-                $this->SettingModel->backup_CopyFile($sourceFile, $backupFile, $destinationFile);
+                $res = $this->SettingModel->backup_CopyFile($sourceFile, $backupFile, $destinationFile);
+                $result = array();
+                if($res){
+                    $res_msg  = "SYNC Success";
+                    $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
+                }else{
+                    $res_msg  = "SYNC Error";
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                }
+
             }
 
             /*if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
