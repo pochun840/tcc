@@ -19,6 +19,11 @@ class Setting{
 
         $this->dbh = new Database;
 
+        $this->db_iDas_device = new Database;
+        $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
+
+
+
     }
 
     public function GetControllerInfo()
@@ -446,31 +451,70 @@ class Setting{
         return $row['device_torque_unit'];
     }
 
+    
     public function backup_CopyFile($source, $backup, $destination) {
         // 確保源檔案存在
         if (!file_exists($source)) {
-            die('錯誤: 源檔案不存在。');
+            echo '錯誤: 源檔案不存在。';
             return false;
         }
     
         // 複製檔案為備份
         if (!copy($source, $backup)) {
-            die('錯誤: 無法複製檔案為備份。');
+            echo '錯誤: 無法複製檔案為備份。';
             return false;
         }
     
-        //echo "檔案備份成功: ".$backup."\n";
+        echo "檔案備份成功: ".$backup."\n";
     
         // 複製檔案為新檔案
         if (!copy($source, $destination)) {
-            die('錯誤: 無法複製檔案到目的地。');
+            echo '錯誤: 無法複製檔案到目的地。';
             return false;
         }
     
         echo "檔案複製成功: ".$destination."\n";
-
+    
+        // 若所有操作成功，返回 true
         return true;
     }
+
+    /*public function backupRemoveAndCopyDatabase($sourcePath, $backupPath, $newFilePath) {
+        // 確保源檔案存在
+        if (!file_exists($sourcePath)) {
+            echo '錯誤: 源檔案不存在。';
+            return false;
+        }
+    
+        // 複製檔案為備份
+        if (!copy($sourcePath, $backupPath)) {
+            echo '錯誤: 無法複製檔案為備份。';
+            return false;
+        }
+    
+        echo "檔案備份成功: ".$backupPath."\n";
+    
+        // 移除原本的檔案 (idas_data.db)
+        if (file_exists($newFilePath)) {
+            if (!unlink($newFilePath)) {
+                echo '錯誤: 無法移除原檔案。';
+                return false;
+            }
+            echo "檔案移除成功: ".$newFilePath."\n";
+        }
+    
+        // 複製檔案為新檔案 (idas_data.db)
+        if (!copy($sourcePath, $newFilePath)) {
+            echo '錯誤: 無法複製檔案為新檔案。';
+            return false;
+        }
+    
+        echo "檔案複製成功: ".$newFilePath."\n";
+    
+        // 若所有操作成功，返回 true
+        return true;
+    }*/
+
 
 
     

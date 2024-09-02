@@ -652,9 +652,8 @@ class Settings extends Controller
     }
 
 
-    public function Sync_check_db($value='')
+    public function Sync_check_db()
     {
-
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
@@ -662,66 +661,17 @@ class Settings extends Controller
    
         if (!empty($_POST['argument']) && isset($_POST['argument'])) {
             $argument = $_POST['argument'];
-        }else{
+        } else {
             $argument = '';
         }
+
+        var_dump($argument);
+        die();
+
         
-        //$notice = '';
-        //$warning = '';
-        //$Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
-        //$Con_DB_Location = '/var/www/html/database/data.db'; //控制器
-
-        if(!empty($argument)){
-            if( PHP_OS_FAMILY == 'Linux' && $argument == 'D2C'){
-
-                //時間差異提醒
-                if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
-                    $notice = $text['system_sync_notice'].date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
-                }
-
-                //DB欄位差異判斷
-                if(!$this->Database_Column_Diff()){
-                    $warning .= 'DB is different';
-                }
-
-                $sourceFile = '/var/www/html/database/idas_data.db';
-                $backupFile = '/var/www/html/database/idas_data_bk.db';
-                $destinationFile = '/var/www/html/database/data.db';
-
-                $this->SettingModel->backup_CopyFile($sourceFile, $backupFile, $destinationFile);
-            }
-
-            /*if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
-
-                //時間差異提醒
-                if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
-                    $notice = $text['system_sync_notice'].date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
-                }
-
-                //DB欄位差異判斷
-                if(!$this->Database_Column_Diff()){
-                    $warning .= 'DB is different';
-                }
-
-                $sourceFile = '/var/www/html/database/data.db';
-                $backupFile = '/var/www/html/database/data_bk.db';
-                $newFile = '/var/www/html/tcc/idas_data.db';
-
-                $result = $this->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
-
-
-            }*/
-
-
-
-        }
-
-
-    
+  
     }
-       
 
-        
 
 
     
