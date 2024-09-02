@@ -446,6 +446,32 @@ class Setting{
         return $row['device_torque_unit'];
     }
 
+    public function backup_CopyFile($source, $backup, $destination) {
+        // 確保源檔案存在
+        if (!file_exists($source)) {
+            die('錯誤: 源檔案不存在。');
+            return false;
+        }
+    
+        // 複製檔案為備份
+        if (!copy($source, $backup)) {
+            die('錯誤: 無法複製檔案為備份。');
+            return false;
+        }
+    
+        //echo "檔案備份成功: ".$backup."\n";
+    
+        // 複製檔案為新檔案
+        if (!copy($source, $destination)) {
+            die('錯誤: 無法複製檔案到目的地。');
+            return false;
+        }
+    
+        echo "檔案複製成功: ".$destination."\n";
+
+        return true;
+    }
+
 
     
  

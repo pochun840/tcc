@@ -673,20 +673,20 @@ class Settings extends Controller
         // 3. compare
         $notice = '';
         $warning = '';
-        $Das_DB_Location = '/var/www/html/database/iDas-data.db';
-        $Con_DB_Location = '/var/www/html/database/data.db';
+        $Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
+        $Con_DB_Location = '/var/www/html/database/data.db'; //控制器
 
         if($this->LoginCheck() == 1){
             echo json_encode(array('warning' => $text['system_sync_warning_login']));
             exit();
         }
 
-        if($way == 'C2D'){
+        /*if($way == 'C2D'){
             echo json_encode( array('notice'=>'','warning'=>'') );
             exit();
-        }
+        }*/
 
-        if( PHP_OS_FAMILY == 'Linux' && $way == 'D2C'){
+        if( PHP_OS_FAMILY == 'Linux' && $argument == 'D2C'){
 
             //時間差異提醒
             if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
@@ -708,64 +708,54 @@ class Settings extends Controller
             }*/
 
             //DB欄位差異判斷
-            /*if(!$this->Database_Column_Diff()){
+            if(!$this->Database_Column_Diff()){
                 $warning .= 'DB is different';
-            }*/
+            }
+
+            //把idas_data.db 複製備份為 idas_data_bk.db後 
+            //把idas_data.db 複製一份 檔案為data.db 
+            //路徑為:/var/www/html/database/ 
+
+            $sourceFile = '/var/www/html/tcc/idas_data.db';
+            $backupFile = '/var/www/html/tcc/idas_data_bk.db';
+            $destinationFile = '/var/www/html/database/data.db';
+
             
-            //資料是否有Null判斷
+            $this->SettingModel->backup_CopyFile($sourceFile, $backupFile, $destinationFile);
+
+
+
+        }else if( PHP_OS_FAMILY == 'Linux' && $argument == " C2D"){
+
+            //時間差異提醒
+            if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
+                $notice = $text['system_sync_notice'].date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
+            }
+
+
+            //DB欄位差異判斷
+            if(!$this->Database_Column_Diff()){
+                $warning .= 'DB is different';
+            }
+
+            
+            
+
         }
 
-        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && $_SERVER['REQUEST_METHOD'] == 'GET' ) {
+        /*if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && $_SERVER['REQUEST_METHOD'] == 'GET' ) {
             // 这是一个外部的 AJAX 请求
             echo json_encode( array('notice'=>$notice,'warning'=>$warning) );
             exit();
         } else {
             // 这是内部调用
             return array('notice'=>$notice,'warning'=>$warning);
-        }
+        }*/
 
     }
 
 
-    /*public function  Sync_check_db(){
-        
-        
 
-        $file = $this->MiscellaneousModel->lang_load();
-        if(!empty($file)){
-            include $file;
-        }
-   
-        $input_check = true;
-        if (!empty($_POST['argument']) && isset($_POST['argument'])) {
-            $argument = $_POST['argument'];
-        } else {
-            $input_check = false; 
-        }
-
-        if($input_check){
-            
-            if($argument=="D2C"){ 
-
-            }else{
-
-
-                
-            }
-           /*$controller_ip = '192.168.0.105'; 
-            $username = 'kls';             
-            $password = '12345678rd';
-
-            if($argument=="D2C"){
-                //下載
-                $this->MiscellaneousModel->FTP_download($controller_ip,$username,$password);
-            }else{
-                //上傳
-                $this->MiscellaneousModel->FTP_upload($controller_ip, $username, $password);
-
-            }*/
-        }
-    }*/
     
     //get barcode
     public function GetBarcodes()
@@ -1225,8 +1215,8 @@ class Settings extends Controller
     //DB欄位差異判斷
     function Database_Column_Diff()
     {
-        /*$dbPath1 = '/var/www/html/database/iDas-tcscon.db';
-        $dbPath2 = '/var/www/html/database/tcscon.db';
+        $dbPath1 = '/var/www/html/database/idas_data.db';
+        $dbPath2 = '/var/www/html/database/data.db';
 
         if ($this->validateTableStructure($dbPath1, $dbPath2)) {
             // echo "两个数据库的表结构相同。\n";
@@ -1241,7 +1231,7 @@ class Settings extends Controller
             return false;
         }else{
             return true;
-        }*/
+        }
         return true;
     }
 

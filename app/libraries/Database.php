@@ -27,20 +27,11 @@ class Database
         $data_db_name = "data".$Year.".db";
         if( PHP_OS_FAMILY == 'Linux'){
 
-            $this->db_con = new PDO('sqlite:/var/www/html/database/idas_data.db'); 
+            $this->db_con = new PDO('sqlite:/var/www/html/database/idas_data.db');
             $this->db_iDas = new PDO('sqlite:/var/www/html/database/idas_data.db'); 
             $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/das.db'); 
             $this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db');
 
-            /*if( file_exists('/home/kls/tcc/resource/db_emmc/'.$data_db_name) ){
-                $this->db_data = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/'.$data_db_name); 
-            }else{
-                $this->db_data = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data.db'); 
-            }
-            
-            $this->db_iDas = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data.db'); 
-            $this->db_iDas_login = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/das.db'); 
-            $this->db_iDas_device = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data_device.db'); */
             
         }else{
             $this->db_con = new PDO('sqlite:../data.db'); 
