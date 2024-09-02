@@ -27,8 +27,8 @@ class Database
         $data_db_name = "data".$Year.".db";
         if( PHP_OS_FAMILY == 'Linux'){
 
-            $this->db_con = new PDO('sqlite:/var/www/html/database/data.db');
-            $this->db_iDas = new PDO('sqlite:/var/www/html/database/data.db'); 
+            $this->db_con = new PDO('sqlite:/var/www/html/database/idas_data.db'); 
+            $this->db_iDas = new PDO('sqlite:/var/www/html/database/idas_data.db'); 
             $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/das.db'); 
             $this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db');
 
