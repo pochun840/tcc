@@ -435,7 +435,7 @@ function crud_job_event(argument){
         document.getElementById('newinput').style.display='block';
     } 
     
-    if(argument == 'del'){
+    if(argument == 'del' && job_id != '' && input_event != '' ){
         delete_input_id(job_id,input_event);
     }
 

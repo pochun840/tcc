@@ -20,6 +20,7 @@ class Input{
         $this->db_iDas_device = new Database;
         $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
 
+        
 
     }
 

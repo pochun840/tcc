@@ -581,7 +581,7 @@ function crud_job_event(argument){
         
     }
 
-    if (argument === 'edit' && job_id != '') {
+    if (argument === 'edit' && job_id != '' && output_event != '') {
         var selectElement = document.getElementById('edit_event_option');
         if (selectElement) {
             selectElement.disabled = true;
