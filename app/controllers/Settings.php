@@ -700,7 +700,7 @@ class Settings extends Controller
 
             }
 
-            /*if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
+            if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
 
                 //時間差異提醒
                 if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
@@ -716,10 +716,19 @@ class Settings extends Controller
                 $backupFile = '/var/www/html/database/data_bk.db';
                 $newFile = '/var/www/html/tcc/idas_data.db';
 
-                $result = $this->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
+                $res = $this->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
+                $result = array();
+                if($res){
+                    $res_msg  = "SYNC Success";
+                    $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
+                }else{
+                    $res_msg  = "SYNC Error";
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                }
 
 
-            }*/
+
+            }
 
 
 

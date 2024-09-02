@@ -479,10 +479,10 @@ class Setting{
         return true;
     }
 
-    /*public function backupRemoveAndCopyDatabase($sourcePath, $backupPath, $newFilePath) {
+    public function backupRemoveAndCopyDatabase($sourcePath, $backupPath, $newFilePath) {
         // 確保源檔案存在
         if (!file_exists($sourcePath)) {
-            echo '錯誤: 源檔案不存在。';
+            //echo '錯誤: 源檔案不存在。';
             return false;
         }
     
@@ -492,28 +492,28 @@ class Setting{
             return false;
         }
     
-        echo "檔案備份成功: ".$backupPath."\n";
+        //echo "檔案備份成功: ".$backupPath."\n";
     
         // 移除原本的檔案 (idas_data.db)
         if (file_exists($newFilePath)) {
             if (!unlink($newFilePath)) {
-                echo '錯誤: 無法移除原檔案。';
+                //echo '錯誤: 無法移除原檔案。';
                 return false;
             }
-            echo "檔案移除成功: ".$newFilePath."\n";
+            //echo "檔案移除成功: ".$newFilePath."\n";
         }
     
         // 複製檔案為新檔案 (idas_data.db)
         if (!copy($sourcePath, $newFilePath)) {
-            echo '錯誤: 無法複製檔案為新檔案。';
+            //echo '錯誤: 無法複製檔案為新檔案。';
             return false;
         }
     
-        echo "檔案複製成功: ".$newFilePath."\n";
+        //echo "檔案複製成功: ".$newFilePath."\n";
     
         // 若所有操作成功，返回 true
         return true;
-    }*/
+    }
 
 
 
