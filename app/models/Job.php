@@ -150,8 +150,6 @@ class Job{
         $results = $statement->execute([$jobid]);
         $rows = $statement->fetch();
 
-        //var_dump($rows);die();
-
         if ($rows['count'] > 0) {
             //$this->del_job_type($jobid);
             
