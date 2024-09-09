@@ -245,9 +245,11 @@ class Jobs extends Controller
                     $jobdata = array(
                         'job_id'   => $_POST['new_jobid'],
                         'job_name' => $_POST['new_jobname'],
-                        'unscrew_power' => $old_res['unscrew_power'],
-                        'unscrew_rpm' => $old_res['unscrew_rpm'],  
-                        'unscrew_direction' => $old_res['unscrew_direction'],  
+                        'reverse_direction' => $old_res['reverse_direction'],
+                        'reverse_rpm' => $old_res['reverse_rpm'],  
+                        'reverse_power' => $old_res['reverse_power'],  
+                        'job_ok' =>$old_res['job_ok'],
+                        'stop_job_ok' => $old_res['stop_job_ok']
 
                     );
                     $res = $this->jobModel->create_job($jobdata);
