@@ -23,11 +23,18 @@ class Jobs extends Controller
 
         $isMobile  = $this->isMobileCheck();
         $jobs      = $this->jobModel->getJobs();
-        $direction = $this->MiscellaneousModel->details('unscrew_direction');
+        $direction = $this->MiscellaneousModel->details('reverse_direction');
 
-        $lastRow  = end($jobs);
-        $jobIdInt = intval($lastRow['job_id']) + 1 ;
-      
+
+        if(!empty($jobs)){
+            $lastRow  = end($jobs);
+            $jobIdInt = intval($lastRow['job_id']) + 1 ;   
+        }else{
+            $lastRow  = ""; 
+            $jobIdInt = "";
+        }
+        ;
+
         $data = array(
             'jobint' => $jobIdInt,
             'jobs' => $jobs,
@@ -56,16 +63,18 @@ class Jobs extends Controller
             $jobdata = array(
                 'job_id' => $_POST['jobidnew'],
                 'job_name' => $_POST['jobname_val'],
-                'unscrew_power' => $_POST['unscre_power_val'],
-                'unscrew_rpm' => $_POST['unscrew_rpm_val'],
-                'unscrew_direction' => $_POST['direction_val'],
+                'reverse_power' => $_POST['reverse_power_val'],
+                'reverse_rpm' => $_POST['reverse_rpm_val'],
+                'reverse_direction' => $_POST['direction_val'],
+                'job_ok' => $_POST['job_ok_val'],
+                'stop_job_ok' => $_POST['stop_job_ok_val']
             );
 
    
 
             $resultName = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
-            $resultPower = $this->MiscellaneousModel->validate($jobdata['unscrew_power'], 'unscrewPower');
-            $resultRpm = $this->MiscellaneousModel->validate($jobdata['unscrew_rpm'], 'unscrewPower');
+            $resultPower = $this->MiscellaneousModel->validate($jobdata['reverse_power'], 'reverse_power');
+            $resultRpm = $this->MiscellaneousModel->validate($jobdata['reverse_rpm'], 'reverse_power');
 
 
 
@@ -115,16 +124,19 @@ class Jobs extends Controller
             $jobdata = array(
                 'job_id' => $_POST['jobid'],
                 'job_name' => $_POST['jobname'],
-                'unscrew_power' => $_POST['powervalue'],
-                'unscrew_rpm' => $_POST['rpmvalue'],
-                'unscrew_direction' => $_POST['directionValue'],
+                'reverse_power' => $_POST['powervalue'],
+                'reverse_rpm' => $_POST['rpmvalue'],
+                'reverse_direction' => $_POST['directionValue'],
+                'job_ok' => $_POST['jobokValue'],
+                'stop_job_ok' => $_POST['stopjobValue']
+
             );
 
 
             
             $resultName = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
-            $resultPower = $this->MiscellaneousModel->validate($jobdata['unscrew_power'], 'unscrewPower');
-            $resultRpm = $this->MiscellaneousModel->validate($jobdata['unscrew_rpm'], 'unscrewPower');
+            $resultPower = $this->MiscellaneousModel->validate($jobdata['reverse_power'], 'reverse_power');
+            $resultRpm = $this->MiscellaneousModel->validate($jobdata['reverse_rpm'], 'reverse_power');
 
             if($resultPower == false || $resultRpm == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);

@@ -12,6 +12,9 @@ $text['delete_text'] = 'Delete';
 $text['cover_confirm_text'] = 'The job id already exists, do you want to overwrite it?';
 $text['cover_text'] = 'Cover';
 
+$text['ON_text'] = 'ON';
+$text['OFF_text'] = 'OFF';
+$text['JOB_COMPLETED'] = 'JOB-COMPLETED';
 //job management
 //$text['normal_job_management'] = 'Normal Job Management';
 //$text['advanced_job_management'] = 'Advanced Job Management';
@@ -37,9 +40,9 @@ $text['mode'] = 'Mode';
 $text['new_job'] = 'New job';
 $text['edit_job'] = 'Edit Job';
 
-$text['Unscrew_direction'] = 'Unscrew direction'; //
-$text['Unscrew_rpm'] = 'Unscrew RPM';
-$text['Unscrew_power'] = 'Unscrew Power';
+$text['reverse_direction'] = 'Reverse direction'; //
+$text['reverse_rpm'] = 'Reverse RPM';
+$text['reverse_power'] = 'Reverse Power';
 
 $text['enable'] = 'Enable';
 $text['disable'] = 'Disable';

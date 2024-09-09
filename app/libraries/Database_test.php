@@ -8,7 +8,7 @@ class Database
     private $error;
 
     private $db_con;// db con
-    private $db_dev;// db dev
+    //private $db_dev;// db dev
     private $db_data;// db dev
     private $db_iDas;//iDas db
     private $db_iDas_login;
@@ -25,37 +25,48 @@ class Database
         // 透過 PHP_OS_FAMILY 判斷，目前執行的系統，決定要採用的DB路徑
         $Year = date("Y");// data db 用西元年命名
         $data_db_name = "data".$Year.".db";
+
+
+        /*if(PHP_OS_FAMILY != 'Linux' ){
+            //local
+
+
+
+        }else{
+            //linux
+
+        }*/
         if( PHP_OS_FAMILY == 'Linux'){
 
-            $this->db_con = new PDO('sqlite:/var/www/html/database/data.db');
-            $this->db_iDas = new PDO('sqlite:/var/www/html/database/data.db'); 
-            $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/das.db'); 
-            $this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db');
-
-            /*if( file_exists('/home/kls/tcc/resource/db_emmc/'.$data_db_name) ){
-                $this->db_data = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/'.$data_db_name); 
+            $this->db_con = new PDO('sqlite:/var/www/html/database/iDas-data.db');
+            //$this->db_dev = new PDO('sqlite:/var/www/html/database/iDas-data.db'); 
+            if( file_exists('/var/www/html/database/'.$data_db_name) ){
+                $this->db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); //local
             }else{
-                $this->db_data = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data.db'); 
+                $this->db_data = new PDO('sqlite:/var/www/html/das/data.db'); //local
+
             }
             
-            $this->db_iDas = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data.db'); 
-            $this->db_iDas_login = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/das.db'); 
-            $this->db_iDas_device = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/data_device.db'); */
+            $this->db_iDas = new PDO('sqlite:/var/www/html/database/data.db'); //local
+            $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/das.db'); 
+            $this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db'); 
             
         }else{
-            $this->db_con = new PDO('sqlite:../data.db'); 
+            $this->db_con = new PDO('sqlite:../data.db'); //local
+            //$this->db_dev = new PDO('sqlite:../data.db'); //local
             if(file_exists('../'.$data_db_name)){
-                $this->db_data = new PDO('sqlite:../'.$data_db_name); 
+                $this->db_data = new PDO('sqlite:../'.$data_db_name); //local
             }else{
-                $this->db_data = new PDO('sqlite:../data.db'); 
+                $this->db_data = new PDO('sqlite:../data.db'); //local
             }
-            $this->db_iDas = new PDO('sqlite:../data.db'); 
-            $this->db_iDas_login = new PDO('sqlite:../das.db'); 
+            $this->db_iDas = new PDO('sqlite:../data.db'); //local
+            $this->db_iDas_login = new PDO('sqlite:../das.db'); //local
             $this->db_iDas_device = new PDO('sqlite:../data_device.db'); 
 
         }
         $this->db_con->exec('set names utf-8'); 
-        //$this->db_data->exec('set names utf-8'); 
+        //$this->db_dev->exec('set names utf-8'); 
+        $this->db_data->exec('set names utf-8'); 
         $this->db_iDas->exec('set names utf-8'); 
         $this->db_iDas_login->exec('set names utf-8'); 
         $this->db_iDas_device->exec('set names utf-8'); 
@@ -104,7 +115,7 @@ class Database
     }
 
 
-    public function get_tool_rpm()
+    /*public function get_tool_rpm()
     {
         $sql = "SELECT tool_maxrpm,tool_minrpm FROM tool_info";
         $statement = $this->db_dev->prepare($sql);
@@ -112,17 +123,17 @@ class Database
         $rows = $statement->fetch();
 
         return $rows;
-    }
+    }*/
 
     private function iDasDB_Initail()
     {
         if( PHP_OS_FAMILY == 'Linux'){
-            $source = "/home/kls/tcc/resource/db_emmc/data.db";
-            $destination = "/home/kls/tcc/resource/db_emmc/iDas-data.db";
-            $source1 = "/home/kls/tcc/resource/db_emmc/data.db";
-            $destination1 = "/home/kls/tcc/resource/db_emmc/iDas-data.db";
+            $source = "/var/www/html/database/data.db";
+            $destination = "/var/www/html/database/iDas-data.db";
+            $source1 = "/var/www/html/database/data.db";
+            $destination1 = "/var/www/html/database/iDas-data.db";
         }else{
-             $source = "/var/www/html/database/data.db";
+            $source = "/var/www/html/database/data.db";
             $destination = "/var/www/html/database/iDasdata.db";
             $source1 = "/var/www/html/database/data.db";
             $destination1 = "/var/www/html/database/iDas-data.db";
