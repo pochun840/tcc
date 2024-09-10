@@ -60,21 +60,16 @@ class Sequences extends Controller
 
         
         if(isset($_POST['jobid'])){
-
-            //echo "111";die();
             
             #如果 POST 中沒有，則使用預設值
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
 
             $k_value = isset($_POST['k_value']) ? floatval($_POST['k_value']) : 100.0;
-            $ok_time = isset($_POST['ok_time']) ? floatval($_POST['ok_time']) : 9.9;
-            $okall_alarm_time = isset($_POST['okall_alarm']) ? floatval($_POST['okall_alarm']) : 1.0;
-            $tighten_repeat = isset($_POST['tighten_repeat']) ? intval($_POST['tighten_repeat']) : 0;
-            $join_val = isset($_POST['join_val']) ? intval($_POST['join_val']) : '';
-            $okall_stop_val = isset($_POST['okall_stop_val']) ? intval($_POST['okall_stop_val']) : '';
+            $tighten_repeat = isset($_POST['tighten_repeat']) ? intval($_POST['tighten_repeat']) : 1;
+            $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
+            $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : '';
-            $torque_unit_val = isset($_POST['torque_unit_val']) ? intval($_POST['torque_unit_val']) : 0;
             $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
 
@@ -90,19 +85,11 @@ class Sequences extends Controller
 
 
             #驗證顆數
-            //var_dump($tighten_repeat);die();
             if(!$this->MiscellaneousModel->seq_validate($tighten_repeat, 'tightenRepeat')) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tightening_repeat']);
                 exit();
             }
 
-       
-
-            #驗證OK_time
-            if(!$this->MiscellaneousModel->seq_validate($ok_time, 'okTime')) {
-                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['ok_time']);
-                exit();
-            }
 
             #驗證k_value
             if(!$this->MiscellaneousModel->seq_validate($k_value, 'kValue')) {
@@ -120,16 +107,13 @@ class Sequences extends Controller
                 'job_id' => $jobid,
                 'sequence_id' => $seqid,
                 'sequence_name' => $seq_name,
+                'sequence_enable' => 1,
                 'tightening_repeat' => $tighten_repeat,
                 'ng_stop' => $ng_stop,
-                'sequence_enable' => 1,
-                'screw_join' => $join_val,
-                'okall_stop' => $okall_stop_val,
+                'seq_ok'  => $seq_ok,
+                'stop_seq_ok' => $stop_seq_ok, 
                 'opt' => $opt_val,
-                'torque_unit' => $torque_unit_val,
                 'k_value' => $k_value,
-                'ok_time' => $ok_time,
-                'okall_alarm_time' => $okall_alarm_time,
                 'offset' => $offset,
             );
 

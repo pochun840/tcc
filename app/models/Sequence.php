@@ -44,8 +44,8 @@ class Sequence{
             return false; 
         }
 
-        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, tightening_repeat, ng_stop, sequence_enable, screw_join, okall_stop, opt, torque_unit, k_value, ok_time, okall_alarm_time, offset)";
-        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :tightening_repeat, :ng_stop, :sequence_enable, :screw_join, :okall_stop, :opt, :torque_unit, :k_value, :ok_time, :okall_alarm_time, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, sequence_enable, tightening_repeat, ng_stop, seq_ok, stop_seq_ok, opt, k_value, offset)";
+        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :sequence_enable, :tightening_repeat, :ng_stop, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
         $statement = $this->db_iDas->prepare($sql);
     
 
@@ -64,13 +64,8 @@ class Sequence{
         $statement->bindValue(':tightening_repeat', $jobdata['tightening_repeat']);
         $statement->bindValue(':ng_stop', $jobdata['ng_stop']);
         $statement->bindValue(':sequence_enable', $jobdata['sequence_enable']);
-        $statement->bindValue(':screw_join', $jobdata['screw_join']);
-        $statement->bindValue(':okall_stop', $jobdata['okall_stop']);
         $statement->bindValue(':opt', $jobdata['opt']);
-        $statement->bindValue(':torque_unit', $jobdata['torque_unit']);
         $statement->bindValue(':k_value', $jobdata['k_value']);
-        $statement->bindValue(':ok_time', $jobdata['ok_time']);
-        $statement->bindValue(':okall_alarm_time', $jobdata['okall_alarm_time']);
         $statement->bindValue(':offset', $jobdata['offset']);
     
         $results = $statement->execute();
