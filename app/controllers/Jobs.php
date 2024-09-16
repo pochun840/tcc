@@ -260,20 +260,34 @@ class Jobs extends Controller
                     if(!empty($select_seq)){
                         $new_temp_seq = array();
                         foreach($select_seq as $key =>$val){
-                            $new_temp_seq[$key]['job_id'] = $new_jobid;
-                            $new_temp_seq[$key]['sequence_id'] = $val['sequence_id'];
-                            $new_temp_seq[$key]['sequence_name'] = $val['sequence_name'];
-                            $new_temp_seq[$key]['tightening_repeat'] = $val['tightening_repeat'];
-                            $new_temp_seq[$key]['ng_stop'] = $val['ng_stop'];
-                            $new_temp_seq[$key]['sequence_enable'] = $val['sequence_enable'];
-                            $new_temp_seq[$key]['screw_join'] = $val['screw_join'];
-                            $new_temp_seq[$key]['okall_stop'] = $val['okall_stop'];
-                            $new_temp_seq[$key]['opt'] = $val['opt'];
-                            $new_temp_seq[$key]['torque_unit'] = $val['torque_unit'];
-                            $new_temp_seq[$key]['k_value'] = $val['k_value'];
-                            $new_temp_seq[$key]['ok_time'] = $val['ok_time'];
-                            $new_temp_seq[$key]['okall_alarm_time'] = $val['okall_alarm_time'];
-                            $new_temp_seq[$key]['offset'] = $val['offset'];
+                            // $new_temp_seq[$key]['job_id'] = $new_jobid;
+                            // $new_temp_seq[$key]['sequence_id'] = $val['sequence_id'];
+                            // $new_temp_seq[$key]['sequence_name'] = $val['sequence_name'];
+                            // $new_temp_seq[$key]['tightening_repeat'] = $val['tightening_repeat'];
+                            // $new_temp_seq[$key]['ng_stop'] = $val['ng_stop'];
+                            // $new_temp_seq[$key]['sequence_enable'] = $val['sequence_enable'];
+                            // $new_temp_seq[$key]['screw_join'] = $val['screw_join'];
+                            // $new_temp_seq[$key]['okall_stop'] = $val['okall_stop'];
+                            // $new_temp_seq[$key]['opt'] = $val['opt'];
+                            // $new_temp_seq[$key]['torque_unit'] = $val['torque_unit'];
+                            // $new_temp_seq[$key]['k_value'] = $val['k_value'];
+                            // $new_temp_seq[$key]['ok_time'] = $val['ok_time'];
+                            // $new_temp_seq[$key]['okall_alarm_time'] = $val['okall_alarm_time'];
+                            // $new_temp_seq[$key]['offset'] = $val['offset'];
+
+                            $new_temp_seq[$kk]['job_id'] = $new_jobid;
+                            $new_temp_seq[$kk]['sequence_id'] = $val['sequence_id'];
+                            $new_temp_seq[$kk]['sequence_name'] = $val['sequence_name'];
+                            $new_temp_seq[$kk]['sequence_enable'] = $val['sequence_enable'];
+                            $new_temp_seq[$kk]['tightening_repeat'] = $val['tightening_repeat'];
+                            $new_temp_seq[$kk]['ng_stop'] = $val['ng_stop']; 
+                            $new_temp_seq[$kk]['seq_ok'] = $val['seq_ok']; 
+                            $new_temp_seq[$kk]['stop_seq_ok'] = $val['stop_seq_ok']; 
+                            $new_temp_seq[$kk]['opt'] = $val['opt']; 
+                            $new_temp_seq[$kk]['k_value'] = $val['k_value']; 
+                            $new_temp_seq[$kk]['offset'] = $val['offset'];
+
+                            
                         }
 
                         $insertedrecords = $this->jobModel->copy_sequence_by_job_id($new_temp_seq);                
