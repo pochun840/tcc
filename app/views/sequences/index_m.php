@@ -243,6 +243,40 @@
                                         <input type="text" class="form-control input-ms" id="edit_tighten_repeat" maxlength="" >
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <div for="OK_Sequence" class="col-6 t1"><?php echo $text['OK_Sequence'];?> :</div>
+                                    <div class="col t2" >
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_seq_ok" id="seq_off" value="0" >
+                                        <label class="form-check-label" for="seq_off"> <?php  echo $text['OFF_text']; ?></label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_seq_ok" id="seq_ok" value="1">
+                                        <label class="form-check-label" for="seq_ok"><?php  echo $text['ON_text']; ?></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="OK_Sequence_Stop" class="col-6 t1"><?php echo $text['OK_Sequence_Stop'];?> :</div>
+                                    <div class="col t2" >
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_stop_seq_ok" id="stop_seq_ok_off" value="0" >
+                                        <label class="form-check-label" for="stop_seq_ok_off"> <?php  echo $text['OFF_text']; ?></label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_stop_seq_ok" id="stop_seq_ok_ok" value="1">
+                                        <label class="form-check-label" for="stop_seq_ok_ok"><?php  echo $text['ON_text']; ?></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 
                                 <div class="row">
                                     <div for="k(30%-300%)" class="col-6 t1">K (30%-300%):</div>
@@ -256,16 +290,7 @@
                                         <input type="text" class="form-control input-ms" id="edit_offset" maxlength="" >
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div for="edit_torque_unit" class="col-6 t1"><?php echo $text['torque_unit'];?>:</div>
-                                    <div class="col-4 t2">
-                                    <select id="edit_torque_unit" class="col custom-file">
-                                        <?php foreach($data['unit_arr'] as $k_unit => $v_unit){?>
-                                            <option value="<?php echo $k_unit;?>"><?php echo $text[$v_unit];?></option>
-                                        <?php }?>
-                                    </select>
-                                    </div>
-                                </div>
+                               
                                 <div class="row">
                                     <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?>:</div>
                                     <div class="col-4 t2">
@@ -276,32 +301,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div for="join" class="col-6 t1"><?php echo $text['join'];?>:</div>
-                                    <div class="col t2" >
-                    			      	<div class="col-4 form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="edit_join_option" id="soft" value="0">
-                    					  <label class="form-check-label" for="soft"><?php echo $text['soft'];?></label>
-                    					</div>
-                    					<div class="form-check form-check-inline">
-                                          <input class="form-check-input" type="radio" name="edit_join_option" id="hard" value="1" >
-                    					  <label class="form-check-label" for="hard"><?php echo $text['hard'];?></label>
-                    					</div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div for="okall-stop" class="col-6 t1"><?php echo $text['OK_All_Stop'];?>:</div>
-                                    <div class="col t2" >
-                    			      	<div class="col-4 form-check form-check-inline">
-                                          <input class="form-check-input" type="radio" name="edit_okall_stop_option" id="Okall_OFF" value="0">
-                    					  <label class="form-check-label" for="Okall_OFF"><?php echo $text['switch_off'];?></label>
-                    					</div>
-                    					<div class="form-check form-check-inline">
-                                          <input class="form-check-input" type="radio" name="edit_okall_stop_option" id="Okall_ON" value="1" >
-                    					  <label class="form-check-label" for="Okall_ON"><?php echo $text['switch_on'];?></label>
-                    					</div>
-                                    </div>
-                                </div>
+                               
+                                
                                 <div class="row">
                                     <div for="OPT" class="col-6 t1"><?php echo $text['opt'];?>:</div>
                                     <div class="col t2" >
@@ -581,10 +582,9 @@ function create_seq() {
     document.getElementById('tighten_repeat').value = 1;
     document.getElementById('seq_off').checked = true;
     document.getElementById('K').value = 100;
-    document.getElementById('soft').checked = true;
     document.getElementById('stop_seq_ok_off').checked = true;
     document.getElementById('seq_off').checked = true;
-    document.getElementById('OPT_ON').checked = true;
+    document.getElementById('OPT_OFF').checked = true;
     document.getElementById('offset').value = 0;
     saveseq();
 
@@ -644,8 +644,7 @@ function saveseq(){
 
 
 function edit_seq(seqid) {
-    var jobid = '<?php echo $data['job_id']?>';
-    //var seqid = readFromLocalStorage('seqid');
+    var jobid = '<?php echo $data['job_id']?>';    
     if(jobid){
         $.ajax({
             url: "?url=Sequences/search_seqinfo",
@@ -660,46 +659,41 @@ function edit_seq(seqid) {
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
 
-
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqname] = cleanString.match(/\[sequence_name]\s*=>\s*([^ ]+)/) || [, null];
                 var [, tightening_repeat] = cleanString.match(/\[tightening_repeat]\s*=>\s*([^ ]+)/) || [, null];
-                var [, ok_time] = cleanString.match(/\[ok_time]\s*=>\s*([^ ]+)/) || [, null];
-                var [, okall_alarm_time] = cleanString.match(/\[okall_alarm_time]\s*=>\s*([^ ]+)/) || [, null];
+                
                 var [, k_value] = cleanString.match(/\[k_value]\s*=>\s*([^ ]+)/) || [, null];
                 var [, offset] = cleanString.match(/\[offset]\s*=>\s*([^ ]+)/) || [, null];
                 var [, ng_stop] = cleanString.match(/\[ng_stop]\s*=>\s*([^ ]+)/) || [, null];
-                var [, torque_unit] = cleanString.match(/\[torque_unit]\s*=>\s*([^ ]+)/) || [, null];
-                var [, screw_join] = cleanString.match(/\[screw_join]\s*=>\s*([^ ]+)/) || [, null];
-                var [, okall_stop] = cleanString.match(/\[okall_stop]\s*=>\s*([^ ]+)/) || [, null];
+                
                 var [, opt] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
-     
+                var [, seq_ok] = cleanString.match(/\[seq_ok]\s*=>\s*([^ ]+)/) || [, null];
+                var [, stop_seq_ok] = cleanString.match(/\[stop_seq_ok]\s*=>\s*([^ ]+)/) || [, null];
+                var [, opt_val] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
+               
+   
+        
                 document.getElementById('editseq').style.display = 'block';
                 document.getElementById("old_seqid").value = seqid;
                 document.getElementById("edit_seq_name").value = seqname;
                 document.getElementById("edit_tighten_repeat").value = tightening_repeat;
-                document.getElementById("edit_ok_time").value = ok_time;
-                document.getElementById("edit_okall_alarm").value = okall_alarm_time;
+
                 document.getElementById("edit_K").value = k_value;
                 document.getElementById("edit_offset").value = offset;
                 document.getElementById("edit_ng_stop").value = ng_stop;
-                document.getElementsByName("edit_torque_unit").value = torque_unit;
-                 
-                var radioButtons = document.getElementsByName("edit_join_option");
-                var radioButtons_1 = document.getElementsByName("edit_okall_stop_option");
+        
+                var radioButtons_seq = document.getElementsByName("edit_seq_ok");
+                setRadioButton_value(radioButtons_seq, seq_ok);
+
+                var radioButtons_stop_seq = document.getElementsByName("edit_stop_seq_ok");
+                setRadioButton_value(radioButtons_stop_seq, stop_seq_ok);
+
+
                 var radioButtons_2 = document.getElementsByName("edit_opt_option");
-
-                //redio 取值
-                setRadioButtonValue(radioButtons, screw_join);
-                setRadioButtonValue(radioButtons_1, okall_stop);
-                setRadioButtonValue(radioButtons_2, opt);
-
-                var oldSeqname = document.getElementById("edit_seq_name").value;
-                var oldTighteningRepeat = document.getElementById("edit_tighten_repeat").value;
-                var oldtorque_unit = document.getElementsByName("edit_torque_unit").value;
-
-               
+                setRadioButton_value(radioButtons_2, opt_val);
+  
             },
             error: function(xhr, status, error) {
              
@@ -835,16 +829,27 @@ function sendRowInfoArray() {
 }
 
 function goBackAndReload() {
-           // 记录当前页面的 URL
-           const currentUrl = window.location.href;
-            // 用 replaceState 记录当前页面的状态
-            window.history.replaceState({}, '', currentUrl);
-            // 返回上一页
-            window.history.back();
-            // 设置标志来强制上一页刷新
-            setTimeout(() => {
-                // 刷新当前页，也就是上一页
-                window.location.href = document.referrer + (document.referrer.includes('?') ? '&' : '?') + 'refresh=' + new Date().getTime();
-            }, 100);
+    // 记录当前页面的 URL
+    const currentUrl = window.location.href;
+    // 用 replaceState 记录当前页面的状态
+    window.history.replaceState({}, '', currentUrl);
+    // 返回上一页
+    window.history.back();
+    // 设置标志来强制上一页刷新
+    setTimeout(() => {
+        // 刷新当前页，也就是上一页
+        window.location.href = document.referrer + (document.referrer.includes('?') ? '&' : '?') + 'refresh=' + new Date().getTime();
+    }, 100);
+}
+
+
+function setRadioButton_value(radioButtons, value) {
+    radioButtons.forEach(function(button) {
+        if (button.value === value.toString()) {
+            button.checked = true;
+        } else {
+            button.checked = false;
         }
+    });
+}        
 </script>
