@@ -51,7 +51,8 @@ class Database
             }
             $this->db_iDas = new PDO('sqlite:../data.db'); 
             $this->db_iDas_login = new PDO('sqlite:../das.db'); 
-            $this->db_iDas_device = new PDO('sqlite:../data_device.db'); 
+            //$this->db_iDas_device = new PDO('sqlite:../data_device.db'); 
+            $this->db_iDas_device = new PDO('sqlite:../data.db'); 
 
         }
         $this->db_con->exec('set names utf-8'); 
