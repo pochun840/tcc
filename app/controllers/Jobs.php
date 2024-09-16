@@ -314,7 +314,7 @@ class Jobs extends Controller
                             $new_temp_step[$key_step]['downshift'] = $val_step['downshift'];
                             $new_temp_step[$key_step]['threshold_torque'] = $val_step['threshold_torque'];
                             $new_temp_step[$key_step]['downshift_torque'] = $val_step['downshift_torque'];
-                            $new_temp_step[$key_step]['downshift_rpm'] = $val_step['downshift_rpm'];
+                            $new_temp_step[$key_step]['downshift_speed'] = $val_step['downshift_speed'];
                         }
 
                         $insertedrecords = $this->jobModel->copy_step_by_job_id($new_temp_step);  
