@@ -114,7 +114,7 @@
                                 </div>
 
                             <?php } else{?>
-                                <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
+                                <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
                             </div>
@@ -122,13 +122,13 @@
                           
                         </div>
                         <div class="row">
-                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
+                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="hi_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
+                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="lo_torque" maxlength="" >
                             </div>
@@ -178,21 +178,21 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-threshold" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit']];?>):</div>
+                            <div for="downshift-threshold" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="downshift_threshold" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit']];?>):</div>
+                            <div for="downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="downshift_torque" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="downshift-rpm" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
+                            <div for="downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
                             <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="downshift_rpm" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="downshift_speed" maxlength="" >
                             </div>
                         </div>
                     </form>
@@ -325,9 +325,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-rpm" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
+                            <div for="edit_downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
                             <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_downshift_rpm" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_downshift_speed" maxlength="" >
                             </div>
                         </div>
                     </form>
@@ -498,7 +498,7 @@ if(jobid){
             var [, hi_angle] = cleanString.match(/\[hi_angle]\s*=>\s*([^ ]+)/) || [, null];
             var [, lo_angle] = cleanString.match(/\[lo_angle]\s*=>\s*([^ ]+)/) || [, null];
             var [, rpm] = cleanString.match(/\[rpm]\s*=>\s*([^ ]+)/) || [, null];
-            var [, downshift_rpm] = cleanString.match(/\[downshift_rpm]\s*=>\s*([^ ]+)/) || [, null];
+            var [, downshift_speed] = cleanString.match(/\[downshift_speed]\s*=>\s*([^ ]+)/) || [, null];
             var [, downshift_torque] = cleanString.match(/\[downshift_torque]\s*=>\s*([^ ]+)/) || [, null];
             var [, threshold_torque] = cleanString.match(/\[threshold_torque]\s*=>\s*([^ ]+)/) || [, null];
             var [, target_option] = cleanString.match(/\[target_option]\s*=>\s*([^ ]+)/) || [, null];
@@ -515,7 +515,7 @@ if(jobid){
             document.getElementById("edit_hi_angle").value = hi_angle;
             document.getElementById("edit_lo_angle").value = lo_angle;
             document.getElementById("edit_rpm").value = rpm;
-            document.getElementById("edit_downshift_rpm").value = downshift_rpm;
+            document.getElementById("edit_downshift_speed").value = downshift_speed;
             document.getElementById("edit_downshift_torque").value = downshift_torque;
             document.getElementById("edit_downshift_threshold").value = threshold_torque;
             document.querySelector("select[name='edit_target_option']").value = target_option;
@@ -555,7 +555,7 @@ if(jobid){
                 document.getElementById('edit_rpm').disabled = true; 
                 document.getElementById('edit_downshift_threshold').disabled = true; 
                 document.getElementById('edit_downshift_torque').disabled = true; 
-                document.getElementById('edit_downshift_rpm').disabled = true; 
+                document.getElementById('edit_downshift_speed').disabled = true; 
 
                 document.querySelectorAll('input[name="edit_direction_option"]').forEach(function(radioButton) {
                             radioButton.disabled = true;
@@ -622,7 +622,7 @@ if(jobid){
                 document.getElementById('edit_downshift_threshold').style.display = "none";
 
                 document.querySelector('div[for="edit_downshift-rpm"]').style.display = "none";
-                document.getElementById('edit_downshift_rpm').style.display = "none";
+                document.getElementById('edit_downshift_speed').style.display = "none";
 
             }
 
@@ -637,9 +637,9 @@ if(jobid){
                         document.getElementById('edit_hi_angle'),
                         document.getElementById('edit_lo_angle'),
                         document.getElementById('edit_rpm'),
-                        document.getElementById('edit_downshift_rpm'),
+                        document.getElementById('edit_downshift_speed'),
                         document.getElementById('edit_downshift_threshold'),
-                        document.getElementById('edit_downshift_rpm'),
+                        document.getElementById('edit_downshift_speed'),
                         document.getElementById('edit_downshift_torque')
                     ];
 
@@ -677,8 +677,8 @@ if(jobid){
                     document.getElementById('edit_downshift_threshold').disabled = false; 
                     document.getElementById('edit_downshift_threshold').value = threshold_torque;
 
-                    document.getElementById('edit_downshift_rpm').disabled = false; 
-                    document.getElementById('edit_downshift_rpm').value = downshift_rpm;
+                    document.getElementById('edit_downshift_speed').disabled = false; 
+                    document.getElementById('edit_downshift_speed').value = downshift_speed;
 
 
                     document.getElementById('edit_downshift_torque').disabled = false; 
@@ -756,7 +756,7 @@ if(jobid){
                         document.getElementById('edit_downshift_threshold').style.display = "block";
 
                         document.querySelector('div[for="edit_downshift-rpm"]').style.display = "block";
-                        document.getElementById('edit_downshift_rpm').style.display = "block";
+                        document.getElementById('edit_downshift_speed').style.display = "block";
                     }else{
                         document.querySelector('div[for="edit_downshift-torque"]').style.display = "none";
                         document.getElementById('edit_downshift_torque').style.display = "none";
@@ -764,8 +764,8 @@ if(jobid){
                         document.querySelector('div[for="edit_downshift-threshold"]').style.display = "none";
                         document.getElementById('edit_downshift_threshold').style.display = "none";
 
-                        document.querySelector('div[for="edit_downshift-rpm"]').style.display = "none";
-                        document.getElementById('edit_downshift_rpm').style.display = "none";
+                        document.querySelector('div[for="edit_downshift-speed"]').style.display = "none";
+                        document.getElementById('edit_downshift_speed').style.display = "none";
                     }
                 
                 });
@@ -801,7 +801,7 @@ function edit_step_save() {
     var downshift = 0;
     var threshold_torque = 0;
     var downshift_torque = 0;
-    var downshift_rpm = 0;
+    var downshift_speed = 0;
 
     if(target_option == 2) {
         target_delaytime = document.getElementById("edit_target_delaytime").value;
@@ -821,7 +821,7 @@ function edit_step_save() {
     downshift = document.querySelector('input[name="edit_downshift_option"]:checked').value;
     threshold_torque = document.getElementById("edit_downshift_threshold").value;
     downshift_torque = document.getElementById("edit_downshift_torque").value;
-    downshift_rpm = document.getElementById("edit_downshift_rpm").value;
+    downshift_speed = document.getElementById("edit_downshift_speed").value;
 
 
     var requestData = {
@@ -841,7 +841,7 @@ function edit_step_save() {
         downshift: downshift,
         threshold_torque: threshold_torque,
         downshift_torque: downshift_torque,
-        downshift_rpm: downshift_rpm
+        downshift_speed: downshift_speed
     };
 
     if (target_option) {
@@ -873,7 +873,7 @@ function create_step() {
     document.getElementById('rpm').value = 100;
     document.getElementById('downshift_threshold').value = 0;
     document.getElementById('downshift_torque').value = 0;
-    document.getElementById('downshift_rpm').value =100;
+    document.getElementById('downshift_speed').value =100;
 
     var targetoptionselect = document.getElementById('target_option');
     targetoptionselect.addEventListener('change', function() {
@@ -888,7 +888,7 @@ function create_step() {
         var rpmElement = document.getElementById('rpm');
         var downshiftThresholdElement = document.getElementById('downshift_threshold');
         var downshiftTorqueElement = document.getElementById('downshift_torque');
-        var downshiftRpmElement = document.getElementById('downshift_rpm');
+        var downshiftRpmElement = document.getElementById('downshift_speed');
         var directionOptions = document.querySelectorAll('input[name="direction_option"]');
         var downshiftOptions = document.querySelectorAll('input[name="downshift_option"]');
 
@@ -972,8 +972,8 @@ function create_step() {
             document.querySelector('div[for="downshift-torque"]').style.display = "none";
             document.getElementById('downshift_torque').style.display = "none";
 
-            document.querySelector('div[for="downshift-rpm"]').style.display = "none";
-            document.getElementById('downshift_rpm').style.display = "none";
+            document.querySelector('div[for="downshift-speed"]').style.display = "none";
+            document.getElementById('downshift_speed').style.display = "none";
         }else{
             document.querySelector('div[for="downshift-threshold"]').style.display = "block";
             document.getElementById('downshift_threshold').style.display = "block";
@@ -981,8 +981,8 @@ function create_step() {
             document.querySelector('div[for="downshift-torque"]').style.display = "block";
             document.getElementById('downshift_torque').style.display = "block";
 
-            document.querySelector('div[for="downshift-rpm"]').style.display = "block";
-            document.getElementById('downshift_rpm').style.display = "block";
+            document.querySelector('div[for="downshift-speed"]').style.display = "block";
+            document.getElementById('downshift_speed').style.display = "block";
 
         }
           
@@ -1011,7 +1011,7 @@ function add_step(){
 
     var threshold_torque = document.getElementById('downshift_threshold').value;
     var downshift_torque = document.getElementById('downshift_torque').value;
-    var downshift_rpm  = document.getElementById('downshift_rpm').value;
+    var downshift_speed  = document.getElementById('downshift_speed').value;
 
     var direction = document.querySelector('input[name="direction_option"]:checked').value;
     var downshift = document.querySelector('input[name="downshift_option"]:checked').value;
@@ -1037,10 +1037,11 @@ function add_step(){
                 downshift: downshift,
                 threshold_torque: threshold_torque,
                 downshift_torque: downshift_torque,
-                downshift_rpm: downshift_rpm
+                downshift_speed: downshift_speed
 
             },
             success: function(response) {
+                //console.log(response);
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
