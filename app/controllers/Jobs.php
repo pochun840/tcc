@@ -305,8 +305,7 @@ class Jobs extends Controller
                         echo "<pre>";
                         print_r($new_temp_step);
                         echo "</pre>";
-                        //die();
-                        //$insertedrecords = $this->jobModel->copy_step_by_job_id($new_temp_step);  
+                   
                     }
                     
                     if($res){
