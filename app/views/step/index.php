@@ -256,14 +256,14 @@
                         </div>
 
                         <div class="row">
-                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
+                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_hi_torque" maxlength="" >
                             </div>
                         </div>
                         
                         <div class="row">
-                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit']];?>):</div>
+                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_lo_torque" maxlength="" >
                             </div>
@@ -313,13 +313,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-threshold" class="col-6 t1">Downshift Threshold(<?php echo $text[$data['unit']];?>):</div>
+                            <div for="edit_downshift-threshold" class="col-6 t1">Downshift Threshold(<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_threshold" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit']];?>):</div>
+                            <div for="edit_downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_torque" maxlength="" >
                             </div>
@@ -411,6 +411,8 @@ window.onclick = function(event) {
     }
 }
 var stepid = '';
+var check_step_torque = '<?php echo $data['check_step_torque']?>';
+
 var rows = document.getElementsByTagName("tr");
 for (var i = 0; i < rows.length; i++) {
     (function(row) {
@@ -457,19 +459,20 @@ function cound_step(argument){
 
 function edit_step(){
 
-var jobid = '<?php echo $data['job_id']?>';
-var seqid = '<?php echo $data['seq_id']?>';
+    var jobid = '<?php echo $data['job_id']?>';
+    var seqid = '<?php echo $data['seq_id']?>';
 
-var unit = '<?php echo $data['unit']?>';
-var language = getCookie('language');
+    var unit = '<?php echo $data['unit_name']?>';
+    var language = getCookie('language');
 
-if(language == "zh-cn"){
-    var torque_title = '目标扭力';
-}else if(language == "zh-tw"){
-    var torque_title = '目標扭力';
-}else{
-    var torque_title ='Target Torque';
-}
+
+    if(language == "zh-cn"){
+        var torque_title = '目标扭力';
+    }else if(language == "zh-tw"){
+        var torque_title = '目標扭力';
+    }else{
+        var torque_title ='Target Torque';
+    }
 
 
 
@@ -507,7 +510,9 @@ if(jobid){
             var [, target_delaytime] = cleanString.match(/\[target_delaytime]\s*=>\s*([^ ]+)/) || [, null];
             var [, direction] = cleanString.match(/\[direction]\s*=>\s*([^ ]+)/) || [, null];
             var [, downshift] = cleanString.match(/\[downshift]\s*=>\s*([^ ]+)/) || [, null];
-            var [, check_step_torque] = cleanString.match(/\[check_step_torque]\s*=>\s*([^ ]+)/) || [, null];
+            //var [, check_step_torque] = cleanString.match(/\[check_step_torque]\s*=>\s*([^ ]+)/) || [, null];
+            //var [, check_step_torque] = cleanString.match(/\[check_step_torque]\s*=>\s*([^ ]+)/) || [, null];
+            //alert(check_step_torque);
 
             document.getElementById('editstep').style.display = 'block';
             document.getElementById("edit_hi_torque").value = hi_torque;
@@ -533,9 +538,9 @@ if(jobid){
 
             //判斷有其他的step 選了 扭力 
             //target_option的下拉式選單 就會把 扭力 移除
-            if(check_step_torque == 1 && target_option != 0){
+            if(target_option != 0){
+            //if(check_step_torque == 1 && target_option != 0){
                 var selectElement = document.getElementById('mySelect');
-
                 var selectElement = document.querySelector('select[name="edit_target_option"]');
 
                 for(var i = selectElement.options.length - 1; i >= 0; i--) {
@@ -544,6 +549,9 @@ if(jobid){
                         selectElement.remove(i);
                     }
                 }
+            }else{
+                var selectElement = document.getElementById('mySelect');
+                var selectElement = document.querySelector('select[name="edit_target_option"]');
             }
 
             if(target_option == 2){
@@ -611,7 +619,6 @@ if(jobid){
                 } 
                 document.getElementById('edit_target-torque_title').style.display = 'block';
                 document.querySelector('div[for="edit_target-torque"]').textContent = torque_title + "(" + unit + ")" ;
-                document.getElementById("edit_target_torque_val").value = '';
             }
 
             if(downshift == 0){
@@ -621,7 +628,7 @@ if(jobid){
                 document.querySelector('div[for="edit_downshift-threshold"]').style.display = "none";
                 document.getElementById('edit_downshift_threshold').style.display = "none";
 
-                document.querySelector('div[for="edit_downshift-rpm"]').style.display = "none";
+                document.querySelector('div[for="edit_downshift-speed"]').style.display = "none";
                 document.getElementById('edit_downshift_speed').style.display = "none";
 
             }
@@ -629,7 +636,8 @@ if(jobid){
             var target_option = document.getElementById("edit_target_option");
             target_option.addEventListener('change', function() {
             var selectedValue = this.value;
-                
+                //alert(selectedValue);
+
                 if (selectedValue == 2) {
                     var elementsToDisable = [
                         document.getElementById('edit_hi_torque'),
@@ -755,7 +763,7 @@ if(jobid){
                         document.querySelector('div[for="edit_downshift-threshold"]').style.display = "block";
                         document.getElementById('edit_downshift_threshold').style.display = "block";
 
-                        document.querySelector('div[for="edit_downshift-rpm"]').style.display = "block";
+                        document.querySelector('div[for="edit_downshift-speed"]').style.display = "block";
                         document.getElementById('edit_downshift_speed').style.display = "block";
                     }else{
                         document.querySelector('div[for="edit_downshift-torque"]').style.display = "none";
