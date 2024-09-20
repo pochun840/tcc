@@ -567,12 +567,14 @@ class Step extends Controller
         }
 
         if($input_check){
+
+            $check = $this->stepModel->check_step_target($jobid, $seqid);
+            $check_count = intval($check[0]['count_records']);
+
             $res = $this->stepModel->getStepNo($jobid, $seqid, $stepid);
+            $res['check_count'] = $check_count;
             print_r($res);
         }
-
-
-      
 
     }
         
