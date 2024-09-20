@@ -475,7 +475,6 @@ function edit_step(){
     }
 
 
-
     if(jobid){
         $.ajax({
             url: "?url=Step/search_stepinfo",
@@ -511,6 +510,7 @@ function edit_step(){
                 var [, direction] = cleanString.match(/\[direction]\s*=>\s*([^ ]+)/) || [, null];
                 var [, downshift] = cleanString.match(/\[downshift]\s*=>\s*([^ ]+)/) || [, null];
                 var [, check_count] = cleanString.match(/\[check_count]\s*=>\s*([^ ]+)/) || [, null];
+                var [, downshift_speed] = cleanString.match(/\[downshift_speed]\s*=>\s*([^ ]+)/) || [, null];
                
 
                 document.getElementById('editstep').style.display = 'block';
