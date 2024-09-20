@@ -44,8 +44,8 @@ class Sequence{
             return false; 
         }
 
-        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, tightening_repeat, ng_stop, sequence_enable, screw_join, okall_stop, opt, torque_unit, k_value, ok_time, okall_alarm_time, offset)";
-        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :tightening_repeat, :ng_stop, :sequence_enable, :screw_join, :okall_stop, :opt, :torque_unit, :k_value, :ok_time, :okall_alarm_time, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, sequence_enable, tightening_repeat, ng_stop, seq_ok, stop_seq_ok, opt, k_value, offset)";
+        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :sequence_enable, :tightening_repeat, :ng_stop, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
         $statement = $this->db_iDas->prepare($sql);
     
 
@@ -62,15 +62,12 @@ class Sequence{
         }
     
         $statement->bindValue(':tightening_repeat', $jobdata['tightening_repeat']);
+        $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
+        $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
         $statement->bindValue(':ng_stop', $jobdata['ng_stop']);
         $statement->bindValue(':sequence_enable', $jobdata['sequence_enable']);
-        $statement->bindValue(':screw_join', $jobdata['screw_join']);
-        $statement->bindValue(':okall_stop', $jobdata['okall_stop']);
         $statement->bindValue(':opt', $jobdata['opt']);
-        $statement->bindValue(':torque_unit', $jobdata['torque_unit']);
         $statement->bindValue(':k_value', $jobdata['k_value']);
-        $statement->bindValue(':ok_time', $jobdata['ok_time']);
-        $statement->bindValue(':okall_alarm_time', $jobdata['okall_alarm_time']);
         $statement->bindValue(':offset', $jobdata['offset']);
     
         $results = $statement->execute();
@@ -81,8 +78,8 @@ class Sequence{
 
     public function copy_seq_by_seq_id($new_temp_seq){
 
-        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, tightening_repeat, ng_stop, sequence_enable, screw_join, okall_stop, opt, torque_unit, k_value, ok_time, okall_alarm_time, offset)";
-        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :tightening_repeat, :ng_stop, :sequence_enable, :screw_join, :okall_stop, :opt, :torque_unit, :k_value, :ok_time, :okall_alarm_time, :offset)";
+        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, sequence_enable, tightening_repeat, ng_stop, seq_ok, stop_seq_ok, opt, k_value, offset)";
+        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :sequence_enable, :tightening_repeat, :ng_stop, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -97,8 +94,8 @@ class Sequence{
 
     public function copy_step_by_seq_id($new_temp_step){
 
-        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, 	downshift_torque,downshift_rpm )";
-        $sql .= " VALUES (:job_id,:sequence_id,:step_id,:target_option,:target_torque,:target_angle,:target_delaytime,:hi_torque,:lo_torque,:hi_angle,:lo_angle,:rpm,:direction,:downshift,:threshold_torque,:downshift_torque,:downshift_rpm )";
+        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, 	downshift_torque,downshift_speed )";
+        $sql .= " VALUES (:job_id,:sequence_id,:step_id,:target_option,:target_torque,:target_angle,:target_delaytime,:hi_torque,:lo_torque,:hi_angle,:lo_angle,:rpm,:direction,:downshift,:threshold_torque,:downshift_torque,:downshift_speed )";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -152,6 +149,7 @@ class Sequence{
     #修改 sequences
     public function update_seq_by_id($jobdata){
 
+
         if(intval($jobdata['job_id']) > 50 || intval($jobdata['sequence_id']) > 50) {   
             return false; 
         }
@@ -159,28 +157,22 @@ class Sequence{
         $sql = "UPDATE `sequence` SET  sequence_name = :sequence_name,
                                   tightening_repeat = :tightening_repeat, 
                                   ng_stop = :ng_stop, 
-                                  screw_join = :screw_join, 
-                                  okall_stop = :okall_stop,
+                                  seq_ok  =:seq_ok,
+                                  stop_seq_ok =:stop_seq_ok,
                                   opt = :opt,
-                                  torque_unit = :torque_unit,
                                   k_value = :k_value,
-                                  ok_time = :ok_time,
-                                  okall_alarm_time = :okall_alarm_time,
                                   offset = :offset
-                WHERE job_id = :job_id  AND   sequence_id = :sequence_id ";
+        WHERE job_id = :job_id  AND   sequence_id = :sequence_id ";
 
 
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':sequence_name', $jobdata['sequence_name']);
         $statement->bindValue(':tightening_repeat', $jobdata['tightening_repeat']);
+        $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
+        $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
         $statement->bindValue(':ng_stop', $jobdata['ng_stop']);
-        $statement->bindValue(':screw_join', $jobdata['screw_join']);
-        $statement->bindValue(':okall_stop', $jobdata['okall_stop']);
         $statement->bindValue(':opt', $jobdata['opt']);
-        $statement->bindValue(':torque_unit', $jobdata['torque_unit']);
         $statement->bindValue(':k_value', $jobdata['k_value']);
-        $statement->bindValue(':ok_time', $jobdata['ok_time']);
-        $statement->bindValue(':okall_alarm_time', $jobdata['okall_alarm_time']);
         $statement->bindValue(':offset', $jobdata['offset']);
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $statement->bindValue(':sequence_id', $jobdata['sequence_id']);

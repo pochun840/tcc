@@ -17,11 +17,12 @@ class Miscellaneous{
     public function details($mode){
         
         $array = array();
-        if($mode == "unscrew_direction"){
+        if($mode == "reverse_direction"){
 
             $array = array(
                 0 => 'CW',
-                1 => 'CCW'
+                1 => 'CCW',
+                2 => 'Disable'
                 
             );
         }
@@ -186,7 +187,7 @@ class Miscellaneous{
                        preg_match('/^[a-zA-Z0-9-]+$/', $value) && 
                        strlen($value) <= 12;
                        
-            case 'unscrewPower':
+            case 'reverse_power':
                 return is_numeric($value) && 
                        $value > 0 && 
                        $value <= 10;

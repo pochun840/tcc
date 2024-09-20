@@ -12,6 +12,11 @@ $text['delete_text'] = '刪除';
 $text['cover_confirm_text'] = 'job id已存在，是否要覆蓋?';
 $text['cover_text'] = '覆蓋';
 
+$text['ON_text'] = '開';
+$text['OFF_text'] = '關';
+$text['JOB_COMPLETED'] = '工作完成按確認';
+
+
 //job management
 //$text['normal_job_management'] = '智能工作管理';
 //$text['advanced_job_management'] = '進階工作管理';
@@ -38,9 +43,9 @@ $text['mode'] = '模式';
 $text['new_job'] = '新增工作';
 $text['edit_job'] = '編輯工作';
 
-$text['Unscrew_direction'] = '拆螺絲方向';
-$text['Unscrew_rpm'] = '拆螺絲轉速';
-$text['Unscrew_power'] = '拆螺絲力道';
+$text['reverse_direction'] = '拆螺絲方向';
+$text['reverse_rpm'] = '拆螺絲轉速';
+$text['reverse_power'] = '拆螺絲力道';
 
 $text['enable'] = '啟用';
 $text['disable'] = '禁用';
@@ -124,8 +129,8 @@ $text['Downshift_Torque'] = '降速點扭力';
 $text['Downshift_Speed'] = '降速點轉速';
 $text['Monitor_Angle'] = '監控角度';
 $text['Over_Angle_Stop'] = '超過角度停止';
-$text['High_Angle'] = '角度上限(度)'; //High Angle( &#870 )
-$text['Low_Angle'] = '角度下限(度)';
+$text['High_Angle'] = '角度上限'; //High Angle( &#870 )
+$text['Low_Angle'] = '角度下限';
 $text['Pre_Run'] = '尋牙設定';
 $text['Pre_Run_RPM'] = '尋牙轉速';
 $text['Pre_Run_Angle'] = '尋牙角度';

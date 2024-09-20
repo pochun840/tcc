@@ -652,7 +652,7 @@ class Settings extends Controller
     }
 
 
-    public function Sync_check_db($value='')
+    public function Sync_check_db()
     {
 
         $file = $this->MiscellaneousModel->lang_load();
@@ -668,8 +668,8 @@ class Settings extends Controller
         
         //$notice = '';
         //$warning = '';
-        //$Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
-        //$Con_DB_Location = '/var/www/html/database/data.db'; //控制器
+        $Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
+        $Con_DB_Location = '/var/www/html/database/data.db'; //控制器
 
         if(!empty($argument)){
             if( PHP_OS_FAMILY == 'Linux' && $argument == 'D2C'){
@@ -700,6 +700,29 @@ class Settings extends Controller
 
             }
 
+        }
+
+
+    
+    }
+       
+    public  function Sync_check_db_load(){
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+   
+        if (!empty($_POST['argument']) && isset($_POST['argument'])) {
+            $argument = $_POST['argument'];
+        }else{
+            $argument = '';
+        }
+
+        $Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
+        $Con_DB_Location = '/var/www/html/database/data.db'; //控制器
+
+        if(!empty($argument)){
             if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
 
                 //時間差異提醒
@@ -712,11 +735,12 @@ class Settings extends Controller
                     $warning .= 'DB is different';
                 }
 
+
                 $sourceFile = '/var/www/html/database/data.db';
                 $backupFile = '/var/www/html/database/data_bk.db';
                 $newFile = '/var/www/html/tcc/idas_data.db';
 
-                $res = $this->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
+                $res  = $this->SettingModel->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
                 $result = array();
                 if($res){
                     $res_msg  = "SYNC Success";
@@ -726,19 +750,9 @@ class Settings extends Controller
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
 
-
-
             }
-
-
-
         }
-
-
-    
     }
-       
-
         
 
 

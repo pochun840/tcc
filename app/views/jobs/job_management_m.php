@@ -21,9 +21,9 @@
                                 <tr class="w3-dark-grey" style="font-size: 2.5vmin">
                                     <th><?php echo $text['job_id'];?></th>
                                     <th><?php echo $text['job_name'];?></th>
-                                    <th><?php echo $text['Unscrew_direction'];?></th>
-                                    <th><?php echo $text['Unscrew_rpm'];?></th>
-                                    <th><?php echo $text['Unscrew_power'];?></th>
+                                    <th><?php echo $text['reverse_direction'];?></th>
+                                    <th><?php echo $text['reverse_rpm'];?></th>
+                                    <th><?php echo $text['reverse_power'];?></th>
                                     <th><?php echo $text['total_seq'];?></th>
                                     <th><?php echo $text['add_seq'];?></th>
                                 </tr>
@@ -34,9 +34,9 @@
 										<tr >
 											<td id='job_id' ><?php echo $val['job_id'];?></td>
 											<td><?php echo $val['job_name'];?></td>
-											<td><?php echo $text[$data['direction'][$val['unscrew_direction']]];?></td>
-											<td><?php echo $val['unscrew_rpm'];?></td>
-											<td><?php echo $val['unscrew_power'];?></td>
+											<td><?php echo $text[$data['direction'][$val['reverse_direction']]];?></td>
+											<td><?php echo $val['reverse_rpm'];?></td>
+											<td><?php echo $val['reverse_power'];?></td>
 											<td><?php echo $val['total_seq'];?></td>
                                             <?php $url ='?url=Sequences/index/'.$val['job_id'];?>
                                             <td><img id="Add_Seq" src="./img/btn_plus.png" onclick="location.href='<?php echo $url;?>'">
@@ -95,32 +95,71 @@
                                 <input type="text" class="form-control input-ms" id="job_name" maxlength="" >
                             </div>
                         </div>
+
                         <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['Unscrew_direction'];?>:</div>
+                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok'];?> :</div>
                             <div class="col t2" >
+
+                                <div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="job_ok" id="job_off" value="0" >
+            					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
+            					</div>
+
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction" id="unfasten_direction_CW" value="0">
-            					  <label class="form-check-label" for="unfasten_direction_CW"><?php echo $text['CW']; ?></label>
+            					  <input class="form-check-input" type="radio" name="job_ok" id="job_ok" value="1">
+            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction" id="unfasten_direction_CCW" value="1">
-            					  <label class="form-check-label" for="unfasten_direction_CCW"><?php echo $text['CCW']; ?></label>
-            					</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="unscrew-RPM" class="col-6 t1"><?php echo $text['Unscrew_rpm'];?>(1=10%):</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="unscrew_RPM" maxlength="" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="unscrew-power" class="col-6 t1"><?php echo $text['Unscrew_power'];?>(1=10%):</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="unscre_power" maxlength="">
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['JOB_COMPLETED'];?> :</div>
+                            <div class="col t2" >
+
+                                <div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="stop_job_ok" id="stop_job_ok_off" value="0" >
+            					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
+            					</div>
+
+            			      	<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="stop_job_ok" id="stop_job_ok_ok" value="1">
+            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
+            					</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="reverse-Direction" class="col-6 t1"><?php echo $text['reverse_direction'];?>:</div>
+                            <div class="col t2" >
+            			      	<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="direction" id="reverse_direction_CW" value="0">
+            					  <label class="form-check-label" for="reverse_direction_CW"><?php echo $text['CW']; ?></label>
+            					</div>
+
+            					<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="direction" id="reverse_direction_CCW" value="1">
+            					  <label class="form-check-label" for="reverse_direction_CCW"><?php echo $text['CCW']; ?></label>
+            					</div>
+
+                                <div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="direction" id="reverse_direction_disable" value="2">
+            					  <label class="form-check-label" for="reverse_direction_disable"> <?php  echo $text['Disable']; ?></label>
+            					</div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(1=10%) :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="reverse_rpm" maxlength="" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>(1=10%):</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="reverse_power" maxlength="">
+                            </div>
+                        </div>
                     </form>
                 </div>
 
@@ -156,29 +195,69 @@
                                 <input type="text" class="form-control input-ms" id="edit_jobname" maxlength="" >
                             </div>
                         </div>
+
                         <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['Unscrew_direction'];?>:</div>
+                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok'];?> :</div>
+                            <div class="col t2" >
+
+                                <div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_job_ok" id="job_off" value="0" >
+            					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
+            					</div>
+
+            			      	<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_job_ok" id="job_ok" value="1">
+            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
+            					</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['JOB_COMPLETED'];?> :</div>
+                            <div class="col t2" >
+
+                                <div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_stop_job_ok" id="stop_job_ok_off" value="0" >
+            					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
+            					</div>
+
+            			      	<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_stop_job_ok" id="stop_job_ok_ok" value="1">
+            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
+            					</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['reverse_direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="unfasten_direction_CW" value="0">
-            					  <label class="form-check-label" for="unfasten_direction_CW"><?php echo $text['CW'];?></label>
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="reverse_direction_CW" value="0">
+            					  <label class="form-check-label" for="reverse_direction_CW"><?php echo $text['CW'];?></label>
             					</div>
+
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="unfasten_direction_CCW" value="1">
-            					  <label class="form-check-label" for="unfasten_direction_CCW"><?php echo $text['CCW'];?></label>
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="reverse_direction__CCW" value="1">
+            					  <label class="form-check-label" for="reverse_direction_CCW"><?php echo $text['CCW'];?></label>
             					</div>
+
+                                <div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="reverse_direction_disable" value="2">
+            					  <label class="form-check-label" for="reverse_direction_disable"> <?php  echo $text['Disable']; ?></label>
+            					</div>
+
                             </div>
                         </div>
                         <div class="row">
-                            <div for="unscrew-RPM" class="col-6 t1"><?php echo $text['Unscrew_rpm'];?>(1=10%):</div>
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(1=10%):</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_unscrew_rpm" maxlength="" required>
+                                <input type="text" class="form-control input-ms" id="edit_reverse_rpm" maxlength="" required>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="unscrew-power" class="col-6 t1"><?php echo $text['Unscrew_power'];?>(1=10%):</div>
+                            <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>(1=10%):</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_unscrew_power" maxlength="">
+                                <input type="text" class="form-control input-ms" id="edit_reverse_power" maxlength="">
                             </div>
                         </div>
 
@@ -382,27 +461,34 @@ function copy_job_by_id(jobid){
 function savejob() {
 
     var jobidnew = '<?php echo $data['jobint']?>';
-
     var jobname_val      = document.getElementById("job_name").value;
-    var unscrew_rpm_val  = document.getElementById("unscrew_RPM").value;
-    var unscre_power_val = document.getElementById("unscre_power").value;
+    var reverse_rpm_val  = document.getElementById("reverse_rpm").value;
+    var reverse_power_val = document.getElementById("reverse_power").value;
 
     var directionElement = document.querySelector('input[name="direction"]:checked');
     var direction_val = directionElement ? directionElement.value : null;
-    if (jobname_val && unscrew_rpm_val && unscre_power_val && direction_val) {
+
+    var jobElement = document.querySelector('input[name="job_ok"]:checked');
+    var job_ok_val = jobElement ? jobElement.value : null;
+
+    var stopjobokElement = document.querySelector('input[name="stop_job_ok"]:checked');
+    var stop_job_ok_val = stopjobokElement ? stopjobokElement .value : null;
+
+    if (jobname_val && reverse_rpm_val && reverse_power_val  && direction_val ) {
         $.ajax({
             url: "?url=Jobs/create_job",
             method: "POST",
             data: { 
                 jobidnew: jobidnew,
                 jobname_val: jobname_val,
-                unscrew_rpm_val: unscrew_rpm_val,
-                unscre_power_val: unscre_power_val,
-                direction_val: direction_val
+                reverse_rpm_val: reverse_rpm_val,
+                reverse_power_val: reverse_power_val,
+                direction_val: direction_val, //起子方向
+                job_ok_val: job_ok_val,
+                stop_job_ok_val:stop_job_ok_val
             },
             success: function(response) {
-                //console.log(response);
-
+    
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);

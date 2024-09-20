@@ -29,7 +29,6 @@
                                 <tr class="w3-dark-grey">
                                     <th><?php echo $text['seq_id'];?></th>
                                     <th><?php echo $text['seq_name'];?></th>
-                                    <th><?php echo $text['column_unit'];?></th>
                                     <th><?php echo $text['tightening_repeat'];?></th>
                                     <th><?php echo $text['enable'];?></th>
                                     <th><?php echo $text['up'];?></th>
@@ -44,7 +43,6 @@
                                 <tr>
                                     <td class="seq-id"> <?php echo $val['sequence_id'];?></td>
                                     <td class="seq-name"><?php echo $val['sequence_name'];?></td>
-                                    <td><?php echo $text[$data['unit_arr'][$val['torque_unit']]];?></td>
                                     <td><?php echo $val['tightening_repeat'];?></td>
                                     <td>
                                         <?php if($val['sequence_enable']== 1){?>
@@ -125,18 +123,46 @@
                                 <input type="text" class="form-control input-ms" id="tighten_repeat" maxlength="" >
                             </div>
                         </div>
+
+                     
+
                         <div class="row">
-                            <div for="ok-time" class="col-6 t1"><?php echo $text['ok_time'];?> (sec) :</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="ok_time" maxlength="" >
+                            <div for="OK_Sequence" class="col-6 t1"><?php echo $text['OK_Sequence'];?> :</div>
+                            <div class="col t2" >
+
+                                <div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="seq_ok" id="seq_off" value="0" >
+            					  <label class="form-check-label" for="seq_off"> <?php  echo $text['OFF_text']; ?></label>
+            					</div>
+
+            			      	<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="seq_ok" id="seq_ok" value="1">
+            					  <label class="form-check-label" for="seq_ok"><?php  echo $text['ON_text']; ?></label>
+            					</div>
                             </div>
                         </div>
+
+
+                       
+
                         <div class="row">
-                            <div for="okall-alarm" class="col-6 t1"><?php echo $text['ok_all_alarm_time'];?> (sec) :</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="okall-alarm" maxlength="" >
+                            <div for="OK_Sequence_Stop" class="col-6 t1"><?php echo $text['OK_Sequence_Stop'];?> :</div>
+                            <div class="col t2" >
+
+                                <div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="stop_seq_ok" id="stop_seq_ok_off" value="0" >
+            					  <label class="form-check-label" for="stop_seq_ok_off"> <?php  echo $text['OFF_text']; ?></label>
+            					</div>
+
+            			      	<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="stop_seq_ok" id="stop_seq_ok_ok" value="1">
+            					  <label class="form-check-label" for="stop_seq_ok_ok"><?php  echo $text['ON_text']; ?></label>
+            					</div>
                             </div>
                         </div>
+
+                       
+                
                         <div class="row">
                             <div for="k(30%-300%)" class="col-6 t1">K (30%-300%) :</div>
                             <div class="col-4 t2">
@@ -149,16 +175,7 @@
                                 <input type="text" class="form-control input-ms" id="offset" maxlength="" >
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="torque-unit" class="col-6 t1"><?php echo $text['torque_unit'];?> :</div>
-                            <div class="col-4 t2">
-                                <select id="torque_unit" class="col custom-file">
-                                   <?php foreach($data['unit_arr'] as $k_unit => $v_unit){?>
-                                      <option value="<?php echo $k_unit;?>"><?php echo $text[$v_unit];?></option>                                                                     ;?></option>
-                                   <?php }?>
-                                </select>
-                            </div>
-                        </div>
+                        
                         <div class="row">
                             <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?> :</div>
                             <div class="col-4 t2">
@@ -172,44 +189,20 @@
                         </div>
 
                         <div class="row">
-                            <div for="join" class="col-6 t1"> <?php  echo $text['join']; ?>  :</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="join_option" id="soft" value="0">
-            					  <label class="form-check-label" for="soft"><?php echo $text['soft'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="join_option" id="hard" value="1" >
-            					  <label class="form-check-label" for="hard"><?php echo $text['hard'];?></label>
-            					</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="okall-stop" class="col-6 t1"><?php echo $text['OK_All_Stop'];?> :</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_OFF" value="0">
-            					  <label class="form-check-label" for="Okall_OFF"><?php echo $text['switch_off'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="okall_stop_option" id="Okall_ON" value="1" >
-            					  <label class="form-check-label" for="Okall_ON"><?php echo $text['switch_on'];?></label>
-            					</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="OPT" class="col-6 t1"><?php  echo $text['opt']; ?> :</div>
+                            <div for="OPT" class="col-6 t1"><?php  echo $text['opt'];?> :</div>
                             <div class="col t2" >
             			      	<div class=" col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_OFF" value="0">
             					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1" >
+            					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1">
             					  <label class="form-check-label" for="OPT_ON"><?php echo $text['switch_on'];?></label>
             					</div>
                             </div>
                         </div>
+                        
+                       
                     </form>
                 </div>
 
@@ -258,18 +251,40 @@
                                 <input type="text" class="form-control input-ms" id="edit_tighten_repeat" maxlength="" >
                             </div>
                         </div>
+
                         <div class="row">
-                            <div for="ok-time" class="col-6 t1"><?php echo $text['ok_time'];?> (sec) :</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_ok_time" maxlength="" >
+                            <div for="OK_Sequence" class="col-6 t1"><?php echo $text['OK_Sequence'];?> :</div>
+                            <div class="col t2" >
+
+                                <div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_seq_ok" id="seq_off" value="0" >
+            					  <label class="form-check-label" for="seq_off"> <?php  echo $text['OFF_text']; ?></label>
+            					</div>
+
+            			      	<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_seq_ok" id="seq_ok" value="1">
+            					  <label class="form-check-label" for="seq_ok"><?php  echo $text['ON_text']; ?></label>
+            					</div>
                             </div>
                         </div>
+
                         <div class="row">
-                            <div for="okall-alarm" class="col-6 t1"><?php echo $text['ok_all_alarm_time'];?> (sec) :</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_okall_alarm" maxlength="" >
+                            <div for="OK_Sequence_Stop" class="col-6 t1"><?php echo $text['OK_Sequence_Stop'];?> :</div>
+                            <div class="col t2" >
+
+                                <div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_stop_seq_ok" id="stop_seq_ok_off" value="0" >
+            					  <label class="form-check-label" for="stop_seq_ok_off"> <?php  echo $text['OFF_text']; ?></label>
+            					</div>
+
+            			      	<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_stop_seq_ok" id="stop_seq_ok_ok" value="1">
+            					  <label class="form-check-label" for="stop_seq_ok_ok"><?php  echo $text['ON_text']; ?></label>
+            					</div>
                             </div>
                         </div>
+
+                       
                         <div class="row">
                             <div for="k(30%-300%)" class="col-6 t1">K (30%-300%) :</div>
                             <div class="col-4 t2">
@@ -282,16 +297,7 @@
                                 <input type="text" class="form-control input-ms" id="edit_offset" maxlength="" >
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="torque-unit" class="col-6 t1"><?php echo $text['torque_unit'];?>:</div>
-                            <div class="col-4 t2">
-                                <select id="edit_torque_unit" class="col custom-file">
-                                   <?php foreach($data['unit_arr'] as $k_unit => $v_unit){?>
-                                      <option value="<?php echo $k_unit;?>"><?php echo $text[$v_unit];?></option>
-                                   <?php }?>
-                                </select>
-                            </div>
-                        </div>
+                       
                         <div class="row">
                             <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?> :</div>
                             <div class="col-4 t2">
@@ -303,33 +309,7 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div for="join" class="col-6 t1"><?php  echo $text['join'];?> :</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_join_option" id="soft" value="0">
-            					  <label class="form-check-label" for="soft"><?php echo $text['soft'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_join_option" id="hard" value="1" >
-            					  <label class="form-check-label" for="hard"><?php echo $text['hard'];?></label>
-            					</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="okall-stop" class="col-6 t1"><?php echo $text['OK_All_Stop'];?> :</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_okall_stop_option" id="Okall_FF" value="0">
-            					  <label class="form-check-label" for="Okall_OFF"><?php echo $text['switch_off'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_okall_stop_option" id="Okall_ON" value="1" >
-            					  <label class="form-check-label" for="Okall_ON"><?php echo $text['switch_on'];?></label>
-            					</div>
-                            </div>
-                        </div>
+                       
                         <div class="row">
                             <div for="OPT" class="col-6 t1"><?php  echo $text['opt'];?> :</div>
                             <div class="col t2" >
@@ -598,15 +578,17 @@ function delete_seqid(seqid){
 }
 
 function create_seq() {
+    //帶入預設值
     document.getElementById('newseq').style.display = 'block';
-    document.getElementById('tighten_repeat').value = 0;
-    document.getElementById('ok_time').value = 9.9;
-    document.getElementById('okall-alarm').value = 1.0;
+    document.getElementById('tighten_repeat').value = 1;
+    document.getElementById('seq_off').checked = true;
+
     document.getElementById('K').value = 100;
-    document.getElementById('soft').checked = true;
-    document.getElementById('Okall_OFF').checked = true;
-    document.getElementById('OPT_ON').checked = true;
+    document.getElementById('stop_seq_ok_off').checked = true;
+    document.getElementById('seq_off').checked = true;
+    document.getElementById('OPT_OFF').checked = true;
     document.getElementById('offset').value = 0;
+
     saveseq();
 
 }
@@ -617,15 +599,19 @@ function saveseq(){
     var seqid = '<?php echo $data['seq_id']?>';
     var seq_name = document.getElementById("seq_name").value;
     var tighten_repeat = document.getElementById("tighten_repeat").value;
-    var ok_time = document.getElementById("ok_time").value;
-    var okall_alarm = document.getElementById("okall-alarm").value;
-    var k_value = document.getElementById("K").value;
-    var torque_unit_val = document.getElementById('torque_unit').value;
+ 
     var ng_stop = document.getElementById('ng_stop').value;
-    var join_val = getSelectedValue('join_option', null);
-    var okall_stop_val = getSelectedValue('okall_stop_option', null);
+
+    var seqElement = document.querySelector('input[name="seq_ok"]:checked');
+    var seq_ok = seqElement ? seqElement.value : null;
+
+    var seq_stop_Element = document.querySelector('input[name="stop_seq_ok"]:checked');
+    var stop_seq_ok = seq_stop_Element ? seq_stop_Element.value : null;
+
     var opt_val = getSelectedValue('opt_option', null);
+    var k_value = document.getElementById("K").value;
     var offset = document.getElementById("offset").value;
+
 
     if(seq_name){
         $.ajax({
@@ -636,19 +622,15 @@ function saveseq(){
                 seqid: seqid,
                 seq_name: seq_name,
                 tighten_repeat: tighten_repeat,
-                ok_time: ok_time,
-                okall_alarm: okall_alarm,
-                k_value: k_value,
-                torque_unit_val: torque_unit_val,
-                join_val: join_val,
-                okall_stop_val: okall_stop_val,
-                opt_val: opt_val,
                 ng_stop: ng_stop,
+                seq_ok:seq_ok,
+                stop_seq_ok:stop_seq_ok,
+                opt_val: opt_val,
+                k_value: k_value,
                 offset: offset
 
             },
             success: function(response) {
-                //console.log(response);
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     history.go(0);
@@ -679,46 +661,41 @@ function edit_seq(seqid) {
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
 
-
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqname] = cleanString.match(/\[sequence_name]\s*=>\s*([^ ]+)/) || [, null];
                 var [, tightening_repeat] = cleanString.match(/\[tightening_repeat]\s*=>\s*([^ ]+)/) || [, null];
-                var [, ok_time] = cleanString.match(/\[ok_time]\s*=>\s*([^ ]+)/) || [, null];
-                var [, okall_alarm_time] = cleanString.match(/\[okall_alarm_time]\s*=>\s*([^ ]+)/) || [, null];
+                
                 var [, k_value] = cleanString.match(/\[k_value]\s*=>\s*([^ ]+)/) || [, null];
                 var [, offset] = cleanString.match(/\[offset]\s*=>\s*([^ ]+)/) || [, null];
                 var [, ng_stop] = cleanString.match(/\[ng_stop]\s*=>\s*([^ ]+)/) || [, null];
-                var [, torque_unit] = cleanString.match(/\[torque_unit]\s*=>\s*([^ ]+)/) || [, null];
-                var [, screw_join] = cleanString.match(/\[screw_join]\s*=>\s*([^ ]+)/) || [, null];
-                var [, okall_stop] = cleanString.match(/\[okall_stop]\s*=>\s*([^ ]+)/) || [, null];
+                
                 var [, opt] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
-     
+                var [, seq_ok] = cleanString.match(/\[seq_ok]\s*=>\s*([^ ]+)/) || [, null];
+                var [, stop_seq_ok] = cleanString.match(/\[stop_seq_ok]\s*=>\s*([^ ]+)/) || [, null];
+                var [, opt_val] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
+               
+   
+        
                 document.getElementById('editseq').style.display = 'block';
                 document.getElementById("old_seqid").value = seqid;
                 document.getElementById("edit_seq_name").value = seqname;
                 document.getElementById("edit_tighten_repeat").value = tightening_repeat;
-                document.getElementById("edit_ok_time").value = ok_time;
-                document.getElementById("edit_okall_alarm").value = okall_alarm_time;
+
                 document.getElementById("edit_K").value = k_value;
                 document.getElementById("edit_offset").value = offset;
                 document.getElementById("edit_ng_stop").value = ng_stop;
-                document.getElementsByName("edit_torque_unit").value = torque_unit;
-                 
-                var radioButtons = document.getElementsByName("edit_join_option");
-                var radioButtons_1 = document.getElementsByName("edit_okall_stop_option");
+        
+                var radioButtons_seq = document.getElementsByName("edit_seq_ok");
+                setRadioButton_value(radioButtons_seq, seq_ok);
+
+                var radioButtons_stop_seq = document.getElementsByName("edit_stop_seq_ok");
+                setRadioButton_value(radioButtons_stop_seq, stop_seq_ok);
+
+
                 var radioButtons_2 = document.getElementsByName("edit_opt_option");
-
-                //redio 取值
-                setRadioButtonValue(radioButtons, screw_join);
-                setRadioButtonValue(radioButtons_1, okall_stop);
-                setRadioButtonValue(radioButtons_2, opt);
-
-                var oldSeqname = document.getElementById("edit_seq_name").value;
-                var oldTighteningRepeat = document.getElementById("edit_tighten_repeat").value;
-                var oldtorque_unit = document.getElementsByName("edit_torque_unit").value;
-
-               
+                setRadioButton_value(radioButtons_2, opt_val);
+  
             },
             error: function(xhr, status, error) {
              
@@ -732,14 +709,11 @@ function edit_seq_save(){
     var jobid = '<?php echo $data['job_id']?>';
     var seq_name = document.getElementById("edit_seq_name").value;
     var tightening_repeat = document.getElementById("edit_tighten_repeat").value;
-    var ok_time = document.getElementById("edit_ok_time").value;
-    var okall_alarm_time = document.getElementById("edit_okall_alarm").value;
+    var seq_ok = document.querySelector('input[name="edit_seq_ok"]:checked').value;
+    var stop_seq_ok = document.querySelector('input[name="edit_stop_seq_ok"]:checked').value;
     var k_value = document.getElementById("edit_K").value;
     var offset = document.getElementById("edit_offset").value;
-    var torque_unit = document.getElementById('edit_torque_unit').value;
     var ng_stop = document.getElementById('edit_ng_stop').value;
-    var join_val = document.querySelector('input[name="edit_join_option"]:checked').value;
-    var okall_stop_val = document.querySelector('input[name="edit_okall_stop_option"]:checked').value;
     var opt_val = document.querySelector('input[name="edit_opt_option"]:checked').value;
     
     
@@ -752,14 +726,11 @@ function edit_seq_save(){
                 seqid: seqid,
                 seq_name: seq_name,
                 tightening_repeat: tightening_repeat,
-                ok_time: ok_time,
-                okall_alarm_time: okall_alarm_time,
+                seq_ok:seq_ok,
+                stop_seq_ok:stop_seq_ok,
                 k_value: k_value,
                 offset: offset,
-                torque_unit: torque_unit,
                 ng_stop: ng_stop,
-                join_val:join_val,
-                okall_stop_val: okall_stop_val,
                 opt_val: opt_val
 
             },
@@ -847,6 +818,17 @@ function sendRowInfoArray() {
         },
         error: function(xhr, status, error) {
             console.error('Error sending data:', error);
+        }
+    });
+}
+
+
+function setRadioButton_value(radioButtons, value) {
+    radioButtons.forEach(function(button) {
+        if (button.value === value.toString()) {
+            button.checked = true;
+        } else {
+            button.checked = false;
         }
     });
 }

@@ -88,8 +88,9 @@ class Job{
 
     #新增JOB
     public function create_job($jobdata){
-        $sql = "INSERT INTO `job` (job_id, job_name, unscrew_power, unscrew_rpm, unscrew_direction)";
-        $sql .= " VALUES (:job_id, :job_name, :unscrew_power, :unscrew_rpm, :unscrew_direction);";
+      
+        $sql = "INSERT INTO `job` (job_id, job_name, reverse_direction,reverse_rpm,reverse_power, job_ok,stop_job_ok)";
+        $sql .= " VALUES (:job_id, :job_name, :reverse_direction, :reverse_rpm, :reverse_power ,:job_ok,:stop_job_ok);";
     
         $jobdata['job_id'] = intval($jobdata['job_id']);
     
@@ -97,10 +98,11 @@ class Job{
     
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $statement->bindValue(':job_name', $jobdata['job_name']);
-        $statement->bindValue(':unscrew_power', $jobdata['unscrew_power']);
-        $statement->bindValue(':unscrew_rpm', $jobdata['unscrew_rpm']);
-        $statement->bindValue(':unscrew_direction', $jobdata['unscrew_direction']);
-    
+        $statement->bindValue(':reverse_power', $jobdata['reverse_power']);
+        $statement->bindValue(':reverse_rpm', $jobdata['reverse_rpm']);
+        $statement->bindValue(':reverse_direction', $jobdata['reverse_direction']);
+        $statement->bindValue(':job_ok', $jobdata['job_ok']);
+        $statement->bindValue(':stop_job_ok', $jobdata['stop_job_ok']);
         $results = $statement->execute();    
         return $results;
     }
@@ -108,12 +110,21 @@ class Job{
     #修改JOB
     public function update_job_by_id($jobdata){
         
-        $sql = "UPDATE `job` SET  job_name = :job_name, unscrew_power = :unscrew_power, unscrew_rpm = :unscrew_rpm, unscrew_direction = :unscrew_direction WHERE job_id = :job_id ";
+        $sql = "UPDATE `job` SET  
+                job_name = :job_name, 
+                reverse_direction = :reverse_direction, 
+                reverse_rpm = :reverse_rpm, 
+                reverse_power = :reverse_power,
+                job_ok = :job_ok,
+                stop_job_ok =:stop_job_ok
+                WHERE job_id = :job_id ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':job_name', $jobdata['job_name']);
-        $statement->bindValue(':unscrew_power', $jobdata['unscrew_power']);
-        $statement->bindValue(':unscrew_rpm', $jobdata['unscrew_rpm']);
-        $statement->bindValue(':unscrew_direction', $jobdata['unscrew_direction']);
+        $statement->bindValue(':reverse_power', $jobdata['reverse_power']);
+        $statement->bindValue(':reverse_rpm', $jobdata['reverse_rpm']);
+        $statement->bindValue(':reverse_direction', $jobdata['reverse_direction']);
+        $statement->bindValue(':job_ok', $jobdata['job_ok']);
+        $statement->bindValue(':stop_job_ok', $jobdata['stop_job_ok']);
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $results = $statement->execute();
 
@@ -187,8 +198,10 @@ class Job{
     
 
     public function copy_sequence_by_job_id($new_temp_seq) {
-        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, tightening_repeat, ng_stop, sequence_enable, screw_join, okall_stop, opt, torque_unit, k_value, ok_time, okall_alarm_time, offset)";
-        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :tightening_repeat, :ng_stop, :sequence_enable, :screw_join, :okall_stop, :opt, :torque_unit, :k_value, :ok_time, :okall_alarm_time, :offset)";
+      
+        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, sequence_enable, tightening_repeat, ng_stop, seq_ok, stop_seq_ok, opt, k_value, offset)";
+        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :sequence_enable, :tightening_repeat, :ng_stop, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
+        
         
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -202,8 +215,8 @@ class Job{
     
 
     public function copy_step_by_job_id($new_temp_step){
-        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, 	downshift_torque,downshift_rpm )";
-        $sql .= " VALUES (:job_id,:sequence_id,:step_id,:target_option,:target_torque,:target_angle,:target_delaytime,:hi_torque,:lo_torque,:hi_angle,:lo_angle,:rpm,:direction,:downshift,:threshold_torque,:downshift_torque,:downshift_rpm )";
+        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, 	downshift_torque,downshift_speed )";
+        $sql .= " VALUES (:job_id,:sequence_id,:step_id,:target_option,:target_torque,:target_angle,:target_delaytime,:hi_torque,:lo_torque,:hi_angle,:lo_angle,:rpm,:direction,:downshift,:threshold_torque,:downshift_torque,:downshift_speed )";
         
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
