@@ -104,7 +104,7 @@
 
                         <div class="row">
                             <?php if($data['check'][0]['count_records'] == "1"){ ?>
-                                <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Angle'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Angle'];?> :</div>
                                 <div class="col-3 t2">
                                     <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
                                 </div>
@@ -478,7 +478,7 @@ function edit_step_save() {
     var downshift = 0;
     var threshold_torque = 0;
     var downshift_torque = 0;
-    var downshift_rpm = 0;
+    var downshift_speed = 0;
 
     if(target_option == 2) {
         target_delaytime = document.getElementById("edit_target_delaytime").value;
@@ -497,7 +497,7 @@ function edit_step_save() {
     downshift = document.querySelector('input[name="edit_downshift_option"]:checked').value;
     threshold_torque = document.getElementById("edit_downshift_threshold").value;
     downshift_torque = document.getElementById("edit_downshift_torque").value;
-    downshift_rpm = document.getElementById("edit_downshift_rpm").value;
+    downshift_speed = document.getElementById("edit_downshift_speed").value;
     
 
     var requestData = {
@@ -517,7 +517,7 @@ function edit_step_save() {
         downshift: downshift,
         threshold_torque: threshold_torque,
         downshift_torque: downshift_torque,
-        downshift_rpm: downshift_rpm
+        downshift_speed: downshift_speed
     };
 
     if (target_option) {
