@@ -261,17 +261,17 @@ class Jobs extends Controller
                         $new_temp_seq = array();
                         foreach($select_seq as $key =>$val){
                  
-                            $new_temp_seq[$kk]['job_id'] = $new_jobid;
-                            $new_temp_seq[$kk]['sequence_id'] = $val['sequence_id'];
-                            $new_temp_seq[$kk]['sequence_name'] = $val['sequence_name'];
-                            $new_temp_seq[$kk]['sequence_enable'] = $val['sequence_enable'];
-                            $new_temp_seq[$kk]['tightening_repeat'] = $val['tightening_repeat'];
-                            $new_temp_seq[$kk]['ng_stop'] = $val['ng_stop']; 
-                            $new_temp_seq[$kk]['seq_ok'] = $val['seq_ok']; 
-                            $new_temp_seq[$kk]['stop_seq_ok'] = $val['stop_seq_ok']; 
-                            $new_temp_seq[$kk]['opt'] = $val['opt']; 
-                            $new_temp_seq[$kk]['k_value'] = $val['k_value']; 
-                            $new_temp_seq[$kk]['offset'] = $val['offset'];
+                            $new_temp_seq[$key]['job_id'] = $new_jobid;
+                            $new_temp_seq[$key]['sequence_id'] = $val['sequence_id'];
+                            $new_temp_seq[$key]['sequence_name'] = $val['sequence_name'];
+                            $new_temp_seq[$key]['sequence_enable'] = $val['sequence_enable'];
+                            $new_temp_seq[$key]['tightening_repeat'] = $val['tightening_repeat'];
+                            $new_temp_seq[$key]['ng_stop'] = $val['ng_stop']; 
+                            $new_temp_seq[$key]['seq_ok'] = $val['seq_ok']; 
+                            $new_temp_seq[$key]['stop_seq_ok'] = $val['stop_seq_ok']; 
+                            $new_temp_seq[$key]['opt'] = $val['opt']; 
+                            $new_temp_seq[$key]['k_value'] = $val['k_value']; 
+                            $new_temp_seq[$key]['offset'] = $val['offset'];
 
                             
                         }
@@ -302,10 +302,8 @@ class Jobs extends Controller
                             $new_temp_step[$key_step]['downshift_torque'] = $val_step['downshift_torque'];
                             $new_temp_step[$key_step]['downshift_speed'] = $val_step['downshift_speed'];
                         }
-                        echo "<pre>";
-                        print_r($new_temp_step);
-                        echo "</pre>";
-                   
+                      
+                        $res = $this->jobModel->copy_step_by_job_id($new_temp_step);     
                     }
                     
                     if($res){
