@@ -471,13 +471,25 @@ class Setting{
     
         return true; // 成功時返回 true
     }
-    
-
-    
 
 
+    public function backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile) {
+        // 檢查源文件是否存在
+        if (!file_exists($sourceFile)) {
+            return false; // 如果源文件不存在，返回錯誤
+        }
     
- 
+        // 嘗試備份源文件
+        if (!copy($sourceFile, $backupFile)) {
+            return false; // 如果備份失敗，返回錯誤
+        }
     
+        // 嘗試將新的資料庫文件複製到指定位置
+        if (!copy($newFile, $sourceFile)) {
+            return false; // 如果複製失敗，返回錯誤
+        }
+    
+        return true; // 成功完成所有操作
+    }
 
 }
