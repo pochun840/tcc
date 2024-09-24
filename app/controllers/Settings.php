@@ -432,49 +432,43 @@ class Settings extends Controller
     public function export_sysytem_config()
     {
         if( PHP_OS_FAMILY == 'Linux'){
-            /*require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-            $modbus = new ModbusMaster("127.0.0.1", "TCP");
-            try {
-                $modbus->port = 502;
-                $data = array(1);
-                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
 
-                // FC 16
-                $modbus->writeMultipleRegister(0, 505, $data, $dataTypes);
-                $this->logMessage('modbus write 505 ,array = '.implode("','", $data));
-                $this->logMessage('modbus status:'.$modbus->status);
-                // echo json_encode(array('error' => ''));
-                // exit();
-
-                header("Content-type: text/html; charset=utf-8");
-                $file="/mnt/ramdisk/FTP/tcscon.cfg"; // 實際檔案的路徑+檔名
-                $filename="tcscon.cfg"; // 下載的檔名
-                //指定類型
-                header("Content-type: ".filetype("$file"));
-                //指定下載時的檔名
-                header("Content-Disposition: attachment; filename=".$filename."");
-                //輸出下載的內容。
-                readfile($file);
-
-            } catch (Exception $e) {
-                $this->logMessage('modbus write 505 fail');
-                $this->logMessage('db_sync D2C end');
-                echo json_encode(array('error' => 'modbus error'));
-                exit();
-            }*/
-        }else{//windows
+            //檢查.idas_data.db 是否存在
+            $file = '/var/www/html/database/idas_data.db';
+            $filename = "data.cfg"; 
+            if (file_exists($file)) {
+                //echo json_encode(array('status' => 'success', 'message' => 'Database exists.'));
+                $cfgContent = file_get_contents($file);
             
-            header("Content-type: text/html; charset=utf-8");
-            $file="../data.db"; // 實際檔案的路徑+檔名
-            $filename="data.cfg"; // 下載的檔名
-            //指定類型
-            header("Content-type: ".filetype("$file"));
-            //指定下載時的檔名
-            header("Content-Disposition: attachment; filename=".$filename."");
-            //輸出下載的內容。
-            readfile($file);
-            exit();
+                if (strpos($cfgContent, 'table - device') !== false) {
+                    $cfgContent = preg_replace('/table - device.*?\n/', '', $cfgContent);
+                }
+
+            } else {
+                
+                echo json_encode(array('status' => 'error', 'message' => 'Database file not found.'));
+                exit();
+            }
+            
+        }else{
+            
+            $file = "../data.db"; 
+            $filename = "data.cfg"; 
+
+            $cfgContent = file_get_contents($file);
+            
+            if (strpos($cfgContent, 'table - device') !== false) {
+                $cfgContent = preg_replace('/table - device.*?\n/', '', $cfgContent);
+            }          
         }
+
+                    
+        header("Content-type: " . filetype("$file"));
+        header("Content-Disposition: attachment; filename=" . $filename);
+        echo $cfgContent;
+        exit();
+        
+
     }
 
     public function system_storage()
@@ -652,8 +646,9 @@ class Settings extends Controller
     }
 
 
-    public function Sync_check_db()
-    {
+
+    public function  Sync_check_db(){
+        
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
@@ -662,90 +657,11 @@ class Settings extends Controller
         $input_check = true;
         if (!empty($_POST['argument']) && isset($_POST['argument'])) {
             $argument = $_POST['argument'];
-        } else {
-            $input_check = false; 
-        }
-
-        
-   
-        // 1. filetime
-        // 2. db version
-        // 3. compare
-        $notice = '';
-        $warning = '';
-        $Das_DB_Location = '/var/www/html/database/iDas-data.db';
-        $Con_DB_Location = '/var/www/html/database/data.db';
-
-        if($this->LoginCheck() == 1){
-            echo json_encode(array('warning' => $text['system_sync_warning_login']));
-            exit();
-        }
-
-        if($way == 'C2D'){
-            echo json_encode( array('notice'=>'','warning'=>'') );
-            exit();
-        }
-
-        if( PHP_OS_FAMILY == 'Linux' && $way == 'D2C'){
-
-            //時間差異提醒
-            if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
-                $notice = $text['system_sync_notice'].date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
-            }
-
-            //DB版本差異判斷
-            /*$C_DB_Version = $this->SettingModel->Get_Controller_DB_version();
-            $Controller_Info = $this->SettingModel->GetControllerInfo();
-            if ($Controller_Info['tcscondb_version'] < $C_DB_Version) {
-                $warning = $text['system_sync_warning'];
-            }*/
-
-            //idas版本驗證 符合match_gtcs_app_version
-            /*$match_gtcs_app_version = $this->AdminModel->Get_Das_Config('match_gtcs_app_version');
-            $C_Device_Vesion = $this->SettingModel->Get_Controller_Device_version();
-            if($match_gtcs_app_version != $C_Device_Vesion){
-                $warning = 'APP Version Not Match';
-            }*/
-
-            //DB欄位差異判斷
-            /*if(!$this->Database_Column_Diff()){
-                $warning .= 'DB is different';
-            }*/
-            
-            //資料是否有Null判斷
-        }
-
-        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && $_SERVER['REQUEST_METHOD'] == 'GET' ) {
-            // 这是一个外部的 AJAX 请求
-            echo json_encode( array('notice'=>$notice,'warning'=>$warning) );
-            exit();
-        } else {
-            // 这是内部调用
-            return array('notice'=>$notice,'warning'=>$warning);
-        }
-
-    }
-
-
-    /*public function  Sync_check_db(){
-        
-        
-
-        $file = $this->MiscellaneousModel->lang_load();
-        if(!empty($file)){
-            include $file;
-        }
-   
-        $input_check = true;
-        if (!empty($_POST['argument']) && isset($_POST['argument'])) {
-            $argument = $_POST['argument'];
-<<<<<<< HEAD
         }else{
             $argument = '';
         }
-        
-        //$notice = '';
-        //$warning = '';
+
+        $argument =  'D2C';
         $Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
         $Con_DB_Location = '/var/www/html/database/data.db'; //控制器
 
@@ -776,12 +692,10 @@ class Settings extends Controller
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
 
+                echo $res_msg;
+
             }
-
         }
-
-
-    
     }
        
     public  function Sync_check_db_load(){
@@ -832,35 +746,9 @@ class Settings extends Controller
         }
     }
         
-=======
-        } else {
-            $input_check = false; 
-        }
-
-        if($input_check){
-            
-            if($argument=="D2C"){ 
-
-            }else{
->>>>>>> b637f82420e5360a02eaa1e4954ceacc2ec64f7d
 
 
-                
-            }
-           /*$controller_ip = '192.168.0.105'; 
-            $username = 'kls';             
-            $password = '12345678rd';
-
-            if($argument=="D2C"){
-                //下載
-                $this->MiscellaneousModel->FTP_download($controller_ip,$username,$password);
-            }else{
-                //上傳
-                $this->MiscellaneousModel->FTP_upload($controller_ip, $username, $password);
-
-            }*/
-        /*}
-    }*/
+    
     
     //get barcode
     public function GetBarcodes()
@@ -1423,7 +1311,5 @@ class Settings extends Controller
          }
 
          return true;
-    }
-
-    
+    }    
 }
