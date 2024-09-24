@@ -663,7 +663,7 @@ class Settings extends Controller
 
         $argument =  'D2C';
         $Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
-        $Con_DB_Location = '/var/www/html/database/data.db'; //控制器
+        $Con_DB_Location = '/home/kls/tcc/resource/db_emmc/data.db'; //控制器
 
         if(!empty($argument)){
             if( PHP_OS_FAMILY == 'Linux' && $argument == 'D2C'){
@@ -680,7 +680,7 @@ class Settings extends Controller
 
                 $sourceFile = '/var/www/html/database/idas_data.db';
                 $backupFile = '/var/www/html/database/idas_data_bk.db';
-                $destinationFile = '/var/www/html/database/data.db';
+                $destinationFile = '/home/kls/tcc/resource/db_emmc/data.db';
 
                 $res = $this->SettingModel->backup_CopyFile($sourceFile, $backupFile, $destinationFile);
                 $result = array();
