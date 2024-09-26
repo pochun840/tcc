@@ -448,29 +448,33 @@ class Setting{
         return $row['device_torque_unit'];
     }
 
-    public function backup_CopyFile($sourceFile, $backupFile, $destinationFile) {
+    public function backup_CopyFile($sourceFile, $backupFile) {
         // 檢查來源文件是否存在
         if (!file_exists($sourceFile)) {
+            echo "來源文件不存在: $sourceFile\n"; // 输出调试信息
             return false; // 如果來源文件不存在，返回 false
+        } else {
+            echo "來源文件存在: $sourceFile\n"; // 输出调试信息
         }
     
         // 創建備份文件
         if (file_exists($backupFile)) {
             unlink($backupFile); // 如果備份文件已存在，刪除它
+            echo "備份文件已存在，已刪除: $backupFile\n"; // 输出调试信息
+        } else {
+            echo "備份文件不存在，準備創建: $backupFile\n"; // 输出调试信息
         }
     
         // 複製來源文件到備份文件
         if (!copy($sourceFile, $backupFile)) {
+            echo "複製失敗: $sourceFile 到 $backupFile\n"; // 输出调试信息
             return false; // 如果複製失敗，返回 false
         }
     
-        // 複製備份文件到目標文件
-        if (!copy($sourceFile, $destinationFile)) {
-            return false; // 如果複製失敗，返回 false
-        }
-    
+        echo "複製成功: $sourceFile 到 $backupFile\n"; // 输出调试信息
         return true; // 成功時返回 true
     }
+    
 
 
     public function backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile) {
