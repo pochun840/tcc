@@ -60,7 +60,7 @@ class Inputs extends Controller
             $tempA = array();
             $tempB = array();
             $job_inputlist = ''; 
-            
+
     
             if (!empty($job_inputs)) {
                 foreach ($job_inputs as $kk => $vv) {

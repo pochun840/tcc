@@ -27,7 +27,7 @@ class Input{
     public function get_input_by_job_id($job_id)
     {   
         $sql = "SELECT * FROM input WHERE input_job_id = ? ORDER BY CASE WHEN input_event >= 200 THEN 0 ELSE 1 END, input_event";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$job_id]);
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
 
