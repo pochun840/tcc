@@ -737,6 +737,7 @@ function job_confirm(){
     localStorage.setItem("jobid", jobid);
     job_id = jobid;
     all_job = jobid;
+    
 
     if(jobid){
         $.ajax({
