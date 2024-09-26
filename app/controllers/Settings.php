@@ -647,57 +647,66 @@ class Settings extends Controller
 
 
 
-    public function  Sync_check_db(){
-        
+    //把  /var/www/html/database/data.db 備份為 /var/www/html/database/data_bk.db
+    //並把 data_bk.db 再另存一個.db 檔名為iDas_data.db
+    public function Sync_check_db() {
         $file = $this->MiscellaneousModel->lang_load();
-        if(!empty($file)){
+        if (!empty($file)) {
             include $file;
         }
-   
+    
         $input_check = true;
         if (!empty($_POST['argument']) && isset($_POST['argument'])) {
             $argument = $_POST['argument'];
-        }else{
+        } else {
             $argument = '';
         }
-
-        $argument =  'D2C';
-        $Das_DB_Location = '/var/www/html/database/iDas_data.db'; //idas 
-        $Con_DB_Location = '/var/www/html/database/data.db'; //控制器
-
-        if(!empty($argument)){
-            if( PHP_OS_FAMILY == 'Linux' && $argument == 'D2C'){
-
-                //時間差異提醒
-                if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
-                    $notice = $text['system_sync_notice'].date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
+    
+        $argument = 'D2C';
+        $Das_DB_Location = '/var/www/html/database/iDas_data.db'; // iDas 資料庫路徑
+        $Con_DB_Location = '/var/www/html/database/data.db'; // 控制器資料庫路徑
+        $Backup_DB_Location = '/var/www/html/database/data_bk.db'; // 備份資料庫路徑
+    
+        if (!empty($argument)) {
+            if (PHP_OS_FAMILY == 'Linux' && $argument == 'D2C') {
+    
+                // 時間差異提醒
+                if (filemtime($Con_DB_Location) > filemtime($Das_DB_Location)) {
+                    $notice = $text['system_sync_notice'] . date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
                 }
-
-                //DB欄位差異判斷
-                if(!$this->Database_Column_Diff()){
-                    $warning .= 'DB is different';
+    
+                // DB 欄位差異判斷
+                if (!$this->Database_Column_Diff()) {
+                    $warning .= 'DB 結構不相同';
                 }
-
-                $sourceFile = '/var/www/html/database/iDas_data.db';
-                $backupFile = '/var/www/html/database/iDas_data_bk.db';
-                $destinationFile = '/var/www/html/database/data.db';
-
-                $res = $this->SettingModel->backup_CopyFile($sourceFile, $backupFile, $destinationFile);
-                $result = array();
-                if($res){
-                    $res_msg  = "SYNC Success";
-                    $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
-                }else{
-                    $res_msg  = "SYNC Error";
+    
+                // 備份並複製文件
+                $res_backup = $this->SettingModel->backup_CopyFile($Con_DB_Location, $Backup_DB_Location);
+    
+                if ($res_backup) {
+                    // 複製備份文件為 iDas_data.db
+                    if (file_exists($Backup_DB_Location)) {
+                        if (file_exists($Das_DB_Location)) {
+                            unlink($Das_DB_Location); // 刪除已存在的 iDas_data.db
+                        }
+                        copy($Backup_DB_Location, $Das_DB_Location); // 複製備份文件為 iDas_data.db
+                        $res_msg = "同步成功";
+                        $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
+                    } else {
+                        $res_msg = "備份文件不存在";
+                        $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                    }
+                } else {
+                    $res_msg = "備份錯誤";
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
-
+    
                 echo $res_msg;
-
             }
         }
     }
-       
+    
+    
     public  function Sync_check_db_load(){
 
         $file = $this->MiscellaneousModel->lang_load();
@@ -1208,13 +1217,13 @@ class Settings extends Controller
     //DB欄位差異判斷
     function Database_Column_Diff()
     {
-        /*$dbPath1 = '/var/www/html/database/iDas-tcscon.db';
-        $dbPath2 = '/var/www/html/database/tcscon.db';
+        $dbPath1 = '/var/www/html/database/iDas_data.db';
+        $dbPath2 = '/var/www/html/database/data.db';
 
         if ($this->validateTableStructure($dbPath1, $dbPath2)) {
-            // echo "两个数据库的表结构相同。\n";
+            echo "两个数据库的表结构相同。\n";
         } else {
-            // echo "两个数据库的表结构不同。\n";
+            echo "两个数据库的表结构不同。\n";
             return false;
         }
 
@@ -1224,7 +1233,7 @@ class Settings extends Controller
             return false;
         }else{
             return true;
-        }*/
+        }
         return true;
     }
 
