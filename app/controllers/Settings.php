@@ -707,50 +707,46 @@ class Settings extends Controller
     }
     
     
-    public  function Sync_check_db_load(){
-
+    public function Sync_check_db_load() {
         $file = $this->MiscellaneousModel->lang_load();
-        if(!empty($file)){
+        if (!empty($file)) {
             include $file;
         }
-   
+    
         if (!empty($_POST['argument']) && isset($_POST['argument'])) {
             $argument = $_POST['argument'];
-        }else{
+        } else {
             $argument = '';
         }
+    
+        $sourceFile = '/var/www/html/database/iDas_data.db'; 
+        $backupFile = '/var/www/html/database/iDas_data_bk.db'; 
+        $newFile = '/var/www/html/database/data.db'; 
 
-        $Das_DB_Location = '/var/www/html/database/iDas_data.db'; //idas 
-        $Con_DB_Location = '/var/www/html/database/data.db'; //控制器
-
-        if(!empty($argument)){
-            if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
-
-                //時間差異提醒
-                if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
-                    $notice = $text['system_sync_notice'].date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
+    
+        if (!empty($argument)) {
+            if (PHP_OS_FAMILY == 'Linux' && $argument == 'C2D') {
+    
+                // 時間差異提醒
+                if (filemtime($Con_DB_Location) > filemtime($Das_DB_Location)) {
+                    $notice = $text['system_sync_notice'] . date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
                 }
-
-                //DB欄位差異判斷
-                if(!$this->Database_Column_Diff()){
+    
+                // DB欄位差異判斷
+                if (!$this->Database_Column_Diff()) {
                     $warning .= 'DB is different';
                 }
-
-
-                $sourceFile = '/var/www/html/database/data.db';
-                $backupFile = '/var/www/html/database/data_bk.db';
-                $newFile = '/var/www/html/database/iDas_data.db';
-
-                $res  = $this->SettingModel->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
+    
+                // 嘗試備份和複製資料庫
+                $res = $this->SettingModel->backupAndCopyDatabase($sourceFile, $backupFile,$newFile);
                 $result = array();
-                if($res){
-                    $res_msg  = "SYNC Success";
+                if ($res) {
+                    $res_msg = "SYNC Success";
                     $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
-                }else{
-                    $res_msg  = "SYNC Error";
+                } else {
+                    $res_msg = "SYNC Error";
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
-
             }
         }
     }
@@ -1219,23 +1215,55 @@ class Settings extends Controller
     {
         $dbPath1 = '/var/www/html/database/iDas_data.db';
         $dbPath2 = '/var/www/html/database/data.db';
-
+    
+        // 比较表结构
         if ($this->validateTableStructure($dbPath1, $dbPath2)) {
-            echo "两个数据库的表结构相同。\n";
+            echo "兩個資料庫的表結構相同。\n";
+            return true;
         } else {
-            echo "两个数据库的表结构不同。\n";
+            echo "兩個資料庫的表結構不同。\n";
+            // 输出详细的差异信息
+            $this->listTableDifferences($dbPath1, $dbPath2);
             return false;
         }
-
-        //確認idas的設定db沒有null
+    
+        // 确认 iDas 的设置 db 没有 null
         $result = $this->checkForNullValues($dbPath1);
-        if(!$result){
+        if (!$result) {
             return false;
-        }else{
+        } else {
             return true;
         }
-        return true;
     }
+
+        // 列出表结构的差异
+    private function listTableDifferences($dbPath1, $dbPath2) {
+        $columnsDb1 = $this->getTableColumns($dbPath1);
+        $columnsDb2 = $this->getTableColumns($dbPath2);
+
+        // 比较列名
+        $diff1 = array_diff($columnsDb1, $columnsDb2);
+        $diff2 = array_diff($columnsDb2, $columnsDb1);
+
+        if (!empty($diff1)) {
+            echo "在資料庫1中存在但在資料庫2中不存在的欄位: " . implode(", ", $diff1) . "\n";
+        }
+
+        if (!empty($diff2)) {
+            echo "在資料庫2中存在但在資料庫1中不存在的欄位: " . implode(", ", $diff2) . "\n";
+        }
+    }
+
+    // 获取表的列名
+    private function getTableColumns($dbPath) {
+        // 建立数据库连接
+        $pdo = new PDO("sqlite:$dbPath");
+        $query = "PRAGMA table_info(your_table_name)"; // 替换为实际的表名
+        $stmt = $pdo->query($query);
+        $columns = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        return $columns;
+    }
+
 
 
     // 連接到SQLite資料庫

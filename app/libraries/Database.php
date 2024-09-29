@@ -29,6 +29,7 @@ class Database
 
             //$this->db_con = new PDO('sqlite:/var/www/html/database/data.db');
             $this->db_iDas = new PDO('sqlite:/var/www/html/database/iDas_data.db'); 
+            $this->db = new PDO('sqlite:/var/www/html/database/iDas_data.db'); 
             //$this->db_iDas = new PDO('sqlite:/var/www/html/database/data.db'); 
             $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/das.db'); 
             //$this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db');
