@@ -1071,59 +1071,70 @@ class Settings extends Controller
             exit();
         }
 
+        $file_location = '';
+        $result = '';
+    
+        if (empty($_FILES)) {
+            echo json_encode(["Error" => '沒有文件']);
+            exit();
+        }
+
+
 
         if( PHP_OS_FAMILY == 'Linux'){
-            /*$this->logMessage('Import config start');
+            $this->logMessage('開始導入配置');
 
-            $destination = "/mnt/ramdisk/FTP/iDas.cfg";
-            //將檔案移到指定位置
-            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
+            // 定義源文件和目標文件路徑
+            $source = $_FILES['file']['tmp_name'];
+            $destination = "/var/www/html/database/iDas_data.db";
 
-            if ($result) {
-                require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-                $modbus = new ModbusMaster("127.0.0.1", "TCP");
-                try {
-                    $modbus->port = 502;
-                    $modbus->timeout_sec = 10;
-                    $data = array(1, 26948, 24947);
-                    $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+            // 讀取 data.cfg 的內容
+            $data = file_get_contents($source);
 
-                    // FC 16
-                    $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
-                    $this->logMessage('modbus write 506 ,array = '.implode("','", $data));
-                    $this->logMessage('modbus status:'.$modbus->status);
-                    $this->logMessage('Import config end');
-                    echo json_encode(array('error' => ''));
-                    exit();
-
-                } catch (Exception $e) {
-                    // Print error information if any
-                    // echo $modbus;
-                    // echo $e;
-                    $this->logMessage('modbus write 506 fail');
-                    $this->logMessage('modbus status:'.$modbus->status);
-                    $this->logMessage('Import config end');
-                    echo json_encode(array('error' => 'modbus error'));
-                    exit();
-                }
-            } else {
-                $this->logMessage('copy db error');
-                $this->logMessage('Import config end');
-                echo json_encode(array('error' => 'copy db error'));
+            // 檢查是否成功讀取內容
+            if ($data === false) {
+                echo json_encode(["error" => '讀取文件失敗']);
                 exit();
-            }*/
+            }
+
+            // 將內容寫入 iDas_data.db
+            $writeResult = file_put_contents($destination, $data);
+
+        if ($writeResult === false) {
+            echo json_encode(["error" => '寫入 iDas_data.db 失敗']);
+            exit();
+        } else {
+            echo json_encode(["success" => 'success']);
+            exit();
+        }
 
         }else{
-            // $this->logMessage('Import config start');
+           // Windows
+            $this->logMessage('開始導入配置');
+
+            // Define source and destination paths
+            $source = $_FILES['file']['tmp_name'];
             $destination = "../data.db";
-            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
-            if($result){
-                echo json_encode(["error" => '']);
+
+            // Read the content of the uploaded file
+            $data = file_get_contents($source);
+
+            // Check if the content was read successfully
+            if ($data === false) {
+                echo json_encode(["error" => '讀取文件失敗']);
                 exit();
-            }else{
-                echo json_encode(["error" => 'fail']);
+            }
+
+            // Write content to data.db
+            $writeResult = file_put_contents($destination, $data);
+
+            if ($writeResult === false) {
+                echo json_encode(["error" => '寫入 data.db 失敗']);
                 exit();
-            }            
+            } else {
+                echo json_encode(["success" => 'success']);
+                exit();
+            } 
         }
 
         echo json_encode(["message" => $result]);
