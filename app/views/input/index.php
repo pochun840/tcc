@@ -894,10 +894,10 @@ function create_input_id(){
                 job_id: job_id,
                 input_event: input_event,
                 input_pin: 	input_pin,
-                input_wave: input_wave,
-                gateconfirm: gateconfirm,
-                pagemode: pagemode,
-                input_seqid: input_seqid
+                input_wave: input_wave
+                //gateconfirm: gateconfirm,
+                //pagemode: pagemode,
+                //input_seqid: input_seqid
             },
             success: function(response) {
 

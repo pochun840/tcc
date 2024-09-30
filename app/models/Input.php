@@ -77,9 +77,7 @@ class Input{
     }
 
     public function create_input($jobdata) {
-        echo "<pre>";
-        print_r($jobdata);
-        echo "</pre>";
+
     
         $sql = "INSERT INTO `input` (input_job_id, input_event, input_pin, input_wave) ";
         $sql .= "VALUES (:input_job_id, :input_event, :input_pin, :input_wave);";
@@ -135,8 +133,8 @@ class Input{
         if(true){//先刪除再複製
             $this->delete_input_by_id($to_job_id);
         }
-        $sql= "INSERT INTO input ( input_jobid,input_event,input_pin1,input_pin2,input_pin3,input_pin4,input_pin5,input_pin6,input_pin7,input_pin8,input_pin9,input_pin10,input_gateconfirm,input_pagemode )
-                SELECT  ?,input_event,input_pin1,input_pin2,input_pin3,input_pin4,input_pin5,input_pin6,input_pin7,input_pin8,input_pin9,input_pin10,input_gateconfirm,input_pagemode
+        $sql= "INSERT INTO input ( input_jobid,input_event,input_pin1,input_pin2,input_pin3,input_pin4,input_pin5,input_pin6,input_pin7,input_pin8,input_pin9,input_pin10 )
+                SELECT  ?,input_event,input_pin1,input_pin2,input_pin3,input_pin4,input_pin5,input_pin6,input_pin7,input_pin8,input_pin9,input_pin10
                 FROM    input
                 WHERE input_jobid = ? ";
         $statement = $this->db->prepare($sql);

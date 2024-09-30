@@ -152,7 +152,6 @@ class Inputs extends Controller
     public function create_input_event()
     {
 
-        //echo "eeeeeewwe";die();
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
@@ -187,23 +186,7 @@ class Inputs extends Controller
             $input_check = false; 
         }
 
-        // if( isset($_POST['gateconfirm'])  ){
-        //     $jobdata['gateconfirm'] = $_POST['gateconfirm'];
-        // }else{ 
-        //     $input_check = false; 
-        // }
-
-        // if( isset($_POST['pagemode'])  ){
-        //     $jobdata['pagemode'] = $_POST['pagemode'];
-        // }else{ 
-        //     $input_check = false; 
-        // }
-
-        // if( isset($_POST['input_seqid'])  ){
-        //     $jobdata['input_seqid'] = $_POST['input_seqid'];
-        // }else{ 
-        //     $input_check = false; 
-        // }
+       
 
         if($input_check){
             $count = $this->InputModel->check_job_event_conflict($jobdata['input_job_id'],$jobdata['input_event']);
@@ -354,9 +337,9 @@ class Inputs extends Controller
                     $jobdata[$key]['input_event'] = $val['input_event'];
                     $jobdata[$key]['input_pin'] = $val['input_pin'];
                     $jobdata[$key]['input_wave'] = $val['input_wave'];
-                    $jobdata[$key]['gateconfirm'] = $val['gateconfirm'];
-                    $jobdata[$key]['pagemode'] = $val['pagemode'];
-                    $jobdata[$key]['input_seqid'] = 0;
+                    // $jobdata[$key]['gateconfirm'] = $val['gateconfirm'];
+                    // $jobdata[$key]['pagemode'] = $val['pagemode'];
+                    // $jobdata[$key]['input_seqid'] = 0;
                     $res = $this->InputModel->create_input($jobdata[$key]);
              
                 }
