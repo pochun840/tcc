@@ -10,6 +10,8 @@ class Step extends Controller
         $this->MiscellaneousModel = $this->model('Miscellaneous');
         $this->stepModel = $this->model('Steptcc');
         $this->sequenceModel = $this->model('Sequence');
+        $this->SettingModel = $this->model('Setting');
+        
     }
 
     public function index($job_id,$seq_id){
@@ -23,19 +25,17 @@ class Step extends Controller
         $isMobile = $this->isMobileCheck();
         $step = $this->stepModel->getStep($job_id, $seq_id);
         $target_option = $this->MiscellaneousModel->details("target_option");
+        $torque_unit   = $this->MiscellaneousModel->details("torque_unit");
         $target_option_change = $this->MiscellaneousModel->details("target_option_change");
-        $direction = $this->MiscellaneousModel->details('unscrew_direction');
+        $direction = $this->MiscellaneousModel->details('reverse_direction');
         $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
         $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
         $check     = $this->stepModel->check_step_target($job_id,$seq_id);
-        
-        if(!empty($seqinfo)){
-            
-            $unit = $unit_arr[$seqinfo[0]['torque_unit']];
-            
-        }else{
-            $unit = '';
-            $unit_arr = '';
+
+        $res_device = $this->SettingModel->GetControllerInfo();
+        if(!empty($res_device)){
+            $unit = $res_device['torque_unit'];
+            $unit_name = $torque_unit[$unit];
         }
         
         if(empty($step)){
@@ -44,7 +44,7 @@ class Step extends Controller
             $stepid_new = count($step) + 1 ;
         }
 
-
+        
         $data = array(
             'isMobile' => $isMobile,
             'step' => $step,
@@ -57,7 +57,9 @@ class Step extends Controller
             'unit_arr' => $unit_arr,
             'unit' => $unit,
             'check' => $check,
-            'seq_id' => $seq_id
+            'seq_id' => $seq_id,
+            'unit_name' => $unit_name
+
         );
 
 
@@ -93,7 +95,7 @@ class Step extends Controller
             $downshift = isset($_POST['downshift'])? intval($_POST['downshift']) : 0;
             $threshold_torque = isset($_POST['threshold_torque'])? intval($_POST['threshold_torque']) : 0;
             $downshift_torque = isset($_POST['downshift_torque'])? intval($_POST['downshift_torque']) : 0;
-            $downshift_rpm = isset($_POST['downshift_rpm'])? intval($_POST['downshift_rpm']) : 100;
+            $downshift_speed = isset($_POST['downshift_speed'])? intval($_POST['downshift_speed']) : 100;
 
             #同一個step 只能有一個Target Torque
             $check = $this->stepModel->check_step_target($jobid,$seqid);
@@ -236,9 +238,10 @@ class Step extends Controller
                 'downshift'        => $downshift,
                 'threshold_torque' => $threshold_torque,
                 'downshift_torque' => $downshift_torque,
-                'downshift_rpm'    => $downshift_rpm,
+                'downshift_speed'    => $downshift_speed,
                 
             );
+
 
             $mode = "create"; 
             $res = $this->stepModel->create_step($mode,$jobdata);
@@ -282,7 +285,7 @@ class Step extends Controller
             $downshift = isset($_POST['downshift'])? intval($_POST['downshift']) : '';
             $threshold_torque = isset($_POST['threshold_torque'])? intval($_POST['threshold_torque']) : '';
             $downshift_torque = isset($_POST['downshift_torque'])? intval($_POST['downshift_torque']) : '';
-            $downshift_rpm = isset($_POST['downshift_rpm'])? intval($_POST['downshift_rpm']) : 100;
+            $downshift_speed = isset($_POST['downshift_speed'])? intval($_POST['downshift_speed']) : 100;
 
             
             #驗證hi_angle的範圍
@@ -379,10 +382,7 @@ class Step extends Controller
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
             
-            /*var_dump($check);
-            var_dump($target_option);
-            die();*/
-            if($check >= 1 && $target_option == 0){
+            if($check > 1 && $target_option == 0){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
                 exit();
 
@@ -406,7 +406,7 @@ class Step extends Controller
                 'downshift'        => $downshift,
                 'threshold_torque' => $threshold_torque,
                 'downshift_torque' => $downshift_torque,
-                'downshift_rpm'    => $downshift_rpm,
+                'downshift_speed'    => $downshift_speed,
                 
             );
 
@@ -511,7 +511,7 @@ class Step extends Controller
                         'downshift'        => $old_res[0]['downshift'],
                         'threshold_torque' => $old_res[0]['threshold_torque'],
                         'downshift_torque' => $old_res[0]['downshift_torque'],
-                        'downshift_rpm'    => $old_res[0]['downshift_rpm']
+                        'downshift_speed'    => $old_res[0]['downshift_speed']
                     );
     
                     $mode = "copy"; 

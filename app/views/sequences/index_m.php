@@ -712,7 +712,6 @@ function edit_seq_save(){
     var okall_alarm_time = document.getElementById("edit_okall_alarm").value;
     var k_value = document.getElementById("edit_K").value;
     var offset = document.getElementById("edit_offset").value;
-    var torque_unit = document.getElementById('edit_torque_unit').value;
     var ng_stop = document.getElementById('edit_ng_stop').value;
     var join_val = document.querySelector('input[name="edit_join_option"]:checked').value;
     var okall_stop_val = document.querySelector('input[name="edit_okall_stop_option"]:checked').value;

@@ -33,6 +33,7 @@ class Setting{
         return $row;
     }
 
+
     public function GetControllerInfo_count($control_id){
 
         $sql = "SELECT count(*) AS count FROM device WHERE device_id = :device_id";

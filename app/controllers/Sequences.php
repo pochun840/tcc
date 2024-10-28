@@ -379,7 +379,7 @@ class Sequences extends Controller
                 $new_temp_step[$k_step]['downshift'] = $v_step['downshift'];
                 $new_temp_step[$k_step]['threshold_torque'] = $v_step['threshold_torque'];
                 $new_temp_step[$k_step]['downshift_torque'] = $v_step['downshift_torque'];
-                $new_temp_step[$k_step]['downshift_rpm'] = $v_step['downshift_rpm'];
+                $new_temp_step[$k_step]['downshift_speed'] = $v_step['downshift_speed'];
 
             }
 

@@ -70,6 +70,18 @@
                			</div>
                     </div>
                 </div>
+
+                <div class="row t2">
+                    <div class="col-3 t1"><?php echo $text['torque_unit'];?>:</div>
+                    <div class="col-3 t2">
+                        <select class="form-select" id="select_torque_unit" name="select_torque_unite">
+                            <?php foreach($data['torque_unit'] as $k_unit =>$v_unit){?>
+                            <option value="<?php echo $k_unit;?>"  <?php echo $k_unit == $data['controller_info']['device_language'] ? 'selected' : ''; ?> ><?php echo $v_unit;?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+
                 <div style="text-align: center;margin-top: 50px;">
                     <button class="all-btn w3-button w3-border w3-round-large" id="cc_save" onclick="cc_save()"><?php echo $text['save'];?></button>
                 </div>

@@ -314,9 +314,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="edit_downshift-rpm" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
+                            <div for="edit_downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
                             <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_downshift_rpm" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_downshift_speed" maxlength="" >
                             </div>
                         </div>
                     </form>
@@ -612,8 +612,8 @@ function edit_step(){
                     document.querySelector('div[for="edit_downshift-threshold"]').style.display = "none";
                     document.getElementById('edit_downshift_threshold').style.display = "none";
 
-                    document.querySelector('div[for="edit_downshift-rpm"]').style.display = "none";
-                    document.getElementById('edit_downshift_rpm').style.display = "none";
+                    document.querySelector('div[for="edit_downshift-speed"]').style.display = "none";
+                    document.getElementById('edit_downshift_speed').style.display = "none";
 
                 }
 
@@ -774,8 +774,8 @@ function edit_step(){
                             document.querySelector('div[for="edit_downshift-threshold"]').style.display = "block";
                             document.getElementById('edit_downshift_threshold').style.display = "block";
 
-                            document.querySelector('div[for="edit_downshift-rpm"]').style.display = "block";
-                            document.getElementById('edit_downshift_rpm').style.display = "block";
+                            document.querySelector('div[for="edit_downshift-speed"]').style.display = "block";
+                            document.getElementById('edit_downshift_speed').style.display = "block";
                         }else{
                             document.querySelector('div[for="edit_downshift-torque"]').style.display = "none";
                             document.getElementById('edit_downshift_torque').style.display = "none";

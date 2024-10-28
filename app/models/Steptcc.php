@@ -94,8 +94,8 @@ class Steptcc{
             return false; 
         }
         
-        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, 	downshift_torque,downshift_rpm )";
-        $sql .= " VALUES (:job_id,:sequence_id,:step_id,:target_option,:target_torque,:target_angle,:target_delaytime,:hi_torque,:lo_torque,:hi_angle,:lo_angle,:rpm,:direction,:downshift,:threshold_torque,:downshift_torque,:downshift_rpm );";
+        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, 	downshift_torque,downshift_speed )";
+        $sql .= " VALUES (:job_id,:sequence_id,:step_id,:target_option,:target_torque,:target_angle,:target_delaytime,:hi_torque,:lo_torque,:hi_angle,:lo_angle,:rpm,:direction,:downshift,:threshold_torque,:downshift_torque,:downshift_speed );";
         $statement = $this->db_iDas->prepare($sql);
 
         if ($mode == "copy" ) {
@@ -103,6 +103,7 @@ class Steptcc{
             $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
             $statement->bindValue(':step_id', $jobdata['step_id']);
         }else{
+            
             $statement->bindValue(':job_id', $jobdata['job_id']);
             $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
             $statement->bindValue(':step_id', $jobdata['step_id']);
@@ -121,7 +122,7 @@ class Steptcc{
         $statement->bindValue(':downshift', $jobdata['downshift']);
         $statement->bindValue(':threshold_torque', $jobdata['threshold_torque']);
         $statement->bindValue(':downshift_torque', $jobdata['downshift_torque']);
-        $statement->bindValue(':downshift_rpm', $jobdata['downshift_rpm']);
+        $statement->bindValue(':downshift_speed', $jobdata['downshift_speed']);
 
         $results = $statement->execute();
 
@@ -146,7 +147,7 @@ class Steptcc{
                     downshift = :downshift,
                     threshold_torque = :threshold_torque,
                     downshift_torque = :downshift_torque,
-                    downshift_rpm = :downshift_rpm
+                    downshift_speed = :downshift_speed
         WHERE job_id = :job_id  AND   sequence_id = :sequence_id  AND step_id = :step_id ";
         $statement = $this->db_iDas->prepare($sql);
 
@@ -165,7 +166,7 @@ class Steptcc{
         $statement->bindValue(':downshift', $jobdata['downshift']);
         $statement->bindValue(':threshold_torque', $jobdata['threshold_torque']);
         $statement->bindValue(':downshift_torque', $jobdata['downshift_torque']);
-        $statement->bindValue(':downshift_rpm', $jobdata['downshift_rpm']);
+        $statement->bindValue(':downshift_speed', $jobdata['downshift_speed']);
         $results = $statement->execute();
 
 

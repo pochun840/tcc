@@ -12,6 +12,9 @@ class Settings extends Controller
         $this->AdminModel = $this->model('Admin');
         $this->ToolModel = $this->model('Tool');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
+
+
+        
     }
 
     // 取得所有info
@@ -20,6 +23,7 @@ class Settings extends Controller
         $isMobile = $this->isMobileCheck();
 
         $lang = $this->MiscellaneousModel->details('lang');
+        $torque_unit = $this->MiscellaneousModel->details('torque_unit');
         $controller_info = $this->SettingModel->GetControllerInfo();
         $active_session = $this->AdminModel->GetActiveSession();
         $iDas_Vesion = $this->AdminModel->Get_Das_Config('idas_version');
@@ -77,6 +81,7 @@ class Settings extends Controller
         $data = array();
         $data = array(
             'lang_arr'        => $lang,
+            'torque_unit'    => $torque_unit,
             'controller_info' => $controller_info,
             'active_session'  => $active_session,
             'iDas_Vesion'     => $iDas_Vesion,
