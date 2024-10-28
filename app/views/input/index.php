@@ -65,9 +65,9 @@
                                             <th>8</th>
                                             <th>9</th>
                                             <th>10</th>
-                                            <th><?php echo $text['Confirm'];?></th>
-                                            <th><?php echo $text['page'];?></th>
-                                            <th><?php echo $text['mode'];?></th>
+                                            <th><?php echo "11";?></th>
+                                            <th><?php echo "11";?></th>
+                                            <th><?php echo "11";?></th>
                                         </tr>
                                     </thead>
 
@@ -737,6 +737,7 @@ function job_confirm(){
     localStorage.setItem("jobid", jobid);
     job_id = jobid;
     all_job = jobid;
+    
 
     if(jobid){
         $.ajax({
@@ -893,10 +894,10 @@ function create_input_id(){
                 job_id: job_id,
                 input_event: input_event,
                 input_pin: 	input_pin,
-                input_wave: input_wave,
-                gateconfirm: gateconfirm,
-                pagemode: pagemode,
-                input_seqid: input_seqid
+                input_wave: input_wave
+                //gateconfirm: gateconfirm,
+                //pagemode: pagemode,
+                //input_seqid: input_seqid
             },
             success: function(response) {
 

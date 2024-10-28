@@ -27,7 +27,7 @@ class Input{
     public function get_input_by_job_id($job_id)
     {   
         $sql = "SELECT * FROM input WHERE input_job_id = ? ORDER BY CASE WHEN input_event >= 200 THEN 0 ELSE 1 END, input_event";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$job_id]);
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
 
@@ -58,7 +58,7 @@ class Input{
     public function check_job_event_conflict($input_job_id,$input_event){
         
         $sql = "SELECT *  FROM input WHERE input_job_id = ? AND input_event = ?";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$input_job_id,$input_event]);
         $rows = $statement->fetch();
 
@@ -68,7 +68,7 @@ class Input{
     public function check_job_event($input_job_id){
         
         $sql = "SELECT *  FROM input WHERE input_job_id = ? ";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$input_job_id]);
         $rows = $statement->fetchAll();
 
@@ -76,35 +76,44 @@ class Input{
 
     }
 
-    public function create_input($jobdata){   
+    public function create_input($jobdata) {
+
     
-        $sql = "INSERT INTO `input` (input_job_id, input_event, input_pin, input_wave, gateconfirm, pagemode, input_seqid) ";
-        $sql .= "VALUES (:input_job_id, :input_event, :input_pin, :input_wave, :gateconfirm, :pagemode, :input_seqid);";
-
+        $sql = "INSERT INTO `input` (input_job_id, input_event, input_pin, input_wave) ";
+        $sql .= "VALUES (:input_job_id, :input_event, :input_pin, :input_wave);";
+    
         $statement = $this->db_iDas->prepare($sql);
-        $statement->bindValue(':input_job_id', $jobdata['input_job_id']);
-        $statement->bindValue(':input_event', $jobdata['input_event']);
-        $statement->bindValue(':input_pin', $jobdata['input_pin']);
-        $statement->bindValue(':input_wave', $jobdata['input_wave']);
-        $statement->bindValue(':gateconfirm', $jobdata['gateconfirm']);
-        $statement->bindValue(':pagemode', $jobdata['pagemode']);
-        $statement->bindValue(':input_seqid', $jobdata['input_seqid']);
-
+        
+        if ($statement === false) {
+            echo "SQL 语句准备失败: " . implode(", ", $this->db_iDas->errorInfo());
+            return false;
+        }
+    
+        // 检查并绑定数据
+        foreach (['input_job_id', 'input_event', 'input_pin', 'input_wave'] as $key) {
+            if (!isset($jobdata[$key])) {
+                echo "缺少键: $key\n";
+                return false;
+            }
+            $statement->bindValue(":$key", $jobdata[$key]);
+        }
+    
         $results = $statement->execute();
-
+    
+        if ($results === false) {
+            echo "执行失败: " . implode(", ", $statement->errorInfo());
+        }
+    
         return $results;
     }
-
+    
     public function edit_input($jobdata){
 
         $sql = "UPDATE `input` 
                     SET input_event = :input_event, 
                         input_pin  = :input_pin,
                         input_wave = :input_wave, 
-                        input_pin  = :input_pin,
-                        gateconfirm = :gateconfirm, 
-                        pagemode = :pagemode, 
-                        input_seqid = :input_seqid ";
+                        input_pin  = :input_pin ";
         $sql .= "WHERE input_event = :input_event  AND input_job_id = :input_job_id;";
 
         $statement = $this->db_iDas->prepare($sql);
@@ -112,9 +121,7 @@ class Input{
         $statement->bindValue(':input_event', $jobdata['input_event']);
         $statement->bindValue(':input_pin', $jobdata['input_pin']);
         $statement->bindValue(':input_wave', $jobdata['input_wave']);
-        $statement->bindValue(':gateconfirm', $jobdata['gateconfirm']);
-        $statement->bindValue(':pagemode', $jobdata['pagemode']);
-        $statement->bindValue(':input_seqid', $jobdata['input_seqid']);
+
         $results = $statement->execute();
         return $results;
     }
@@ -126,8 +133,8 @@ class Input{
         if(true){//先刪除再複製
             $this->delete_input_by_id($to_job_id);
         }
-        $sql= "INSERT INTO input ( input_jobid,input_event,input_pin1,input_pin2,input_pin3,input_pin4,input_pin5,input_pin6,input_pin7,input_pin8,input_pin9,input_pin10,input_gateconfirm,input_pagemode )
-                SELECT  ?,input_event,input_pin1,input_pin2,input_pin3,input_pin4,input_pin5,input_pin6,input_pin7,input_pin8,input_pin9,input_pin10,input_gateconfirm,input_pagemode
+        $sql= "INSERT INTO input ( input_jobid,input_event,input_pin1,input_pin2,input_pin3,input_pin4,input_pin5,input_pin6,input_pin7,input_pin8,input_pin9,input_pin10 )
+                SELECT  ?,input_event,input_pin1,input_pin2,input_pin3,input_pin4,input_pin5,input_pin6,input_pin7,input_pin8,input_pin9,input_pin10
                 FROM    input
                 WHERE input_jobid = ? ";
         $statement = $this->db->prepare($sql);

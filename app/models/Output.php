@@ -7,8 +7,7 @@ class Output{
     // 在建構子將 Database 物件實例化
     public function __construct()
     {
-        $this->db = new Database;
-        $this->db = $this->db->getDb();
+        
 
         $this->dbh = new Database;
 

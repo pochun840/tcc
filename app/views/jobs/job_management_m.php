@@ -411,7 +411,6 @@ function copy_job_by_id(jobid){
 
 
     if(new_jobid){
-        //alert(new_jobid);
         $.ajax({
             url: "?url=Jobs/check_job_type",
             method: "POST",

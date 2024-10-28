@@ -261,6 +261,7 @@ class Jobs extends Controller
                         $new_temp_seq = array();
                         foreach($select_seq as $key =>$val){
                  
+<<<<<<< HEAD
                             $new_temp_seq[$kk]['job_id'] = $new_jobid;
                             $new_temp_seq[$kk]['sequence_id'] = $val['sequence_id'];
                             $new_temp_seq[$kk]['sequence_name'] = $val['sequence_name'];
@@ -272,6 +273,19 @@ class Jobs extends Controller
                             $new_temp_seq[$kk]['opt'] = $val['opt']; 
                             $new_temp_seq[$kk]['k_value'] = $val['k_value']; 
                             $new_temp_seq[$kk]['offset'] = $val['offset'];
+=======
+                            $new_temp_seq[$key]['job_id'] = $new_jobid;
+                            $new_temp_seq[$key]['sequence_id'] = $val['sequence_id'];
+                            $new_temp_seq[$key]['sequence_name'] = $val['sequence_name'];
+                            $new_temp_seq[$key]['sequence_enable'] = $val['sequence_enable'];
+                            $new_temp_seq[$key]['tightening_repeat'] = $val['tightening_repeat'];
+                            $new_temp_seq[$key]['ng_stop'] = $val['ng_stop']; 
+                            $new_temp_seq[$key]['seq_ok'] = $val['seq_ok']; 
+                            $new_temp_seq[$key]['stop_seq_ok'] = $val['stop_seq_ok']; 
+                            $new_temp_seq[$key]['opt'] = $val['opt']; 
+                            $new_temp_seq[$key]['k_value'] = $val['k_value']; 
+                            $new_temp_seq[$key]['offset'] = $val['offset'];
+>>>>>>> b907e8e54885d20475a82d836145a34e1b4ab8b4
 
                             
                         }
@@ -302,11 +316,16 @@ class Jobs extends Controller
                             $new_temp_step[$key_step]['downshift_torque'] = $val_step['downshift_torque'];
                             $new_temp_step[$key_step]['downshift_speed'] = $val_step['downshift_speed'];
                         }
+<<<<<<< HEAD
                         echo "<pre>";
                         print_r($new_temp_step);
                         echo "</pre>";
                         //die();
                         //$insertedrecords = $this->jobModel->copy_step_by_job_id($new_temp_step);  
+=======
+                      
+                        $res = $this->jobModel->copy_step_by_job_id($new_temp_step);     
+>>>>>>> b907e8e54885d20475a82d836145a34e1b4ab8b4
                     }
                     
                     if($res){

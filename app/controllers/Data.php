@@ -104,9 +104,13 @@ class Data extends Controller
         if ($input_check) {
             $unit_arr = $this->MiscellaneousModel->details('torque_unit');
             $status_arr = $this->MiscellaneousModel->details('status');
-    
-            $start_date = str_replace('-', "", $start_date);
-            $end_date = str_replace('-', "", $end_date);
+
+            if (PHP_OS_FAMILY != 'Linux'){
+                $start_date = str_replace('-', "", $start_date);
+                $end_date = str_replace('-', "", $end_date);
+                
+            }
+
             $dataset = $this->DataModel->get_range_data($start_date, $end_date);
     
 

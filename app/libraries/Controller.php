@@ -98,7 +98,7 @@ class Controller
     public function LoginCheck($value='')
     {
         if( PHP_OS_FAMILY == 'Linux'){
-            $con_db = new PDO('sqlite:/var/www/html/database/data.db'); 
+            $con_db = new PDO('sqlite:/var/www/html/database/das.db'); 
         }else{
             $con_db = new PDO('sqlite:../data.db'); 
         }

@@ -25,7 +25,6 @@ class Sequence{
 
     }
 
-
     #透過 job_id  取得當前有幾個seq
     public function countseq($jobid ){
         $sql = "SELECT COUNT(*) as count FROM sequence WHERE job_id = ? ";
@@ -237,8 +236,6 @@ class Sequence{
                 $update_statement->execute([$new_val, $jobid, $v_s['sequence_name']]);
 
 
-            
-                
                 $rows_count = $update_statement->rowCount();
                 if ($rows_count  > 0){
                     $new_val = 'New_Value'.($k_s + 1);
@@ -294,9 +291,8 @@ class Sequence{
                     $update_statement->execute();
 
                     
-                    //echo "Executed: ".$sql_step."\n";
                 }else{
-                    //echo "No record found for job_id ".$jobid."and sequence_id .".$sequence_id."\n";
+                  
                 }
 
             }

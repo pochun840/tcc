@@ -163,7 +163,6 @@ class Job{
 
         if ($rows['count'] > 0) {
             //$this->del_job_type($jobid);
-            
             return "True"; // job_id已存在
 
         }else{

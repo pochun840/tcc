@@ -448,9 +448,56 @@ class Setting{
         return $row['device_torque_unit'];
     }
 
-
+    public function backup_CopyFile($sourceFile, $backupFile) {
+        // 檢查來源文件是否存在
+        if (!file_exists($sourceFile)) {
+            echo "來源文件不存在: $sourceFile\n"; // 输出调试信息
+            return false; // 如果來源文件不存在，返回 false
+        } else {
+            echo "來源文件存在: $sourceFile\n"; // 输出调试信息
+        }
     
- 
+        // 創建備份文件
+        if (file_exists($backupFile)) {
+            unlink($backupFile); // 如果備份文件已存在，刪除它
+            echo "備份文件已存在，已刪除: $backupFile\n"; // 输出调试信息
+        } else {
+            echo "備份文件不存在，準備創建: $backupFile\n"; // 输出调试信息
+        }
+    
+        // 複製來源文件到備份文件
+        if (!copy($sourceFile, $backupFile)) {
+            echo "複製失敗: $sourceFile 到 $backupFile\n"; // 输出调试信息
+            return false; // 如果複製失敗，返回 false
+        }
+    
+        echo "複製成功: $sourceFile 到 $backupFile\n"; // 输出调试信息
+        return true; // 成功時返回 true
+    }
     
 
+    public function backupAndCopyDatabase($sourceFile, $backupFile, $newFile) {
+        // 检查源文件是否存在
+        if (!file_exists($sourceFile)) {
+            echo "錯誤：源文件不存在: $sourceFile\n"; // 如果源文件不存在，输出错误消息
+            return false; // 返回错误
+        }
+    
+        // 尝试备份源文件
+        if (!@copy($sourceFile, $backupFile)) {
+            echo "錯誤：備份失敗，無法複製到: $backupFile\n"; // 如果备份失败，输出错误消息
+            return false; // 返回错误
+        }
+    
+        // 尝试将备份文件复制到原始 data.db
+        if (file_exists($backupFile)) { // 确保备份文件存在
+            if (!@copy($backupFile, $newFile)) {
+                echo "錯誤：複製失敗，無法複製到: $newFile\n"; // 如果复制失败，输出错误消息
+                return false; // 返回错误
+            }
+        }
+    
+        return true; // 成功完成所有操作
+    }
+    
 }
