@@ -88,29 +88,12 @@ class Steptcc{
 
 
     public function create_step($mode, $jobdata) {
-        echo "<pre>";
-        print_r($jobdata);
-        echo "</pre>";
+    
     
         if (empty($jobdata['job_id'])) {
             return false; 
         }
         
-<<<<<<< HEAD
-        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, 	downshift_torque,downshift_speed )";
-        $sql .= " VALUES (:job_id,:sequence_id,:step_id,:target_option,:target_torque,:target_angle,:target_delaytime,:hi_torque,:lo_torque,:hi_angle,:lo_angle,:rpm,:direction,:downshift,:threshold_torque,:downshift_torque,:downshift_speed );";
-        $statement = $this->db_iDas->prepare($sql);
-
-        if ($mode == "copy" ) {
-            $statement->bindValue(':job_id', $jobdata['job_id']);
-            $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
-            $statement->bindValue(':step_id', $jobdata['step_id']);
-        }else{
-            
-            $statement->bindValue(':job_id', $jobdata['job_id']);
-            $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
-            $statement->bindValue(':step_id', $jobdata['step_id']);
-=======
         $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, downshift_torque, downshift_speed) ";
         $sql .= "VALUES (:job_id, :sequence_id, :step_id, :target_option, :target_torque, :target_angle, :target_delaytime, :hi_torque, :lo_torque, :hi_angle, :lo_angle, :rpm, :direction, :downshift, :threshold_torque, :downshift_torque, :downshift_speed);";
     
@@ -118,7 +101,6 @@ class Steptcc{
         if ($this->db_iDas === null) {
             echo "数据库连接无效。";
             return false;
->>>>>>> b907e8e54885d20475a82d836145a34e1b4ab8b4
         }
     
         $statement = $this->db_iDas->prepare($sql);
@@ -148,12 +130,8 @@ class Steptcc{
         $statement->bindValue(':threshold_torque', $jobdata['threshold_torque']);
         $statement->bindValue(':downshift_torque', $jobdata['downshift_torque']);
         $statement->bindValue(':downshift_speed', $jobdata['downshift_speed']);
-<<<<<<< HEAD
-
-=======
     
         // 执行查询并检查结果
->>>>>>> b907e8e54885d20475a82d836145a34e1b4ab8b4
         $results = $statement->execute();
         if (!$results) {
             echo "执行错误: " . implode(", ", $statement->errorInfo());

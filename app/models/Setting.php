@@ -476,28 +476,24 @@ class Setting{
     }
     
 
-    public function backupAndCopyDatabase($sourceFile, $backupFile, $newFile) {
-        // 检查源文件是否存在
+
+    public function backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile) {
+        // 檢查源文件是否存在
         if (!file_exists($sourceFile)) {
-            echo "錯誤：源文件不存在: $sourceFile\n"; // 如果源文件不存在，输出错误消息
-            return false; // 返回错误
+            return false; // 如果源文件不存在，返回錯誤
         }
     
-        // 尝试备份源文件
-        if (!@copy($sourceFile, $backupFile)) {
-            echo "錯誤：備份失敗，無法複製到: $backupFile\n"; // 如果备份失败，输出错误消息
-            return false; // 返回错误
+        // 嘗試備份源文件
+        if (!copy($sourceFile, $backupFile)) {
+            return false; // 如果備份失敗，返回錯誤
         }
     
-        // 尝试将备份文件复制到原始 data.db
-        if (file_exists($backupFile)) { // 确保备份文件存在
-            if (!@copy($backupFile, $newFile)) {
-                echo "錯誤：複製失敗，無法複製到: $newFile\n"; // 如果复制失败，输出错误消息
-                return false; // 返回错误
-            }
+        // 嘗試將新的資料庫文件複製到指定位置
+        if (!copy($newFile, $sourceFile)) {
+            return false; // 如果複製失敗，返回錯誤
         }
     
         return true; // 成功完成所有操作
     }
-    
+
 }

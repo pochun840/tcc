@@ -44,15 +44,12 @@ class Step extends Controller
             $stepid_new = count($step) + 1 ;
         }
 
-<<<<<<< HEAD
-=======
         if(!empty($check[0]['count_records'])){
             $check_step_torque = 1;
         }else{
             $check_step_torque = '';
         }
 
->>>>>>> b907e8e54885d20475a82d836145a34e1b4ab8b4
         
         $data = array(
             'isMobile' => $isMobile,
@@ -67,13 +64,9 @@ class Step extends Controller
             'unit' => $unit,
             'check' => $check,
             'seq_id' => $seq_id,
-<<<<<<< HEAD
-            'unit_name' => $unit_name
-=======
             'unit_name' => $unit_name,
             'check_step_torque' => $check_step_torque,
             'check' => $check
->>>>>>> b907e8e54885d20475a82d836145a34e1b4ab8b4
 
         );
 
@@ -527,11 +520,7 @@ class Step extends Controller
                         'downshift'        => $old_res[0]['downshift'],
                         'threshold_torque' => $old_res[0]['threshold_torque'],
                         'downshift_torque' => $old_res[0]['downshift_torque'],
-<<<<<<< HEAD
-                        'downshift_speed'    => $old_res[0]['downshift_speed']
-=======
                         'downshift_speed'  => $old_res[0]['downshift_speed']
->>>>>>> b907e8e54885d20475a82d836145a34e1b4ab8b4
                     );
     
                     $mode = "copy"; 

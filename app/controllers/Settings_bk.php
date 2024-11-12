@@ -432,43 +432,49 @@ class Settings extends Controller
     public function export_sysytem_config()
     {
         if( PHP_OS_FAMILY == 'Linux'){
+            /*require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+            $modbus = new ModbusMaster("127.0.0.1", "TCP");
+            try {
+                $modbus->port = 502;
+                $data = array(1);
+                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
 
-            //檢查.idas_data.db 是否存在
-            $file = '/var/www/html/database/iDas_data.db';
-            $filename = "data.cfg"; 
-            if (file_exists($file)) {
-                //echo json_encode(array('status' => 'success', 'message' => 'Database exists.'));
-                $cfgContent = file_get_contents($file);
-            
-                if (strpos($cfgContent, 'table - device') !== false) {
-                    $cfgContent = preg_replace('/table - device.*?\n/', '', $cfgContent);
-                }
+                // FC 16
+                $modbus->writeMultipleRegister(0, 505, $data, $dataTypes);
+                $this->logMessage('modbus write 505 ,array = '.implode("','", $data));
+                $this->logMessage('modbus status:'.$modbus->status);
+                // echo json_encode(array('error' => ''));
+                // exit();
 
-            } else {
-                
-                echo json_encode(array('status' => 'error', 'message' => 'Database file not found.'));
+                header("Content-type: text/html; charset=utf-8");
+                $file="/mnt/ramdisk/FTP/tcscon.cfg"; // 實際檔案的路徑+檔名
+                $filename="tcscon.cfg"; // 下載的檔名
+                //指定類型
+                header("Content-type: ".filetype("$file"));
+                //指定下載時的檔名
+                header("Content-Disposition: attachment; filename=".$filename."");
+                //輸出下載的內容。
+                readfile($file);
+
+            } catch (Exception $e) {
+                $this->logMessage('modbus write 505 fail');
+                $this->logMessage('db_sync D2C end');
+                echo json_encode(array('error' => 'modbus error'));
                 exit();
-            }
+            }*/
+        }else{//windows
             
-        }else{
-            
-            $file = "../data.db"; 
-            $filename = "data.cfg"; 
-
-            $cfgContent = file_get_contents($file);
-            
-            if (strpos($cfgContent, 'table - device') !== false) {
-                $cfgContent = preg_replace('/table - device.*?\n/', '', $cfgContent);
-            }          
+            header("Content-type: text/html; charset=utf-8");
+            $file="../data.db"; // 實際檔案的路徑+檔名
+            $filename="data.cfg"; // 下載的檔名
+            //指定類型
+            header("Content-type: ".filetype("$file"));
+            //指定下載時的檔名
+            header("Content-Disposition: attachment; filename=".$filename."");
+            //輸出下載的內容。
+            readfile($file);
+            exit();
         }
-
-                    
-        header("Content-type: " . filetype("$file"));
-        header("Content-Disposition: attachment; filename=" . $filename);
-        echo $cfgContent;
-        exit();
-        
-
     }
 
     public function system_storage()
@@ -646,69 +652,8 @@ class Settings extends Controller
     }
 
 
-
-    //把  /var/www/html/database/data.db 備份為 /var/www/html/database/data_bk.db
-    //並把 data_bk.db 再另存一個.db 檔名為iDas_data.db
-    public function Sync_check_db() {
-        $file = $this->MiscellaneousModel->lang_load();
-        if (!empty($file)) {
-            include $file;
-        }
-    
-        $input_check = true;
-        if (!empty($_POST['argument']) && isset($_POST['argument'])) {
-            $argument = $_POST['argument'];
-        } else {
-            $argument = '';
-        }
-    
-        $argument = 'D2C';
-        $Das_DB_Location = '/var/www/html/database/iDas_data.db'; // iDas 資料庫路徑
-        $Con_DB_Location = '/var/www/html/database/data.db'; // 控制器資料庫路徑
-        $Backup_DB_Location = '/var/www/html/database/data_bk.db'; // 備份資料庫路徑
-    
-        if (!empty($argument)) {
-            if (PHP_OS_FAMILY == 'Linux' && $argument == 'D2C') {
-    
-                // 時間差異提醒
-                if (filemtime($Con_DB_Location) > filemtime($Das_DB_Location)) {
-                    $notice = $text['system_sync_notice'] . date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
-                }
-    
-                // DB 欄位差異判斷
-                if (!$this->Database_Column_Diff()) {
-                    $warning .= 'DB 結構不相同';
-                }
-    
-                // 備份並複製文件
-                $res_backup = $this->SettingModel->backup_CopyFile($Con_DB_Location, $Backup_DB_Location);
-    
-                if ($res_backup) {
-                    // 複製備份文件為 iDas_data.db
-                    if (file_exists($Backup_DB_Location)) {
-                        if (file_exists($Das_DB_Location)) {
-                            unlink($Das_DB_Location); // 刪除已存在的 iDas_data.db
-                        }
-                        copy($Backup_DB_Location, $Das_DB_Location); // 複製備份文件為 iDas_data.db
-                        $res_msg = "同步成功";
-                        $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
-                    } else {
-                        $res_msg = "備份文件不存在";
-                        $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
-                    }
-                } else {
-                    $res_msg = "備份錯誤";
-                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
-                }
-    
-                echo $res_msg;
-            }
-        }
-    }
-    
-    
-    public  function Sync_check_db_load(){
-
+    public function Sync_check_db()
+    {
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
@@ -716,48 +661,19 @@ class Settings extends Controller
    
         if (!empty($_POST['argument']) && isset($_POST['argument'])) {
             $argument = $_POST['argument'];
-        }else{
+        } else {
             $argument = '';
         }
 
-        $Das_DB_Location = '/var/www/html/database/iDas_data.db'; //idas 
-        $Con_DB_Location = '/var/www/html/database/data.db'; //控制器
+        var_dump($argument);
+        die();
 
-        if(!empty($argument)){
-            if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
-
-                //時間差異提醒
-                if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
-                    $notice = $text['system_sync_notice'].date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
-                }
-
-                //DB欄位差異判斷
-                if(!$this->Database_Column_Diff()){
-                    $warning .= 'DB is different';
-                }
-
-
-                $sourceFile = '/var/www/html/database/data.db';
-                $backupFile = '/var/www/html/database/data_bk.db';
-                $newFile = '/var/www/html/database/iDas_data.db';
-
-                $res  = $this->SettingModel->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
-                $result = array();
-                if($res){
-                    $res_msg  = "SYNC Success";
-                    $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
-                }else{
-                    $res_msg  = "SYNC Error";
-                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
-                }
-
-            }
-        }
-    }
         
+  
+    }
 
 
-    
+
     
     //get barcode
     public function GetBarcodes()
@@ -1217,13 +1133,13 @@ class Settings extends Controller
     //DB欄位差異判斷
     function Database_Column_Diff()
     {
-        $dbPath1 = '/var/www/html/database/iDas_data.db';
+        $dbPath1 = '/var/www/html/database/idas_data.db';
         $dbPath2 = '/var/www/html/database/data.db';
 
         if ($this->validateTableStructure($dbPath1, $dbPath2)) {
-            echo "两个数据库的表结构相同。\n";
+            // echo "两个数据库的表结构相同。\n";
         } else {
-            echo "两个数据库的表结构不同。\n";
+            // echo "两个数据库的表结构不同。\n";
             return false;
         }
 
@@ -1320,5 +1236,7 @@ class Settings extends Controller
          }
 
          return true;
-    }    
+    }
+
+    
 }

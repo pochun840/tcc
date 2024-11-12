@@ -40,7 +40,7 @@
                         </table>
                     </div>
                     <div class="modal-footer justify-content-center w3-dark-grey" style="height: 48px">
-                        <button id="select_confirm" type="button" class="btn btn-primary" onclick='job_confirm_output()'><?php echo $text['confirm'];?></button>
+                        <button id="select_confirm" type="button" class="btn btn-primary" onclick='job_confirm()'><?php echo $text['confirm'];?></button>
                         <button id="select_close" type="button" class="btn btn-secondary" onclick="document.getElementById('JobSelect').style.display='none'"><?php echo $text['close'];?></button>
                     </div>
                 </form>
@@ -572,7 +572,7 @@ function toggleElementsInRange(start, end, suffix, disable) {
 
 var old_output_event; 
 var output_event;
-function job_confirm_output(){
+function job_confirm(){
     var jobid = document.getElementById("JobNameSelect").value;
     localStorage.setItem("jobid", jobid);
     job_id = jobid;
