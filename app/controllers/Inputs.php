@@ -66,7 +66,7 @@ class Inputs extends Controller
                 foreach ($job_inputs as $kk => $vv) {
                     if (!empty($vv['input_pin'])) {
                         $pin_number = $vv['input_pin'];
-                        $gateconfirm = $vv['gateconfirm'];
+                        $gateconfirm = "1";
                         $temp[] = "pin" . $pin_number . "_high";
                         $temp[] = "pin" . $pin_number . "_low";
                         $temp[] = "edit_pin" . $pin_number . "_high";

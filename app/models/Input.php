@@ -78,17 +78,18 @@ class Input{
 
     public function create_input($jobdata){   
     
-        $sql = "INSERT INTO `input` (input_job_id, input_event, input_pin, input_wave, gateconfirm, pagemode, input_seqid) ";
-        $sql .= "VALUES (:input_job_id, :input_event, :input_pin, :input_wave, :gateconfirm, :pagemode, :input_seqid);";
+        $sql = "INSERT INTO `input` (input_job_id, input_event, input_pin, input_wave) ";
+        $sql .= "VALUES (:input_job_id, :input_event, :input_pin, :input_wave);";
+
 
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':input_job_id', $jobdata['input_job_id']);
         $statement->bindValue(':input_event', $jobdata['input_event']);
         $statement->bindValue(':input_pin', $jobdata['input_pin']);
         $statement->bindValue(':input_wave', $jobdata['input_wave']);
-        $statement->bindValue(':gateconfirm', $jobdata['gateconfirm']);
-        $statement->bindValue(':pagemode', $jobdata['pagemode']);
-        $statement->bindValue(':input_seqid', $jobdata['input_seqid']);
+        //$statement->bindValue(':gateconfirm', $jobdata['gateconfirm']);
+        //$statement->bindValue(':pagemode', $jobdata['pagemode']);
+        //$statement->bindValue(':input_seqid', $jobdata['input_seqid']);
 
         $results = $statement->execute();
 
@@ -101,10 +102,7 @@ class Input{
                     SET input_event = :input_event, 
                         input_pin  = :input_pin,
                         input_wave = :input_wave, 
-                        input_pin  = :input_pin,
-                        gateconfirm = :gateconfirm, 
-                        pagemode = :pagemode, 
-                        input_seqid = :input_seqid ";
+                        input_pin  = :input_pin";
         $sql .= "WHERE input_event = :input_event  AND input_job_id = :input_job_id;";
 
         $statement = $this->db_iDas->prepare($sql);
@@ -112,10 +110,6 @@ class Input{
         $statement->bindValue(':input_event', $jobdata['input_event']);
         $statement->bindValue(':input_pin', $jobdata['input_pin']);
         $statement->bindValue(':input_wave', $jobdata['input_wave']);
-        $statement->bindValue(':gateconfirm', $jobdata['gateconfirm']);
-        $statement->bindValue(':pagemode', $jobdata['pagemode']);
-        $statement->bindValue(':input_seqid', $jobdata['input_seqid']);
-        $results = $statement->execute();
         return $results;
     }
 
@@ -164,9 +158,9 @@ class Input{
     }
 
     public function generateTableCell($value,$value2) {
-        if($value >= 2 && $value <= 10){
+        if($value >= 2 && $value <= 12){
             $tableCells = "";
-            for($i = 2; $i <= 10; $i++){
+            for($i = 2; $i <= 12; $i++){
                 if($i == $value){ 
                     if($value2 == 1){
                         $img = '<img src="./img/high.png" style="max-width: 50px;">';
