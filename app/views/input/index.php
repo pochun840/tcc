@@ -285,7 +285,7 @@
                     					    <label class="form-check-label" for="pin7_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="col form-check form-check-inline" style="margin-left: -10px">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_low" value="2">
                     					    <label class="form-check-label" for="pin7_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
@@ -479,7 +479,7 @@
                     					    <label class="form-check-label" for="pin7_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="col form-check form-check-inline" style="margin-left: -10px">
-                    					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_low" value="1">
+                    					    <input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin7_low" value="2">
                     					    <label class="form-check-label" for="edit_pin7_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
