@@ -98,20 +98,29 @@ class Input{
 
     public function edit_input($jobdata){
 
+        if (!isset($jobdata['input_job_id'], $jobdata['input_event'], $jobdata['input_pin'], $jobdata['input_wave'])) {
+            throw new Exception('Missing required fields in jobdata');
+        }
+    
         $sql = "UPDATE `input` 
-                    SET input_event = :input_event, 
-                        input_pin  = :input_pin,
-                        input_wave = :input_wave, 
-                        input_pin  = :input_pin";
-        $sql .= "WHERE input_event = :input_event  AND input_job_id = :input_job_id;";
-
+                SET input_event = :input_event, 
+                    input_wave = :input_wave, 
+                    input_pin  = :input_pin
+                WHERE input_job_id = :input_job_id";
+    
         $statement = $this->db_iDas->prepare($sql);
+    
         $statement->bindValue(':input_job_id', $jobdata['input_job_id']);
         $statement->bindValue(':input_event', $jobdata['input_event']);
         $statement->bindValue(':input_pin', $jobdata['input_pin']);
         $statement->bindValue(':input_wave', $jobdata['input_wave']);
+    
+        $statement->execute();
+        $results = $statement->rowCount();  
+    
         return $results;
     }
+    
 
 
     public function copy_input_by_id($from_job_id,$to_job_id){
