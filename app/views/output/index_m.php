@@ -489,10 +489,25 @@ function crud_job_event(argument){
     }
 
     if(argument == 'del' && job_id != '' &&  del_output_val){
+
+        var selectedRows = document.querySelectorAll('#output_jobid_select tr.selected');
+        if (!selectedRows.length > 0) {
+            getLanguageMessage('language'); 
+            return;
+        }
+        
         delete_output_id(job_id,del_output_val);
     }
 
     if(argument == 'new' && job_id != ''){
+
+        var selectedRows = document.querySelectorAll('#output_jobid_select tr.selected');
+        if (!selectedRows.length > 0) {
+            getLanguageMessage('language'); 
+            return;
+        }
+
+        
 
         if (Array.isArray(temp)){ 
             temp.forEach(function(element) {
@@ -582,6 +597,14 @@ function crud_job_event(argument){
     }
 
     if (argument === 'edit' && job_id != '' && output_event != '') {
+
+        var selectedRows = document.querySelectorAll('#output_jobid_select tr.selected');
+        if (!selectedRows.length > 0) {
+            getLanguageMessage('language'); 
+            return;
+        }
+
+
         var selectElement = document.getElementById('edit_event_option');
         if (selectElement) {
             selectElement.disabled = true;
@@ -678,6 +701,12 @@ function crud_job_event(argument){
                 options[i].disabled = true; 
                 options[i].classList.add('disabled_input'); 
             }
+        }
+
+        var selectedRows = document.querySelectorAll('#output_jobid_select tr.selected');
+        if (!selectedRows.length > 0) {
+            getLanguageMessage('language'); 
+            return;
         }
 
 

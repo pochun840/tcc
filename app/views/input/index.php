@@ -651,6 +651,14 @@ window.onclick = function(event) {
 
 function crud_job_event(argument){
     if(argument == 'new' && job_id != ''){
+
+
+        var selectedRows = document.querySelectorAll('#input_jobid_select tr.selected');
+        if (!selectedRows.length > 0) {
+            getLanguageMessage('language'); 
+            return;
+        }
+
         //針對已設定的pin角位disable
         if (Array.isArray(temp)){ 
             temp.forEach(function(element) {
@@ -680,12 +688,25 @@ function crud_job_event(argument){
     } 
     
     if(argument == 'del' && job_id  != '' &&  input_event != '')  {
+
+        var selectedRows = document.querySelectorAll('#input_jobid_select tr.selected');
+        if (!selectedRows.length > 0) {
+            getLanguageMessage('language'); 
+            return;
+        }
+
         delete_input_id(job_id,input_event);
     }
 
 
     if(argument == 'edit' && job_id != '' && input_event != ''){
 
+        var selectedRows = document.querySelectorAll('#input_jobid_select tr.selected');
+        if (!selectedRows.length > 0) {
+            getLanguageMessage('language'); 
+            return;
+        }
+        
         var selectElement = document.getElementById('edit_Event_Option');
         if(selectElement){
             selectElement.disabled = true;
