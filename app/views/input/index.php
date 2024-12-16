@@ -15,7 +15,7 @@
             <div class="topnav">
                 <label style="font-size:2.5vmin;color: #000; padding-left: 2%" for="job_id"><?php echo $text['job_id'];?> :</label>&nbsp;
                 <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="" disabled style="height:30px; font-size:2.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
-                <button id="Button_Select" type="button" onclick="document.getElementById('JobSelect').style.display='block'"><?php echo $text['select'];?></button>
+                <button id="Button_Select" type="button" onclick="document.getElementById('JobSelect').style.display='block'" style="height:30px;width:100px; font-size:2.5vmin; line-height:30px; padding: 0; vertical-align: middle; margin-top: -10px;" ><?php echo $text['select'];?></button>
             </div>
 
             <!-- Job Select Modal -->
@@ -654,10 +654,10 @@ function crud_job_event(argument){
 
 
         var selectedRows = document.querySelectorAll('#input_jobid_select tr.selected');
-        if (!selectedRows.length > 0) {
+        /*if (!selectedRows.length > 0) {
             getLanguageMessage('language'); 
             return;
-        }
+        }*/
 
         //針對已設定的pin角位disable
         if (Array.isArray(temp)){ 
@@ -669,6 +669,7 @@ function crud_job_event(argument){
             });
         } 
         
+        alert(tempA);
         //針對已設定的事件option做反灰+disable
         if (Array.isArray(tempA)){
             tempA.forEach(function(element){

@@ -501,99 +501,40 @@ function crud_job_event(argument){
 
     if(argument == 'new' && job_id != ''){
 
-        var selectedRows = document.querySelectorAll('#output_jobid_select tr.selected');
-        if (!selectedRows.length > 0) {
-            getLanguageMessage('language'); 
-            return;
-        }
+            if (Array.isArray(temp)){ 
+                temp.forEach(function(element) {
+                    var radio = document.getElementById(element);
+                    if (radio && radio.type === 'radio') { 
+                        radio.disabled = true; 
+                    }
+                });
+            } 
 
-        
-
-        if (Array.isArray(temp)){ 
+            var filtered_array = [];
             temp.forEach(function(element) {
-                var radio = document.getElementById(element);
-                if (radio && radio.type === 'radio') { 
-                    radio.disabled = true; 
+                // 檢查是否是以 'pin' 開頭並且不包含 'edit_pin'
+                if (element.includes('pin') && !element.includes('edit_pin')) {
+                    filtered_array.push(element);
                 }
             });
-        } 
 
-        var filtered_array = [];
-        temp.forEach(function(element) {
-            // 檢查是否是以 'pin' 開頭並且不包含 'edit_pin'
-            if (element.includes('pin') && !element.includes('edit_pin')) {
-                filtered_array.push(element);
-            }
-        });
 
-        filtered_array.forEach(function(id) {
-            
-            var match = id.match(/(pin\d+)_(\d+)/);
-            if (match) {
-                var basePinId = match[1]; 
-                var pinNumber = match[2]; 
+            disableElements(filtered_array);
 
-        
-                for (var i = 1; i <= 3; i++) {
-                    var pinElementId = basePinId + "_" + i;
-                    var pinElement = document.getElementById(pinElementId);
-                    if (pinElement && pinElement.type === 'radio') {
-                        pinElement.disabled = true;
-                    }
+
+            document.getElementById('new_output').style.display='block';
+            var eventOption = document.getElementById('Event_Option');
+            eventOption.addEventListener('change', function() {
+                var selectedOptionId = eventOption.options[eventOption.selectedIndex].value;
+                if(selectedOptionId == 7 || selectedOptionId == 8 || selectedOptionId == 9){
+                    toggleElementsInRange(1, 11, 2, true);
+                }else{
+                    toggleElementsInRange(1, 11, 2, false);
+                    disableElements(filtered_array);
                 }
-
-                // 禁用 time 相關的元素
-                var timeElementId = 'time' + basePinId.slice(3); // 假設 time ID 的格式是 'time' + 數字部分
-                var timeElement = document.getElementById(timeElementId);
-                if (timeElement) {
-                    timeElement.disabled = true;
-                }
-            }
-        });
+            }); 
 
 
-         //針對已設定的事件option做反灰+disable
-         if (Array.isArray(tempA)){
-            tempA.forEach(function(element){
-                var option = document.querySelector('#Event_Option option[value="' + element + '"]');
-                if(option){
-                    if (option.selected){
-                        selectedValue = element;
-                    }
-
-                    option.disabled = true;
-                    option.classList.add('disabled_input');
-                }
-            });
-        }
-
-
-        document.getElementById('new_output').style.display='block';
-
-        document.getElementById('new_output').style.display='block';
-        var eventOption = document.getElementById('Event_Option');
-        eventOption.addEventListener('change', function() {
-            var selectedOptionId = eventOption.options[eventOption.selectedIndex].value;
-            if(selectedOptionId == 7 || selectedOptionId == 8 || selectedOptionId == 9){
-                toggleElementsInRange(1, 11, 2, true);
-            }else{
-                toggleElementsInRange(1, 11, 2, false);
-            }
-
-            let tempC = tempA.slice();
-            tempC.forEach(pin => {
-                for (let i = 1; i <= 3; i++) {
-                    let id = `pin${pin}_${i}`;
-                    let element = document.getElementById(id);
-                    if (element) {
-                        element.disabled = true; 
-                    }
-                }
-            });
-            
-        });
-               
-        
     }
 
     if (argument === 'edit' && job_id != '' && output_event != '') {
@@ -1272,4 +1213,31 @@ function toggleOnputTime_edit(inputId, checked, option) {
     }
 }
 
+function disableElements(filtered_array) {
+    // 生成新的 id 数组，去除末尾的数字并添加 "_1", "_2", "_3" 和 "time1" 到 "time11"
+    let new_array = filtered_array
+        .map(item => item.replace(/_\d$/, ''))  // 去除原始字符串末尾的数字
+        .flatMap(item => {
+            let result = [
+                item + "_1",
+                item + "_2",
+                item + "_3"
+            ];
+
+            // 新增 "time" + 1 到 11
+            for (let i = 1; i <= 11; i++) {
+                result.push("time" + i);
+            }
+
+            return result;
+        });
+
+    // 遍历新生成的 id 数组，如果元素存在就禁用它
+    new_array.forEach(id => {
+        let element = document.getElementById(id); 
+        if (element) {
+            element.disabled = true;  // 禁用该元素
+        }
+    });
+}
 </script>
