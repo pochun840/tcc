@@ -1,5 +1,18 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_seq_m.css" type="text/css">
+<style>
+.form-control{
+    width: 100px;
+    display: initial!important;
+}
+
+.form-control.is-invalid{
+    padding-right:inherit!important;
+}
+.is-invalid~.invalid-feedback{
+    display: inline!important;
+}
+</style>
 
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -113,12 +126,14 @@
                                     <div for="seq-name" class="col-6 t1"><?php echo $text['seq_name'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="seq_name" maxlength="" >
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div for="Tighten-Repeat" class="col-6 t1"><?php echo $text['tighten_repeat'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="tighten_repeat" maxlength="" >
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -157,12 +172,14 @@
                                     <div for="k(30%-300%)" class="col-6 t1">K (30%-300%):</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="K" maxlength="" >
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div for="offset" class="col-6 t1"><?php echo $text['Joint_Offset'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="offset" maxlength="" >
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                               
@@ -235,12 +252,14 @@
                                     <div for="seq-name" class="col-6 t1"><?php echo $text['seq_name'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_seq_name" maxlength="" >
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div for="Tighten-Repeat" class="col-6 t1"><?php echo $text['tightening_repeat'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_tighten_repeat" maxlength="" >
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
 
@@ -282,12 +301,14 @@
                                     <div for="k(30%-300%)" class="col-6 t1">K (30%-300%):</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_K" maxlength="" >
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div for="offset" class="col-6 t1"><?php echo $text['Joint_Offset'];?>:</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_offset" maxlength="" >
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
                                

@@ -1,6 +1,18 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_seq.css" type="text/css">
+<style>
+.form-control{
+    width: auto!important;
+    display: initial!important;
+}
 
+.form-control.is-invalid{
+    padding-right:inherit!important;
+}
+.is-invalid~.invalid-feedback{
+    display: inline!important;
+}
+</style>
 
 <div class="container-ms">
     <div class="w3-text-white w3-center">
