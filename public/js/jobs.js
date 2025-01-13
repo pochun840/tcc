@@ -77,7 +77,10 @@ function updatejob(){
     var jobokValue = document.querySelector('input[name="edit_job_ok"]:checked').value;
     var stopjobValue = document.querySelector('input[name="edit_stop_job_ok"]:checked').value;
 
-    if(jobid) {
+    //驗證
+    let check = input_check_editjob();
+    
+    if(check) {
         $.ajax({
             url: "?url=Jobs/update_job",
             method: "POST",

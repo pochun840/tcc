@@ -1,5 +1,19 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_jobs.css" type="text/css">
+<style>
+.form-control{
+    width: auto!important;
+    display: initial!important;
+}
+
+.form-control.is-invalid{
+    padding-right:inherit!important;
+}
+.is-invalid~.invalid-feedback{
+    display: inline!important;
+}
+</style>
+
 
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -85,13 +99,14 @@
                         <div class="row">
                             <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_id" maxlength=""  value='<?php echo $data['jobint'];?>'>
+                                <input type="text" class="form-control input-ms" id="job_id"  value='<?php echo $data['jobint'];?>'>
                             </div>
                         </div>
                         <div class="row">
                             <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_name" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="job_name"  >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
@@ -152,12 +167,14 @@
                             <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(1=10%) :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="reverse_rpm" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row">
                             <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>(1=10%):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="reverse_power" maxlength="">
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
@@ -195,6 +212,7 @@
                             <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_jobname" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
@@ -254,12 +272,14 @@
                             <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(1=10%) :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_reverse_rpm" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row">
                             <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>(1=10%):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_reverse_power" maxlength="">
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
@@ -405,7 +425,10 @@ function savejob() {
     var stopjobokElement = document.querySelector('input[name="stop_job_ok"]:checked');
     var stop_job_ok_val = stopjobokElement ? stopjobokElement .value : null;
 
-    if (jobname_val && reverse_rpm_val && reverse_power_val  && direction_val ) {
+    //驗證
+    let check = input_check_savejob();
+
+    if (check) {
         $.ajax({
             url: "?url=Jobs/create_job",
             method: "POST",
@@ -508,4 +531,84 @@ function copy_job_by_id(jobid){
         document.getElementById('copyjob').style.display = 'none';
     }
 }
+
+function validateInput(element, pattern, min, max) {
+    let value = element.value.trim();
+    let isValid = true;
+
+    // 验证空值
+    if (value === "") {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证正则
+    else if (!pattern.test(value)) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最小值
+    else if (min !== null && parseFloat(value) < min) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最大值
+    else if (max !== null && parseFloat(value) > max) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 通过验证
+    else {
+        element.classList.remove("is-invalid");
+    }
+
+    return isValid;
+}
+
+function input_check_savejob() {
+    let conditions = [
+        { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
+        { id: 'reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        { id: 'reverse_power', pattern: /^[0-9]+$/, min: 1, max: 10 },
+    ];
+
+    let isFormValid = true;
+
+    conditions.forEach(function(input) {
+        var element = document.getElementById(input.id);
+        if (input.id !== 'job_name') {
+            element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
+        }
+
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
+            isFormValid = false;
+        }
+    });
+
+    return isFormValid;
+}
+
+function input_check_editjob() {
+    let conditions = [
+        { id: 'edit_jobname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
+        { id: 'edit_reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        { id: 'edit_reverse_power', pattern: /^[0-9]+$/, min: 1, max: 10 },
+    ];
+
+    let isFormValid = true;
+
+    conditions.forEach(function(input) {
+        var element = document.getElementById(input.id);
+        if (input.id !== 'edit_jobname') {
+            element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
+        }
+
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
+            isFormValid = false;
+        }
+    });
+
+    return isFormValid;
+}
+
+
 </script>

@@ -609,7 +609,11 @@ function saveseq(){
     var k_value = document.getElementById("K").value;
     var offset = document.getElementById("offset").value;
 
-    if(seq_name){
+    //驗證
+    let check = input_check_saveseq();
+
+
+    if(check){
         $.ajax({
             url: "?url=Sequences/create_seq",
             method: "POST",
@@ -716,8 +720,11 @@ function edit_seq_save(){
     var join_val = document.querySelector('input[name="edit_join_option"]:checked').value;
     var okall_stop_val = document.querySelector('input[name="edit_okall_stop_option"]:checked').value;
     var opt_val = document.querySelector('input[name="edit_opt_option"]:checked').value;
+
+    //驗證
+    let check = input_check_editseq();
     
-    if(seq_name){
+    if(check){
         $.ajax({
             url: "?url=Sequences/edit_seq",
             method: "POST",
@@ -850,5 +857,96 @@ function setRadioButton_value(radioButtons, value) {
             button.checked = false;
         }
     });
-}        
+}  
+
+function validateInput(element, pattern, min, max) {
+    let value = element.value.trim();
+    let isValid = true;
+
+    // 验证空值
+    if (value === "") {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证正则
+    else if (!pattern.test(value)) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最小值
+    else if (min !== null && parseFloat(value) < min) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最大值
+    else if (max !== null && parseFloat(value) > max) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 通过验证
+    else {
+        element.classList.remove("is-invalid");
+    }
+
+    return isValid;
+}
+
+function input_check_saveseq() {
+    let conditions = [
+        { id: 'seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
+        { id: 'tighten_repeat', pattern: /^[0-9]+$/, min: 1, max: 99 },
+        { id: 'K', pattern: /^[0-9]+$/, min: 10, max: 100 },
+        //{ id: 'reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        //{ id: 'reverse_power', pattern: /^[0-9]+$/, min: 1, max: 10 },
+    ];
+
+    let isFormValid = true;
+
+    conditions.forEach(function(input) {
+        var element = document.getElementById(input.id);
+        if (input.id !== 'seq_name') {
+            let nextSibling = element.nextElementSibling;
+            if (nextSibling) {
+                nextSibling.innerHTML = `${input.min} ~ ${input.max}`;
+            } else {
+                console.warn(`No next sibling found for element with id ${input.id}`);
+            }
+        }
+
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
+            isFormValid = false;
+        }
+    });
+
+    return isFormValid;
+}
+
+function input_check_editseq() {
+    let conditions = [
+        { id: 'edit_seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
+        { id: 'edit_tighten_repeat', pattern: /^[0-9]+$/, min: 1, max: 99 },
+        //{ id: 'edit_K', pattern: /^[0-9]+$/, min: 1, max: 10 },
+    ];
+
+    let isFormValid = true;
+
+    conditions.forEach(function(input) {
+        var element = document.getElementById(input.id);
+        if (input.id !== 'edit_seq_name') {
+            let nextSibling = element.nextElementSibling;
+            if (nextSibling) {
+                nextSibling.innerHTML = `${input.min} ~ ${input.max}`;
+            } else {
+                console.warn(`No next sibling found for element with id ${input.id}`);
+            }
+        }
+
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
+            isFormValid = false;
+        }
+    });
+
+    return isFormValid;
+}
+
 </script>
