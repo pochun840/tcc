@@ -28,6 +28,7 @@ function cound_job(argument){
     oldjobname = selectedRow ? selectedRow.cells[1].innerText : null;
     old_jobid  = selectedRow ? selectedRow.cells[0].innerText : null;
     if(argument == 'del' && jobid != null){
+        
         delete_jobid(jobid);
     }
 

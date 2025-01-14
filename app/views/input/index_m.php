@@ -451,7 +451,8 @@ function crud_job_event(argument){
             getLanguageMessage('language'); 
             return;
         }
-
+        
+        //console.log(selectedRows);
         delete_input_id(job_id,input_event);
     }
 

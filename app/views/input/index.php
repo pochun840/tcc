@@ -668,8 +668,8 @@ function crud_job_event(argument){
                 }
             });
         } 
+
         
-        alert(tempA);
         //針對已設定的事件option做反灰+disable
         if (Array.isArray(tempA)){
             tempA.forEach(function(element){
@@ -692,10 +692,33 @@ function crud_job_event(argument){
 
         var selectedRows = document.querySelectorAll('#input_jobid_select tr.selected');
         if (!selectedRows.length > 0) {
-            getLanguageMessage('language'); 
+
+            selectedRows.forEach(function(row) {
+                var cells = row.querySelectorAll('td');
+                var rowData = [];
+                cells.forEach(function(cell) {
+                rowData.push(cell.textContent.trim()); // 使用 trim() 去除空白字元
+                });
+                console.log("選取行的資料:", rowData); // 輸出每一行的資料
+                // 你可以在這裡使用 rowData 進行後續處理，例如儲存到陣列或傳送到伺服器
+            });
+
             return;
         }
 
+        if (selectedRows.length > 0) {
+            selectedRows.forEach(function(row) {
+                var cells = row.querySelectorAll('td');
+                var rowData = [];
+                cells.forEach(function(cell) {
+                rowData.push(cell.textContent.trim()); // 使用 trim() 去除空白字元
+                });
+                console.log("選取行的資料:", rowData); // 輸出每一行的資料
+                // 你可以在這裡使用 rowData 進行後續處理，例如儲存到陣列或傳送到伺服器
+            });
+        }
+
+        //console.log(selectedRows);
         delete_input_id(job_id,input_event);
     }
 
@@ -704,7 +727,7 @@ function crud_job_event(argument){
 
         var selectedRows = document.querySelectorAll('#input_jobid_select tr.selected');
         if (!selectedRows.length > 0) {
-            getLanguageMessage('language'); 
+            //getLanguageMessage('language'); 
             return;
         }
         
@@ -919,6 +942,7 @@ function delete_input_id(jobid,input_event){
             data: { 
                 job_id: job_id,
                 input_event: input_event,
+
              
             },
             success: function(response) {
@@ -926,6 +950,7 @@ function delete_input_id(jobid,input_event){
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_input_by_job_id(job_id);
+                    
                 });
 
             },

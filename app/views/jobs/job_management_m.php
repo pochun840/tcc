@@ -1,6 +1,18 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_jobs_m.css" type="text/css">
+<style>
+.form-control{
+    width: 100px;
+    display: initial!important;
+}
 
+.form-control.is-invalid{
+    padding-right:inherit!important;
+}
+.is-invalid~.invalid-feedback{
+    display: inline!important;
+}
+</style>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -86,13 +98,13 @@
                         <div class="row">
                             <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?>:</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_id" maxlength="" value='<?php echo $data['jobint'];?>'  style="max-width: 100px;">
+                                <input type="text" class="form-control input-ms" id="job_id" maxlength="" value='<?php echo $data['jobint'];?>' >
                             </div>
                         </div>
                         <div class="row">
                             <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?>:</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_name" maxlength=""  style="max-width: 100px;">
+                                <input type="text" class="form-control input-ms" id="job_name" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -152,14 +164,14 @@
                         <div class="row">
                             <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(1=10%) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="reverse_rpm" maxlength=""  style="max-width: 100px;">
+                                <input type="text" class="form-control input-ms" id="reverse_rpm" maxlength=""  >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row">
                             <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>(1=10%):</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="reverse_power" maxlength="" style="max-width: 100px;">
+                                <input type="text" class="form-control input-ms" id="reverse_power" maxlength="">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -195,7 +207,7 @@
                         <div class="row">
                             <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?>:</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_jobname" maxlength="" style="max-width: 100px;">
+                                <input type="text" class="form-control input-ms" id="edit_jobname" maxlength="">
                             </div>
                         </div>
 
@@ -254,13 +266,13 @@
                         <div class="row">
                             <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(1=10%):</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_reverse_rpm" maxlength="" required style="max-width: 100px;" >
+                                <input type="text" class="form-control input-ms" id="edit_reverse_rpm" maxlength="" required >
                             </div>
                         </div>
                         <div class="row">
                             <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>(1=10%):</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_reverse_power" maxlength="" style="max-width: 100px;" >
+                                <input type="text" class="form-control input-ms" id="edit_reverse_power" maxlength=""  >
                             </div>
                         </div>
 
@@ -476,7 +488,10 @@ function savejob() {
     var stopjobokElement = document.querySelector('input[name="stop_job_ok"]:checked');
     var stop_job_ok_val = stopjobokElement ? stopjobokElement .value : null;
 
-    if (jobname_val && reverse_rpm_val && reverse_power_val  && direction_val ) {
+     //驗證
+    let check = input_check_savejob();
+
+    if (check  ) {
         $.ajax({
             url: "?url=Jobs/create_job",
             method: "POST",
@@ -583,17 +598,3 @@ function input_check_editjob() {
 
 
 </script>
-
-<style>
-.form-control{
-    width: auto!important;
-    display: initial!important;
-}
-
-.form-control.is-invalid{
-    padding-right:inherit!important;
-}
-.is-invalid~.invalid-feedback{
-    display: inline!important;
-}
-</style>

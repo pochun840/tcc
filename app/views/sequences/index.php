@@ -188,6 +188,7 @@
                             <div for="offset" class="col-6 t1"><?php echo $text['Joint_Offset'];?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="offset" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         
@@ -313,6 +314,7 @@
                             <div for="offset" class="col-6 t1"><?php echo $text['Joint_Offset'];?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_offset" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                        
@@ -893,9 +895,8 @@ function input_check_saveseq() {
     let conditions = [
         { id: 'seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'tighten_repeat', pattern: /^[0-9]+$/, min: 1, max: 99 },
-        { id: 'K', pattern: /^[0-9]+$/, min: 10, max: 100 },
-        //{ id: 'reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 10 },
-        //{ id: 'reverse_power', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        { id: 'K', pattern: /^(1\.[5-9]|([1-9][0-9]{0,2}|[1-9][0-9]{3,})(\.[0-9])?|999(\.[0-7])?|999\.8)$/, min: 1.5, max: 999.8 },
+        { id: 'offset', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 } 
     ];
 
     let isFormValid = true;
@@ -923,7 +924,8 @@ function input_check_editseq() {
     let conditions = [
         { id: 'edit_seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'edit_tighten_repeat', pattern: /^[0-9]+$/, min: 1, max: 99 },
-        //{ id: 'edit_K', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        { id: 'edit_K', pattern: /^(1\.[5-9]|([1-9][0-9]{0,2}|[1-9][0-9]{3,})(\.[0-9])?|999(\.[0-7])?|999\.8)$/, min: 1.5, max: 999.8 },
+        { id: 'edit_offset', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 } 
     ];
 
     let isFormValid = true;
