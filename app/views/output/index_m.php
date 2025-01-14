@@ -488,14 +488,15 @@ function crud_job_event(argument){
             document.getElementById('new_output').style.display='block';
             var eventOption = document.getElementById('Event_Option');
             eventOption.addEventListener('change', function() {
-                var selectedOptionId = eventOption.options[eventOption.selectedIndex].value;
-                if(selectedOptionId == 7 || selectedOptionId == 8 || selectedOptionId == 9){
-                    toggleElementsInRange(1, 10, 3);
-                }else{
-                    toggleElementsInRange(1, 10, 3);
-                    disableElements(filtered_array);
+                var selectedOptionId = parseInt(eventOption.options[eventOption.selectedIndex].value); // 轉換為整數
+                const disableOptions = [7, 8, 9, 12, 13, 14, 15, 16]; // 需要停用的選項值陣列
+
+                toggleElementsInRange(1, 10, 3); // 先重置所有元素的狀態
+
+                if (!disableOptions.includes(selectedOptionId)) { // 如果選擇的選項不在停用列表中
+                    disableElements(filtered_array); // 則執行停用特定元素的函式
                 }
-            }); 
+            });
 
 
     }
@@ -631,23 +632,24 @@ function crud_job_event(argument){
     }
 }
 
-function toggleElementsInRange(start, end, suffix) { 
+function toggleElementsInRange(start, end, suffix) {
     let selectedOptionId = eventOption.options[eventOption.selectedIndex].value;
-    let disableAll = selectedOptionId == 7 || selectedOptionId == 8 || selectedOptionId == 9;
+    const disableOptions = [7, 8, 9, 12, 13, 14, 15, 16]; 
+    let disableAll = disableOptions.includes(parseInt(selectedOptionId)); 
 
     for (let i = start; i <= end; i++) {
         for (let j = 1; j <= suffix; j++) {
             let id = 'pin' + i + '_' + j;
             let element = document.getElementById(id);
             if (element) {
-                element.disabled = disableAll && (j === 1 || j === 3); 
+                element.disabled = disableAll && (j === 1 || j === 2);
             }
         }
 
         let timeId = 'time' + i;
         let timeElement = document.getElementById(timeId);
         if (timeElement) {
-            timeElement.disabled = disableAll; 
+            timeElement.disabled = disableAll;
         }
     }
 }

@@ -240,12 +240,12 @@
                                     <div class="col-1 t1">10:</div>
                                     <div class="col t2">
                     			      	<div class="col-4 form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_high" value="1">
-                    					    <label class="form-check-label" for="pin10_high"><img src="./img/high.png"></label>
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_high" value="1">
+                    					    <label class="form-check-label" for="pin11_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_low" value="2">
-                    					    <label class="form-check-label" for="pin10_low"><img src="./img/low.png"></label>
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_low" value="2">
+                    					    <label class="form-check-label" for="pin11_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
                                 </div>
