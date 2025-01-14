@@ -390,6 +390,7 @@
 </div>
 
 <script>
+var eventOption = document.getElementById('Event_Option'); 
 var job_id; 
 var output_event;
 var temp;
@@ -455,7 +456,7 @@ function crud_job_event(argument){
 
         var selectedRows = document.querySelectorAll('#output_jobid_select tr.selected');
         if (!selectedRows.length > 0) {
-            getLanguageMessage('language'); 
+            //getLanguageMessage('language'); 
             return;
         }
         
@@ -464,6 +465,18 @@ function crud_job_event(argument){
 
     if(argument == 'new' && job_id != ''){
 
+            //處理下拉式選單
+            var eventOption = document.getElementById('Event_Option');
+            if (Array.isArray(tempA)) {
+                tempA.forEach(function (optionValue) {
+                    const option = eventOption.querySelector(`option[value="${optionValue}"]`);
+                    if (option) {
+                        option.disabled = true;
+                    }
+                });
+            }
+
+            //處理pin
             if (Array.isArray(temp)){ 
                 temp.forEach(function(element) {
                     var radio = document.getElementById(element);

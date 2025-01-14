@@ -265,35 +265,41 @@ class Inputs extends Controller
             $input_check = false; 
         }
 
-        if( isset($_POST['gateconfirm'])){
-            $jobdata['gateconfirm'] = $_POST['gateconfirm'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( isset($_POST['pagemode'])){
-            $jobdata['pagemode'] = $_POST['pagemode'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( isset($_POST['input_seqid'])){
-            $jobdata['input_seqid'] = $_POST['input_seqid'];
-        }else{ 
-            $input_check = false; 
-        }
-        if( isset($_POST['old_input_event'])){
-            $jobdata['old_input_event'] = $_POST['old_input_event'];
-        }
-
+      
         if($input_check){
-            $count = $this->InputModel->check_job_event_conflict($jobdata['input_job_id'],$jobdata['old_input_event']);
-            if ($count > 0 && $jobdata['input_event'] != $jobdata['old_input_event']){
+
+            $count = $this->InputModel->check_job_event_conflict($jobdata['input_job_id'],$jobdata['input_event']);
+            $ans  = $this->InputModel->delete_input_event_by_id($jobdata['input_job_id'],$jobdata['input_event']);
+            $res  = $this->InputModel->create_input($jobdata);
+
+            $result = array();
+            if($res){
+                $res_type = 'Success';
+                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$input_data['JOBID'].','.$text['event'].':'.$text[$event[$input_data['EvenID']]]."  ".$text['success'];
+            } else {
+                $res_type = 'Error';
+                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$input_data['JOBID'].','.$text['event'].':'.$text[$event[$input_data['EvenID']]]."  ".$text['fail'];
+            }
+            
+            $result = array(
+                'res_type' => $res_type,
+                'res_msg'  => $res_msg 
+            );
+
+            echo json_encode($result);
+
+            //$count = $this->InputModel->check_job_event_conflict($input_data['JOBID'],$input_data['EvenID']);
+            //$ans  = $this->InputModel->delete_input_event_by_id($input_data['JOBID'],$input_data['EvenID']);
+            //$res  = $this->InputModel->create_input($input_data);
+
+
+
+            /*if ($count > 0 && $jobdata['input_event'] != $jobdata['old_input_event']){
                 
                 //先移除舊的資料 再新增新的資料
-                $ans  = $this->InputModel->delete_input_event_by_id($jobdata['input_job_id'],$jobdata['old_input_event']);
+                $ans  = $this->InputModel->delete_input_event_by_id($jobdata['input_job_id'],);
                 $res  = $this->InputModel->create_input($jobdata);
-            }else if($count > 0 && $jobdata['input_event'] == $jobdata['old_input_event']) {
+            }else if($count > 0 ) {
                 $res  = $this->InputModel->edit_input($jobdata);
             }
             $result = array();
@@ -310,7 +316,7 @@ class Inputs extends Controller
                 'res_msg'  => $res_msg 
             );
 
-            echo json_encode($result);
+            echo json_encode($result);*/
         }
     }
 
