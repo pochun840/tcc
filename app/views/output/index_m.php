@@ -527,9 +527,9 @@ function crud_job_event(argument){
             eventOption.addEventListener('change', function() {
                 var selectedOptionId = eventOption.options[eventOption.selectedIndex].value;
                 if(selectedOptionId == 7 || selectedOptionId == 8 || selectedOptionId == 9){
-                    toggleElementsInRange(1, 11, 2, true);
+                    toggleElementsInRange(1, 11, 3);
                 }else{
-                    toggleElementsInRange(1, 11, 2, false);
+                    toggleElementsInRange(1, 11, 3);
                     disableElements(filtered_array);
                 }
             }); 
@@ -668,17 +668,28 @@ function crud_job_event(argument){
     }
 }
 
-function toggleElementsInRange(start, end, suffix, disable) {
-    for (var i = start; i <= end; i++) {
-        for (var j = 1; j <= suffix; j++) {
-            var id = 'pin' + i + '_' + j;
-            var element = document.getElementById(id);
+function toggleElementsInRange(start, end, suffix) { 
+    let selectedOptionId = eventOption.options[eventOption.selectedIndex].value;
+    let disableAll = selectedOptionId == 7 || selectedOptionId == 8 || selectedOptionId == 9;
+
+    for (let i = start; i <= end; i++) {
+        for (let j = 1; j <= suffix; j++) {
+            let id = 'pin' + i + '_' + j;
+            let element = document.getElementById(id);
             if (element) {
-                element.disabled = disable; // 设置元素的 disabled 属性
+                element.disabled = disableAll && (j === 1 || j === 3); 
             }
         }
+
+        let timeId = 'time' + i;
+        let timeElement = document.getElementById(timeId);
+        if (timeElement) {
+            timeElement.disabled = disableAll; 
+        }
     }
-}  
+}
+
+
 var old_output_event; 
 var output_event;
 function job_confirm(){
