@@ -23,7 +23,7 @@ class Output{
     //get_input_by_job_id
     public function get_output_by_job_id($output_job_id)
     {   
-        $sql = "SELECT * FROM output WHERE output_job_id = ? ORDER BY output_event";
+        $sql = "SELECT * FROM output WHERE output_job_id = ? ORDER BY output_event ";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$output_job_id]);
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -169,9 +169,9 @@ class Output{
     }
     
     public function generateTableCell($value,$value2) {
-        if($value >= 1 && $value <= 11){
+        if($value >= 1 && $value <= 9){
             $tableCells = "";
-            for($i = 1; $i <= 11; $i++){
+            for($i = 1; $i <= 9; $i++){
                 if($i == $value){ 
                     if($value2 == 1){
                         $img = '<img src="./img/signal01.png" style="max-width: 50px;">';

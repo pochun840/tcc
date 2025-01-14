@@ -57,7 +57,7 @@
                                         <tr class="w3-dark-grey">
                                             <th><?php echo $text['event'];?></th>
                                             <?php
-                                                for ($i = 2; $i <= 12; $i++) {
+                                                for ($i = 2; $i <= 10; $i++) {
                                                     echo "<th>$i</th>";
                                                 }
                                             ?>
@@ -159,15 +159,15 @@
                     					</div>
                                     </div>
 
-                                    <div class="col-1 t1">8:</div>
+                                    <div class="col-1 t1">7:</div>
                                     <div class="col t2" >
                     			      	<div class="col-4 form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_high" value="1">
-                    					    <label class="form-check-label" for="pin8_high"><img src="./img/high.png"></label>
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_high" value="1">
+                    					    <label class="form-check-label" for="pin7_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_low" value="2">
-                    					    <label class="form-check-label" for="pin8_low"><img src="./img/low.png"></label>
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_low" value="2">
+                    					    <label class="form-check-label" for="pin7_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
                                 </div>
@@ -185,15 +185,15 @@
                     					</div>
                                     </div>
 
-                                    <div class="col-1 t1">9:</div>
+                                    <div class="col-1 t1">8:</div>
                                     <div class="col t2" >
                     			      	<div class="col-4 form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_high" value="1">
-                    					    <label class="form-check-label" for="pin9_high"><img src="./img/high.png"></label>
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_high" value="1">
+                    					    <label class="form-check-label" for="pin8_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_low" value="2">
-                    					    <label class="form-check-label" for="pin9_low"><img src="./img/low.png"></label>
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin8_low" value="2">
+                    					    <label class="form-check-label" for="pin8_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
                                 </div>
@@ -211,15 +211,15 @@
                     					</div>
                                     </div>
 
-                                    <div class="col-1 t1">10:</div>
+                                    <div class="col-1 t1">9:</div>
                                     <div class="col t2">
                     			      	<div class="col-4 form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_high" value="1">
-                    					    <label class="form-check-label" for="pin10_high"><img src="./img/high.png"></label>
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_high" value="1">
+                    					    <label class="form-check-label" for="pin9_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_low" value="2">
-                    					    <label class="form-check-label" for="pin10_low"><img src="./img/low.png"></label>
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin9_low" value="2">
+                    					    <label class="form-check-label" for="pin9_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
                                 </div>
@@ -237,59 +237,23 @@
                     					</div>
                                     </div>
 
-                                    <div class="col-1 t1">11:</div>
+                                    <div class="col-1 t1">10:</div>
                                     <div class="col t2">
                     			      	<div class="col-4 form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_high" value="1">
-                    					    <label class="form-check-label" for="pin11_high"><img src="./img/high.png"></label>
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_high" value="1">
+                    					    <label class="form-check-label" for="pin10_high"><img src="./img/high.png"></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin11_low" value="2">
-                    					    <label class="form-check-label" for="pin11_low"><img src="./img/low.png"></label>
+                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin10_low" value="2">
+                    					    <label class="form-check-label" for="pin10_low"><img src="./img/low.png"></label>
                     					</div>
                                     </div>
                                 </div>
 
-                                <div class="row input-pin">
-                                    <div class="col-1 t1">6:</div>
-                                    <div class="col t2" >
-                    			      	<div class="col-4 form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_high" value="1">
-                    					    <label class="form-check-label" for="pin6_high"><img src="./img/high.png"></label>
-                    					</div>
-                    					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin6_low" value="2">
-                    					    <label class="form-check-label" for="pin6_low"><img src="./img/low.png"></label>
-                    					</div>
-                                    </div>
-
-                                    <div class="col-1 t1">12:</div>
-                                    <div class="col t2">
-                    			      	<div class="col-4 form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin12_high" value="1">
-                    					    <label class="form-check-label" for="pin12_high"><img src="./img/high.png"></label>
-                    					</div>
-                    					<div class="form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin12_low" value="2">
-                    					    <label class="form-check-label" for="pin12_low"><img src="./img/low.png"></label>
-                    					</div>
-                                    </div>
-                                </div>
+                              
 
 
-                                <div class="row input-pin">
-                                    <div class="col-1 t1">7:</div>
-                                    <div class="col t2" >
-                    			      	<div class="col-2 form-check form-check-inline">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_high" value="1">
-                    					    <label class="form-check-label" for="pin7_high"><img src="./img/high.png"></label>
-                    					</div>
-                    					<div class="col form-check form-check-inline" style="margin-left: -10px">
-                    					    <input class="form-check-input" type="radio" name="pin_option" id="pin7_low" value="2">
-                    					    <label class="form-check-label" for="pin7_low"><img src="./img/low.png"></label>
-                    					</div>
-                                    </div>
-                                </div>
+                             
 
 
                                 <div class="row" id='work_goc'  style="display: none;">
@@ -650,43 +614,9 @@ window.onclick = function(event) {
 }
 
 function crud_job_event(argument){
-    if(argument == 'new' && job_id != ''){
-
-
-        var selectedRows = document.querySelectorAll('#input_jobid_select tr.selected');
-        /*if (!selectedRows.length > 0) {
-            getLanguageMessage('language'); 
-            return;
-        }*/
-
-        //針對已設定的pin角位disable
-        if (Array.isArray(temp)){ 
-            temp.forEach(function(element) {
-                var radio = document.getElementById(element);
-                if (radio && radio.type === 'radio') { 
-                    radio.disabled = true; 
-                }
-            });
-        } 
-
-        
-        //針對已設定的事件option做反灰+disable
-        if (Array.isArray(tempA)){
-            tempA.forEach(function(element){
-                var option = document.querySelector('#Event_Option option[value="' + element + '"]');
-                if(option){
-                    if (option.selected){
-                        selectedValue = element;
-                    }
-
-                    option.disabled = true;
-                    option.classList.add('disabled_input');
-                }
-            });
-        }
-
-        document.getElementById('newinput').style.display='block';
-    } 
+    if (argument == 'new' && job_id != '') {
+        loadDataAndUpdateUI(job_id);
+    }
     
     if(argument == 'del' && job_id  != '' &&  input_event != '')  {
 
@@ -699,7 +629,7 @@ function crud_job_event(argument){
                 cells.forEach(function(cell) {
                 rowData.push(cell.textContent.trim()); // 使用 trim() 去除空白字元
                 });
-                console.log("選取行的資料:", rowData); // 輸出每一行的資料
+                //console.log("選取行的資料:", rowData); // 輸出每一行的資料
                 // 你可以在這裡使用 rowData 進行後續處理，例如儲存到陣列或傳送到伺服器
             });
 
@@ -713,7 +643,7 @@ function crud_job_event(argument){
                 cells.forEach(function(cell) {
                 rowData.push(cell.textContent.trim()); // 使用 trim() 去除空白字元
                 });
-                console.log("選取行的資料:", rowData); // 輸出每一行的資料
+                //console.log("選取行的資料:", rowData); // 輸出每一行的資料
                 // 你可以在這裡使用 rowData 進行後續處理，例如儲存到陣列或傳送到伺服器
             });
         }
@@ -861,6 +791,17 @@ function job_confirm(){
                     
                     });
                 });
+
+                //針對已設定的pin角位disable
+                if (Array.isArray(temp)){ 
+                    temp.forEach(function(element) {
+                        var radio = document.getElementById(element);
+                        if (radio && radio.type === 'radio') { 
+                            radio.disabled = true; 
+                        }
+                    });
+                } 
+                
 
                 var language = getCookie('language');
                 if(language == "zh-cn"){
@@ -1185,7 +1126,7 @@ function get_input_info(){
 
 }
 
-function get_input_by_job_id(jobid){
+function get_input_by_job_id(jobid, callback){
     $.ajax({
         url: "?url=Inputs/get_input_by_job_id",
         method: "POST",
@@ -1198,7 +1139,6 @@ function get_input_by_job_id(jobid){
             var job_inputlist = data.job_inputlist;
             temp = data.temp;
             tempA = data.tempA;
-
             document.getElementById("input_jobid_select").innerHTML = job_inputlist;
             document.getElementById("JobSelect").style.display = 'none';
             document.getElementById("job_id").value = jobid;
@@ -1244,6 +1184,11 @@ function get_input_by_job_id(jobid){
                     document.getElementById('113') && (document.getElementById('113').textContent = '自定義4');
                     document.getElementById('114') && (document.getElementById('114').textContent = '自定義5');
                 }
+
+                if (typeof callback === 'function') { // 檢查回呼函數是否存在
+                    callback(); // 呼叫回呼函數
+                }
+
 
         },
         error: function(xhr, status, error) {
@@ -1301,6 +1246,45 @@ function edit_input_id(){
     }
 }
 
+function loadDataAndUpdateUI(jobId) {
+    get_input_by_job_id(jobId, function() {
+        //console.log('loadDataAndUpdateUI_temp:', temp);
+        //console.log('loadDataAndUpdateUI_tempA:', tempA);
+        if (Array.isArray(temp)) {
+            temp.forEach(function(element) {
+                var radio = document.getElementById(element);
+                if (radio && radio.type === 'radio') {
+                    radio.disabled = true;
+                }
+            });
+        }
+
+        if (Array.isArray(tempA)) {
+            tempA.forEach(function(element) {
+                var option = document.querySelector('#Event_Option option[value="' + element + '"]');
+                if (option) {
+                    if (option.selected) {
+                        selectedValue = element;
+                    }
+                    option.disabled = true;
+                    option.classList.add('disabled_input');
+                }
+            });
+        }
+
+        document.getElementById('newinput').style.display = 'block';
+    });
+}
+
+// 頁面載入完成後執行
+document.addEventListener('DOMContentLoaded', function() {
+    // 檢查 job_id 是否存在 (例如從 URL 參數或 localStorage 中取得)
+    const urlParams = new URLSearchParams(window.location.search);
+    job_id = urlParams.get('job_id'); 
+    if (job_id) {
+        loadDataAndUpdateUI(job_id);
+    }
+});
 
 </script>
 <style>

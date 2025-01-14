@@ -265,44 +265,7 @@
               				            <input type="text" class="t4 form-control" id="time9" placeholder="ms" >
                				        </div>
                                 </div>
-                                <div class="row output-pin">
-                                    <div class="col t1">10:</div>
-                   			      	<div class="col t2 form-check form-check-inline">
-                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin10_1" value="1" onclick="toggleOnputTime('pin10_1', this.checked,'1')">
-                   					    <label class="form-check-label" for="pin10_signal01"><img src="./img/signal01.png"></label> 
-                   					</div>
-                   					<div class="col t2 form-check form-check-inline">
-                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin10_2" value="2" onclick="toggleOnputTime('pin10_2', this.checked,'2')">
-                   					    <label class="form-check-label" for="pin10_signal02"><img src="./img/signal02.png"></label>
-                   					</div>
-                   					<div class="col t2 form-check form-check-inline">
-                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin10_3" value="3" onclick="toggleOnputTime('pin10_3', this.checked,'3')">
-                   					    <label class="form-check-label" for="pin10_trigger"><img src="./img/trigger.png"></label>
-                   					</div>
-              				        <div class="col-3 t2">
-              				            <input type="text" class="t4 form-control" id="time10" placeholder="ms" >
-               				        </div>
-                                </div>
-                                <div class="row output-pin">
-                                    <div class="col t1">11:</div>
-                   			      	<div class="col t2 form-check form-check-inline">
-                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_1" value="1" onclick="toggleOnputTime('pin11_1', this.checked,'1')" >
-                   					    <label class="form-check-label" for="pin11_signal01"><img src="./img/signal01.png"></label>
-                   					</div>
-                   					<div class="col t2 form-check form-check-inline">
-                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_2" value="2" onclick="toggleOnputTime('pin11_2', this.checked,'2')">
-                   					    <label class="form-check-label" for="pin11_signal02"><img src="./img/signal02.png"></label>
-                   					</div>
-                   					<div class="col t2 form-check form-check-inline">
-                   					    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin11_3" value="3" onclick="toggleOnputTime('pin11_3', this.checked,'2')">
-                   					    <label class="form-check-label" for="pin11_trigger"><img src="./img/trigger.png"></label>
-                   					</div>
-              				        <div class="col-3 t2">
-              				            <input type="text" class="t4 form-control" id="time11" placeholder="ms" >
-               				        </div>
-                                </div>
-
-
+                               
                             </form>
                         </div>
 
@@ -336,7 +299,7 @@
                                         </select>
                                     </div>
                                 </div>
-								<?php for ($i = 1; $i <= 11; $i++) {?>
+								<?php for ($i = 1; $i <= 9; $i++) {?>
 
 									<div class="row output-pin">
 										<div class="col t1"><?php echo $i;?>:</div>
@@ -527,9 +490,9 @@ function crud_job_event(argument){
             eventOption.addEventListener('change', function() {
                 var selectedOptionId = eventOption.options[eventOption.selectedIndex].value;
                 if(selectedOptionId == 7 || selectedOptionId == 8 || selectedOptionId == 9){
-                    toggleElementsInRange(1, 11, 3);
+                    toggleElementsInRange(1, 10, 3);
                 }else{
-                    toggleElementsInRange(1, 11, 3);
+                    toggleElementsInRange(1, 10, 3);
                     disableElements(filtered_array);
                 }
             }); 
@@ -788,6 +751,8 @@ function delete_output_id(job_id,del_output_val){
             success: function(response) {
        
                 var responseData = JSON.parse(response);
+
+                console.log(responseData);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_output_by_job_id(job_id);
                 });

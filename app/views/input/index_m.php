@@ -64,8 +64,6 @@
                                         <th style="display: none;">8</th>
                                         <th style="display: none;">9</th>
                                         <th style="display: none;">10</th>
-                                        <th style="display: none;">11</th>
-                                        <th style="display: none;">12</th>
                                         <th width="20%">Pin</th>
                                         <th width="20%"></th>
                                     </tr>
@@ -155,7 +153,7 @@
                                     </div>
                                 </div>
 
-                                <?php for($i = 2; $i <= 12; $i++){?>     
+                                <?php for($i = 2; $i <= 10; $i++){?>     
                                         <div class="row input-pin">
                                             <div class="col-2 t1" style="margin-left: 5%"><?php echo $i; ?>:</div>
                                             <div class="col t2">
@@ -226,7 +224,7 @@
                                     </div>
                                 </div>
 
-                                <?php for ($i = 2; $i <= 12; $i++){?>
+                                <?php for ($i = 2; $i <= 10; $i++){?>
                                     <div class="row input-pin">
                                         <div class="col-2 t1" style="margin-left: 5%"><?php echo $i; ?>:</div>
                                         <div class="col t2">

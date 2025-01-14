@@ -167,7 +167,7 @@ class Input{
     }
 
     public function generateTableCell($value,$value2) {
-        if($value >= 2 && $value <= 12){
+        if($value >= 2 && $value <= 10){
             $tableCells = "";
             for($i = 2; $i <= 12; $i++){
                 if($i == $value){ 

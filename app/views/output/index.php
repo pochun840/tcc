@@ -58,7 +58,7 @@
                                 <thead class="header-table">
                                     <tr class="w3-dark-grey">
                                         <th><?php echo $text['event'];?></th>
-                                        <?php $io = 1; for($io = 1; $io <= 11;$io++){?>
+                                        <?php $io = 1; for($io = 1; $io <= 9;$io++){?>
                                             <th><?php echo $io;?></th>
                                         <?php } ?>
                                         
@@ -107,7 +107,7 @@
                                     </div>
                                 </div>
 
-								<?php for ($i = 1; $i <= 11; $i++) {?>
+								<?php for ($i = 1; $i <= 9; $i++) {?>
 									<div class="row output-pin">
 										<div class="col-sm-2 t1"><?php echo $i; ?>:</div>
 										<div class="col-sm-2 t2 form-check form-check-inline">
@@ -162,7 +162,7 @@
                                     </div>
                                 </div>
 
-								<?php for ($i = 1; $i <= 11; $i++) {?>
+								<?php for ($i = 1; $i <= 9; $i++) {?>
 										<div class="row output-pin">
 											<div class="col-sm-2 t1"><?php echo $i; ?>:</div>
 											<div class="col-sm-2 t2 form-check form-check-inline">
@@ -254,6 +254,7 @@
 
 
 <script>
+var eventOption = document.getElementById('Event_Option'); 
 var job_id; 
 var output_event;
 var temp;
@@ -571,7 +572,6 @@ function job_confirm(){
                         row.getAttribute('data-event');
                         output_event = row.getAttribute('data-event');
                    
- 
                     });
                 });
 
@@ -658,6 +658,10 @@ function get_output_by_job_id(job_id){
             var job_outputlist = data.job_outputlist;
             temp = data.temp;
             tempA = data.tempA;
+
+            console.log(temp);
+            console.log(tempA);
+
 
             document.getElementById("output_jobid_select").innerHTML = job_outputlist;
             document.getElementById("JobSelect").style.display = 'none';
