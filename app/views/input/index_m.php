@@ -990,8 +990,7 @@ function edit_input_id(){
                 input_wave: input_wave,
                 gateconfirm: gateconfirm,
                 pagemode: pagemode,
-                input_seqid: input_seqid,
-                old_input_event: old_input_event
+                input_seqid: input_seqid
             },
             success: function(response) {
 
@@ -999,6 +998,16 @@ function edit_input_id(){
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     get_input_by_job_id(job_id);
+
+                    //將目前select  選單的 id ='Event_Option' 當前的 option selected value 如果不是 -1 要改成 -1 
+                    var eventSelect = document.getElementById('Event_Option');
+                    if (eventSelect && eventSelect.value !== '-1') {
+                        eventSelect.value = '-1';
+                    }
+
+                    updateEventSelectAndPins(responseData.old_input_pin);
+
+
                 });
 
             },
@@ -1009,5 +1018,37 @@ function edit_input_id(){
 
     }
 }
+
+
+// 更新 Event_Option 的選擇，並解除相應 pin 的 disabled
+function updateEventSelectAndPins(old_input_pin) {
+    // 更新 select 選單的值，如果當前值不是 -1 則設為 -1
+    var eventSelect = document.getElementById('Event_Option');
+    if (eventSelect && eventSelect.value !== '-1') {
+        eventSelect.value = '-1';
+    }
+
+    // 根據 old_input_pin 解除 pin 的 disabled
+    if (old_input_pin) {
+        // 解析數字部分
+        var pinNumber = old_input_pin.match(/\d+/)[0];
+
+        // 組合出需要操作的元素 ID
+        var pinHighId = 'pin' + pinNumber + '_high';
+        var pinLowId = 'pin' + pinNumber + '_low';
+
+        // 解除 disabled 屬性
+        var pinHighElement = document.getElementById(pinHighId);
+        var pinLowElement = document.getElementById(pinLowId);
+
+        if (pinHighElement) {
+            pinHighElement.disabled = false;
+        }
+        if (pinLowElement) {
+            pinLowElement.disabled = false;
+        }
+    }
+}
+
 
 </script>

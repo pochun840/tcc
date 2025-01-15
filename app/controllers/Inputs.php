@@ -269,8 +269,11 @@ class Inputs extends Controller
         if($input_check){
 
             $count = $this->InputModel->check_job_event_conflict($jobdata['input_job_id'],$jobdata['input_event']);
+            //var_dump($count['input_pin']);die();
             $ans  = $this->InputModel->delete_input_event_by_id($jobdata['input_job_id'],$jobdata['input_event']);
             $res  = $this->InputModel->create_input($jobdata);
+
+
 
             $result = array();
             if($res){
@@ -283,7 +286,8 @@ class Inputs extends Controller
             
             $result = array(
                 'res_type' => $res_type,
-                'res_msg'  => $res_msg 
+                'res_msg'  => $res_msg,
+                'old_input_pin' =>$count['input_pin']
             );
 
             echo json_encode($result);
