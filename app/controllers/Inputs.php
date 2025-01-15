@@ -58,7 +58,7 @@ class Inputs extends Controller
             $job_inputs = $this->InputModel->get_input_by_job_id($job_id);
             $temp  = array(); 
             $tempA = array();
-            $tempB = array();
+           
             $job_inputlist = ''; 
 
     
@@ -118,10 +118,10 @@ class Inputs extends Controller
         $response = array(
             'job_inputlist' => $job_inputlist,
             'temp' => $temp,
-            'tempA' => $tempA,
-            'tempB' => $tempB
+            'tempA' => $tempA
             
         );
+
         echo json_encode($response);
     }
 
@@ -275,36 +275,6 @@ class Inputs extends Controller
             $result = array();
             if($res){
                 $res_type = 'Success';
-                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$input_data['JOBID'].','.$text['event'].':'.$text[$event[$input_data['EvenID']]]."  ".$text['success'];
-            } else {
-                $res_type = 'Error';
-                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$input_data['JOBID'].','.$text['event'].':'.$text[$event[$input_data['EvenID']]]."  ".$text['fail'];
-            }
-            
-            $result = array(
-                'res_type' => $res_type,
-                'res_msg'  => $res_msg 
-            );
-
-            echo json_encode($result);
-
-            //$count = $this->InputModel->check_job_event_conflict($input_data['JOBID'],$input_data['EvenID']);
-            //$ans  = $this->InputModel->delete_input_event_by_id($input_data['JOBID'],$input_data['EvenID']);
-            //$res  = $this->InputModel->create_input($input_data);
-
-
-
-            /*if ($count > 0 && $jobdata['input_event'] != $jobdata['old_input_event']){
-                
-                //先移除舊的資料 再新增新的資料
-                $ans  = $this->InputModel->delete_input_event_by_id($jobdata['input_job_id'],);
-                $res  = $this->InputModel->create_input($jobdata);
-            }else if($count > 0 ) {
-                $res  = $this->InputModel->edit_input($jobdata);
-            }
-            $result = array();
-            if($res){
-                $res_type = 'Success';
                 $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
             } else {
                 $res_type = 'Error';
@@ -316,7 +286,8 @@ class Inputs extends Controller
                 'res_msg'  => $res_msg 
             );
 
-            echo json_encode($result);*/
+            echo json_encode($result);
+
         }
     }
 

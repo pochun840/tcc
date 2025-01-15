@@ -1204,8 +1204,8 @@ function edit_input_id(){
                 input_wave: input_wave,
                 gateconfirm: gateconfirm,
                 pagemode: pagemode,
-                input_seqid: input_seqid,
-                old_input_event: old_input_event
+                input_seqid: input_seqid
+                //old_input_event: old_input_event
             },
             success: function(response) {
 
@@ -1217,6 +1217,7 @@ function edit_input_id(){
 
             },
             error: function(xhr, status, error) {
+                console.log('error');
                 
             }
         });
