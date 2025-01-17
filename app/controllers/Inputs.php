@@ -311,7 +311,8 @@ class Inputs extends Controller
         }
         if (!empty($_POST['to_job_id']) && isset($_POST['to_job_id'])) {
             $to_job_id = $_POST['to_job_id'];
-            $this->InputModel->delete_input_by_id($to_job_id);
+            
+            //$this->InputModel->delete_input_by_id($to_job_id);
         } else {
             $input_check = false;
         }
@@ -382,7 +383,12 @@ class Inputs extends Controller
             $input_check = false; 
         }
 
+
         if($input_check){
+            //先取得要刪除資料的PIN角位
+            $ans = $this->InputModel->check_job_event_conflict($job_id,$input_event);
+
+            //進行資料的刪除
             $res = $this->InputModel->delete_input_event_by_id($job_id,$input_event);
             $result = array();
             if ($res) {
@@ -395,7 +401,8 @@ class Inputs extends Controller
             
             $result = array(
                 'res_type' => $res_type,
-                'res_msg'  => $res_msg 
+                'res_msg'  => $res_msg,
+                'old_input_pin' => $ans['input_pin']
             );
 
             echo json_encode($result);

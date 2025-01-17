@@ -65,6 +65,8 @@ class Output{
         return (int)$count;
     }
 
+ 
+
     public function check_event_conflict_by_job_id($output_job_id){
         
         $sql = "SELECT * FROM output WHERE output_job_id = ? AND output_event NOT IN('6','7','8') ";

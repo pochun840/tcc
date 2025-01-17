@@ -659,6 +659,7 @@ function delete_input_id(jobid,input_event){
             
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                    updateEventSelectAndPins(responseData.old_input_pin);
                     get_input_by_job_id(job_id);
                 });
 
@@ -1037,15 +1038,17 @@ function updateEventSelectAndPins(old_input_pin) {
         var pinHighId = 'pin' + pinNumber + '_high';
         var pinLowId = 'pin' + pinNumber + '_low';
 
-        // 解除 disabled 屬性
+        // 解除 disabled 屬性 及 checked 屬性
         var pinHighElement = document.getElementById(pinHighId);
         var pinLowElement = document.getElementById(pinLowId);
 
         if (pinHighElement) {
             pinHighElement.disabled = false;
+            pinHighElement.checked = false;
         }
         if (pinLowElement) {
             pinLowElement.disabled = false;
+            pinLowElement.checked = false;
         }
     }
 }

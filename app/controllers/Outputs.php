@@ -285,8 +285,8 @@ class Outputs extends Controller
         }
 
         if($input_check){
-    
             
+            $ans = $this->OutputModel->check_job_event_conflict($output_job_id,$output_event);
             $res = $this->OutputModel->delete_output_event_by_id($output_job_id,$output_event);
             $result = array();
             if($res){
@@ -298,7 +298,8 @@ class Outputs extends Controller
             }
             $result = array(
                 'res_type' => $res_type,
-                'res_msg'  => $res_msg 
+                'res_msg'  => $res_msg,
+                'old_output_pin' => $ans['output_pin']
             );
   
             echo json_encode($result);
@@ -396,15 +397,10 @@ class Outputs extends Controller
         }
 
         $count = $this->OutputModel->check_event_conflict($jobdata['output_job_id'],$jobdata['output_event']);
+
         if ($count > 0){
-            //先移除舊的資料 再新增新的資料
-
-            //檢查 PIN 有無被使用 
-            /*$result = $this->OutputModel->check_event_pin_by_job_id($jobdata['output_job_id'],$jobdata['wave']);
-            if($result){
-                $res = $this->OutputModel->edit_output($jobdata);
-            }*/
-
+            
+            $ans = $this->OutputModel->check_job_event_conflict($jobdata['output_job_id'],$jobdata['output_event']);
             $res = $this->OutputModel->edit_output($jobdata);
         }
         
@@ -418,7 +414,8 @@ class Outputs extends Controller
 
         $result = array(
             'res_type' => $res_type,
-            'res_msg'  => $res_msg 
+            'res_msg'  => $res_msg,
+            'old_output_pin' => $ans['output_pin']
         );
 
         echo json_encode($result);
@@ -443,7 +440,7 @@ class Outputs extends Controller
             echo "<pre>";
             print_r($res);
             echo "</pre>";
-            die();
+            //die();
 
         }
 

@@ -652,8 +652,10 @@ function delete_output_id(job_id,del_output_val){
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                     // 在刪除成功後執行 get_output_by_job_id
-                    get_output_by_job_id(job_id);
+                    updateEventSelectAndPins(responseData.old_output_pin);
                     
+                    get_output_by_job_id(job_id);
+
                 });
             },
             error: function(xhr, status, error) {
@@ -792,7 +794,9 @@ function edit_output_id(){
                 
                 var responseData = JSON.parse(response);
                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
+
                     get_output_by_job_id(job_id);
+                    updateEventSelectAndPins(responseData.old_output_pin);
                 });
 
                 document.getElementById('edit_output').style.display='none';
@@ -1161,6 +1165,47 @@ function translatePage(language) {
     }
   }
 }
+
+// 更新 Event_Option 的選擇，並解除相應 pin 的 disabled
+function updateEventSelectAndPins(old_input_pin) {
+    // 更新 select 選單的值，如果當前值不是 -1 則設為 -1
+    var eventSelect = document.getElementById('Event_Option');
+    if (eventSelect && eventSelect.value !== '-1') {
+        eventSelect.value = '-1';
+    }
+
+    // 根據 old_input_pin 解除 pin 的 disabled
+    if (old_input_pin) {
+        // 解析數字部分
+        var pinNumber = old_input_pin.match(/\d+/)[0];
+
+        // 組合出需要操作的元素 ID
+        var pinHighId = 'pin' + pinNumber + '_high';
+        var pinLowId  = 'pin' + pinNumber + '_low';
+
+        // 解除 disabled 屬性 及 checked 屬性
+        var pinHighElement = document.getElementById(pinHighId);
+        var pinLowElement = document.getElementById(pinLowId);
+
+        var pinNumbers = ['1', '2', '3'];  
+        pinNumbers.forEach(function(suffix) {
+            var pinid = 'pin' + pinNumber + '_' + suffix;
+            document.getElementById(pinid).checked = false;
+        });
+
+
+        if (pinHighElement) {
+            pinHighElement.disabled = false;
+            //pinHighElement.checked  = false;
+
+        }
+        if (pinLowElement) {
+            pinLowElement.disabled = false;
+            //pinLowElement.checked  = false;
+        }
+    }
+}
+
 
 
 </script>
