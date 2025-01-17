@@ -95,9 +95,7 @@ class Dashboard{
         $file_arr = array('_0p5', '_1p0', '_2p0');
         
         foreach ($file_arr as $v_f) {
-            //$infile = "../public/data/DATALOG_20241126074447_DEVICE_000000" . $no . $v_f . ".csv";
             $infile = "../public/data/DATALOG_20241220150526_DEVICE_".$no. $v_f . ".csv";
-            //echo $infile;die();
             if (file_exists($infile)) {
                 $csvdata_tmp = file_get_contents($infile);
                 
@@ -131,7 +129,6 @@ class Dashboard{
             
             foreach ($file_arr as $v_f) {
                 $infile = "../public/data/DATALOG_20241220150526_DEVICE_".$no. $v_f . ".csv";
-                // echo $infile; die();
                 if (file_exists($infile)) {
                     $csvdata_tmp = file_get_contents($infile);
                     
