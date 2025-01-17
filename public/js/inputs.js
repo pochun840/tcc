@@ -12,5 +12,5 @@ function getLanguageMessage(cookieName) {
     } else {
       message =  'Please select the event to delete';
     }
-   alertify.alert(message);
+   //alertify.alert(message);
 }
