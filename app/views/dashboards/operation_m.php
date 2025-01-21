@@ -1,5 +1,100 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_operation_m.css" type="text/css">
+
+<style type="text/css">
+    @font-face
+    {
+      font-family: 'LED字型';
+      src: url('<?php echo URLROOT; ?>font/Petitinho.ttf') format('truetype');
+    }
+    @font-face
+    {
+      font-family: 'fa-solid-900';
+      src: url('<?php echo URLROOT; ?>font/fa-solid-900.woff2') format('truetype');
+    }
+    .led-number
+    {
+/*      font-family: 'LED字型', sans-serif;*/
+    }
+
+    /* 在手機旋轉時套用的 CSS 樣式 */
+    @media screen and (orientation: landscape)  {
+      /* 手機為橫向旋轉狀態時的 CSS */
+      /* 在此設定您的 CSS 樣式 */
+        .panel-container
+        {
+            height: 65%!important;margin: 3px;
+        }
+
+        .w3-container, .w3-panel
+        {
+            padding: 0.01em 5px;
+        }
+
+        .message-font
+        {
+            font-size: 4vmin!important;
+        }
+
+        .w3-panel
+        {
+            margin-top: 5px!important;
+        }
+
+        .table-font
+        {
+            font-size: 3vmin!important;
+        }
+
+
+        .p1{ width:33%; height:23%; background-color: #CDC5BF; }
+        .p2{ width:33%; height:23%; background-color: #CDC9C9; }
+        .p3{ width:33%; height:23%; background-color: #CDC9C9;position: absolute; left: 33.5%; top: 0%; }
+        .p4{ width:50%; height:23%; background-color: #CDC5BF;position: absolute; right: 0; top: 26%; display:none; }
+        .p5{ margin: 0px;padding: 0;position: absolute; left: 17%; top: 26%; width:83%; height: 100% }
+        .p6{ margin: 0px;padding: 0;position: absolute; left: 0; top: 26%; width: 20%; text-align:center; }
+        .nav-item{margin-bottom: 5px;}
+
+        #Target_Torque{top: 70%!important;}
+        #Torque_Result{top: 70%!important;}
+        #Target_Angle{top: 70%!important;}
+        .i-btn{display: block!important;}
+    }
+
+    .panel-container
+    {
+        height: 83%;margin: 3px;
+    }
+
+    @media screen and (orientation: portrait) 
+    {
+      /* 手機為直向旋轉狀態時的 CSS */
+      /* 在此設定您的 CSS 樣式 */
+     /* .panel-container{
+        height: 80%;margin: 5px;
+       }*/
+       .message-font
+       {
+            font-size: 4vmin!important;
+        }
+        .table-font
+        {
+            font-size: 3vmin!important;
+        }
+
+        .p1{ width:48%; height:20%; background-color: #CDC5BF;}
+        .p2{ width:50%; height:20%; background-color: #CDC9C9;}
+        .p3{ width:48%; height:20%; background-color: #CDC9C9;position: absolute; left: 0; top: 21%;}
+        .p4{ width:50%; height:20%; background-color: #CDC5BF;position: absolute; right: 0; top: 21%;}
+        .p5{ margin: 0px;padding: 0;position: absolute; left:0; top: 42%;}
+        .p6{ margin: 0px;padding: 0;position: absolute; left: 0; top: 92%; text-align:center; }
+        .nav-item{margin-bottom: 5px; width: 20%;}
+
+    }
+
+
+</style>
+
 <body>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -17,14 +112,22 @@
     <div class="main-content">
         <div class="center-content">
             <div class="topnav">
-                <label style="color: #fff;" for="job_name"><?php echo $text['job'];?>:</label>
-                <input type="text" id="Job_Name" name="Job_Name" size="16" maxlength="20" value="" disabled>
-
-                <label style="color: #fff;" for="seq_name"><?php echo $text['sequence'];?>:</label>
-                <input type="text" id="Seq_Name" name="Seq_Name" size="16" maxlength="20" value="" disabled>
-
-                <label style="color: #fff;" for="screw"><?php echo $text['screws'];?>:</label>
-                <input type="text" id="Screws" name="Screws" size="4" maxlength="20" value="" disabled>
+                <table class="w3-table w3-dark-grey table-font">
+                    <tr>
+                        <td>
+                            <label style="color: #FFF; font-weight: bold" for="Job_Name"><?php echo $text['job']; ?>:</label>
+                            <input style=" color: #000" type="text" id="Job_Name" name="Job_Name" size="10" maxlength="15" value="" disabled>
+                        </td>
+                        <td>
+                            <label style="color: #FFF; font-weight: bold" for="Seq_Name"><?php echo $text['sequence']; ?>:</label>
+                            <input style=" color: #000" type="text" id="Seq_Name" name="Seq_Name" size="10" maxlength="15" value="" disabled>
+                        </td>
+                        <td>
+                            <label style="color: #FFF; font-weight: bold" for="Screws"><?php echo $text['screws']; ?>:</label>
+                            <input style=" color: #000; text-align: center" type="text" id="Screws" name="Screws" size="4" maxlength="5" value="" disabled>
+                        </td>
+                    </tr>
+                </table>
             </div>
             
             <div class="operation-setting">

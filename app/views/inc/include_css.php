@@ -18,19 +18,19 @@ function includecss_file($part, $cssFileName) {
 ?>
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
  
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/jquery_data_Tables.css?v=202408211600">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/jquery_data_Tables.css">
 
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/datatables.min.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css">
 
-    <script src="<?php echo URLROOT; ?>js/all.js?v=202408191700"></script>
+    <script src="<?php echo URLROOT; ?>js/all.js"></script>
     <script src="<?php echo URLROOT; ?>js/echarts_min.js"></script>
-    <script src="<?php echo URLROOT; ?>js/jquery_data_Tables.js?v=202408211500"></script>
+    <script src="<?php echo URLROOT; ?>js/jquery_data_Tables.js"></script>
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/flatpickr.min.css" type="text/css">
 
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/alertify_min.css?v=202408211500"/>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/default_min.css?v=202408211500"/>
-    <script src="<?php echo URLROOT; ?>js/alertify_min.js?v=202408211600"></script>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/alertify_min.css"/>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/default_min.css"/>
+    <script src="<?php echo URLROOT; ?>js/alertify_min.js"></script>
 
     <?php 
         $userAgent = $_SERVER['HTTP_USER_AGENT'];

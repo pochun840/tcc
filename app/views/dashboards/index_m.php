@@ -5,7 +5,7 @@
         <div class="center-content w3-center">
             <div style="text-shadow:3px 5px 0 #444;" class="wrapper w3-center w3-text-red">
                 <div class="buttonbox" style=" top: 2%;right: 10px;text-align: right;position: absolute;">
-                <input type="button" name="" value="Logout" onclick="logout()" >
+                <input type="button" name="" value="Logout" onclick="logout()">
                 <input type="button" name="" value="简中" data-language="zh-cn" onclick="language_change('zh-cn');" >
                 <input type="button" name="" value="繁中" data-language="zh-tw" onclick="language_change('zh-tw');">
                 <input type="button" name="" value="English" data-language="en-us" onclick="language_change('en-us');">
@@ -23,14 +23,20 @@
 
             <div class="button col pt-5">
                 <button class="menu-item blue" id="job_manager" style="font-size: 20px;" onclick="window.location.href='?url=Jobs/index'"><span style="visibility: hidden;">Job</span></button>
+                <button class="menu-item purple" id="operation" style="font-size: 20px" onclick="window.location.href='?url=Dashboards/operation'"><span style="visibility: hidden;">Operation</span></button>
+                <br>
+                
                 <button class="menu-item green" id="io_input" style="font-size: 20px;"   onclick="window.location.href='?url=Inputs/index'"><span style="visibility: hidden;">IO Input</span></button>
                 <button class="menu-item orange" id="io_output" style="font-size: 20px"  onclick="window.location.href='?url=Outputs/index'"><span style="visibility: hidden;">IO Output</span></button>
-                <br><br>
-                <button class="menu-item purple" id="operation" style="font-size: 20px" onclick="window.location.href='?url=Dashboards/operation'"><span style="visibility: hidden;">Operation</span></button>
+                <br>
+
                 <button class="menu-item lightblue" id="data" style="font-size: 20px" onclick="window.location.href='?url=Data/index'"><span style="visibility: hidden;">Data</span></button>
                 <button class="menu-item pink" id="tool" style="font-size: 20px" onclick="window.location.href='?url=Tools/index'"><span style="visibility: hidden;">Tool</span></button>
+                <br>
+                
                 <button class="menu-item PaleGreen" id="setting" style="font-size: 20px;" onclick="window.location.href='?url=Settings/index'"><span style="visibility: hidden;">Setting</span></button>
-                <br><br>
+                <button class="menu-item lime" id="" style="font-size: 24px" onclick="window.location.href='?url=Agents'">Agent</button>
+                <br>
                
                 <?php if($_SESSION['privilege'] == 'admin'){ ?>
                 <div>

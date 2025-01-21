@@ -25,8 +25,13 @@ class Dashboards extends Controller
             'agent_type' => $agent_type,
             'device_info' => $device_info,
         ];
-        
-        $this->view('dashboards/index', $data);
+
+    
+        if($isMobile){
+            $this->view('dashboards/index_m', $data);
+        }else{
+            $this->view('dashboards/index', $data);
+        }
 
     }
 
