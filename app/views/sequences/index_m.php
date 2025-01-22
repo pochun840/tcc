@@ -607,8 +607,11 @@ function create_seq() {
     document.getElementById('seq_off').checked = true;
     document.getElementById('OPT_OFF').checked = true;
     document.getElementById('offset').value = 0;
-    saveseq();
-
+    
+    var seqname_val = document.getElementById("seq_name").value;
+    if (seqname_val.trim() !== "") {
+        saveseq();
+    } 
 }
 
 function saveseq(){

@@ -59,8 +59,12 @@ function create_job() {
     document.getElementById('reverse_direction_CCW').checked = true;
     document.getElementById('job_off').checked = true;
     document.getElementById('stop_job_ok_off').checked = true;
+
     
-    savejob();
+    var jobname_val = document.getElementById("job_name").value;
+    if (jobname_val.trim() !== "") {
+        savejob();
+    } 
 }
 
 function copy_job(jobid){
