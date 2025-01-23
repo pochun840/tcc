@@ -520,15 +520,14 @@ function copy_job_by_id(jobid){
                     alertify.error('Cancelled');
                    
                 }
-
-                
+      
                 });
                         },
             error: function(xhr, status, error) {
                 
             }
         });
-        document.getElementById('copyjob').style.display = 'none';
+        //document.getElementById('copyjob').style.display = 'none';
     }
 }
 
