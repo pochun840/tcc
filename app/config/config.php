@@ -22,10 +22,10 @@ define('LANGUAGE',$language);
 
 
 // 抓取APP的檔案名稱，判斷是哪一個品牌
-//$brand_code = get_brand_code();
+$brand_code = get_brand_code();
 $brand = '0';//預設值帶kilews
 
-/*if($brand_code == false || $brand_code == 'BF01'){ //Kilews or Windows
+if($brand_code == false || $brand_code == 'BF01'){ //Kilews or Windows
 	$brand = '0';
 }else if($brand_code == 'BF02'){ //上海
 	$brand = '2';
@@ -37,17 +37,12 @@ $brand = '0';//預設值帶kilews
 	$brand = '6';
 }else if($brand_code == 'BF07'){ //白牌
 	$brand = '7';
-}*/
+}
 
 // iDAS出貨版本 0:Kilews 2:上海 shanhai 4:MyTorque 5:晶元SUMAKE 6:DELTA 7:白牌 6:
 define('ICONMODE', $brand);
 
-define('TITLE_INDEX',       'KILEWS');
-define('SUBTITLE_INDEX',    'iDAS for TCC-M7');
-define('ICON_NORMAL_APPLE', URLROOT.'img/60.png');
-define('ICON_AGENT',        URLROOT.'img/192.png');
-
-/*switch ( ICONMODE ) {
+switch ( ICONMODE ) {
 	case '0': // Kilews
 		define('ICON_NORMAL',       URLROOT.'img/192.png'); // normal icon
 		define('ICON_NORMAL_APPLE', URLROOT.'img/60.png');  // apple icon
@@ -125,11 +120,11 @@ define('ICON_AGENT',        URLROOT.'img/192.png');
 		define('TITLE_AGENT',       'KILEWS IoT Agent');
 		define('DEVICE_TYPE_7',     'KL-GTCS');    // Agent頁title
 		break;
-}*/
+}
 
 
 
-/*function get_brand_code()
+function get_brand_code()
 {
 	if( PHP_OS_FAMILY == 'Linux'){
 		$directory = '/home/kls/project/system/ltver'; // 指定目錄路徑
@@ -149,4 +144,4 @@ define('ICON_AGENT',        URLROOT.'img/192.png');
 	}else{
 		return false;
 	}
-}*/
+}

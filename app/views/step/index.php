@@ -1,5 +1,18 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_step.css" type="text/css">
+<style>
+.form-control{
+    width: auto!important;
+    display: initial!important;
+}
+
+.form-control.is-invalid{
+    padding-right:inherit!important;
+}
+.is-invalid~.invalid-feedback{
+    display: inline!important;
+}
+</style>
 
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -125,30 +138,35 @@
                             <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="hi_torque" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row">
                             <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="lo_torque" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row">
                             <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?> :</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="hi_angle" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row">
                             <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="lo_angle" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row">
                             <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="rpm" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row">
@@ -1024,6 +1042,9 @@ function add_step(){
     var downshift = document.querySelector('input[name="downshift_option"]:checked').value;
 
 
+    //驗證
+    let check = input_check_savestep();
+
     if(target_torque){
 
         $.ajax({
@@ -1180,7 +1201,73 @@ function countrows() {
     var tbody = document.querySelector('#step_table tbody');
     var rows = tbody.querySelectorAll('tr');
     var rowCount = rows.length;
-    console.log("共有 " + rowCount + " 行");
+    //console.log("共有 " + rowCount + " 行");
     return rowCount;
 }
+
+
+
+
+function validateInput(element, pattern, min, max) {
+    let value = element.value.trim();
+    let isValid = true;
+
+    // 验证空值
+    if (value === "") {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证正则
+    else if (!pattern.test(value)) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最小值
+    else if (min !== null && parseFloat(value) < min) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最大值
+    else if (max !== null && parseFloat(value) > max) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 通过验证
+    else {
+        element.classList.remove("is-invalid");
+    }
+
+    return isValid;
+}
+
+function input_check_savestep() {
+    let conditions = [
+        { id: 'seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
+        { id: 'tighten_repeat', pattern: /^[0-9]+$/, min: 1, max: 99 },
+        { id: 'K', pattern: /^(1\.[5-9]|([1-9][0-9]{0,2}|[1-9][0-9]{3,})(\.[0-9])?|999(\.[0-7])?|999\.8)$/, min: 1.5, max: 999.8 },
+        { id: 'offset', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
+    ];
+
+    let isFormValid = true;
+
+    conditions.forEach(function(input) {
+        var element = document.getElementById(input.id);
+        if (input.id !== 'seq_name') {
+            let nextSibling = element.nextElementSibling;
+            if (nextSibling) {
+                nextSibling.innerHTML = `${input.min} ~ ${input.max}`;
+            } else {
+                console.warn(`No next sibling found for element with id ${input.id}`);
+            }
+        }
+
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
+            isFormValid = false;
+        }
+    });
+
+    return isFormValid;
+}
+
+
 </script>
