@@ -32,6 +32,10 @@ class Step extends Controller
         $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
         $check     = $this->stepModel->check_step_target($job_id,$seq_id);
 
+        $step_count = $this->stepModel->countstep($job_id, $seq_id);
+        $step_count = intval($step_count);
+
+
         $res_device = $this->SettingModel->GetControllerInfo();
         if(!empty($res_device)){
             $unit = $res_device['torque_unit'];
@@ -66,7 +70,8 @@ class Step extends Controller
             'seq_id' => $seq_id,
             'unit_name' => $unit_name,
             'check_step_torque' => $check_step_torque,
-            'check' => $check
+            'check' => $check,
+            'step_count' => $step_count
 
         );
 

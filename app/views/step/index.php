@@ -195,21 +195,21 @@
             					</div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="downshift-threshold" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="downshift_threshold" maxlength="" >
+                        <div class="row" >
+                            <div id="downshift_threshold_title" for="downshift-threshold" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                            <div class="col-3 t2" id="downshift_threshold_item"> 
+                                <input type="text" class="form-control input-ms" id="downshift_threshold" >
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
+                        <div class="row" >
+                            <div id="downshift_torque_title" for="downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                            <div class="col-3 t2" id="downshift_torque_item">
                                 <input type="text" class="form-control input-ms" id="downshift_torque" maxlength="" >
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
-                            <div class="col-3 t2">
+                        <div class="row" >
+                            <div id="downshift_speed_title" for="downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
+                            <div class="col-3 t2" id="downshift_speed_item">
                                 <input type="text" class="form-control input-ms" id="downshift_speed" maxlength="" >
                             </div>
                         </div>
@@ -336,7 +336,7 @@
                                 <input type="text" class="form-control input-ms" id="edit_downshift_threshold" maxlength="" >
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" >
                             <div for="edit_downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="edit_downshift_torque" maxlength="" >
@@ -981,42 +981,33 @@ function create_step() {
         }
     });
 
-
-
-    var downshiftOptionRadios = document.getElementsByName("downshift_option");
-  
+    var downshiftOptionRadios = document.getElementsByName("downshift_option");  
 
     for(var i = 0; i < downshiftOptionRadios.length; i++) {
         downshiftOptionRadios[i].addEventListener("change", function() {
         var selectedValue = this.value;
+       
         localStorage.setItem('downshift_option',selectedValue);
         if(selectedValue  == 1){
-            document.querySelector('div[for="downshift-threshold"]').style.display = "none";
-            document.getElementById('downshift_threshold').style.display = "none";
+            document.getElementById('downshift_threshold_item').style.display = "none";
+            document.getElementById('downshift_torque_item').style.display = "none";
+            document.getElementById('downshift_speed_item').style.display = "none";
+            document.getElementById('downshift_threshold_title').style.display = "none";
+            document.getElementById('downshift_torque_title').style.display = "none";
+            document.getElementById('downshift_speed_title').style.display = "none";
 
-            document.querySelector('div[for="downshift-torque"]').style.display = "none";
-            document.getElementById('downshift_torque').style.display = "none";
-
-            document.querySelector('div[for="downshift-speed"]').style.display = "none";
-            document.getElementById('downshift_speed').style.display = "none";
         }else{
-            document.querySelector('div[for="downshift-threshold"]').style.display = "block";
-            document.getElementById('downshift_threshold').style.display = "block";
-
-            document.querySelector('div[for="downshift-torque"]').style.display = "block";
-            document.getElementById('downshift_torque').style.display = "block";
-
-            document.querySelector('div[for="downshift-speed"]').style.display = "block";
-            document.getElementById('downshift_speed').style.display = "block";
-
+            document.getElementById('downshift_threshold_item').style.display = "block";
+            document.getElementById('downshift_torque_item').style.display = "block";
+            document.getElementById('downshift_speed_item').style.display = "block";
+            document.getElementById('downshift_threshold_title').style.display = "block";
+            document.getElementById('downshift_torque_title').style.display = "block";
+            document.getElementById('downshift_speed_title').style.display = "block";
         }
           
         });
     }
-
-
 }
-
 
 function add_step(){
 

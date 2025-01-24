@@ -1032,7 +1032,6 @@ function edit_step(){
                 var target_option = document.getElementById("edit_target_option");
                 target_option.addEventListener('change', function() {
                 var selectedValue = this.value;
-                    //alert(selectedValue);
 
                     if (selectedValue == 2) {
                         var elementsToDisable = [
