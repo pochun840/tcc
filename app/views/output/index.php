@@ -410,6 +410,8 @@ function crud_job_event(argument){
             });
 
             let tempC = temp.slice(); 
+
+            
         
    
             const filtered_C = tempC.filter(item => item.includes("edit_pin"));
@@ -433,7 +435,7 @@ function crud_job_event(argument){
                     var timeElementId = 'edit_time' + basePinId.slice(3);
                     const toremove = "t_pin"; 
                     timeElementId = timeElementId.replace(toremove,'');
-                    //console.log(timeElementId);
+                 
                     
                     var timeElement = document.getElementById(timeElementId);
                     if (timeElement) {
@@ -442,10 +444,7 @@ function crud_job_event(argument){
                 }
             });
 
-
-
         }
-
 
         //該事件的pin的 所有radio 及 input 全部都要可以填
         if(output_pinval != ''){
@@ -465,6 +464,7 @@ function crud_job_event(argument){
             });
             
         }
+
 
 
         get_output_info(job_id, output_event);
@@ -936,6 +936,12 @@ function get_output_info(job_id,output_event){
                 var [, output_pin] = cleanString.match(/\[output_pin]\s*=>\s*([^ ]+)/) || [, null];
                 var [, wave] = cleanString.match(/\[wave]\s*=>\s*([^ ]+)/) || [, null];
                 var [, wave_on] = cleanString.match(/\[wave_on]\s*=>\s*([^ ]+)/) || [, null];
+                var time_ms = 'edit_time' + output_pin;
+
+                if (wave_on !== "0") {
+                    document.getElementById(time_ms).value = wave_on;
+                }
+ 
 
                 var edit_output_pin = "edit_pin" + output_pin + "_"+ wave;
                 var radioButton = document.getElementById(edit_output_pin);
@@ -952,8 +958,6 @@ function get_output_info(job_id,output_event){
                     }
                 }
 
-
-                    
                 //完工信號 && 馬達信號 && 啟動信號
                 if (output_event == 8  || output_event == 6 || output_event == 7 ) {
                     for(let i = 1; i <= 11; i++) {
@@ -988,14 +992,8 @@ function get_output_info(job_id,output_event){
                                 radio.disabled = true;
                             }
                         });
-
                     }
                     
-                    
-
-                    
-                   
-              
                 }
 
                  document.getElementById(time_ms).value = wave_on;
@@ -1024,18 +1022,16 @@ function toggleOnputTime(inputId, checked, option) {
     
     if (!inputElement) {
         console.error(`Element with ID '${inputId}' not found.`);
-        return; // Exit if element is not found
+        return; 
     }
 
-   
     if (inputElement.type === 'checkbox' || inputElement.type === 'radio') {
 
         if (inputElement.checked !== checked) {
             console.warn(`The checked state of the element with ID '${inputId}' does not match the provided 'checked' value.`);
         }
     }
-
-    
+   
     if (option != '2') {
         var newId = inputId.replace(/^pin(\d+)_\d+$/, 'time$1');
         var element = document.getElementById(newId);
@@ -1057,10 +1053,9 @@ function toggleOnputTime_edit(inputId, checked, option) {
     
     if (!inputElement) {
         console.error(`Element with ID '${inputId}' not found.`);
-        return; // Exit if element is not found
+        return; 
     }
 
-   
     if (inputElement.type === 'checkbox' || inputElement.type === 'radio') {
 
         if (inputElement.checked !== checked) {
@@ -1112,7 +1107,6 @@ function disableElements(filtered_array) {
         }
     });
 }
-
 
 function translatePage(language) {
   const translations = {
@@ -1193,7 +1187,6 @@ function updateEventSelectAndPins(old_input_pin) {
             document.getElementById(pinid).checked = false;
         });
 
-
         if (pinHighElement) {
             pinHighElement.disabled = false;
             //pinHighElement.checked  = false;
@@ -1205,10 +1198,8 @@ function updateEventSelectAndPins(old_input_pin) {
         }
     }
 }
-
-
-
 </script>
+
 <style>
     #output_table td,
     #output_table th {
