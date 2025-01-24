@@ -665,13 +665,15 @@ function crud_job_event(argument){
         if(input_event ==109){
             document.getElementById('edit_work_goc').style.display='block';
             var gateconfirm = temp[19];
-            var result = gateconfirm.replace("check_", "");
+            console.log(gateconfirm);
+            
+           // var result = gateconfirm.replace("check_", "");
 
-            if (result == "0") {
+            /*if (result == "0") {
                 document.getElementById('edit_gateconfirm_0').checked = true;
             } else if (result == "1") {
                 document.getElementById('edit_gateconfirm_1').checked = true;
-            }
+            }*/
          
         }
         

@@ -115,12 +115,17 @@ class Step extends Controller
             $check = $this->stepModel->check_step_target($jobid,$seqid);
             $check = intval($check[0]['count_records']);
 
+
+
+            if($target_option == 2){
+                $downshift = 1;
+            }
             
 
 
-            
+    
             #驗證hi_angle的範圍
-            if(!empty($hi_angle)){
+            /*if(!empty($hi_angle)){
                 $ans = $this->MiscellaneousModel->check_angle($hi_angle);
                 if($ans == FALSE){
                     $res_type = 'Error';
@@ -133,10 +138,10 @@ class Step extends Controller
                     exit();
 
                 }
-            }
+            }*/
 
             #驗證lo_angle的範圍
-            if(!empty($lo_angle)){
+            /*if(!empty($lo_angle)){
                 $ans = $this->MiscellaneousModel->check_angle($lo_angle);
                 if($ans == FALSE){
                     $res_type = 'Error';
@@ -149,11 +154,11 @@ class Step extends Controller
                     exit();
 
                 }
-            }
+            }*/
 
 
             #最小角度 必須小於 最大角度
-            if($lo_angle > $hi_angle){
+            /*if($lo_angle > $hi_angle){
                 $res_type = 'Error';
                 $res_msg  =  $error_message['angle_error'];
                 $result = array(
@@ -163,7 +168,7 @@ class Step extends Controller
                 echo json_encode($result);
                 exit();
 
-            }
+            }*/
 
 
             if($check > 1){
