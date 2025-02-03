@@ -190,14 +190,14 @@ class Miscellaneous{
                        
             case 'reverse_power':
                 return is_numeric($value) && 
-                       $value > 0 && 
-                       $value <= 10;
+                       $value > 10 && 
+                       $value <= 100;
             
                        
             case 'reverse_rpm':
             return is_numeric($value) && 
                     $value > 0 && 
-                    $value <= 10000;
+                    $value <= 1100;
                                     
             default:
                 return false;

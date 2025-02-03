@@ -169,7 +169,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>(1=10%):</div>
+                            <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>:</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="reverse_power" maxlength="">
                                 <div class="invalid-feedback"></div>
@@ -270,7 +270,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>(1=10%):</div>
+                            <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>:</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_reverse_power" maxlength=""  >
                             </div>
@@ -553,7 +553,7 @@ function input_check_savejob() {
     let conditions = [
         { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 1100 },
-        { id: 'reverse_power', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        { id: 'reverse_power', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 
     let isFormValid = true;
@@ -576,7 +576,7 @@ function input_check_editjob() {
     let conditions = [
         { id: 'edit_jobname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'edit_reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 1100 },
-        { id: 'edit_reverse_power', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        { id: 'edit_reverse_power', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 
     let isFormValid = true;
