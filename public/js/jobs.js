@@ -54,17 +54,11 @@ function create_job() {
     
     //帶入預設值
     document.getElementById('newjob').style.display = 'block';
-    document.getElementById('reverse_rpm').value = 1;
+    document.getElementById('reverse_rpm').value = 200;
     document.getElementById('reverse_power').value = 1;
     document.getElementById('reverse_direction_CCW').checked = true;
     document.getElementById('job_off').checked = true;
     document.getElementById('stop_job_ok_off').checked = true;
-
-    
-    var jobname_val = document.getElementById("job_name").value;
-    if (jobname_val.trim() !== "") {
-        savejob();
-    } 
 }
 
 function copy_job(jobid){

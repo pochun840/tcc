@@ -104,7 +104,7 @@
                         <div class="row">
                             <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?>:</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_name" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="job_name" maxlength="" value ='<?php echo "JOB"."-".$data['jobint'];?>'>
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
 
             			      	<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="job_ok" id="job_ok" value="1">
-            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
+            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>  
             					</div>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(1=10%) :</div>
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="reverse_rpm" maxlength=""  >
                                 <div class="invalid-feedback"></div>
@@ -264,7 +264,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(1=10%):</div>
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>:</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_reverse_rpm" maxlength="" required >
                             </div>
@@ -587,9 +587,9 @@ function input_check_editjob() {
             element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
         }
 
-        if (!validateInput(element, input.pattern, input.min, input.max)) {
+        /*if (!validateInput(element, input.pattern, input.min, input.max)) {
             isFormValid = false;
-        }
+        }*/
     });
 
     return isFormValid;

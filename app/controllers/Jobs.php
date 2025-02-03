@@ -72,13 +72,12 @@ class Jobs extends Controller
 
    
 
-            $resultName = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
+            $resultName  = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
             $resultPower = $this->MiscellaneousModel->validate($jobdata['reverse_power'], 'reverse_power');
-            $resultRpm = $this->MiscellaneousModel->validate($jobdata['reverse_rpm'], 'reverse_power');
+            $resultRpm   = $jobdata['reverse_rpm'];
 
 
-
-            if($resultPower == false || $resultRpm == false){
+            if($resultPower == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
                 exit();
             }
@@ -134,11 +133,12 @@ class Jobs extends Controller
 
 
             
-            $resultName = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
+            $resultName  = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
             $resultPower = $this->MiscellaneousModel->validate($jobdata['reverse_power'], 'reverse_power');
-            $resultRpm = $this->MiscellaneousModel->validate($jobdata['reverse_rpm'], 'reverse_power');
+            $resultRpm   = $jobdata['reverse_rpm'];
+            //$resultRpm = $this->MiscellaneousModel->validate($jobdata['reverse_rpm'], 'reverse_power');
 
-            if($resultPower == false || $resultRpm == false){
+            if($resultPower == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
                 exit();
             }

@@ -192,7 +192,13 @@ class Miscellaneous{
                 return is_numeric($value) && 
                        $value > 0 && 
                        $value <= 10;
+            
                        
+            case 'reverse_rpm':
+            return is_numeric($value) && 
+                    $value > 0 && 
+                    $value <= 10000;
+                                    
             default:
                 return false;
         }

@@ -466,6 +466,11 @@ function cound_step(argument){
         if(step_count  < 4){
             create_step();
         }
+
+        /*if(step_count > 1){
+            //如果不是STEP1 的話 name = downshift_option 需要disabled 
+            document.querySelector('[name="downshift_option"]')?.disabled = true;
+        }*/
     }
 
     if(argument =="edit" && stepid != null){

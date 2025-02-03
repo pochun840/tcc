@@ -105,7 +105,7 @@
                         <div class="row">
                             <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_name"  >
+                                <input type="text" class="form-control input-ms" id="job_name" value ='<?php echo "JOB"."-".$data['jobint'];?>' >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -164,7 +164,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(1=10%) :</div>
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>:</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="reverse_rpm" maxlength="" >
                                 <div class="invalid-feedback"></div>
@@ -269,7 +269,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(1=10%) :</div>
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>:</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_reverse_rpm" maxlength="" >
                                 <div class="invalid-feedback"></div>
@@ -527,7 +527,6 @@ function copy_job_by_id(jobid){
                 
             }
         });
-        //document.getElementById('copyjob').style.display = 'none';
     }
 }
 
@@ -566,8 +565,8 @@ function validateInput(element, pattern, min, max) {
 function input_check_savejob() {
     let conditions = [
         { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 10 },
-        { id: 'reverse_power', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        { id: 'reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 10000 },
+        { id: 'reverse_power', pattern: /^[0-9]+$/, min: 1, max: 11 },
     ];
 
     let isFormValid = true;
@@ -589,8 +588,8 @@ function input_check_savejob() {
 function input_check_editjob() {
     let conditions = [
         { id: 'edit_jobname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'edit_reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 10 },
-        { id: 'edit_reverse_power', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        { id: 'edit_reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 10000 },
+        { id: 'edit_reverse_power', pattern: /^[0-9]+$/, min: 1, max: 11 },
     ];
 
     let isFormValid = true;
@@ -601,9 +600,9 @@ function input_check_editjob() {
             element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
         }
 
-        if (!validateInput(element, input.pattern, input.min, input.max)) {
+        /*if (!validateInput(element, input.pattern, input.min, input.max)) {
             isFormValid = false;
-        }
+        }*/
     });
 
     return isFormValid;
