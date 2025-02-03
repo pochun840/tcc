@@ -605,15 +605,15 @@ function create_seq() {
 
     document.getElementById('K').value = 100;
     document.getElementById('stop_seq_ok_off').checked = true;
-    document.getElementById('seq_off').checked = true;
+    document.getElementById('seq_ok').checked = true;
     document.getElementById('OPT_OFF').checked = true;
     document.getElementById('offset').value = 0;
 
 
-    var seqname_val = document.getElementById("seq_name").value;
+    /*var seqname_val = document.getElementById("seq_name").value;
     if (seqname_val.trim() !== "") {
         saveseq();
-    } 
+    } */
    
 }
 

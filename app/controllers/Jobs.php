@@ -30,8 +30,8 @@ class Jobs extends Controller
             $lastRow  = end($jobs);
             $jobIdInt = intval($lastRow['job_id']) + 1 ;   
         }else{
-            $lastRow  = ""; 
-            $jobIdInt = "";
+            $lastRow  = 1; 
+            $jobIdInt = 1;
         }
         ;
 
@@ -70,12 +70,9 @@ class Jobs extends Controller
                 'stop_job_ok' => $_POST['stop_job_ok_val']
             );
 
-   
-
             $resultName  = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
             $resultPower = $this->MiscellaneousModel->validate($jobdata['reverse_power'], 'reverse_power');
             $resultRpm   = $jobdata['reverse_rpm'];
-
 
             if($resultPower == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);

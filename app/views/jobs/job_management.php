@@ -600,9 +600,9 @@ function input_check_editjob() {
             element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
         }
 
-        /*if (!validateInput(element, input.pattern, input.min, input.max)) {
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
             isFormValid = false;
-        }*/
+        }
     });
 
     return isFormValid;

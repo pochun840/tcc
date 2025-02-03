@@ -580,16 +580,15 @@ function input_check_editjob() {
     ];
 
     let isFormValid = true;
-
     conditions.forEach(function(input) {
         var element = document.getElementById(input.id);
         if (input.id !== 'edit_jobname') {
             element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
         }
 
-        /*if (!validateInput(element, input.pattern, input.min, input.max)) {
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
             isFormValid = false;
-        }*/
+        }
     });
 
     return isFormValid;
