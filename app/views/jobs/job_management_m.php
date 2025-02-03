@@ -162,7 +162,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?> :</div>
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(Max:1100):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="reverse_rpm" maxlength=""  >
                                 <div class="invalid-feedback"></div>
@@ -264,7 +264,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>:</div>
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(Max:1100):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_reverse_rpm" maxlength="" required >
                             </div>
@@ -552,7 +552,7 @@ function validateInput(element, pattern, min, max) {
 function input_check_savejob() {
     let conditions = [
         { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        { id: 'reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 1100 },
         { id: 'reverse_power', pattern: /^[0-9]+$/, min: 1, max: 10 },
     ];
 
@@ -575,7 +575,7 @@ function input_check_savejob() {
 function input_check_editjob() {
     let conditions = [
         { id: 'edit_jobname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'edit_reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 10 },
+        { id: 'edit_reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 1100 },
         { id: 'edit_reverse_power', pattern: /^[0-9]+$/, min: 1, max: 10 },
     ];
 

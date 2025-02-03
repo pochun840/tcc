@@ -426,7 +426,7 @@ $text['img_save_hover'] = '../public/img/home_save_m_tw.png';
 $text['img_agent'] = '../public/img/home_agent_tw.png';
 $text['img_agent_hover'] = '../public/img/home_m_agent_tw.png';
 
-$text['unfasten_force'] = '超出範圍 1 - 10';
+$text['unfasten_force'] = '超出範圍 1 - 1100';
 $text['error_job_name'] = 'JOB名稱輸入有誤';
 $text['error_seq_name'] = 'SEQ名稱輸入有誤';
 //--------------------------------------------------------------------------------------------------------------
