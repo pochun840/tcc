@@ -1123,7 +1123,9 @@ function get_output_info(job_id,output_event){
                     
                 }
 
-                 document.getElementById(time_ms).value = wave_on;
+                if (wave_on !== "0") {
+                    document.getElementById(time_ms).value = wave_on;
+                }
  
                  old_output_even = output_event;
  

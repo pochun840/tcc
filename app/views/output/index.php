@@ -778,6 +778,7 @@ function edit_output_id(){
 
     var time_ms = 'edit_time'+ output_pin;
     var wave_on =  document.getElementById(time_ms).value;
+
     if(job_id){
         $.ajax({
             url: "?url=Outputs/edit_output_event",
@@ -942,7 +943,6 @@ function get_output_info(job_id,output_event){
                     document.getElementById(time_ms).value = wave_on;
                 }
  
-
                 var edit_output_pin = "edit_pin" + output_pin + "_"+ wave;
                 var radioButton = document.getElementById(edit_output_pin);
                 radioButton.removeAttribute('disabled');
@@ -996,12 +996,12 @@ function get_output_info(job_id,output_event){
                     
                 }
 
-                 document.getElementById(time_ms).value = wave_on;
+                //document.getElementById(time_ms).value = wave_on;
  
                  old_output_even = output_event;
  
                  if(radioButton){
-                     radioButton.checked = true;
+                    radioButton.checked = true;
                  }
                  
                  document.querySelector("select[name='edit_event_option']").value = output_event;
