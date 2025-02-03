@@ -147,16 +147,16 @@
                         <div class="row">
                             <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['reverse_direction'];?> :</div>
                             <div class="col t2" >
-            			      	<div class="form-check form-check-inline">
+            			      	<div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="direction" id="reverse_direction_CW" value="0">
             					  <label class="form-check-label" for="reverse_direction_CW"><?php  echo $text['CW']; ?></label>
             					</div>
-            					<div class="form-check form-check-inline">
+            					<div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="direction" id="reverse_direction_CCW" value="1">
             					  <label class="form-check-label" for="reverse_direction_CCW"> <?php  echo $text['CCW']; ?></label>
             					</div>
 
-                                <div class="form-check form-check-inline">
+                                <div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="direction" id="reverse_direction_disable" value="2">
             					  <label class="form-check-label" for="reverse_direction_disable"> <?php  echo $text['Disable']; ?></label>
             					</div>
@@ -164,7 +164,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>:</div>
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(Max:1100):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="reverse_rpm" maxlength="" >
                                 <div class="invalid-feedback"></div>
@@ -252,17 +252,17 @@
                         <div class="row">
                             <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['reverse_direction'];?> :</div>
                             <div class="col t2" >
-            			      	<div class="form-check form-check-inline">
+            			      	<div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_CW" value="0">
             					  <label class="form-check-label" for="reverse_direction_CW"><?php  echo $text['CW'];?></label>
             					</div>
 
-            					<div class="form-check form-check-inline">
+            					<div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio"  name="edit_direction" id="direction_CCW" value="1">
             					  <label class="form-check-label" for="reverse_direction_CCW"><?php  echo $text['CCW'];?></label>
             					</div>
 
-                                <div class="form-check form-check-inline">
+                                <div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_disable" value="2">
             					  <label class="form-check-label" for="reverse_direction_disable"> <?php  echo $text['Disable']; ?></label>
             					</div>

@@ -890,7 +890,7 @@ function create_input_id(){
     var pin_old   = pinval[0]['id'];
     var input_wave  = pinval[0]['value'];
     var pagemode    = 1;
-    var input_seqid = 0;
+    var input_seqid = "-1";
 
     if(input_event == 109){
         var selectedOption = document.querySelector('input[name="gateconfirm"]:checked');

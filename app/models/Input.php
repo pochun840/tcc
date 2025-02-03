@@ -78,8 +78,8 @@ class Input{
 
     public function create_input($jobdata){   
     
-        $sql = "INSERT INTO `input` (input_job_id, input_event, input_pin, input_wave) ";
-        $sql .= "VALUES (:input_job_id, :input_event, :input_pin, :input_wave);";
+        $sql = "INSERT INTO `input` (input_job_id, input_event, input_pin, input_wave, gateconfirm, pagemode, input_seqid ) ";
+        $sql .= "VALUES (:input_job_id, :input_event, :input_pin, :input_wave, :gateconfirm, :pagemode, :input_seqid );";
 
 
         $statement = $this->db_iDas->prepare($sql);
@@ -87,9 +87,9 @@ class Input{
         $statement->bindValue(':input_event', $jobdata['input_event']);
         $statement->bindValue(':input_pin', $jobdata['input_pin']);
         $statement->bindValue(':input_wave', $jobdata['input_wave']);
-        //$statement->bindValue(':gateconfirm', $jobdata['gateconfirm']);
-        //$statement->bindValue(':pagemode', $jobdata['pagemode']);
-        //$statement->bindValue(':input_seqid', $jobdata['input_seqid']);
+        $statement->bindValue(':gateconfirm', $jobdata['gateconfirm']);
+        $statement->bindValue(':pagemode', $jobdata['pagemode']);
+        $statement->bindValue(':input_seqid', $jobdata['input_seqid']);
 
         $results = $statement->execute();
 
