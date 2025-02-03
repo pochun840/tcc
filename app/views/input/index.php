@@ -66,8 +66,6 @@
                                             <th>9</th>
                                             <th>10</th>
                                             <th><?php echo $text['Confirm'];?></th>
-                                            <!--<th><?php //echo $text['page'];?></th>-->
-                                            <!--<th><?php //echo $text['mode'];?></th>-->
                                         </tr>
                                     </thead>
 
@@ -664,10 +662,9 @@ function crud_job_event(argument){
 
         if(input_event ==109){
             document.getElementById('edit_work_goc').style.display='block';
-            var gateconfirm = temp[19];
-            console.log(gateconfirm);
-            
-           // var result = gateconfirm.replace("check_", "");
+            let checkValues = temp
+                .filter(item => item.includes("check_"))
+                .map(item => item.replace("check_", ""));
 
             /*if (result == "0") {
                 document.getElementById('edit_gateconfirm_0').checked = true;
