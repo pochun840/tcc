@@ -66,8 +66,8 @@
                                             <th>9</th>
                                             <th>10</th>
                                             <th><?php echo $text['Confirm'];?></th>
-                                            <th><?php echo $text['page'];?></th>
-                                            <th><?php echo $text['mode'];?></th>
+                                            <!--<th><?php //echo $text['page'];?></th>-->
+                                            <!--<th><?php //echo $text['mode'];?></th>-->
                                         </tr>
                                     </thead>
 

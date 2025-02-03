@@ -126,7 +126,7 @@
                         <div class="row">
                             <div for="seq-name" class="col-6 t1"><?php echo $text['seq_name'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="seq_name" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="seq_name" maxlength="" value ='<?php echo "SEQ"."-".$data['seq_id'];?>'>
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -608,12 +608,6 @@ function create_seq() {
     document.getElementById('seq_ok').checked = true;
     document.getElementById('OPT_OFF').checked = true;
     document.getElementById('offset').value = 0;
-
-
-    /*var seqname_val = document.getElementById("seq_name").value;
-    if (seqname_val.trim() !== "") {
-        saveseq();
-    } */
    
 }
 

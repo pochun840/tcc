@@ -46,7 +46,6 @@ class Inputs extends Controller
 
         $event = $this->MiscellaneousModel->details('io_input');
 
-    
         $input_check = true;
         if (!empty($_POST['jobid']) && isset($_POST['jobid'])) {
             $job_id = $_POST['jobid'];
@@ -60,7 +59,6 @@ class Inputs extends Controller
             $tempA = array();
            
             $job_inputlist = ''; 
-
     
             if (!empty($job_inputs)) {
                 foreach ($job_inputs as $kk => $vv) {
@@ -79,8 +77,6 @@ class Inputs extends Controller
                         $tempA[] = $vv['input_event'];
                     }
 
-                
-                    
                     $isMobile = $this->isMobileCheck();
 
                     if($isMobile){
@@ -91,7 +87,6 @@ class Inputs extends Controller
                             $img = '<img src="./img/low.png" style="max-width: 50px;">';
                         }
                         
-
                         $job_inputlist .= "<tr data-event = '".$vv['input_event']."' >";
                         $job_inputlist .= "<td id='".$vv['input_event']."'>".$event[$vv['input_event']]."</td>";
                         $job_inputlist .= '<td>'.$vv['input_pin'].'</td>';
@@ -103,9 +98,7 @@ class Inputs extends Controller
                         $job_inputlist .= "<tr data-event = '".$vv['input_event']."' >";
                         $job_inputlist .= "<td id='".$vv['input_event']."'>".$event[$vv['input_event']]."</td>";
                         $job_inputlist .= $this->InputModel->generateTableCell($vv['input_pin'],$vv['input_wave']);
-                        $job_inputlist .= '<td>NO</td>';
-                        $job_inputlist .= '<td>1</td>';
-                        $job_inputlist .= '<td>EVENT</td>';
+                        $job_inputlist .= '<td>'.$vv['gateconfirm'].'</td>';
                         $job_inputlist .= '</tr>';
                     }
     
