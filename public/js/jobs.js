@@ -56,7 +56,7 @@ function create_job() {
     document.getElementById('newjob').style.display = 'block';
     document.getElementById('rev_speed').value = 200;
     document.getElementById('rev_force').value = 100;
-    document.getElementById('reverse_direction_CCW').checked = true;
+    document.getElementById('rev_direction_CCW').checked = true;
     document.getElementById('job_off').checked = true;
     document.getElementById('stop_job_ok_off').checked = true;
 }
@@ -71,7 +71,7 @@ function updatejob(){
     var jobid      = document.getElementById("edit_jobid").value;
     var jobname    = document.getElementById("edit_jobname").value;
     var speedvalue   = document.getElementById("edit_rev_speed").value;
-    var powervalue = document.getElementById("edit_rev_force").value;
+    var forcevalue = document.getElementById("edit_rev_force").value;
     var directionValue = document.querySelector('input[name="edit_direction"]:checked').value;
     var jobokValue = document.querySelector('input[name="edit_job_ok"]:checked').value;
     var stopjobValue = document.querySelector('input[name="edit_stop_job_ok"]:checked').value;
@@ -87,7 +87,7 @@ function updatejob(){
                 jobid: jobid,
                 jobname: jobname,
                 speedvalue: speedvalue,
-                powervalue: powervalue,
+                forcevalue: forcevalue,
                 directionValue: directionValue,
                 jobokValue:jobokValue,
                 stopjobValue:stopjobValue
@@ -100,7 +100,7 @@ function updatejob(){
                     localStorage.setItem('jobid', jobid);
                     localStorage.setItem('jobname', jobname);
                     localStorage.setItem('rev_speed', speedvalue);
-                    localStorage.setItem('rev_force', powervalue);
+                    localStorage.setItem('rev_force', forcevalue);
                     localStorage.setItem('direction', directionValue);
                     history.go(0);
                 });
@@ -129,7 +129,7 @@ function edit_job(jobid) {
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, jobname] = cleanString.match(/\[job_name]\s*=>\s*([^ ]+)/) || [, null];
-                var [, reverse_direction] = cleanString.match(/\[reverse_direction]\s*=>\s*([^ ]+)/) || [, null];
+                var [, rev_direction] = cleanString.match(/\[rev_direction]\s*=>\s*([^ ]+)/) || [, null];
                 var [, rev_force] = cleanString.match(/\[rev_force]\s*=>\s*([^ ]+)/) || [, null];
                 var [, rev_speed] = cleanString.match(/\[rev_speed]\s*=>\s*([^ ]+)/) || [, null];
                 var [, job_ok] = cleanString.match(/\[job_ok]\s*=>\s*([^ ]+)/) || [, null];
@@ -145,7 +145,7 @@ function edit_job(jobid) {
                 document.getElementById("edit_rev_force").value = rev_force;
 
                 var radioButtons = document.getElementsByName("edit_direction");
-                setRadioButtonValue(radioButtons, reverse_direction);
+                setRadioButtonValue(radioButtons, rev_direction);
 
                 var radioButtons_job = document.getElementsByName("edit_job_ok");
                 setRadioButtonValue(radioButtons_job, job_ok);

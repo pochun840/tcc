@@ -23,7 +23,7 @@ class Jobs extends Controller
 
         $isMobile  = $this->isMobileCheck();
         $jobs      = $this->jobModel->getJobs();
-        $direction = $this->MiscellaneousModel->details('reverse_direction');
+        $direction = $this->MiscellaneousModel->details('rev_direction');
 
 
         if(!empty($jobs)){
@@ -65,7 +65,7 @@ class Jobs extends Controller
                 'job_name' => $_POST['jobname_val'],
                 'rev_force' => $_POST['rev_force_val'],
                 'rev_speed' => $_POST['rev_speed_val'],
-                'reverse_direction' => $_POST['direction_val'],
+                'rev_direction' => $_POST['direction_val'],
                 'job_ok' => $_POST['job_ok_val'],
                 'stop_job_ok' => $_POST['stop_job_ok_val']
             );
@@ -120,9 +120,9 @@ class Jobs extends Controller
             $jobdata = array(
                 'job_id' => $_POST['jobid'],
                 'job_name' => $_POST['jobname'],
-                'rev_force' => $_POST['powervalue'],
+                'rev_force' => $_POST['forcevalue'],
                 'rev_speed' => $_POST['speedvalue'],
-                'reverse_direction' => $_POST['directionValue'],
+                'rev_direction' => $_POST['directionValue'],
                 'job_ok' => $_POST['jobokValue'],
                 'stop_job_ok' => $_POST['stopjobValue']
 
@@ -241,7 +241,7 @@ class Jobs extends Controller
                     $jobdata = array(
                         'job_id'   => $_POST['new_jobid'],
                         'job_name' => $_POST['new_jobname'],
-                        'reverse_direction' => $old_res['reverse_direction'],
+                        'rev_direction' => $old_res['rev_direction'],
                         'rev_speed' => $old_res['rev_speed'],  
                         'rev_force' => $old_res['rev_force'],  
                         'job_ok' =>$old_res['job_ok'],

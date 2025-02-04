@@ -40,7 +40,7 @@ $text['page_of'] = '之';
 $text['new_job'] = '新增工作';
 $text['edit_job'] = '编辑工作';
 
-$text['reverse_direction'] = '拆螺丝设定';
+$text['rev_direction'] = '拆螺丝设定';
 $text['rev_speed'] = '拆螺丝转速';
 $text['rev_force'] = '拆螺丝扭力';
 

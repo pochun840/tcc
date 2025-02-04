@@ -33,7 +33,7 @@
                                 <tr class="w3-dark-grey" style="font-size: 2.5vmin">
                                     <th><?php echo $text['job_id'];?></th>
                                     <th><?php echo $text['job_name'];?></th>
-                                    <th><?php echo $text['reverse_direction'];?></th>
+                                    <th><?php echo $text['rev_direction'];?></th>
                                     <th><?php echo $text['rev_speed'];?></th>
                                     <th><?php echo $text['rev_force'];?></th>
                                     <th><?php echo $text['total_seq'];?></th>
@@ -46,7 +46,7 @@
 										<tr >
 											<td id='job_id' ><?php echo $val['job_id'];?></td>
 											<td><?php echo $val['job_name'];?></td>
-											<td><?php echo $text[$data['direction'][$val['reverse_direction']]];?></td>
+											<td><?php echo $text[$data['direction'][$val['rev_direction']]];?></td>
 											<td><?php echo $val['rev_speed'];?></td>
 											<td><?php echo $val['rev_force'];?></td>
 											<td><?php echo $val['total_seq'];?></td>
@@ -142,21 +142,21 @@
                         </div>
 
                         <div class="row">
-                            <div for="reverse-Direction" class="col-6 t1"><?php echo $text['reverse_direction'];?>:</div>
+                            <div for="reverse-Direction" class="col-6 t1"><?php echo $text['rev_direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction" id="reverse_direction_CW" value="0">
-            					  <label class="form-check-label" for="reverse_direction_CW"><?php echo $text['CW']; ?></label>
+            					  <input class="form-check-input" type="radio" name="direction" id="rev_direction_CW" value="0">
+            					  <label class="form-check-label" for="rev_direction_CW"><?php echo $text['CW']; ?></label>
             					</div>
 
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction" id="reverse_direction_CCW" value="1">
-            					  <label class="form-check-label" for="reverse_direction_CCW"><?php echo $text['CCW']; ?></label>
+            					  <input class="form-check-input" type="radio" name="direction" id="rev_direction_CCW" value="1">
+            					  <label class="form-check-label" for="rev_direction_CCW"><?php echo $text['CCW']; ?></label>
             					</div>
 
                                 <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction" id="reverse_direction_disable" value="2">
-            					  <label class="form-check-label" for="reverse_direction_disable"> <?php  echo $text['Disable']; ?></label>
+            					  <input class="form-check-input" type="radio" name="direction" id="rev_direction_disable" value="2">
+            					  <label class="form-check-label" for="rev_direction_disable"> <?php  echo $text['Disable']; ?></label>
             					</div>
 
                             </div>
@@ -244,21 +244,21 @@
                         </div>
 
                         <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['reverse_direction'];?>:</div>
+                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['rev_direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="reverse_direction_CW" value="0">
-            					  <label class="form-check-label" for="reverse_direction_CW"><?php echo $text['CW'];?></label>
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="rev_direction_CW" value="0">
+            					  <label class="form-check-label" for="rev_direction_CW"><?php echo $text['CW'];?></label>
             					</div>
 
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="reverse_direction__CCW" value="1">
-            					  <label class="form-check-label" for="reverse_direction_CCW"><?php echo $text['CCW'];?></label>
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="rev_direction__CCW" value="1">
+            					  <label class="form-check-label" for="rev_direction_CCW"><?php echo $text['CCW'];?></label>
             					</div>
 
                                 <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="reverse_direction_disable" value="2">
-            					  <label class="form-check-label" for="reverse_direction_disable"> <?php  echo $text['Disable']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="rev_direction_disable" value="2">
+            					  <label class="form-check-label" for="rev_direction_disable"> <?php  echo $text['Disable']; ?></label>
             					</div>
 
                             </div>
@@ -582,9 +582,23 @@ function input_check_editjob() {
     let isFormValid = true;
     conditions.forEach(function(input) {
         var element = document.getElementById(input.id);
-        if (input.id !== 'edit_jobname') {
+        /*if (input.id !== 'edit_jobname') {
             element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
+        }*/
+
+        if (input.id !== 'edit_jobname') {
+            const nextSibling = element.nextElementSibling; // 先存起來，避免重複呼叫
+            if (nextSibling) { // 檢查 nextSibling 是否不為 null
+                nextSibling.innerHTML = `${input.min} ~ ${input.max}`;
+            } else {
+                console.error(`Element with id '${input.id}' does not have a next sibling.`); // 錯誤處理，例如輸出到控制台
+                // 或者你可以選擇創建一個新的元素，並將它插入到 element 之後
+                // const newSibling = document.createElement('span');
+                // element.parentNode.insertBefore(newSibling, element.nextSibling);
+                // newSibling.innerHTML = `${input.min} ~ ${input.max}`;
+            }
         }
+
 
         if (!validateInput(element, input.pattern, input.min, input.max)) {
             isFormValid = false;

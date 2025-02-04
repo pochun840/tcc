@@ -89,8 +89,8 @@ class Job{
     #新增JOB
     public function create_job($jobdata){
       
-        $sql = "INSERT INTO `job` (job_id, job_name, reverse_direction,rev_speed,rev_force, job_ok,stop_job_ok)";
-        $sql .= " VALUES (:job_id, :job_name, :reverse_direction, :rev_speed, :rev_force ,:job_ok,:stop_job_ok);";
+        $sql = "INSERT INTO `job` (job_id, job_name, rev_direction,rev_speed,rev_force, job_ok,stop_job_ok)";
+        $sql .= " VALUES (:job_id, :job_name, :rev_direction, :rev_speed, :rev_force ,:job_ok,:stop_job_ok);";
     
         $jobdata['job_id'] = intval($jobdata['job_id']);
     
@@ -100,7 +100,7 @@ class Job{
         $statement->bindValue(':job_name', $jobdata['job_name']);
         $statement->bindValue(':rev_force', $jobdata['rev_force']);
         $statement->bindValue(':rev_speed', $jobdata['rev_speed']);
-        $statement->bindValue(':reverse_direction', $jobdata['reverse_direction']);
+        $statement->bindValue(':rev_direction', $jobdata['rev_direction']);
         $statement->bindValue(':job_ok', $jobdata['job_ok']);
         $statement->bindValue(':stop_job_ok', $jobdata['stop_job_ok']);
         $results = $statement->execute();    
@@ -112,7 +112,7 @@ class Job{
         
         $sql = "UPDATE `job` SET  
                 job_name = :job_name, 
-                reverse_direction = :reverse_direction, 
+                rev_direction = :rev_direction, 
                 rev_speed = :rev_speed, 
                 rev_force = :rev_force,
                 job_ok = :job_ok,
@@ -122,7 +122,7 @@ class Job{
         $statement->bindValue(':job_name', $jobdata['job_name']);
         $statement->bindValue(':rev_force', $jobdata['rev_force']);
         $statement->bindValue(':rev_speed', $jobdata['rev_speed']);
-        $statement->bindValue(':reverse_direction', $jobdata['reverse_direction']);
+        $statement->bindValue(':rev_direction', $jobdata['rev_direction']);
         $statement->bindValue(':job_ok', $jobdata['job_ok']);
         $statement->bindValue(':stop_job_ok', $jobdata['stop_job_ok']);
         $statement->bindValue(':job_id', $jobdata['job_id']);

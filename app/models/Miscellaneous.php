@@ -17,7 +17,7 @@ class Miscellaneous{
     public function details($mode){
         
         $array = array();
-        if($mode == "reverse_direction"){
+        if($mode == "rev_direction"){
 
             $array = array(
                 0 => 'CW',

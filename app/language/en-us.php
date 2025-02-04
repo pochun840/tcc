@@ -40,7 +40,7 @@ $text['mode'] = 'Mode';
 $text['new_job'] = 'New job';
 $text['edit_job'] = 'Edit Job';
 
-$text['reverse_direction'] = 'Reverse direction'; //
+$text['rev_direction'] = 'Reverse direction'; //
 $text['rev_speed'] = 'Reverse RPM';
 $text['rev_force'] = 'Reverse Power';
 

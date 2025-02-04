@@ -43,7 +43,7 @@ $text['mode'] = '模式';
 $text['new_job'] = '新增工作';
 $text['edit_job'] = '編輯工作';
 
-$text['reverse_direction'] = '拆螺絲方向';
+$text['rev_direction'] = '拆螺絲方向';
 $text['rev_speed'] = '拆螺絲轉速';
 $text['rev_force'] = '拆螺絲力道';
 

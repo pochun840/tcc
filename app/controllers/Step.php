@@ -27,7 +27,7 @@ class Step extends Controller
         $target_option = $this->MiscellaneousModel->details("target_option");
         $torque_unit   = $this->MiscellaneousModel->details("torque_unit");
         $target_option_change = $this->MiscellaneousModel->details("target_option_change");
-        $direction = $this->MiscellaneousModel->details('reverse_direction');
+        $direction = $this->MiscellaneousModel->details('rev_direction');
         $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
         $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
         $check     = $this->stepModel->check_step_target($job_id,$seq_id);
