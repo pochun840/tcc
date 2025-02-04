@@ -105,7 +105,7 @@ class Sequences extends Controller
             
             $jobdata = array(
                 'job_id' => $jobid,
-                'sequence_id' => $seqid,
+                'seq_id' => $seqid,
                 'sequence_name' => $seq_name,
                 'seq_en' => 1,
                 'tr' => $tr,
@@ -127,10 +127,10 @@ class Sequences extends Controller
             $result = array();
             if($res){
                 $res_type = 'Success';
-                $res_msg  = $text['new_seq'].':'. $jobdata['sequence_id']."  ".$text['success'];
+                $res_msg  = $text['new_seq'].':'. $jobdata['seq_id']."  ".$text['success'];
             }else{
                 $res_type = 'Error';
-                $res_msg  = $text['new_seq'].':'. $jobdata['sequence_id']."  ".$text['fail'];
+                $res_msg  = $text['new_seq'].':'. $jobdata['seq_id']."  ".$text['fail'];
             }
             
             $result = array(
@@ -249,7 +249,7 @@ class Sequences extends Controller
            
             $jobdata = array(
                 'job_id' => $jobid,
-                'sequence_id' => $seqid,
+                'seq_id' => $seqid,
                 'sequence_name' =>$seq_name,
                 'seq_en' => 1,
                 'tr' => $tr,
@@ -291,7 +291,7 @@ class Sequences extends Controller
         
 
         if(!empty($seqid)){
-            $res  = $this->sequenceModel->sequence_id_repeat($jobid,$seqid);
+            $res  = $this->sequenceModel->seq_id_repeat($jobid,$seqid);
             if($res == "True"){
 
             }
@@ -342,7 +342,7 @@ class Sequences extends Controller
             $new_temp_seq = array();
             foreach($old_res as $kk =>$vv){
                 $new_temp_seq[$kk]['job_id'] = $vv['job_id'];
-                $new_temp_seq[$kk]['sequence_id'] = $newseqid;
+                $new_temp_seq[$kk]['seq_id'] = $newseqid;
                 $new_temp_seq[$kk]['sequence_name'] = $newseqname;
                 $new_temp_seq[$kk]['seq_en'] = $vv['seq_en'];
                 $new_temp_seq[$kk]['tr'] = $vv['tr'];
@@ -362,7 +362,7 @@ class Sequences extends Controller
             $new_temp_step = array();
             foreach($select_step as $k_step =>$v_step){
                 $new_temp_step[$k_step]['job_id'] = $v_step['job_id'];
-                $new_temp_step[$k_step]['sequence_id'] = $newseqid;
+                $new_temp_step[$k_step]['seq_id'] = $newseqid;
                 $new_temp_step[$k_step]['step_id'] = $v_step['step_id'];
                 $new_temp_step[$k_step]['target_option'] =$v_step['target_option'];
                 $new_temp_step[$k_step]['target_torque'] = $v_step['target_torque'];

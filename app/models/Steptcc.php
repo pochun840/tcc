@@ -20,7 +20,7 @@ class Steptcc{
     #透過 job_id 及 seq_id 取得當前有幾個step
     public function countstep($jobid, $seqid){
 
-        $sql = "SELECT COUNT(*) as count FROM step WHERE job_id = ? AND sequence_id = ?";
+        $sql = "SELECT COUNT(*) as count FROM step WHERE job_id = ? AND seq_id = ?";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$jobid, $seqid]);
         $result = $statement->fetch();
@@ -30,7 +30,7 @@ class Steptcc{
     #透過job_id 及 seq_id 取得對應的step
     public function getStep($job_id, $seq_id) {
 
-        $sql = "SELECT * FROM step WHERE job_id = ? AND sequence_id = ? ORDER BY step_id ASC ";
+        $sql = "SELECT * FROM step WHERE job_id = ? AND seq_id = ? ORDER BY step_id ASC ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$job_id, $seq_id]);
         return $statement->fetchAll();
@@ -39,7 +39,7 @@ class Steptcc{
     #透過job_id 及 seq_id 及 step_id取得對應的資料
     public function getStepNo($jobid,$seqid,$stepid){
 
-        $sql = "SELECT * FROM step WHERE job_id = ? AND sequence_id = ? AND step_id = ?";
+        $sql = "SELECT * FROM step WHERE job_id = ? AND seq_id = ? AND step_id = ?";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$jobid, $seqid, $stepid]);
         return $statement->fetchAll();
@@ -49,7 +49,7 @@ class Steptcc{
     #檢查同一個seq中所建立的Step Target Torque 只能有一個
     public function check_step_target($jobid,$seqid){
 
-        $sql = "SELECT COUNT(*) AS count_records FROM step WHERE job_id = ? AND sequence_id = ?  AND target_option = '0'  ";
+        $sql = "SELECT COUNT(*) AS count_records FROM step WHERE job_id = ? AND seq_id = ?  AND target_option = '0'  ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$jobid, $seqid]);
         return $statement->fetchAll();
@@ -58,7 +58,7 @@ class Steptcc{
     #COPY專用 檢查被複製的Step_id 有沒有設置Target Torque
     public function check_copy_step($jobid,$seqid,$stepid){
         
-        $sql = "SELECT target_option  FROM step WHERE job_id = ? AND sequence_id = ?  AND step_id = ? ";
+        $sql = "SELECT target_option  FROM step WHERE job_id = ? AND seq_id = ?  AND step_id = ? ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$jobid,$seqid,$stepid]);
         return $statement->fetchAll();
@@ -70,13 +70,13 @@ class Steptcc{
     #透過 job_id 及 seq_id 及 step_id 刪除對應的資料
     public function delete_step_id($jobid,$seqid,$stepid){
 
-        $sql= " DELETE FROM step WHERE job_id = ? AND sequence_id = ?  AND step_id = ? ";
+        $sql= " DELETE FROM step WHERE job_id = ? AND seq_id = ?  AND step_id = ? ";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$jobid, $seqid,$stepid]);
 
 
         if ($stepid != 4) {
-            $sql_update = "UPDATE step SET step_id = step_id - 1 WHERE job_id = ? AND sequence_id = ? AND step_id > ?";
+            $sql_update = "UPDATE step SET step_id = step_id - 1 WHERE job_id = ? AND seq_id = ? AND step_id > ?";
             $statement_update = $this->db_iDas->prepare($sql_update);
             $statement_update->execute([$jobid, $seqid, $stepid]);
         }
@@ -94,8 +94,8 @@ class Steptcc{
             return false; 
         }
         
-        $sql = "INSERT INTO `step` (job_id, sequence_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, downshift_torque, downshift_speed) ";
-        $sql .= "VALUES (:job_id, :sequence_id, :step_id, :target_option, :target_torque, :target_angle, :target_delaytime, :hi_torque, :lo_torque, :hi_angle, :lo_angle, :rpm, :direction, :downshift, :threshold_torque, :downshift_torque, :downshift_speed);";
+        $sql = "INSERT INTO `step` (job_id, seq_id, step_id, target_option, target_torque, target_angle, target_delaytime, hi_torque, lo_torque, hi_angle, lo_angle, rpm, direction, downshift, threshold_torque, downshift_torque, downshift_speed) ";
+        $sql .= "VALUES (:job_id, :seq_id, :step_id, :target_option, :target_torque, :target_angle, :target_delaytime, :hi_torque, :lo_torque, :hi_angle, :lo_angle, :rpm, :direction, :downshift, :threshold_torque, :downshift_torque, :downshift_speed);";
     
         // 检查数据库连接
         if ($this->db_iDas === null) {
@@ -114,7 +114,7 @@ class Steptcc{
         
         // 绑定参数
         $statement->bindValue(':job_id', $jobdata['job_id']);
-        $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
+        $statement->bindValue(':seq_id', $jobdata['seq_id']);
         $statement->bindValue(':step_id', $jobdata['step_id']);
         $statement->bindValue(':target_option', $jobdata['target_option']);
         $statement->bindValue(':target_torque', $jobdata['target_torque']);
@@ -159,11 +159,11 @@ class Steptcc{
                     threshold_torque = :threshold_torque,
                     downshift_torque = :downshift_torque,
                     downshift_speed = :downshift_speed
-        WHERE job_id = :job_id  AND   sequence_id = :sequence_id  AND step_id = :step_id ";
+        WHERE job_id = :job_id  AND   seq_id = :seq_id  AND step_id = :step_id ";
         $statement = $this->db_iDas->prepare($sql);
 
         $statement->bindValue(':job_id', $jobdata['job_id']);
-        $statement->bindValue(':sequence_id', $jobdata['sequence_id']);
+        $statement->bindValue(':seq_id', $jobdata['seq_id']);
         $statement->bindValue(':step_id', $jobdata['step_id']);
         $statement->bindValue(':target_option', $jobdata['target_option']);
         $statement->bindValue(':target_torque', $jobdata['target_torque']);
@@ -190,27 +190,27 @@ class Steptcc{
     public function swapupdate($jobid,$rowInfoArray){
         $temp = array();
         foreach ($rowInfoArray as $k_s => $v_s) {
-            $sql = "SELECT step_id FROM step WHERE job_id = ? AND sequence_id = ? ";
+            $sql = "SELECT step_id FROM step WHERE job_id = ? AND seq_id = ? ";
             $statement = $this->db_iDas->prepare($sql);
-            $statement->execute([$jobid, $v_s['sequence_id']]);
+            $statement->execute([$jobid, $v_s['seq_id']]);
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
             
             if ($result){
                 
                 $new_val = 'New_Value'.($k_s + 1);
-                $update_sql = "UPDATE step SET step_id = ? WHERE job_id = ? AND sequence_id = ? AND step_id = ?";
+                $update_sql = "UPDATE step SET step_id = ? WHERE job_id = ? AND seq_id = ? AND step_id = ?";
                 $update_statement = $this->db_iDas->prepare($update_sql);
-                $update_statement->execute([$new_val, $jobid, $v_s['sequence_id'], $v_s['step_id']]);
+                $update_statement->execute([$new_val, $jobid, $v_s['seq_id'], $v_s['step_id']]);
                 $rows_count = $update_statement->rowCount();
 
                 if ($rows_count  > 0){
                     $new_val = 'New_Value'.($k_s + 1);
                     $updated_step_id = preg_replace('/[^0-9]/', '', $new_val);
                     
-                    $update_id_sql = "UPDATE step SET step_id = ? WHERE job_id = ? AND sequence_id = ? ";
+                    $update_id_sql = "UPDATE step SET step_id = ? WHERE job_id = ? AND seq_id = ? ";
                     $update_id_statement = $this->db_iDas->prepare($update_id_sql);
-                    $update_id_statement->execute([$updated_step_id, $jobid, $v_s['sequence_id']]);
+                    $update_id_statement->execute([$updated_step_id, $jobid, $v_s['seq_id']]);
                 }
                 else{
                     //echo "ewq";die();

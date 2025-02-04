@@ -516,7 +516,7 @@ function edit_step(){
 
 
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seqid] = cleanString.match(/\[seq_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, step_id] = cleanString.match(/\[step_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, hi_torque] = cleanString.match(/\[hi_torque]\s*=>\s*([^ ]+)/) || [, null];
                 var [, lo_torque] = cleanString.match(/\[lo_torque]\s*=>\s*([^ ]+)/) || [, null];
@@ -1154,7 +1154,7 @@ function disableElements(elements, value) {
 var rowInfoArray = [];
 <?php foreach($data['step'] as $key =>$val) {?>
         var jobid = "<?php echo $val['job_id'];?>";
-        var sequenceId = "<?php echo $val['sequence_id'];?>";
+        var sequenceId = "<?php echo $val['seq_id'];?>";
         var stepid = "<?php echo $val['step_id'];?>";
       
         

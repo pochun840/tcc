@@ -89,7 +89,7 @@ class Setting{
 
     public function GetAllSequences()
     {
-        $sql = "SELECT * FROM sequence ORDER BY job_id,sequence_id";
+        $sql = "SELECT * FROM sequence ORDER BY job_id,seq_id";
         $statement = $this->db->prepare($sql);
         $results = $statement->execute();
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -99,9 +99,9 @@ class Setting{
 
     public function GetAllSteps()
     {
-        $sql = "SELECT job_id,sequence_id,step_id,step_name FROM normalstep WHERE 1 
+        $sql = "SELECT job_id,seq_id,step_id,step_name FROM normalstep WHERE 1 
                 union 
-                SELECT job_id,sequence_id,step_id,step_name FROM advancedstep WHERE 1 ORDER BY job_id,sequence_id,step_id ";
+                SELECT job_id,seq_id,step_id,step_name FROM advancedstep WHERE 1 ORDER BY job_id,seq_id,step_id ";
         $statement = $this->db->prepare($sql);
         $results = $statement->execute();
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -320,7 +320,7 @@ class Setting{
     //get all job seq
     public function get_seq_list($job_id)
     {
-        $sql = "SELECT job_id,sequence_id,sequence_name FROM sequence WHERE job_id = :job_id AND seq_en = 1 order by sequence_id";
+        $sql = "SELECT job_id,seq_id,sequence_name FROM sequence WHERE job_id = :job_id AND seq_en = 1 order by seq_id";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
         $results = $statement->execute();

@@ -258,7 +258,7 @@ class Jobs extends Controller
                         foreach($select_seq as $key =>$val){
                  
                             $new_temp_seq[$key]['job_id'] = $new_jobid;
-                            $new_temp_seq[$key]['sequence_id'] = $val['sequence_id'];
+                            $new_temp_seq[$key]['seq_id'] = $val['seq_id'];
                             $new_temp_seq[$key]['sequence_name'] = $val['sequence_name'];
                             $new_temp_seq[$key]['seq_ene'] = $val['seq_en'];
                             $new_temp_seq[$key]['tr'] = $val['tr'];
@@ -281,7 +281,7 @@ class Jobs extends Controller
                         foreach($select_step as $key_step =>$val_step){
 
                             $new_temp_step[$key_step]['job_id'] = $new_jobid;
-                            $new_temp_step[$key_step]['sequence_id'] = $val_step['sequence_id'];
+                            $new_temp_step[$key_step]['seq_id'] = $val_step['seq_id'];
                             $new_temp_step[$key_step]['step_id'] = $val_step['step_id'];
                             $new_temp_step[$key_step]['target_option'] = $val_step['target_option']; 
                             $new_temp_step[$key_step]['target_torque'] = $val_step['target_torque'];

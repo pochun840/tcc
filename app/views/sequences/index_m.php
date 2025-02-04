@@ -53,20 +53,20 @@
                             <tbody style="font-size: 2vmin;text-align: center;">
                                 <?php foreach($data['sequences'] as $key =>$val) {?>
                                     <tr>
-                                        <td class="seq-id"> <?php echo $val['sequence_id'];?></td>
+                                        <td class="seq-id"> <?php echo $val['seq_id'];?></td>
                                         <td class="seq-name"><?php echo $val['sequence_name'];?></td>
                                         <td><?php echo $val['tr'];?></td>
                                         <td>
                                             <?php if($val['seq_en']== 1){?>
-                                                <input class="seq_enable" style="zoom:1.5; vertical-align: middle" data-sequence-id="<?php echo $val['sequence_id'];?>" id="seq_en"   value="1"  type="checkbox" onclick="updateValue(this)"  checked>
+                                                <input class="seq_enable" style="zoom:1.5; vertical-align: middle" data-sequence-id="<?php echo $val['seq_id'];?>" id="seq_en"   value="1"  type="checkbox" onclick="updateValue(this)"  checked>
                                             <?php }else{?>
-                                                <input class="seq_enable" style="zoom:1.5; vertical-align: middle" data-sequence-id="<?php echo $val['sequence_id'];?>" id="seq_en"   value="0"  type="checkbox" onclick="updateValue(this)">
+                                                <input class="seq_enable" style="zoom:1.5; vertical-align: middle" data-sequence-id="<?php echo $val['seq_id'];?>" id="seq_en"   value="0"  type="checkbox" onclick="updateValue(this)">
                                             <?php }?>
                                         </td>
                                         <td><img src="./img/btn_up.png"   onclick="MoveUp(this);"></td>
                                         <td><img src="./img/btn_down.png" onclick="MoveDown(this);"></td>
                                         <td><?php echo $val['total_step'];?></td>
-                                        <?php $url ='?url=Step/index/'.$data['job_id']."/".$val['sequence_id'];?>
+                                        <?php $url ='?url=Step/index/'.$data['job_id']."/".$val['seq_id'];?>
                                         <td><img id="Add_Step" src="./img/btn_plus.png" onclick="location.href='<?php echo $url;?>'"></td>
                                     </tr>
                                 <?php  } ?>                   
@@ -464,7 +464,7 @@ function cound_job(argument){
 
 var rowInfoArray = [];
 <?php foreach($data['sequences'] as $key =>$val) {?>
-        var sequenceId = "<?php echo $val['sequence_id'];?>";
+        var sequenceId = "<?php echo $val['seq_id'];?>";
         var sequenceName = "<?php echo $val['sequence_name'];?>";
         
         var rowInfo = {
@@ -811,7 +811,7 @@ function updateValue(element){
 <script>
     
 <?php foreach($data['sequences'] as $key =>$val) {?>
-    var sequenceId = "<?php echo $val['sequence_id'];?>";
+    var sequenceId = "<?php echo $val['seq_id'];?>";
     var sequenceName = "<?php echo $val['sequence_name'];?>";
 
     var exists = rowInfoArray.some(function(item) {

@@ -242,7 +242,7 @@ class Step extends Controller
 
             $jobdata = array(
                 'job_id'           => $jobid,
-                'sequence_id'      => $seqid,
+                'seq_id'           => $seqid,
                 'step_id'          => $stepid,
                 'target_option'    => $target_option,
                 'target_torque'    => $target_torque,
@@ -410,7 +410,7 @@ class Step extends Controller
 
             $jobdata = array(
                 'job_id'           => $jobid,
-                'sequence_id'      => $seqid,
+                'seq_id'           => $seqid,
                 'step_id'          => $stepid,
                 'target_option'    => $target_option,
                 'target_torque'    => $target_torque,
@@ -515,7 +515,7 @@ class Step extends Controller
                 if(!empty($old_res)){
                     $jobdata = array(
                         'job_id'           => $jobid,
-                        'sequence_id'      => $seqid,
+                        'seq_id'           => $seqid,
                         'step_id'          => $stepid_new,
                         'target_option'    => $old_res[0]['target_option'],
                         'target_torque'    => $old_res[0]['target_torque'],
