@@ -63,16 +63,16 @@ class Jobs extends Controller
             $jobdata = array(
                 'job_id' => $_POST['jobidnew'],
                 'job_name' => $_POST['jobname_val'],
-                'reverse_power' => $_POST['reverse_power_val'],
-                'reverse_rpm' => $_POST['reverse_rpm_val'],
+                'rev_force' => $_POST['rev_force_val'],
+                'rev_speed' => $_POST['rev_speed_val'],
                 'reverse_direction' => $_POST['direction_val'],
                 'job_ok' => $_POST['job_ok_val'],
                 'stop_job_ok' => $_POST['stop_job_ok_val']
             );
 
             $resultName  = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
-            $resultPower = $this->MiscellaneousModel->validate($jobdata['reverse_power'], 'reverse_power');
-            $resultRpm   = $this->MiscellaneousModel->validate($jobdata['reverse_rpm'],'reverse_rpm');
+            $resultPower = $this->MiscellaneousModel->validate($jobdata['rev_force'], 'rev_force');
+            $resultRpm   = $this->MiscellaneousModel->validate($jobdata['rev_speed'],'rev_speed');
 
             if($resultPower == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
@@ -120,8 +120,8 @@ class Jobs extends Controller
             $jobdata = array(
                 'job_id' => $_POST['jobid'],
                 'job_name' => $_POST['jobname'],
-                'reverse_power' => $_POST['powervalue'],
-                'reverse_rpm' => $_POST['rpmvalue'],
+                'rev_force' => $_POST['powervalue'],
+                'rev_speed' => $_POST['speedvalue'],
                 'reverse_direction' => $_POST['directionValue'],
                 'job_ok' => $_POST['jobokValue'],
                 'stop_job_ok' => $_POST['stopjobValue']
@@ -131,9 +131,8 @@ class Jobs extends Controller
 
             
             $resultName  = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
-            $resultPower = $this->MiscellaneousModel->validate($jobdata['reverse_power'], 'reverse_power');
-            //$resultRpm   = $jobdata['reverse_rpm'];
-            $resultRpm = $this->MiscellaneousModel->validate($jobdata['reverse_rpm'], 'reverse_rpm');
+            $resultPower = $this->MiscellaneousModel->validate($jobdata['rev_force'], 'rev_force');
+            $resultspeed = $this->MiscellaneousModel->validate($jobdata['rev_speed'], 'rev_speed');
 
             if($resultPower == false){
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
@@ -145,7 +144,7 @@ class Jobs extends Controller
                 exit();
             }
 
-            if ($resultName  == true  && $resultPower == true && $resultRpm == true) {
+            if ($resultName  == true  && $resultPower == true && $resultspeed  == true) {
                 
                 $res = $this->jobModel->update_job_by_id($jobdata);
                 $result = array();
@@ -225,7 +224,7 @@ class Jobs extends Controller
 
         if(!empty($old_jobid)){
             $job_count = $this->jobModel->countjob();
-            if($job_count >= 50) {
+            if($job_count > 50) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['job_id']);
                 exit();
             }else{
@@ -243,8 +242,8 @@ class Jobs extends Controller
                         'job_id'   => $_POST['new_jobid'],
                         'job_name' => $_POST['new_jobname'],
                         'reverse_direction' => $old_res['reverse_direction'],
-                        'reverse_rpm' => $old_res['reverse_rpm'],  
-                        'reverse_power' => $old_res['reverse_power'],  
+                        'rev_speed' => $old_res['rev_speed'],  
+                        'rev_force' => $old_res['rev_force'],  
                         'job_ok' =>$old_res['job_ok'],
                         'stop_job_ok' => $old_res['stop_job_ok']
 

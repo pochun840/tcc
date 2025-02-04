@@ -242,7 +242,7 @@ class Sequences extends Controller
             $seq_count = intval($seq_count);
            
             #檢查job 
-            if($seq_count >= 50) {
+            if($seq_count > 50) {
                 echo "The maximum number of steps has been reached, unable to continue copying seqs";
                 return;
             }
@@ -292,8 +292,6 @@ class Sequences extends Controller
 
         if(!empty($seqid)){
             $res  = $this->sequenceModel->sequence_id_repeat($jobid,$seqid);
-
-            //var_dump($success);
             if($res == "True"){
 
             }

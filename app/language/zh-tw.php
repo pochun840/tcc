@@ -44,8 +44,8 @@ $text['new_job'] = '新增工作';
 $text['edit_job'] = '編輯工作';
 
 $text['reverse_direction'] = '拆螺絲方向';
-$text['reverse_rpm'] = '拆螺絲轉速';
-$text['reverse_power'] = '拆螺絲力道';
+$text['rev_speed'] = '拆螺絲轉速';
+$text['rev_force'] = '拆螺絲力道';
 
 $text['enable'] = '啟用';
 $text['disable'] = '禁用';

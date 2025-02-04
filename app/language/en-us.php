@@ -41,8 +41,8 @@ $text['new_job'] = 'New job';
 $text['edit_job'] = 'Edit Job';
 
 $text['reverse_direction'] = 'Reverse direction'; //
-$text['reverse_rpm'] = 'Reverse RPM';
-$text['reverse_power'] = 'Reverse Power';
+$text['rev_speed'] = 'Reverse RPM';
+$text['rev_force'] = 'Reverse Power';
 
 $text['enable'] = 'Enable';
 $text['disable'] = 'Disable';

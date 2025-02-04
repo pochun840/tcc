@@ -34,8 +34,8 @@
                                     <th><?php echo $text['job_id'];?></th>
                                     <th><?php echo $text['job_name'];?></th>
                                     <th><?php echo $text['reverse_direction'];?></th>
-                                    <th><?php echo $text['reverse_rpm'];?></th>
-                                    <th><?php echo $text['reverse_power'];?></th>
+                                    <th><?php echo $text['rev_speed'];?></th>
+                                    <th><?php echo $text['rev_force'];?></th>
                                     <th><?php echo $text['total_seq'];?></th>
                                     <th><?php echo $text['add_seq'];?></th>
                                 </tr>
@@ -47,8 +47,8 @@
 											<td id='job_id' ><?php echo $val['job_id'];?></td>
 											<td><?php echo $val['job_name'];?></td>
 											<td><?php echo $text[$data['direction'][$val['reverse_direction']]];?></td>
-											<td><?php echo $val['reverse_rpm'];?></td>
-											<td><?php echo $val['reverse_power'];?></td>
+											<td><?php echo $val['rev_speed'];?></td>
+											<td><?php echo $val['rev_force'];?></td>
 											<td><?php echo $val['total_seq'];?></td>
                                             <?php $url ='?url=Sequences/index/'.$val['job_id'];?>
                                             <td><img id="Add_Seq" src="./img/btn_plus.png" onclick="location.href='<?php echo $url;?>'">
@@ -162,16 +162,16 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(Max:1100):</div>
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['rev_speed'];?>(Max:1100):</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="reverse_rpm" maxlength=""  >
+                                <input type="text" class="form-control input-ms" id="rev_speed" maxlength=""  >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>:</div>
+                            <div for="reverse-power" class="col-6 t1"><?php echo $text['rev_force'];?>:</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="reverse_power" maxlength="">
+                                <input type="text" class="form-control input-ms" id="rev_force" maxlength="">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -264,15 +264,15 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['reverse_rpm'];?>(Max:1100):</div>
+                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['rev_speed'];?>(Max:1100):</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_reverse_rpm" maxlength="" required >
+                                <input type="text" class="form-control input-ms" id="edit_rev_speed" maxlength="" required >
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-power" class="col-6 t1"><?php echo $text['reverse_power'];?>:</div>
+                            <div for="reverse-power" class="col-6 t1"><?php echo $text['rev_force'];?>:</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_reverse_power" maxlength=""  >
+                                <input type="text" class="form-control input-ms" id="edit_rev_force" maxlength=""  >
                             </div>
                         </div>
 
@@ -389,7 +389,7 @@ for (var i = 0; i < rows.length; i++) {
                 var jobid = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
                 var secondCellValue = cells[1] ? (cells[1].textContent || cells[1].innerText) : null;
                 var thirdCellValue = cells[2] ? (cells[2].textContent || cells[2].innerText) : null;
-                var rpmvalue = cells[3] ? (cells[3].textContent || cells[3].innerText) : null;
+                var speedvalue = cells[3] ? (cells[3].textContent || cells[3].innerText) : null;
                 var powervalue = cells[4] ? (cells[4].textContent || cells[4].innerText) : null;
                 jobid = jobid;
                 old_jobname = secondCellValue;
@@ -398,7 +398,7 @@ for (var i = 0; i < rows.length; i++) {
                 localStorage.setItem("jobname", secondCellValue);
                 localStorage.setItem("direction", thirdCellValue);
                 localStorage.setItem("powervalue", powervalue);
-                localStorage.setItem("rpmvalue", rpmvalue);
+                localStorage.setItem("speedvalue", speedvalue);
 
             });
         }
@@ -475,8 +475,8 @@ function savejob() {
 
     var jobidnew = '<?php echo $data['jobint']?>';
     var jobname_val      = document.getElementById("job_name").value;
-    var reverse_rpm_val  = document.getElementById("reverse_rpm").value;
-    var reverse_power_val = document.getElementById("reverse_power").value;
+    var rev_speed_val  = document.getElementById("rev_speed").value;
+    var rev_force_val = document.getElementById("rev_force").value;
 
     var directionElement = document.querySelector('input[name="direction"]:checked');
     var direction_val = directionElement ? directionElement.value : null;
@@ -497,8 +497,8 @@ function savejob() {
             data: { 
                 jobidnew: jobidnew,
                 jobname_val: jobname_val,
-                reverse_rpm_val: reverse_rpm_val,
-                reverse_power_val: reverse_power_val,
+                rev_speed_val: rev_speed_val,
+                rev_force_val: rev_force_val,
                 direction_val: direction_val, //起子方向
                 job_ok_val: job_ok_val,
                 stop_job_ok_val:stop_job_ok_val
@@ -552,8 +552,8 @@ function validateInput(element, pattern, min, max) {
 function input_check_savejob() {
     let conditions = [
         { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 1100 },
-        { id: 'reverse_power', pattern: /^[0-9]+$/, min: 10, max: 110 },
+        { id: 'rev_speed', pattern: /^[0-9]+$/, min: 1, max: 1100 },
+        { id: 'rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 
     let isFormValid = true;
@@ -575,8 +575,8 @@ function input_check_savejob() {
 function input_check_editjob() {
     let conditions = [
         { id: 'edit_jobname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'edit_reverse_rpm', pattern: /^[0-9]+$/, min: 1, max: 1100 },
-        { id: 'edit_reverse_power', pattern: /^[0-9]+$/, min: 10, max: 110 },
+        { id: 'edit_rev_speed', pattern: /^[0-9]+$/, min: 1, max: 1100 },
+        { id: 'edit_rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 
     let isFormValid = true;

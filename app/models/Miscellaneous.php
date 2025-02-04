@@ -188,13 +188,13 @@ class Miscellaneous{
                        preg_match('/^[a-zA-Z0-9-]+$/', $value) && 
                        strlen($value) <= 12;
                        
-            case 'reverse_power':
+            case 'rev_force':
                 return is_numeric($value) && 
                        $value > 10 && 
-                       $value <= 100;
+                       $value <= 110;
             
                        
-            case 'reverse_rpm':
+            case 'rev_speed':
             return is_numeric($value) && 
                     $value > 0 && 
                     $value <= 1100;

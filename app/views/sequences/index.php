@@ -196,11 +196,13 @@
                             <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?> :</div>
                             <div class="col-4 t2">
                                 <select id="ng_stop" class="col custom-file">
-                                    <option value="-1"><?php echo "OFF";?></option>
+                               
                                     <?php for($i=0;$i<=9;$i++) {?>
                                                 <option value="<?php echo $i;?>"><?php echo $i;?></option>
                                     <?php } ?> 
                                 </select>
+
+
                             </div>
                         </div>
 
@@ -608,7 +610,8 @@ function create_seq() {
     document.getElementById('seq_ok').checked = true;
     document.getElementById('OPT_OFF').checked = true;
     document.getElementById('offset').value = 0;
-   
+
+
 }
 
 function saveseq(){

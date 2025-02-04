@@ -89,8 +89,8 @@ class Job{
     #新增JOB
     public function create_job($jobdata){
       
-        $sql = "INSERT INTO `job` (job_id, job_name, reverse_direction,reverse_rpm,reverse_power, job_ok,stop_job_ok)";
-        $sql .= " VALUES (:job_id, :job_name, :reverse_direction, :reverse_rpm, :reverse_power ,:job_ok,:stop_job_ok);";
+        $sql = "INSERT INTO `job` (job_id, job_name, reverse_direction,rev_speed,rev_force, job_ok,stop_job_ok)";
+        $sql .= " VALUES (:job_id, :job_name, :reverse_direction, :rev_speed, :rev_force ,:job_ok,:stop_job_ok);";
     
         $jobdata['job_id'] = intval($jobdata['job_id']);
     
@@ -98,8 +98,8 @@ class Job{
     
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $statement->bindValue(':job_name', $jobdata['job_name']);
-        $statement->bindValue(':reverse_power', $jobdata['reverse_power']);
-        $statement->bindValue(':reverse_rpm', $jobdata['reverse_rpm']);
+        $statement->bindValue(':rev_force', $jobdata['rev_force']);
+        $statement->bindValue(':rev_speed', $jobdata['rev_speed']);
         $statement->bindValue(':reverse_direction', $jobdata['reverse_direction']);
         $statement->bindValue(':job_ok', $jobdata['job_ok']);
         $statement->bindValue(':stop_job_ok', $jobdata['stop_job_ok']);
@@ -113,15 +113,15 @@ class Job{
         $sql = "UPDATE `job` SET  
                 job_name = :job_name, 
                 reverse_direction = :reverse_direction, 
-                reverse_rpm = :reverse_rpm, 
-                reverse_power = :reverse_power,
+                rev_speed = :rev_speed, 
+                rev_force = :rev_force,
                 job_ok = :job_ok,
                 stop_job_ok =:stop_job_ok
                 WHERE job_id = :job_id ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':job_name', $jobdata['job_name']);
-        $statement->bindValue(':reverse_power', $jobdata['reverse_power']);
-        $statement->bindValue(':reverse_rpm', $jobdata['reverse_rpm']);
+        $statement->bindValue(':rev_force', $jobdata['rev_force']);
+        $statement->bindValue(':rev_speed', $jobdata['rev_speed']);
         $statement->bindValue(':reverse_direction', $jobdata['reverse_direction']);
         $statement->bindValue(':job_ok', $jobdata['job_ok']);
         $statement->bindValue(':stop_job_ok', $jobdata['stop_job_ok']);
