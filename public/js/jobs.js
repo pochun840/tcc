@@ -56,9 +56,9 @@ function create_job() {
     document.getElementById('newjob').style.display = 'block';
     
     document.getElementById('rev_speed').value = 200;
-    document.getElementById('rev_force').value = 100;
+    document.getElementById('rev_force').value = 50;
     document.getElementById('rev_direction_CCW').checked = true;
-    document.getElementById('job_off').checked = true;
+    document.getElementById('job_ok').checked = true;
     document.getElementById('stop_job_ok_off').checked = true;
 }
 
