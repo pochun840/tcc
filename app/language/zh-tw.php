@@ -69,7 +69,7 @@ $text['seq_management'] = '工序管理';
 $text['seq_id'] = '工序ID';
 $text['seq_name'] = '工序名稱';
 $text['target_type'] = '工序目標';
-$text['tightening_repeat'] = '顆數';
+$text['tr'] = '顆數';
 
 $text['return'] = '返回';
 $text['up'] = '上';
@@ -104,7 +104,7 @@ $text['Second'] = '秒';
 $text['Copy_Sequence'] = '複製工序';
 $text['OK_All_Stop'] = 'OK All 禁止起子啟動';
 $text['ok_all_alarm_time'] = 'OK All 持續時間';
-$text['tighten_repeat'] = '鎖附顆數';
+$text['tr'] = '鎖附顆數';
 
 //normalstep
 
@@ -464,7 +464,7 @@ $text['already_top'] = '已經在最上方';
 $text['already_bottom'] = '已經在最下方';
 $text['delete_seq_confirm_text'] = '是否要刪除 工序 id: ';
 $error_message['sequence_name'] = '工序名稱輸入有誤';
-$error_message['tightening_repeat'] = '超出範圍 1 - 99';
+$error_message['tr'] = '超出範圍 1 - 99';
 $error_message['timeout'] = '超出範圍 0.1 - 60.0';
 $error_message['to_seq_name'] = '工序名稱輸入有誤';
 $error_message['jon_val'] = "欄位不得為空";
@@ -489,7 +489,7 @@ $error_message['Low_Angle'] = '超出範圍 ';//範圍交給js
 $error_message['Pre_Run_RPM'] = '超出範圍 60 - tool_maxrpm';
 $error_message['Pre_Run_Angle'] = '超出範圍 1 - 30600';
 $error_message['Target_Angle'] = '超出範圍 1 - 30600';
-$text['error_tightening_repeat'] = '超出範圍 1 - 99';
+$text['error_tr'] = '超出範圍 1 - 99';
 $error_message['angle_error'] = '最大角度 不可低於 最小角度';
 $error_message['torque_error'] = '最大扭力 不可低於 最小扭力';
 

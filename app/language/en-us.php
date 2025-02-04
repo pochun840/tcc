@@ -66,7 +66,7 @@ $text['seq_management'] = 'Sequence Management';
 $text['seq_id'] = 'Seq ID';
 $text['seq_name'] = 'Sequence Name';
 $text['target_type'] = 'Target Type';
-$text['tightening_repeat'] = 'TR';
+$text['tr'] = 'TR';
 
 $text['return'] = 'Return';
 $text['up'] = 'Up';
@@ -105,7 +105,7 @@ $text['opt'] = 'OPT';
 $text['soft'] = 'Soft';
 $text['hard'] = 'Hard';
 $text['ok_all_alarm_time'] = 'OK All Alarm Time';
-$text['tighten_repeat'] = 'Tighten Repeat';
+$text['tr'] = 'Tighten Repeat';
 $text['ok_time'] = "OK Time";
 
 //normal step
@@ -478,7 +478,7 @@ $text['already_top'] = 'already on top';
 $text['already_bottom'] = 'already at the bottom';
 $text['delete_seq_confirm_text'] = 'Do you want to delete seq id: ';
 $error_message['sequence_name'] = 'Sequence name input error';
-$error_message['tightening_repeat'] = 'Out of range 1 - 99';
+$error_message['tr'] = 'Out of range 1 - 99';
 $error_message['timeout'] = 'Out of range 0.1 - 60.0';
 $error_message['to_seq_name'] = 'Sequence name input error';
 $error_message['jon_val'] = "Field cannot be empty";

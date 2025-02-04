@@ -65,7 +65,7 @@ function includecss_file($part, $cssFileName) {
         includecss_file("Outputs", "outputs.js");
         includecss_file("Jobs", "jobs.js");
         includecss_file("Data", "data.js");
-        includecss_file("Sequences", "seq.js");
+        //includecss_file("Sequences", "seq.js");
         includecss_file("Step", "step.js");
         includecss_file("Settings", "settings.js");
 

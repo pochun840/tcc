@@ -43,8 +43,8 @@ class Sequence{
             return false; 
         }
 
-        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, sequence_enable, tightening_repeat, ng_stop, seq_ok, stop_seq_ok, opt, k_value, offset)";
-        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :sequence_enable, :tightening_repeat, :ng_stop, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, seq_en, tr, ng_stop, seq_ok, stop_seq_ok, opt, k_value, offset)";
+        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :seq_en, :tr, :ng_stop, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
         $statement = $this->db_iDas->prepare($sql);
     
 
@@ -60,11 +60,11 @@ class Sequence{
             $statement->bindValue(':sequence_name', $jobdata['sequence_name']);
         }
     
-        $statement->bindValue(':tightening_repeat', $jobdata['tightening_repeat']);
+        $statement->bindValue(':tr', $jobdata['tr']);
         $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
         $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
         $statement->bindValue(':ng_stop', $jobdata['ng_stop']);
-        $statement->bindValue(':sequence_enable', $jobdata['sequence_enable']);
+        $statement->bindValue(':seq_en', $jobdata['seq_en']);
         $statement->bindValue(':opt', $jobdata['opt']);
         $statement->bindValue(':k_value', $jobdata['k_value']);
         $statement->bindValue(':offset', $jobdata['offset']);
@@ -77,8 +77,8 @@ class Sequence{
 
     public function copy_seq_by_seq_id($new_temp_seq){
 
-        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, sequence_enable, tightening_repeat, ng_stop, seq_ok, stop_seq_ok, opt, k_value, offset)";
-        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :sequence_enable, :tightening_repeat, :ng_stop, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, seq_en, tr, ng_stop, seq_ok, stop_seq_ok, opt, k_value, offset)";
+        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :seq_en, :tr, :ng_stop, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -154,7 +154,7 @@ class Sequence{
         }
 
         $sql = "UPDATE `sequence` SET  sequence_name = :sequence_name,
-                                  tightening_repeat = :tightening_repeat, 
+                                  tr = :tr, 
                                   ng_stop = :ng_stop, 
                                   seq_ok  =:seq_ok,
                                   stop_seq_ok =:stop_seq_ok,
@@ -166,7 +166,7 @@ class Sequence{
 
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':sequence_name', $jobdata['sequence_name']);
-        $statement->bindValue(':tightening_repeat', $jobdata['tightening_repeat']);
+        $statement->bindValue(':tr', $jobdata['tr']);
         $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
         $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
         $statement->bindValue(':ng_stop', $jobdata['ng_stop']);
@@ -183,11 +183,11 @@ class Sequence{
     }
 
     #修改單筆的sequence的狀態
-    public function check_seq_type($jobid, $seqid, $type_value) {
-        $sql = "UPDATE `sequence` SET sequence_enable = :sequence_enable WHERE job_id = :job_id AND sequence_id = :sequence_id ";
+    public function check_seq_type($jobid, $seqid, $seq_en) {
+        $sql = "UPDATE `sequence` SET seq_en = :seq_en WHERE job_id = :job_id AND sequence_id = :sequence_id ";
         $statement = $this->db_iDas->prepare($sql);
     
-        $statement->bindValue(':sequence_enable', $type_value);
+        $statement->bindValue(':seq_en', $seq_en);
         $statement->bindValue(':job_id', $jobid);
         $statement->bindValue(':sequence_id', $seqid);
         
@@ -196,10 +196,10 @@ class Sequence{
     }
 
     public function update_seq_type($seq_data) {
-        $sql = "UPDATE `sequence` SET sequence_enable = :sequence_enable WHERE job_id = :job_id AND sequence_id = :sequence_id ";
+        $sql = "UPDATE `sequence` SET seq_en = :seq_en WHERE job_id = :job_id AND sequence_id = :sequence_id ";
         $statement = $this->db_iDas->prepare($sql);
     
-        $statement->bindValue(':sequence_enable', $seq_data['type_value']);
+        $statement->bindValue(':seq_en', $seq_data['seq_en']);
         $statement->bindValue(':job_id', $seq_data['jobid']);
         $statement->bindValue(':sequence_id', $seq_data['seqid']);
         

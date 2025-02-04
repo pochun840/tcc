@@ -66,7 +66,7 @@ $text['seq_management'] = '工序管理';
 $text['seq_id'] = '工序ID';
 $text['seq_name'] = '工序名称';
 $text['target_type'] = '工序目标';
-$text['tightening_repeat'] = '颗数';
+$text['tr'] = '颗数';
 
 $text['return'] = '返回';
 $text['up'] = '上';
@@ -106,7 +106,7 @@ $text['opt'] = '最佳化';
 $text['soft'] = '軟';
 $text['hard'] = '硬';
 $text['ok_all_alarm_time'] = 'OK All 持续时间';
-$text['tighten_repeat'] = '锁附颗数';
+$text['tr'] = '锁附颗数';
 $text['ok_time'] = "OK one持续时间";
 //normalstep
 $text['normal_step'] = '快速工序目标';
@@ -466,7 +466,7 @@ $text['already_top'] = '已经在最上方';
 $text['already_bottom'] = '已经在最下方';
 $text['delete_seq_confirm_text'] = '是否要刪除 工序 id: ';
 $error_message['sequence_name'] = '工序名称输入有误';
-$error_message['tightening_repeat'] = '超出范围 1 - 99';
+$error_message['tr'] = '超出范围 1 - 99';
 $error_message['timeout'] = '超出范围 0.1 - 60.0';
 $error_message['to_seq_name'] = '工序名称输入有误';
 $error_message['jon_val'] = "字段不能为空";

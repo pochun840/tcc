@@ -41,7 +41,7 @@
                                 <tr class="w3-dark-grey">
                                     <th><?php echo $text['seq_id'];?></th>
                                     <th><?php echo $text['seq_name'];?></th>
-                                    <th><?php echo $text['tightening_repeat'];?></th>
+                                    <th><?php echo $text['tr'];?></th>
                                     <th><?php echo $text['enable'];?></th>
                                     <th><?php echo $text['up'];?></th>
                                     <th><?php echo $text['down'];?></th>
@@ -55,12 +55,12 @@
                                 <tr>
                                     <td class="seq-id"> <?php echo $val['sequence_id'];?></td>
                                     <td class="seq-name"><?php echo $val['sequence_name'];?></td>
-                                    <td><?php echo $val['tightening_repeat'];?></td>
+                                    <td><?php echo $val['tr'];?></td>
                                     <td>
-                                        <?php if($val['sequence_enable']== 1){?>
-                                            <input class="seq_enable" style="zoom:1.5; vertical-align: middle"  data-sequence-id="<?php echo $val['sequence_id'];?>" id="sequence_enable"   value="1"  type="checkbox" onclick="updateValue(this)"  checked>
+                                        <?php if($val['seq_en']== 1){?>
+                                            <input class="seq_enable" style="zoom:1.5; vertical-align: middle"  data-sequence-id="<?php echo $val['sequence_id'];?>" id="seq_en"   value="1"  type="checkbox" onclick="updateValue(this)"  checked>
                                         <?php }else{?>
-                                            <input class="seq_enable" style="zoom:1.5; vertical-align: middle"  data-sequence-id="<?php echo $val['sequence_id'];?>" id="sequence_enable"   value="0"  type="checkbox" onclick="updateValue(this)">
+                                            <input class="seq_enable" style="zoom:1.5; vertical-align: middle"  data-sequence-id="<?php echo $val['sequence_id'];?>" id="seq_en"   value="0"  type="checkbox" onclick="updateValue(this)">
                                         <?php }?>
                                         
 
@@ -131,9 +131,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="Tighten-Repeat" class="col-6 t1"><?php echo $text['tighten_repeat'];?> :</div>
+                            <div for="Tighten-Repeat" class="col-6 t1"><?php echo $text['tr'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="tighten_repeat" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="tr" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -265,9 +265,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="Tighten-Repeat" class="col-6 t1"><?php echo $text['tighten_repeat'];?> :</div>
+                            <div for="Tighten-Repeat" class="col-6 t1"><?php echo $text['tr'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_tighten_repeat" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_tr" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -602,7 +602,7 @@ function delete_seqid(seqid){
 function create_seq() {
     //帶入預設值
     document.getElementById('newseq').style.display = 'block';
-    document.getElementById('tighten_repeat').value = 1;
+    document.getElementById('tr').value = 1;
     document.getElementById('seq_off').checked = true;
 
     document.getElementById('K').value = 100;
@@ -619,7 +619,7 @@ function saveseq(){
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
     var seq_name = document.getElementById("seq_name").value;
-    var tighten_repeat = document.getElementById("tighten_repeat").value;
+    var tr = document.getElementById("tr").value;
  
     var ng_stop = document.getElementById('ng_stop').value;
 
@@ -643,7 +643,7 @@ function saveseq(){
                 jobid: jobid,
                 seqid: seqid,
                 seq_name: seq_name,
-                tighten_repeat: tighten_repeat,
+                tr: tr,
                 ng_stop: ng_stop,
                 seq_ok:seq_ok,
                 stop_seq_ok:stop_seq_ok,
@@ -686,7 +686,7 @@ function edit_seq(seqid) {
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqname] = cleanString.match(/\[sequence_name]\s*=>\s*([^ ]+)/) || [, null];
-                var [, tightening_repeat] = cleanString.match(/\[tightening_repeat]\s*=>\s*([^ ]+)/) || [, null];
+                var [, tr] = cleanString.match(/\[tr]\s*=>\s*([^ ]+)/) || [, null];
                 
                 var [, k_value] = cleanString.match(/\[k_value]\s*=>\s*([^ ]+)/) || [, null];
                 var [, offset] = cleanString.match(/\[offset]\s*=>\s*([^ ]+)/) || [, null];
@@ -702,7 +702,7 @@ function edit_seq(seqid) {
                 document.getElementById('editseq').style.display = 'block';
                 document.getElementById("old_seqid").value = seqid;
                 document.getElementById("edit_seq_name").value = seqname;
-                document.getElementById("edit_tighten_repeat").value = tightening_repeat;
+                document.getElementById("edit_tr").value = tr;
 
                 document.getElementById("edit_K").value = k_value;
                 document.getElementById("edit_offset").value = offset;
@@ -730,7 +730,7 @@ function edit_seq_save(){
 
     var jobid = '<?php echo $data['job_id']?>';
     var seq_name = document.getElementById("edit_seq_name").value;
-    var tightening_repeat = document.getElementById("edit_tighten_repeat").value;
+    var tr = document.getElementById("edit_tr").value;
     var seq_ok = document.querySelector('input[name="edit_seq_ok"]:checked').value;
     var stop_seq_ok = document.querySelector('input[name="edit_stop_seq_ok"]:checked').value;
     var k_value = document.getElementById("edit_K").value;
@@ -749,7 +749,7 @@ function edit_seq_save(){
                 jobid: jobid,
                 seqid: seqid,
                 seq_name: seq_name,
-                tightening_repeat: tightening_repeat,
+                tr: tr,
                 seq_ok:seq_ok,
                 stop_seq_ok:stop_seq_ok,
                 k_value: k_value,
@@ -781,7 +781,7 @@ function getSelectedValue(name, defaultValue = 0) {
 
 function updateValue(element){
     var jobid = '<?php echo $data['job_id']?>';
-    var type_value = element.checked ? 1 : 0;
+    var seq_en = element.checked ? 1 : 0;
     var seqid = element.getAttribute('data-sequence-id');
     
     if(seqid){
@@ -791,7 +791,7 @@ function updateValue(element){
             data: { 
                 jobid: jobid,
                 seqid: seqid,
-                type_value: type_value
+                seq_en: seq_en
             },
             success: function(response) {
                 console.log(response);
@@ -895,7 +895,7 @@ function validateInput(element, pattern, min, max) {
 function input_check_saveseq() {
     let conditions = [
         { id: 'seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'tighten_repeat', pattern: /^[0-9]+$/, min: 1, max: 99 },
+        { id: 'tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
         { id: 'K', pattern: /^(1\.[5-9]|([1-9][0-9]{0,2}|[1-9][0-9]{3,})(\.[0-9])?|999(\.[0-7])?|999\.8)$/, min: 1.5, max: 999.8 },
         { id: 'offset', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
@@ -924,7 +924,7 @@ function input_check_saveseq() {
 function input_check_editseq() {
     let conditions = [
         { id: 'edit_seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'edit_tighten_repeat', pattern: /^[0-9]+$/, min: 1, max: 99 },
+        { id: 'edit_tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
         { id: 'edit_K', pattern: /^(1\.[5-9]|([1-9][0-9]{0,2}|[1-9][0-9]{3,})(\.[0-9])?|999(\.[0-7])?|999\.8)$/, min: 1.5, max: 999.8 },
         { id: 'edit_offset', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 },
     ];

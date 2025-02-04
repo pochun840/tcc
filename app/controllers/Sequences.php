@@ -66,7 +66,7 @@ class Sequences extends Controller
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
 
             $k_value = isset($_POST['k_value']) ? floatval($_POST['k_value']) : 100.0;
-            $tighten_repeat = isset($_POST['tighten_repeat']) ? intval($_POST['tighten_repeat']) : 1;
+            $tr = isset($_POST['tr']) ? intval($_POST['tr']) : 1;
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : '';
@@ -85,8 +85,8 @@ class Sequences extends Controller
 
 
             #驗證顆數
-            if(!$this->MiscellaneousModel->seq_validate($tighten_repeat, 'tightenRepeat')) {
-                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tightening_repeat']);
+            if(!$this->MiscellaneousModel->seq_validate($tr, 'tr')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tr']);
                 exit();
             }
 
@@ -107,8 +107,8 @@ class Sequences extends Controller
                 'job_id' => $jobid,
                 'sequence_id' => $seqid,
                 'sequence_name' => $seq_name,
-                'sequence_enable' => 1,
-                'tightening_repeat' => $tighten_repeat,
+                'seq_en' => 1,
+                'tr' => $tr,
                 'ng_stop' => $ng_stop,
                 'seq_ok'  => $seq_ok,
                 'stop_seq_ok' => $stop_seq_ok, 
@@ -202,7 +202,7 @@ class Sequences extends Controller
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
             $seq_name = $_POST['seq_name'];
-            $tighten_repeat = isset($_POST['tightening_repeat']) ? intval($_POST['tightening_repeat']) : 1;
+            $tr = isset($_POST['tr']) ? intval($_POST['tr']) : 1;
             $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
@@ -218,8 +218,8 @@ class Sequences extends Controller
 
 
             #驗證顆數
-            if(!$this->MiscellaneousModel->seq_validate($tighten_repeat, 'tightenRepeat')) {
-                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tightening_repeat']);
+            if(!$this->MiscellaneousModel->seq_validate($tr, 'tr')) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tr']);
                 exit();
             }
     
@@ -251,8 +251,8 @@ class Sequences extends Controller
                 'job_id' => $jobid,
                 'sequence_id' => $seqid,
                 'sequence_name' =>$seq_name,
-                'sequence_enable' => 1,
-                'tightening_repeat' => $tighten_repeat,
+                'seq_en' => 1,
+                'tr' => $tr,
                 'ng_stop' => $ng_stop,
                 'seq_ok'  => $seq_ok,
                 'stop_seq_ok' =>$stop_seq_ok,
@@ -344,8 +344,8 @@ class Sequences extends Controller
                 $new_temp_seq[$kk]['job_id'] = $vv['job_id'];
                 $new_temp_seq[$kk]['sequence_id'] = $newseqid;
                 $new_temp_seq[$kk]['sequence_name'] = $newseqname;
-                $new_temp_seq[$kk]['sequence_enable'] = $vv['sequence_enable'];
-                $new_temp_seq[$kk]['tightening_repeat'] = $vv['tightening_repeat'];
+                $new_temp_seq[$kk]['seq_en'] = $vv['seq_en'];
+                $new_temp_seq[$kk]['tr'] = $vv['tr'];
                 $new_temp_seq[$kk]['ng_stop'] = $vv['ng_stop']; 
                 $new_temp_seq[$kk]['seq_ok'] = $vv['seq_ok']; 
                 $new_temp_seq[$kk]['stop_seq_ok'] = $vv['stop_seq_ok']; 

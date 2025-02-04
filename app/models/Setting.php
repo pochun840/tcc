@@ -320,7 +320,7 @@ class Setting{
     //get all job seq
     public function get_seq_list($job_id)
     {
-        $sql = "SELECT job_id,sequence_id,sequence_name FROM sequence WHERE job_id = :job_id AND sequence_enable = 1 order by sequence_id";
+        $sql = "SELECT job_id,sequence_id,sequence_name FROM sequence WHERE job_id = :job_id AND seq_en = 1 order by sequence_id";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
         $results = $statement->execute();
