@@ -25,7 +25,8 @@ class Jobs extends Controller
         $jobs      = $this->jobModel->getJobs();
         $direction = $this->MiscellaneousModel->details('rev_direction');
 
-
+        $next_job_id_arr = $this->jobModel->get_head_job_id();
+        $next_job_id = (int)$next_job_id_arr['missing_id'];
         if(!empty($jobs)){
             $lastRow  = end($jobs);
             $jobIdInt = intval($lastRow['job_id']) + 1 ;   
@@ -37,6 +38,7 @@ class Jobs extends Controller
 
         $data = array(
             'jobint' => $jobIdInt,
+            'next_job_id' => $next_job_id,
             'jobs' => $jobs,
             'direction' => $direction,
         );
@@ -315,6 +317,13 @@ class Jobs extends Controller
         
         }
 
+    }
+
+
+    //查詢 job_id 還沒有 被使用的 取出 最小值
+    public function get_min_job_id(){
+
+        
     }
 
 }

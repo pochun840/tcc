@@ -12,6 +12,14 @@
 .is-invalid~.invalid-feedback{
     display: inline!important;
 }
+
+.gray-background {
+    filter: grayscale(100%); /* 100% 灰階 */
+}
+#newjob {
+    display: none; /* 預設隱藏 */
+}
+
 </style>
 
 
@@ -99,13 +107,13 @@
                         <div class="row">
                             <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_id"  value='<?php echo $data['jobint'];?>'>
+                                <input type="text" class="form-control input-ms" id="job_id"  value='<?php echo $data['next_job_id'];?>'>
                             </div>
                         </div>
                         <div class="row">
                             <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_name" value ='<?php echo "JOB"."-".$data['jobint'];?>' >
+                                <input type="text" class="form-control input-ms" id="job_name" value ='<?php echo "JOB"."-".$data['next_job_id'];?>' >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -327,13 +335,13 @@
         				    <div class="row">
         				        <label for="to_job_id" class="t1 col-4 col-form-label"><?php echo $text['job_id'];?> :</label>
         				        <div class="t2 col-5">
-        				            <input type="number" class="form-control" id="to_job_id">
+        				            <input type="number" class="form-control" id="to_job_id" value= '<?php echo $data['next_job_id'];?>'>
         				        </div>
         				    </div>
         				    <div class="row">
         				        <label for="to_job_name" class="t1 col-4 col-form-label"><?php echo $text['job_name'];?> :</label>
         				        <div class="t2 col-5">
-        				            <input type="text" class="form-control" id="to_job_name">
+        				            <input type="text" class="form-control" id="to_job_name" value ='<?php echo "JOB"."-".$data['next_job_id'];?>'>
         				        </div>
         				    </div>
         			    </div>
@@ -528,6 +536,17 @@ function copy_job_by_id(jobid){
             }
         });
     }
+}
+
+
+function copy_data(jobid){
+    var new_jobid = document.getElementById("to_job_id").value;
+    var new_jobname = document.getElementById("to_job_name").value;
+
+    document.getElementById("from_job_id").value = old_jobid;
+    document.getElementById("from_job_name").value = oldjobname;
+    document.getElementById("to_job_id").value = new_jobid;
+
 }
 
 function validateInput(element, pattern, min, max) {

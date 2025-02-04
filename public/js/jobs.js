@@ -54,6 +54,7 @@ function create_job() {
     
     //帶入預設值
     document.getElementById('newjob').style.display = 'block';
+    
     document.getElementById('rev_speed').value = 200;
     document.getElementById('rev_force').value = 100;
     document.getElementById('rev_direction_CCW').checked = true;
@@ -63,7 +64,7 @@ function create_job() {
 
 function copy_job(jobid){
     document.getElementById('copyjob').style.display = 'block';
-    copy_job_by_id(jobid);
+    copy_data(jobid);
 }
 
 function updatejob(){

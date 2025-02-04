@@ -334,6 +334,33 @@ class Job{
         }
     }
 
+    //查詢 job_id 還沒有 被使用的 取出 最小值
+    public function get_head_job_id(){
+
+        $query = "SELECT job_id FROM job ";
+
+        $statement = $this->db_iDas->prepare($query);
+        $statement->execute();
+
+        $result = $statement->fetch();
+        if ($result == false || empty($result) ){
+            return array('0'=> 1, 'missing_id' => 1);
+        }
+
+        $query = "SELECT job_id + 1 AS missing_id
+                  FROM job
+                  WHERE (job_id + 1) NOT IN ( SELECT job_id FROM job  ) order by  missing_id limit 1";
+
+        $statement = $this->db_iDas->prepare($query);
+        $statement->execute();
+
+        return $statement->fetch();
+    }
+
+
+
+    
+
 
 
 
