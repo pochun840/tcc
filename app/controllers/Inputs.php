@@ -57,6 +57,7 @@ class Inputs extends Controller
             $job_inputs = $this->InputModel->get_input_by_job_id($job_id);
             $temp  = array(); 
             $tempA = array();
+            $temp_gateconfirm = array();
            
             $job_inputlist = ''; 
     
@@ -75,6 +76,11 @@ class Inputs extends Controller
 
                     if (!empty($vv['input_event'])) {
                         $tempA[] = $vv['input_event'];
+                    }
+
+                    if(!empty($vv['gateconfirm'])){
+                        $temp_gateconfirm[] = $vv['gateconfirm'];
+
                     }
 
                     $isMobile = $this->isMobileCheck();
@@ -111,7 +117,8 @@ class Inputs extends Controller
         $response = array(
             'job_inputlist' => $job_inputlist,
             'temp' => $temp,
-            'tempA' => $tempA
+            'tempA' => $tempA,
+            'temp_gateconfirm' => $temp_gateconfirm
             
         );
 

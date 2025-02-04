@@ -659,21 +659,7 @@ function crud_job_event(argument){
                 }
             });
         }
-
-        if(input_event ==109){
-            document.getElementById('edit_work_goc').style.display='block';
-            let checkValues = temp
-                .filter(item => item.includes("check_"))
-                .map(item => item.replace("check_", ""));
-
-            /*if (result == "0") {
-                document.getElementById('edit_gateconfirm_0').checked = true;
-            } else if (result == "1") {
-                document.getElementById('edit_gateconfirm_1').checked = true;
-            }*/
-         
-        }
-        
+ 
         get_input_info(job_id,input_event);
         handleEventChange(input_event); 
         document.getElementById('edit_input').style.display='block';
@@ -1086,6 +1072,15 @@ function get_input_info(){
                     if(element){
                         element.disabled = false; 
                     } 
+                }
+
+                if(input_event == 109){
+                    document.getElementById('edit_work_goc').style.display='block';
+                    if (gateconfirm == 0) {
+                        document.getElementById('edit_gateconfirm_0').checked = true;
+                    } else  {
+                        document.getElementById('edit_gateconfirm_1').checked = true;
+                    }
                 }
                 
                 document.querySelector("select[name='edit_Event_Option']").value = input_event;
