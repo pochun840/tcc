@@ -70,7 +70,7 @@ class Sequences extends Controller
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : '';
-            $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
+            $ns = isset($_POST['ns']) ? intval($_POST['ns']) : 0;
             $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
 
             $seq_name = $_POST['seq_name'];
@@ -109,7 +109,7 @@ class Sequences extends Controller
                 'sequence_name' => $seq_name,
                 'seq_en' => 1,
                 'tr' => $tr,
-                'ng_stop' => $ng_stop,
+                'ns' => $ns,
                 'seq_ok'  => $seq_ok,
                 'stop_seq_ok' => $stop_seq_ok, 
                 'opt' => $opt_val,
@@ -203,7 +203,7 @@ class Sequences extends Controller
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
             $seq_name = $_POST['seq_name'];
             $tr = isset($_POST['tr']) ? intval($_POST['tr']) : 1;
-            $ng_stop = isset($_POST['ng_stop']) ? intval($_POST['ng_stop']) : 0;
+            $ns = isset($_POST['ns']) ? intval($_POST['ns']) : 0;
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : 0;
@@ -253,7 +253,7 @@ class Sequences extends Controller
                 'sequence_name' =>$seq_name,
                 'seq_en' => 1,
                 'tr' => $tr,
-                'ng_stop' => $ng_stop,
+                'ns' => $ns,
                 'seq_ok'  => $seq_ok,
                 'stop_seq_ok' =>$stop_seq_ok,
                 'opt' => $opt_val,
@@ -346,7 +346,7 @@ class Sequences extends Controller
                 $new_temp_seq[$kk]['sequence_name'] = $newseqname;
                 $new_temp_seq[$kk]['seq_en'] = $vv['seq_en'];
                 $new_temp_seq[$kk]['tr'] = $vv['tr'];
-                $new_temp_seq[$kk]['ng_stop'] = $vv['ng_stop']; 
+                $new_temp_seq[$kk]['ns'] = $vv['ns']; 
                 $new_temp_seq[$kk]['seq_ok'] = $vv['seq_ok']; 
                 $new_temp_seq[$kk]['stop_seq_ok'] = $vv['stop_seq_ok']; 
                 $new_temp_seq[$kk]['opt'] = $vv['opt']; 

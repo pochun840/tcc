@@ -184,9 +184,9 @@
                                 </div>
                               
                                 <div class="row">
-                                    <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?>:</div>
+                                    <div for="NG-stop" class="col-6 t1"><?php echo $text['ns'];?>:</div>
                                     <div class="col-4 t2">
-                                        <select id="ng_stop" class="col custom-file">
+                                        <select id="ns" class="col custom-file">
                                             <?php for($i=0;$i<=9;$i++) {?>
                                                 <option value="<?php echo $i;?>"><?php echo $i;?></option>
                                             <?php } ?> 
@@ -312,9 +312,9 @@
                                 </div>
                                
                                 <div class="row">
-                                    <div for="NG-stop" class="col-6 t1"><?php echo $text['NG_Stop'];?>:</div>
+                                    <div for="NG-stop" class="col-6 t1"><?php echo $text['ns'];?>:</div>
                                     <div class="col-4 t2">
-                                        <select id="edit_ng_stop" class="col custom-file">
+                                        <select id="edit_ns" class="col custom-file">
                                             <?php for($i=0;$i<=9;$i++) {?>
                                             <option value="<?php echo $i;?>"><?php echo $i;?></option>
                                             <?php } ?>    
@@ -606,7 +606,7 @@ function create_seq() {
     document.getElementById('seq_off').checked = true;
     document.getElementById('OPT_OFF').checked = true;
     document.getElementById('offset').value = 0;
-    document.getElementById('ng_stop').selectedIndex = 1;
+    document.getElementById('ns').selectedIndex = 1;
     
 }
 
@@ -617,7 +617,7 @@ function saveseq(){
     var seq_name = document.getElementById("seq_name").value;
     var tr = document.getElementById("tr").value;
  
-    var ng_stop = document.getElementById('ng_stop').value;
+    var ns = document.getElementById('ns').value;
 
     var seqElement = document.querySelector('input[name="seq_ok"]:checked');
     var seq_ok = seqElement ? seqElement.value : null;
@@ -642,7 +642,7 @@ function saveseq(){
                 seqid: seqid,
                 seq_name: seq_name,
                 tr: tr,
-                ng_stop: ng_stop,
+                ns: ns,
                 seq_ok:seq_ok,
                 stop_seq_ok:stop_seq_ok,
                 opt_val: opt_val,
@@ -690,7 +690,7 @@ function edit_seq(seqid) {
                 
                 var [, k_value] = cleanString.match(/\[k_value]\s*=>\s*([^ ]+)/) || [, null];
                 var [, offset] = cleanString.match(/\[offset]\s*=>\s*([^ ]+)/) || [, null];
-                var [, ng_stop] = cleanString.match(/\[ng_stop]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ns] = cleanString.match(/\[ns]\s*=>\s*([^ ]+)/) || [, null];
                 
                 var [, opt] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ok] = cleanString.match(/\[seq_ok]\s*=>\s*([^ ]+)/) || [, null];
@@ -706,7 +706,7 @@ function edit_seq(seqid) {
 
                 document.getElementById("edit_K").value = k_value;
                 document.getElementById("edit_offset").value = offset;
-                document.getElementById("edit_ng_stop").value = ng_stop;
+                document.getElementById("edit_ns").value = ns;
         
                 var radioButtons_seq = document.getElementsByName("edit_seq_ok");
                 setRadioButton_value(radioButtons_seq, seq_ok);
@@ -736,7 +736,7 @@ function edit_seq_save(){
     var stop_seq_ok = document.querySelector('input[name="edit_stop_seq_ok"]:checked').value;
     var k_value = document.getElementById("edit_K").value;
     var offset = document.getElementById("edit_offset").value;
-    var ng_stop = document.getElementById('edit_ng_stop').value;
+    var ns = document.getElementById('edit_ns').value;
     var opt_val = document.querySelector('input[name="edit_opt_option"]:checked').value;
 
     //驗證
@@ -755,7 +755,7 @@ function edit_seq_save(){
                 stop_seq_ok:stop_seq_ok,
                 k_value: k_value,
                 offset: offset,
-                ng_stop: ng_stop,
+                ns: ns,
                 opt_val: opt_val
 
             },

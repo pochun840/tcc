@@ -43,8 +43,8 @@ class Sequence{
             return false; 
         }
 
-        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, seq_en, tr, ng_stop, seq_ok, stop_seq_ok, opt, k_value, offset)";
-        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :seq_en, :tr, :ng_stop, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, offset)";
+        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
         $statement = $this->db_iDas->prepare($sql);
     
 
@@ -63,7 +63,7 @@ class Sequence{
         $statement->bindValue(':tr', $jobdata['tr']);
         $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
         $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
-        $statement->bindValue(':ng_stop', $jobdata['ng_stop']);
+        $statement->bindValue(':ns', $jobdata['ns']);
         $statement->bindValue(':seq_en', $jobdata['seq_en']);
         $statement->bindValue(':opt', $jobdata['opt']);
         $statement->bindValue(':k_value', $jobdata['k_value']);
@@ -77,8 +77,8 @@ class Sequence{
 
     public function copy_seq_by_seq_id($new_temp_seq){
 
-        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, seq_en, tr, ng_stop, seq_ok, stop_seq_ok, opt, k_value, offset)";
-        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :seq_en, :tr, :ng_stop, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, sequence_id, sequence_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, offset)";
+        $sql .= " VALUES (:job_id, :sequence_id, :sequence_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -155,7 +155,7 @@ class Sequence{
 
         $sql = "UPDATE `sequence` SET  sequence_name = :sequence_name,
                                   tr = :tr, 
-                                  ng_stop = :ng_stop, 
+                                  ns = :ns, 
                                   seq_ok  =:seq_ok,
                                   stop_seq_ok =:stop_seq_ok,
                                   opt = :opt,
@@ -169,7 +169,7 @@ class Sequence{
         $statement->bindValue(':tr', $jobdata['tr']);
         $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
         $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
-        $statement->bindValue(':ng_stop', $jobdata['ng_stop']);
+        $statement->bindValue(':ns', $jobdata['ns']);
         $statement->bindValue(':opt', $jobdata['opt']);
         $statement->bindValue(':k_value', $jobdata['k_value']);
         $statement->bindValue(':offset', $jobdata['offset']);

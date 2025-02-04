@@ -78,7 +78,7 @@ $text['new_seq'] = '新增工序';
 $text['edit_seq'] = '编辑工序';
 $text['del_seq'] = '刪除工序';
 
-$text['NG_Stop'] = 'NG停止';
+$text['ns'] = 'NG停止';
 $text['Choose_option'] = '选项';
 $text['OK_Sequence'] = '工序完成信号';
 $text['OK_Sequence_Stop'] = '工序完成停止';
