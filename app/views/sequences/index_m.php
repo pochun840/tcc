@@ -684,7 +684,7 @@ function edit_seq(seqid) {
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
 
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seqid] = cleanString.match(/\[seq_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqname] = cleanString.match(/\[seq_name]\s*=>\s*([^ ]+)/) || [, null];
                 var [, tr] = cleanString.match(/\[tr]\s*=>\s*([^ ]+)/) || [, null];
                 
@@ -812,7 +812,7 @@ function updateValue(element){
     
 <?php foreach($data['sequences'] as $key =>$val) {?>
     var sequenceId = "<?php echo $val['seq_id'];?>";
-    var sequenceName = "<?php echo $val['sequence_name'];?>";
+    var sequenceName = "<?php echo $val['seq_name'];?>";
 
     var exists = rowInfoArray.some(function(item) {
         return item.sequence_id === sequenceId || item.sequence_name === sequenceName;
