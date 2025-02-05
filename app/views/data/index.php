@@ -253,10 +253,10 @@
     const moonLanding = new Date();
     let yy = moonLanding.getFullYear();
     flatpickr("#start_date,#end_date", {
-        enableTime: true,
+        enableTime:false,
         static: true,
         inline:true,
-        dateFormat: "Y-m-d H:i",
+        dateFormat: "Y-m-d H:i:s",
         locale: "<?php echo $calendar_lang; ?>",
         disableMobile: "true",
         // minDate: String(yy),

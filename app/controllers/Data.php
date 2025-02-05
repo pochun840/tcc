@@ -86,14 +86,15 @@ class Data extends Controller
     
         #檢查開始日期
         if (!empty($_POST['start_date']) && isset($_POST['start_date'])) {
-            $start_date = $_POST['start_date'] . ":00";
+            $start_date = $_POST['start_date'] . "0";
         } else {
             $input_check = false;
         }
     
         #檢查結束日期
         if (!empty($_POST['end_date']) && isset($_POST['end_date'])) {
-            $end_date = $_POST['end_date'] . ":00";
+            $end_date = $_POST['end_date'] . "0"; //00:00:00
+            $end_date = str_replace("00:00:00","23:59:59",$end_date);
         } else {
             $input_check = false;
         }
@@ -113,9 +114,7 @@ class Data extends Controller
 
             $dataset = $this->DataModel->get_range_data($start_date, $end_date);
     
-
             $dataset = array_slice($dataset, 0, 10000);
-    
 
             foreach ($dataset as $key => $val) {
                 $dataset[$key]['torque_unit'] = $unit_arr[$val['torque_unit']];

@@ -110,7 +110,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: 70%">
                 <header class="w3-container modal-header">
-                    <span onclick="hideElementById('newseq');"
+                    <span onclick="closebutton('newseq');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_seq'];?></h3>
                 </header>
@@ -232,7 +232,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="saveseq();"><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('newseq');"  class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closebutton('newseq');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -244,7 +244,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: 70%">
                 <header class="w3-container modal-header">
-                    <span onclick="hideElementById('editseq');"
+                    <span onclick="closebutton('editseq');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['edit_seq'];?></h3>
                 </header>
@@ -356,7 +356,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="edit_seq_save();"><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('editseq');"  class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closebutton('editseq');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -367,7 +367,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: 60%">
                 <header class="w3-container modal-header">
-                    <span onclick="document.getElementById('copyseq').style.display='none'"
+                    <span onclick="closebutton('copyseq')"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['Copy_Sequence'];?></h3>
                 </header>
@@ -410,7 +410,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="copy_seq_by_id()"><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('copyseq');" class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closebutton('copyseq');" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -457,19 +457,22 @@ function cound_job(argument){
     seqname = selectedRowData_name;
     
     if(argument == 'del' && seqid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
         delete_seqid(seqid);
     }
 
     if(argument =="edit" && seqid != null){
-        
+        document.querySelector(".main-content").classList.add("overlay-active");
         edit_seq(seqid);
     }
 
     if(argument =="new"){
+        document.querySelector(".main-content").classList.add("overlay-active");
         create_seq();
     }
 
     if(argument =="copy" && seqid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
         copy_seq(seqid);
     }
 
