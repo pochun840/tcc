@@ -400,7 +400,6 @@ class Sequences extends Controller
 
         echo json_encode($result);
     
-
     }
    
     #seq 排序
@@ -409,8 +408,6 @@ class Sequences extends Controller
         if(isset($_POST['jobid'])){
             $jobid = $_POST['jobid'];
             $rowInfoArray = $_POST['rowInfoArray'];
-
-
 
             if(!empty($rowInfoArray)){
                 $new_info = array();
@@ -430,8 +427,6 @@ class Sequences extends Controller
                 
             }
             
-
-
         }
     }
 }
