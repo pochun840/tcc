@@ -28,23 +28,28 @@ function cound_job(argument){
     oldjobname = selectedRow ? selectedRow.cells[1].innerText : null;
     old_jobid  = selectedRow ? selectedRow.cells[0].innerText : null;
     if(argument == 'del' && jobid != null){
-        
+        document.querySelector(".main-content").classList.add("overlay-active");
+
         delete_jobid(jobid);
     }
 
     if(argument =="edit" && jobid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
         edit_job(jobid);
     }
 
     if(argument =="new"){
+        document.querySelector(".main-content").classList.add("overlay-active");
         create_job();
     }
 
     if(argument =="copy" && jobid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
         copy_job(jobid);
     }
 
 }
+
 
 function readFromLocalStorage(key) {
     return localStorage.getItem(key);

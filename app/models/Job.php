@@ -335,27 +335,31 @@ class Job{
     }
 
     //查詢 job_id 還沒有 被使用的 取出 最小值
-    public function get_head_job_id(){
+    public function get_head_job_id() {
 
-        $query = "SELECT job_id FROM job ";
-
+        // 檢查 job_id 是否有 1，如果沒有就直接返回 1
+        $query = "SELECT job_id FROM job WHERE job_id = 1 ";
         $statement = $this->db_iDas->prepare($query);
         $statement->execute();
-
+    
         $result = $statement->fetch();
-        if ($result == false || empty($result) ){
-            return array('0'=> 1, 'missing_id' => 1);
+        if (!$result) {
+            return array('missing_id' => 1); // 如果 job_id = 1 不存在，返回 1
         }
-
+    
+        // 如果 job_id = 1 存在，查找最小的可用 job_id
         $query = "SELECT job_id + 1 AS missing_id
                   FROM job
-                  WHERE (job_id + 1) NOT IN ( SELECT job_id FROM job  ) order by  missing_id limit 1";
-
+                  WHERE (job_id + 1) NOT IN (SELECT job_id FROM job)
+                  ORDER BY missing_id
+                  LIMIT 1";
+    
         $statement = $this->db_iDas->prepare($query);
         $statement->execute();
-
+    
         return $statement->fetch();
     }
+    
 
 
 

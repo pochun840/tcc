@@ -13,11 +13,11 @@
     display: inline!important;
 }
 
-.gray-background {
-    filter: grayscale(100%); /* 100% 灰階 */
-}
-#newjob {
-    display: none; /* 預設隱藏 */
+
+.main-content.overlay-active {
+  filter: grayscale(100%); /* 完全灰化 */
+  pointer-events: none; /* 禁止點擊 */
+  opacity: 0.3; /* 降低不透明度 */
 }
 
 </style>
@@ -97,7 +97,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: 70%">
                 <header class="w3-container modal-header">
-                    <span onclick="hideElementById('newjob');"
+                    <span onclick="closejob('newjob');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_job'];?></h3>
                 </header>
@@ -191,7 +191,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="savejob()"><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('newjob');" class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closejob('newjob');" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -203,7 +203,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: 70%">
                 <header class="w3-container modal-header">
-                    <span onclick="hideElementById('editjob');"
+                    <span onclick="closejob('editjob');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['edit_job'];?></h3>
                 </header>
@@ -296,7 +296,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="updatejob();"><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('editjob');" class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closejob('editjob');" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -307,7 +307,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: 60%">
                 <header class="w3-container modal-header">
-                    <span onclick="hideElementById('copyjob');"
+                    <span onclick="closejob('copyjob');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['copy_job'];?></h3>
                 </header>
@@ -349,8 +349,8 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
-                    <button id="" class="button-modal"  onclick="copy_job_by_id();"><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('copyjob');"  class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="copy_job_by_id();"><?php echo $text['save'];?></button>
+                    <button id="" class="button-modal" onclick="closejob('copyjob');" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -418,8 +418,8 @@ for (var i = 0; i < rows.length; i++) {
 
 function savejob() {
 
-    var jobidnew = '<?php echo $data['jobint']?>';
-
+    var jobidnew = '<?php echo $data['next_job_id']?>';
+    
     var jobname_val       = document.getElementById("job_name").value;
     var rev_speed_val     = document.getElementById("rev_speed").value;
     var rev_force_val     = document.getElementById("rev_force").value;
@@ -627,5 +627,17 @@ function input_check_editjob() {
     return isFormValid;
 }
 
+
+
+function closejob(elementId) {
+    // 確保傳入的 elementId 有效，並且元素存在
+    document.getElementById(elementId).style.display = 'none';
+   
+    // 確保 .main-content 元素存在
+    var mainContent = document.querySelector(".main-content");
+    if (mainContent) {
+        mainContent.classList.remove("overlay-active");
+    }
+}
 
 </script>

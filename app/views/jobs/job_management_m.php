@@ -12,6 +12,13 @@
 .is-invalid~.invalid-feedback{
     display: inline!important;
 }
+
+.main-content.overlay-active {
+  filter: grayscale(100%); /* 完全灰化 */
+  pointer-events: none; /* 禁止點擊 */
+  opacity: 0.3; /* 降低不透明度 */
+}
+
 </style>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -88,7 +95,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: auto">
                 <header class="w3-container modal-header">
-                    <span onclick="document.getElementById('newjob').style.display='none'"
+                    <span onclick="closejob('newjob')"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px; margin: 3px; font-size: 4.5vmin">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_job'];?></h3>
                 </header>
@@ -180,7 +187,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="savejob()"><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="document.getElementById('newjob').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closejob('newjob')" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -191,7 +198,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: auto">
                 <header class="w3-container modal-header">
-                    <span onclick="document.getElementById('editjob').style.display='none'"
+                    <span onclick="closejob('editjob')"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px; margin: 3px; font-size: 4.5vmin">&times;</span>
                     <h3 id='modal_title'><?php echo $text['edit_job'];?></h3>
                 </header>
@@ -281,7 +288,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="updatejob();"><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('editjob');" class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closejob('editjob')" class="closebtn"><?php echo $text['close'];?></button>
 
                 </div>
             </div>
@@ -293,7 +300,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: auto">
                 <header class="w3-container modal-header">
-                    <span onclick="hideElementById('copyjob');"
+                    <span onclick="closejob('copyjob')"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px;font-size: 4.5vmin; margin: 3px">&times;</span>
                     <h3 id='modal_title'><?php echo $text['copy_job'];?></h3>
                 </header>
@@ -336,8 +343,8 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="copy_job_by_id();"><?php echo $text['save'];?></button>
-                   <button id="" class="button-modal" onclick="hideElementById('copyjob');" class="closebtn"><?php echo $text['close'];?></button>
-                </div>
+                   <button id="" class="button-modal"  onclick="closejob('copyjob')" class="closebtn"><?php echo $text['close'];?></button>
+                </div> 
             </div>
         </div>
     </div>
@@ -618,5 +625,14 @@ function input_check_editjob() {
     return isFormValid;
 }
 
-
+function closejob(elementId) {
+    // 確保傳入的 elementId 有效，並且元素存在
+    document.getElementById(elementId).style.display = 'none';
+   
+    // 確保 .main-content 元素存在
+    var mainContent = document.querySelector(".main-content");
+    if (mainContent) {
+        mainContent.classList.remove("overlay-active");
+    }
+}
 </script>
