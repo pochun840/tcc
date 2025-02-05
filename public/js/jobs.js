@@ -1,16 +1,23 @@
 
 function delete_jobid(jobid) {
     if (jobid) {
+        document.getElementById('spinner').style.display = 'block';
         $.ajax({
             url: "?url=Jobs/delete_jobid",
             method: "POST",
             data: { jobid: jobid },
             success: function(response) {
-                console.log(response);
                 var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                }); 
+                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    //隱藏加載動畫
+                    document.getElementById('spinner').style.display = 'none';
+
+                    //顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        history.go(0);  //刷新頁面
+                    });
+                }, 1000); //延遲 1000 毫秒  
             },
             error: function(xhr, status, error) {
                 
@@ -86,6 +93,10 @@ function updatejob(){
     let check = input_check_editjob();
     
     if(check) {
+
+        document.getElementById('spinner').style.display = 'block';
+
+
         $.ajax({
             url: "?url=Jobs/update_job",
             method: "POST",
@@ -100,17 +111,26 @@ function updatejob(){
 
             },
             success: function(response) {   
-                  
                 var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    localStorage.setItem('jobid', jobid);
-                    localStorage.setItem('jobname', jobname);
-                    localStorage.setItem('rev_speed', speedvalue);
-                    localStorage.setItem('rev_force', forcevalue);
-                    localStorage.setItem('direction', directionValue);
-                    history.go(0);
-                });
+                
+                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    //隱藏加載動畫
+                    document.getElementById('spinner').style.display = 'none';
 
+                    //顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        // 將數據存储到 localStorage
+                        localStorage.setItem('jobid', jobid);
+                        localStorage.setItem('jobname', jobname);
+                        localStorage.setItem('rev_speed', speedvalue);
+                        localStorage.setItem('rev_force', forcevalue);
+                        localStorage.setItem('direction', directionValue);
+
+                        //刷新頁面
+                        history.go(0);
+                    });
+                }, 1000); //延遲 1000 毫秒 
             },
             error: function(xhr, status, error) {
                 

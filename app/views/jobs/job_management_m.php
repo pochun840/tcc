@@ -349,6 +349,15 @@
         </div>
     </div>
 
+    <!-- 加载動畫 OP -->
+    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    <!-- 加载動畫 ED -->
+
+
 
 </div>
 
@@ -443,6 +452,8 @@ function copy_job_by_id(jobid){
 
 
     if(new_jobid){
+
+
         $.ajax({
             url: "?url=Jobs/check_job_type",
             method: "POST",
@@ -453,6 +464,7 @@ function copy_job_by_id(jobid){
             success: function(response) {
                 alertify.confirm(text_info , function (result) {
                 if (result) {
+                    document.getElementById('spinner').style.display = 'block';
                     $.ajax({
                         url: "?url=Jobs/copy_job_data",
                         method: "POST",
@@ -463,12 +475,21 @@ function copy_job_by_id(jobid){
                             new_jobname: new_jobname
 
                         },
-                        success: function(response) {
+                        success: function(response) { 
                             var responseData = JSON.parse(response);
-                            alertify.alert(responseData.res_type, responseData.res_msg, function() {
+
+                            // 延遲 1000 毫秒後隱藏加載動畫（'copyjob' 和 'spinner'），並在隱藏後顯示 alertify 彈跳視窗
+                            setTimeout(function() {
+                                // 隱藏 'copyjob' 和 'spinner' 加載動畫
                                 document.getElementById('copyjob').style.display = 'none';
-                                history.go(0);
-                            });
+                                document.getElementById('spinner').style.display = 'none';  // 隱藏 spinner
+
+                                // 顯示 alertify 彈跳視窗
+                                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                    // 刷新頁面
+                                    history.go(0);
+                                });
+                            }, 1000); // 延遲 1000 毫秒
                         },
                         error: function(xhr, status, error) {
                             
@@ -507,7 +528,10 @@ function savejob() {
      //驗證
     let check = input_check_savejob();
 
-    if (check  ) {
+    if (check) {
+
+        document.getElementById('spinner').style.display = 'block';
+        
         $.ajax({
             url: "?url=Jobs/create_job",
             method: "POST",
@@ -521,11 +545,19 @@ function savejob() {
                 stop_job_ok_val:stop_job_ok_val
             },
             success: function(response) {
-    
+
                 var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                });         
+                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    //隱藏加載動畫
+                    document.getElementById('spinner').style.display = 'none';
+
+                    //顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        history.go(0);  //刷新頁面
+                    });
+                }, 1000); //延遲 1000 毫秒   
+
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
