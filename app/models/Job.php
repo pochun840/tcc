@@ -198,8 +198,8 @@ class Job{
 
     public function copy_sequence_by_job_id($new_temp_seq) {
       
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, offset)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :ofs);";
         
         
         $statement = $this->db_iDas->prepare($sql);

@@ -1238,7 +1238,7 @@ function input_check_savestep() {
         { id: 'seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'tighten_repeat', pattern: /^[0-9]+$/, min: 1, max: 99 },
         { id: 'K', pattern: /^(1\.[5-9]|([1-9][0-9]{0,2}|[1-9][0-9]{3,})(\.[0-9])?|999(\.[0-7])?|999\.8)$/, min: 1.5, max: 999.8 },
-        { id: 'offset', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
+        { id: 'ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
 
     let isFormValid = true;

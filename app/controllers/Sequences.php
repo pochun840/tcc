@@ -71,7 +71,7 @@ class Sequences extends Controller
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : '';
             $ns = isset($_POST['ns']) ? intval($_POST['ns']) : 0;
-            $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
+            $ofs = isset($_POST['ofs']) ? intval($_POST['ofs']) : 0;  
 
             $seq_name = $_POST['seq_name'];
             
@@ -98,7 +98,7 @@ class Sequences extends Controller
             }
 
             #驗證offset
-            if(!$this->MiscellaneousModel->seq_validate($offset, 'offset')) {
+            if(!$this->MiscellaneousModel->seq_validate($ofs, 'ofs')) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['joint_offset_val']);
                 exit();
             }
@@ -114,12 +114,12 @@ class Sequences extends Controller
                 'stop_seq_ok' => $stop_seq_ok, 
                 'opt' => $opt_val,
                 'k_value' => $k_value,
-                'offset' => $offset,
+                'ofs' => $ofs,
             );
 
 
-            if(!empty($jobdata['offset'])){
-                $jobdata['offset'] = sprintf("%+03d", $jobdata['offset']);
+            if(!empty($jobdata['ofs'])){
+                $jobdata['ofs'] = sprintf("%+03d", $jobdata['ofs']);
             }
            
             $mode = "create";
@@ -208,7 +208,7 @@ class Sequences extends Controller
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : 0;
             $k_value = isset($_POST['k_value']) ? floatval($_POST['k_value']) : 100.0;
-            $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;  
+            $ofs = isset($_POST['ofs']) ? intval($_POST['ofs']) : 0;  
 
             #驗證seq_name 
             if(!$this->MiscellaneousModel->seq_validate($seq_name, 'name')) {
@@ -230,13 +230,13 @@ class Sequences extends Controller
             }
 
             #驗證offset
-            if(!$this->MiscellaneousModel->seq_validate($offset, 'offset')) {
+            if(!$this->MiscellaneousModel->seq_validate($ofs, 'ofs')) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['joint_offset_val']);
                 exit();
             }
 
 
-            $offset = sprintf("%+03d", $offset);
+            $ofs = sprintf("%+03d", $ofs);
 
             $seq_count = $this->sequenceModel->countseq($jobid);
             $seq_count = intval($seq_count);
@@ -258,7 +258,7 @@ class Sequences extends Controller
                 'stop_seq_ok' =>$stop_seq_ok,
                 'opt' => $opt_val,
                 'k_value' => $k_value,
-                'offset' => $offset,
+                'ofs' => $ofs,
             );
            
             $res = $this->sequenceModel->update_seq_by_id($jobdata);
@@ -351,7 +351,7 @@ class Sequences extends Controller
                 $new_temp_seq[$kk]['stop_seq_ok'] = $vv['stop_seq_ok']; 
                 $new_temp_seq[$kk]['opt'] = $vv['opt']; 
                 $new_temp_seq[$kk]['k_value'] = $vv['k_value']; 
-                $new_temp_seq[$kk]['offset'] = $vv['offset'];
+                $new_temp_seq[$kk]['ofs'] = $vv['ofs'];
 
             }  
 

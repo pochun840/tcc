@@ -237,7 +237,7 @@ class Miscellaneous{
                        $value <= 300;
     
             // offset
-            case 'offset':
+            case 'ofs':
                 return is_numeric($value) && 
                        $value >= -254 && 
                        $value <= 254;

@@ -43,8 +43,8 @@ class Sequence{
             return false; 
         }
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, offset)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :ofs);";
         $statement = $this->db_iDas->prepare($sql);
     
 
@@ -67,7 +67,7 @@ class Sequence{
         $statement->bindValue(':seq_en', $jobdata['seq_en']);
         $statement->bindValue(':opt', $jobdata['opt']);
         $statement->bindValue(':k_value', $jobdata['k_value']);
-        $statement->bindValue(':offset', $jobdata['offset']);
+        $statement->bindValue(':ofs', $jobdata['ofs']);
     
         $results = $statement->execute();
 
@@ -77,8 +77,8 @@ class Sequence{
 
     public function copy_seq_by_seq_id($new_temp_seq){
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, offset)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :ofs);";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -160,7 +160,7 @@ class Sequence{
                                   stop_seq_ok =:stop_seq_ok,
                                   opt = :opt,
                                   k_value = :k_value,
-                                  offset = :offset
+                                  ofs = :ofs
         WHERE job_id = :job_id  AND   seq_id = :seq_id ";
 
 
@@ -172,7 +172,7 @@ class Sequence{
         $statement->bindValue(':ns', $jobdata['ns']);
         $statement->bindValue(':opt', $jobdata['opt']);
         $statement->bindValue(':k_value', $jobdata['k_value']);
-        $statement->bindValue(':offset', $jobdata['offset']);
+        $statement->bindValue(':ofs', $jobdata['ofs']);
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $statement->bindValue(':seq_id', $jobdata['seq_id']);
         $results = $statement->execute();
