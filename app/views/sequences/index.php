@@ -12,6 +12,12 @@
 .is-invalid~.invalid-feedback{
     display: inline!important;
 }
+
+.main-content.overlay-active {
+  filter: grayscale(100%); /* 完全灰化 */
+  pointer-events: none; /* 禁止點擊 */
+  opacity: 0.3; /* 降低不透明度 */
+}
 </style>
 
 <div class="container-ms">
@@ -948,7 +954,6 @@ function input_check_editseq() {
 
     return isFormValid;
 }
-
 
 
 </script>
