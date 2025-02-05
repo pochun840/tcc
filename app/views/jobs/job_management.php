@@ -84,7 +84,7 @@
         </div>
 
         <div class="buttonbox">
-        <?php $status = count($data['jobs']) >=  50 ? 'disabled' : ''; ?>
+        <?php $status = count($data['jobs']) >  50 ? 'disabled' : ''; ?>
             <input id="S3" name="Job_Manager_Submit" type="button" value="<?php echo $text['New'];?>" tabindex="1"   onclick="cound_job('new')" <?php echo $status;?> >
             <input id="S6" name="Job_Manager_Submit" type="button" value="<?php echo $text['Edit'];?>" tabindex="1"  onclick="cound_job('edit')">
             <input id="S5" name="Job_Manager_Submit" type="button" value="<?php echo $text['Copy'];?>" tabindex="1"  onclick="cound_job('copy')" <?php echo $status;?> >
@@ -472,7 +472,6 @@ function savejob() {
                     });
                 }, 1000); //延遲 1000 毫秒  
             },
-
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
             }
@@ -614,7 +613,7 @@ function input_check_savejob() {
     let conditions = [
         { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'rev_speed', pattern: /^[0-9]+$/, min: 1, max: 1100 },
-        { id: 'rev_force', pattern: /^[0-9]+$/, min: 1, max: 110 },
+        { id: 'rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 
     let isFormValid = true;

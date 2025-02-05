@@ -97,7 +97,7 @@
         </div>
 
         <div class="buttonbox">
-        <?php $status = count($data['sequences']) >=  50 ? 'disabled' : ''; ?>
+        <?php $status = count($data['sequences']) >  50 ? 'disabled' : ''; ?>
             <input id="S3" name="Seq_Manager_Submit" type="button" value="<?php echo $text['New'];?>" tabindex="1"  onclick="cound_job('new');" <?php echo $status;?> >
             <input id="S6" name="Seq_Manager_Submit" type="button" value="<?php echo $text['Edit'];?>" tabindex="1" onclick="cound_job('edit');">
             <input id="S5" name="Seq_Manager_Submit" type="button" value="<?php echo $text['Copy'];?>" tabindex="1" onclick="cound_job('copy');" <?php echo $status;?> >
@@ -416,6 +416,15 @@
         </div>
     </div>
 
+    <!-- 加载動畫 OP -->
+    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    <!-- 加载動畫 ED -->
+
+
 </div>
 
 <script>
@@ -617,7 +626,7 @@ function create_seq() {
     document.getElementById('K').value = 100;
     document.getElementById('stop_seq_ok_off').checked = true;
     document.getElementById('seq_ok').checked = true;
-    document.getElementById('OPT_OFF').checked = true;
+    document.getElementById('OPT_ON').checked = true;
     document.getElementById('ofs').value = 0;
 
 
@@ -846,7 +855,7 @@ function sendRowInfoArray() {
         data: dataToSend,
         success: function(response) {
             console.log(response);
-            history.go(0); 
+            //history.go(0); 
         },
         error: function(xhr, status, error) {
             console.error('Error sending data:', error);

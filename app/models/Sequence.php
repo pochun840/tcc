@@ -221,19 +221,24 @@ class Sequence{
 
 
     public function swapupdate($jobid, $rowInfoArray,$new_info) {
+
         $temp = array();
         foreach ($rowInfoArray as $k_s => $v_s) {
             $sql = "SELECT seq_id FROM sequence WHERE job_id = ? AND seq_name = ? ";
             $statement = $this->db_iDas->prepare($sql);
-            $statement->execute([$jobid, $v_s['seq_name']]);
+            $statement->execute([$jobid, $v_s['sequence_name']]);
             $result = $statement->fetch(PDO::FETCH_ASSOC);
             
             if ($result) {
+                
                 $new_val = 'New_Value'.($k_s + 1);
                 $update_sql = "UPDATE sequence SET seq_id = ? WHERE job_id = ? AND seq_name = ? ";
 
                 $update_statement = $this->db_iDas->prepare($update_sql);
-                $update_statement->execute([$new_val, $jobid, $v_s['seq_name']]);
+                $update_statement->execute([$new_val, $jobid, $v_s['sequence_name']]);
+                $rows_count = $update_statement->rowCount();
+
+                
 
 
                 $rows_count = $update_statement->rowCount();
@@ -243,7 +248,7 @@ class Sequence{
                     
                     $update_id_sql = "UPDATE sequence SET seq_id = ? WHERE job_id = ? AND seq_name = ? ";
                     $update_id_statement = $this->db_iDas->prepare($update_id_sql);
-                    $update_id_statement->execute([$updated_seq_id, $jobid, $v_s['seq_name']]);                  
+                    $update_id_statement->execute([$updated_seq_id, $jobid, $v_s['sequence_name']]);                  
                 }
 
             }
@@ -253,16 +258,14 @@ class Sequence{
             $force_update_statement = $this->db_iDas->prepare($force_update_sql);
             $force_update_statement->execute([$jobid]);
             
-
-
         }
 
         if(!empty($new_info)){
 
-            //var_dump($new_info);die();
+          
             foreach($new_info as $key =>$val){
                 $new_val = $key; // 使用陣列的鍵作為 new_val
-                $seq_id = $val['seq_id'];
+                $seq_id = $val['sequence_id'];
 
                 $sql_select = "SELECT count(*) FROM step WHERE job_id = :jobid AND seq_id = :seq_id";
                 $select_statement = $this->db_iDas->prepare($sql_select);
@@ -279,7 +282,6 @@ class Sequence{
                     $update_statement = $this->db_iDas->prepare($sql_step);
     
                     $update_statement->execute();
-
 
                     $sql_step = "UPDATE step SET seq_id = :new_val WHERE job_id = :jobid AND seq_id = :seq_id";
                     $update_statement = $pdo->prepare($sql_step);

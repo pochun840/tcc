@@ -410,6 +410,7 @@ class Sequences extends Controller
             $rowInfoArray = $_POST['rowInfoArray'];
 
             if(!empty($rowInfoArray)){
+
                 $new_info = array();
                 $index = 1;
                 foreach ($rowInfoArray as $v_s) {

@@ -12,6 +12,12 @@
 .is-invalid~.invalid-feedback{
     display: inline!important;
 }
+
+.main-content.overlay-active {
+  filter: grayscale(100%); /* 完全灰化 */
+  pointer-events: none; /* 禁止點擊 */
+  opacity: 0.3; /* 降低不透明度 */
+}
 </style>
 
 <div class="container-ms">
@@ -88,7 +94,7 @@
         </div>
 
         <div class="buttonbox">
-        <?php $status = count($data['sequences']) >=  50 ? 'disabled' : ''; ?>
+        <?php $status = count($data['sequences']) >  50 ? 'disabled' : ''; ?>
 
             <input id="S3" name="Seq_Manager_Submit" type="button" value="<?php echo $text['New'];?>" tabindex="1"  onclick="cound_job('new');" <?php echo $status;?> >
             <input id="S6" name="Seq_Manager_Submit" type="button" value="<?php echo $text['Edit'];?>" tabindex="1" onclick="cound_job('edit');">
@@ -402,6 +408,14 @@
         </div>
     </div>
 
+    <!-- 加载動畫 OP -->
+    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    <!-- 加载動畫 ED -->
+
 </div>
 
 <script>
@@ -443,19 +457,22 @@ function cound_job(argument){
     
     
     if(argument == 'del' && seqid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
         delete_seqid(seqid);
     }
 
     if(argument =="edit" && seqid != null){
-        
+        document.querySelector(".main-content").classList.add("overlay-active");
         edit_seq(seqid);
     }
 
     if(argument =="new"){
+        document.querySelector(".main-content").classList.add("overlay-active");
         create_seq();
     }
 
     if(argument =="copy" && seqid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
         copy_seq(seqid);
     }
 
@@ -575,6 +592,7 @@ function delete_seqid(seqid){
     var jobid = '<?php echo $data['job_id']?>';
 
     if (jobid) {
+        document.getElementById('spinner').style.display = 'block';
         $.ajax({
             url: "?url=Sequences/delete_seq",
             method: "POST",
@@ -584,9 +602,16 @@ function delete_seqid(seqid){
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                }); 
+                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    //隱藏加載動畫
+                    document.getElementById('spinner').style.display = 'none';
+
+                    //顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        history.go(0);  //刷新頁面
+                    });
+                }, 1000); //延遲 1000 毫秒  
             },
             error: function(xhr, status, error) {
                 
@@ -604,7 +629,7 @@ function create_seq() {
     document.getElementById('K').value = 100;
     document.getElementById('stop_seq_ok_off').checked = true;
     document.getElementById('seq_off').checked = true;
-    document.getElementById('OPT_OFF').checked = true;
+    document.getElementById('OPT_ON').checked = true;
     document.getElementById('ofs').value = 0;
     document.getElementById('ns').selectedIndex = 1;
     
@@ -634,6 +659,7 @@ function saveseq(){
 
 
     if(check){
+        document.getElementById('spinner').style.display = 'block';
         $.ajax({
             url: "?url=Sequences/create_seq",
             method: "POST",
@@ -652,9 +678,16 @@ function saveseq(){
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                });
+                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    //隱藏加載動畫
+                    document.getElementById('spinner').style.display = 'none';
+
+                    //顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        history.go(0);  //刷新頁面
+                    });
+                }, 1000); //延遲 1000 毫秒  
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -743,6 +776,7 @@ function edit_seq_save(){
     let check = input_check_editseq();
     
     if(check){
+        document.getElementById('spinner').style.display = 'block';
         $.ajax({
             url: "?url=Sequences/edit_seq",
             method: "POST",
@@ -761,9 +795,16 @@ function edit_seq_save(){
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                });
+                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    //隱藏加載動畫
+                    document.getElementById('spinner').style.display = 'none';
+
+                    //顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        history.go(0);  //刷新頁面
+                    });
+                }, 1000); //延遲 1000 毫秒  
             },
             error: function(xhr, status, error) {
                 

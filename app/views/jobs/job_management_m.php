@@ -505,7 +505,6 @@ function copy_job_by_id(jobid){
             }
         });
         
-        //document.getElementById('copyjob').style.display = 'none';
     }
 }
 
