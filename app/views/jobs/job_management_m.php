@@ -176,7 +176,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-power" class="col-6 t1"><?php echo $text['rev_force'];?>:</div>
+                            <div for="reverse-power" class="col-6 t1"><?php echo $text['rev_force'];?>(%):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="rev_force" maxlength="">
                                 <div class="invalid-feedback"></div>
@@ -277,7 +277,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div for="reverse-power" class="col-6 t1"><?php echo $text['rev_force'];?>:</div>
+                            <div for="reverse-power" class="col-6 t1"><?php echo $text['rev_force'];?>(%):</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_rev_force" maxlength=""  >
                             </div>
