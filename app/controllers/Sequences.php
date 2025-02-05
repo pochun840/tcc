@@ -106,7 +106,7 @@ class Sequences extends Controller
             $jobdata = array(
                 'job_id' => $jobid,
                 'seq_id' => $seqid,
-                'sequence_name' => $seq_name,
+                'seq_name' => $seq_name,
                 'seq_en' => 1,
                 'tr' => $tr,
                 'ns' => $ns,
@@ -250,7 +250,7 @@ class Sequences extends Controller
             $jobdata = array(
                 'job_id' => $jobid,
                 'seq_id' => $seqid,
-                'sequence_name' =>$seq_name,
+                'seq_name' =>$seq_name,
                 'seq_en' => 1,
                 'tr' => $tr,
                 'ns' => $ns,
@@ -343,7 +343,7 @@ class Sequences extends Controller
             foreach($old_res as $kk =>$vv){
                 $new_temp_seq[$kk]['job_id'] = $vv['job_id'];
                 $new_temp_seq[$kk]['seq_id'] = $newseqid;
-                $new_temp_seq[$kk]['sequence_name'] = $newseqname;
+                $new_temp_seq[$kk]['seq_name'] = $newseqname;
                 $new_temp_seq[$kk]['seq_en'] = $vv['seq_en'];
                 $new_temp_seq[$kk]['tr'] = $vv['tr'];
                 $new_temp_seq[$kk]['ns'] = $vv['ns']; 

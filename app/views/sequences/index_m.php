@@ -54,7 +54,7 @@
                                 <?php foreach($data['sequences'] as $key =>$val) {?>
                                     <tr>
                                         <td class="seq-id"> <?php echo $val['seq_id'];?></td>
-                                        <td class="seq-name"><?php echo $val['sequence_name'];?></td>
+                                        <td class="seq-name"><?php echo $val['seq_name'];?></td>
                                         <td><?php echo $val['tr'];?></td>
                                         <td>
                                             <?php if($val['seq_en']== 1){?>
@@ -465,7 +465,7 @@ function cound_job(argument){
 var rowInfoArray = [];
 <?php foreach($data['sequences'] as $key =>$val) {?>
         var sequenceId = "<?php echo $val['seq_id'];?>";
-        var sequenceName = "<?php echo $val['sequence_name'];?>";
+        var sequenceName = "<?php echo $val['seq_name'];?>";
         
         var rowInfo = {
             sequence_id: sequenceId,
@@ -685,7 +685,7 @@ function edit_seq(seqid) {
 
                 var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seqid] = cleanString.match(/\[sequence_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, seqname] = cleanString.match(/\[sequence_name]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seqname] = cleanString.match(/\[seq_name]\s*=>\s*([^ ]+)/) || [, null];
                 var [, tr] = cleanString.match(/\[tr]\s*=>\s*([^ ]+)/) || [, null];
                 
                 var [, k_value] = cleanString.match(/\[k_value]\s*=>\s*([^ ]+)/) || [, null];

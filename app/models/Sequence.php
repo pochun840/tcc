@@ -43,21 +43,21 @@ class Sequence{
             return false; 
         }
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, sequence_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, offset)";
-        $sql .= " VALUES (:job_id, :seq_id, :sequence_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, offset)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
         $statement = $this->db_iDas->prepare($sql);
     
 
         if ($mode == "create") {
             $statement->bindValue(':job_id', $jobdata['job_id']);
             $statement->bindValue(':seq_id', $jobdata['seq_id']);
-            $statement->bindValue(':sequence_name', $jobdata['sequence_name']);
+            $statement->bindValue(':seq_name', $jobdata['seq_name']);
 
         }else if($mode =="copy"){
             
             $statement->bindValue(':job_id', $jobdata['job_id']);
             $statement->bindValue(':seq_id', $jobdata['seq_id']);
-            $statement->bindValue(':sequence_name', $jobdata['sequence_name']);
+            $statement->bindValue(':seq_name', $jobdata['seq_name']);
         }
     
         $statement->bindValue(':tr', $jobdata['tr']);
@@ -77,8 +77,8 @@ class Sequence{
 
     public function copy_seq_by_seq_id($new_temp_seq){
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, sequence_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, offset)";
-        $sql .= " VALUES (:job_id, :seq_id, :sequence_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, offset)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :offset);";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -153,7 +153,7 @@ class Sequence{
             return false; 
         }
 
-        $sql = "UPDATE `sequence` SET  sequence_name = :sequence_name,
+        $sql = "UPDATE `sequence` SET  seq_name = :seq_name,
                                   tr = :tr, 
                                   ns = :ns, 
                                   seq_ok  =:seq_ok,
@@ -165,7 +165,7 @@ class Sequence{
 
 
         $statement = $this->db_iDas->prepare($sql);
-        $statement->bindValue(':sequence_name', $jobdata['sequence_name']);
+        $statement->bindValue(':seq_name', $jobdata['seq_name']);
         $statement->bindValue(':tr', $jobdata['tr']);
         $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
         $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
@@ -211,7 +211,7 @@ class Sequence{
     #用jobid seqid oldseqname 查詢該筆的所有資料
     public function search_old_data($jobid,$seqid,$oldseqname){
 
-        $sql= " SELECT * FROM sequence WHERE job_id = ? AND seq_id = ? AND sequence_name = ? ";
+        $sql= " SELECT * FROM sequence WHERE job_id = ? AND seq_id = ? AND seq_name = ? ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$jobid,$seqid,$oldseqname]);
         $rows = $statement->fetch();
@@ -223,17 +223,17 @@ class Sequence{
     public function swapupdate($jobid, $rowInfoArray,$new_info) {
         $temp = array();
         foreach ($rowInfoArray as $k_s => $v_s) {
-            $sql = "SELECT seq_id FROM sequence WHERE job_id = ? AND sequence_name = ? ";
+            $sql = "SELECT seq_id FROM sequence WHERE job_id = ? AND seq_name = ? ";
             $statement = $this->db_iDas->prepare($sql);
-            $statement->execute([$jobid, $v_s['sequence_name']]);
+            $statement->execute([$jobid, $v_s['seq_name']]);
             $result = $statement->fetch(PDO::FETCH_ASSOC);
             
             if ($result) {
                 $new_val = 'New_Value'.($k_s + 1);
-                $update_sql = "UPDATE sequence SET seq_id = ? WHERE job_id = ? AND sequence_name = ? ";
+                $update_sql = "UPDATE sequence SET seq_id = ? WHERE job_id = ? AND seq_name = ? ";
 
                 $update_statement = $this->db_iDas->prepare($update_sql);
-                $update_statement->execute([$new_val, $jobid, $v_s['sequence_name']]);
+                $update_statement->execute([$new_val, $jobid, $v_s['seq_name']]);
 
 
                 $rows_count = $update_statement->rowCount();
@@ -241,9 +241,9 @@ class Sequence{
                     $new_val = 'New_Value'.($k_s + 1);
                     $updated_seq_id = preg_replace('/[^0-9]/', '', $new_val);
                     
-                    $update_id_sql = "UPDATE sequence SET seq_id = ? WHERE job_id = ? AND sequence_name = ? ";
+                    $update_id_sql = "UPDATE sequence SET seq_id = ? WHERE job_id = ? AND seq_name = ? ";
                     $update_id_statement = $this->db_iDas->prepare($update_id_sql);
-                    $update_id_statement->execute([$updated_seq_id, $jobid, $v_s['sequence_name']]);                  
+                    $update_id_statement->execute([$updated_seq_id, $jobid, $v_s['seq_name']]);                  
                 }
 
             }

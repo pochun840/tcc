@@ -119,7 +119,7 @@ class Settings extends Controller
             $data_array[] = $temp;
         }
         foreach ($seqs as $key => $value) {
-            $temp = ["id" => 'job_'.$value['job_id'].'_'.'seq_'.$value['seq_id'], "parent" => 'job_'.$value['job_id'], "text" => $value['sequence_name'] ];
+            $temp = ["id" => 'job_'.$value['job_id'].'_'.'seq_'.$value['seq_id'], "parent" => 'job_'.$value['job_id'], "text" => $value['seq_name'] ];
             $data_array[] = $temp;
         }
         foreach ($steps as $key => $value) {

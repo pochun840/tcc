@@ -463,7 +463,7 @@ if(isset($data['job_type'])){
 $text['already_top'] = '已經在最上方';
 $text['already_bottom'] = '已經在最下方';
 $text['delete_seq_confirm_text'] = '是否要刪除 工序 id: ';
-$error_message['sequence_name'] = '工序名稱輸入有誤';
+$error_message['seq_name'] = '工序名稱輸入有誤';
 $error_message['tr'] = '超出範圍 1 - 99';
 $error_message['timeout'] = '超出範圍 0.1 - 60.0';
 $error_message['to_seq_name'] = '工序名稱輸入有誤';

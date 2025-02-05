@@ -477,7 +477,7 @@ if(isset($data['job_type'])){
 $text['already_top'] = 'already on top';
 $text['already_bottom'] = 'already at the bottom';
 $text['delete_seq_confirm_text'] = 'Do you want to delete seq id: ';
-$error_message['sequence_name'] = 'Sequence name input error';
+$error_message['seq_name'] = 'Sequence name input error';
 $error_message['tr'] = 'Out of range 1 - 99';
 $error_message['timeout'] = 'Out of range 0.1 - 60.0';
 $error_message['to_seq_name'] = 'Sequence name input error';
