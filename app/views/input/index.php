@@ -1,4 +1,10 @@
-
+<style>
+ .main-content.overlay-active {
+  filter: grayscale(100%); /* 完全灰化 */
+  pointer-events: none; /* 禁止點擊 */
+  opacity: 0.3; /* 降低不透明度 */
+}   
+</style>    
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_input.css" type="text/css">
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -518,6 +524,16 @@
             </div>
         </div>
     </div>
+
+    <!-- 加载動畫 OP -->
+    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    <!-- 加载動畫 ED -->
+
+
 </div>
 
 <script>
@@ -629,6 +645,7 @@ function crud_job_event(argument){
     } 
     
     if(argument == 'del' && job_id  != '' &&  input_event != '')  {
+        document.querySelector(".main-content").classList.add("overlay-active");
         delete_input_id(job_id,input_event);
     }
 
@@ -836,7 +853,9 @@ function collectPinValues(selector) {
 
 //delete
 function delete_input_id(jobid,input_event){
+    
     if(job_id){
+        document.getElementById('spinner').style.display = 'block';
         $.ajax({
             url: "?url=Inputs/delete_input",
             method: "POST",

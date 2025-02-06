@@ -536,6 +536,7 @@ function copy_seq_by_id(){
 
 
     if(newseqname){
+
         $.ajax({
             url: "?url=Sequences/check_seq_type",
             method: "POST",
@@ -547,6 +548,10 @@ function copy_seq_by_id(){
             success: function(response) {
                 alertify.confirm(text_info, function (result) {
                 if(result){
+
+                    document.getElementById('spinner').style.display = 'block';
+
+
                     $.ajax({
                         url: "?url=Sequences/copy_seq_data",
                         method: "POST",
@@ -558,12 +563,25 @@ function copy_seq_by_id(){
                             newseqname: newseqname
                         },
                         success: function(response) {
-                            console.log(response);
                             var responseData = JSON.parse(response);
-                            alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                                history.go(0);
-                            });
-                           
+                            // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                            setTimeout(function() {
+                                // 隱藏 'copyjob' 和 'spinner' 加載動畫
+                                document.getElementById('copyseq').style.display = 'none';
+                                document.getElementById('spinner').style.display = 'none';  
+
+                                // 顯示 alertify 彈跳視窗
+                                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                    // 刷新頁面
+                                    history.go(0);  
+                                });
+
+                                // 在 3 秒後自動關閉 alertify 彈跳視窗
+                                setTimeout(function() {
+                                    alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                                    history.go(0); 
+                                }, 3000); 
+                            }, 1000); // 延遲 1000 毫秒
                         },
                         error: function(xhr, status, error) {
                             
