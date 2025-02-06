@@ -105,7 +105,7 @@
                         <div class="row">
                             <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?>:</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_id" maxlength="" value='<?php echo $data['next_job_id'];?>' >
+                                <input type="text" class="form-control input-ms" id="job_id" maxlength="" value='<?php echo $data['next_job_id'];?>' disabled>
                             </div>
                         </div>
                         <div class="row">
