@@ -208,7 +208,7 @@
                         <div class="row">
                             <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?>:</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_jobid" maxlength="" value='<?php echo $data['jobint'];?>' style="max-width: 100px;" >
+                                <input type="text" class="form-control input-ms" id="edit_jobid" maxlength="" value='<?php echo $data['jobint'];?>' style="max-width: 100px;" disabled >
                             </div>
                         </div>
                         <div class="row">

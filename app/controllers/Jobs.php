@@ -224,6 +224,15 @@ class Jobs extends Controller
         $new_jobid   = $_POST['new_jobid'] ?? null;
         $new_jobname = $_POST['new_jobname'] ?? null;
 
+        //檢查 $new_jobid 是否有存在 
+        $res = $this->jobModel->search_jobinfo($new_jobid);
+
+        if(!empty($res['job_id'])){
+            $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['job_id']);
+            exit();
+        }
+
+
         if(!empty($old_jobid)){
             $job_count = $this->jobModel->countjob();
             if($job_count > 50) {
