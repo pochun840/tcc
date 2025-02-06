@@ -366,7 +366,9 @@ class Sequences extends Controller
             $new_temp_step = array();
             foreach($select_step as $k_step =>$v_step){
                 $new_temp_step[$k_step]['job_id'] = $v_step['job_id'];
+                $new_temp_step[$k_step]['job_name'] = '';
                 $new_temp_step[$k_step]['seq_id'] = $newseqid;
+                $new_temp_step[$k_step]['seq_name'] = '';
                 $new_temp_step[$k_step]['step_id'] = $v_step['step_id'];
                 $new_temp_step[$k_step]['target_option'] =$v_step['target_option'];
                 $new_temp_step[$k_step]['target_torque'] = $v_step['target_torque'];
@@ -382,6 +384,7 @@ class Sequences extends Controller
                 $new_temp_step[$k_step]['threshold_torque'] = $v_step['threshold_torque'];
                 $new_temp_step[$k_step]['downshift_torque'] = $v_step['downshift_torque'];
                 $new_temp_step[$k_step]['downshift_speed'] = $v_step['downshift_speed'];
+                $new_temp_step[$k_step]['record_ang'] = $v_step['record_ang'];
 
             }
 

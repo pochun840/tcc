@@ -94,7 +94,7 @@
         </div>
 
         <div class="buttonbox">
-        <?php $status = count($data['sequences']) >  50 ? 'disabled' : ''; ?>
+        <?php $status = count($data['sequences']) >=  50 ? 'disabled' : ''; ?>
 
             <input id="S3" name="Seq_Manager_Submit" type="button" value="<?php echo $text['New'];?>" tabindex="1"  onclick="cound_job('new');" <?php echo $status;?> >
             <input id="S6" name="Seq_Manager_Submit" type="button" value="<?php echo $text['Edit'];?>" tabindex="1" onclick="cound_job('edit');">
@@ -108,7 +108,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: auto">
                 <header class="w3-container modal-header">
-                    <span onclick="hideElementById('newseq');"
+                    <span onclick="closebutton('newseq');" 
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px;font-size: 4.5vmin; margin: 3px">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_seq'];?></h3>
                 </header>
@@ -177,7 +177,7 @@
                                 <div class="row">
                                     <div for="k(30%-300%)" class="col-6 t1">K (30%-300%):</div>
                                     <div class="col-4 t2">
-                                        <input type="text" class="form-control input-ms" id="K" maxlength="" >
+                                        <input type="text" class="form-control input-ms" id="k_value" maxlength="" >
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -222,7 +222,7 @@
 
                 <div class="modal-footer justify-content-center">
                 <button id="" class="button-modal" onclick="saveseq();"><?php echo $text['save'];?></button>
-                <button id="" class="button-modal" onclick="hideElementById('newseq');"  class="closebtn"><?php echo $text['close'];?></button>
+                <button id="" class="button-modal" onclick="closebutton('newseq');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -233,7 +233,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: auto">
                 <header class="w3-container modal-header">
-                    <span onclick="hideElementById('editseq');"
+                    <span onclick="closebutton('editseq');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px;font-size: 4.5vmin; margin: 3px">&times;</span>
                     <h3 id='modal_title'><?php echo $text['edit_seq'];?></h3>
                 </header>
@@ -348,7 +348,7 @@
                 </div>    
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="edit_seq_save();"><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('editseq');"  class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closebutton('editseq');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -359,7 +359,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: auto">
                 <header class="w3-container modal-header">
-                    <span onclick="document.getElementById('copyseq').style.display='none'"
+                    <span onclick="closebutton('copyseq');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px;font-size: 4.5vmin; margin: 3px">&times;</span>
                     <h3 id='modal_title'><?php echo $text['Copy_Sequence'];?></h3>
                 </header>
@@ -402,7 +402,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="copy_seq_by_id()"><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('copyseq');" class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closebutton('copyseq');" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -633,7 +633,7 @@ function create_seq() {
     document.getElementById('newseq').style.display = 'block';
     document.getElementById('tr').value = 1;
     document.getElementById('seq_ok').checked = true;
-    document.getElementById('K').value = 100;
+    document.getElementById('k_value').value = 100;
     document.getElementById('stop_seq_ok_off').checked = true;
     document.getElementById('seq_off').checked = true;
     document.getElementById('OPT_ON').checked = true;
@@ -658,7 +658,7 @@ function saveseq(){
     var stop_seq_ok = seq_stop_Element ? seq_stop_Element.value : null;
 
     var opt_val = getSelectedValue('opt_option', null);
-    var k_value = document.getElementById("K").value;
+    var k_value = document.getElementById("k_value").value;
     var ofs = document.getElementById("ofs").value;
 
     //驗證
@@ -971,10 +971,13 @@ function validateInput(element, pattern, min, max) {
 }
 
 function input_check_saveseq() {
+
+    let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+
     let conditions = [
         { id: 'seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
-        { id: 'K', pattern: /^(1\.[5-9]|([1-9][0-9]{0,2}|[1-9][0-9]{3,})(\.[0-9])?|999(\.[0-7])?|999\.8)$/, min: 1.5, max: 999.8 },
+        { id: 'k_value', pattern: /^[0-9]+$/, min: 40, max: 300 },
         { id: 'ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 },
 
     ];
@@ -1001,6 +1004,9 @@ function input_check_saveseq() {
 }
 
 function input_check_editseq() {
+
+    let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+
     let conditions = [
         { id: 'edit_seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'edit_tr', pattern: /^[0-9]+$/, min: 1, max: 99 },

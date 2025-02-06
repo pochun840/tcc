@@ -97,7 +97,7 @@
         </div>
 
         <div class="buttonbox">
-        <?php $status = count($data['sequences']) >  50 ? 'disabled' : ''; ?>
+        <?php $status = count($data['sequences']) >=  50 ? 'disabled' : ''; ?>
             <input id="S3" name="Seq_Manager_Submit" type="button" value="<?php echo $text['New'];?>" tabindex="1"  onclick="cound_job('new');" <?php echo $status;?> >
             <input id="S6" name="Seq_Manager_Submit" type="button" value="<?php echo $text['Edit'];?>" tabindex="1" onclick="cound_job('edit');">
             <input id="S5" name="Seq_Manager_Submit" type="button" value="<?php echo $text['Copy'];?>" tabindex="1" onclick="cound_job('copy');" <?php echo $status;?> >
@@ -186,7 +186,7 @@
                         <div class="row">
                             <div for="k(30%-300%)" class="col-6 t1">K (30%-300%) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="K" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="k_value" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -658,7 +658,7 @@ function create_seq() {
     document.getElementById('tr').value = 1;
     document.getElementById('seq_off').checked = true;
 
-    document.getElementById('K').value = 100;
+    document.getElementById('k_value').value = 100;
     document.getElementById('stop_seq_ok_off').checked = true;
     document.getElementById('seq_ok').checked = true;
     document.getElementById('OPT_ON').checked = true;
@@ -683,7 +683,7 @@ function saveseq(){
     var stop_seq_ok = seq_stop_Element ? seq_stop_Element.value : null;
 
     var opt_val = getSelectedValue('opt_option', null);
-    var k_value = document.getElementById("K").value;
+    var k_value = document.getElementById("k_value").value;
     var ofs = document.getElementById("ofs").value;
 
     //驗證
@@ -979,7 +979,7 @@ function input_check_saveseq() {
     let conditions = [
         { id: 'seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
-        { id: 'K', pattern: /^(1\.[5-9]|([1-9][0-9]{0,2}|[1-9][0-9]{3,})(\.[0-9])?|999(\.[0-7])?|999\.8)$/, min: 1.5, max: 999.8 },
+        { id: 'k_value',  pattern: /^[0-9]+$/, min: 40, max: 300 },
         { id: 'ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
 

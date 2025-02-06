@@ -298,7 +298,9 @@ class Jobs extends Controller
                         foreach($select_step as $key_step =>$val_step){
 
                             $new_temp_step[$key_step]['job_id'] = $new_jobid;
+                            $new_temp_step[$key_step]['job_name'] = '';
                             $new_temp_step[$key_step]['seq_id'] = $val_step['seq_id'];
+                            $new_temp_step[$key_step]['seq_name'] = '';
                             $new_temp_step[$key_step]['step_id'] = $val_step['step_id'];
                             $new_temp_step[$key_step]['target_option'] = $val_step['target_option']; 
                             $new_temp_step[$key_step]['target_torque'] = $val_step['target_torque'];
@@ -314,6 +316,7 @@ class Jobs extends Controller
                             $new_temp_step[$key_step]['threshold_torque'] = $val_step['threshold_torque'];
                             $new_temp_step[$key_step]['downshift_torque'] = $val_step['downshift_torque'];
                             $new_temp_step[$key_step]['downshift_speed'] = $val_step['downshift_speed'];
+                            $new_temp_step[$key_step]['record_ang'] = $val_step['record_ang'];
                         }
                       
                         $res = $this->jobModel->copy_step_by_job_id($new_temp_step);     
