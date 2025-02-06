@@ -89,7 +89,7 @@ class Jobs extends Controller
             if ($resultName  == true  && $resultPower == true && $resultRpm == true) {
 
                 $job_count = $this->jobModel->countjob();
-                if($job_count >= 50) {
+                if($job_count > 50) {
                     $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['job_id']);
                     exit();
                 }
