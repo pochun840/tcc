@@ -461,16 +461,23 @@ function savejob() {
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                 setTimeout(function() {
-                    //隱藏加載動畫
+                    // 隱藏加載動畫
                     document.getElementById('spinner').style.display = 'none';
 
-                    //顯示 alertify 彈跳視窗
+                    // 顯示 alertify 彈跳視窗
                     alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        history.go(0);  //刷新頁面
+                        // 刷新頁面
+                        history.go(0);  
                     });
-                }, 1000); //延遲 1000 毫秒  
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        history.go(0); 
+                    }, 3000); 
+                }, 1000); // 延遲 1000 毫秒
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -531,23 +538,28 @@ function copy_job_by_id(jobid){
                             new_jobname: new_jobname
 
                         },
-                        success: function(response) { 
+                        //document.getElementById('spinner').style.display = 'none';  // 隱藏 spinner
+                        success: function(response) {
                             var responseData = JSON.parse(response);
-
-                            // 延遲 1000 毫秒後隱藏加載動畫（'copyjob' 和 'spinner'），並在隱藏後顯示 alertify 彈跳視窗
+                            // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                             setTimeout(function() {
                                 // 隱藏 'copyjob' 和 'spinner' 加載動畫
                                 document.getElementById('copyjob').style.display = 'none';
-                                document.getElementById('spinner').style.display = 'none';  // 隱藏 spinner
+                                document.getElementById('spinner').style.display = 'none';  
 
                                 // 顯示 alertify 彈跳視窗
                                 alertify.alert(responseData.res_type, responseData.res_msg, function() {
                                     // 刷新頁面
-                                    history.go(0);
+                                    history.go(0);  
                                 });
+
+                                // 在 3 秒後自動關閉 alertify 彈跳視窗
+                                setTimeout(function() {
+                                    alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                                    history.go(0); 
+                                }, 3000); 
                             }, 1000); // 延遲 1000 毫秒
                         },
-
                         error: function(xhr, status, error) {
                             
                         }

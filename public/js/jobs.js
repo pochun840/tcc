@@ -8,23 +8,32 @@ function delete_jobid(jobid) {
             data: { jobid: jobid },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                 setTimeout(function() {
-                    //隱藏加載動畫
+                    // 隱藏加載動畫
                     document.getElementById('spinner').style.display = 'none';
 
-                    //顯示 alertify 彈跳視窗
+                    // 顯示 alertify 彈跳視窗
                     alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        history.go(0);  //刷新頁面
+                        // 刷新頁面
+                        history.go(0);  
                     });
-                }, 1000); //延遲 1000 毫秒  
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        history.go(0); 
+                    }, 3000); 
+                }, 1000); // 延遲 1000 毫秒
             },
             error: function(xhr, status, error) {
-                
+                // 這裡可以處理 AJAX 請求失敗的情況
             }
         });
     }
 }
+
+
 var oldjobname ='';
 var old_jobid  = '';
 function cound_job(argument){
@@ -113,24 +122,30 @@ function updatejob(){
             success: function(response) {   
                 var responseData = JSON.parse(response);
                 
-                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                 setTimeout(function() {
-                    //隱藏加載動畫
+                    // 隱藏加載動畫
                     document.getElementById('spinner').style.display = 'none';
 
-                    //顯示 alertify 彈跳視窗
+                    // 顯示 alertify 彈跳視窗
                     alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        // 將數據存储到 localStorage
-                        localStorage.setItem('jobid', jobid);
-                        localStorage.setItem('jobname', jobname);
-                        localStorage.setItem('rev_speed', speedvalue);
-                        localStorage.setItem('rev_force', forcevalue);
-                        localStorage.setItem('direction', directionValue);
-
-                        //刷新頁面
-                        history.go(0);
+                        // 在這裡可以進行其他回調操作，如果需要的話
                     });
-                }, 1000); //延遲 1000 毫秒 
+
+                    // 儲存數據到 localStorage
+                    localStorage.setItem('jobid', jobid);
+                    localStorage.setItem('jobname', jobname);
+                    localStorage.setItem('rev_speed', speedvalue);
+                    localStorage.setItem('rev_force', forcevalue);
+                    localStorage.setItem('direction', directionValue);
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗並刷新頁面
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        // 刷新頁面
+                        history.go(0);
+                    }, 3000); // 3000 毫秒 = 3 秒
+                }, 1000); // 延遲 1000 毫秒 
             },
             error: function(xhr, status, error) {
                 
