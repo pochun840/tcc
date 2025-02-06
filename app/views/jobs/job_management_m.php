@@ -609,6 +609,9 @@ function validateInput(element, pattern, min, max) {
 }
 
 function input_check_savejob() {
+
+    let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+
     let conditions = [
         { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'rev_speed', pattern: /^[0-9]+$/, min: 1, max: 1100 },
@@ -620,7 +623,7 @@ function input_check_savejob() {
     conditions.forEach(function(input) {
         var element = document.getElementById(input.id);
         if (input.id !== 'job_name') {
-            element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
+             element.nextElementSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
         }
 
         if (!validateInput(element, input.pattern, input.min, input.max)) {
@@ -632,6 +635,9 @@ function input_check_savejob() {
 }
 
 function input_check_editjob() {
+
+    let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+
     let conditions = [
         { id: 'edit_jobname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'edit_rev_speed', pattern: /^[0-9]+$/, min: 1, max: 1100 },
@@ -641,14 +647,12 @@ function input_check_editjob() {
     let isFormValid = true;
     conditions.forEach(function(input) {
         var element = document.getElementById(input.id);
-        /*if (input.id !== 'edit_jobname') {
-            element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
-        }*/
+     
 
         if (input.id !== 'edit_jobname') {
             const nextSibling = element.nextElementSibling; // 先存起來，避免重複呼叫
             if (nextSibling) { // 檢查 nextSibling 是否不為 null
-                nextSibling.innerHTML = `${input.min} ~ ${input.max}`;
+                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
             } else {
                 console.error(`Element with id '${input.id}' does not have a next sibling.`); // 錯誤處理，例如輸出到控制台
                 // 或者你可以選擇創建一個新的元素，並將它插入到 element 之後

@@ -445,21 +445,14 @@ $error_message['unfasten_force'] = '超出范围';
 $error_message['copy_to_id'] = '工作ID输入有误 1 - 50';
 $error_message['copy_to_name'] = '工作名称输入有误';
 
+$error_message['OOR'] = '超出范围:';
+
 if(isset($data['tool_info'])){
 	$error_message['unfasten_RPM'] = '超出范围 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
 	$error_message['unfasten_force'] = '超出范围 1 - 110';
 }
 
-if(isset($data['job_type'])){
-	if($data['job_type'] == 'normal'){
-		$error_message['job_id'] = '工作ID超出范围 1 - 99';
-		$error_message['copy_to_id'] = '工作ID超出范围 1 - 99';
-	}
-	if($data['job_type'] == 'advanced'){
-		$error_message['job_id'] = '工作ID超出范围 101 - 170';
-		$error_message['copy_to_id'] = '工作ID超出范围 101 - 170';
-	}
-}
+
 
 //------sequence manage
 $text['already_top'] = '已经在最上方';

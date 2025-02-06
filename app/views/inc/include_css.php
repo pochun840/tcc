@@ -1,5 +1,5 @@
 <?php 
-
+# inliude CSS 及 JS 
 function includecss_file($part, $cssFileName) {
     $queryString = $_SERVER['QUERY_STRING'];
     $queryStringWithoutUrl = str_replace('url=', '', $queryString);
@@ -44,7 +44,7 @@ function includecss_file($part, $cssFileName) {
             //includecss_file("Sequences", "tcc_seq_m.css");
             //includecss_file("Jobs", "tcc_jobs_m.css");
             //includecss_file("Step", "tcc_step_m.css");
-           //includecss_file("Dashboards","tcc_operation_m.css");
+            //includecss_file("Dashboards","tcc_operation_m.css");
             //includecss_file("Data","tcc_data.css");
             //includecss_file("Settings","tcc_setting_m.css");
     
@@ -65,7 +65,7 @@ function includecss_file($part, $cssFileName) {
         includecss_file("Outputs", "outputs.js");
         includecss_file("Jobs", "jobs.js");
         includecss_file("Data", "data.js");
-        //includecss_file("Sequences", "seq.js");
+        includecss_file("Sequences", "seq.js");
         includecss_file("Step", "step.js");
         includecss_file("Settings", "settings.js");
 

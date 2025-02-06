@@ -388,6 +388,36 @@ class Sequence{
         }
     }
 
+     //查詢 seq_id 還沒有 被使用的 取出 最小值
+     public function get_head_seq_id() {
+
+        // 檢查 seq_id 是否有 1，如果沒有就直接返回 1
+        $query = "SELECT seq_id FROM sequence WHERE seq_id = 1 ";
+        $statement = $this->db_iDas->prepare($query);
+        $statement->execute();
+    
+        $result = $statement->fetch();
+        if (!$result) {
+            return array('missing_id' => 1); // 如果 seq_id = 1 不存在，返回 1
+        }
+    
+        // 如果 seq_id = 1 存在，查找最小的可用 seq_id
+        $query = "SELECT seq_id + 1 AS missing_id
+                  FROM sequence
+                  WHERE (seq_id + 1) NOT IN (SELECT seq_id FROM sequence)
+                  ORDER BY missing_id
+                  LIMIT 1";
+    
+        $statement = $this->db_iDas->prepare($query);
+        $statement->execute();
+    
+        return $statement->fetch();
+    }
+
+
+
+
+
 
     
 }

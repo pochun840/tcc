@@ -457,6 +457,8 @@ $error_message['unfasten_force'] = 'Out of range';
 $error_message['copy_to_id'] = 'JOB ID input error 1 - 50';
 $error_message['copy_to_name'] = 'JOB name input error';
 
+$error_message['OOR'] = 'Out of range :';
+
 if(isset($data['tool_info'])){
 	$error_message['unfasten_RPM'] = 'Out of range'.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
 	$error_message['unfasten_force'] = 'Out of range 1 - 110';
@@ -472,6 +474,7 @@ if(isset($data['job_type'])){
 		$error_message['copy_to_id'] = 'JOB ID out of range 101 - 170';
 	}
 }
+
 
 //------sequence manage
 $text['already_top'] = 'already on top';

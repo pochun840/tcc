@@ -125,13 +125,13 @@
                                 <div class="row">
                                     <div for="seq-id" class="col-6 t1"><?php echo $text['seq_id'];?>:</div>
                                     <div class="col-4 t2">
-                                        <input type="text" class="form-control input-ms" id="seq_id" maxlength="" value="<?php echo $data['seq_id'];?>" disabled>
+                                        <input type="text" class="form-control input-ms" id="seq_id" maxlength="" value="<?php echo $data['next_seq_id'];?>" disabled>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div for="seq-name" class="col-6 t1"><?php echo $text['seq_name'];?>:</div>
                                     <div class="col-4 t2">
-                                        <input type="text" class="form-control input-ms" id="seq_name" maxlength="" value ='<?php echo "SEQ"."-".$data['seq_id'];?>'>
+                                        <input type="text" class="form-control input-ms" id="seq_name" maxlength="" value ='<?php echo "SEQ"."-".$data['next_seq_id'];?>'>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -387,13 +387,13 @@
         				    <div class="row">
         				        <label for="to_seq_id" class="t1 col-4 col-form-label"><?php echo $text['seq_id'];?> :</label>
         				        <div class="t2 col-5">
-        				            <input type="number" class="form-control" id="to_seq_id">
+        				            <input type="number" class="form-control" id="to_seq_id" value= '<?php echo $data['next_seq_id'];?>'>
         				        </div>
         				    </div>
         				    <div class="row">
         				        <label for="to_seq_name" class="t1 col-4 col-form-label"><?php echo $text['seq_name'];?> :</label>
         				        <div class="t2 col-5">
-        				            <input type="text" class="form-control" id="to_seq_name">
+        				            <input type="text" class="form-control" id="to_seq_name" value ='<?php echo "SEQ"."-".$data['next_seq_id'];?>'>
         				        </div>
         				    </div>
         			    </div>
@@ -602,16 +602,23 @@ function delete_seqid(seqid){
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                 setTimeout(function() {
-                    //隱藏加載動畫
+                    // 隱藏加載動畫
                     document.getElementById('spinner').style.display = 'none';
 
-                    //顯示 alertify 彈跳視窗
+                    // 顯示 alertify 彈跳視窗
                     alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        history.go(0);  //刷新頁面
+                        // 刷新頁面
+                        history.go(0);  
                     });
-                }, 1000); //延遲 1000 毫秒  
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        history.go(0); 
+                    }, 3000); 
+                }, 1000); // 延遲 1000 毫秒
             },
             error: function(xhr, status, error) {
                 
@@ -638,7 +645,7 @@ function create_seq() {
 function saveseq(){
 
     var jobid = '<?php echo $data['job_id']?>';
-    var seqid = '<?php echo $data['seq_id']?>';
+    var seqid = '<?php echo $data['next_seq_id']?>';
     var seq_name = document.getElementById("seq_name").value;
     var tr = document.getElementById("tr").value;
  
@@ -678,16 +685,23 @@ function saveseq(){
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                 setTimeout(function() {
-                    //隱藏加載動畫
+                    // 隱藏加載動畫
                     document.getElementById('spinner').style.display = 'none';
 
-                    //顯示 alertify 彈跳視窗
+                    // 顯示 alertify 彈跳視窗
                     alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        history.go(0);  //刷新頁面
+                        // 刷新頁面
+                        history.go(0);  
                     });
-                }, 1000); //延遲 1000 毫秒  
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        history.go(0); 
+                    }, 3000); 
+                }, 1000); // 延遲 1000 毫秒
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -776,7 +790,9 @@ function edit_seq_save(){
     let check = input_check_editseq();
     
     if(check){
+
         document.getElementById('spinner').style.display = 'block';
+
         $.ajax({
             url: "?url=Sequences/edit_seq",
             method: "POST",
@@ -795,16 +811,23 @@ function edit_seq_save(){
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                //延遲 1000 毫秒後隱藏加載動畫，並在隐藏後顯示 alertify 彈跳視窗
+                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                 setTimeout(function() {
-                    //隱藏加載動畫
+                    // 隱藏加載動畫
                     document.getElementById('spinner').style.display = 'none';
 
-                    //顯示 alertify 彈跳視窗
+                    // 顯示 alertify 彈跳視窗
                     alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        history.go(0);  //刷新頁面
+                        // 刷新頁面
+                        history.go(0);  
                     });
-                }, 1000); //延遲 1000 毫秒  
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        history.go(0); 
+                    }, 3000); 
+                }, 1000); // 延遲 1000 毫秒
             },
             error: function(xhr, status, error) {
                 
@@ -963,7 +986,7 @@ function input_check_saveseq() {
         if (input.id !== 'seq_name') {
             let nextSibling = element.nextElementSibling;
             if (nextSibling) {
-                nextSibling.innerHTML = `${input.min} ~ ${input.max}`;
+                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
             } else {
                 console.warn(`No next sibling found for element with id ${input.id}`);
             }
@@ -992,7 +1015,7 @@ function input_check_editseq() {
         if (input.id !== 'edit_seq_name') {
             let nextSibling = element.nextElementSibling;
             if (nextSibling) {
-                nextSibling.innerHTML = `${input.min} ~ ${input.max}`;
+                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
             } else {
                 console.warn(`No next sibling found for element with id ${input.id}`);
             }

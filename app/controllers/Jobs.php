@@ -18,6 +18,8 @@ class Jobs extends Controller
 
     // 取得所有Jobs
     public function index(){
+
+        
         $data = array();
         
 
@@ -34,13 +36,17 @@ class Jobs extends Controller
             $lastRow  = 1; 
             $jobIdInt = 1;
         }
-        ;
+
+        //
+
 
         $data = array(
             'jobint' => $jobIdInt,
             'next_job_id' => $next_job_id,
             'jobs' => $jobs,
             'direction' => $direction,
+            //'OOR' => $text['OOR'],
+
         );
         
         if($isMobile){

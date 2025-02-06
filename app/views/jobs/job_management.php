@@ -622,6 +622,9 @@ function validateInput(element, pattern, min, max) {
 }
 
 function input_check_savejob() {
+
+    let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+
     let conditions = [
         { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'rev_speed', pattern: /^[0-9]+$/, min: 1, max: 1100 },
@@ -633,7 +636,7 @@ function input_check_savejob() {
     conditions.forEach(function(input) {
         var element = document.getElementById(input.id);
         if (input.id !== 'job_name') {
-            element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
+            element.nextElementSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
         }
 
         if (!validateInput(element, input.pattern, input.min, input.max)) {
@@ -645,6 +648,9 @@ function input_check_savejob() {
 }
 
 function input_check_editjob() {
+
+    let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+
     let conditions = [
         { id: 'edit_jobname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'edit_rev_speed', pattern: /^[0-9]+$/, min: 1, max: 1100 },
@@ -656,7 +662,7 @@ function input_check_editjob() {
     conditions.forEach(function(input) {
         var element = document.getElementById(input.id);
         if (input.id !== 'edit_jobname') {
-            element.nextElementSibling.innerHTML = `${input.min} ~ ${input.max}`;
+            element.nextElementSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
         }
 
         if (!validateInput(element, input.pattern, input.min, input.max)) {

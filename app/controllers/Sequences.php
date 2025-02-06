@@ -22,6 +22,9 @@ class Sequences extends Controller
         $sequences  = $this->sequenceModel->getSequences_by_job_id($job_id);
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
 
+        $next_seq_id_arr = $this->sequenceModel->get_head_seq_id();
+        $next_seq_id = (int)$next_seq_id_arr['missing_id'];
+
         if(empty($sequences)){
             $seq_id = 1;
         }else{
@@ -38,6 +41,7 @@ class Sequences extends Controller
             'unit_arr' => $unit_arr,
             'seq_id' => $seq_id,
             'old_seqid' => '',
+            'next_seq_id' => $next_seq_id
 
 
         );
@@ -117,7 +121,7 @@ class Sequences extends Controller
                 'ofs' => $ofs,
             );
 
-
+            
             if(!empty($jobdata['ofs'])){
                 $jobdata['ofs'] = sprintf("%+03d", $jobdata['ofs']);
             }

@@ -443,9 +443,12 @@ $error_message['unfasten_force'] = '超出範圍';
 $error_message['copy_to_id'] = 'JOB ID輸入有誤 1 - 50';
 $error_message['copy_to_name'] = 'JOB名稱輸入有誤';
 
+
+$error_message['OOR'] = '超出範圍:';
+
 if(isset($data['tool_info'])){
 	$error_message['unfasten_RPM'] = '超出範圍 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
-	$error_message['unfasten_force'] = '超出範圍 1 - 10';
+	$error_message['unfasten_force'] = '超出範圍 10 - 110';
 }
 
 if(isset($data['job_type'])){
