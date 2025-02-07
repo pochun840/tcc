@@ -283,8 +283,6 @@ class Jobs extends Controller
                             $new_temp_seq[$key]['opt'] = $val['opt']; 
                             $new_temp_seq[$key]['k_value'] = $val['k_value']; 
                             $new_temp_seq[$key]['seq_ofs'] = $val['seq_ofs'];
-
-                            
                         }
 
                         $insertedrecords = $this->jobModel->copy_sequence_by_job_id($new_temp_seq);                
@@ -335,12 +333,6 @@ class Jobs extends Controller
 
     }
 
-
-    //查詢 job_id 還沒有 被使用的 取出 最小值
-    public function get_min_job_id(){
-
-        
-    }
 
 }
 

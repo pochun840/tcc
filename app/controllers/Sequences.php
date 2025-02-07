@@ -72,7 +72,7 @@ class Sequences extends Controller
             $seq_tr = isset($_POST['seq_tr']) ? intval($_POST['seq_tr']) : 1;
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
-            $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : '';
+            $seq_opt = isset($_POST['seq_opt']) ? intval($_POST['seq_opt']) : 0;
             $seq_ns = isset($_POST['seq_ns']) ? intval($_POST['seq_ns']) : 0;
             $seq_ofs = isset($_POST['seq_ofs']) ? intval($_POST['seq_ofs']) : 0;  
 
@@ -113,7 +113,7 @@ class Sequences extends Controller
                 'seq_ns' => $seq_ns,
                 'seq_ok'  => $seq_ok,
                 'stop_seq_ok' => $stop_seq_ok, 
-                'opt' => $opt_val,
+                'seq_opt' => $seq_opt,
                 'k_value' => $k_value,
                 'seq_ofs' => $seq_ofs,
             );
@@ -203,7 +203,7 @@ class Sequences extends Controller
             $seq_ns = isset($_POST['seq_ns']) ? intval($_POST['seq_ns']) : 0;
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
-            $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : 0;
+            $seq_opt = isset($_POST['seq_opt']) ? intval($_POST['seq_opt']) : 0;
             $k_value = isset($_POST['k_value']) ? floatval($_POST['k_value']) : 100;
             $seq_ofs = isset($_POST['seq_ofs']) ? intval($_POST['seq_ofs']) : 0;  
 
@@ -238,11 +238,6 @@ class Sequences extends Controller
             $seq_count = $this->sequenceModel->countseq($jobid);
             $seq_count = intval($seq_count);
            
-            #檢查job 
-            /*if($seq_count > 50) {
-                echo "The maximum number of steps has been reached, unable to continue copying seqs";
-                return;
-            }*/
            
             $jobdata = array(
                 'job_id' => $jobid,
@@ -253,7 +248,7 @@ class Sequences extends Controller
                 'seq_ns' => $seq_ns,
                 'seq_ok'  => $seq_ok,
                 'stop_seq_ok' =>$stop_seq_ok,
-                'opt' => $opt_val,
+                'seq_opt' => $seq_opt,
                 'k_value' => $k_value,
                 'seq_ofs' => $seq_ofs,
             );
@@ -279,14 +274,11 @@ class Sequences extends Controller
     }
 
 
-
-
     public function check_seq_type(){
         
         $jobid = $_POST['jobid'] ?? null;
         $seqid = $_POST['newseqid'] ?? null;
         
-
         if(!empty($seqid)){
             $res  = $this->sequenceModel->seq_id_repeat($jobid,$seqid);
             if($res == "True"){
@@ -355,7 +347,7 @@ class Sequences extends Controller
                 $new_temp_seq[$kk]['seq_ns'] = $vv['seq_ns']; 
                 $new_temp_seq[$kk]['seq_ok'] = $vv['seq_ok']; 
                 $new_temp_seq[$kk]['stop_seq_ok'] = $vv['stop_seq_ok']; 
-                $new_temp_seq[$kk]['opt'] = $vv['opt']; 
+                $new_temp_seq[$kk]['seq_opt'] = $vv['seq_opt']; 
                 $new_temp_seq[$kk]['k_value'] = $vv['k_value']; 
                 $new_temp_seq[$kk]['seq_ofs'] = $vv['seq_ofs'];
 

@@ -321,7 +321,7 @@
                         <div class="row">
                             <div for="offset" class="col-6 t1"><?php echo $text['Joint_Offset'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_ofs" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_seq_ofs" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -669,7 +669,7 @@ function saveseq(){
     var seq_stop_Element = document.querySelector('input[name="stop_seq_ok"]:checked');
     var stop_seq_ok = seq_stop_Element ? seq_stop_Element.value : null;
 
-    var opt_val = getSelectedValue('opt_option', null);
+    var seq_opt = getSelectedValue('opt_option', null);
     var k_value = document.getElementById("k_value").value;
     var seq_ofs = document.getElementById("seq_ofs").value;
 
@@ -690,7 +690,7 @@ function saveseq(){
                 seq_ns: seq_ns,
                 seq_ok:seq_ok,
                 stop_seq_ok:stop_seq_ok,
-                opt_val: opt_val,
+                seq_opt: seq_opt,
                 k_value: k_value,
                 seq_ofs: seq_ofs
 
@@ -748,11 +748,10 @@ function edit_seq(seqid) {
                 var [, k_value] = cleanString.match(/\[k_value]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ofs] = cleanString.match(/\[seq_ofs]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ns] = cleanString.match(/\[seq_ns]\s*=>\s*([^ ]+)/) || [, null];
-                
-                var [, opt] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
+
                 var [, seq_ok] = cleanString.match(/\[seq_ok]\s*=>\s*([^ ]+)/) || [, null];
                 var [, stop_seq_ok] = cleanString.match(/\[stop_seq_ok]\s*=>\s*([^ ]+)/) || [, null];
-                var [, opt_val] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seq_opt] = cleanString.match(/\[seq_opt]\s*=>\s*([^ ]+)/) || [, null];
                
    
         
@@ -773,7 +772,7 @@ function edit_seq(seqid) {
 
 
                 var radioButtons_2 = document.getElementsByName("edit_opt_option");
-                setRadioButton_value(radioButtons_2, opt_val);
+                setRadioButton_value(radioButtons_2, seq_opt);
   
             },
             error: function(xhr, status, error) {
@@ -792,8 +791,8 @@ function edit_seq_save(){
     var stop_seq_ok = document.querySelector('input[name="edit_stop_seq_ok"]:checked').value;
     var k_value = document.getElementById("edit_K").value;
     var seq_ofs = document.getElementById("edit_seq_ofs").value;
-    var seq_nss = document.getElementById('edit_seq_ns').value;
-    var opt_val = document.querySelector('input[name="edit_opt_option"]:checked').value;
+    var seq_ns = document.getElementById('edit_seq_ns').value;
+    var seq_opt = document.querySelector('input[name="edit_opt_option"]:checked').value;
 
     //驗證
     let check = input_check_editseq();
@@ -812,7 +811,7 @@ function edit_seq_save(){
                 k_value: k_value,
                 seq_ofs: seq_ofs,
                 seq_nss: seq_ns,
-                opt_val: opt_val
+                seq_opt: seq_opt
 
             },
             success: function(response) {
