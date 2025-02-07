@@ -8,14 +8,26 @@ class Tool{
     // 在建構子將 Database 物件實例化
     public function __construct()
     {
-        $this->db = new Database;
-        $this->db = $this->db->getDb();
+        //$this->db = new Database;
+        //$this->db = $this->db->getDb();
 
-        $this->db_data = new Database;
-        $this->db_data = $this->db_data->getDb_data();
+        $this->db_tools = new Database;
+        $this->db_tools = $this->db_tools->getDb_tools();
 
         $this->dbh = new Database;
 
+    }
+
+
+    #取的tool 相關資料
+    public function GetToolInfo()
+    {
+        $sql = "SELECT * FROM tool_info ";
+        $statement = $this->db_tools->prepare($sql);
+        $results = $statement->execute();
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $row;
     }
 
     /*public function GetControllerInfo()

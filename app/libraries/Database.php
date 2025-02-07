@@ -13,6 +13,7 @@ class Database
     private $db_iDas;//iDas db
     private $db_iDas_login;
     private $db_iDas_device;
+    private $db_tools;
     public function __construct()
     {
         // 透過 PDO 建立資料庫連線
@@ -61,6 +62,7 @@ class Database
             $this->db_iDas = new PDO('sqlite:../idas_data.db'); 
             $this->db_iDas_login = new PDO('sqlite:../das.db'); 
             $this->db_iDas_device = new PDO('sqlite:../data_device.db'); 
+            $this->db_tools = new PDO('sqlite:../tcc_dev.db');
             //$this->db_iDas_device = new PDO('sqlite:../data.db'); 
 
         }
@@ -113,15 +115,10 @@ class Database
         }
     }
 
-
-    public function get_tool_rpm()
-    {
-        $sql = "SELECT tool_maxrpm,tool_minrpm FROM tool_info";
-        $statement = $this->db_dev->prepare($sql);
-        $results = $statement->execute();
-        $rows = $statement->fetch();
-
-        return $rows;
+    public function getDb_tools() {
+        if ($this->db_tools instanceof PDO) {
+            return $this->db_tools;
+        }
     }
 
     private function iDasDB_Initail()
@@ -132,7 +129,7 @@ class Database
             $source1 = "/home/kls/tcc/resource/db_emmc/data.db";
             $destination1 = "/home/kls/tcc/resource/db_emmc/iDas-data.db";
         }else{
-             $source = "/var/www/html/database/data.db";
+            $source = "/var/www/html/database/data.db";
             $destination = "/var/www/html/database/iDasdata.db";
             $source1 = "/var/www/html/database/data.db";
             $destination1 = "/var/www/html/database/iDas-data.db";

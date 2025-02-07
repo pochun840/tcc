@@ -450,6 +450,7 @@ $error_message = array();
 
 //------job manage
 $error_message['job_id'] = 'JOB ID out of range 1 - 50';
+$error_message['job_id_exist'] = 'JOB ID already exists';
 $error_message['job_name'] = 'JOB name input error';
 $error_message['unfasten_RPM'] = 'Out of range';
 $error_message['unfasten_force'] = 'Out of range';

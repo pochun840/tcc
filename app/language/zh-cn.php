@@ -438,6 +438,7 @@ $error_message = array();
 
 //------job manage
 $error_message['job_id'] = '工作ID超出范围 1 - 50';
+$error_message['job_id_exist'] = '工作ID 已存在';
 $error_message['job_name'] = '工作名称输入有误';
 $error_message['unfasten_RPM'] = '超出范围';
 $error_message['unfasten_force'] = '超出范围';

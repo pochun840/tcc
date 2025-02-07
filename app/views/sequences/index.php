@@ -759,7 +759,7 @@ function edit_seq(seqid) {
                 document.getElementById('editseq').style.display = 'block';
                 document.getElementById("old_seqid").value = seqid;
                 document.getElementById("edit_seq_name").value = seqname;
-                document.getElementById("edit_seq_tr").value = tr;
+                document.getElementById("edit_seq_tr").value = seq_tr;
 
                 document.getElementById("edit_K").value = k_value;
                 document.getElementById("edit_seq_ofs").value = seq_ofs;

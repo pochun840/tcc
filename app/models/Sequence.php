@@ -38,10 +38,10 @@ class Sequence{
     public function create_seq($mode, $jobdata) {
 
 
-        if(intval($jobdata['job_id']) > 50 || intval($jobdata['seq_id']) > 50) {
+        /*if(intval($jobdata['job_id']) > 50 || intval($jobdata['seq_id']) > 50) {
            
             return false; 
-        }
+        }*/
 
         $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, opt, k_value, seq_ofs)";
         $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :seq_ofs);";

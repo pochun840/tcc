@@ -9,7 +9,7 @@ function create_seq() {
     document.getElementById('stop_seq_ok_off').checked = true;
     document.getElementById('seq_off').checked = true;
     document.getElementById('OPT_ON').checked = true;
-    document.getElementById('ofs').value = 0;
+    document.getElementById('seq_ofs').value = 0;
     document.getElementById('seq_ns').selectedIndex = 1;
     
 }

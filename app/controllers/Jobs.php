@@ -12,7 +12,7 @@ class Jobs extends Controller
         $this->jobModel = $this->model('Job');
         $this->DashboardModel = $this->model('Dashboard');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
-
+        $this->ToolModel = $this->model('Tool');
 
     }
 
@@ -25,6 +25,7 @@ class Jobs extends Controller
 
         $isMobile  = $this->isMobileCheck();
         $jobs      = $this->jobModel->getJobs();
+        $tools     = $this->ToolModel->GetToolInfo();
         $direction = $this->MiscellaneousModel->details('rev_direction');
 
         $next_job_id_arr = $this->jobModel->get_head_job_id();
@@ -37,14 +38,14 @@ class Jobs extends Controller
             $jobIdInt = 1;
         }
 
-        //
 
 
         $data = array(
             'jobint' => $jobIdInt,
             'next_job_id' => $next_job_id,
             'jobs' => $jobs,
-            'direction' => $direction
+            'direction' => $direction,
+            'tools' => $tools
         );
         
         if($isMobile){
@@ -230,9 +231,8 @@ class Jobs extends Controller
 
         //檢查 $new_jobid 是否有存在 
         $res = $this->jobModel->search_jobinfo($new_jobid);
-
         if(!empty($res['job_id'])){
-            $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['job_id']);
+            $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['job_id_exist'] );
             exit();
         }
 

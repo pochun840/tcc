@@ -625,9 +625,12 @@ function input_check_savejob() {
 
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 
+    let max_rpm = "<?php echo $data['tools']['tool_maxrpm']?>";
+    let min_rpm = "<?php echo $data['tools']['tool_minrpm']?>";
+
     let conditions = [
         { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'rev_speed', pattern: /^[0-9]+$/, min: 1, max: 1100 },
+        { id: 'rev_speed', pattern: /^[0-9]+$/, min: min_rpm, max: max_rpm },
         { id: 'rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 
@@ -650,10 +653,13 @@ function input_check_savejob() {
 function input_check_editjob() {
 
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+    
+    let max_rpm = "<?php echo $data['tools']['tool_maxrpm']?>";
+    let min_rpm = "<?php echo $data['tools']['tool_minrpm']?>";
 
     let conditions = [
         { id: 'edit_jobname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'edit_rev_speed', pattern: /^[0-9]+$/, min: 1, max: 1100 },
+        { id: 'edit_rev_speed', pattern: /^[0-9]+$/, min: min_rpm, max: max_rpm },
         { id: 'edit_rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 

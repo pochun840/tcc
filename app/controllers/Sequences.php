@@ -77,7 +77,6 @@ class Sequences extends Controller
             $seq_ofs = isset($_POST['seq_ofs']) ? intval($_POST['seq_ofs']) : 0;  
 
             $seq_name = $_POST['seq_name'];
-            
         
             #驗證seq_name 
             if(!$this->MiscellaneousModel->seq_validate($seq_name, 'name')) {
@@ -119,10 +118,6 @@ class Sequences extends Controller
                 'seq_ofs' => $seq_ofs,
             );
 
-            
-            if(!empty($jobdata['seq_ofs'])){
-                $jobdata['seq_ofs'] = sprintf("%+03d", $jobdata['seq_ofs']);
-            }
            
             $mode = "create";
             $res = $this->sequenceModel->create_seq($mode,$jobdata);
@@ -238,7 +233,7 @@ class Sequences extends Controller
             }
 
 
-            $seq_ofs = sprintf("%+03d", $seq_ofs);
+            //$seq_ofs = sprintf("%+03d", $seq_ofs);
 
             $seq_count = $this->sequenceModel->countseq($jobid);
             $seq_count = intval($seq_count);
