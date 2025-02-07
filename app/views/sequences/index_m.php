@@ -175,7 +175,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div for="k(30%-300%)" class="col-6 t1">K (30%-300%):</div>
+                                    <div for="k(30%-300%)" class="col-6 t1">K (40%-300%):</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="k_value" maxlength="" >
                                         <div class="invalid-feedback"></div>
@@ -303,7 +303,7 @@
 
                                 
                                 <div class="row">
-                                    <div for="k(30%-300%)" class="col-6 t1">K (30%-300%):</div>
+                                    <div for="k(30%-300%)" class="col-6 t1">K (40%-300%):</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_K" maxlength="" >
                                         <div class="invalid-feedback"></div>
@@ -628,19 +628,6 @@ function delete_seqid(seqid){
 
 }
 
-function create_seq() {
-    // 帶入預設值
-    document.getElementById('newseq').style.display = 'block';
-    document.getElementById('tr').value = 1;
-    document.getElementById('seq_ok').checked = true;
-    document.getElementById('k_value').value = 100;
-    document.getElementById('stop_seq_ok_off').checked = true;
-    document.getElementById('seq_off').checked = true;
-    document.getElementById('OPT_ON').checked = true;
-    document.getElementById('ofs').value = 0;
-    document.getElementById('ns').selectedIndex = 1;
-    
-}
 
 function saveseq(){
 
@@ -1009,8 +996,8 @@ function input_check_editseq() {
 
     let conditions = [
         { id: 'edit_seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'edit_tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
-        { id: 'edit_K', pattern: /^(1\.[5-9]|([1-9][0-9]{0,2}|[1-9][0-9]{3,})(\.[0-9])?|999(\.[0-7])?|999\.8)$/, min: 1.5, max: 999.8 },
+        { id: 'edit_tr',  pattern: /^[0-9]+$/, min: 1, max: 99 },
+        { id: 'edit_K',   pattern: /^[0-9]+$/, min: 40, max: 300 },
         { id: 'edit_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 },
     ];
 

@@ -66,9 +66,7 @@
 {
     overflow-y: auto;
     padding: 3px 0px;
-    max-height: 700px;
 }
-
 
 table
 {
@@ -141,7 +139,6 @@ th, td
     text-align: center;
     margin: auto;
 }
-
 
 /**  STYLE Job Table */
 #style-jobtable::-webkit-scrollbar
@@ -301,7 +298,3 @@ select
     color: #000;
     transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
 }
-
-.t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
-.t2{font-size: 17px; margin: 5px 0px;}
-.t3{font-size: 17px; margin: 3px 0px;}

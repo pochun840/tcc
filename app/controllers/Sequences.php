@@ -43,7 +43,6 @@ class Sequences extends Controller
             'old_seqid' => '',
             'next_seq_id' => $next_seq_id
 
-
         );
 
         if($isMobile){
@@ -79,8 +78,7 @@ class Sequences extends Controller
 
             $seq_name = $_POST['seq_name'];
             
-           
-      
+        
             #驗證seq_name 
             if(!$this->MiscellaneousModel->seq_validate($seq_name, 'name')) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_seq_name']);
@@ -334,6 +332,15 @@ class Sequences extends Controller
         $newseqid = $_POST['newseqid'] ?? null;
         $oldseqname = $_POST['oldseqname'] ?? null;
         $newseqname = $_POST['newseqname'] ?? null;
+
+          //檢查 $seqid 是否有存在 
+        $res = $this->sequenceModel->seq_id_repeat($jobid,$seqid);
+
+        if(!empty($res['job_id'])){
+            $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['job_id']);
+            exit();
+        }
+
 
         //用jobid 及 seqid 去找出 對應的資料
         $old_res = $this->sequenceModel->search_seqinfo($jobid,$seqid);

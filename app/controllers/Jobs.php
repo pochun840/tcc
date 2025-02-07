@@ -44,9 +44,7 @@ class Jobs extends Controller
             'jobint' => $jobIdInt,
             'next_job_id' => $next_job_id,
             'jobs' => $jobs,
-            'direction' => $direction,
-            //'OOR' => $text['OOR'],
-
+            'direction' => $direction
         );
         
         if($isMobile){
