@@ -358,26 +358,25 @@ class Sequences extends Controller
         if(!empty($select_step)){
             $new_temp_step = array();
             foreach($select_step as $k_step =>$v_step){
-                $new_temp_step[$k_step]['job_id'] = $v_step['job_id'];
-                //$new_temp_step[$k_step]['job_name'] = '';
-                $new_temp_step[$k_step]['seq_id'] = $newseqid;
-                //$new_temp_step[$k_step]['seq_name'] = '';
-                $new_temp_step[$k_step]['step_id'] = $v_step['step_id'];
-                $new_temp_step[$k_step]['target_option'] =$v_step['target_option'];
-                $new_temp_step[$k_step]['target_torque'] = $v_step['target_torque'];
-                $new_temp_step[$k_step]['target_angle'] = $v_step['target_angle'];
-                $new_temp_step[$k_step]['target_delaytime'] = $v_step['target_delaytime'];
-                $new_temp_step[$k_step]['hi_torque'] = $v_step['hi_torque'];
-                $new_temp_step[$k_step]['lo_torque'] = $v_step['lo_torque'];
-                $new_temp_step[$k_step]['hi_angle'] = $v_step['hi_angle'];
-                $new_temp_step[$k_step]['lo_angle'] = $v_step['lo_angle'];
-                $new_temp_step[$k_step]['rpm'] = $v_step['rpm'];
-                $new_temp_step[$k_step]['direction'] = $v_step['direction'];
-                $new_temp_step[$k_step]['downshift'] = $v_step['downshift'];
-                $new_temp_step[$k_step]['threshold_torque'] = $v_step['threshold_torque'];
-                $new_temp_step[$k_step]['downshift_torque'] = $v_step['downshift_torque'];
-                $new_temp_step[$k_step]['downshift_speed'] = $v_step['downshift_speed'];
-                $new_temp_step[$k_step]['record_ang'] = $v_step['record_ang'];
+                $new_temp_step[$key_step]['job_id'] = $new_jobid;
+                $new_temp_step[$key_step]['seq_id'] = $val_step['seq_id'];
+                $new_temp_step[$key_step]['step_id'] = $val_step['step_id'];
+                $new_temp_step[$key_step]['target_opt'] = $val_step['target_opt']; 
+                $new_temp_step[$key_step]['target_tor'] = $val_step['target_tor'];
+                $new_temp_step[$key_step]['target_ang'] = $val_step['target_ang'];
+                $new_temp_step[$key_step]['target_delay'] = $val_step['target_delay'];
+                $new_temp_step[$key_step]['tor_hi'] = $val_step['tor_hi'];
+                $new_temp_step[$key_step]['tor_lo'] = $val_step['tor_lo'];
+                $new_temp_step[$key_step]['ang_hi'] = $val_step['ang_hi'];
+                $new_temp_step[$key_step]['ang_hi'] = $val_step['ang_lo'];
+                $new_temp_step[$key_step]['rpm'] = $val_step['rpm'];
+                $new_temp_step[$key_step]['direction'] = $val_step['direction'];
+                $new_temp_step[$key_step]['ds_mode'] = $val_step['ds_mode'];
+                $new_temp_step[$key_step]['ds_tor'] = $val_step['ds_tor'];
+                $new_temp_step[$key_step]['ds_speed'] = $val_step['ds_speed'];
+                $new_temp_step[$key_step]['th_tor'] = $val_step['th_tor'];
+                $new_temp_step[$key_step]['record_ang'] = $val_step['record_ang'];
+                $new_temp_step[$key_step]['tor_unit'] = $val_step['tor_unit'];
 
             }
 
