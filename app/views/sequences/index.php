@@ -193,7 +193,7 @@
                         <div class="row">
                             <div for="offset" class="col-6 t1"><?php echo $text['Joint_Offset'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="ofs" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="seq_ofs" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -671,7 +671,7 @@ function saveseq(){
 
     var opt_val = getSelectedValue('opt_option', null);
     var k_value = document.getElementById("k_value").value;
-    var ofs = document.getElementById("ofs").value;
+    var seq_ofs = document.getElementById("seq_ofs").value;
 
     //驗證
     let check = input_check_saveseq();
@@ -692,7 +692,7 @@ function saveseq(){
                 stop_seq_ok:stop_seq_ok,
                 opt_val: opt_val,
                 k_value: k_value,
-                ofs: ofs
+                seq_ofs: seq_ofs
 
             },
             success: function(response) {
@@ -746,7 +746,7 @@ function edit_seq(seqid) {
                 var [, seq_tr] = cleanString.match(/\[seq_tr]\s*=>\s*([^ ]+)/) || [, null];
                 
                 var [, k_value] = cleanString.match(/\[k_value]\s*=>\s*([^ ]+)/) || [, null];
-                var [, ofs] = cleanString.match(/\[ofs]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seq_ofs] = cleanString.match(/\[seq_ofs]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ns] = cleanString.match(/\[seq_ns]\s*=>\s*([^ ]+)/) || [, null];
                 
                 var [, opt] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
@@ -762,7 +762,7 @@ function edit_seq(seqid) {
                 document.getElementById("edit_seq_tr").value = tr;
 
                 document.getElementById("edit_K").value = k_value;
-                document.getElementById("edit_ofs").value = ofs;
+                document.getElementById("edit_seq_ofs").value = seq_ofs;
                 document.getElementById("edit_seq_ns").value = seq_ns;
         
                 var radioButtons_seq = document.getElementsByName("edit_seq_ok");
@@ -791,7 +791,7 @@ function edit_seq_save(){
     var seq_ok = document.querySelector('input[name="edit_seq_ok"]:checked').value;
     var stop_seq_ok = document.querySelector('input[name="edit_stop_seq_ok"]:checked').value;
     var k_value = document.getElementById("edit_K").value;
-    var ofs = document.getElementById("edit_ofs").value;
+    var seq_ofs = document.getElementById("edit_seq_ofs").value;
     var seq_nss = document.getElementById('edit_seq_ns').value;
     var opt_val = document.querySelector('input[name="edit_opt_option"]:checked').value;
 
@@ -810,7 +810,7 @@ function edit_seq_save(){
                 seq_ok:seq_ok,
                 stop_seq_ok:stop_seq_ok,
                 k_value: k_value,
-                ofs: ofs,
+                seq_ofs: seq_ofs,
                 seq_nss: seq_ns,
                 opt_val: opt_val
 
@@ -967,7 +967,7 @@ function input_check_saveseq() {
         { id: 'seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'seq_tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
         { id: 'k_value',  pattern: /^[0-9]+$/, min: 40, max: 300 },
-        { id: 'ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
+        { id: 'seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
 
     let isFormValid = true;
@@ -999,7 +999,7 @@ function input_check_editseq() {
         { id: 'edit_seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'edit_seq_tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
         { id: 'edit_K', pattern: /^[0-9]+$/, min: 40, max: 300 },
-        { id: 'edit_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 },
+        { id: 'edit_seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 },
     ];
 
     let isFormValid = true;
