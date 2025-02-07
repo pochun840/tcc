@@ -43,8 +43,8 @@ class Sequence{
             return false; 
         }*/
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, seq_opt, k_value, seq_ofs)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :seq_opt, :k_value, :seq_ofs);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, seq_opt, seq_k_val, seq_ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :seq_opt, :seq_k_val, :seq_ofs);";
         $statement = $this->db_iDas->prepare($sql);
     
 
@@ -66,7 +66,7 @@ class Sequence{
         $statement->bindValue(':seq_ns', $jobdata['seq_ns']);
         $statement->bindValue(':seq_en', $jobdata['seq_en']);
         $statement->bindValue(':seq_opt', $jobdata['seq_opt']);
-        $statement->bindValue(':k_value', $jobdata['k_value']);
+        $statement->bindValue(':seq_k_val', $jobdata['seq_k_val']);
         $statement->bindValue(':seq_ofs', $jobdata['seq_ofs']);
     
         $results = $statement->execute();
@@ -77,8 +77,8 @@ class Sequence{
 
     public function copy_seq_by_seq_id($new_temp_seq){
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, seq_opt, k_value, seq_ofs)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :seq_opt, :k_value, :seq_ofs);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, seq_opt, seq_k_val, seq_ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :seq_opt, :seq_k_val, :seq_ofs);";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -155,7 +155,7 @@ class Sequence{
                                   seq_ok  =:seq_ok,
                                   stop_seq_ok =:stop_seq_ok,
                                   seq_opt = :seq_opt,
-                                  k_value = :k_value,
+                                  seq_k_val = :seq_k_val,
                                   seq_ofs = :seq_ofs
         WHERE job_id = :job_id  AND   seq_id = :seq_id ";
 
@@ -167,7 +167,7 @@ class Sequence{
         $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
         $statement->bindValue(':seq_ns', $jobdata['seq_ns']);
         $statement->bindValue(':seq_opt', $jobdata['seq_opt']);
-        $statement->bindValue(':k_value', $jobdata['k_value']);
+        $statement->bindValue(':seq_k_val', $jobdata['seq_k_val']);
         $statement->bindValue(':seq_ofs', $jobdata['seq_ofs']);
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $statement->bindValue(':seq_id', $jobdata['seq_id']);
@@ -385,10 +385,10 @@ class Sequence{
     }
 
      //查詢 seq_id 還沒有 被使用的 取出 最小值
-     public function get_head_seq_id() {
+     public function get_head_seq_id($job_id) {
 
         // 檢查 seq_id 是否有 1，如果沒有就直接返回 1
-        $query = "SELECT seq_id FROM sequence WHERE seq_id = 1 ";
+        $query = "SELECT seq_id FROM sequence WHERE job_id ='".$job_id."' AND seq_id = 1 ";
         $statement = $this->db_iDas->prepare($query);
         $statement->execute();
     
@@ -399,8 +399,8 @@ class Sequence{
     
         // 如果 seq_id = 1 存在，查找最小的可用 seq_id
         $query = "SELECT seq_id + 1 AS missing_id
-                  FROM sequence
-                  WHERE (seq_id + 1) NOT IN (SELECT seq_id FROM sequence)
+                  FROM sequence 
+                  WHERE (seq_id + 1) NOT IN (SELECT seq_id FROM sequence) AND job_id ='".$job_id."' 
                   ORDER BY missing_id
                   LIMIT 1";
     

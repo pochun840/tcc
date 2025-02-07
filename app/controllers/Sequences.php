@@ -17,12 +17,11 @@ class Sequences extends Controller
         }else{
             $job_id = 1;
         }
-
    
         $sequences  = $this->sequenceModel->getSequences_by_job_id($job_id);
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
 
-        $next_seq_id_arr = $this->sequenceModel->get_head_seq_id();
+        $next_seq_id_arr = $this->sequenceModel->get_head_seq_id($job_id);
         $next_seq_id = (int)$next_seq_id_arr['missing_id'];
 
         if(empty($sequences)){
@@ -68,7 +67,7 @@ class Sequences extends Controller
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
 
-            $k_value = isset($_POST['k_value']) ? floatval($_POST['k_value']) : 100.0;
+            $seq_k_val = isset($_POST['seq_k_val']) ? intval($_POST['seq_k_val']) : 100;
             $seq_tr = isset($_POST['seq_tr']) ? intval($_POST['seq_tr']) : 1;
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
@@ -93,7 +92,7 @@ class Sequences extends Controller
 
 
             #驗證k_value
-            if(!$this->MiscellaneousModel->seq_validate($k_value, 'kValue')) {
+            if(!$this->MiscellaneousModel->seq_validate($seq_k_val, 'kValue')) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['ok_time']);
                 exit();
             }
@@ -114,7 +113,7 @@ class Sequences extends Controller
                 'seq_ok'  => $seq_ok,
                 'stop_seq_ok' => $stop_seq_ok, 
                 'seq_opt' => $seq_opt,
-                'k_value' => $k_value,
+                'seq_k_val' => $seq_k_val,
                 'seq_ofs' => $seq_ofs,
             );
 
@@ -204,7 +203,7 @@ class Sequences extends Controller
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
             $seq_opt = isset($_POST['seq_opt']) ? intval($_POST['seq_opt']) : 0;
-            $k_value = isset($_POST['k_value']) ? floatval($_POST['k_value']) : 100;
+            $seq_k_val = isset($_POST['seq_k_val']) ? floatval($_POST['seq_k_val']) : 100;
             $seq_ofs = isset($_POST['seq_ofs']) ? intval($_POST['seq_ofs']) : 0;  
 
             #驗證seq_name 
@@ -221,7 +220,7 @@ class Sequences extends Controller
             }
     
             #驗證k_value
-            if(!$this->MiscellaneousModel->seq_validate($k_value, 'kValue')) {
+            if(!$this->MiscellaneousModel->seq_validate($seq_k_val, 'kValue')) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['ok_time']);
                 exit();
             }
@@ -249,7 +248,7 @@ class Sequences extends Controller
                 'seq_ok'  => $seq_ok,
                 'stop_seq_ok' =>$stop_seq_ok,
                 'seq_opt' => $seq_opt,
-                'k_value' => $k_value,
+                'seq_k_val' => $seq_k_val,
                 'seq_ofs' => $seq_ofs,
             );
            
@@ -348,7 +347,7 @@ class Sequences extends Controller
                 $new_temp_seq[$kk]['seq_ok'] = $vv['seq_ok']; 
                 $new_temp_seq[$kk]['stop_seq_ok'] = $vv['stop_seq_ok']; 
                 $new_temp_seq[$kk]['seq_opt'] = $vv['seq_opt']; 
-                $new_temp_seq[$kk]['k_value'] = $vv['k_value']; 
+                $new_temp_seq[$kk]['seq_k_val'] = $vv['seq_k_val']; 
                 $new_temp_seq[$kk]['seq_ofs'] = $vv['seq_ofs'];
 
             }  
@@ -360,9 +359,9 @@ class Sequences extends Controller
             $new_temp_step = array();
             foreach($select_step as $k_step =>$v_step){
                 $new_temp_step[$k_step]['job_id'] = $v_step['job_id'];
-                $new_temp_step[$k_step]['job_name'] = '';
+                //$new_temp_step[$k_step]['job_name'] = '';
                 $new_temp_step[$k_step]['seq_id'] = $newseqid;
-                $new_temp_step[$k_step]['seq_name'] = '';
+                //$new_temp_step[$k_step]['seq_name'] = '';
                 $new_temp_step[$k_step]['step_id'] = $v_step['step_id'];
                 $new_temp_step[$k_step]['target_option'] =$v_step['target_option'];
                 $new_temp_step[$k_step]['target_torque'] = $v_step['target_torque'];

@@ -280,8 +280,8 @@ class Jobs extends Controller
                             $new_temp_seq[$key]['seq_ns'] = $val['seq_ns']; 
                             $new_temp_seq[$key]['seq_ok'] = $val['seq_ok']; 
                             $new_temp_seq[$key]['stop_seq_ok'] = $val['stop_seq_ok']; 
-                            $new_temp_seq[$key]['opt'] = $val['opt']; 
-                            $new_temp_seq[$key]['k_value'] = $val['k_value']; 
+                            $new_temp_seq[$key]['seq_opt'] = $val['seq_opt']; 
+                            $new_temp_seq[$key]['seq_k_val'] = $val['seq_k_val']; 
                             $new_temp_seq[$key]['seq_ofs'] = $val['seq_ofs'];
                         }
 

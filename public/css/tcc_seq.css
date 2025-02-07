@@ -287,17 +287,6 @@ th, td
     color: white;
 }
 
-select
-{
-    height: 35px;
-    width: 152px;
-    font-size: 18px;
-    border: 1px solid #CCCCCC;
-    cursor: pointer;
-    border-radius: 5px;
-    color: #000;
-    transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
-}
 
 .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
 .t2{font-size: 17px; margin: 5px 0px;}

@@ -13,9 +13,6 @@ class Job{
     {
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
-        //$tool_rpm = $this->dbh->get_tool_rpm();
-        //$this->tool_max_rpm = $tool_rpm['tool_maxrpm'];
-        //$this->tool_min_rpm = $tool_rpm['tool_minrpm'];
 
     }
 
@@ -198,8 +195,8 @@ class Job{
 
     public function copy_sequence_by_job_id($new_temp_seq) {
       
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, opt, k_value, seq_ofs)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :seq_ofs);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, seq_opt, seq_k_val, seq_ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :seq_opt, :seq_k_val, :seq_ofs);";
         
         
         $statement = $this->db_iDas->prepare($sql);

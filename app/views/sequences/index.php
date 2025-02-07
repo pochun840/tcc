@@ -186,7 +186,7 @@
                         <div class="row">
                             <div for="k(30%-300%)" class="col-6 t1">K (40%-300%) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="k_value" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="seq_k_val" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -314,7 +314,7 @@
                         <div class="row">
                             <div for="k(30%-300%)" class="col-6 t1">K (40%-300%) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_K" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_seq_k_val" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -670,7 +670,7 @@ function saveseq(){
     var stop_seq_ok = seq_stop_Element ? seq_stop_Element.value : null;
 
     var seq_opt = getSelectedValue('opt_option', null);
-    var k_value = document.getElementById("k_value").value;
+    var seq_k_val = document.getElementById("seq_k_val").value;
     var seq_ofs = document.getElementById("seq_ofs").value;
 
     //驗證
@@ -691,7 +691,7 @@ function saveseq(){
                 seq_ok:seq_ok,
                 stop_seq_ok:stop_seq_ok,
                 seq_opt: seq_opt,
-                k_value: k_value,
+                seq_k_val: seq_k_val,
                 seq_ofs: seq_ofs
 
             },
@@ -745,7 +745,7 @@ function edit_seq(seqid) {
                 var [, seqname] = cleanString.match(/\[seq_name]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_tr] = cleanString.match(/\[seq_tr]\s*=>\s*([^ ]+)/) || [, null];
                 
-                var [, k_value] = cleanString.match(/\[k_value]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seq_k_val] = cleanString.match(/\[seq_k_val]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ofs] = cleanString.match(/\[seq_ofs]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ns] = cleanString.match(/\[seq_ns]\s*=>\s*([^ ]+)/) || [, null];
 
@@ -760,7 +760,7 @@ function edit_seq(seqid) {
                 document.getElementById("edit_seq_name").value = seqname;
                 document.getElementById("edit_seq_tr").value = seq_tr;
 
-                document.getElementById("edit_K").value = k_value;
+                document.getElementById("edit_seq_k_val").value = seq_k_val;
                 document.getElementById("edit_seq_ofs").value = seq_ofs;
                 document.getElementById("edit_seq_ns").value = seq_ns;
         
@@ -789,7 +789,7 @@ function edit_seq_save(){
     var seq_tr = document.getElementById("edit_seq_tr").value;
     var seq_ok = document.querySelector('input[name="edit_seq_ok"]:checked').value;
     var stop_seq_ok = document.querySelector('input[name="edit_stop_seq_ok"]:checked').value;
-    var k_value = document.getElementById("edit_K").value;
+    var seq_k_val = document.getElementById("edit_seq_k_val").value;
     var seq_ofs = document.getElementById("edit_seq_ofs").value;
     var seq_ns = document.getElementById('edit_seq_ns').value;
     var seq_opt = document.querySelector('input[name="edit_opt_option"]:checked').value;
@@ -808,7 +808,7 @@ function edit_seq_save(){
                 seq_tr: seq_tr,
                 seq_ok:seq_ok,
                 stop_seq_ok:stop_seq_ok,
-                k_value: k_value,
+                seq_k_val: seq_k_val,
                 seq_ofs: seq_ofs,
                 seq_nss: seq_ns,
                 seq_opt: seq_opt
@@ -965,7 +965,7 @@ function input_check_saveseq() {
     let conditions = [
         { id: 'seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'seq_tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
-        { id: 'k_value',  pattern: /^[0-9]+$/, min: 40, max: 300 },
+        { id: 'seq_k_val',  pattern: /^[0-9]+$/, min: 40, max: 300 },
         { id: 'seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
 
@@ -997,7 +997,7 @@ function input_check_editseq() {
     let conditions = [
         { id: 'edit_seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'edit_seq_tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
-        { id: 'edit_K', pattern: /^[0-9]+$/, min: 40, max: 300 },
+        { id: 'edit_seq_k_val', pattern: /^[0-9]+$/, min: 40, max: 300 },
         { id: 'edit_seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 },
     ];
 
