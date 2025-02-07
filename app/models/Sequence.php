@@ -43,8 +43,8 @@ class Sequence{
             return false; 
         }
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, ofs)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :ofs);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, opt, k_value, ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :ofs);";
         $statement = $this->db_iDas->prepare($sql);
     
 
@@ -60,10 +60,10 @@ class Sequence{
             $statement->bindValue(':seq_name', $jobdata['seq_name']);
         }
     
-        $statement->bindValue(':tr', $jobdata['tr']);
+        $statement->bindValue(':seq_tr', $jobdata['seq_tr']);
         $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
         $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
-        $statement->bindValue(':ns', $jobdata['ns']);
+        $statement->bindValue(':seq_ns', $jobdata['seq_ns']);
         $statement->bindValue(':seq_en', $jobdata['seq_en']);
         $statement->bindValue(':opt', $jobdata['opt']);
         $statement->bindValue(':k_value', $jobdata['k_value']);
@@ -77,8 +77,8 @@ class Sequence{
 
     public function copy_seq_by_seq_id($new_temp_seq){
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, tr, ns, seq_ok, stop_seq_ok, opt, k_value, ofs)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :tr, :ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :ofs);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, opt, k_value, ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :opt, :k_value, :ofs);";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -115,11 +115,7 @@ class Sequence{
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$jobid, $seqid]);
 
-        /*if ($seqid != 50 ) {
-            $sql_update = "UPDATE sequence  SET seq_id = seq_id - 1 WHERE job_id = ? AND seq_id > ?";
-            $statement_update = $this->db_iDas->prepare($sql_update);
-            $statement_update->execute([$jobid, $seqid]);
-        }*/   
+  
         return $results;
 
     }
@@ -154,8 +150,8 @@ class Sequence{
         }
 
         $sql = "UPDATE `sequence` SET  seq_name = :seq_name,
-                                  tr = :tr, 
-                                  ns = :ns, 
+                                  seq_tr = :seq_tr, 
+                                  seq_ns = :seq_ns, 
                                   seq_ok  =:seq_ok,
                                   stop_seq_ok =:stop_seq_ok,
                                   opt = :opt,
@@ -166,10 +162,10 @@ class Sequence{
 
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':seq_name', $jobdata['seq_name']);
-        $statement->bindValue(':tr', $jobdata['tr']);
+        $statement->bindValue(':seq_tr', $jobdata['seq_tr']);
         $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
         $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
-        $statement->bindValue(':ns', $jobdata['ns']);
+        $statement->bindValue(':seq_ns', $jobdata['seq_ns']);
         $statement->bindValue(':opt', $jobdata['opt']);
         $statement->bindValue(':k_value', $jobdata['k_value']);
         $statement->bindValue(':ofs', $jobdata['ofs']);

@@ -214,7 +214,7 @@ class Miscellaneous{
                        strlen($value) <= 12;
     
             // 顆數
-            case 'tr':
+            case 'seq_tr':
                 return is_numeric($value) && 
                        $value >= 1 && 
                        $value <= 99;

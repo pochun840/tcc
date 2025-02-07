@@ -69,11 +69,11 @@ class Sequences extends Controller
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
 
             $k_value = isset($_POST['k_value']) ? floatval($_POST['k_value']) : 100.0;
-            $tr = isset($_POST['tr']) ? intval($_POST['tr']) : 1;
+            $seq_tr = isset($_POST['seq_tr']) ? intval($_POST['seq_tr']) : 1;
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : '';
-            $ns = isset($_POST['ns']) ? intval($_POST['ns']) : 0;
+            $seq_ns = isset($_POST['seq_ns']) ? intval($_POST['seq_ns']) : 0;
             $ofs = isset($_POST['ofs']) ? intval($_POST['ofs']) : 0;  
 
             $seq_name = $_POST['seq_name'];
@@ -87,7 +87,7 @@ class Sequences extends Controller
 
 
             #驗證顆數
-            if(!$this->MiscellaneousModel->seq_validate($tr, 'tr')) {
+            if(!$this->MiscellaneousModel->seq_validate($seq_tr, 'seq_tr')) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tr']);
                 exit();
             }
@@ -110,8 +110,8 @@ class Sequences extends Controller
                 'seq_id' => $seqid,
                 'seq_name' => $seq_name,
                 'seq_en' => 1,
-                'tr' => $tr,
-                'ns' => $ns,
+                'seq_tr' => $seq_tr,
+                'seq_ns' => $seq_ns,
                 'seq_ok'  => $seq_ok,
                 'stop_seq_ok' => $stop_seq_ok, 
                 'opt' => $opt_val,
@@ -204,12 +204,12 @@ class Sequences extends Controller
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
             $seq_name = $_POST['seq_name'];
-            $tr = isset($_POST['tr']) ? intval($_POST['tr']) : 1;
-            $ns = isset($_POST['ns']) ? intval($_POST['ns']) : 0;
+            $seq_tr = isset($_POST['seq_tr']) ? intval($_POST['seq_tr']) : 1;
+            $seq_ns = isset($_POST['seq_ns']) ? intval($_POST['seq_ns']) : 0;
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
             $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
             $opt_val = isset($_POST['opt_val']) ? intval($_POST['opt_val']) : 0;
-            $k_value = isset($_POST['k_value']) ? floatval($_POST['k_value']) : 100.0;
+            $k_value = isset($_POST['k_value']) ? floatval($_POST['k_value']) : 100;
             $ofs = isset($_POST['ofs']) ? intval($_POST['ofs']) : 0;  
 
             #驗證seq_name 
@@ -220,7 +220,7 @@ class Sequences extends Controller
 
 
             #驗證顆數
-            if(!$this->MiscellaneousModel->seq_validate($tr, 'tr')) {
+            if(!$this->MiscellaneousModel->seq_validate($seq_tr, 'seq_tr')) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tr']);
                 exit();
             }
@@ -244,18 +244,18 @@ class Sequences extends Controller
             $seq_count = intval($seq_count);
            
             #檢查job 
-            if($seq_count > 50) {
+            /*if($seq_count > 50) {
                 echo "The maximum number of steps has been reached, unable to continue copying seqs";
                 return;
-            }
+            }*/
            
             $jobdata = array(
                 'job_id' => $jobid,
                 'seq_id' => $seqid,
                 'seq_name' =>$seq_name,
                 'seq_en' => 1,
-                'tr' => $tr,
-                'ns' => $ns,
+                'seq_tr' => $seq_tr,
+                'seq_ns' => $seq_ns,
                 'seq_ok'  => $seq_ok,
                 'stop_seq_ok' =>$stop_seq_ok,
                 'opt' => $opt_val,
@@ -356,7 +356,7 @@ class Sequences extends Controller
                 $new_temp_seq[$kk]['seq_id'] = $newseqid;
                 $new_temp_seq[$kk]['seq_name'] = $newseqname;
                 $new_temp_seq[$kk]['seq_en'] = $vv['seq_en'];
-                $new_temp_seq[$kk]['tr'] = $vv['tr'];
+                $new_temp_seq[$kk]['seq_tr'] = $vv['seq_tr'];
                 $new_temp_seq[$kk]['ns'] = $vv['ns']; 
                 $new_temp_seq[$kk]['seq_ok'] = $vv['seq_ok']; 
                 $new_temp_seq[$kk]['stop_seq_ok'] = $vv['stop_seq_ok']; 
