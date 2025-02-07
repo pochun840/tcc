@@ -6,7 +6,7 @@ class Step extends Controller
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
-        //$this->ToolModel = $this->model('Tool');
+        $this->ToolModel = $this->model('Tool');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
         $this->stepModel = $this->model('Steptcc');
         $this->sequenceModel = $this->model('Sequence');
@@ -31,6 +31,7 @@ class Step extends Controller
         $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
         $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
         $check     = $this->stepModel->check_step_target($job_id,$seq_id);
+        $tools     = $this->ToolModel->GetToolInfo();
 
         $step_count = $this->stepModel->countstep($job_id, $seq_id);
         $step_count = intval($step_count);
@@ -48,13 +49,20 @@ class Step extends Controller
             $stepid_new = count($step) + 1 ;
         }
 
+        $count_records = (int)$check['count_records'];
         if(!empty($check[0]['count_records'])){
+
+
             $check_step_torque = 1;
         }else{
             $check_step_torque = '';
         }
 
-        
+
+
+        //var_dump($check['count_records']);die();
+
+
         $data = array(
             'isMobile' => $isMobile,
             'step' => $step,
@@ -74,8 +82,6 @@ class Step extends Controller
             'step_count' => $step_count
 
         );
-
-      
 
         if($isMobile){
             $this->view('step/index_m', $data);
@@ -98,18 +104,22 @@ class Step extends Controller
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
             $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0; 
-            $target_option = isset($_POST['target_option'])? intval($_POST['target_option']) : 0; 
-            $target_torque = isset($_POST['target_torque'])? floatval($_POST['target_torque']) : 0; 
-            $hi_torque = isset($_POST['hi_torque'])? floatval($_POST['hi_torque']) : 0; 
-            $lo_torque = isset($_POST['lo_torque'])? floatval($_POST['lo_torque']) : 0; 
-            $hi_angle  = isset($_POST['hi_angle'])? intval($_POST['hi_angle']) : 0; 
-            $lo_angle  = isset($_POST['lo_angle'])? intval($_POST['lo_angle']) : 0; 
+            $target_opt = isset($_POST['target_opt'])? intval($_POST['target_opt']) : 0; 
+            $target_tor = isset($_POST['target_tor'])? floatval($_POST['target_tor']) : 0; 
+            $target_ang = isset($_POST['target_ang'])? intval($_POST['target_ang']) : 0; 
+            $target_delay = isset($_POST['target_delay'])? floatval($_POST['target_delay']) : 0; 
+            $tor_hi = isset($_POST['tor_hi'])? floatval($_POST['tor_hi']) : 0; 
+            $tor_lo = isset($_POST['tor_lo'])? floatval($_POST['tor_lo']) : 0; 
+            $ang_hi  = isset($_POST['ang_hi'])? intval($_POST['ang_hi']) : 0; 
+            $ang_lo  = isset($_POST['lo_angle'])? intval($_POST['ang_lo']) : 0; 
             $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 0;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
-            $downshift = isset($_POST['downshift'])? intval($_POST['downshift']) : 0;
-            $threshold_torque = isset($_POST['threshold_torque'])? intval($_POST['threshold_torque']) : 0;
-            $downshift_torque = isset($_POST['downshift_torque'])? intval($_POST['downshift_torque']) : 0;
-            $downshift_speed = isset($_POST['downshift_speed'])? intval($_POST['downshift_speed']) : 100;
+            $ds_mode = isset($_POST['ds_mode'])? intval($_POST['ds_mode']) : 0;
+            $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0; 
+            $ds_speedg = isset($_POST['ds_speed'])? intval($_POST['ds_speed']) : 0;
+            $th_tor = isset($_POST['th_tor'])? floatval($_POST['th_tor']) : 0;
+            $record_ang = isset($_POST['record_ang'])? intval($_POST['record_ang']) : 0;
+            $tor_unit = isset($_POST['tor_unit'])? intval($_POST['tor_unit']) : 0;
 
             #同一個step 只能有一個Target Torque
             $check = $this->stepModel->check_step_target($jobid,$seqid);
@@ -352,7 +362,7 @@ class Step extends Controller
 
             }
 
-            
+
 
 
             

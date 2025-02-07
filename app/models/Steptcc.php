@@ -49,7 +49,7 @@ class Steptcc{
     #檢查同一個seq中所建立的Step Target Torque 只能有一個
     public function check_step_target($jobid,$seqid){
 
-        $sql = "SELECT COUNT(*) AS count_records FROM step WHERE job_id = ? AND seq_id = ?  AND target_option = '0'  ";
+        $sql = "SELECT COUNT(*) AS count_records FROM step WHERE job_id = ? AND seq_id = ?  AND target_opt = '0'  ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$jobid, $seqid]);
         return $statement->fetchAll();

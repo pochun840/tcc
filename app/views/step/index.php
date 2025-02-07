@@ -102,7 +102,7 @@
                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col-3 t2">
-                                <select id="target_option" name="target_option" class="col custom-file">
+                                <select id="target_opt" name="target_opt" class="col custom-file">
                                     <?php if($data['check'][0]['count_records'] == "1"){?>
                                         <?php foreach($data['target_option_change'] as $key => $val){?>
                                              <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
@@ -134,6 +134,8 @@
                             <?php } ?>
                           
                         </div>
+
+
                         <div class="row">
                             <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
