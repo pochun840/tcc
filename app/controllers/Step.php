@@ -49,7 +49,10 @@ class Step extends Controller
             $stepid_new = count($step) + 1 ;
         }
 
-        $count_records = (int)$check['count_records'];
+        var_dump($check);
+        //$count_records = (int)$check['count_records'];
+
+        //if()
         if(!empty($check[0]['count_records'])){
 
 
@@ -79,7 +82,8 @@ class Step extends Controller
             'unit_name' => $unit_name,
             'check_step_torque' => $check_step_torque,
             'check' => $check,
-            'step_count' => $step_count
+            'step_count' => $step_count,
+            'count_records' => $count_records
 
         );
 
