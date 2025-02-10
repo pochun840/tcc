@@ -35,12 +35,15 @@ class Step extends Controller
 
         $step_count = $this->stepModel->countstep($job_id, $seq_id);
         $step_count = intval($step_count);
+        if($step_count ==0){
+            $step_count = 1;
+        }
 
 
         $res_device = $this->SettingModel->GetControllerInfo();
         if(!empty($res_device)){
-            $unit = $res_device['torque_unit'];
-            $unit_name = $torque_unit[$unit];
+            $step_torque_unit = $res_device['torque_unit'];
+            $unit_name = $torque_unit[$step_torque_unit];
         }
         
         if(empty($step)){
@@ -49,10 +52,7 @@ class Step extends Controller
             $stepid_new = count($step) + 1 ;
         }
 
-        var_dump($check);
         //$count_records = (int)$check['count_records'];
-
-        //if()
         if(!empty($check[0]['count_records'])){
 
 
@@ -60,10 +60,6 @@ class Step extends Controller
         }else{
             $check_step_torque = '';
         }
-
-
-
-        //var_dump($check['count_records']);die();
 
 
         $data = array(
@@ -76,14 +72,15 @@ class Step extends Controller
             'seq_id' => $seq_id,
             'stepid_new' => $stepid_new,
             'unit_arr' => $unit_arr,
-            'unit' => $unit,
+            'step_torque_unit' => $step_torque_unit,
             'check' => $check,
             'seq_id' => $seq_id,
             'unit_name' => $unit_name,
             'check_step_torque' => $check_step_torque,
             'check' => $check,
             'step_count' => $step_count,
-            'count_records' => $count_records
+            'tools' => $tools
+            //'count_records' => $count_records
 
         );
 

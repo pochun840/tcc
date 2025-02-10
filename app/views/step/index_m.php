@@ -103,22 +103,6 @@
                         </div>
 
                         <div class="row">
-                            <?php if($data['check'][0]['count_records'] == "1"){ ?>
-                                <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Angle'];?> :</div>
-                                <div class="col-3 t2">
-                                    <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
-                                </div>
-
-                            <?php }else {?>
-                                <div for="target-torque" class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2">
-                                    <input type="text" class="form-control input-ms" id="target_torque" maxlength="" >
-                                </div>
-
-                            <?php } ?>
-                           
-                        </div>
-                        <div class="row">
                             <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
                                 <input type="text" class="form-control input-ms" id="hi_torque" maxlength="" >
