@@ -36,9 +36,9 @@ function enableElementById(id, value = '') {
     if (element && element.disabled) {
         element.disabled = false;  
         element.value = value;     
-        console.log('元素已启用:', id, '并设置值为:', value);
+        //console.log('元素已启用:', id, '并设置值为:', value);
     } else if (element) {
-        console.log('元素已是启用状态:', id);
+        //console.log('元素已是启用状态:', id);
     } else {
         console.log("元素未找到: " + id);  
     }
@@ -63,7 +63,7 @@ function toggleVisibility(targetValue) {
         enableElementById('ang_lo','0');
         enableElementById('rpm','200');
         enableElementById('th_tor','0');
-        enableElementById('ds_tor','0');
+        enableElementById('ds_tor','0.3');
         enableElementById('ds_speed','100');
         enableElementById('direction_CW','');
         enableElementById('direction_CCW','');
@@ -87,7 +87,7 @@ function toggleVisibility(targetValue) {
         disableElementById('ang_lo','0');
         disableElementById('rpm','200');
         disableElementById('th_tor','0');
-        disableElementById('ds_tor','0');
+        disableElementById('ds_tor','0.3');
         disableElementById('ds_speed','100');
         disableElementById('direction_CW','');
         disableElementById('direction_CCW','');
@@ -95,3 +95,7 @@ function toggleVisibility(targetValue) {
         disableElementById('downshift_OFF','');
     }
 }
+
+
+
+

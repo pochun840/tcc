@@ -12,6 +12,13 @@
 .is-invalid~.invalid-feedback{
     display: inline!important;
 }
+
+.main-content.overlay-active {
+  filter: grayscale(100%); /* 完全灰化 */
+  pointer-events: none; /* 禁止點擊 */
+  opacity: 0.3; /* 降低不透明度 */
+}
+
 </style>
 
 <div class="container-ms">
@@ -56,7 +63,7 @@
                        <?php foreach($data['step'] as $key =>$val){?>
                         <tr>
                             <td><?php echo $val['step_id'];?></td>
-                            <td><?php echo $text[$data['target_option'][$val['target_option']]];?></td>
+                            <td><?php echo $text[$data['target_option'][$val['target_opt']]];?></td>
                             <td><?php echo $text[$data['direction'][$val['direction']]];?></td>
                             <td><img src="./img/btn_up.png" onclick="MoveUp(this);"></td>
                             <td><img src="./img/btn_down.png"onclick="MoveDown(this);"></td>
@@ -92,7 +99,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: 80%">
                 <header class="w3-container modal-header">
-                    <span onclick="hideElementById('newstep');"
+                    <span onclick="closebutton('newstep');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_step'];?></h3>
                 </header>
@@ -243,7 +250,7 @@
                 <div class="modal-footer justify-content-center">
                     <input type='hidden' id='step_torque_unit' name='step_torque_unit' value='<?php echo $data['step_torque_unit'];?>'>
                     <button id="" class="button-modal" onclick="add_step()" ><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('newstep');"  class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closebutton('newstep');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -425,6 +432,15 @@
             </div>
         </div>
     </div>
+
+    <!-- 加载動畫 OP -->
+    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    <!-- 加载動畫 ED -->
+
 </div>
 
 <script>
@@ -435,7 +451,8 @@ let jobid = '<?php echo $data['job_id']?>';
 let seqid = '<?php echo $data['seq_id']?>';
 let add_stepid = '<?php echo $data['step_count']?>';
 let step_torque_unit = '<?php echo $data['step_torque_unit']?>';
-
+let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+let isProcessing = false; 
 
 $(document).ready(function () {
     highlight_row('step_table');
@@ -496,6 +513,9 @@ function cound_step(argument){
 
 
     if(argument =="new"){
+
+        document.querySelector(".main-content").classList.add("overlay-active");
+
         var step_count = countrows();
         if(step_count  < 4){
             create_step();
@@ -931,8 +951,9 @@ function create_step() {
 
     document.getElementById('rpm').value = 200;
     document.getElementById('th_tor').value = 0;
-    document.getElementById('ds_tor').value = 0;
+    document.getElementById('ds_tor').value = 0.3;
     document.getElementById('ds_speed').value =100;
+
 
     var targetoptionselect = document.getElementById('target_opt');
     targetoptionselect.addEventListener('change', function() {
@@ -942,93 +963,102 @@ function create_step() {
         toggleVisibility(target_opt_Value);
     });
 
-   
-
 }
-   
-function add_step(){
+  
 
-    var target_option = document.getElementById('target_opt').value;
-    var target_tor    = document.getElementById('target_tor').value;
-    var target_ang    = document.getElementById('target_ang').value;
-    var target_delay  = document.getElementById('target_delay').value;
-    var tor_hi        = document.getElementById('tor_hi').value;
-    var tor_lo        = document.getElementById('tor_lo').value;
-    var ang_hi        = document.getElementById('ang_hi').value;
-    var ang_lo        = document.getElementById('ang_lo').value;
-    var rpm           = document.getElementById('rpm').value;
-    var direction     = document.querySelector('input[name="direction_option"]:checked').value;
-    var ds_mode       = document.querySelector('input[name="ds_mode"]:checked').value;
-    var th_tor        = document.getElementById('th_tor').value;
-    var ds_tor        = document.getElementById('ds_tor').value;
-    var ds_speed      = document.getElementById('ds_speed').value;
-    var record_ang    = 0; //紀錄 累計角度(DB有這個欄位,但是SA並沒有)
 
-    //驗證 
-    let check = input_check_savestep();
-    if(check){
 
-    }
-    //alert(direction_opt);
-
-    /*var target_option = document.getElementById('target_opt').value;
-
+function add_step() {
     
-    var target_torque = document.getElementById('target_torque').value;
+    // 防止重複處理的標誌
+    if (isProcessing) return;
+    isProcessing = true; // 設置為處理中
 
-    var hi_torque = document.getElementById('hi_torque').value;
-    var lo_torque = document.getElementById('lo_torque').value;
-
-    var hi_angle = document.getElementById('hi_angle').value;
-    var lo_angle = document.getElementById('lo_angle').value;
+    var target_opt = document.getElementById('target_opt').value;
+    var target_tor = document.getElementById('target_tor').value;
+    var target_ang = document.getElementById('target_ang').value;
+    var target_delay = document.getElementById('target_delay').value;
+    var tor_hi = document.getElementById('tor_hi').value;
+    var tor_lo = document.getElementById('tor_lo').value;
+    var ang_hi = document.getElementById('ang_hi').value;
+    var ang_lo = document.getElementById('ang_lo').value;
     var rpm = document.getElementById('rpm').value;
+    var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
+    var ds_mode = document.querySelector('input[name="ds_mode"]:checked').value;
+    var th_tor = document.getElementById('th_tor').value;
+    var ds_tor = document.getElementById('ds_tor').value;
+    var ds_speed = document.getElementById('ds_speed').value;
+    var record_ang = 0; //紀錄 累計角度
+    var tor_unit = 3; //預設
 
-    var threshold_torque = document.getElementById('downshift_threshold').value;
-    var downshift_torque = document.getElementById('downshift_torque').value;
-    var downshift_speed  = document.getElementById('downshift_speed').value;
-
-    var direction = document.querySelector('input[name="direction_option"]:checked').value;
-    var downshift = document.querySelector('input[name="downshift_option"]:checked').value;
-
-
-    //驗證
+    // 驗證
     let check = input_check_savestep();
-
-    if(check){
+    if (check) {
+        // 顯示加載動畫
+        document.getElementById('spinner').style.display = 'block';
 
         $.ajax({
             url: "?url=Step/create_step",
             method: "POST",
-            data:{ 
+            data: {
                 jobid: jobid,
                 seqid: seqid,
-                stepid: stepid,
-                target_option: target_option,
-                target_torque: target_torque,
-                hi_torque: hi_torque,
-                lo_torque: lo_torque,
-                hi_angle: hi_angle,
-                lo_angle: lo_angle,
+                stepid: add_stepid,
+                target_opt: target_opt,
+                target_ang: target_ang,
+                target_delay: target_delay,
+                tor_hi: tor_hi,
+                tor_lo: tor_lo,
+                ang_hi: ang_hi,
+                ang_lo: ang_lo,
                 rpm: rpm,
                 direction: direction,
-                downshift: downshift,
-                threshold_torque: threshold_torque,
-                downshift_torque: downshift_torque,
-                downshift_speed: downshift_speed
-
+                ds_mode: ds_mode,
+                th_tor: th_tor,
+                ds_tor: ds_tor,
+                ds_speed: ds_speed,
+                record_ang: record_ang,
+                tor_unit: tor_unit
             },
             success: function(response) {
-                //console.log(response);
                 var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                });
+                // 延遲 1000 毫秒後隱藏加載動畫，並顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    // 隱藏加載動畫
+                    document.getElementById('spinner').style.display = 'none';
+
+                    // 顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        // 只刷新一次頁面
+                        if (!window.pageRefreshed) {
+                            window.pageRefreshed = true; // 防止無限重複刷新
+                            history.go(0);
+                        }
+                    });
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        if (!window.pageRefreshed) {
+                            window.pageRefreshed = true;
+                            history.go(0);
+                        }
+                    }, 3000); 
+                }, 1000); // 延遲 1000 毫秒
             },
             error: function(xhr, status, error) {
-                
+                console.error("AJAX request failed:", status, error);
+                // 顯示錯誤信息
+                document.getElementById('spinner').style.display = 'none';
+                alertify.alert('Error', 'There was an issue with the request. Please try again later.');
+            },
+            complete: function() {
+                isProcessing = false; // 處理結束
             }
         });
-    }*/
+    } else {
+        isProcessing = false; // 如果驗證不通過，重置處理狀態
+    }
 }
 
 
@@ -1044,7 +1074,6 @@ function copy_step_by_id(){
 }
 
 function copy_step_by_id_ajax(){
-    //var stepid = readFromLocalStorage("stepid");
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['seq_id']?>';
     var stepid_new  = '<?php echo $data['stepid_new']?>';
@@ -1102,7 +1131,6 @@ function del_stepid(step_id){
 
 var rowInfoArray = [];
 <?php foreach($data['step'] as $key =>$val) {?>
-        var jobid = "<?php echo $val['job_id'];?>";
         var sequenceId = "<?php echo $val['seq_id'];?>";
         var stepid = "<?php echo $val['step_id'];?>";
       
@@ -1147,8 +1175,69 @@ function countrows() {
     return rowCount;
 }
 
+function input_check_savestep() {
 
+    let target_opt = document.getElementById("target_opt").value;
+    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor').value);
+    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor').value);
+    let Tool_Max_RPM = document.getElementById('tool_max_rpm').value;
+    let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
+    let hi_angle_max = 9999;
+    let hi_angle_min = 1;
 
+    let conditions = []; // 初始化為空數組
+    if (target_opt == 0) {
+        conditions = [
+            { id: 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+            { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+        ];
+    }
+
+    if (target_opt == 1) {
+        conditions = [
+            { id: 'target_ang', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+        ];
+    }
+
+    if (target_opt == 2) {
+        conditions = [
+            { id: 'target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
+        ];
+    }
+
+    let isFormValid = true;
+    conditions.forEach(function(input) {
+        var element = document.getElementById(input.id);
+        if (input.id !== 'target_opt') {
+            let nextSibling = element.nextElementSibling;
+            if (nextSibling) {
+                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
+            } else {
+                console.warn(`No next sibling found for element with id ${input.id}`);
+            }
+        }
+
+        // 移除先前的錯誤樣式
+        element.classList.remove("is-invalid");
+
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
+            isFormValid = false;
+        }
+    });
+
+    return isFormValid;
+}
 
 function validateInput(element, pattern, min, max) {
     let value = element.value.trim();
@@ -1165,12 +1254,12 @@ function validateInput(element, pattern, min, max) {
         isValid = false;
     }
     // 验证最小值
-    else if (min !== null && parseFloat(value) < min) {
+    else if (min !== null && min !== undefined && parseFloat(value) < min) {
         element.classList.add("is-invalid");
         isValid = false;
     }
     // 验证最大值
-    else if (max !== null && parseFloat(value) > max) {
+    else if (max !== null && max !== undefined && parseFloat(value) > max) {
         element.classList.add("is-invalid");
         isValid = false;
     }
@@ -1181,270 +1270,5 @@ function validateInput(element, pattern, min, max) {
 
     return isValid;
 }
-
-function input_check_savestep(){
-
-    let target_opt = document.getElementById("target_opt").value;
-    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_torque').value);
-    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_torque').value);
-    let Tool_Max_RPM = document.getElementById('tool_max_rpm').value;
-    let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
-    let hi_angle_max = 9999;
-    let hi_angle_min = 1;
-
-    let conditions  = [];
-    if(target_opt == 0){
-        //需要驗證 target_tor
-        conditions = [
-            { id: 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque }
-        ];
-
-    }
-
-
-    if(target_opt == 1){
-        //需要驗證 target_ang
-        conditions = [
-            { id: 'target_ang', pattern: /^\d{0,5}?$/, min: 1, max: 9999 }
-        ];
-
-    }
-
-
-    if(target_opt == 2){
-        //需要驗證 target_delay
-        conditions = [
-            { id: 'target_delay', pattern: /^\d{0,5}?$/, min: 0.1, max: 9.9 }
-        ];
-
-    }
-    //unscrew_torque_threshold
-    conditions = [
-        { id: 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-    ];
-
-    let isFormValid = true;
-    conditions.forEach(function(input) {
-        var element = document.getElementById(input.id);
-        if (input.id !== 'target_opt') {
-            let nextSibling = element.nextElementSibling;
-            if (nextSibling) {
-                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
-            } else {
-                console.warn(`No next sibling found for element with id ${input.id}`);
-            }
-        }
-        if (!validateInput(element, input.pattern, input.min, input.max)) {
-            isFormValid = false;
-        }
-
-    });
-
-
-return true;
-
-
-
-
-return isFormValid;
-
-} 
-
-function input_check_savestep11() {
-
-    let target_opt = document.getElementById("target_opt").value;
-    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_torque').value);
-    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_torque').value);
-    let Tool_Max_RPM = document.getElementById('tool_max_rpm').value;
-    let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
-    let hi_angle_max = 9999;
-    let hi_angle_min = 1;
-
-    //let StepOption = document.getElementById("StepOption").value;
-    //let Target_Torque_value = document.getElementById('StepTorque').value;
-    //let delta = Number.parseFloat(Tool_Min_Torque * 0.05).toFixed(4);
-
-    //let  StepEnableThreshold = document.querySelector('input[name="StepEnableThreshold"]:checked');
-
-        /*if(StepEnableThreshold.value == 0){
-            Tool_Max_Torque = 0;
-            Tool_Min_Torque = 0;
-        }*/
-        //alert(Tool_Min_Torque);
- 
-        if(StepOption ==0){
-
-            //torque
-            /*et offset_max = 0;
-            if( parseFloat(Tool_Max_Torque*1.08 - Target_Torque_value).toFixed(2) >= parseFloat(Target_Torque_value*0.3).toFixed(4) ){
-                offset_max = parseFloat(Target_Torque_value*0.3).toFixed(4);
-            }else{
-                offset_max = parseFloat(Tool_Max_Torque*1.08 - Target_Torque_value).toFixed(2);
-            }
-            let offset_min = 0;
-            let aa = Number.parseFloat(Tool_Min_Torque*0.7 - Target_Torque_value ).toFixed(4);
-            let bb = Number.parseFloat(Target_Torque_value*0.3).toFixed(4);
-            if( aa >= -bb ){
-                offset_min = aa;
-            }else{
-                offset_min = -bb;
-            }
-
-
-            hi_angle_max = 30600
-            hi_angle_min = 0;
-            //lo_angle_max =  document.getElementById('StepHiAngle').value;
-            lo_angle_max = 0;
-            lo_angle_min = 0;
-            hi_torque_max = Number.parseFloat(Tool_Max_Torque*1.1).toFixed(4);
-            hi_torque_min = Number.parseFloat( parseFloat(Target_Torque_value) + parseFloat(delta) ).toFixed(4);
-            lo_torque_max = Number.parseFloat( parseFloat(Target_Torque_value) - parseFloat(delta) ).toFixed(4);
-            lo_torque_min = 0;
-            join_offset_max = offset_max;
-            join_offset_min = offset_min;
-            torque_threshold_max = document.getElementById('StepTorque').value;
-            torque_threshold_min = 0;
-            downshift_torque_max = document.getElementById('StepTorque').value;
-            downshift_torque_min = 0;
-            downshift_speed_max = document.getElementById('StepRPMDownShift').value;
-            downshift_speed_min = Tool_Min_RPM;
-
-            angle_threshold_max = 30600;
-            angle_threshold_min = 0;
-            downshift_angle_max = 30600;
-            downshift_angle_min = 0;*/
-
-        }else if(StepOption ==1){
-
-            //Angle 
-            let offset_max = Number.parseFloat(Tool_Max_Torque*0.3).toFixed(4);
-            let offset_min = parseFloat(Tool_Min_Torque*0.7 - document.getElementById('StepHiTorque').value ).toFixed(4);
-            if(Math.abs(offset_min) > Math.abs(offset_max)){
-                offset_min = offset_max * -1;
-            }
-
- 
-
-           
-
-        }else{
-
-            //time
-            let offset_max = 99999;
-            let offset_min = 0;
-  
-
-         
-
-        }
-
-        let conditions  = [];
-        if (StepOption == 0) {
-        // StepOption == 0: 需要驗證 StepTorque，不需要驗證 StepAngle 和 StepTime
-            conditions = [
-                { id: 'StepTorque', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque }
-            ];
-        } else if (StepOption == 1) {
-            // StepOption == 1: 需要驗證 StepAngle，不需要驗證 StepTorque 和 StepTime
-            conditions = [
-                { id: 'StepAngle', pattern: /^\d{0,5}?$/, min: 1, max: 30600 }
-            ];
-        } else if (StepOption == 2) {
-            // StepOption == 2: 需要驗證 StepTime，不需要驗證 StepTorque 和 StepAngle
-            conditions = [
-                { id: 'StepTime', pattern: /^\d{0,5}?$/, min: 0, max: 20 }
-            ];
-        }
-
-        //unscrew_torque_threshold
-         conditions = [
-            { id: 'STEPname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-            { id: 'StepDelay', pattern: /^\d{0,4}$/, min: 0, max: 2000 }, 
-            { id: 'StepRPM', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-            { id: 'k_value', pattern: /^(0(\.\d{1,2})?|1(\.\d{2})?|2(\.([0-4]{1}[0-9]{1}|50)))$/, min: 0, max: 2.50 },  
-            { id: 'StepRPMDownShift',pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM},
-            //{ id: 'StepTorqueTS', pattern: /^\d{0,4}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },20250113 暫時disabled
-            //{ id: 'StepTorqueDownShift', pattern: /^\d{0,4}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },20250113暫時disabled
-            { id: 'StepHiTorque',pattern: /^\d{0,6}(\.\d{0,4})?$/, min: lo_torque_min, max: hi_torque_max },
-            { id: 'StepLoTorque',pattern: /^\d{0,6}(\.\d{0,4})?$/, min: lo_torque_min, max: hi_torque_max },
-            { id: 'StepHiAngle', pattern: /^\d{0,5}?$/, min: hi_angle_min, max: 30600 },
-            { id: 'StepLoAngle', pattern: /^\d{1,6}$/, min: lo_angle_min, max: lo_angle_max },
-            { id: 'StepLimiHi',pattern: /^\d{0,3}$/, min: 0, max:100 },
-            { id: 'StepLimiLo',pattern: /^\d{0,3}$/, min: 0, max:100 },
-            //{ id: 'StepTorque', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            //{ id: 'StepAngle', pattern: /^\d{0,5}?$/, min: 1, max: 30600 },
-            //{ id: 'StepTime', pattern: /^\d{0,5}?$/, min: 0, max: 20 },
-   
-        ];
-
-        if (StepOption == 0) {
-            // 當 StepOption == 0 時，不需要驗證 StepAngle 和 StepTime
-            conditions.push(
-                { id: 'StepTorque', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-              
-            );
-        } else if (StepOption == 1) {
-            // 保留所有欄位驗證
-            conditions.push(
-                { id: 'StepAngle', pattern: /^\d{0,5}?$/, min: 1, max: 30600 },
-            );
-        } else if (StepOption == 2) {
-            // 保留所有欄位驗證
-            conditions.push(
-                { id: 'StepTime', pattern: /^\d{0,5}?$/, min: 0, max: 20 },
-            );
-        }
-
-
-        let isFormValid = true;
-        let errorMessages = []; 
-        conditions.forEach(function(input) {
-            var element = document.getElementById(input.id);
-            var value = element.value.trim();
-
- 
-            if(input.id != 'STEPname'){
-                var nextSibling = element.nextElementSibling;
-                if (nextSibling) {
-                    nextSibling.innerHTML = input.min + ' ~ ' + input.max;
-                }
-            }
-
-            if (value === "") {
-                element.classList.add("is-invalid");
-                errorMessages.push(input.message); // 儲存錯誤訊息
-                isFormValid = false;
-            } else if (!input.pattern.test(value)) {
-                element.classList.add("is-invalid");
-                errorMessages.push(input.message); // 儲存錯誤訊息
-                isFormValid = false;
-            } else if (input.min !== null && parseFloat(value) < input.min) {
-                element.classList.add("is-invalid");
-                errorMessages.push(input.message); // 儲存錯誤訊息
-                isFormValid = false;
-            } else if (input.max !== null && parseFloat(value) > input.max) {
-                element.classList.add("is-invalid");
-                errorMessages.push(input.message); // 儲存錯誤訊息
-                isFormValid = false;
-            } else {
-                element.classList.remove("is-invalid");
-            }
-
-        });
-
-        
-        console.log(isFormValid);
-        if (!isFormValid) {
-            //alert("以下欄位有錯誤：\n" + errorMessages.join("\n"));
-            return false;  // 只要有錯誤，回傳 false
-        }
-
-        return true;
-
-
-
-    return isFormValid;
-}
-
 
 </script>

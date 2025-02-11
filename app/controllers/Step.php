@@ -30,15 +30,20 @@ class Step extends Controller
         $direction = $this->MiscellaneousModel->details('rev_direction');
         $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
         $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
-        $check     = $this->stepModel->check_step_target($job_id,$seq_id);
+  
         $tools     = $this->ToolModel->GetToolInfo();
 
         $step_count = $this->stepModel->countstep($job_id, $seq_id);
         $step_count = intval($step_count);
-        if($step_count ==0){
+        $step_id = intval($step_count);
+        if($step_count == 0){
             $step_count = 1;
+            $step_id = 1;
         }
 
+
+        $check = $this->stepModel->check_step_target($job_id,$seq_id,$step_id);
+        var_dump($check[0]);die();
 
         $res_device = $this->SettingModel->GetControllerInfo();
         if(!empty($res_device)){
@@ -52,7 +57,9 @@ class Step extends Controller
             $stepid_new = count($step) + 1 ;
         }
 
-        //$count_records = (int)$check['count_records'];
+        if(!empty($check['count_records'])){
+            $count_records = (int)$check['count_records'];
+        }
         if(!empty($check[0]['count_records'])){
 
 
@@ -79,11 +86,17 @@ class Step extends Controller
             'check_step_torque' => $check_step_torque,
             'check' => $check,
             'step_count' => $step_count,
-            'tools' => $tools
-            //'count_records' => $count_records
+            'tools' => $tools,
+            'count_records' => $count_records
 
         );
 
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
+
+
+ 
         if($isMobile){
             $this->view('step/index_m', $data);
         }else{
@@ -104,7 +117,7 @@ class Step extends Controller
 
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
             $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
-            $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0; 
+            $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 1; 
             $target_opt = isset($_POST['target_opt'])? intval($_POST['target_opt']) : 0; 
             $target_tor = isset($_POST['target_tor'])? floatval($_POST['target_tor']) : 0; 
             $target_ang = isset($_POST['target_ang'])? intval($_POST['target_ang']) : 0; 
@@ -113,85 +126,25 @@ class Step extends Controller
             $tor_lo = isset($_POST['tor_lo'])? floatval($_POST['tor_lo']) : 0; 
             $ang_hi  = isset($_POST['ang_hi'])? intval($_POST['ang_hi']) : 0; 
             $ang_lo  = isset($_POST['lo_angle'])? intval($_POST['ang_lo']) : 0; 
-            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 0;
+            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 200;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
             $ds_mode = isset($_POST['ds_mode'])? intval($_POST['ds_mode']) : 0;
-            $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0; 
-            $ds_speedg = isset($_POST['ds_speed'])? intval($_POST['ds_speed']) : 0;
+            $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0.3; 
+            $ds_speed = isset($_POST['ds_speed'])? intval($_POST['ds_speed']) : 100;
             $th_tor = isset($_POST['th_tor'])? floatval($_POST['th_tor']) : 0;
             $record_ang = isset($_POST['record_ang'])? intval($_POST['record_ang']) : 0;
-            $tor_unit = isset($_POST['tor_unit'])? intval($_POST['tor_unit']) : 0;
+            $tor_unit = isset($_POST['tor_unit'])? intval($_POST['tor_unit']) : 1;
 
             #同一個step 只能有一個Target Torque
-            $check = $this->stepModel->check_step_target($jobid,$seqid);
-            $check = intval($check[0]['count_records']);
+            //$check = $this->stepModel->check_step_target($jobid,$seqid);
+            //$check = intval($check[0]['count_records']);
 
 
-
-            if($target_option == 2){
-                $downshift = 1;
-            }
-            
-
-
-    
-            #驗證hi_angle的範圍
-            /*if(!empty($hi_angle)){
-                $ans = $this->MiscellaneousModel->check_angle($hi_angle);
-                if($ans == FALSE){
+            if($target_opt  == 0 && $target_opt  == 1){
+                //需要驗證 tor_lo 必須 小於 tor_hi
+                if($tor_lo  > $tor_hi){
                     $res_type = 'Error';
-                    $res_msg  = $error_message['High_Angle'];
-                    $result = array(
-                        'res_type' => $res_type,
-                        'res_msg'  => $res_msg 
-                    );
-                    echo json_encode($result);
-                    exit();
-
-                }
-            }*/
-
-            #驗證lo_angle的範圍
-            /*if(!empty($lo_angle)){
-                $ans = $this->MiscellaneousModel->check_angle($lo_angle);
-                if($ans == FALSE){
-                    $res_type = 'Error';
-                    $res_msg  = $error_message['Low_Angle'];
-                    $result = array(
-                        'res_type' => $res_type,
-                        'res_msg'  => $res_msg 
-                    );
-                    echo json_encode($result);
-                    exit();
-
-                }
-            }*/
-
-
-            #最小角度 必須小於 最大角度
-            /*if($lo_angle > $hi_angle){
-                $res_type = 'Error';
-                $res_msg  =  $error_message['angle_error'];
-                $result = array(
-                    'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
-                );
-                echo json_encode($result);
-                exit();
-
-            }*/
-
-
-            if($check > 1){
-                $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
-                exit();
-            }
-
-            if($target_option  == 0 && $target_option  == 1){
-                #$target_torque 必填
-                if(empty($target_torque)){
-                    $res_type = 'Error';
-                    $res_msg  =  $error_message['target_torque_empty'];
+                    $res_msg  =  $error_message['angle_error'];
                     $result = array(
                         'res_type' => $res_type,
                         'res_msg'  => $res_msg 
@@ -200,8 +153,8 @@ class Step extends Controller
                     exit();
                 }
 
-                #最小扭力 必須小於 最大扭力
-                if($hi_torque < $lo_torque){
+                //需要驗證 ang_lo 必須 小於 ang_hi
+                if($ang_lo  > $ang_hi){
                     $res_type = 'Error';
                     $res_msg  =  $error_message['torque_error'];
                     $result = array(
@@ -211,68 +164,45 @@ class Step extends Controller
                     echo json_encode($result);
                     exit();
                 }
+            }   
 
-                //if()
+            
+            if ($target_opt == 0) {
+                $target_ang = 0;
+                $target_delay = 0;
+            } elseif ($target_opt == 1) {
+                $target_tor = 0;
+                $target_delay = 0;
+            } elseif ($target_opt == 2) {
+                $target_tor = 0;
+                $target_ang = 0;
             }
 
-
-
-            if($target_option == 2){
-                $target_delaytime = $target_torque; 
-                if ($target_torque < 0.1 || $target_torque > 9.9){
-                    if($target_option == 2){
-                        if ($target_delaytime < 0.1 || $target_delaytime > 9.9){
-        
-                            $res_type = 'Error';
-                            $res_msg  =  $text['check_step_target'];
-                            $result = array(
-                                'res_type' => $res_type,
-                                'res_msg'  => $res_msg 
-                            );
-                            echo json_encode($result);
-                            exit();
-                        }
-        
-                    }
-        
-                }else{
-                    $target_torque = 0;
-                    $target_angle  = 0;
-                }
-            }
-
-            if($target_option == 0){
-                $target_angle  = 0;
-                $target_delaytime = 0;
-            }
-            if($target_option == 1){
-                $target_angle = $target_torque;
-                $target_torque = 0;
-                $target_delaytime = 0;
-            }
+            $record_ang = 0;
 
             $jobdata = array(
                 'job_id'           => $jobid,
                 'seq_id'           => $seqid,
                 'step_id'          => $stepid,
-                'target_option'    => $target_option,
-                'target_torque'    => $target_torque,
-                'target_angle'     => $target_angle,
-                'target_delaytime' => $target_delaytime,
-                'hi_torque'        => $hi_torque,
-                'lo_torque'        => $lo_torque,
-                'hi_angle'         => $hi_angle,
-                'lo_angle'         => $lo_angle,
+                'target_opt'       => $target_opt,
+                'target_tor'       => $target_tor,
+                'target_ang'       => $target_ang,
+                'target_delay'     => $target_delay,
+                'tor_hi'           => $tor_hi,
+                'tor_lo'           => $tor_lo,
+                'ang_hi'           => $ang_hi,
+                'ang_lo'           => $ang_lo,
                 'rpm'              => $rpm,
                 'direction'        => $direction,
-                'downshift'        => $downshift,
-                'threshold_torque' => $threshold_torque,
-                'downshift_torque' => $downshift_torque,
-                'downshift_speed'    => $downshift_speed,
+                'ds_mode'          => $ds_mode,
+                'th_tor'           => $th_tor,
+                'ds_tor'           => $ds_tor,
+                'ds_speed'         => $ds_speed,
+                'record_ang '      => $record_ang,
+                'tor_unit'         => $tor_unit
                 
             );
-
-
+   
             $mode = "create"; 
             $res = $this->stepModel->create_step($mode,$jobdata);
             $result = array();
@@ -285,6 +215,29 @@ class Step extends Controller
                 $res_msg = $text['new_step'].':'.$stepid."  ".$text['fail'];
                 $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
             }
+
+
+        
+
+
+            
+
+
+            /*if($target_option == 2){
+                $downshift = 1;
+            }*/
+            
+
+
+
+
+
+            /*if($check > 1){
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
+                exit();
+            }*/
+
+          
         }
 
     }
