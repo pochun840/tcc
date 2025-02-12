@@ -261,7 +261,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: 80%">
                 <header class="w3-container modal-header">
-                    <span onclick="hideElementById('editstep');"
+                    <span onclick="closebutton('editstep');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['edit_step'];?></h3>
                 </header>
@@ -284,7 +284,7 @@
                         <div class="row">
                             <div for="edit_target-torque" id="edit_target-torque_title"  class="col-6 t1" style="display: none;" ><?php echo $text['Target_Angle'];?>(<?php echo $text[$data['step_torque_unit']];?>):</div>
                             <div class="col-3 t2" id="edit_target-torque_val" style="display:none;" >
-                                <input type="text" class="form-control input-ms" id="edit_target_torque" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_target_tor`" maxlength="" >
                             </div>
                         </div>
                      
@@ -293,7 +293,7 @@
                         <div class="row">
                             <div for="edit_target-angle" id="edit_target-angle_title"  class="col-6 t1" style="display: none;" ><?php echo $text['Target_Angle'];?>:</div>
                             <div class="col-3 t2" id="edit_target-angle_val" style="display:none;" >
-                                <input type="text" class="form-control input-ms" id="edit_target_angle" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_target_ang" maxlength="" >
                             </div>
                         </div>
 
@@ -301,33 +301,33 @@
                         <div class="row">
                             <div for="edit_target-delaytime" id="edit_target-delaytime_title"  class="col-6 t1" style="display: none;" ><?php  echo  $text['Target Delay Time'] ; ?>:</div>
                             <div class="col-3 t2" id="edit_target-delaytime_val" style="display:none;" >
-                                <input type="text" class="form-control input-ms" id="edit_target_delaytime" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_target_delay" maxlength="" >
                             </div>
                         </div>
 
                         <div class="row">
                             <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_hi_torque" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_tor_hi" maxlength="" >
                             </div>
                         </div>
                         
                         <div class="row">
                             <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_lo_torque" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_tor_lo" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
                             <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?>:</div>
                             <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_hi_angle" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_ang_hi" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
                             <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
                             <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_lo_angle" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_ang_lo" maxlength="" >
                             </div>
                         </div>
                         <div class="row">
@@ -340,11 +340,11 @@
                             <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CW" value="0">
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_CW" value="0">
             					  <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CCW" value="1">
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_CCW" value="1">
             					  <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
             					</div>
                             </div>
@@ -362,22 +362,22 @@
             					</div>
                             </div>
                         </div>
-                        <div class="row" id="edit_downshift_threshold_title">
-                            <div class="col-6 t1">Downshift Threshold(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2" id="edit_downshift_threshold_item">
-                                <input type="text" class="form-control input-ms" id="edit_downshift_threshold" maxlength="" >
+                        <div class="row">
+                            <div class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_th_tor" maxlength="" >
                             </div>
                         </div>
-                        <div class="row" id="edit_downshift_torque_title">
+                        <div class="row">
                             <div class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2" id="edit_downshift_torque_item">
-                                <input type="text" class="form-control input-ms" id="edit_downshift_torque" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_ds_tor" maxlength="" >
                             </div>
                         </div>
-                        <div class="row" id="edit_downshift_speed_title">
+                        <div class="row">
                             <div class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
-                            <div class="col-3 t2" id="edit_downshift_speed_item">
-                                <input type="text" class="form-control input-ms" id="edit_downshift_speed" maxlength="" >
+                            <div class="col-3 t2">
+                                <input type="text" class="form-control input-ms" id="edit_ds_speed" maxlength="" >
                             </div>
                         </div>
                     </form>
@@ -385,7 +385,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="edit_step_save()" ><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="hideElementById('edittep');"  class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closebutton('edittep');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -500,10 +500,77 @@ for (var i = 0; i < rows.length; i++) {
 
 
 
-function edit_step(){
+function edit_step(stepid){
 
+    if(jobid){
+        $.ajax({
+            url: "?url=Step/search_stepinfo",
+            method: "POST",
+            data:{ 
+                job_id: jobid,
+                seq_id: seqid,
+                step_id:stepid
+
+            },
+            success: function(response) {
+
+                var responseJSON = JSON.stringify(response);
+                var cleanString = responseJSON.replace(/Array|\\n/g, '');
+                var cleanString = cleanString.substring(2, cleanString.length - 2);
+
+                var [, job_id] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seq_id] = cleanString.match(/\[seq_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, step_id] = cleanString.match(/\[step_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_opt] = cleanString.match(/\[target_opt]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_tor] = cleanString.match(/\[target_tor]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_ang] = cleanString.match(/\[target_ang]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_delay] = cleanString.match(/\[target_delay]\s*=>\s*([^ ]+)/) || [, null];
+                var [, tor_hi] = cleanString.match(/\[tor_hi]\s*=>\s*([^ ]+)/) || [, null];
+                var [, tor_lo] = cleanString.match(/\[tor_lo]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ang_hi] = cleanString.match(/\[ang_hi]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ang_lo] = cleanString.match(/\[ang_lo]\s*=>\s*([^ ]+)/) || [, null];
+                var [, rpm] = cleanString.match(/\[rpm]\s*=>\s*([^ ]+)/) || [, null];
+                var [, direction] = cleanString.match(/\[direction]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ds_mode] = cleanString.match(/\[ds_mode]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ds_tor] = cleanString.match(/\[ds_tor]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ds_speed] = cleanString.match(/\[ds_speed]\s*=>\s*([^ ]+)/) || [, null];
+                var [, th_tor] = cleanString.match(/\[th_tor]\s*=>\s*([^ ]+)/) || [, null];
+                var [, record_ang] = cleanString.match(/\[record_ang]\s*=>\s*([^ ]+)/) || [, null];
+                var [, tor_unit] = cleanString.match(/\[tor_unit]\s*=>\s*([^ ]+)/) || [, null];
+
+                document.getElementById('editstep').style.display = 'block';
+
+
+
+                document.getElementById("edit_rpm").value = rpm;
+                document.getElementById("edit_ds_speed").value = ds_speed;
+                document.getElementById("edit_ds_tor").value = ds_tor;
+                document.getElementById("edit_th_tor").value = th_tor;
+                /*document.getElementById("old_seqid").value = seqid;
+                document.getElementById("edit_seq_name").value = seqname;
+                document.getElementById("edit_seq_tr").value = seq_tr;
+
+                document.getElementById("edit_seq_k_val").value = seq_k_val;
+                document.getElementById("edit_seq_ofs").value = seq_ofs;
+                document.getElementById("edit_seq_ns").value = seq_ns;
+        
+                var radioButtons_seq = document.getElementsByName("edit_seq_ok");
+                setRadioButton_value(radioButtons_seq, seq_ok);
+
+                var radioButtons_stop_seq = document.getElementsByName("edit_stop_seq_ok");
+                setRadioButton_value(radioButtons_stop_seq, stop_seq_ok);
+
+
+                var radioButtons_2 = document.getElementsByName("edit_opt_option");
+                setRadioButton_value(radioButtons_2, seq_opt);*/
+  
+            },
+            error: function(xhr, status, error) {
+             
+            }
+        });
+    }
 }
-
 
 
 
@@ -669,7 +736,7 @@ function copy_step_by_id_ajax() {
                 old_step_id: stepid,
                 new_step_id: stepid_new
             },
-            success: function(response) {
+           success: function(response) {
                 alertify.confirm(text_info, function (result) {
                     var responseData = JSON.parse(response);
                     // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗

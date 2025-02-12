@@ -491,35 +491,30 @@ class Step extends Controller
     #查詢step data
     public function search_stepinfo(){
 
-        
         $input_check = true;
-        if(!empty($_POST['jobid']) && isset($_POST['jobid'])){
-            $jobid = $_POST['jobid'];
+        if(!empty($_POST['job_id']) && isset($_POST['job_id'])){
+            $jobid = $_POST['job_id'];
         }else{
             $input_check = false; 
         }
 
-        if(!empty($_POST['seqid']) && isset($_POST['seqid'])){
-            $seqid = $_POST['seqid'];
+        if(!empty($_POST['seq_id']) && isset($_POST['seq_id'])){
+            $seqid = $_POST['seq_id'];
         }else{
             $input_check = false; 
         }
 
 
-        if(!empty($_POST['stepid']) && isset($_POST['stepid'])){
-            $stepid  = $_POST['stepid'];
+        if(!empty($_POST['step_id']) && isset($_POST['step_id'])){
+            $stepid  = $_POST['step_id'];
         }else{
             $input_check = false; 
         }
 
         if($input_check){
 
-            $check = $this->stepModel->check_step_target($jobid, $seqid);
-            $check_count = intval($check[0]['count_records']);
-
             $res = $this->stepModel->getStepNo($jobid, $seqid, $stepid);
-            $res['check_count'] = $check_count;
-            print_r($res);
+            print_r($res[0]);
         }
 
     }

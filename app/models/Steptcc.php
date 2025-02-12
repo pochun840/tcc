@@ -37,11 +37,11 @@ class Steptcc{
     }
 
     #透過job_id 及 seq_id 及 step_id取得對應的資料
-    public function getStepNo($job_id,$seq_id,$ols_step_id){
+    public function getStepNo($job_id,$seq_id,$old_step_id){
 
         $sql = "SELECT * FROM step WHERE job_id = ? AND seq_id = ? AND step_id = ?";
         $statement = $this->db_iDas->prepare($sql);
-        $statement->execute([$job_id, $seq_id, $ols_step_id]);
+        $statement->execute([$job_id, $seq_id, $old_step_id]);
         return $statement->fetchAll();
 
     }
