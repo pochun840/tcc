@@ -41,9 +41,7 @@ class Step extends Controller
             $step_id = 1;
         }
 
-
         $check = $this->stepModel->check_step_target($job_id,$seq_id,$step_id);
-        var_dump($check[0]);die();
 
         $res_device = $this->SettingModel->GetControllerInfo();
         if(!empty($res_device)){
@@ -57,17 +55,14 @@ class Step extends Controller
             $stepid_new = count($step) + 1 ;
         }
 
-        if(!empty($check['count_records'])){
-            $count_records = (int)$check['count_records'];
-        }
         if(!empty($check[0]['count_records'])){
-
-
+            $count_records = (int)$check[0]['count_records'];
             $check_step_torque = 1;
         }else{
-            $check_step_torque = '';
+            $check_step_torque = '';   
+            $count_records = ''; 
         }
-
+    
 
         $data = array(
             'isMobile' => $isMobile,
@@ -77,7 +72,7 @@ class Step extends Controller
             'direction' => $direction,
             'job_id' => $job_id,
             'seq_id' => $seq_id,
-            'stepid_new' => $stepid_new,
+            'step_id' => $stepid_new,
             'unit_arr' => $unit_arr,
             'step_torque_unit' => $step_torque_unit,
             'check' => $check,
@@ -90,12 +85,6 @@ class Step extends Controller
             'count_records' => $count_records
 
         );
-
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
-
-
  
         if($isMobile){
             $this->view('step/index_m', $data);
@@ -215,29 +204,6 @@ class Step extends Controller
                 $res_msg = $text['new_step'].':'.$stepid."  ".$text['fail'];
                 $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
             }
-
-
-        
-
-
-            
-
-
-            /*if($target_option == 2){
-                $downshift = 1;
-            }*/
-            
-
-
-
-
-
-            /*if($check > 1){
-                $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
-                exit();
-            }*/
-
-          
         }
 
     }
@@ -423,6 +389,7 @@ class Step extends Controller
             include $file;
         }
         
+
         if(isset($_POST['stepid'])){
             
             $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : '';
@@ -448,75 +415,76 @@ class Step extends Controller
     
     }
 
-    public function copy_step(){
+    public function copy_tcc_step(){
 
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
         }
 
-        if(isset($_POST['jobid'])){
-
-            #如果 POST 中沒有，則使用預設值
-            $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : '';
-            $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : '';
-            $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 0;
-            $stepid_new = isset($_POST['stepid_new']) ? intval($_POST['stepid_new']) : '';
-            $step_count = $this->stepModel->countstep($jobid, $seqid);
-            $step_count = intval($step_count);
-
-            if($step_count >= 4) {
-                echo "The maximum number of steps has been reached, unable to continue copying steps";
-                return;
-            }
+        if(isset($_POST['job_id'])){
+            $job_id      = isset($_POST['job_id']) ? intval($_POST['job_id']) : '';
+            $seq_id      = isset($_POST['seq_id']) ? intval($_POST['seq_id']) : '';
+            $old_step_id = isset($_POST['old_step_id']) ? intval($_POST['old_step_id']) : '';
+            $new_step_id = isset($_POST['new_step_id']) ? intval($_POST['new_step_id']) : '';
 
             #檢查被複製的那個step 是不是  Target Torque
-            $check = $this->stepModel->check_copy_step($jobid,$seqid,$stepid);
-            $check = intval($check[0]['target_option']);
-            if($check == 0 ){
-                $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target'] );
+            $check = $this->stepModel->check_copy_step($job_id,$seq_id, $old_step_id);
+            $check = intval($check[0]['target_opt']);
 
-            }else{
-                $old_res= $this->stepModel->getStepNo($jobid,$seqid,$stepid);
+            if($check != 0){
+
+                //可以新增資料  
+                $old_res= $this->stepModel->getStepNo($job_id,$seq_id,$old_step_id);    
                 if(!empty($old_res)){
                     $jobdata = array(
-                        'job_id'           => $jobid,
-                        'seq_id'           => $seqid,
-                        'step_id'          => $stepid_new,
-                        'target_option'    => $old_res[0]['target_option'],
-                        'target_torque'    => $old_res[0]['target_torque'],
-                        'target_angle'     => $old_res[0]['target_angle'],
-                        'target_delaytime' => $old_res[0]['target_delaytime'],
-                        'hi_torque'        => $old_res[0]['hi_torque'],
-                        'lo_torque'        => $old_res[0]['lo_torque'],
-                        'hi_angle'         => $old_res[0]['hi_angle'],
-                        'lo_angle'         => $old_res[0]['lo_angle'],
+                        'job_id'           => $job_id,
+                        'seq_id'           => $seq_id,
+                        'step_id'          => $new_step_id,
+                        'target_opt'       => $old_res[0]['target_opt'],
+                        'target_tor'       => $old_res[0]['target_tor'],
+                        'target_ang'       => $old_res[0]['target_ang'],
+                        'target_delay'     => $old_res[0]['target_delay'],
+                        'tor_hi'           => $old_res[0]['tor_hi'],
+                        'tor_lo'           => $old_res[0]['tor_lo'],
+                        'ang_hi'           => $old_res[0]['ang_hi'],
+                        'ang_lo'           => $old_res[0]['ang_lo'],
                         'rpm'              => $old_res[0]['rpm'],
                         'direction'        => $old_res[0]['direction'],
-                        'downshift'        => $old_res[0]['downshift'],
-                        'threshold_torque' => $old_res[0]['threshold_torque'],
-                        'downshift_torque' => $old_res[0]['downshift_torque'],
-                        'downshift_speed'  => $old_res[0]['downshift_speed']
-                    );
-    
+                        'ds_mode'          => $old_res[0]['ds_mode'],
+                        'th_tor'           => $old_res[0]['th_tor'],
+                        'ds_tor'           => $old_res[0]['ds_tor'],
+                        'ds_speed'         => $old_res[0]['ds_speed'],
+                        'record_ang '      => $old_res[0]['record_ang'],
+                        'tor_unit'         => $old_res[0]['tor_unit']
+                    ); 
+
                     $mode = "copy"; 
                     $res = $this->stepModel->create_step($mode,$jobdata);
-
+                    $result = array();
                     if($res){
                         $res_type = 'Success';
-                        $res_msg  = $text['copy_step'].':'.$stepid_new."  ".$text['success'];
+                        $res_msg = $text['copy_step'].':'.$new_step_id."  ".$text['success'];
                         $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
                     }else{
                         $res_type = 'Error';
-                        $res_msg  = $text['copy_step'].':'.$stepid_new."  ".$text['fail'];
+                        $res_msg = $text['copy_step'].':'.$new_step_id."  ".$text['fail'];
                         $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
                     }
-        
+
+
                 }
+            }else{
+
+                
             }
+        
+        
         }
+          
 
     }
+   
 
     #查詢step data
     public function search_stepinfo(){

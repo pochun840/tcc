@@ -124,14 +124,14 @@ th, td
 .scrollbar
 {
     float: left;
-    height: calc(100vh - 173px);
+    height: calc(100vh - 220px);
     width: 100%;
     overflow-y: scroll;
 }
 
 .force-overflow
 {
-    min-height: 60vh;
+    min-height: 50vh;
 }
 
 #wrapper

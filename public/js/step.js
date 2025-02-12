@@ -1,15 +1,75 @@
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('click', function(event) {
-        if (event.target && event.target.id === 'copyButton') {
-            copy_step_by_id();
-        }
+
+function create_step() {
+
+    document.getElementById('newstep').style.display = 'block';
+
+    document.getElementById('rpm').value = 200;
+    document.getElementById('th_tor').value = 0;
+    document.getElementById('ds_tor').value = 0.3;
+    document.getElementById('ds_speed').value =100;
+
+
+    var targetoptionselect = document.getElementById('target_opt');
+    targetoptionselect.addEventListener('change', function() {
+
+    var target_opt_Value = targetoptionselect.value;
+        localStorage.setItem('target_option', target_opt_Value);
+        toggleVisibility(target_opt_Value);
     });
-});
+
+}
+  
+
+
+function countrows() {
+    var tbody = document.querySelector('#step_table tbody');
+    var rows = tbody.querySelectorAll('tr');
+    var rowCount = rows.length;
+
+    return rowCount;
+}
+
+
+function cound_step(argument){
+
+    var table = document.getElementById('step_table');
+    var selectedRow = table.querySelector('.selected');
+    var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
+    stepid = selectedRowData;
+    if(argument == 'del'){
+        document.querySelector(".main-content").classList.add("overlay-active");
+        del_stepid(stepid);
+    }
+
+    if(argument =="copy" && stepid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
+        copy_step(stepid);
+    }
+
+
+    if(argument =="new"){
+
+        document.querySelector(".main-content").classList.add("overlay-active");
+
+        var step_count = countrows();
+        if(step_count  < 4){
+            create_step();
+        }
+    }
+
+    if(argument =="edit" && stepid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
+        edit_step(stepid);
+    }
+
+}
+
+
 
 function copy_step(stepid){
     document.getElementById('copystep').style.display = 'block';   
-    copy_step_by_id();
+    copy_step_by_id(stepid);
 
 }
 
@@ -95,6 +155,65 @@ function toggleVisibility(targetValue) {
         disableElementById('downshift_OFF','');
     }
 }
+
+
+function del_stepid(step_id){
+
+    if(step_id) {
+
+        var language = getCookie('language');
+        if(language == "zh-cn"){
+            var text_info ='你确定吗？';
+            var title = 'Copy Job';
+        }else if(language == "zh-tw"){
+            var text_info ='你確定嗎 ?';
+            var title = 'Copy Job';
+        }else{
+            var text_info ='Are you sure ?';
+            var title = 'Copy Job';
+        }
+
+        document.getElementById('spinner').style.display = 'block';
+        $.ajax({
+            url: "?url=Step/delete_step",
+            method: "POST",
+            data:{ 
+                stepid:step_id,
+                jobid:jobid,
+                seqid:seqid
+            },
+            success: function(response) {
+                alertify.confirm(text_info, function (result) {
+                    var responseData = JSON.parse(response);
+                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                    setTimeout(function() {
+                        // 隱藏加載動畫
+                        document.getElementById('spinner').style.display = 'none';
+
+                        // 顯示 alertify 彈跳視窗
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            // 刷新頁面
+                            history.go(0);  
+                        });
+
+                        // 在 3 秒後自動關閉 alertify 彈跳視窗
+                        setTimeout(function() {
+                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                            history.go(0); 
+                        }, 3000); 
+                    }, 1000); // 延遲 1000 毫秒
+
+                });
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+
+    }
+
+}
+
 
 
 

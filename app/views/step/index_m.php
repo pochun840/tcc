@@ -369,6 +369,9 @@
 </div>
 
 <script>
+
+let seqidnew = '<?php echo $data['stepid_new']?>';
+
 $(document).ready(function () {
     highlight_row('step_table');
 });
@@ -588,30 +591,23 @@ function add_step(){
 }
 
 function copy_step_by_id(){
-    var jobid = '<?php echo $data['job_id']?>';
-    var seqidnew = '<?php echo $data['stepid_new']?>';
-
     document.getElementById('from_step_id').value = stepid;    
     document.getElementById("to_step_id").value = seqidnew;
-
 
 }
 
 function copy_step_by_id_ajax(){
 
-    var jobid = '<?php echo $data['job_id']?>';
-    var seqid = '<?php echo $data['seq_id']?>';
-    var stepid_new  = '<?php echo $data['stepid_new']?>';
 
     if(stepid_new){
         $.ajax({
             url: "?url=Step/copy_step",
             method: "POST",
             data:{ 
-                jobid: jobid,
-                seqid: seqid,
-                stepid:stepid,
-                stepid_new: stepid_new
+                job_id: jobid,
+                seq_id: seqid,
+                old_step_id:stepid,
+                new_step_id: stepid_new
             },
             success: function(response) {
                 var responseData = JSON.parse(response);

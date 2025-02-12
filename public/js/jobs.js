@@ -1,30 +1,46 @@
 
 function delete_jobid(jobid) {
     if (jobid) {
+
+        var language = getCookie('language');
+        if(language == "zh-cn"){
+            var text_info ='你确定吗？';
+            var title = 'Copy Job';
+        }else if(language == "zh-tw"){
+            var text_info ='你確定嗎 ?';
+            var title = 'Copy Job';
+        }else{
+            var text_info ='Are you sure ?';
+            var title = 'Copy Job';
+        }
+
         document.getElementById('spinner').style.display = 'block';
         $.ajax({
             url: "?url=Jobs/delete_jobid",
             method: "POST",
             data: { jobid: jobid },
             success: function(response) {
-                var responseData = JSON.parse(response);
-                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
-                setTimeout(function() {
-                    // 隱藏加載動畫
-                    document.getElementById('spinner').style.display = 'none';
-
-                    // 顯示 alertify 彈跳視窗
-                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        // 刷新頁面
-                        history.go(0);  
-                    });
-
-                    // 在 3 秒後自動關閉 alertify 彈跳視窗
+                alertify.confirm(text_info, function (result) {
+                    var responseData = JSON.parse(response);
+                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                     setTimeout(function() {
-                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                        history.go(0); 
-                    }, 3000); 
-                }, 1000); // 延遲 1000 毫秒
+                        // 隱藏加載動畫
+                        document.getElementById('spinner').style.display = 'none';
+
+                        // 顯示 alertify 彈跳視窗
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            // 刷新頁面
+                            history.go(0);  
+                        });
+
+                        // 在 3 秒後自動關閉 alertify 彈跳視窗
+                        setTimeout(function() {
+                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                            history.go(0); 
+                        }, 3000); 
+                    }, 1000); // 延遲 1000 毫秒
+
+                });
             },
             error: function(xhr, status, error) {
                 // 這裡可以處理 AJAX 請求失敗的情況
