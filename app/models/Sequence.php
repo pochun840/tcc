@@ -37,17 +37,10 @@ class Sequence{
     #新增sequence
     public function create_seq($mode, $jobdata) {
 
-
-        /*if(intval($jobdata['job_id']) > 50 || intval($jobdata['seq_id']) > 50) {
-           
-            return false; 
-        }*/
-
         $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, seq_opt, seq_k_val, seq_ofs)";
         $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :seq_opt, :seq_k_val, :seq_ofs);";
         $statement = $this->db_iDas->prepare($sql);
     
-
         if ($mode == "create") {
             $statement->bindValue(':job_id', $jobdata['job_id']);
             $statement->bindValue(':seq_id', $jobdata['seq_id']);
@@ -110,12 +103,9 @@ class Sequence{
     #刪除sequences
     public function delete_seq_by_id($jobid,$seqid){
 
-        
         $sql= " DELETE FROM sequence WHERE job_id = ? AND seq_id = ? ";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$jobid, $seqid]);
-
-  
         return $results;
 
     }
@@ -233,11 +223,6 @@ class Sequence{
                 $update_statement = $this->db_iDas->prepare($update_sql);
                 $update_statement->execute([$new_val, $jobid, $v_s['sequence_name']]);
                 $rows_count = $update_statement->rowCount();
-
-                
-
-
-                $rows_count = $update_statement->rowCount();
                 if ($rows_count  > 0){
                     $new_val = 'New_Value'.($k_s + 1);
                     $updated_seq_id = preg_replace('/[^0-9]/', '', $new_val);
@@ -301,30 +286,26 @@ class Sequence{
     }
     
     
-
-
     #驗證seq id是否重複
-    public function seq_id_repeat($jobid,$seqid)
-    {
-        $sql = "SELECT count(*) as count FROM sequence WHERE 	job_id AND seq_id = ?";
+    public function seq_id_repeat($jobid, $seqid){
+        // 查詢是否有相同的 job_id 和 seq_id
+        $sql = "SELECT count(*) as count FROM sequence WHERE job_id = ? AND seq_id = ?";
         $statement = $this->db_iDas->prepare($sql);
-        $results = $statement->execute([$jobid,$seqid]);
+        $results = $statement->execute([$jobid, $seqid]);
         $rows = $statement->fetch();
 
         if ($rows['count'] > 0) {
-
-            //如果有的話
-            $sql_d = "DELETE FROM step WHERE  job_id = ? AND seq_id = ? ";
+            // 如果有重複，刪除相關的 step
+            $sql_d = "DELETE FROM step WHERE job_id = ? AND seq_id = ?";
             $statement = $this->db_iDas->prepare($sql_d);
             $results_d = $statement->execute([$jobid, $seqid]);
 
             return "True"; // seq_id已存在
-        }else{
+        } else {
             return "False"; // seq_id不存在
         }
-
-
     }
+
 
 
     public function search_stepinfo($jobid,$seqid){
@@ -371,13 +352,11 @@ class Sequence{
         $count = $statement->fetchColumn();
         $count = intval($count);
 
-          //die();
         if ($count > 0) {
             #如果資料存在，則刪除
             $delete_step_sql = "DELETE FROM step  WHERE job_id = ? AND seq_id = ?";
             $deleteStatement = $this->db_iDas->prepare($delete_step_sql);
             $deleteStatement->execute([$jobid, $newseqid]);
-    
             return true;
         } else {
             return false;
@@ -409,11 +388,5 @@ class Sequence{
     
         return $statement->fetch();
     }
-
-
-
-
-
-
-    
+   
 }

@@ -476,7 +476,9 @@ class Step extends Controller
                 }
             }else{
 
-                
+                $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
+                exit();
+
             }
         
         

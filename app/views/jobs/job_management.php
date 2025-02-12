@@ -37,7 +37,7 @@
         <div class="center-content">
             <div class="table-container">
                 <div class="scrollbar" id="style-jobtable">
-                    <div class="scrollbar-force-overflow">
+                    <div class="force-overflow">
                         <table id="job_table"  class="table w3-table-all w3-hoverable">
                             <thead id="header-table">
                                 <tr class="w3-dark-grey">
