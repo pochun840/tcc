@@ -134,7 +134,7 @@
                             </div>
                         </div>
 
-                        <div id='target_tor_item' style="display: block;"  >
+                        <div id='target_tor_item' style="display:block;">
                             <div class="row">
                                 <div  class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                                 <div class="col-3 t2">
@@ -144,7 +144,7 @@
                             </div>
                         </div>
 
-                        <div id='target_ang_item' style="display: none;"  >                     
+                        <div id='target_ang_item' style="display:none;">                     
                             <div class="row">
                                 <div class="col-6 t1"><?php echo $text['Target_Angle'];?> :</div>
                                 <div class="col-3 t2">
@@ -154,7 +154,7 @@
                             </div>
                         </div>
 
-                        <div id='target_delay_item' style="display: none;"  >       
+                        <div id='target_delay_item' style="display:none;">       
                             <div class="row">
                                     <div for="target-torque" class="col-6 t1"><?php echo $text['Target Delay Time'];?> :</div>
                                     <div class="col-3 t2">
@@ -217,12 +217,12 @@
                             <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="ds_mode" id="downshift_ON" value="0" checked="checked">
-            					  <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
+            					  <input class="form-check-input" type="radio" name="ds_mode" id="downshift_OFF" value="0" checked="checked">
+            					  <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="ds_mode" id="downshift_OFF" value="1" >
-            					  <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
+            					  <input class="form-check-input" type="radio" name="ds_mode" id="downshift_ON" value="1" >
+            					  <label class="form-check-label" for="ownshift_ON"><?php echo $text['switch_on'];?></label>
             					</div>
                             </div>
                         </div>
@@ -271,7 +271,7 @@
                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col-3 t2">
-                                <select id="edit_target_option" name="edit_target_opt" class="col custom-file">
+                                <select id="edit_target_opt" name="edit_target_opt" class="col custom-file">
                                     <?php foreach($data['target_option'] as $key => $val){?>
                                         <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
                                     <?php }?>
@@ -281,29 +281,37 @@
                         </div>
 
                         
-                        <div class="row">
-                            <div for="edit_target-torque" id="edit_target-torque_title"  class="col-6 t1" style="display: none;" ><?php echo $text['Target_Angle'];?>(<?php echo $text[$data['step_torque_unit']];?>):</div>
-                            <div class="col-3 t2" id="edit_target-torque_val" style="display:none;" >
-                                <input type="text" class="form-control input-ms" id="edit_target_tor`" maxlength="" >
-                            </div>
-                        </div>
-                     
-                   
-
-                        <div class="row">
-                            <div for="edit_target-angle" id="edit_target-angle_title"  class="col-6 t1" style="display: none;" ><?php echo $text['Target_Angle'];?>:</div>
-                            <div class="col-3 t2" id="edit_target-angle_val" style="display:none;" >
-                                <input type="text" class="form-control input-ms" id="edit_target_ang" maxlength="" >
+                        <div id='edit_target_tor_item' style="display:block;">
+                            <div class="row">
+                                <div  class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_target_tor" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
 
-
-                        <div class="row">
-                            <div for="edit_target-delaytime" id="edit_target-delaytime_title"  class="col-6 t1" style="display: none;" ><?php  echo  $text['Target Delay Time'] ; ?>:</div>
-                            <div class="col-3 t2" id="edit_target-delaytime_val" style="display:none;" >
-                                <input type="text" class="form-control input-ms" id="edit_target_delay" maxlength="" >
+                        <div id='edit_target_ang_item' style="display:none;">                     
+                            <div class="row">
+                                <div class="col-6 t1"><?php echo $text['Target_Angle'];?> :</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_target_ang" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
+
+                        <div id='edit_target_delay_item' style="display:none;">       
+                            <div class="row">
+                                    <div for="target-torque" class="col-6 t1"><?php echo $text['Target Delay Time'];?> :</div>
+                                    <div class="col-3 t2">
+                                        <input type="text" class="form-control input-ms" id="edit_target_delay" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                            </div>
+                        </div>
+
+                        
 
                         <div class="row">
                             <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
@@ -541,11 +549,32 @@ function edit_step(stepid){
                 document.getElementById('editstep').style.display = 'block';
 
 
+                document.querySelector("select[name='edit_target_opt']").value = target_opt;
+                if(target_opt == 0){
+                    document.getElementById("edit_target_tor").value = target_tor;
+                    document.getElementById("edit_target_ang_item").style.display='none';
+                    document.getElementById("edit_target_delay_item").style.display='none';
+                }
+
+                if(target_opt == 1){
+                    document.getElementById("edit_target_ang").value = target_ang;
+                    document.getElementById("edit_target_tor_item").style.display='none';
+                    document.getElementById("edit_target_delay_item").style.display='none';
+                }
+
+                if(target_opt == 2){
+    
+                    document.getElementById("edit_target_delay").value = target_delay;
+                    document.getElementById("edit_target_tor_item").style.display='none';
+                    document.getElementById("edit_target_ang_item").style.display='none';
+                }
 
                 document.getElementById("edit_rpm").value = rpm;
                 document.getElementById("edit_ds_speed").value = ds_speed;
                 document.getElementById("edit_ds_tor").value = ds_tor;
                 document.getElementById("edit_th_tor").value = th_tor;
+
+
                 /*document.getElementById("old_seqid").value = seqid;
                 document.getElementById("edit_seq_name").value = seqname;
                 document.getElementById("edit_seq_tr").value = seq_tr;
@@ -593,6 +622,13 @@ function create_step() {
         localStorage.setItem('target_option', target_opt_Value);
         toggleVisibility(target_opt_Value);
     });
+
+
+    //
+    var ds_mode = document.querySelector('input[name="ds_mode"]:checked').value;
+    if(ds_mode == 1){
+        
+    }
 
 }
   

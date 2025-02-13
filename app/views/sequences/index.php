@@ -628,8 +628,6 @@ function delete_seqid(seqid){
     var jobid = '<?php echo $data['job_id']?>';
     if (jobid) {
         
-        document.getElementById('spinner').style.display = 'block';
-
         $.ajax({
             url: "?url=Sequences/delete_seq",
             method: "POST",
@@ -639,6 +637,10 @@ function delete_seqid(seqid){
             },
             success: function(response) {
                 alertify.confirm(text_info, function (result) {
+
+                    document.getElementById('spinner').style.display = 'block';
+
+                    
                     var responseData = JSON.parse(response);
                     // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                     setTimeout(function() {

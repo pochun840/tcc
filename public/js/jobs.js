@@ -14,13 +14,14 @@ function delete_jobid(jobid) {
             var title = 'Copy Job';
         }
 
-        document.getElementById('spinner').style.display = 'block';
+        
         $.ajax({
             url: "?url=Jobs/delete_jobid",
             method: "POST",
             data: { jobid: jobid },
             success: function(response) {
                 alertify.confirm(text_info, function (result) {
+                    document.getElementById('spinner').style.display = 'block';
                     var responseData = JSON.parse(response);
                     // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                     setTimeout(function() {
@@ -61,7 +62,6 @@ function cound_job(argument){
     old_jobid  = selectedRow ? selectedRow.cells[0].innerText : null;
     if(argument == 'del' && jobid != null){
         document.querySelector(".main-content").classList.add("overlay-active");
-
         delete_jobid(jobid);
     }
 
