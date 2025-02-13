@@ -666,8 +666,6 @@ function saveseq(){
 
     //驗證
     let check = input_check_saveseq();
-
-
     if(check){
         document.getElementById('spinner').style.display = 'block';
         $.ajax({
