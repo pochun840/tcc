@@ -55,6 +55,12 @@ class Miscellaneous{
             );
         }
 
+        if($mode == "target_option_only_tor" ){
+            $array = array(
+                0 => 'Torque'
+            );
+        }
+
         if($mode =="io_input"){
             $array = array(
                 101 => 'Disable',

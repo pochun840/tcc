@@ -91,6 +91,13 @@ function disableElementById(id, value = '') {
     }
 }
 
+function disableElementsByName(elementName) {
+    const elements = document.getElementsByName(elementName);
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].disabled = true;
+    }
+}
+
 function enableElementById(id, value = '') {
     var element = document.getElementById(id); 
     if (element && element.disabled) {
@@ -103,6 +110,21 @@ function enableElementById(id, value = '') {
         console.log("元素未找到: " + id);  
     }
 }
+
+
+function detectDownshiftSelection() {
+    const radios = document.getElementsByName("ds_mode");
+    radios.forEach((radio) => {
+        radio.addEventListener("change", function() {
+            if (document.getElementById("downshift_ON").checked) {
+                updateTargetOption();
+            }else{
+                restoreBackupOptions();
+            }
+        });
+    });
+}
+
 
 
 //依照targer_opt的 val 控制 欄位的是否需要 disabled
@@ -132,12 +154,19 @@ function toggleVisibility(targetValue) {
 
     } else if (targetValue == 1) {
         targetAngItem.style.display = "block";
+
         enableElementById('tor_hi', ''); 
         enableElementById('tor_lo', ''); 
         enableElementById('ang_hi', ''); 
         enableElementById('ang_lo', ''); 
         enableElementById('direction_CW','');
         enableElementById('direction_CCW','');
+        disableElementById('rpm','200');
+        disableElementById('downshift_ON','');
+        disableElementById('downshift_OFF','');
+        disableElementById('th_tor','0');
+        disableElementById('ds_tor','0.3');
+        disableElementById('ds_speed','100');
 
     } else if (targetValue == 2) {
         targetDelayItem.style.display = "block";
@@ -154,6 +183,17 @@ function toggleVisibility(targetValue) {
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
     }
+}
+
+
+function setRadioButton_value(radioButtons, value) {
+    radioButtons.forEach(function(button) {
+        if (button.value === value.toString()) {
+            button.checked = true;
+        } else {
+            button.checked = false;
+        }
+    });
 }
 
 

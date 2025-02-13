@@ -230,18 +230,21 @@
                             <div id="downshift_threshold_title" for="th_tor" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2" id="downshift_threshold_item"> 
                                 <input type="text" class="form-control input-ms" id="th_tor" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row" >
                             <div id="downshift_torque_title" for="ds_tor" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
                             <div class="col-3 t2" id="downshift_torque_item">
                                 <input type="text" class="form-control input-ms" id="ds_tor" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row" >
                             <div id="downshift_speed_title" for="downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
                             <div class="col-3 t2" id="downshift_speed_item">
                                 <input type="text" class="form-control input-ms" id="ds_speed" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                     </form>
@@ -361,11 +364,11 @@
                             <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_ON" value="1">
+            					  <input class="form-check-input" type="radio" name="edit_ds_mode" id="downshift_ON" value="1">
             					  <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_OFF" value="0" >
+            					  <input class="form-check-input" type="radio" name="edit_ds_mode" id="downshift_OFF" value="0" >
             					  <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
             					</div>
                             </div>
@@ -463,7 +466,6 @@ let step_torque_unit = '<?php echo $data['step_torque_unit']?>';
 let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 let isProcessing = false; 
 let stepid_new  = '<?php echo $data['step_id']?>';
-
  
 $(document).ready(function () {
     highlight_row('step_table');
@@ -554,12 +556,19 @@ function edit_step(stepid){
                     document.getElementById("edit_target_tor").value = target_tor;
                     document.getElementById("edit_target_ang_item").style.display='none';
                     document.getElementById("edit_target_delay_item").style.display='none';
+                    document.getElementById("edit_target_tor_item").style.display='block';
                 }
 
                 if(target_opt == 1){
                     document.getElementById("edit_target_ang").value = target_ang;
                     document.getElementById("edit_target_tor_item").style.display='none';
                     document.getElementById("edit_target_delay_item").style.display='none';
+                    document.getElementById("edit_target_ang_item").style.display='block';
+
+                    disableElementById('edit_ds_tor');
+                    disableElementById('edit_ds_speed');
+                    disableElementById('edit_th_tor');
+                     
                 }
 
                 if(target_opt == 2){
@@ -567,12 +576,36 @@ function edit_step(stepid){
                     document.getElementById("edit_target_delay").value = target_delay;
                     document.getElementById("edit_target_tor_item").style.display='none';
                     document.getElementById("edit_target_ang_item").style.display='none';
+                    document.getElementById("edit_target_delay_item").style.display='block';
+                    disableElementById('edit_rpm');
+                    disableElementById('edit_ds_tor');
+                    disableElementById('edit_ds_speed');
+                    disableElementById('edit_th_tor');
+                    disableElementById('edit_tor_hi');
+                    disableElementById('edit_tor_lo');
+                    disableElementById('edit_ang_hi');
+                    disableElementById('edit_ang_lo');
+                    disableElementsByName("edit_ds_mode");
+                    disableElementsByName("edit_direction");
                 }
+
+
 
                 document.getElementById("edit_rpm").value = rpm;
                 document.getElementById("edit_ds_speed").value = ds_speed;
                 document.getElementById("edit_ds_tor").value = ds_tor;
                 document.getElementById("edit_th_tor").value = th_tor;
+                document.getElementById("edit_tor_hi").value = tor_hi;
+                document.getElementById("edit_tor_lo").value = tor_lo;
+                document.getElementById("edit_ang_hi").value = ang_hi;
+                document.getElementById("edit_ang_lo").value = ang_lo;
+
+
+                var radioButtons_ds_mode = document.getElementsByName("edit_ds_mode");
+                setRadioButton_value(radioButtons_ds_mode, ds_mode);
+
+                var radioButtons_direction = document.getElementsByName("edit_direction");
+                setRadioButton_value(radioButtons_direction, direction);
 
 
                 /*document.getElementById("old_seqid").value = seqid;
@@ -624,11 +657,8 @@ function create_step() {
     });
 
 
-    //
-    var ds_mode = document.querySelector('input[name="ds_mode"]:checked').value;
-    if(ds_mode == 1){
-        
-    }
+    //處理ds_mode 
+    detectDownshiftSelection();
 
 }
   
@@ -959,5 +989,81 @@ function validateInput(element, pattern, min, max) {
 
     return isValid;
 }
+
+
+
+let backupOptions = [];  // 用來存儲備份的選項
+
+// 根據 target_option_only_tor 更新 select options
+function updateTargetOption() {
+    try {
+        // 假設 target_option_only_tor 是從 PHP 傳過來的 JSON 資料
+        let target_option_only_tor = JSON.parse('<?php echo $data["target_option_only_tor_json"]; ?>');
+
+        // 檢查 target_option_only_tor 是否是有效的陣列
+        if (!Array.isArray(target_option_only_tor)) {
+            return; // 如果不是陣列，則終止函數
+        }
+
+        // 取得 select 元素
+        const selectElement = document.getElementById("target_opt");
+
+        // 檢查 select 元素是否存在
+        if (!selectElement) {
+            //console.error('未能找到 id="target_opt" 的元素');
+            return; 
+        }
+
+        // 備份目前的選項
+        backupOptions = Array.from(selectElement.options).map(option => ({
+            value: option.value,
+            text: option.text
+        }));
+
+        // 清空現有的選項
+        while (selectElement.options.length > 0) {
+            selectElement.remove(0);  // 移除第一個選項
+        }
+
+        console.log('target_option_only_tor:', target_option_only_tor);
+
+        // 遍歷 target_option_only_tor 並創建新的 option 元素
+        target_option_only_tor.forEach((option) => {
+            // 確保每個選項有有效的 value 和 text
+            if (option.value !== undefined && option.text !== undefined) {
+                const optionElement = document.createElement("option");
+                optionElement.value = option.value;  // 設定選項的 value 屬性
+                optionElement.textContent = option.text;  // 設定選項的顯示文字
+                selectElement.appendChild(optionElement);  // 將選項加入到 select 中
+            } else {
+                //console.warn('無效的選項:', option);  // 如果選項格式不正確，輸出警告
+            }
+        });
+
+    } catch (error) {
+        //console.error('解析 JSON 發生錯誤:', error);
+    }
+}
+
+// 恢復原本的選項
+function restoreBackupOptions() {
+    const selectElement = document.getElementById("target_opt");
+
+    // 清空現有的選項
+    while (selectElement.options.length > 0) {
+        selectElement.remove(0);
+    }
+
+    // 恢復備份的選項
+    backupOptions.forEach((option) => {
+        const optionElement = document.createElement("option");
+        optionElement.value = option.value;
+        optionElement.textContent = option.text;
+        selectElement.appendChild(optionElement);
+    });
+
+}
+
+
 
 </script>

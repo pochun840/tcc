@@ -38,7 +38,7 @@
                         <?php foreach($data['step'] as $key =>$val){?>
                             <tr>
                                 <td><?php echo $val['step_id'];?></td>
-                                <td><?php echo $text[$data['target_option'][$val['target_option']]];?></td>
+                                <td><?php echo $text[$data['target_option'][$val['target_opt']]];?></td>
                                 <td><?php echo $data['direction'][$val['direction']];?></td>
                                 <td><img src="./img/btn_up.png" onclick="MoveUp(this);"></td>
                                 <td><img src="./img/btn_down.png"onclick="MoveDown(this);"></td>

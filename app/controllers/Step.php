@@ -27,6 +27,17 @@ class Step extends Controller
         $target_option = $this->MiscellaneousModel->details("target_option");
         $torque_unit   = $this->MiscellaneousModel->details("torque_unit");
         $target_option_change = $this->MiscellaneousModel->details("target_option_change");
+
+        $target_option_only_tor = $this->MiscellaneousModel->details("target_option_only_tor");
+        $formatted_array = [];
+        foreach ( $target_option_only_tor as $index => $item) {
+            $formatted_array[] = array(
+                'value' => $index, 
+                'text' => $item   
+            );
+        }
+        $json = json_encode($formatted_array);
+
         $direction = $this->MiscellaneousModel->details('rev_direction');
         $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
         $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
@@ -69,6 +80,7 @@ class Step extends Controller
             'step' => $step,
             'target_option' => $target_option,
             'target_option_change' =>$target_option_change,
+            'target_option_only_tor_json' => $json,
             'direction' => $direction,
             'job_id' => $job_id,
             'seq_id' => $seq_id,
@@ -85,7 +97,9 @@ class Step extends Controller
             'count_records' => $count_records
 
         );
- 
+
+
+
         if($isMobile){
             $this->view('step/index_m', $data);
         }else{
