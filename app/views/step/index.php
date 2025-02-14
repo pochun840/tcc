@@ -94,6 +94,15 @@
         </div>
     </div>
 
+    <div style="display:none;">
+        <input id="tool_max_tor" value="<?php echo $data['tools']['tool_maxtorque']; ?>">
+        <input id="tool_min_tor" value="<?php echo $data['tools']['tool_mintorque']; ?>">
+        <input id="tool_max_rpm" value="<?php echo $data['tools']['tool_maxrpm']; ?>">
+        <input id="tool_min_rpm" value="<?php echo $data['tools']['tool_minrpm']; ?>">
+    </div>
+
+
+
     <!-- Add New Step -->
     <div id="newstep" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -104,13 +113,7 @@
                     <h3 id='modal_title'><?php echo $text['new_step'];?></h3>
                 </header>
 
-                <div style="display:none;">
-                    <input id="tool_max_tor" value="<?php echo $data['tools']['tool_maxtorque']; ?>">
-                    <input id="tool_min_tor" value="<?php echo $data['tools']['tool_mintorque']; ?>">
-                    <input id="tool_max_rpm" value="<?php echo $data['tools']['tool_maxrpm']; ?>">
-                    <input id="tool_min_rpm" value="<?php echo $data['tools']['tool_minrpm']; ?>">
-                </div>
-
+              
 
                 <div class="modal-body">
                     <form id="new_step_form" style="padding-left: 5%">
@@ -164,87 +167,115 @@
                             </div>
                         </div>
 
+                        <div id="tor_hi_item">                   
+                            <div class="row">
+                                <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="tor_hi" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                        <div class="row">
-                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="tor_hi" maxlength="" >
-                                <div class="invalid-feedback"></div>
+                        <div id="tor_lo_item">
+                            <div class="row">
+                                <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="tor_lo" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="tor_lo" maxlength="" >
-                                <div class="invalid-feedback"></div>
+
+                        <div id="ang_hi_item">
+                            <div class="row">
+                                <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?> :</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="ang_hi" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?> :</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="ang_hi" maxlength="" >
-                                <div class="invalid-feedback"></div>
+
+                        <div id="ang_lo_item">
+                            <div class="row">
+                                <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="ang_lo" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="ang_lo" maxlength="" >
-                                <div class="invalid-feedback"></div>
+
+                        <div id="rpm_item">
+                            <div class="row">
+                                <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="rpm" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="rpm" maxlength="" >
-                                <div class="invalid-feedback"></div>
+
+                        <div id="direction_item">
+                            <div class="row">
+                                <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="direction_option" id="direction_CW" value="0">
+                                    <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">
+                                    <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CW" value="0">
-            					  <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">
-            					  <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
-            					</div>
+
+                        <div id="ds_mode_item">
+                            <div class="row">
+                                <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="ds_mode" id="downshift_OFF" value="0" checked="checked">
+                                    <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="ds_mode" id="downshift_ON" value="1" >
+                                    <label class="form-check-label" for="ownshift_ON"><?php echo $text['switch_on'];?></label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="ds_mode" id="downshift_OFF" value="0" checked="checked">
-            					  <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="ds_mode" id="downshift_ON" value="1" >
-            					  <label class="form-check-label" for="ownshift_ON"><?php echo $text['switch_on'];?></label>
-            					</div>
+
+                        <div id='th_tor_item'>
+                            <div class="row" >
+                                <div id="downshift_threshold_title" for="th_tor" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2" id="downshift_threshold_item"> 
+                                    <input type="text" class="form-control input-ms" id="th_tor" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row" >
-                            <div id="downshift_threshold_title" for="th_tor" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2" id="downshift_threshold_item"> 
-                                <input type="text" class="form-control input-ms" id="th_tor" >
-                                <div class="invalid-feedback"></div>
+
+                        <div id='ds_tor_item'>
+                            <div class="row" >
+                                <div id="downshift_torque_title" for="ds_tor" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2" id="downshift_torque_item">
+                                    <input type="text" class="form-control input-ms" id="ds_tor" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row" >
-                            <div id="downshift_torque_title" for="ds_tor" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2" id="downshift_torque_item">
-                                <input type="text" class="form-control input-ms" id="ds_tor" maxlength="" >
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                        <div class="row" >
-                            <div id="downshift_speed_title" for="downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
-                            <div class="col-3 t2" id="downshift_speed_item">
-                                <input type="text" class="form-control input-ms" id="ds_speed" maxlength="" >
-                                <div class="invalid-feedback"></div>
+
+                        <div id='ds_speed_item'>
+                            <div class="row" >
+                                <div id="downshift_speed_title" for="downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
+                                <div class="col-3 t2" id="downshift_speed_item">
+                                    <input type="text" class="form-control input-ms" id="ds_speed" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -274,7 +305,7 @@
                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col-3 t2">
-                                <select id="edit_target_opt" name="edit_target_opt" class="col custom-file">
+                                <select id="edit_target_opt" name="edit_target_opt" class="col custom-file" onchange="targetOptChangeHandler()">
                                     <?php foreach($data['target_option'] as $key => $val){?>
                                         <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
                                     <?php }?>
@@ -315,86 +346,121 @@
                         </div>
 
                         
-
-                        <div class="row">
-                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_tor_hi" maxlength="" >
+                        <div id="edit_tor_hi_item">                
+                            <div class="row">
+                                <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_tor_hi" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="row">
-                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_tor_lo" maxlength="" >
+                        <div id="edit_tor_lo_item"> 
+                            <div class="row">
+                                <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_tor_lo" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_ang_hi" maxlength="" >
+
+                        <div id="edit_ang_hi_item"> 
+                            <div class="row">
+                                <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_ang_hi" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_ang_lo" maxlength="" >
+
+                        <div id="edit_ang_lo_item"> 
+                            <div class="row">
+                                <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_ang_lo" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_rpm" maxlength="" >
+
+                        <div id="edit_rpm_item">
+                            <div class="row">
+                                <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_rpm" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_CW" value="0">
-            					  <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_CCW" value="1">
-            					  <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
-            					</div>
+                        <div id="edit_direction_item">
+                            <div class="row">
+                                <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_direction" id="direction_CW" value="0">
+                                    <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_direction" id="direction_CCW" value="1">
+                                    <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_ds_mode" id="downshift_ON" value="1">
-            					  <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_ds_mode" id="downshift_OFF" value="0" >
-            					  <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
-            					</div>
+
+                        <div id="edit_ds_mode_item">
+                            <div class="row">
+                                <div for="edit_ds_mode" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_ds_mode" id="downshift_ON" value="1">
+                                    <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_ds_mode" id="downshift_OFF" value="0" >
+                                    <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_th_tor" maxlength="" >
+                        
+                        <div id="edit_th_tor_item">
+                            <div class="row">
+                                <div class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_th_tor" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2" id="edit_downshift_torque_item">
-                                <input type="text" class="form-control input-ms" id="edit_ds_tor" maxlength="" >
+                        <div id="edit_ds_tor_item">
+                            <div class="row">
+                                <div class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2" id="edit_downshift_torque_item">
+                                    <input type="text" class="form-control input-ms" id="edit_ds_tor" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_ds_speed" maxlength="" >
+
+                        <div id="edit_ds_speed_item">
+                            <div class="row">
+                                <div class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_ds_speed" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
+
                     </form>
                 </div>
 
                 <div class="modal-footer justify-content-center">
+                    <input type='hidden' id='step_torque_unit' name='step_torque_unit' value='<?php echo $data['step_torque_unit'];?>'>
                     <button id="" class="button-modal" onclick="edit_step_save()" ><?php echo $text['save'];?></button>
                     <button id="" class="button-modal" onclick="closebutton('edittep');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
@@ -568,6 +634,17 @@ function edit_step(stepid){
                     disableElementById('edit_ds_tor');
                     disableElementById('edit_ds_speed');
                     disableElementById('edit_th_tor');
+                    disableElementById('edit_rpm');
+                    disableElementsByName("edit_ds_mode");
+
+                    document.getElementById("edit_rpm_item").style.display = 'none';
+                    document.getElementById("edit_ds_mode_item").style.display = 'none';
+                    document.getElementById("edit_th_tor_item").style.display = 'none';
+                    document.getElementById("edit_ds_tor_item").style.display = 'none';
+                    document.getElementById("edit_ds_speed_item").style.display = 'none';
+                    document.getElementById("edit_ds_mode_item").style.display = 'none';
+
+
                      
                 }
 
@@ -587,8 +664,23 @@ function edit_step(stepid){
                     disableElementById('edit_ang_lo');
                     disableElementsByName("edit_ds_mode");
                     disableElementsByName("edit_direction");
-                }
 
+                    //隱藏欄位
+                    document.getElementById("edit_tor_hi_item").style.display= 'none';
+                    document.getElementById("edit_tor_lo_item").style.display= 'none';
+                    document.getElementById("edit_ang_hi_item").style.display= 'none';
+                    document.getElementById("edit_ang_lo_item").style.display= 'none';
+                    document.getElementById("edit_rpm_item").style.display= 'none';
+                    document.getElementById("edit_direction_item").style.display= 'none';
+                    document.getElementById("edit_ds_mode_item").style.display = 'none';
+                    document.getElementById("edit_th_tor_item").style.display = 'none';
+                    document.getElementById("edit_ds_tor_item").style.display = 'none';
+                    document.getElementById("edit_ds_speed_item").style.display = 'none';
+                    document.getElementById("edit_ds_mode_item").style.display = 'none';
+
+
+                    
+                }
 
 
                 document.getElementById("edit_rpm").value = rpm;
@@ -608,23 +700,7 @@ function edit_step(stepid){
                 setRadioButton_value(radioButtons_direction, direction);
 
 
-                /*document.getElementById("old_seqid").value = seqid;
-                document.getElementById("edit_seq_name").value = seqname;
-                document.getElementById("edit_seq_tr").value = seq_tr;
-
-                document.getElementById("edit_seq_k_val").value = seq_k_val;
-                document.getElementById("edit_seq_ofs").value = seq_ofs;
-                document.getElementById("edit_seq_ns").value = seq_ns;
         
-                var radioButtons_seq = document.getElementsByName("edit_seq_ok");
-                setRadioButton_value(radioButtons_seq, seq_ok);
-
-                var radioButtons_stop_seq = document.getElementsByName("edit_stop_seq_ok");
-                setRadioButton_value(radioButtons_stop_seq, stop_seq_ok);
-
-
-                var radioButtons_2 = document.getElementsByName("edit_opt_option");
-                setRadioButton_value(radioButtons_2, seq_opt);*/
   
             },
             error: function(xhr, status, error) {
@@ -758,7 +834,101 @@ function add_step() {
     }
 }
 
+function edit_step_save() {
 
+    // 防止重複處理的標誌
+    if (isProcessing) return;
+    isProcessing = true; // 設置為處理中
+
+    var target_opt = document.getElementById('edit_target_opt').value;
+    var target_tor = document.getElementById('edit_target_tor').value;
+    var target_ang = document.getElementById('edit_target_ang').value;
+    var target_delay = document.getElementById('edit_target_delay').value;
+    var tor_hi = document.getElementById('edit_tor_hi').value;
+    var tor_lo = document.getElementById('edit_tor_lo').value;
+    var ang_hi = document.getElementById('edit_ang_hi').value;
+    var ang_lo = document.getElementById('edit_ang_lo').value;
+    var rpm = document.getElementById('edit_rpm').value;
+    var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
+    var ds_mode = document.querySelector('input[name="edit_ds_mode"]:checked').value;
+    var th_tor = document.getElementById('edit_th_tor').value;
+    var ds_tor = document.getElementById('edit_ds_tor').value;
+    var ds_speed = document.getElementById('edit_ds_speed').value;
+    var record_ang = 0; //紀錄 累計角度
+    var tor_unit = 3; //預設
+
+
+    //驗證
+    let check = input_check_editstep();
+    if (check) {
+        // 顯示加載動畫
+        document.getElementById('spinner').style.display = 'block';
+
+        $.ajax({
+            url: "?url=Step/edit_step",
+            method: "POST",
+            data: {
+                jobid: jobid,
+                seqid: seqid,
+                stepid: stepid,
+                target_opt: target_opt,
+                target_ang: target_ang,
+                target_delay: target_delay,
+                tor_hi: tor_hi,
+                tor_lo: tor_lo,
+                ang_hi: ang_hi,
+                ang_lo: ang_lo,
+                rpm: rpm,
+                direction: direction,
+                ds_mode: ds_mode,
+                th_tor: th_tor,
+                ds_tor: ds_tor,
+                ds_speed: ds_speed,
+                record_ang: record_ang,
+                tor_unit: tor_unit
+            },
+            success: function(response) {
+                var responseData = JSON.parse(response);
+                // 延遲 1000 毫秒後隱藏加載動畫，並顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    // 隱藏加載動畫
+                    document.getElementById('spinner').style.display = 'none';
+
+                    // 顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        // 只刷新一次頁面
+                        if (!window.pageRefreshed) {
+                            window.pageRefreshed = true; // 防止無限重複刷新
+                            history.go(0);
+                        }
+                    });
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        if (!window.pageRefreshed) {
+                            window.pageRefreshed = true;
+                            history.go(0);
+                        }
+                    }, 3000); 
+                }, 1000); // 延遲 1000 毫秒
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+                // 顯示錯誤信息
+                document.getElementById('spinner').style.display = 'none';
+                alertify.alert('Error', 'There was an issue with the request. Please try again later.');
+            },
+            complete: function() {
+                isProcessing = false; // 處理結束
+            }
+        });
+    } else {
+        isProcessing = false; // 如果驗證不通過，重置處理狀態
+    }
+
+
+}
 
 function copy_step_by_id(stepid){
     var stepid_new  = '<?php echo $data['step_id']?>';
@@ -892,7 +1062,70 @@ function countrows() {
 }
 
 
+function input_check_editstep(){
+    
+    let target_opt = document.getElementById("edit_target_opt").value;
+    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor').value);
+    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor').value);
+    let Tool_Max_RPM = document.getElementById('tool_max_rpm').value;
+    let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
+    let hi_angle_max = 9999;
+    let hi_angle_min = 1;
 
+    let conditions = []; // 初始化為空數組
+    if (target_opt == 0) {
+        conditions = [
+            { id: 'edit_target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'edit_ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'edit_rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+            { id: 'edit_th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+        ];
+    }
+
+    if (target_opt == 1) {
+        conditions = [
+            { id: 'edit_target_ang', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'edit_tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'edit_ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+        ];
+    }
+
+    if (target_opt == 2) {
+        conditions = [
+            { id: 'edit_target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
+        ];
+    }
+
+    let isFormValid = true;
+    conditions.forEach(function(input) {
+        var element = document.getElementById(input.id);
+        if (input.id !== 'target_opt') {
+            let nextSibling = element.nextElementSibling;
+            if (nextSibling) {
+                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
+            } else {
+                console.warn(`No next sibling found for element with id ${input.id}`);
+            }
+        }
+
+        // 移除先前的錯誤樣式
+        element.classList.remove("is-invalid");
+
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
+            isFormValid = false;
+        }
+    });
+
+    return isFormValid;
+
+}
 
 function input_check_savestep() {
 

@@ -47,13 +47,19 @@ class Steptcc{
     }
 
     #檢查同一個seq中所建立的Step Target Torque 只能有一個
-    public function check_step_target($jobid,$seqid,$step_id){
+    public function check_step_target($jobid,$seqid,$step_id,$check_opt = 0){
 
-        $sql = "SELECT COUNT(*) AS count_records FROM step WHERE job_id = ? AND seq_id = ? AND step_id = ? AND target_opt = '0'  ";
+        if ($check_opt == 0) {
+            $sql = "SELECT COUNT(*) AS count_records FROM step WHERE job_id = ? AND seq_id = ? AND step_id = ? AND target_opt = '0'";
+        } else {
+            $sql = "SELECT COUNT(*) AS count_records FROM step WHERE job_id = ? AND seq_id = ? AND step_id != ? AND target_opt = '0'";
+        }
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute([$jobid, $seqid,$step_id]);
         return $statement->fetchAll();
     }
+
+
 
     #COPY專用 檢查被複製的Step_id 有沒有設置Target Torque
     public function check_copy_step($job_id,$seq_id,$old_step_id){
@@ -149,39 +155,48 @@ class Steptcc{
     public function update_step_by_id($jobdata){
 
 
+        // 強制設置 $jobdata['record_ang'] 為 0 如果不存在
+        $jobdata['record_ang'] = isset($jobdata['record_ang']) ? $jobdata['record_ang'] : 0;
+
         $sql = "UPDATE `step` SET 
-                    target_option = :target_option,
-                    target_torque = :target_torque, 
-                    target_angle = :target_angle, 
-                    target_delaytime = :target_delaytime, 
-                    hi_torque = :hi_torque,
-                    lo_torque = :lo_torque,
-                    hi_angle = :hi_angle,
-                    lo_angle = :lo_angle,
+                    target_opt = :target_opt,
+                    target_tor = :target_tor, 
+                    target_ang = :target_ang, 
+                    target_delay = :target_delay, 
+                    tor_hi = :tor_hi,
+                    tor_lo = :tor_lo,
+                    ang_hi = :ang_hi,
+                    ang_lo = :ang_lo,
+                    rpm = :rpm,
                     direction = :direction,
-                    downshift = :downshift,
-                    threshold_torque = :threshold_torque,
-                    downshift_torque = :downshift_torque,
-                    downshift_speed = :downshift_speed
+                    ds_mode = :ds_mode,
+                    th_tor = :th_tor,
+                    ds_tor = :ds_tor,
+                    ds_speed = :ds_speed,
+                    record_ang =:record_ang,
+                    tor_unit =:tor_unit
         WHERE job_id = :job_id  AND   seq_id = :seq_id  AND step_id = :step_id ";
         $statement = $this->db_iDas->prepare($sql);
 
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $statement->bindValue(':seq_id', $jobdata['seq_id']);
         $statement->bindValue(':step_id', $jobdata['step_id']);
-        $statement->bindValue(':target_option', $jobdata['target_option']);
-        $statement->bindValue(':target_torque', $jobdata['target_torque']);
-        $statement->bindValue(':target_angle', $jobdata['target_angle']);
-        $statement->bindValue(':target_delaytime', $jobdata['target_delaytime']);
-        $statement->bindValue(':hi_torque', $jobdata['hi_torque']);
-        $statement->bindValue(':lo_torque', $jobdata['lo_torque']);
-        $statement->bindValue(':hi_angle', $jobdata['hi_angle']);
-        $statement->bindValue(':lo_angle', $jobdata['lo_angle']);
+        $statement->bindValue(':target_opt', $jobdata['target_opt']);
+        $statement->bindValue(':target_tor', $jobdata['target_tor']);
+        $statement->bindValue(':target_ang', $jobdata['target_ang']);
+        $statement->bindValue(':target_delay', $jobdata['target_delay']);
+        $statement->bindValue(':tor_hi', $jobdata['tor_hi']);
+        $statement->bindValue(':tor_lo', $jobdata['tor_lo']);
+        $statement->bindValue(':ang_hi', $jobdata['ang_hi']);
+        $statement->bindValue(':ang_lo', $jobdata['ang_lo']);
+        $statement->bindValue(':rpm', $jobdata['rpm']);
         $statement->bindValue(':direction', $jobdata['direction']);
-        $statement->bindValue(':downshift', $jobdata['downshift']);
-        $statement->bindValue(':threshold_torque', $jobdata['threshold_torque']);
-        $statement->bindValue(':downshift_torque', $jobdata['downshift_torque']);
-        $statement->bindValue(':downshift_speed', $jobdata['downshift_speed']);
+        $statement->bindValue(':ds_mode', $jobdata['ds_mode']);
+        $statement->bindValue(':ds_tor', $jobdata['ds_tor']);
+        $statement->bindValue(':ds_speed', $jobdata['ds_speed']);
+        $statement->bindValue(':th_tor', $jobdata['th_tor']);
+        $statement->bindValue(':record_ang', $jobdata['record_ang']);
+        $statement->bindValue(':tor_unit', $jobdata['tor_unit']);
         $results = $statement->execute();
 
 

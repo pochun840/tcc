@@ -110,6 +110,23 @@ function enableElementById(id, value = '') {
         console.log("元素未找到: " + id);  
     }
 }
+function enableElementByName(name, value = '') {
+    var elements = document.getElementsByName(name);  // 根據 name 屬性選擇元素
+    if (elements.length > 0) {
+        // 遍歷所有具有該 name 的元素
+        elements.forEach(function(element) {
+            if (element.disabled) {
+                element.disabled = false;  // 啟用元素
+                element.value = value;     // 設置元素的值
+                //console.log('元素已启用:', name, '并设置值为:', value);
+            } else {
+                //console.log('元素已是启用状态:', name);
+            }
+        });
+    } else {
+        console.log("未找到具有 name '" + name + "' 的元素");
+    }
+}
 
 
 function detectDownshiftSelection() {
@@ -152,6 +169,19 @@ function toggleVisibility(targetValue) {
         enableElementById('downshift_ON','');
         enableElementById('downshift_OFF','');
 
+        //控制欄位 顯示 / 隱藏
+        document.getElementById("tor_hi_item").style.display= 'block';
+        document.getElementById("tor_lo_item").style.display= 'block';
+        document.getElementById("ang_hi_item").style.display= 'block';
+        document.getElementById("ang_lo_item").style.display= 'block';
+        document.getElementById("rpm_item").style.display= 'block';
+        document.getElementById("direction_item").style.display= 'block';
+        document.getElementById("ds_mode_item").style.display = 'block';
+        document.getElementById("th_tor_item").style.display = 'block';
+        document.getElementById("ds_tor_item").style.display = 'block';
+        document.getElementById("ds_speed_item").style.display = 'block';
+        document.getElementById("ds_mode_item").style.display = 'block';
+
     } else if (targetValue == 1) {
         targetAngItem.style.display = "block";
 
@@ -168,6 +198,21 @@ function toggleVisibility(targetValue) {
         disableElementById('ds_tor','0.3');
         disableElementById('ds_speed','100');
 
+        //控制欄位 顯示 / 隱藏
+        document.getElementById("tor_hi_item").style.display= 'block';
+        document.getElementById("tor_lo_item").style.display= 'block';
+        document.getElementById("ang_hi_item").style.display= 'block';
+        document.getElementById("ang_lo_item").style.display= 'block';
+        document.getElementById("rpm_item").style.display= 'none';
+        document.getElementById("direction_item").style.display= 'block';
+        document.getElementById("ds_mode_item").style.display = 'none';
+        document.getElementById("th_tor_item").style.display = 'none';
+        document.getElementById("ds_tor_item").style.display = 'none';
+        document.getElementById("ds_speed_item").style.display = 'none';
+        document.getElementById("ds_mode_item").style.display = 'none';
+
+         
+
     } else if (targetValue == 2) {
         targetDelayItem.style.display = "block";
         disableElementById('tor_hi','0');
@@ -182,8 +227,153 @@ function toggleVisibility(targetValue) {
         disableElementById('direction_CCW','');
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
+
+
+        //控制欄位 顯示 / 隱藏
+        document.getElementById("tor_hi_item").style.display= 'none';
+        document.getElementById("tor_lo_item").style.display= 'none';
+        document.getElementById("ang_hi_item").style.display= 'none';
+        document.getElementById("ang_lo_item").style.display= 'none';
+        document.getElementById("rpm_item").style.display= 'none';
+        document.getElementById("direction_item").style.display= 'none';
+        document.getElementById("ds_mode_item").style.display = 'none';
+        document.getElementById("th_tor_item").style.display = 'none';
+        document.getElementById("ds_tor_item").style.display = 'none';
+        document.getElementById("ds_speed_item").style.display = 'none';
+        document.getElementById("ds_mode_item").style.display = 'none';
+
+
+     
+
     }
 }
+
+function targetOptChangeHandler() {
+    var target_opt = document.querySelector("select[name='edit_target_opt']").value;
+    handleTargetOptChange(target_opt); 
+}
+
+function handleTargetOptChange(target_opt) {
+
+    var rpm = document.getElementById("edit_rpm").value;  
+    var ds_tor = document.getElementById("edit_ds_tor").value;  
+    var ds_speed = document.getElementById("edit_ds_speed").value;  
+    var th_tor = document.getElementById("edit_th_tor").value; 
+    var tor_hi = document.getElementById("edit_tor_hi").value; 
+    var tor_lo = document.getElementById("edit_tor_lo").value;
+    var ang_hi = document.getElementById("edit_ang_hi").value; 
+    var ang_lo = document.getElementById("edit_ang_lo").value;
+
+    var target_tor = document.getElementById("edit_target_tor").value;
+    var target_ang = document.getElementById("edit_target_ang").value;
+    var target_delay = document.getElementById("edit_target_delay").value;
+
+
+    if (target_opt == 0) {
+        document.getElementById("edit_target_tor_item").style.display = 'block';
+        document.getElementById("edit_target_ang_item").style.display = 'none';
+        document.getElementById("edit_target_delay_item").style.display = 'none';
+
+
+        enableElementById('edit_tor_hi',tor_hi);
+        enableElementById('edit_tor_lo',tor_lo);
+        enableElementById('edit_ang_hi',ang_hi);
+        enableElementById('edit_ang_lo',ang_lo);
+        enableElementById('edit_rpm',rpm);
+        enableElementById('edit_ds_tor',ds_tor);
+        enableElementById('edit_ds_speed',ds_speed);
+        enableElementById('edit_th_tor',th_tor);
+        enableElementByName("edit_direction");
+        enableElementByName("edit_ds_mode");
+
+
+        //欄位 控制
+        document.getElementById("edit_tor_hi_item").style.display= 'block';
+        document.getElementById("edit_tor_lo_item").style.display= 'block';
+        document.getElementById("edit_ang_hi_item").style.display= 'block';
+        document.getElementById("edit_ang_lo_item").style.display= 'block';
+        document.getElementById("edit_rpm_item").style.display= 'block';
+        document.getElementById("edit_direction_item").style.display= 'block';
+        document.getElementById("edit_ds_mode_item").style.display = 'block';
+        document.getElementById("edit_th_tor_item").style.display = 'block';
+        document.getElementById("edit_ds_tor_item").style.display = 'block';
+        document.getElementById("edit_ds_speed_item").style.display = 'block';
+        document.getElementById("edit_ds_mode_item").style.display = 'block';
+
+    }
+
+    if (target_opt == 1) {
+        document.getElementById("edit_target_ang_item").style.display = 'block';
+        document.getElementById("edit_target_tor_item").style.display = 'none';
+        document.getElementById("edit_target_delay_item").style.display = 'none';
+
+        enableElementById('edit_tor_hi',tor_hi);
+        enableElementById('edit_tor_lo',tor_lo);
+        enableElementById('edit_ang_hi',ang_hi);
+        enableElementById('edit_ang_lo',ang_lo);
+        disableElementById('edit_ds_tor',ds_tor);
+        disableElementById('edit_ds_speed',ds_speed);
+        disableElementById('edit_th_tor',th_tor);
+        disableElementById('edit_rpm',rpm);
+        disableElementsByName("edit_ds_mode");
+        enableElementByName("edit_direction");
+
+
+        //欄位 控制
+        document.getElementById("edit_tor_hi_item").style.display= 'block';
+        document.getElementById("edit_tor_lo_item").style.display= 'block';
+        document.getElementById("edit_ang_hi_item").style.display= 'block';
+        document.getElementById("edit_ang_lo_item").style.display= 'block';
+        document.getElementById("edit_rpm_item").style.display= 'none';
+        document.getElementById("edit_direction_item").style.display= 'block';
+        document.getElementById("edit_ds_mode_item").style.display = 'none';
+        document.getElementById("edit_th_tor_item").style.display = 'none';
+        document.getElementById("edit_ds_tor_item").style.display = 'none';
+        document.getElementById("edit_ds_speed_item").style.display = 'none';
+        document.getElementById("edit_ds_mode_item").style.display = 'none';
+
+
+        
+    }
+
+    if (target_opt == 2) {
+        document.getElementById("edit_target_delay_item").style.display = 'block';
+        document.getElementById("edit_target_tor_item").style.display = 'none';
+        document.getElementById("edit_target_ang_item").style.display = 'none';
+
+        disableElementById('edit_th_tor',th_tor);
+        disableElementById('edit_tor_hi',tor_hi);
+        disableElementById('edit_tor_lo',tor_lo);
+        disableElementById('edit_ang_hi',ang_hi);
+        disableElementById('edit_ang_lo',ang_lo);
+
+        disableElementById('edit_rpm',rpm);
+        disableElementById('edit_ds_tor',ds_tor);
+        disableElementById('edit_ds_speed',ds_speed);
+        disableElementsByName("edit_ds_mode");
+        disableElementsByName("edit_direction");
+
+        //欄位 控制
+        document.getElementById("edit_tor_hi_item").style.display= 'none';
+        document.getElementById("edit_tor_lo_item").style.display= 'none';
+        document.getElementById("edit_ang_hi_item").style.display= 'none';
+        document.getElementById("edit_ang_lo_item").style.display= 'none';
+        document.getElementById("edit_rpm_item").style.display= 'none';
+        document.getElementById("edit_direction_item").style.display= 'none';
+        document.getElementById("edit_ds_mode_item").style.display = 'none';
+        document.getElementById("edit_th_tor_item").style.display = 'none';
+        document.getElementById("edit_ds_tor_item").style.display = 'none';
+        document.getElementById("edit_ds_speed_item").style.display = 'none';
+        document.getElementById("edit_ds_mode_item").style.display = 'none';
+
+
+
+
+    }
+
+    
+}
+
 
 
 function setRadioButton_value(radioButtons, value) {
