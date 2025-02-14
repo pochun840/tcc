@@ -1,5 +1,4 @@
 
-
 function create_step() {
 
     document.getElementById('newstep').style.display = 'block';
@@ -8,7 +7,6 @@ function create_step() {
     document.getElementById('th_tor').value = 0;
     document.getElementById('ds_tor').value = 0.3;
     document.getElementById('ds_speed').value =100;
-
 
     var targetoptionselect = document.getElementById('target_opt');
     targetoptionselect.addEventListener('change', function() {
@@ -20,8 +18,6 @@ function create_step() {
 
 }
   
-
-
 function countrows() {
     var tbody = document.querySelector('#step_table tbody');
     var rows = tbody.querySelectorAll('tr');
@@ -47,7 +43,6 @@ function cound_step(argument){
         copy_step(stepid);
     }
 
-
     if(argument =="new"){
 
         document.querySelector(".main-content").classList.add("overlay-active");
@@ -65,14 +60,11 @@ function cound_step(argument){
 
 }
 
-
-
 function copy_step(stepid){
     document.getElementById('copystep').style.display = 'block';   
     copy_step_by_id(stepid);
 
 }
-
 
 function disableElements(elements, value) {
     elements.forEach(function(element) {
@@ -143,7 +135,6 @@ function detectDownshiftSelection() {
 }
 
 
-
 //依照targer_opt的 val 控制 欄位的是否需要 disabled
 function toggleVisibility(targetValue) {
     const targetTorItem = document.getElementById('target_tor_item');
@@ -212,7 +203,6 @@ function toggleVisibility(targetValue) {
         document.getElementById("ds_mode_item").style.display = 'none';
 
          
-
     } else if (targetValue == 2) {
         targetDelayItem.style.display = "block";
         disableElementById('tor_hi','0');
@@ -241,9 +231,6 @@ function toggleVisibility(targetValue) {
         document.getElementById("ds_tor_item").style.display = 'none';
         document.getElementById("ds_speed_item").style.display = 'none';
         document.getElementById("ds_mode_item").style.display = 'none';
-
-
-     
 
     }
 }
@@ -331,9 +318,7 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_ds_tor_item").style.display = 'none';
         document.getElementById("edit_ds_speed_item").style.display = 'none';
         document.getElementById("edit_ds_mode_item").style.display = 'none';
-
-
-        
+  
     }
 
     if (target_opt == 2) {
@@ -367,14 +352,10 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_ds_mode_item").style.display = 'none';
 
 
-
-
     }
 
     
 }
-
-
 
 function setRadioButton_value(radioButtons, value) {
     radioButtons.forEach(function(button) {
