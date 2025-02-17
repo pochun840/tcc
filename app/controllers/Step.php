@@ -201,7 +201,7 @@ class Step extends Controller
                 'th_tor'           => $th_tor,
                 'ds_tor'           => $ds_tor,
                 'ds_speed'         => $ds_speed,
-                'record_ang '      => $record_ang,
+                'record_ang'      => $record_ang,
                 'tor_unit'         => $tor_unit
                 
             );
@@ -314,7 +314,7 @@ class Step extends Controller
                 'th_tor'           => $th_tor,
                 'ds_tor'           => $ds_tor,
                 'ds_speed'         => $ds_speed,
-                'record_ang '      => $record_ang,
+                'record_ang'      => $record_ang,
                 'tor_unit'         => $tor_unit
                 
             );
@@ -329,11 +329,9 @@ class Step extends Controller
                 exit();
 
             }*/
-            
 
-      
 
-            
+    
 
             $res = $this->stepModel->update_step_by_id($jobdata);
             $result = array();
@@ -402,8 +400,8 @@ class Step extends Controller
 
             #檢查被複製的那個step 是不是  Target Torque
             $check = $this->stepModel->check_copy_step($job_id,$seq_id, $old_step_id);
-            $check = intval($check[0]['target_opt']);
 
+            $check = intval($check[0]['target_opt']);
             if($check != 0){
 
                 //可以新增資料  
@@ -427,7 +425,7 @@ class Step extends Controller
                         'th_tor'           => $old_res[0]['th_tor'],
                         'ds_tor'           => $old_res[0]['ds_tor'],
                         'ds_speed'         => $old_res[0]['ds_speed'],
-                        'record_ang '      => $old_res[0]['record_ang'],
+                        'record_ang'      => $old_res[0]['record_ang'],
                         'tor_unit'         => $old_res[0]['tor_unit']
                     ); 
 
