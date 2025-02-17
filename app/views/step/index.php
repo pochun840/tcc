@@ -345,7 +345,6 @@
                             </div>
                         </div>
 
-                        
                         <div id="edit_tor_hi_item">                
                             <div class="row">
                                 <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
@@ -395,6 +394,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div id="edit_direction_item">
                             <div class="row">
                                 <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
@@ -619,6 +619,7 @@ function edit_step(stepid){
 
                 document.querySelector("select[name='edit_target_opt']").value = target_opt;
                 if(target_opt == 0){
+                    
                     document.getElementById("edit_target_tor").value = target_tor;
                     document.getElementById("edit_target_ang_item").style.display='none';
                     document.getElementById("edit_target_delay_item").style.display='none';
@@ -637,12 +638,13 @@ function edit_step(stepid){
                     disableElementById('edit_rpm');
                     disableElementsByName("edit_ds_mode");
 
-                    document.getElementById("edit_rpm_item").style.display = 'none';
+                    //隱藏欄位
+                    /*document.getElementById("edit_rpm_item").style.display = 'none';
                     document.getElementById("edit_ds_mode_item").style.display = 'none';
                     document.getElementById("edit_th_tor_item").style.display = 'none';
                     document.getElementById("edit_ds_tor_item").style.display = 'none';
                     document.getElementById("edit_ds_speed_item").style.display = 'none';
-                    document.getElementById("edit_ds_mode_item").style.display = 'none';
+                    document.getElementById("edit_ds_mode_item").style.display = 'none';*/
 
 
                      
@@ -666,7 +668,7 @@ function edit_step(stepid){
                     disableElementsByName("edit_direction");
 
                     //隱藏欄位
-                    document.getElementById("edit_tor_hi_item").style.display= 'none';
+                    /*document.getElementById("edit_tor_hi_item").style.display= 'none';
                     document.getElementById("edit_tor_lo_item").style.display= 'none';
                     document.getElementById("edit_ang_hi_item").style.display= 'none';
                     document.getElementById("edit_ang_lo_item").style.display= 'none';
@@ -676,7 +678,7 @@ function edit_step(stepid){
                     document.getElementById("edit_th_tor_item").style.display = 'none';
                     document.getElementById("edit_ds_tor_item").style.display = 'none';
                     document.getElementById("edit_ds_speed_item").style.display = 'none';
-                    document.getElementById("edit_ds_mode_item").style.display = 'none';
+                    document.getElementById("edit_ds_mode_item").style.display = 'none';*/
 
 
                     

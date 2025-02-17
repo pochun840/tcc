@@ -161,7 +161,7 @@ function toggleVisibility(targetValue) {
         enableElementById('downshift_OFF','');
 
         //控制欄位 顯示 / 隱藏
-        document.getElementById("tor_hi_item").style.display= 'block';
+        /*document.getElementById("tor_hi_item").style.display= 'block';
         document.getElementById("tor_lo_item").style.display= 'block';
         document.getElementById("ang_hi_item").style.display= 'block';
         document.getElementById("ang_lo_item").style.display= 'block';
@@ -171,7 +171,7 @@ function toggleVisibility(targetValue) {
         document.getElementById("th_tor_item").style.display = 'block';
         document.getElementById("ds_tor_item").style.display = 'block';
         document.getElementById("ds_speed_item").style.display = 'block';
-        document.getElementById("ds_mode_item").style.display = 'block';
+        document.getElementById("ds_mode_item").style.display = 'block';*/
 
     } else if (targetValue == 1) {
         targetAngItem.style.display = "block";
@@ -190,7 +190,7 @@ function toggleVisibility(targetValue) {
         disableElementById('ds_speed','100');
 
         //控制欄位 顯示 / 隱藏
-        document.getElementById("tor_hi_item").style.display= 'block';
+        /*document.getElementById("tor_hi_item").style.display= 'block';
         document.getElementById("tor_lo_item").style.display= 'block';
         document.getElementById("ang_hi_item").style.display= 'block';
         document.getElementById("ang_lo_item").style.display= 'block';
@@ -200,7 +200,7 @@ function toggleVisibility(targetValue) {
         document.getElementById("th_tor_item").style.display = 'none';
         document.getElementById("ds_tor_item").style.display = 'none';
         document.getElementById("ds_speed_item").style.display = 'none';
-        document.getElementById("ds_mode_item").style.display = 'none';
+        document.getElementById("ds_mode_item").style.display = 'none';*/
 
          
     } else if (targetValue == 2) {
@@ -220,7 +220,7 @@ function toggleVisibility(targetValue) {
 
 
         //控制欄位 顯示 / 隱藏
-        document.getElementById("tor_hi_item").style.display= 'none';
+        /*document.getElementById("tor_hi_item").style.display= 'none';
         document.getElementById("tor_lo_item").style.display= 'none';
         document.getElementById("ang_hi_item").style.display= 'none';
         document.getElementById("ang_lo_item").style.display= 'none';
@@ -230,7 +230,7 @@ function toggleVisibility(targetValue) {
         document.getElementById("th_tor_item").style.display = 'none';
         document.getElementById("ds_tor_item").style.display = 'none';
         document.getElementById("ds_speed_item").style.display = 'none';
-        document.getElementById("ds_mode_item").style.display = 'none';
+        document.getElementById("ds_mode_item").style.display = 'none';*/
 
     }
 }
@@ -275,7 +275,7 @@ function handleTargetOptChange(target_opt) {
 
 
         //欄位 控制
-        document.getElementById("edit_tor_hi_item").style.display= 'block';
+        /*document.getElementById("edit_tor_hi_item").style.display= 'block';
         document.getElementById("edit_tor_lo_item").style.display= 'block';
         document.getElementById("edit_ang_hi_item").style.display= 'block';
         document.getElementById("edit_ang_lo_item").style.display= 'block';
@@ -285,7 +285,7 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_th_tor_item").style.display = 'block';
         document.getElementById("edit_ds_tor_item").style.display = 'block';
         document.getElementById("edit_ds_speed_item").style.display = 'block';
-        document.getElementById("edit_ds_mode_item").style.display = 'block';
+        document.getElementById("edit_ds_mode_item").style.display = 'block';*/
 
     }
 
@@ -307,7 +307,7 @@ function handleTargetOptChange(target_opt) {
 
 
         //欄位 控制
-        document.getElementById("edit_tor_hi_item").style.display= 'block';
+        /*document.getElementById("edit_tor_hi_item").style.display= 'block';
         document.getElementById("edit_tor_lo_item").style.display= 'block';
         document.getElementById("edit_ang_hi_item").style.display= 'block';
         document.getElementById("edit_ang_lo_item").style.display= 'block';
@@ -317,7 +317,7 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_th_tor_item").style.display = 'none';
         document.getElementById("edit_ds_tor_item").style.display = 'none';
         document.getElementById("edit_ds_speed_item").style.display = 'none';
-        document.getElementById("edit_ds_mode_item").style.display = 'none';
+        document.getElementById("edit_ds_mode_item").style.display = 'none';*/
   
     }
 
@@ -339,7 +339,7 @@ function handleTargetOptChange(target_opt) {
         disableElementsByName("edit_direction");
 
         //欄位 控制
-        document.getElementById("edit_tor_hi_item").style.display= 'none';
+        /*document.getElementById("edit_tor_hi_item").style.display= 'none';
         document.getElementById("edit_tor_lo_item").style.display= 'none';
         document.getElementById("edit_ang_hi_item").style.display= 'none';
         document.getElementById("edit_ang_lo_item").style.display= 'none';
@@ -349,7 +349,7 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_th_tor_item").style.display = 'none';
         document.getElementById("edit_ds_tor_item").style.display = 'none';
         document.getElementById("edit_ds_speed_item").style.display = 'none';
-        document.getElementById("edit_ds_mode_item").style.display = 'none';
+        document.getElementById("edit_ds_mode_item").style.display = 'none';*/
 
 
     }

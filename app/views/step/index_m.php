@@ -60,6 +60,9 @@
             </div>
         </div>
 
+   
+
+
         <div class="buttonbox">
             <?php $status = count($data['step']) == 4 ? 'disabled' : ''; ?>
             <input id="S3" name="Step_Manager_Submit" type="button" value="<?php echo $text['New'];?>"    tabindex="1"  onclick="cound_step('new');" <?php echo $status; ?>>
@@ -67,6 +70,14 @@
             <input id="S5" name="Step_Manager_Submit" type="button" value="<?php echo $text['Copy'];?>"   tabindex="1"  onclick="cound_step('copy');" <?php echo $status; ?>>
             <input id="S4" name="Step_Manager_Submit" type="button" value="<?php echo $text['Delete'];?>" tabindex="1" onclick="cound_step('del');" >
         </div>
+
+        <div style="display:none;">
+            <input id="tool_max_tor" value="<?php echo $data['tools']['tool_maxtorque']; ?>">
+            <input id="tool_min_tor" value="<?php echo $data['tools']['tool_mintorque']; ?>">
+            <input id="tool_max_rpm" value="<?php echo $data['tools']['tool_maxrpm']; ?>">
+            <input id="tool_min_rpm" value="<?php echo $data['tools']['tool_minrpm']; ?>">
+        </div>
+
     </div>
 
     <!-- Add New Step -->
@@ -74,7 +85,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: auto;">
                 <header class="w3-container modal-header">
-                    <span onclick="document.getElementById('newstep').style.display='none'"
+                    <span onclick="closebutton('newstep');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_step'];?></h3>
                 </header>
@@ -85,7 +96,7 @@
                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col-3 t2">
-                                <select id="target_option" name="target_option" class="col custom-file">
+                                <select id="target_opt" name="target_opt" class="col custom-file">
                                     <?php if($data['check'][0]['count_records'] == "1"){?>
                                         <?php foreach($data['target_option_change'] as $key => $val){?>
                                              <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
@@ -102,78 +113,146 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="hi_torque" maxlength="" >
+                        <div id='target_tor_item' style="display:block;">
+                            <div class="row">
+                                <div  class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="target_tor" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?>  (<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="lo_torque" maxlength="" >
+
+                        <div id='target_ang_item' style="display:block;">                     
+                            <div class="row">
+                                <div class="col-6 t1"><?php echo $text['Target_Angle'];?> :</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="target_ang" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="hi_angle" maxlength="" >
+
+                        <div id='target_delay_item' style="display:block;">       
+                            <div class="row">
+                                    <div for="target-torque" class="col-6 t1"><?php echo $text['Target Delay Time'];?> :</div>
+                                    <div class="col-3 t2">
+                                        <input type="text" class="form-control input-ms" id="target_delay" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="lo_angle" maxlength="" >
+
+
+                        <div id="tor_hi_item">                   
+                            <div class="row">
+                                <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="tor_hi" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="rpm" maxlength="" >
+
+                         <div id="tor_lo_item">
+                            <div class="row">
+                                <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="tor_lo" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CW" value="0">
-            					  <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">
-            					  <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
-            					</div>
+
+                        <div id="ang_hi_item">
+                            <div class="row">
+                                <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?> :</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="ang_hi" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="downshift" class="col-6 t1"><?php  echo $text['Downshift'];?>:</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="downshift_option" id="downshift_ON" value="0" checked="checked">
-            					  <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="downshift_option" id="downshift_OFF" value="1">
-            					  <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
-            					</div>
+
+                        <div id="ang_lo_item">
+                            <div class="row">
+                                <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="ang_lo" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="downshift-threshold" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="downshift_threshold" maxlength="" >
+
+                        <div id="rpm_item">
+                            <div class="row">
+                                <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="rpm" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="downshift_torque" maxlength="" >
+
+                        <div id="direction_item">
+                            <div class="row">
+                                <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="direction_option" id="direction_CW" value="0">
+                                    <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">
+                                    <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="downshift_speed" maxlength="" >
+
+                        <div id="ds_mode_item">
+                            <div class="row">
+                                <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="ds_mode" id="downshift_OFF" value="0" checked="checked">
+                                    <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="ds_mode" id="downshift_ON" value="1" >
+                                    <label class="form-check-label" for="ownshift_ON"><?php echo $text['switch_on'];?></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id='th_tor_item'>
+                            <div class="row" >
+                                <div id="downshift_threshold_title" for="th_tor" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2" id="downshift_threshold_item"> 
+                                    <input type="text" class="form-control input-ms" id="th_tor" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id='ds_tor_item'>
+                            <div class="row" >
+                                <div id="downshift_torque_title" for="ds_tor" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2" id="downshift_torque_item">
+                                    <input type="text" class="form-control input-ms" id="ds_tor" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id='ds_speed_item'>
+                            <div class="row" >
+                                <div id="downshift_speed_title" for="downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
+                                <div class="col-3 t2" id="downshift_speed_item">
+                                    <input type="text" class="form-control input-ms" id="ds_speed" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -182,8 +261,9 @@
             </div>
 
                 <div class="modal-footer justify-content-center">
+                    <input type='hidden' id='step_torque_unit' name='step_torque_unit' value='<?php echo $data['step_torque_unit'];?>'>
                     <button id="" class="button-modal" onclick="add_step()" ><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="document.getElementById('newstep').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closebutton('newstep');" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
@@ -193,7 +273,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: auto;">
                 <header class="w3-container modal-header">
-                    <span onclick="document.getElementById('editstep').style.display='none'"
+                    <span onclick="closebutton('editstep');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['edit_step'];?></h3>
                 </header>
@@ -201,115 +281,156 @@
                 <div class="newseq-force-overflow">
                 <div class="modal-body">
                     <form id="new_step_form" style="padding-left: 5%">
-                        <div class="row">
+                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col-3 t2">
-                                <select id="edit_target_option" name="edit_target_option" class="col custom-file">
+                                <select id="edit_target_opt" name="edit_target_opt" class="col custom-file" onchange="targetOptChangeHandler()">
                                     <?php foreach($data['target_option'] as $key => $val){?>
                                         <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
-                                    <?php }?>     
+                                    <?php }?>
+                                    
                                 </select>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div for="edit_target-torque" id="edit_target-torque_title"  class="col-6 t1" style="display: none;" ><?php echo $text['Target_Torque'];?>(<?php echo $text[$data['unit']];?>):</div>
-                            <div class="col-3 t2" id="edit_target-torque_val" style="display:none;" >
-                                <input type="text" class="form-control input-ms" id="edit_target_torque" maxlength="" >
-                            </div>
-                        </div>
-                     
-                   
-
-                        <div class="row">
-                            <div for="edit_target-angle" id="edit_target-angle_title"  class="col-6 t1" style="display: none;" ><?php echo $text['Target_Angle'];?>:</div>
-                            <div class="col-3 t2" id="edit_target-angle_val" style="display:none;" >
-                                <input type="text" class="form-control input-ms" id="edit_target_angle" maxlength="" >
+                        <div id='edit_target_tor_item' style="display:block;">
+                            <div class="row">
+                                <div  class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_target_tor" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
 
-
-                        <div class="row">
-                            <div for="edit_target-delaytime" id="edit_target-delaytime_title"  class="col-6 t1" style="display: none;" ><?php  echo  $text['Target Delay Time'] ; ?>:</div>
-                            <div class="col-3 t2" id="edit_target-delaytime_val" style="display:none;" >
-                                <input type="text" class="form-control input-ms" id="edit_target_delaytime" maxlength="" >
+                        <div id='edit_target_ang_item' style="display:none;">                     
+                            <div class="row">
+                                <div class="col-6 t1"><?php echo $text['Target_Angle'];?> :</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_target_ang" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
 
+                        <div id='edit_target_delay_item' style="display:none;">       
+                            <div class="row">
+                                    <div for="target-torque" class="col-6 t1"><?php echo $text['Target Delay Time'];?> :</div>
+                                    <div class="col-3 t2">
+                                        <input type="text" class="form-control input-ms" id="edit_target_delay" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                            </div>
+                        </div>
 
+                        <div id="edit_tor_hi_item">                
+                            <div class="row">
+                                <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_tor_hi" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="edit_tor_lo_item"> 
+                            <div class="row">
+                                <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_tor_lo" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                        <div class="row">
-                            <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_hi_torque" maxlength="" >
+                        <div id="edit_ang_hi_item"> 
+                            <div class="row">
+                                <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_ang_hi" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_lo_torque" maxlength="" >
+
+                        <div id="edit_ang_lo_item"> 
+                            <div class="row">
+                                <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_ang_lo" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_hi_angle" maxlength="" >
+
+                        <div id="edit_rpm_item">
+                            <div class="row">
+                                <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_rpm" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_lo_angle" maxlength="" >
+
+                        <div id="edit_direction_item">
+                            <div class="row">
+                                <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_direction" id="direction_CW" value="0">
+                                    <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_direction" id="direction_CCW" value="1">
+                                    <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_rpm" maxlength="" >
+
+                        <div id="edit_ds_mode_item">
+                            <div class="row">
+                                <div for="edit_ds_mode" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_ds_mode" id="downshift_ON" value="1">
+                                    <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_ds_mode" id="downshift_OFF" value="0" >
+                                    <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CW" value="0">
-            					  <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="edit_direction_option" id="direction_CCW" value="1">
-            					  <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
-            					</div>
+                        
+                        <div id="edit_th_tor_item">
+                            <div class="row">
+                                <div class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_th_tor" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_ON" value="1">
-            					  <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="edit_downshift_option" id="downshift_OFF" value="0">
-            					  <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
-            					</div>
+                        <div id="edit_ds_tor_item">
+                            <div class="row">
+                                <div class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-3 t2" id="edit_downshift_torque_item">
+                                    <input type="text" class="form-control input-ms" id="edit_ds_tor" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div for="edit_downshift-threshold" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_downshift_threshold" maxlength="" >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="edit_downshift-torque" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_downshift_torque" maxlength="" >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="edit_downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
-                            <div class="col-3 t2">
-                                <input type="text" class="form-control input-ms" id="edit_downshift_speed" maxlength="" >
+
+                        <div id="edit_ds_speed_item">
+                            <div class="row">
+                                <div class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
+                                <div class="col-3 t2">
+                                    <input type="text" class="form-control input-ms" id="edit_ds_speed" maxlength="" >
+                                    <div class="invalid-feedback"></div>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -318,6 +439,7 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
+                    <input type='hidden' id='step_torque_unit' name='step_torque_unit' value='<?php echo $data['step_torque_unit'];?>'>
                     <button id="" class="button-modal" onclick="edit_step_save()" ><?php echo $text['save'];?></button>
                     <button id="" class="button-modal" onclick="document.getElementById('editstep').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
@@ -366,12 +488,30 @@
             </div>
         </div>
     </div>
+
+    <!-- 加载動畫 OP -->
+    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    <!-- 加载動畫 ED -->
+
 </div>
 
 <script>
 
-let seqidnew = '<?php echo $data['stepid_new']?>';
+let selected_target_opt_val = '';
 
+let jobid = '<?php echo $data['job_id']?>';
+let seqid = '<?php echo $data['seq_id']?>';
+let add_stepid = '<?php echo $data['step_id']?>';
+
+let step_torque_unit = '<?php echo $data['step_torque_unit']?>';
+let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+let isProcessing = false; 
+let stepid_new  = '<?php echo $data['step_id']?>';
+ 
 $(document).ready(function () {
     highlight_row('step_table');
 });
@@ -389,283 +529,485 @@ document.addEventListener('DOMContentLoaded', function() {
   observer.observe(document.body, { childList: true, subtree: true });
 });
 
+// Get the modal
 var modal = document.getElementById('newstep');
-let job_id;
-let seq_id;
+
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
+var check_step_torque = '<?php echo $data['check_step_torque']?>';
 
 var rows = document.getElementsByTagName("tr");
-var stepid = '';
 for (var i = 0; i < rows.length; i++) {
     (function(row) {
         var cells = row.getElementsByTagName("td");
         if (cells.length > 0) {
             cells[0].addEventListener("click", function() {
-                stepid   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
-                localStorage.setItem("stepid", stepid);
+           
+                checkstep_id   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
+                localStorage.setItem("stepid", checkstep_id);
             });
         }
     })(rows[i]);
 }
 
 
-function cound_step(argument){
+function edit_step(stepid){
 
-    var table = document.getElementById('step_table');
-    var selectedRow = table.querySelector('.selected');
-    var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
-
-    job_id ='<?php echo $data['job_id']?>';
-    seq_id ='<?php echo $data['seq_id']?>';
-
-    stepid = selectedRowData;
-    if(argument == 'del'){
-        del_stepid(stepid);
-    }
-
-    if(argument =="copy" && stepid != null){
-        copy_step(stepid);
-    }
-
-    if(argument =="new"){
-        var step_count = countrows();
-        if(step_count  < 4){
-            create_step();
-        }
-    }
-
-    if(argument =="edit" && stepid != null){
-        edit_step(stepid);
-    }
-
-}
-
-
-
-
-function edit_step_save() {
-
-    var jobid = '<?php echo $data['job_id']?>';
-    var seqid = '<?php echo $data['seq_id']?>';
-    var target_option = document.getElementById("edit_target_option").value;
-
-    var target_torque = 0;
-    var target_angle = 0;
-    var target_delaytime = 0;
-    var hi_torque = 0;
-    var lo_torque = 0;
-    var hi_angle = 0;
-    var lo_angle = 0;
-    var rpm = 0;
-    var direction = 0;
-    var downshift = 0;
-    var threshold_torque = 0;
-    var downshift_torque = 0;
-    var downshift_speed = 0;
-
-    if(target_option == 2) {
-        target_delaytime = document.getElementById("edit_target_delaytime").value;
-    }else if(target_option == 1) {
-        target_angle = document.getElementById("edit_target_angle").value;
-    }else{
-        target_torque = document.getElementById("edit_target_torque").value;
-    }      
-
-    hi_torque = document.getElementById("edit_hi_torque").value;
-    lo_torque = document.getElementById("edit_lo_torque").value;
-    hi_angle = document.getElementById("edit_hi_angle").value;
-    lo_angle = document.getElementById("edit_lo_angle").value;
-    rpm = document.getElementById("edit_rpm").value;
-    direction = document.querySelector('input[name="edit_direction_option"]:checked').value;
-    downshift = document.querySelector('input[name="edit_downshift_option"]:checked').value;
-    threshold_torque = document.getElementById("edit_downshift_threshold").value;
-    downshift_torque = document.getElementById("edit_downshift_torque").value;
-    downshift_speed = document.getElementById("edit_downshift_speed").value;
-    
-
-    var requestData = {
-        jobid: jobid,
-        seqid: seqid,
-        stepid: stepid,
-        target_option: target_option,
-        target_torque: target_torque,
-        target_angle: target_angle,
-        target_delaytime: target_delaytime,
-        hi_torque: hi_torque,
-        lo_torque: lo_torque,
-        hi_angle: hi_angle,
-        lo_angle: lo_angle,
-        rpm: rpm,
-        direction: direction,
-        downshift: downshift,
-        threshold_torque: threshold_torque,
-        downshift_torque: downshift_torque,
-        downshift_speed: downshift_speed
-    };
-
-    if (target_option) {
+    if(jobid){
         $.ajax({
-            url: "?url=Step/edit_step",
-            method: "POST",
-            data: requestData,
-            success: function(response) {
-                console.log(response);
-                var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                });
-            },
-            error: function(xhr, status, error) {
-
-            }
-        });
-    }
-}
-
-
-
-function add_step(){
-
-    var jobid = '<?php echo $data['job_id']?>';
-    var seqid = '<?php echo $data['seq_id']?>';
-    var stepid = '<?php echo $data['stepid_new']?>';
-
-    var target_option = document.getElementById('target_option').value;
-    var target_torque = document.getElementById('target_torque').value;
-
-    var hi_torque = document.getElementById('hi_torque').value;
-    var lo_torque = document.getElementById('lo_torque').value;
-
-    var hi_angle = document.getElementById('hi_angle').value;
-    var lo_angle = document.getElementById('lo_angle').value;
-    var rpm = document.getElementById('rpm').value;
-
-    var threshold_torque = document.getElementById('downshift_threshold').value;
-    var downshift_torque = document.getElementById('downshift_torque').value;
-    var downshift_rpm  = document.getElementById('downshift_rpm').value;
-
-    var direction = document.querySelector('input[name="direction_option"]:checked').value;
-    var downshift = document.querySelector('input[name="downshift_option"]:checked').value;
-
-
-    if(target_torque){
-
-        $.ajax({
-            url: "?url=Step/create_step",
-            method: "POST",
-            data:{ 
-                jobid: jobid,
-                seqid: seqid,
-                stepid: stepid,
-                target_option: target_option,
-                target_torque: target_torque,
-                hi_torque: hi_torque,
-                lo_torque: lo_torque,
-                hi_angle: hi_angle,
-                lo_angle: lo_angle,
-                rpm: rpm,
-                direction: direction,
-                downshift: downshift,
-                threshold_torque: threshold_torque,
-                downshift_torque: downshift_torque,
-                downshift_speed: downshift_speed
-
-            },
-            success: function(response) {
-
-                var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                });
-                
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-    }
-}
-
-function copy_step_by_id(){
-    document.getElementById('from_step_id').value = stepid;    
-    document.getElementById("to_step_id").value = seqidnew;
-
-}
-
-function copy_step_by_id_ajax(){
-
-
-    if(stepid_new){
-        $.ajax({
-            url: "?url=Step/copy_step",
+            url: "?url=Step/search_stepinfo",
             method: "POST",
             data:{ 
                 job_id: jobid,
                 seq_id: seqid,
-                old_step_id:stepid,
-                new_step_id: stepid_new
+                step_id:stepid
+
+            },
+            success: function(response) {
+
+                var responseJSON = JSON.stringify(response);
+                var cleanString = responseJSON.replace(/Array|\\n/g, '');
+                var cleanString = cleanString.substring(2, cleanString.length - 2);
+
+                var [, job_id] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seq_id] = cleanString.match(/\[seq_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, step_id] = cleanString.match(/\[step_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_opt] = cleanString.match(/\[target_opt]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_tor] = cleanString.match(/\[target_tor]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_ang] = cleanString.match(/\[target_ang]\s*=>\s*([^ ]+)/) || [, null];
+                var [, target_delay] = cleanString.match(/\[target_delay]\s*=>\s*([^ ]+)/) || [, null];
+                var [, tor_hi] = cleanString.match(/\[tor_hi]\s*=>\s*([^ ]+)/) || [, null];
+                var [, tor_lo] = cleanString.match(/\[tor_lo]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ang_hi] = cleanString.match(/\[ang_hi]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ang_lo] = cleanString.match(/\[ang_lo]\s*=>\s*([^ ]+)/) || [, null];
+                var [, rpm] = cleanString.match(/\[rpm]\s*=>\s*([^ ]+)/) || [, null];
+                var [, direction] = cleanString.match(/\[direction]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ds_mode] = cleanString.match(/\[ds_mode]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ds_tor] = cleanString.match(/\[ds_tor]\s*=>\s*([^ ]+)/) || [, null];
+                var [, ds_speed] = cleanString.match(/\[ds_speed]\s*=>\s*([^ ]+)/) || [, null];
+                var [, th_tor] = cleanString.match(/\[th_tor]\s*=>\s*([^ ]+)/) || [, null];
+                var [, record_ang] = cleanString.match(/\[record_ang]\s*=>\s*([^ ]+)/) || [, null];
+                var [, tor_unit] = cleanString.match(/\[tor_unit]\s*=>\s*([^ ]+)/) || [, null];
+
+                document.getElementById('editstep').style.display = 'block';
+
+
+                document.querySelector("select[name='edit_target_opt']").value = target_opt;
+                if(target_opt == 0){
+                    
+                    document.getElementById("edit_target_tor").value = target_tor;
+                    document.getElementById("edit_target_ang_item").style.display='none';
+                    document.getElementById("edit_target_delay_item").style.display='none';
+                    document.getElementById("edit_target_tor_item").style.display='block';
+                }
+
+                if(target_opt == 1){
+                    document.getElementById("edit_target_ang").value = target_ang;
+                    document.getElementById("edit_target_tor_item").style.display='none';
+                    document.getElementById("edit_target_delay_item").style.display='none';
+                    document.getElementById("edit_target_ang_item").style.display='block';
+
+                    disableElementById('edit_ds_tor');
+                    disableElementById('edit_ds_speed');
+                    disableElementById('edit_th_tor');
+                    disableElementById('edit_rpm');
+                    disableElementsByName("edit_ds_mode");
+
+                    //隱藏欄位
+                    /*document.getElementById("edit_rpm_item").style.display = 'none';
+                    document.getElementById("edit_ds_mode_item").style.display = 'none';
+                    document.getElementById("edit_th_tor_item").style.display = 'none';
+                    document.getElementById("edit_ds_tor_item").style.display = 'none';
+                    document.getElementById("edit_ds_speed_item").style.display = 'none';
+                    document.getElementById("edit_ds_mode_item").style.display = 'none';*/
+
+
+                     
+                }
+
+                if(target_opt == 2){
+    
+                    document.getElementById("edit_target_delay").value = target_delay;
+                    document.getElementById("edit_target_tor_item").style.display='none';
+                    document.getElementById("edit_target_ang_item").style.display='none';
+                    document.getElementById("edit_target_delay_item").style.display='block';
+                    disableElementById('edit_rpm');
+                    disableElementById('edit_ds_tor');
+                    disableElementById('edit_ds_speed');
+                    disableElementById('edit_th_tor');
+                    disableElementById('edit_tor_hi');
+                    disableElementById('edit_tor_lo');
+                    disableElementById('edit_ang_hi');
+                    disableElementById('edit_ang_lo');
+                    disableElementsByName("edit_ds_mode");
+                    disableElementsByName("edit_direction");
+
+                    //隱藏欄位
+                    /*document.getElementById("edit_tor_hi_item").style.display= 'none';
+                    document.getElementById("edit_tor_lo_item").style.display= 'none';
+                    document.getElementById("edit_ang_hi_item").style.display= 'none';
+                    document.getElementById("edit_ang_lo_item").style.display= 'none';
+                    document.getElementById("edit_rpm_item").style.display= 'none';
+                    document.getElementById("edit_direction_item").style.display= 'none';
+                    document.getElementById("edit_ds_mode_item").style.display = 'none';
+                    document.getElementById("edit_th_tor_item").style.display = 'none';
+                    document.getElementById("edit_ds_tor_item").style.display = 'none';
+                    document.getElementById("edit_ds_speed_item").style.display = 'none';
+                    document.getElementById("edit_ds_mode_item").style.display = 'none';*/
+
+
+                    
+                }
+
+
+                document.getElementById("edit_rpm").value = rpm;
+                document.getElementById("edit_ds_speed").value = ds_speed;
+                document.getElementById("edit_ds_tor").value = ds_tor;
+                document.getElementById("edit_th_tor").value = th_tor;
+                document.getElementById("edit_tor_hi").value = tor_hi;
+                document.getElementById("edit_tor_lo").value = tor_lo;
+                document.getElementById("edit_ang_hi").value = ang_hi;
+                document.getElementById("edit_ang_lo").value = ang_lo;
+
+
+                var radioButtons_ds_mode = document.getElementsByName("edit_ds_mode");
+                setRadioButton_value(radioButtons_ds_mode, ds_mode);
+
+                var radioButtons_direction = document.getElementsByName("edit_direction");
+                setRadioButton_value(radioButtons_direction, direction);
+
+
+        
+  
+            },
+            error: function(xhr, status, error) {
+             
+            }
+        });
+    }
+}
+
+
+
+
+
+function create_step() {
+
+    document.getElementById('newstep').style.display = 'block';
+
+    document.getElementById('rpm').value = 200;
+    document.getElementById('th_tor').value = 0;
+    document.getElementById('ds_tor').value = 0.3;
+    document.getElementById('ds_speed').value =100;
+
+
+    var targetoptionselect = document.getElementById('target_opt');
+    targetoptionselect.addEventListener('change', function() {
+
+    var target_opt_Value = targetoptionselect.value;
+        localStorage.setItem('target_option', target_opt_Value);
+        toggleVisibility(target_opt_Value);
+    });
+
+
+    //處理ds_mode 
+    detectDownshiftSelection();
+
+}
+  
+
+
+
+function add_step() {
+    
+    // 防止重複處理的標誌
+    if (isProcessing) return;
+    isProcessing = true; // 設置為處理中
+
+    var target_opt = document.getElementById('target_opt').value;
+    var target_tor = document.getElementById('target_tor').value;
+    var target_ang = document.getElementById('target_ang').value;
+    var target_delay = document.getElementById('target_delay').value;
+    var tor_hi = document.getElementById('tor_hi').value;
+    var tor_lo = document.getElementById('tor_lo').value;
+    var ang_hi = document.getElementById('ang_hi').value;
+    var ang_lo = document.getElementById('ang_lo').value;
+    var rpm = document.getElementById('rpm').value;
+    var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
+    var ds_mode = document.querySelector('input[name="ds_mode"]:checked').value;
+    var th_tor = document.getElementById('th_tor').value;
+    var ds_tor = document.getElementById('ds_tor').value;
+    var ds_speed = document.getElementById('ds_speed').value;
+    var record_ang = 0; //紀錄 累計角度
+    var tor_unit = 3; //預設
+
+    // 驗證
+    let check = input_check_savestep();
+    if (check) {
+        // 顯示加載動畫
+        document.getElementById('spinner').style.display = 'block';
+
+        $.ajax({
+            url: "?url=Step/create_step",
+            method: "POST",
+            data: {
+                jobid: jobid,
+                seqid: seqid,
+                stepid: add_stepid,
+                target_opt: target_opt,
+                target_ang: target_ang,
+                target_delay: target_delay,
+                tor_hi: tor_hi,
+                tor_lo: tor_lo,
+                ang_hi: ang_hi,
+                ang_lo: ang_lo,
+                rpm: rpm,
+                direction: direction,
+                ds_mode: ds_mode,
+                th_tor: th_tor,
+                ds_tor: ds_tor,
+                ds_speed: ds_speed,
+                record_ang: record_ang,
+                tor_unit: tor_unit
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
+                // 延遲 1000 毫秒後隱藏加載動畫，並顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    // 隱藏加載動畫
+                    document.getElementById('spinner').style.display = 'none';
+
+                    // 顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        // 只刷新一次頁面
+                        if (!window.pageRefreshed) {
+                            window.pageRefreshed = true; // 防止無限重複刷新
+                            history.go(0);
+                        }
+                    });
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        if (!window.pageRefreshed) {
+                            window.pageRefreshed = true;
+                            history.go(0);
+                        }
+                    }, 3000); 
+                }, 1000); // 延遲 1000 毫秒
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+                // 顯示錯誤信息
+                document.getElementById('spinner').style.display = 'none';
+                alertify.alert('Error', 'There was an issue with the request. Please try again later.');
+            },
+            complete: function() {
+                isProcessing = false; // 處理結束
+            }
+        });
+    } else {
+        isProcessing = false; // 如果驗證不通過，重置處理狀態
+    }
+}
+
+function edit_step_save() {
+
+    // 防止重複處理的標誌
+    if (isProcessing) return;
+    isProcessing = true; // 設置為處理中
+
+    var target_opt = document.getElementById('edit_target_opt').value;
+    var target_tor = document.getElementById('edit_target_tor').value;
+    var target_ang = document.getElementById('edit_target_ang').value;
+    var target_delay = document.getElementById('edit_target_delay').value;
+    var tor_hi = document.getElementById('edit_tor_hi').value;
+    var tor_lo = document.getElementById('edit_tor_lo').value;
+    var ang_hi = document.getElementById('edit_ang_hi').value;
+    var ang_lo = document.getElementById('edit_ang_lo').value;
+    var rpm = document.getElementById('edit_rpm').value;
+    var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
+    var ds_mode = document.querySelector('input[name="edit_ds_mode"]:checked').value;
+    var th_tor = document.getElementById('edit_th_tor').value;
+    var ds_tor = document.getElementById('edit_ds_tor').value;
+    var ds_speed = document.getElementById('edit_ds_speed').value;
+    var record_ang = 0; //紀錄 累計角度
+    var tor_unit = 3; //預設
+
+
+    //驗證
+    let check = input_check_editstep();
+    if (check) {
+        // 顯示加載動畫
+        document.getElementById('spinner').style.display = 'block';
+
+        $.ajax({
+            url: "?url=Step/edit_step",
+            method: "POST",
+            data: {
+                jobid: jobid,
+                seqid: seqid,
+                stepid: stepid,
+                target_opt: target_opt,
+                target_ang: target_ang,
+                target_delay: target_delay,
+                tor_hi: tor_hi,
+                tor_lo: tor_lo,
+                ang_hi: ang_hi,
+                ang_lo: ang_lo,
+                rpm: rpm,
+                direction: direction,
+                ds_mode: ds_mode,
+                th_tor: th_tor,
+                ds_tor: ds_tor,
+                ds_speed: ds_speed,
+                record_ang: record_ang,
+                tor_unit: tor_unit
+            },
+            success: function(response) {
+                var responseData = JSON.parse(response);
+                // 延遲 1000 毫秒後隱藏加載動畫，並顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    // 隱藏加載動畫
+                    document.getElementById('spinner').style.display = 'none';
+
+                    // 顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        // 只刷新一次頁面
+                        if (!window.pageRefreshed) {
+                            window.pageRefreshed = true; // 防止無限重複刷新
+                            history.go(0);
+                        }
+                    });
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        if (!window.pageRefreshed) {
+                            window.pageRefreshed = true;
+                            history.go(0);
+                        }
+                    }, 3000); 
+                }, 1000); // 延遲 1000 毫秒
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+                // 顯示錯誤信息
+                document.getElementById('spinner').style.display = 'none';
+                alertify.alert('Error', 'There was an issue with the request. Please try again later.');
+            },
+            complete: function() {
+                isProcessing = false; // 處理結束
+            }
+        });
+    } else {
+        isProcessing = false; // 如果驗證不通過，重置處理狀態
+    }
+
+
+}
+
+function copy_step_by_id(stepid){
+    var stepid_new  = '<?php echo $data['step_id']?>';
+    
+    document.getElementById('from_step_id').value = stepid;    
+    document.getElementById("to_step_id").value = stepid_new;
+
+
+}
+
+function copy_step_by_id_ajax() {
+    
+    var language = getCookie('language');
+    if(language == "zh-cn"){
+        var text_info ='你确定吗？';
+        var title = 'Copy Job';
+    }else if(language == "zh-tw"){
+        var text_info ='你確定嗎 ?';
+        var title = 'Copy Job';
+    }else{
+        var text_info ='Are you sure ?';
+        var title = 'Copy Job';
+    }
+
+    if (isProcessing) {
+        return; // 如果正在處理中，直接返回
+    }
+
+    isProcessing = true; // 設置為處理
+
+    if (stepid_new) {
+        // 顯示加載動畫
+        document.getElementById('spinner').style.display = 'block';
+
+        $.ajax({
+            url: "?url=Step/copy_tcc_step",
+            method: "POST",
+            data: { 
+                job_id: jobid,
+                seq_id: seqid,
+                old_step_id: stepid,
+                new_step_id: stepid_new
+            },
+           success: function(response) {
+                alertify.confirm(text_info, function (result) {
+                    var responseData = JSON.parse(response);
+                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                    setTimeout(function() {
+                        // 隱藏加載動畫
+                        document.getElementById('spinner').style.display = 'none';
+
+                        // 顯示 alertify 彈跳視窗
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            // 刷新頁面
+                            history.go(0);  
+                        });
+
+                        // 在 3 秒後自動關閉 alertify 彈跳視窗
+                        setTimeout(function() {
+                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                            history.go(0); 
+                        }, 3000); 
+                    }, 1000); // 延遲 1000 毫秒
+
                 });
             },
             error: function(xhr, status, error) {
-                
+                console.error("AJAX request failed:", status, error);
+                // 顯示錯誤信息
+                document.getElementById('spinner').style.display = 'none';
+                alertify.alert('Error', 'There was an issue with the request. Please try again later.');
+            },
+            complete: function() {
+                isProcessing = false; // 處理結束
             }
         });
+    } else {
+        //alert('stepid_new 變數未定義或為空');
+        isProcessing = false; // 如果 stepid_new 不正確，重置處理狀態
     }
 }
 
 
-function del_stepid(step_id){
-    var jobid = '<?php echo $data['job_id']?>';
-    var seqid = '<?php echo $data['seq_id']?>';
-    if(stepid) {
 
-        $.ajax({
-            url: "?url=Step/delete_step",
-            method: "POST",
-            data:{ 
-                stepid:stepid,
-                jobid:jobid,
-                seqid:seqid
-            },
-            success: function(response){
-                var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    history.go(0);
-                }); 
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-
-    }
-
-}
 
 
 var rowInfoArray = [];
 <?php foreach($data['step'] as $key =>$val) {?>
-    var jobid = "<?php echo $val['job_id'];?>";
-    var sequenceId = "<?php echo $val['seq_id'];?>";
-    var stepid = "<?php echo $val['step_id'];?>";
-  
-    
-    var rowInfo = {
-        job_id: jobid,
-        sequence_id: sequenceId,
-        step_id: stepid,
-    };
-    
-    rowInfoArray.push(rowInfo);
+        var sequenceId = "<?php echo $val['seq_id'];?>";
+        var stepid = "<?php echo $val['step_id'];?>";
+      
+        
+        var rowInfo = {
+            job_id: jobid,
+            sequence_id: sequenceId,
+            step_id: stepid,
+        };
+        
+        rowInfoArray.push(rowInfo);
 <?php } ?>
 
 function sendRowInfoArray() {
@@ -674,7 +1016,7 @@ function sendRowInfoArray() {
         jobid: jobid,
         rowInfoArray: rowInfoArray
     };
-
+ 
     if(rowInfoArray){
 
         $.ajax({
@@ -691,477 +1033,250 @@ function sendRowInfoArray() {
     }
 }
 
-
 function countrows() {
     var tbody = document.querySelector('#step_table tbody');
     var rows = tbody.querySelectorAll('tr');
     var rowCount = rows.length;
-    console.log("共有 " + rowCount + " 行");
+
     return rowCount;
 }
 
 
-function goToPage() {
-    var seq_id = '<?php echo $data['seq_id'];?>';
-    var url = '?url=Sequences/index/' + seq_id;
-    window.location.href = url;
-}
+function input_check_editstep(){
+    
+    let target_opt = document.getElementById("edit_target_opt").value;
+    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor').value);
+    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor').value);
+    let Tool_Max_RPM = document.getElementById('tool_max_rpm').value;
+    let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
+    let hi_angle_max = 9999;
+    let hi_angle_min = 1;
 
+    let conditions = []; // 初始化為空數組
+    if (target_opt == 0) {
+        conditions = [
+            { id: 'edit_target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'edit_ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'edit_rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+            { id: 'edit_th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+        ];
+    }
 
-function create_step() {
-    document.getElementById('newstep').style.display = 'block';
+    if (target_opt == 1) {
+        conditions = [
+            { id: 'edit_target_ang', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'edit_tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'edit_ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'edit_ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+        ];
+    }
 
-    var unit = '<?php echo $data['unit']?>';
-    var language = getCookie('language');
+    if (target_opt == 2) {
+        conditions = [
+            { id: 'edit_target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
+        ];
+    }
 
-    document.getElementById('rpm').value = 100;
-    document.getElementById('downshift_threshold').value = 0;
-    document.getElementById('downshift_torque').value = 0;
-    document.getElementById('downshift_speed').value =100;
-
-    var targetoptionselect = document.getElementById('target_option');
-    targetoptionselect.addEventListener('change', function() {
-        var targetOptionValue = targetoptionselect.value;
-        localStorage.setItem('target_option', targetOptionValue);
-        
-        var targetTorqueElement = document.getElementById('target_torque');
-        var hiTorqueElement = document.getElementById('hi_torque');
-        var loTorqueElement = document.getElementById('lo_torque');
-        var hiAngleElement = document.getElementById('hi_angle');
-        var loAngleElement = document.getElementById('lo_angle');
-        var rpmElement = document.getElementById('rpm');
-        var downshiftThresholdElement = document.getElementById('downshift_threshold');
-        var downshiftTorqueElement = document.getElementById('downshift_torque');
-        var downshiftRpmElement = document.getElementById('downshift_speed');
-        var directionOptions = document.querySelectorAll('input[name="direction_option"]');
-        var downshiftOptions = document.querySelectorAll('input[name="downshift_option"]');
-
-        targetTorqueElement.disabled = false;
-        hiTorqueElement.disabled = false;
-        loTorqueElement.disabled = false;
-        hiAngleElement.disabled = false;
-        loAngleElement.disabled = false;
-        rpmElement.disabled = false;
-        downshiftThresholdElement.disabled = false;
-        downshiftTorqueElement.disabled = false;
-        downshiftRpmElement.disabled = false;
-        directionOptions.forEach(radioButton => radioButton.disabled = false);
-        downshiftOptions.forEach(radioButton => radioButton.disabled = false);
-
-
-        if (targetOptionValue == 2) {
-            var name1 = '<?php echo $text['Target Delay Time']?>';
-            document.querySelector('div[for="target-torque"]').textContent = name1;
-            
-            hiTorqueElement.disabled = true;
-            loTorqueElement.disabled = true;
-            hiAngleElement.disabled = true;
-            loAngleElement.disabled = true;
-            rpmElement.disabled = true;
-            downshiftThresholdElement.disabled = true;
-            downshiftTorqueElement.disabled = true;
-            downshiftRpmElement.disabled = true;
-            directionOptions.forEach(radioButton => radioButton.disabled = true);
-            downshiftOptions.forEach(radioButton => radioButton.disabled = true);
-            
-        } else if (targetOptionValue == 1 || targetOptionValue == '') {
-            var name = '<?php echo $text['Target_Angle']?>';
-            document.querySelector('div[for="target-torque"]').textContent = name;
+    let isFormValid = true;
+    conditions.forEach(function(input) {
+        var element = document.getElementById(input.id);
+        if (input.id !== 'target_opt') {
+            let nextSibling = element.nextElementSibling;
+            if (nextSibling) {
+                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
+            } else {
+                console.warn(`No next sibling found for element with id ${input.id}`);
+            }
         }
 
-        else if (targetOptionValue == 0) {
-            var name1 = '<?php echo $text['Target_Torque']?>';
-            const unitTranslations = {
-                "zh-cn": {
-                    "kgf.cm": "公斤公分",
-                    "kgf.m": "公斤米",
-                    "N.m": "牛頓米",
-                    "default": "英磅英吋"
-                },
-                "zh-tw": {
-                    "kgf.cm": "公斤公分",
-                    "kgf.m": "公斤米",
-                    "N.m": "牛頓米",
-                    "default": "英磅英吋"
-                }
-                
-            };
+        // 移除先前的錯誤樣式
+        element.classList.remove("is-invalid");
 
-            if (language === "zh-cn" || language === "zh-tw") {
-                unit = unitTranslations[language][unit] || unitTranslations[language]["default"];
-            } 
-            document.querySelector('div[for="target-torque"]').textContent = name1;
-            //document.querySelector('div[for="target-torque"]').textContent = name1 +"(" + unit + ")";
-        }else{
-           
-            var name = '<?php echo $text['Target_Angle']?>';
-            document.querySelector('div[for="target-torque"]').textContent = '';
-
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
+            isFormValid = false;
         }
     });
 
-
-
-    var downshiftOptionRadios = document.getElementsByName("downshift_option");
-  
-
-    for(var i = 0; i < downshiftOptionRadios.length; i++) {
-        downshiftOptionRadios[i].addEventListener("change", function() {
-        var selectedValue = this.value;
-        localStorage.setItem('downshift_option',selectedValue);
-        if(selectedValue  == 1){
-            document.querySelector('div[for="downshift-threshold"]').style.display = "none";
-            document.getElementById('downshift_threshold').style.display = "none";
-
-            document.querySelector('div[for="downshift-torque"]').style.display = "none";
-            document.getElementById('downshift_torque').style.display = "none";
-
-            document.querySelector('div[for="downshift-speed"]').style.display = "none";
-            document.getElementById('downshift_speed').style.display = "none";
-        }else{
-            document.querySelector('div[for="downshift-threshold"]').style.display = "block";
-            document.getElementById('downshift_threshold').style.display = "block";
-
-            document.querySelector('div[for="downshift-torque"]').style.display = "block";
-            document.getElementById('downshift_torque').style.display = "block";
-
-            document.querySelector('div[for="downshift-speed"]').style.display = "block";
-            document.getElementById('downshift_speed').style.display = "block";
-
-        }
-          
-        });
-    }
-
+    return isFormValid;
 
 }
 
-function edit_step(){
+function input_check_savestep() {
 
-    var unit = '<?php echo $data['unit_name']?>';
-    var language = getCookie('language');
+    let target_opt = document.getElementById("target_opt").value;
+    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor').value);
+    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor').value);
+    let Tool_Max_RPM = document.getElementById('tool_max_rpm').value;
+    let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
+    let hi_angle_max = 9999;
+    let hi_angle_min = 1;
 
-
-    if(language == "zh-cn"){
-        var torque_title = '目标扭力';
-    }else if(language == "zh-tw"){
-        var torque_title = '目標扭力';
-    }else{
-        var torque_title ='Target Torque';
+    let conditions = []; // 初始化為空數組
+    if (target_opt == 0) {
+        conditions = [
+            { id: 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+            { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+        ];
     }
 
-
-    if(job_id){
-        $.ajax({
-            url: "?url=Step/search_stepinfo",
-            method: "POST",
-            data:{ 
-                jobid: job_id,
-                seqid: seq_id,
-                stepid:stepid,
-            },
-            success: function(response) {
-
-                var responseJSON = JSON.stringify(response);
-                var cleanString = responseJSON.replace(/Array|\\n/g, '');
-                var cleanString = cleanString.substring(2, cleanString.length - 2);
-
-
-
-                var [, jobid] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, seqid] = cleanString.match(/\[seq_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, step_id] = cleanString.match(/\[step_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, hi_torque] = cleanString.match(/\[hi_torque]\s*=>\s*([^ ]+)/) || [, null];
-                var [, lo_torque] = cleanString.match(/\[lo_torque]\s*=>\s*([^ ]+)/) || [, null];
-                var [, hi_angle] = cleanString.match(/\[hi_angle]\s*=>\s*([^ ]+)/) || [, null];
-                var [, lo_angle] = cleanString.match(/\[lo_angle]\s*=>\s*([^ ]+)/) || [, null];
-                var [, rpm] = cleanString.match(/\[rpm]\s*=>\s*([^ ]+)/) || [, null];
-                var [, downshift_speed] = cleanString.match(/\[downshift_speed]\s*=>\s*([^ ]+)/) || [, null];
-                var [, downshift_torque] = cleanString.match(/\[downshift_torque]\s*=>\s*([^ ]+)/) || [, null];
-                var [, threshold_torque] = cleanString.match(/\[threshold_torque]\s*=>\s*([^ ]+)/) || [, null];
-                var [, target_option] = cleanString.match(/\[target_option]\s*=>\s*([^ ]+)/) || [, null];
-                var [, target_torque] = cleanString.match(/\[target_torque]\s*=>\s*([^ ]+)/) || [, null];
-                var [, target_angle] = cleanString.match(/\[target_angle]\s*=>\s*([^ ]+)/) || [, null];
-                var [, target_delaytime] = cleanString.match(/\[target_delaytime]\s*=>\s*([^ ]+)/) || [, null];
-                var [, direction] = cleanString.match(/\[direction]\s*=>\s*([^ ]+)/) || [, null];
-                var [, downshift] = cleanString.match(/\[downshift]\s*=>\s*([^ ]+)/) || [, null];
-                var [, check_count] = cleanString.match(/\[check_count]\s*=>\s*([^ ]+)/) || [, null];
-                var [, downshift_speed] = cleanString.match(/\[downshift_speed]\s*=>\s*([^ ]+)/) || [, null];
-            
-
-                document.getElementById('editstep').style.display = 'block';
-                document.getElementById("edit_hi_torque").value = hi_torque;
-                document.getElementById("edit_lo_torque").value = lo_torque;
-                document.getElementById("edit_hi_angle").value = hi_angle;
-                document.getElementById("edit_lo_angle").value = lo_angle;
-                document.getElementById("edit_rpm").value = rpm;
-                document.getElementById("edit_downshift_speed").value = downshift_speed;
-                document.getElementById("edit_downshift_torque").value = downshift_torque;
-                document.getElementById("edit_downshift_threshold").value = threshold_torque;
-                document.querySelector("select[name='edit_target_option']").value = target_option;
-
-                document.getElementById("edit_target_delaytime").value = target_delaytime;
-                document.getElementById("edit_target_torque").value = target_torque;
-                document.getElementById("edit_target_angle").value = target_angle;
-
-
-                var radioButtons1 = document.getElementsByName("edit_direction_option");
-                var radioButtons2 = document.getElementsByName("edit_downshift_option");
-
-                setRadioButtonValue(radioButtons1, direction);
-                setRadioButtonValue(radioButtons2, downshift);
-
-                //判斷有其他的step 選了 扭力 
-                //target_option的下拉式選單 就會把 扭力 移除
-                
-                if(target_option != 0 && check_count != 0){
-                    
-                    var selectElement = document.getElementById('mySelect');
-                    var selectElement = document.querySelector('select[name="edit_target_option"]');
-
-                    for(var i = selectElement.options.length - 1; i >= 0; i--) {
-                        var option = selectElement.options[i];
-                        if (option.value === '0') { 
-                            selectElement.remove(i);
-                        }
-                    }
-                }else{
-                    var selectElement = document.getElementById('mySelect');
-                    var selectElement = document.querySelector('select[name="edit_target_option"]');
-                }
-
-                if(target_option == 2){
-                    document.querySelector('div[for="edit_target-torque"]').textContent = '<?php echo $text['Target Delay Time']?>';
-                    document.getElementById('edit_hi_torque').disabled = true; 
-                    document.getElementById('edit_lo_torque').disabled = true; 
-                    document.getElementById('edit_hi_angle').disabled = true; 
-                    document.getElementById('edit_lo_angle').disabled = true; 
-                    document.getElementById('edit_rpm').disabled = true; 
-                    document.getElementById('edit_downshift_threshold').disabled = true; 
-                    document.getElementById('edit_downshift_torque').disabled = true; 
-                    document.getElementById('edit_downshift_speed').disabled = true; 
-
-                    document.querySelectorAll('input[name="edit_direction_option"]').forEach(function(radioButton) {
-                                radioButton.disabled = true;
-                    });
-
-                    document.querySelectorAll('input[name="edit_downshift_option"]').forEach(function(radioButton) {
-                                radioButton.disabled = true;
-                    });
-                }
-
-                //扭力
-                if(target_option == 0){
-                    document.getElementById('edit_target-torque_title').style.display = 'block';
-                    document.getElementById('edit_target-torque_val').style.display = 'block';
-                    document.getElementById('edit_target_torque').value = target_torque;  
-                }
-
-                //角度
-                if(target_option == 1){
-                    document.getElementById('edit_target-angle_title').style.display = 'block';
-                    document.getElementById('edit_target-angle_val').style.display = 'block';
-                    document.getElementById('edit_target_angle').value = target_angle; 
-                }
-
-                //delay time 
-                if(target_option == 2){
-                    document.getElementById('edit_target-delaytime_title').style.display = 'block';
-                    document.getElementById('edit_target-delaytime_val').style.display = 'block';
-                    document.getElementById("edit_target_delaytime").value = target_delaytime;
-                }
-
-
-                if(target_option == 0){
-                    var name = '<?php echo $text['Target_Torque']?>';
-                    const unitTranslations = {
-                        "zh-cn": {
-                            "kgf.cm": "公斤公分",
-                            "kgf.m": "公斤米",
-                            "N.m": "牛頓米",
-                            "default": "英磅英吋"
-                        },
-                        "zh-tw": {
-                            "kgf.cm": "公斤公分",
-                            "kgf.m": "公斤米",
-                            "N.m": "牛頓米",
-                            "default": "英磅英吋"
-                        }
-                        
-                    };
-
-                    if (language === "zh-cn" || language === "zh-tw") {
-                        unit = unitTranslations[language][unit] || unitTranslations[language]["default"];
-                    } 
-                    document.getElementById('edit_target-torque_title').style.display = 'block';
-                    document.querySelector('div[for="edit_target-torque"]').textContent = torque_title + "(" + unit + ")" ;
-                }
-
-                if(downshift == 0){
-                    document.querySelector('div[for="edit_downshift-torque"]').style.display = "none";
-                    document.getElementById('edit_downshift_torque').style.display = "none";
-
-                    document.querySelector('div[for="edit_downshift-threshold"]').style.display = "none";
-                    document.getElementById('edit_downshift_threshold').style.display = "none";
-
-                    document.querySelector('div[for="edit_downshift-speed"]').style.display = "none";
-                    document.getElementById('edit_downshift_speed').style.display = "none";
-
-                }
-
-                var target_option = document.getElementById("edit_target_option");
-                target_option.addEventListener('change', function() {
-                var selectedValue = this.value;
-
-                    if (selectedValue == 2) {
-                        var elementsToDisable = [
-                            document.getElementById('edit_hi_torque'),
-                            document.getElementById('edit_lo_torque'),
-                            document.getElementById('edit_hi_angle'),
-                            document.getElementById('edit_lo_angle'),
-                            document.getElementById('edit_rpm'),
-                            document.getElementById('edit_downshift_speed'),
-                            document.getElementById('edit_downshift_threshold'),
-                            document.getElementById('edit_downshift_speed'),
-                            document.getElementById('edit_downshift_torque')
-                        ];
-
-                        disableElements(elementsToDisable, true);
-
-                        document.querySelectorAll('input[name="edit_direction_option"]').forEach(function(radioButton) {
-                            radioButton.disabled = true;
-                        });
-
-                        document.querySelectorAll('input[name="edit_downshift_option"]').forEach(function(radioButton) {
-                            radioButton.disabled = true;
-                        });
-                
-
-                        document.querySelector('div[for="edit_target-torque"]').textContent = '<?php echo $text['Target Delay Time']?>';
-                    } 
-                    
-                    if (selectedValue == 1 || selectedValue == 0) {
-
-                        document.getElementById('edit_hi_torque').disabled = false;
-                        document.getElementById('edit_hi_torque').value = hi_torque;
-
-                        document.getElementById('edit_lo_torque').disabled = false;
-                        document.getElementById('edit_lo_torque').value = lo_torque;
-
-                        document.getElementById('edit_hi_angle').disabled = false;
-                        document.getElementById('edit_hi_angle').value = hi_angle;
-
-                        document.getElementById('edit_lo_angle').disabled = false;
-                        document.getElementById('edit_lo_angle').value = lo_angle;
-
-                        document.getElementById('edit_rpm').disabled = false;  
-                        document.getElementById('edit_rpm').value = rpm;
-
-                        document.getElementById('edit_downshift_threshold').disabled = false; 
-                        document.getElementById('edit_downshift_threshold').value = threshold_torque;
-
-                        document.getElementById('edit_downshift_speed').disabled = false; 
-                        document.getElementById('edit_downshift_speed').value = downshift_speed;
-
-
-                        document.getElementById('edit_downshift_torque').disabled = false; 
-                        document.getElementById('edit_downshift_torque').value = downshift_torque;
-
-
-                        document.querySelectorAll('input[name="edit_direction_option"]').forEach(function(radioButton) {
-                            radioButton.disabled = false;
-                        });
-
-                        document.querySelectorAll('input[name="edit_downshift_option"]').forEach(function(radioButton) {
-                            radioButton.disabled = false;
-                        });
-
-                    }
-
-                    if(selectedValue == 0){
-
-                        document.getElementById('edit_target-torque_title').style.display = 'block';
-                        document.getElementById('edit_target-torque_val').style.display = 'block';
-
-                        document.getElementById('edit_target-angle_title').style.display = 'none';
-                        document.getElementById('edit_target-angle_val').style.display = 'none';
-
-                        document.getElementById('edit_target-delaytime_title').style.display = 'none';
-                        document.getElementById('edit_target-delaytime_val').style.display = 'none';
-                        document.querySelector('div[for="edit_target-torque"]').textContent = '<?php echo $text['Target_Torque'] ?>' + "(" + unit + ")" ;
-
-                    }
-
-
-                    if(selectedValue == 1){
-
-                        document.getElementById('edit_target-torque_title').style.display = 'none';
-                        document.getElementById('edit_target-torque_val').style.display = 'none';
-
-                        document.getElementById('edit_target-angle_title').style.display = 'block';
-                        document.getElementById('edit_target-angle_val').style.display = 'block';
-
-
-                        document.getElementById('edit_target-delaytime_title').style.display = 'none';
-                        document.getElementById('edit_target-delaytime_val').style.display = 'none';
-
-                    }
-
-
-                    if(selectedValue == 2){
-
-                        document.getElementById('edit_target-torque_title').style.display = 'none';
-                        document.getElementById('edit_target-torque_val').style.display = 'none';
-
-                        document.getElementById('edit_target-angle_title').style.display = 'none';
-                        document.getElementById('edit_target-angle_val').style.display = 'none';
-
-                        document.getElementById('edit_target-delaytime_title').style.display = 'block';
-                        document.getElementById('edit_target-delaytime_val').style.display = 'block';
-
-                    }
-
-
-                
-                });
-
-
-                var downshiftOptionRadios = document.getElementsByName("edit_downshift_option");
-                for (var i = 0; i < downshiftOptionRadios.length; i++) {
-                    downshiftOptionRadios[i].addEventListener("change", function() {
-                        var selectval = this.value;
-                        localStorage.setItem('downshift_option',selectval);
-                        if(selectval == 1){
-                            document.querySelector('div[for="edit_downshift-torque"]').style.display = "block";
-                            document.getElementById('edit_downshift_torque').style.display = "block";
-
-                            document.querySelector('div[for="edit_downshift-threshold"]').style.display = "block";
-                            document.getElementById('edit_downshift_threshold').style.display = "block";
-
-                            document.querySelector('div[for="edit_downshift-speed"]').style.display = "block";
-                            document.getElementById('edit_downshift_speed').style.display = "block";
-                        }else{
-                            document.querySelector('div[for="edit_downshift-torque"]').style.display = "none";
-                            document.getElementById('edit_downshift_torque').style.display = "none";
-
-                            document.querySelector('div[for="edit_downshift-threshold"]').style.display = "none";
-                            document.getElementById('edit_downshift_threshold').style.display = "none";
-
-                            document.querySelector('div[for="edit_downshift-speed"]').style.display = "none";
-                            document.getElementById('edit_downshift_speed').style.display = "none";
-                        }
-                    
-                    });
-                }
-
-            },
-            error: function(xhr, status, error) {
-                
+    if (target_opt == 1) {
+        conditions = [
+            { id: 'target_ang', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+        ];
+    }
+
+    if (target_opt == 2) {
+        conditions = [
+            { id: 'target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
+        ];
+    }
+
+    let isFormValid = true;
+    conditions.forEach(function(input) {
+        var element = document.getElementById(input.id);
+        if (input.id !== 'target_opt') {
+            let nextSibling = element.nextElementSibling;
+            if (nextSibling) {
+                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
+            } else {
+                console.warn(`No next sibling found for element with id ${input.id}`);
+            }
+        }
+
+        // 移除先前的錯誤樣式
+        element.classList.remove("is-invalid");
+
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
+            isFormValid = false;
+        }
+    });
+
+    return isFormValid;
+}
+
+function validateInput(element, pattern, min, max) {
+    let value = element.value.trim();
+    let isValid = true;
+
+    // 验证空值
+    if (value === "") {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证正则
+    else if (!pattern.test(value)) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最小值
+    else if (min !== null && min !== undefined && parseFloat(value) < min) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最大值
+    else if (max !== null && max !== undefined && parseFloat(value) > max) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 通过验证
+    else {
+        element.classList.remove("is-invalid");
+    }
+
+    return isValid;
+}
+
+
+
+let backupOptions = [];  // 用來存儲備份的選項
+
+// 根據 target_option_only_tor 更新 select options
+function updateTargetOption() {
+    try {
+        // 假設 target_option_only_tor 是從 PHP 傳過來的 JSON 資料
+        let target_option_only_tor = JSON.parse('<?php echo $data["target_option_only_tor_json"]; ?>');
+
+        // 檢查 target_option_only_tor 是否是有效的陣列
+        if (!Array.isArray(target_option_only_tor)) {
+            return; // 如果不是陣列，則終止函數
+        }
+
+        // 取得 select 元素
+        const selectElement = document.getElementById("target_opt");
+
+        // 檢查 select 元素是否存在
+        if (!selectElement) {
+            //console.error('未能找到 id="target_opt" 的元素');
+            return; 
+        }
+
+        // 備份目前的選項
+        backupOptions = Array.from(selectElement.options).map(option => ({
+            value: option.value,
+            text: option.text
+        }));
+
+        // 清空現有的選項
+        while (selectElement.options.length > 0) {
+            selectElement.remove(0);  // 移除第一個選項
+        }
+
+        console.log('target_option_only_tor:', target_option_only_tor);
+
+        // 遍歷 target_option_only_tor 並創建新的 option 元素
+        target_option_only_tor.forEach((option) => {
+            // 確保每個選項有有效的 value 和 text
+            if (option.value !== undefined && option.text !== undefined) {
+                const optionElement = document.createElement("option");
+                optionElement.value = option.value;  // 設定選項的 value 屬性
+                optionElement.textContent = option.text;  // 設定選項的顯示文字
+                selectElement.appendChild(optionElement);  // 將選項加入到 select 中
+            } else {
+                //console.warn('無效的選項:', option);  // 如果選項格式不正確，輸出警告
             }
         });
 
+    } catch (error) {
+        //console.error('解析 JSON 發生錯誤:', error);
+    }
+}
+
+// 恢復原本的選項
+function restoreBackupOptions() {
+    const selectElement = document.getElementById("target_opt");
+
+    // 清空現有的選項
+    while (selectElement.options.length > 0) {
+        selectElement.remove(0);
     }
 
+    // 恢復備份的選項
+    backupOptions.forEach((option) => {
+        const optionElement = document.createElement("option");
+        optionElement.value = option.value;
+        optionElement.textContent = option.text;
+        selectElement.appendChild(optionElement);
+    });
+
 }
+
+
 
 </script>
