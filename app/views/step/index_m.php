@@ -940,8 +940,7 @@ function copy_step_by_id_ajax() {
     isProcessing = true; // 設置為處理
 
     if (stepid_new) {
-        // 顯示加載動畫
-        document.getElementById('spinner').style.display = 'block';
+      
 
         $.ajax({
             url: "?url=Step/copy_tcc_step",
@@ -954,6 +953,10 @@ function copy_step_by_id_ajax() {
             },
            success: function(response) {
                 alertify.confirm(text_info, function (result) {
+
+                    // 顯示加載動畫
+                    document.getElementById('spinner').style.display = 'block';
+
                     var responseData = JSON.parse(response);
                     // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                     setTimeout(function() {
