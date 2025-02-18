@@ -498,6 +498,13 @@ class Step extends Controller
             $jobid = $_POST['jobid'];
             $rowInfoArray = $_POST['rowInfoArray'];
 
+
+            echo "<pre>";
+            print_r($rowInfoArray);
+            echo "</pre>";
+            //die();
+
+
             $this->stepModel->swapupdate($jobid,$rowInfoArray);
         } else {
             
