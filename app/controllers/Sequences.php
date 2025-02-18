@@ -21,6 +21,7 @@ class Sequences extends Controller
         $sequences  = $this->sequenceModel->getSequences_by_job_id($job_id);
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
 
+
         $next_seq_id_arr = $this->sequenceModel->get_head_seq_id($job_id);
         $next_seq_id = (int)$next_seq_id_arr['missing_id'];
 
@@ -403,10 +404,14 @@ class Sequences extends Controller
    
     #seq 排序
     public function adjustment_order(){
+        
+
 
         if(isset($_POST['jobid'])){
             $jobid = $_POST['jobid'];
             $rowInfoArray = $_POST['rowInfoArray'];
+
+        
 
             if(!empty($rowInfoArray)){
 
@@ -416,10 +421,14 @@ class Sequences extends Controller
                     $new_info[$index] = $v_s;
                     $index++;
                 }
+
+           
                 $res = $this->sequenceModel->swapupdate($jobid,$rowInfoArray,$new_info);
                 
                 if($res){
+                    $this->sequenceModel->finalizeStepSeqId($jobid);
                     $res_msg = 'success';
+
                 }else{
                     $res_msg = 'fail';
                 }

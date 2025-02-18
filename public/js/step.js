@@ -384,7 +384,7 @@ function del_stepid(step_id){
             var title = 'Copy Job';
         }
 
-        document.getElementById('spinner').style.display = 'block';
+ 
         $.ajax({
             url: "?url=Step/delete_step",
             method: "POST",
@@ -395,6 +395,9 @@ function del_stepid(step_id){
             },
             success: function(response) {
                 alertify.confirm(text_info, function (result) {
+
+                    document.getElementById('spinner').style.display = 'block';
+                    
                     var responseData = JSON.parse(response);
                     // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                     setTimeout(function() {

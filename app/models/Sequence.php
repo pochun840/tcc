@@ -106,6 +106,13 @@ class Sequence{
         $sql= " DELETE FROM sequence WHERE job_id = ? AND seq_id = ? ";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$jobid, $seqid]);
+
+        if ($seqid != 50 ) {
+            $sql_update = "UPDATE sequence  SET seq_id = seq_id - 1 WHERE job_id = ? AND seq_id > ?";
+            $statement_update = $this->db_iDas->prepare($sql_update);
+            $statement_update->execute([$jobid, $seqid]);
+        }   
+
         return $results;
 
     }
@@ -205,85 +212,84 @@ class Sequence{
         return $rows;
     }
 
-
-    public function swapupdate($jobid, $rowInfoArray,$new_info) {
-
-        $temp = array();
-        foreach ($rowInfoArray as $k_s => $v_s) {
-            $sql = "SELECT seq_id FROM sequence WHERE job_id = ? AND seq_name = ? ";
-            $statement = $this->db_iDas->prepare($sql);
-            $statement->execute([$jobid, $v_s['sequence_name']]);
-            $result = $statement->fetch(PDO::FETCH_ASSOC);
-            
-            if ($result) {
-                
-                $new_val = 'New_Value'.($k_s + 1);
-                $update_sql = "UPDATE sequence SET seq_id = ? WHERE job_id = ? AND seq_name = ? ";
-
-                $update_statement = $this->db_iDas->prepare($update_sql);
-                $update_statement->execute([$new_val, $jobid, $v_s['sequence_name']]);
-                $rows_count = $update_statement->rowCount();
-                if ($rows_count  > 0){
-                    $new_val = 'New_Value'.($k_s + 1);
-                    $updated_seq_id = preg_replace('/[^0-9]/', '', $new_val);
-                    
-                    $update_id_sql = "UPDATE sequence SET seq_id = ? WHERE job_id = ? AND seq_name = ? ";
-                    $update_id_statement = $this->db_iDas->prepare($update_id_sql);
-                    $update_id_statement->execute([$updated_seq_id, $jobid, $v_s['sequence_name']]);                  
-                }
-
-            }
-
-            //最終再次檢查 強制把 欄位seq_id 不是數字的 通通移除
-            $force_update_sql = "UPDATE sequence SET seq_id = CAST(REPLACE(seq_id, 'New_Value', '') AS UNSIGNED) WHERE job_id =  ? ";
-            $force_update_statement = $this->db_iDas->prepare($force_update_sql);
-            $force_update_statement->execute([$jobid]);
-            
-        }
-
-        if(!empty($new_info)){
-
-          
-            foreach($new_info as $key =>$val){
-                $new_val = $key; // 使用陣列的鍵作為 new_val
-                $seq_id = $val['sequence_id'];
-
-                $sql_select = "SELECT count(*) FROM step WHERE job_id = :jobid AND seq_id = :seq_id";
-                $select_statement = $this->db_iDas->prepare($sql_select);
-
-                $select_statement->bindValue(':jobid', $jobid);
-                $select_statement->bindValue(':seq_id', $seq_id);
+    public function swapupdate($jobid, $rowInfoArray, $new_info) {
+        // 開啟事務
+        $this->db_iDas->beginTransaction();
     
-                // 執行查詢
-                $select_statement->execute();
-                $count = $select_statement->fetchColumn();
-                if ($count > 0) {
-
-                    $sql_step = "UPDATE step SET seq_id = '".$key."' WHERE job_id = '".$jobid."' AND seq_id = '". $val['seq_id']."' ";
-                    $update_statement = $this->db_iDas->prepare($sql_step);
+        try {
+            // 遍歷 $rowInfoArray，更新 sequence 表和 step 表
+            foreach ($rowInfoArray as $k_s => $v_s) {
+                // 檢查是否存在該 sequence
+                $sql = "SELECT seq_id FROM sequence WHERE job_id = ? AND seq_name = ?";
+                $statement = $this->db_iDas->prepare($sql);
+                $statement->execute([$jobid, $v_s['sequence_name']]);
+                $result = $statement->fetch(PDO::FETCH_ASSOC);
     
-                    $update_statement->execute();
-
-                    $sql_step = "UPDATE step SET seq_id = :new_val WHERE job_id = :jobid AND seq_id = :seq_id";
-                    $update_statement = $pdo->prepare($sql_step);
-                    
-                    $update_statement->bindValue(':new_val', $key, PDO::PARAM_INT);
-                    $update_statement->bindValue(':jobid', $jobid, PDO::PARAM_INT);
-                    $update_statement->bindValue(':seq_id', $seq_id, PDO::PARAM_INT);
-        
-                    $update_statement->execute();
-
-                    
-                }else{
-                  
+                if ($result) {
+                    $old_seq_id = $result['seq_id']; // 取得舊的 seq_id
+    
+                    // 生成新的 seq_id
+                    $new_val = 'New_Value' . ($k_s + 1);
+                    $updated_seq_id = preg_replace('/[^0-9]/', '', $new_val); // 移除 "New_Value" 部分，保留純數字
+    
+                    // 檢查 $updated_seq_id 是否為 1，如果是，則改為 777
+                    if ($updated_seq_id == 1) {
+                        $temp_seq_id = 777;
+                    } else {
+                        $temp_seq_id = $updated_seq_id;
+                    }
+    
+                    // 更新 sequence 表中的 seq_id
+                    $update_sql = "UPDATE sequence SET seq_id = ? WHERE job_id = ? AND seq_name = ?";
+                    $update_statement = $this->db_iDas->prepare($update_sql);
+                    $update_statement->execute([$temp_seq_id, $jobid, $v_s['sequence_name']]);
+    
+                    // 更新 step 表中的 seq_id (使用 CASE 語句)
+                    $update_step_sql = "UPDATE step SET seq_id = CASE
+                        WHEN seq_id = :old_seq_id THEN :temp_seq_id
+                        ELSE seq_id  -- 保留其他 seq_id 不變
+                    END
+                    WHERE job_id = :jobid AND seq_id = :old_seq_id";
+    
+                    $update_step_statement = $this->db_iDas->prepare($update_step_sql);
+                    $update_step_statement->bindValue(':temp_seq_id', $temp_seq_id); // 使用 $temp_seq_id
+                    $update_step_statement->bindValue(':jobid', $jobid);
+                    $update_step_statement->bindValue(':old_seq_id', $old_seq_id);
+                    $update_step_statement->execute();
                 }
-
             }
-
+    
+            // 遍歷 $rowInfoArray，將 seq_id 為 777 的改回 1
+            foreach ($rowInfoArray as $k_s => $v_s) {
+                $sql = "SELECT seq_id FROM sequence WHERE job_id = ? AND seq_name = ?";
+                $statement = $this->db_iDas->prepare($sql);
+                $statement->execute([$jobid, $v_s['sequence_name']]);
+                $result = $statement->fetch(PDO::FETCH_ASSOC);
+    
+                if ($result && $result['seq_id'] == 777) {
+                    $update_sql = "UPDATE sequence SET seq_id = 1 WHERE job_id = ? AND seq_name = ?";
+                    $update_statement = $this->db_iDas->prepare($update_sql);
+                    $update_statement->execute([$jobid, $v_s['sequence_name']]);
+    
+                    $update_step_sql = "UPDATE step SET seq_id = 1 WHERE job_id = ? AND seq_id = 777";
+                    $update_step_statement = $this->db_iDas->prepare($update_step_sql);
+                    $update_step_statement->execute([$jobid]);
+                }
+            }
+    
+            // 提交事務
+            $this->db_iDas->commit();
+    
+        } catch (Exception $e) {
+            // 發生錯誤時回滾事務
+            $this->db_iDas->rollBack();
+            // 重新拋出異常
+            throw $e;
         }
+    
         return true;
-   
     }
+    
     
     
     #驗證seq id是否重複

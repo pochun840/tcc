@@ -491,6 +491,9 @@ class Step extends Controller
         
     #排序step
     public function adjustment_order(){
+
+        //var_dump($_POST);die();
+
         if (isset($_POST['jobid']) && isset($_POST['rowInfoArray'])) {
             $jobid = $_POST['jobid'];
             $rowInfoArray = $_POST['rowInfoArray'];

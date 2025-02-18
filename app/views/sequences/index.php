@@ -924,7 +924,7 @@ function sendRowInfoArray() {
         method: "POST",
         data: dataToSend,
         success: function(response) {
-            history.go(0); 
+           //history.go(0); 
         },
         error: function(xhr, status, error) {
             console.error('Error sending data:', error);
