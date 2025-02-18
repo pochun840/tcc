@@ -233,16 +233,16 @@
                             </div>
                         </div>
 
-                        <div id="ds_mode_item">
+                        <div id="th_mode_item">
                             <div class="row">
                                 <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                                 <div class="col t2" >
                                     <div class="col-4 form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="ds_mode" id="downshift_OFF" value="0" checked="checked">
+                                    <input class="form-check-input" type="radio" name="th_mode" id="downshift_OFF" value="0" checked="checked">
                                     <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="ds_mode" id="downshift_ON" value="1" >
+                                    <input class="form-check-input" type="radio" name="th_mode" id="downshift_ON" value="1" >
                                     <label class="form-check-label" for="ownshift_ON"><?php echo $text['switch_on'];?></label>
                                     </div>
                                 </div>
@@ -411,16 +411,16 @@
                             </div>
                         </div>
 
-                        <div id="edit_ds_mode_item">
+                        <div id="edit_th_mode_item">
                             <div class="row">
-                                <div for="edit_ds_mode" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
+                                <div for="edit_th_mode" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                                 <div class="col t2" >
                                     <div class="col-4 form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_ds_mode" id="downshift_ON" value="1">
+                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_ON" value="1">
                                     <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_ds_mode" id="downshift_OFF" value="0" >
+                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_OFF" value="0" >
                                     <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
                                     </div>
                                 </div>
@@ -607,7 +607,7 @@ function edit_step(stepid){
                 var [, ang_lo] = cleanString.match(/\[ang_lo]\s*=>\s*([^ ]+)/) || [, null];
                 var [, rpm] = cleanString.match(/\[rpm]\s*=>\s*([^ ]+)/) || [, null];
                 var [, direction] = cleanString.match(/\[direction]\s*=>\s*([^ ]+)/) || [, null];
-                var [, ds_mode] = cleanString.match(/\[ds_mode]\s*=>\s*([^ ]+)/) || [, null];
+                var [, th_mode] = cleanString.match(/\[th_mode]\s*=>\s*([^ ]+)/) || [, null];
                 var [, ds_tor] = cleanString.match(/\[ds_tor]\s*=>\s*([^ ]+)/) || [, null];
                 var [, ds_speed] = cleanString.match(/\[ds_speed]\s*=>\s*([^ ]+)/) || [, null];
                 var [, th_tor] = cleanString.match(/\[th_tor]\s*=>\s*([^ ]+)/) || [, null];
@@ -636,15 +636,15 @@ function edit_step(stepid){
                     disableElementById('edit_ds_speed');
                     disableElementById('edit_th_tor');
                     disableElementById('edit_rpm');
-                    disableElementsByName("edit_ds_mode");
+                    disableElementsByName("edit_th_mode");
 
                     //隱藏欄位
                     /*document.getElementById("edit_rpm_item").style.display = 'none';
-                    document.getElementById("edit_ds_mode_item").style.display = 'none';
+                    document.getElementById("edit_th_mode_item").style.display = 'none';
                     document.getElementById("edit_th_tor_item").style.display = 'none';
                     document.getElementById("edit_ds_tor_item").style.display = 'none';
                     document.getElementById("edit_ds_speed_item").style.display = 'none';
-                    document.getElementById("edit_ds_mode_item").style.display = 'none';*/
+                    document.getElementById("edit_th_mode_item").style.display = 'none';*/
 
 
                      
@@ -664,7 +664,7 @@ function edit_step(stepid){
                     disableElementById('edit_tor_lo');
                     disableElementById('edit_ang_hi');
                     disableElementById('edit_ang_lo');
-                    disableElementsByName("edit_ds_mode");
+                    disableElementsByName("edit_th_mode");
                     disableElementsByName("edit_direction");
 
                     //隱藏欄位
@@ -674,11 +674,11 @@ function edit_step(stepid){
                     document.getElementById("edit_ang_lo_item").style.display= 'none';
                     document.getElementById("edit_rpm_item").style.display= 'none';
                     document.getElementById("edit_direction_item").style.display= 'none';
-                    document.getElementById("edit_ds_mode_item").style.display = 'none';
+                    document.getElementById("edit_th_mode_item").style.display = 'none';
                     document.getElementById("edit_th_tor_item").style.display = 'none';
                     document.getElementById("edit_ds_tor_item").style.display = 'none';
                     document.getElementById("edit_ds_speed_item").style.display = 'none';
-                    document.getElementById("edit_ds_mode_item").style.display = 'none';*/
+                    document.getElementById("edit_th_mode_item").style.display = 'none';*/
 
 
                     
@@ -695,8 +695,8 @@ function edit_step(stepid){
                 document.getElementById("edit_ang_lo").value = ang_lo;
 
 
-                var radioButtons_ds_mode = document.getElementsByName("edit_ds_mode");
-                setRadioButton_value(radioButtons_ds_mode, ds_mode);
+                var radioButtons_th_mode = document.getElementsByName("edit_th_mode");
+                setRadioButton_value(radioButtons_th_mode, th_mode);
 
                 var radioButtons_direction = document.getElementsByName("edit_direction");
                 setRadioButton_value(radioButtons_direction, direction);
@@ -735,7 +735,7 @@ function create_step() {
     });
 
 
-    //處理ds_mode 
+    //處理th_mode 
     detectDownshiftSelection();
 
 }
@@ -759,7 +759,7 @@ function add_step() {
     var ang_lo = document.getElementById('ang_lo').value;
     var rpm = document.getElementById('rpm').value;
     var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
-    var ds_mode = document.querySelector('input[name="ds_mode"]:checked').value;
+    var th_mode = document.querySelector('input[name="th_mode"]:checked').value;
     var th_tor = document.getElementById('th_tor').value;
     var ds_tor = document.getElementById('ds_tor').value;
     var ds_speed = document.getElementById('ds_speed').value;
@@ -788,7 +788,7 @@ function add_step() {
                 ang_lo: ang_lo,
                 rpm: rpm,
                 direction: direction,
-                ds_mode: ds_mode,
+                th_mode: th_mode,
                 th_tor: th_tor,
                 ds_tor: ds_tor,
                 ds_speed: ds_speed,
@@ -852,7 +852,7 @@ function edit_step_save() {
     var ang_lo = document.getElementById('edit_ang_lo').value;
     var rpm = document.getElementById('edit_rpm').value;
     var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
-    var ds_mode = document.querySelector('input[name="edit_ds_mode"]:checked').value;
+    var th_mode = document.querySelector('input[name="edit_th_mode"]:checked').value;
     var th_tor = document.getElementById('edit_th_tor').value;
     var ds_tor = document.getElementById('edit_ds_tor').value;
     var ds_speed = document.getElementById('edit_ds_speed').value;
@@ -882,7 +882,7 @@ function edit_step_save() {
                 ang_lo: ang_lo,
                 rpm: rpm,
                 direction: direction,
-                ds_mode: ds_mode,
+                th_mode: th_mode,
                 th_tor: th_tor,
                 ds_tor: ds_tor,
                 ds_speed: ds_speed,

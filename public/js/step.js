@@ -122,7 +122,7 @@ function enableElementByName(name, value = '') {
 
 
 function detectDownshiftSelection() {
-    const radios = document.getElementsByName("ds_mode");
+    const radios = document.getElementsByName("th_mode");
     radios.forEach((radio) => {
         radio.addEventListener("change", function() {
             if (document.getElementById("downshift_ON").checked) {
@@ -167,11 +167,11 @@ function toggleVisibility(targetValue) {
         document.getElementById("ang_lo_item").style.display= 'block';
         document.getElementById("rpm_item").style.display= 'block';
         document.getElementById("direction_item").style.display= 'block';
-        document.getElementById("ds_mode_item").style.display = 'block';
+        document.getElementById("th_mode_item").style.display = 'block';
         document.getElementById("th_tor_item").style.display = 'block';
         document.getElementById("ds_tor_item").style.display = 'block';
         document.getElementById("ds_speed_item").style.display = 'block';
-        document.getElementById("ds_mode_item").style.display = 'block';*/
+        document.getElementById("th_mode_item").style.display = 'block';*/
 
     } else if (targetValue == 1) {
         targetAngItem.style.display = "block";
@@ -196,11 +196,11 @@ function toggleVisibility(targetValue) {
         document.getElementById("ang_lo_item").style.display= 'block';
         document.getElementById("rpm_item").style.display= 'none';
         document.getElementById("direction_item").style.display= 'block';
-        document.getElementById("ds_mode_item").style.display = 'none';
+        document.getElementById("th_mode_item").style.display = 'none';
         document.getElementById("th_tor_item").style.display = 'none';
         document.getElementById("ds_tor_item").style.display = 'none';
         document.getElementById("ds_speed_item").style.display = 'none';
-        document.getElementById("ds_mode_item").style.display = 'none';*/
+        document.getElementById("th_mode_item").style.display = 'none';*/
 
          
     } else if (targetValue == 2) {
@@ -226,11 +226,11 @@ function toggleVisibility(targetValue) {
         document.getElementById("ang_lo_item").style.display= 'none';
         document.getElementById("rpm_item").style.display= 'none';
         document.getElementById("direction_item").style.display= 'none';
-        document.getElementById("ds_mode_item").style.display = 'none';
+        document.getElementById("th_mode_item").style.display = 'none';
         document.getElementById("th_tor_item").style.display = 'none';
         document.getElementById("ds_tor_item").style.display = 'none';
         document.getElementById("ds_speed_item").style.display = 'none';
-        document.getElementById("ds_mode_item").style.display = 'none';*/
+        document.getElementById("th_mode_item").style.display = 'none';*/
 
     }
 }
@@ -271,7 +271,7 @@ function handleTargetOptChange(target_opt) {
         enableElementById('edit_ds_speed',ds_speed);
         enableElementById('edit_th_tor',th_tor);
         enableElementByName("edit_direction");
-        enableElementByName("edit_ds_mode");
+        enableElementByName("edit_th_mode");
 
 
         //欄位 控制
@@ -281,11 +281,11 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_ang_lo_item").style.display= 'block';
         document.getElementById("edit_rpm_item").style.display= 'block';
         document.getElementById("edit_direction_item").style.display= 'block';
-        document.getElementById("edit_ds_mode_item").style.display = 'block';
+        document.getElementById("edit_th_mode_item").style.display = 'block';
         document.getElementById("edit_th_tor_item").style.display = 'block';
         document.getElementById("edit_ds_tor_item").style.display = 'block';
         document.getElementById("edit_ds_speed_item").style.display = 'block';
-        document.getElementById("edit_ds_mode_item").style.display = 'block';*/
+        document.getElementById("edit_th_mode_item").style.display = 'block';*/
 
     }
 
@@ -302,7 +302,7 @@ function handleTargetOptChange(target_opt) {
         disableElementById('edit_ds_speed',ds_speed);
         disableElementById('edit_th_tor',th_tor);
         disableElementById('edit_rpm',rpm);
-        disableElementsByName("edit_ds_mode");
+        disableElementsByName("edit_th_mode");
         enableElementByName("edit_direction");
 
 
@@ -313,11 +313,11 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_ang_lo_item").style.display= 'block';
         document.getElementById("edit_rpm_item").style.display= 'none';
         document.getElementById("edit_direction_item").style.display= 'block';
-        document.getElementById("edit_ds_mode_item").style.display = 'none';
+        document.getElementById("edit_th_mode_item").style.display = 'none';
         document.getElementById("edit_th_tor_item").style.display = 'none';
         document.getElementById("edit_ds_tor_item").style.display = 'none';
         document.getElementById("edit_ds_speed_item").style.display = 'none';
-        document.getElementById("edit_ds_mode_item").style.display = 'none';*/
+        document.getElementById("edit_th_mode_item").style.display = 'none';*/
   
     }
 
@@ -335,7 +335,7 @@ function handleTargetOptChange(target_opt) {
         disableElementById('edit_rpm',rpm);
         disableElementById('edit_ds_tor',ds_tor);
         disableElementById('edit_ds_speed',ds_speed);
-        disableElementsByName("edit_ds_mode");
+        disableElementsByName("edit_th_mode");
         disableElementsByName("edit_direction");
 
         //欄位 控制
@@ -345,11 +345,11 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_ang_lo_item").style.display= 'none';
         document.getElementById("edit_rpm_item").style.display= 'none';
         document.getElementById("edit_direction_item").style.display= 'none';
-        document.getElementById("edit_ds_mode_item").style.display = 'none';
+        document.getElementById("edit_th_mode_item").style.display = 'none';
         document.getElementById("edit_th_tor_item").style.display = 'none';
         document.getElementById("edit_ds_tor_item").style.display = 'none';
         document.getElementById("edit_ds_speed_item").style.display = 'none';
-        document.getElementById("edit_ds_mode_item").style.display = 'none';*/
+        document.getElementById("edit_th_mode_item").style.display = 'none';*/
 
 
     }

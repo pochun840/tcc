@@ -131,7 +131,7 @@ class Step extends Controller
             $ang_lo  = isset($_POST['lo_angle'])? intval($_POST['ang_lo']) : 0; 
             $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 200;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
-            $ds_mode = isset($_POST['ds_mode'])? intval($_POST['ds_mode']) : 0;
+            $th_mode = isset($_POST['th_mode'])? intval($_POST['th_mode']) : 0;
             $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0.3; 
             $ds_speed = isset($_POST['ds_speed'])? intval($_POST['ds_speed']) : 100;
             $th_tor = isset($_POST['th_tor'])? floatval($_POST['th_tor']) : 0;
@@ -197,7 +197,7 @@ class Step extends Controller
                 'ang_lo'           => $ang_lo,
                 'rpm'              => $rpm,
                 'direction'        => $direction,
-                'ds_mode'          => $ds_mode,
+                'th_mode'          => $th_mode,
                 'th_tor'           => $th_tor,
                 'ds_tor'           => $ds_tor,
                 'ds_speed'         => $ds_speed,
@@ -256,7 +256,7 @@ class Step extends Controller
             $ang_lo  = isset($_POST['ang_lo'])? intval($_POST['ang_lo']) : 0; 
             $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 200;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
-            $ds_mode = isset($_POST['ds_mode'])? intval($_POST['ds_mode']) : 0;
+            $th_mode = isset($_POST['th_mode'])? intval($_POST['th_mode']) : 0;
             $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0.3; 
             $ds_speed = isset($_POST['ds_speed'])? intval($_POST['ds_speed']) : 100;
             $th_tor = isset($_POST['th_tor'])? floatval($_POST['th_tor']) : 0;
@@ -310,7 +310,7 @@ class Step extends Controller
                 'ang_lo'           => $ang_lo,
                 'rpm'              => $rpm,
                 'direction'        => $direction,
-                'ds_mode'          => $ds_mode,
+                'th_mode'          => $th_mode,
                 'th_tor'           => $th_tor,
                 'ds_tor'           => $ds_tor,
                 'ds_speed'         => $ds_speed,
@@ -421,7 +421,7 @@ class Step extends Controller
                         'ang_lo'           => $old_res[0]['ang_lo'],
                         'rpm'              => $old_res[0]['rpm'],
                         'direction'        => $old_res[0]['direction'],
-                        'ds_mode'          => $old_res[0]['ds_mode'],
+                        'th_mode'          => $old_res[0]['th_mode'],
                         'th_tor'           => $old_res[0]['th_tor'],
                         'ds_tor'           => $old_res[0]['ds_tor'],
                         'ds_speed'         => $old_res[0]['ds_speed'],

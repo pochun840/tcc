@@ -100,8 +100,8 @@ class Steptcc{
             return false; 
         }
         
-        $sql = "INSERT INTO `step` (job_id, seq_id, step_id, target_opt, target_tor, target_ang, target_delay, tor_hi, tor_lo, ang_hi, ang_lo, rpm, direction, ds_mode, ds_tor, ds_speed, th_tor,record_ang,tor_unit) ";
-        $sql .= "VALUES (:job_id, :seq_id, :step_id, :target_opt, :target_tor, :target_ang, :target_delay, :tor_hi, :tor_lo, :ang_hi, :ang_lo, :rpm, :direction, :ds_mode, :ds_tor, :ds_speed, :th_tor,:record_ang,:tor_unit);";
+        $sql = "INSERT INTO `step` (job_id, seq_id, step_id, target_opt, target_tor, target_ang, target_delay, tor_hi, tor_lo, ang_hi, ang_lo, rpm, direction, th_mode, ds_tor, ds_speed, th_tor,record_ang,tor_unit) ";
+        $sql .= "VALUES (:job_id, :seq_id, :step_id, :target_opt, :target_tor, :target_ang, :target_delay, :tor_hi, :tor_lo, :ang_hi, :ang_lo, :rpm, :direction, :th_mode, :ds_tor, :ds_speed, :th_tor,:record_ang,:tor_unit);";
     
         // 检查数据库连接
         if ($this->db_iDas === null) {
@@ -135,7 +135,7 @@ class Steptcc{
         $statement->bindValue(':ang_lo', $jobdata['ang_lo']);
         $statement->bindValue(':rpm', $jobdata['rpm']);
         $statement->bindValue(':direction', $jobdata['direction']);
-        $statement->bindValue(':ds_mode', $jobdata['ds_mode']);
+        $statement->bindValue(':th_mode', $jobdata['th_mode']);
         $statement->bindValue(':ds_tor', $jobdata['ds_tor']);
         $statement->bindValue(':ds_speed', $jobdata['ds_speed']);
         $statement->bindValue(':th_tor', $jobdata['th_tor']);
@@ -169,7 +169,7 @@ class Steptcc{
                     ang_lo = :ang_lo,
                     rpm = :rpm,
                     direction = :direction,
-                    ds_mode = :ds_mode,
+                    th_mode = :th_mode,
                     th_tor = :th_tor,
                     ds_tor = :ds_tor,
                     ds_speed = :ds_speed,
@@ -191,7 +191,7 @@ class Steptcc{
         $statement->bindValue(':ang_lo', $jobdata['ang_lo']);
         $statement->bindValue(':rpm', $jobdata['rpm']);
         $statement->bindValue(':direction', $jobdata['direction']);
-        $statement->bindValue(':ds_mode', $jobdata['ds_mode']);
+        $statement->bindValue(':th_mode', $jobdata['th_mode']);
         $statement->bindValue(':ds_tor', $jobdata['ds_tor']);
         $statement->bindValue(':ds_speed', $jobdata['ds_speed']);
         $statement->bindValue(':th_tor', $jobdata['th_tor']);

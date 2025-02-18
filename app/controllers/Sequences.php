@@ -372,7 +372,7 @@ class Sequences extends Controller
                 $new_temp_step[$key_step]['ang_hi'] = $val_step['ang_lo'];
                 $new_temp_step[$key_step]['rpm'] = $val_step['rpm'];
                 $new_temp_step[$key_step]['direction'] = $val_step['direction'];
-                $new_temp_step[$key_step]['ds_mode'] = $val_step['ds_mode'];
+                $new_temp_step[$key_step]['th_mode'] = $val_step['th_mode'];
                 $new_temp_step[$key_step]['ds_tor'] = $val_step['ds_tor'];
                 $new_temp_step[$key_step]['ds_speed'] = $val_step['ds_speed'];
                 $new_temp_step[$key_step]['th_tor'] = $val_step['th_tor'];
