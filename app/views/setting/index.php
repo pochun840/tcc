@@ -43,7 +43,19 @@
                             <?php } ?>
                         </select>
                     </div>
+                </div>
+                
+                <div class="row t2">
+                    <div class="col-3 t1"><?php echo $text['torque_unit'];?>:</div>
+                    <div class="col-3 t2">
+                        <select class="form-select" id="select_language" name="select_language">
+                            <?php foreach($data['unit_arr'] as $k_unit =>$v_unit){?>
+                            <option value="<?php echo  $k_unit;?>"  <?php echo $k_lang == $data['controller_info']['torque_unit'] ? 'selected' : ''; ?> ><?php echo $v_unit;?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
                 </div>    
+
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_batch'];?>:</div>
                     <div class="col t2" >

@@ -28,6 +28,7 @@ class Settings extends Controller
         $agent_type = $this->AdminModel->Get_Das_Config('agent_type');
         $job_list = $this->SettingModel->get_job_list();
         $barcodes = $this->GetBarcodes();
+        $unit_arr = $this->MiscellaneousModel->details('torque_unit');
 
      
 
@@ -74,7 +75,6 @@ class Settings extends Controller
         
         $this->view('setting/index', $data);*/
         
-        $data = array();
         $data = array(
             'lang_arr'        => $lang,
             'controller_info' => $controller_info,
@@ -84,7 +84,8 @@ class Settings extends Controller
             'agent_server_ip' => $agent_server_ip,
             'agent_type'      => $agent_type,
             'job_list'        => $job_list,
-            'barcodes'        => $barcodes
+            'barcodes'        => $barcodes,
+            'unit_arr'        => $unit_arr
 
         );
 
