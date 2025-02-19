@@ -57,9 +57,39 @@
                             <?php }?>
                         </div>
 
+                    
+                       
                         <div id="graph" class="display-chart">
-                            <div id="chart" style="width: 100%; height: 100%"></div>
+                        <table class="chart-table">
+                            <thead>
+                                <tr>
+                                    <th><?php echo $text['step']; ?></th>
+                                    <?php for ($i = 1; $i <= 4; $i++){?>
+                                        <th><?php echo $i; ?></th>
+                                    <?php }?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $rows = array(
+                                    $text['Torque'] => $data['other_data']['torque'],
+                                    $text['Angle'] => $data['other_data']['angle']
+                                );
+                                foreach ($rows as $label => $values){?>
+                                    <tr>
+                                        <td><?php echo $label; ?></td>
+                                        <?php for ($i = 1; $i <= 4; $i++){?>
+                                            <td><?php echo isset($values[$i]) ? $values[$i] : 'N/A'; ?></td>
+                                        <?php } ?>
+                                    </tr>
+                                <?php }?>
+                            </tbody>
+                        </table>
+
+                            <div id="chart" style="width: 100%; height: 80%"></div>
                         </div>      
+
+                        
                     </div>
                 </div>
             </div>
@@ -94,10 +124,6 @@ function chart_type(argument){
     activeButton.classList.add("active");
 
     var chartIndex = currentUrl.indexOf('chart=');
-
-
-
-
     var chart;
 
     if(argument == "torque_time"){
@@ -286,3 +312,22 @@ function generateDataZoom() {
 </body>
 
 </html>
+<style>
+  .chart-table {
+    width: 99%; /* Or adjust as needed */
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Space between table and chart */
+}
+
+.chart-table th, .chart-table td {
+    border: 1px solid #ddd; /* Light gray borders */
+    padding: 5px; /* Reduced padding */
+    text-align: center;
+    font-size: 12px; /* Smaller font size */
+    height: 25px; /* Adjust row height as needed */
+}
+
+.chart-table th {
+    background-color: #f0f0f0; /* Light gray header */
+}
+</style> 

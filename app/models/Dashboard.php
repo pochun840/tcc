@@ -118,6 +118,68 @@ class Dashboard{
         return $first_column;
     }
 
+
+    public function get_csv_selected_columns($no) {
+        $selected_columns = array(
+            'step' => array(),
+            'torque' => array(),
+            'angle' => array()
+        );  // 用於儲存 F, G, H 欄位的數據
+    
+        // 檔案類型
+        $file_arr = array('_0p5', '_1p0', '_2p0');
+    
+        foreach ($file_arr as $v_f) {
+            $infile = "../public/data/DATALOG_20241220150526_DEVICE_" . $no . $v_f . ".csv";
+            if (file_exists($infile)) {
+                $csvdata_tmp = file_get_contents($infile);
+    
+                if (!empty($csvdata_tmp)) {
+                    $csvdata = $csvdata_tmp;
+                    $lines = explode("\n", $csvdata);
+                    $csv_array = array_map('str_getcsv', $lines);
+    
+                    // 取得每行的 F, G, H 欄位 (即 5, 6, 7 索引)
+                    foreach ($csv_array as $subarray) {
+                        // 確保該行有足夠的欄位數據 (至少 8 欄)
+                        if (isset($subarray[5]) && isset($subarray[6]) && isset($subarray[7])) {
+                            $selected_columns['step'][] = $subarray[5]; // 'step' 欄位數據
+                            $selected_columns['torque'][] = $subarray[6]; // 'torque' 欄位數據
+                            $selected_columns['angle'][] = $subarray[7]; // 'angle' 欄位數據
+                        }
+                    }
+                    break;  // 若找到檔案後，就退出循環
+                }
+            }
+        }
+
+        array_shift($selected_columns['step']);
+        array_shift($selected_columns['torque']);
+        array_shift($selected_columns['angle']);
+    
+        // 只保留前 4 筆數據
+        $selected_columns['step'] = array_slice($selected_columns['step'], 0, 4);
+        $selected_columns['torque'] = array_slice($selected_columns['torque'], 0, 4);
+        $selected_columns['angle'] = array_slice($selected_columns['angle'], 0, 4);
+
+        // 重新索引數組，將索引從 1 開始
+        $selected_columns['step'] = array_values($selected_columns['step']);
+        $selected_columns['torque'] = array_values($selected_columns['torque']);
+        $selected_columns['angle'] = array_values($selected_columns['angle']);
+
+        // 更改索引，使其從 1 開始
+        $selected_columns['step'] = array_combine(range(1, count($selected_columns['step'])), $selected_columns['step']);
+        $selected_columns['torque'] = array_combine(range(1, count($selected_columns['torque'])), $selected_columns['torque']);
+        $selected_columns['angle'] = array_combine(range(1, count($selected_columns['angle'])), $selected_columns['angle']);
+
+    
+        return $selected_columns;
+    }
+    
+
+
+
+
     public function get_info($no, $chat_mode) {
         $resultarr = array();
         
