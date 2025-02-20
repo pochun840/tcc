@@ -846,7 +846,7 @@ function get_input_info(){
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
 
-                var [, jobid] = cleanString.match(/\[input_job_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, jobid] = cleanString.match(/\[input_jobid]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_event] = cleanString.match(/\[input_event]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_pin] = cleanString.match(/\[input_pin]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_wave] = cleanString.match(/\[input_wave]\s*=>\s*([^ ]+)/) || [, null];

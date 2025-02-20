@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['JOB_COMPLETED'];?> :</div>
+                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok_stop'];?> :</div>
                             <div class="col t2" >
 
                                 <div class="form-check form-check-inline">
@@ -241,7 +241,7 @@
                         </div>
 
                         <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['JOB_COMPLETED'];?> :</div>
+                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok_stop'];?> :</div>
                             <div class="col t2" >
 
                                 <div class="form-check form-check-inline">

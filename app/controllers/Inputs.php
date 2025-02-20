@@ -159,62 +159,96 @@ class Inputs extends Controller
         $event    = $this->MiscellaneousModel->details('io_input');
 
         $input_check = true;
-        $jobdata = array();
+        $input_data = array();
 
-        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $jobdata['input_job_id'] = $_POST['job_id'];
+        // 初始化所有的 input_pin_1 到 input_pin_10 設為 0
+        for ($i = 1; $i <= 10; $i++) {
+            $_POST["input_pin_$i"] = 0;
+        }
+        
+        // 處理 $_POST['input_pin']
+        if (isset($_POST['input_pin'])) {
+            // 從 input_pin 取得數字部分
+            preg_match('/input_pin(\d+)/', $_POST['input_pin'], $matches);
+        
+            // 如果找到數字，則動態建立新的 key
+            if (isset($matches[1])) {
+                $pin_number = $matches[1]; 
+                $new_key = 'input_pin_' . $pin_number;
+        
+                // 把 input_wave 的值賦給新的 key
+                if (isset($_POST['input_wave'])) {
+                    $_POST[$new_key] = $_POST['input_wave'];  
+                }
+            }
+        }
+
+        if(!empty($_POST)){
+            $input_data = $_POST;
+            $input_data['input_jobid'] = $input_data['job_id'];
+        }
+
+
+        /*if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+            $input_data['input_jobid'] = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
 
         if( !empty($_POST['input_event']) && isset($_POST['input_event'])  ){
-            $jobdata['input_event'] = $_POST['input_event'];
+            $input_data['input_event'] = $_POST['input_event'];
         }else{ 
             $input_check = false; 
         }
 
         if( !empty($_POST['input_pin']) && isset($_POST['input_pin'])  ){
-            $jobdata['input_pin'] = intval($_POST['input_pin']);
+            $input_data['input_pin'] = intval($_POST['input_pin']);
         }else{ 
             $input_check = false; 
         }
 
         if( !empty($_POST['input_wave']) && isset($_POST['input_wave'])  ){
-            $jobdata['input_wave'] = $_POST['input_wave'];
+            $input_data['input_wave'] = $_POST['input_wave'];
         }else{ 
             $input_check = false; 
         }
 
-        if( isset($_POST['gateconfirm'])  ){
-            $jobdata['gateconfirm'] = $_POST['gateconfirm'];
+        if( isset($_POST['input_gateconfirm'])  ){
+            $jobdata['input_gateconfirm'] = $_POST['input_gateconfirm'];
         }else{ 
             $input_check = false; 
         }
 
-        if( isset($_POST['pagemode'])  ){
-            $jobdata['pagemode'] = $_POST['pagemode'];
+        if( isset($_POST['input_pagemode'])  ){
+            $input_data['input_pagemode'] = $_POST['input_pagemode'];
+            $input_data['input_seqid']    = $_POST['input_seqid'];
         }else{ 
             $input_check = false; 
         }
 
-        if( isset($_POST['input_seqid'])  ){
-            $jobdata['input_seqid'] = $_POST['input_seqid'];
-        }else{ 
-            $input_check = false; 
-        }
 
+        $input_data['input_seqid'] = '';*/
+
+        echo "<pre>";
+        print_r($input_data);
+        echo "</pre>";
+
+
+        die();
+
+      
         if($input_check){
-            $count = $this->InputModel->check_job_event_conflict($jobdata['input_job_id'],$jobdata['input_event']);
+            $count = $this->InputModel->check_job_event_conflict($jobdata['input_jobid'],$jobdata['input_event']);
             if(!$count){
                
                 $res  = $this->InputModel->create_input($jobdata);
                 $result = array();
                 if($res){
                     $res_type = 'Success';
-                    $res_msg  = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
+                    $res_msg  = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_jobid'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
                 }else{
                     $res_type = 'Error';
-                    $res_msg  = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
+                    $res_msg  = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_jobid'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
                 }
                 
                 $result = array(
@@ -242,7 +276,7 @@ class Inputs extends Controller
         $input_check = true;
         $jobdata = array();
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $jobdata['input_job_id'] = $_POST['job_id'];
+            $jobdata['input_jobid'] = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
@@ -268,9 +302,8 @@ class Inputs extends Controller
       
         if($input_check){
 
-            $count = $this->InputModel->check_job_event_conflict($jobdata['input_job_id'],$jobdata['input_event']);
-            //var_dump($count['input_pin']);die();
-            $ans  = $this->InputModel->delete_input_event_by_id($jobdata['input_job_id'],$jobdata['input_event']);
+            $count = $this->InputModel->check_job_event_conflict($jobdata['input_jobid'],$jobdata['input_event']);
+            $ans  = $this->InputModel->delete_input_event_by_id($jobdata['input_jobid'],$jobdata['input_event']);
             $res  = $this->InputModel->create_input($jobdata);
 
 
@@ -278,10 +311,10 @@ class Inputs extends Controller
             $result = array();
             if($res){
                 $res_type = 'Success';
-                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
+                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_jobid'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
             } else {
                 $res_type = 'Error';
-                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_job_id'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
+                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_jobid'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
             }
             
             $result = array(
@@ -305,7 +338,7 @@ class Inputs extends Controller
 
         $input_check = true;
         if (!empty($_POST['from_job_id']) && isset($_POST['from_job_id'])) {
-            $input_job_id = $_POST['from_job_id'];
+            $input_jobid = $_POST['from_job_id'];
         } else {
             $input_check = false;
         }
@@ -319,13 +352,13 @@ class Inputs extends Controller
         
 
         if ($input_check) {
-            $job_inputs_from = $this->InputModel->check_job_event($input_job_id);
+            $job_inputs_from = $this->InputModel->check_job_event($input_jobid);
             if (!empty($job_inputs_from)) {
                 $jobdata = array();
                 foreach ($job_inputs_from as $key => $val) {
                 
-                    if (isset($val['input_job_id'])) {
-                        $jobdata[$key]['input_job_id'] = $to_job_id;
+                    if (isset($val['input_jobid'])) {
+                        $jobdata[$key]['input_jobid'] = $to_job_id;
                     } else {
                         continue; 
                     }
@@ -413,18 +446,18 @@ class Inputs extends Controller
     {
         $input_check = true;
         if( isset($_POST['job_id']) && $_POST['job_id'] >= 0 ){
-            $input_job_id = $_POST['job_id'];
+            $input_jobid = $_POST['job_id'];
         }else if(isset($_POST['job_id_new']) && $_POST['job_id_new'] >= 0){
-            $input_job_id = '';
+            $input_jobid = '';
         }else{
             $input_check = false; 
         }
         if($input_check){
-            $res = $this->InputModel->set_input_alljob($input_job_id);
+            $res = $this->InputModel->set_input_alljob($input_jobid);
             if($res){
-                $res_msg ='set inputall job:'.$input_job_id.' copyDB success';
+                $res_msg ='set inputall job:'.$input_jobid.' copyDB success';
             }else{
-                $res_msg ='set inputall job:'.$input_job_id.' copyDB fail';
+                $res_msg ='set inputall job:'.$input_jobid.' copyDB fail';
             }
             echo $res_msg;   
         }
