@@ -29,52 +29,9 @@ class Settings extends Controller
         $job_list = $this->SettingModel->get_job_list();
         $barcodes = $this->GetBarcodes();
         $unit_arr = $this->MiscellaneousModel->details('torque_unit');
+        $barcode_mode = $this->MiscellaneousModel->details('barcode_mode');
 
      
-
-        /*$isMobile = $this->isMobileCheck();
-        $Controller_Info = $this->SettingModel->GetControllerInfo();
-        $operator_priviledge = $this->SettingModel->GetOperator_priviledge();
-        $priviledge = $this->intTo16BitArray($operator_priviledge);
-        $priviledge['confirm'] = $priviledge[12];
-        $priviledge['clear'] = $priviledge[11];
-        $priviledge['seq_clear'] = $priviledge[10];
-        $priviledge['export'] = $priviledge[13];
-        $priviledge['switch'] = $priviledge[14];
-        $priviledge['barcode'] = $priviledge[15];
-
-        //admin connect setting
-        $active_session = $this->AdminModel->GetActiveSession();
-        $max_user = $this->AdminModel->Get_Das_Config('max_concurrent_users');
-        $agent_server_ip = $this->AdminModel->Get_Das_Config('agent_server_ip');
-        $agent_type = $this->AdminModel->Get_Das_Config('agent_type');
-        $iDas_Vesion = $this->AdminModel->Get_Das_Config('idas_version');
-
-        $barcodes = $this->GetBarcodes();
-        $job_list = $this->SettingModel->get_job_list();
-
-        //get tool info
-        $Tool_Info = $this->ToolModel->GetToolInfo();
-        $device_info = $this->Device_Info();
-
-        $data = [
-            'isMobile' => $isMobile,
-            'Controller_Info' => $Controller_Info,
-            'priviledge' => $priviledge,
-            'barcodes' => $barcodes,
-            'job_list' => $job_list,
-            'active_session' => $active_session,
-            'max_user' => $max_user,
-            'agent_server_ip' => $agent_server_ip,
-            'agent_type' => $agent_type,
-            'iDas_Vesion' => $iDas_Vesion,
-            'Tool_Info' => $Tool_Info,
-            'device_info' => $device_info
-        ];
-        
-        
-        $this->view('setting/index', $data);*/
-        
         $data = array(
             'lang_arr'        => $lang,
             'controller_info' => $controller_info,
@@ -85,15 +42,10 @@ class Settings extends Controller
             'agent_type'      => $agent_type,
             'job_list'        => $job_list,
             'barcodes'        => $barcodes,
-            'unit_arr'        => $unit_arr
+            'unit_arr'        => $unit_arr,
+            'barcode_mode'   => $barcode_mode
 
         );
-
-
-     
-
-    
-
 
         if($isMobile){
             $this->view('setting/index_m', $data);
@@ -782,9 +734,9 @@ class Settings extends Controller
                     $barcode_list .= "<td><input class='form-check-input' type='checkbox' name='barcode_check' id='barcode_check' style='zoom:1.2' value='".$vv['barcode_selected_job']."'></td>";
                     $barcode_list .= '<td>'.$vv['barcode_selected_job'].'</td>';
                     $barcode_list .= '<td>'.$vv['job_name'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_range_from'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_range_count'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_content'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_mask_from'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_mask_count'].'</td>';
                     $barcode_list .= '<tr>';
     
                     echo $barcode_list;
@@ -796,9 +748,9 @@ class Settings extends Controller
                     $barcode_list .= "<td><input class='form-check-input' type='checkbox' name='barcode_check' id='barcode_check' style='zoom:1.2' value='".$vv['barcode_selected_job']."'></td>";
                     $barcode_list .= '<td>'.$vv['barcode_selected_job'].'</td>';
                     $barcode_list .= '<td>'.$vv['job_name'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_range_from'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_range_count'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_content'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_mask_from'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_mask_count'].'</td>';
                     $barcode_list .= '<tr>';
     
                     echo $barcode_list;
@@ -814,46 +766,27 @@ class Settings extends Controller
     //update barcode
     public function Update_Barcode()
     {
-        $input_check = true;
+        //$input_check = true;
         $barcode = array();
-        //$error_message = '';
-        if( !empty($_POST['barcode_name']) && isset($_POST['barcode_name'])  ){
-            $barcode['barcode_name'] = $_POST['barcode_name'];
-            if (strlen($barcode['barcode_name']) > 54) {
-                $input_check = false;
-            }
-        }else{ 
-            $input_check = false;
-            //$error_message .= "barcode_name,";
-        }
-        if( !empty($_POST['barcode_from']) && isset($_POST['barcode_from'])  ){
-            $barcode['barcode_range_from'] = $_POST['barcode_from'];
-        }else{ 
-            $input_check = false;
-            //$error_message .= "barcode_from,";
-        }
-        if( !empty($_POST['barcode_count']) && isset($_POST['barcode_count'])  ){
-            $barcode['barcode_range_count'] = $_POST['barcode_count'];
-        }else{ 
-            $input_check = false;
-            //$error_message .= "barcode_count,";
-        }
+
+        $barcode['barcode_content']       = $_POST['barcode_content'] ?? null;
+        $barcode['barcode_mask_from']     = $_POST['barcode_mask_from'] ?? null;
+        $barcode['barcode_mask_count']    = $_POST['barcode_mask_count'] ?? null;
+        $barcode['barcode_selected_job']  = $_POST['barcode_selected_job'] ?? null;
+        $barcode['barcode_enable']        = $_POST['barcode_enable'] ?? null;
+        $barcode['barcode_selected_seq']  = '';
         
-        if( isset($_POST['barcode_job'])  ){
-            $barcode['barcode_job'] = $_POST['barcode_job'];
-        }else{ 
-            $input_check = false;
-            ///$error_message .= "Job_Select,";
-        }
-        
-        if($input_check){
+        if(!empty($barcode)){
             $barcode_result = $this->SettingModel->Update_Barcode($barcode);
             if($barcode_result){
-                $res_msg = 'edit barcode :'. $barcode['barcode_name'].' success';
+                $res_msg = 'edit barcode :'. $barcode['barcode_content'].' success';
+                $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg );
+
             }else{
-                $res_msg = 'edit barcode :'. $barcode['barcode_name'].' fail';
+                $res_msg = 'edit barcode :'. $barcode['barcode_content'].' fail';
+                $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
             }
-            echo $res_msg;    
+            //echo $res_msg;    
         }
     }
 
@@ -916,15 +849,18 @@ class Settings extends Controller
         }else{ 
             $input_check = false;
         }
+
         if($input_check){
            $res = $this->SettingModel->delete_job_barcode($barcode);
 
            if($res){
-                $res_msg = 'delete  barcode :'. $barcode[0].' success';
+                $res_msg = 'del barcode :'. $barcode[0].'success';
+                $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg );
+
            }else{
-                $res_msg = 'delete  barcode :'. $barcode[0].' fail';
+                $res_msg = 'del barcode :'. $barcode[0].'fail';
+                $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
            }
-           echo $res_msg;
         }
       
     }

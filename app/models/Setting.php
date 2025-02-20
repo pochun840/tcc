@@ -257,31 +257,38 @@ class Setting{
 
     public function Update_Barcode($barcode)
     {
-        if( $this->check_barcode_conflict($barcode['barcode_job']) ){ 
+        if( $this->check_barcode_conflict($barcode['barcode_selected_job']) ){ 
 
         
             $sql = "UPDATE `barcode` 
-                    SET barcode = :barcode,
-                        barcode_range_from  = :barcode_range_from,
-                        barcode_range_count = :barcode_range_count,
+                    SET barcode_content = :barcode_content,
+                        barcode_mask_from  = :barcode_mask_from,
+                        barcode_mask_count = :barcode_mask_count,
+                        barcode_enable = :barcode_enable
                     WHERE barcode_selected_job = :barcode_selected_job ";
             $statement = $this->db_iDas->prepare($sql);
             $statement->bindValue(':barcode', $barcode['barcode_name']);
-            $statement->bindValue(':barcode_range_from', $barcode['barcode_range_from']);
-            $statement->bindValue(':barcode_range_count', $barcode['barcode_range_count']);
-            $statement->bindValue(':barcode_selected_job',$barcode['barcode_job']);
+            $statement->bindValue(':barcode_mask_from', $barcode['barcode_mask_from']);
+            $statement->bindValue(':barcode_mask_count', $barcode['barcode_mask_count']);
+            $statement->bindValue(':barcode_selected_job',$barcode['barcode_selected_job']);
+            $statement->bindValue(':barcode_enable', $barcode['barcode_enable']);
+            $statement->bindValue(':barcode_selected_seq', $barcode['barcode_selected_seq']);
             $results = $statement->execute();
 
 
         }else{ //不存在，用insert
 
-            $sql = "INSERT INTO `barcode` ('barcode','barcode_range_from','barcode_range_count','barcode_selected_job')
-                    VALUES (:barcode,:barcode_range_from,:barcode_range_count,:barcode_selected_job )";
+            $sql = "INSERT INTO `barcode` ('barcode_content','barcode_mask_from','barcode_mask_count','barcode_selected_job','barcode_enable','barcode_selected_seq')
+                    VALUES (:barcode_content,:barcode_mask_from,:barcode_mask_count,:barcode_selected_job,:barcode_enable,:barcode_selected_seq)";
             $statement = $this->db_iDas->prepare($sql);
-            $statement->bindValue(':barcode', $barcode['barcode_name']);
-            $statement->bindValue(':barcode_range_from', $barcode['barcode_range_from']);
-            $statement->bindValue(':barcode_range_count', $barcode['barcode_range_count']);
-            $statement->bindValue(':barcode_selected_job', $barcode['barcode_job']);
+            $statement->bindValue(':barcode_content', $barcode['barcode_content']);
+            $statement->bindValue(':barcode_mask_from', $barcode['barcode_mask_from']);
+            $statement->bindValue(':barcode_mask_count', $barcode['barcode_mask_count']);
+            $statement->bindValue(':barcode_selected_job', $barcode['barcode_selected_job']);
+            $statement->bindValue(':barcode_enable', $barcode['barcode_enable']);
+            $statement->bindValue(':barcode_selected_seq', $barcode['barcode_selected_seq']);
+            //barcode_enable
+            //barcode_selected_seq
             $results = $statement->execute();
 
         }
@@ -345,9 +352,9 @@ class Setting{
     public function delete_job_barcode($barcode)
     {
         foreach($barcode as $key =>$val){
-            $sql = "DELETE FROM barcode WHERE barcode_selected_job = :job_id ";
+            $sql = "DELETE FROM barcode WHERE barcode_selected_job = :barcode_selected_job ";
             $statement = $this->db_iDas->prepare($sql);
-            $statement->bindValue(':job_id', $val);
+            $statement->bindValue(':barcode_selected_job', $val);
             $results = $statement->execute();
     
             

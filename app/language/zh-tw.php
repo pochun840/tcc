@@ -394,6 +394,7 @@ $text['system_barcode_notice_3'] = '匹配個數超出範圍';//Match To Error
 $text['system_barcode_notice_4'] = '請掃描條碼';//Match To Error
 $text['system_barcode_del_notice2'] = '是否刪除此條碼';
 $text['cancel'] = '取消';
+$text['system_barcode_select']  = "請選擇模式";
 
 //admin setting
 $text['system_connect_setting'] = '連線設定';

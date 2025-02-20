@@ -360,43 +360,79 @@ function idas_update() {
 
 
 function update_barcode(){
-    var barcode_name  = document.getElementById("barcode_name").value;
-    var barcode_from  = document.getElementById("barcode_from").value;
-    var barcode_count = document.getElementById("barcode_count").value;
-    var barcode_job   = document.querySelector("select[name='barcode_job']").value;
-    
-    if(barcode_name){
+    var barcode_content    = document.getElementById("barcode_content").value;
+    var barcode_mask_from  = document.getElementById("barcode_mask_from").value;
+    var barcode_mask_count = document.getElementById("barcode_mask_count").value;
+    var barcode_selected_job  = document.querySelector("select[name='barcode_selected_job']").value;
+    var barcode_enable  = document.querySelector("select[name='barcode_enable']").value;
+    var barcode_selected_seq = '';
+
+    // 驗證輸入
+    let check = input_check_savebarcode();
+
+    if(check){ 
+        //document.querySelector(".main-content").classList.add("overlay-active");
+        document.getElementById('spinner').style.display = 'block';
+
         $.ajax({
             url: "?url=Settings/Update_Barcode",
             method: "POST",
             data:{ 
-                barcode_name: barcode_name,
-                barcode_from: barcode_from,
-                barcode_count: barcode_count,
-                barcode_job: barcode_job
-
+                barcode_content : barcode_content,
+                barcode_mask_from: barcode_mask_from,
+                barcode_mask_count: barcode_mask_count,
+                barcode_selected_job:barcode_selected_job,
+                barcode_enable:barcode_enable,
+                barcode_selected_seq : barcode_selected_seq
             },
             success: function(response) {
-                console.log(response);
-                alert(response);
-                $.ajax({
-                    url: "?url=Settings/show_Barcodes",
-                    method: "GET",
-                    success: function(html) {
-                        $('#total_barcodes').html(html);  
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error fetching barcodes:", error);
-                    }
-                });
+                var responseData = JSON.parse(response);  // 解析返回的 JSON 資料
+                
+                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    // 隱藏 'copyjob' 和 'spinner' 加載動畫
+                    document.getElementById('spinner').style.display = 'none';  
+
+                    // 顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        // 彈跳視窗關閉後刷新頁面
+                        // 存儲頁面顯示狀態到 sessionStorage
+                        sessionStorage.setItem('Barcode_Setting', 'block');
+                        sessionStorage.setItem('Controller_Setting', 'none');
+                        
+                        history.go(0);  // 重新加載頁面
+                    });
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗，並執行 AJAX 請求來刷新條形碼列表
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        
+                        // 刷新條形碼列表
+                        $.ajax({
+                            url: "?url=Settings/show_Barcodes",
+                            method: "GET",
+                            success: function(html) {
+                                $('#total_barcodes').html(html);  
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("獲取條形碼時出錯:", error);
+                            }
+                        });
+                    }, 3000); // 延遲 3 秒
+                }, 1000); // 延遲 1000 毫秒
             },
             error: function(xhr, status, error) {
-                
+                //console.error("更新條形碼時出錯:", error);
             }
         });   
+    }
 
-    }  
+    //document.querySelector(".main-content").classList.remove("overlay-active");
+
+
 }
+
+
 
 function delete_barcode() {
     var del_barcode_id = [];
@@ -407,6 +443,10 @@ function delete_barcode() {
     });
     
     if(del_barcode_id){
+
+        document.getElementById('spinner').style.display = 'block';
+
+        
         $.ajax({
             url: "?url=Settings/delete_barcodes",
             method: "POST",
@@ -415,18 +455,40 @@ function delete_barcode() {
 
             },
             success: function(response) {
-                console.log(response);
-                alert(response);
-                $.ajax({
-                    url: "?url=Settings/show_Barcodes",
-                    method: "GET",
-                    success: function(html) {
-                        $('#total_barcodes').html(html);  
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error fetching barcodes:", error);
-                    }
-                });
+                var responseData = JSON.parse(response);  // 解析返回的 JSON 資料
+                
+                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    // 隱藏 'copyjob' 和 'spinner' 加載動畫
+                    document.getElementById('spinner').style.display = 'none';  
+
+                    // 顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        // 彈跳視窗關閉後刷新頁面
+                        // 存儲頁面顯示狀態到 sessionStorage
+                        sessionStorage.setItem('Barcode_Setting', 'block');
+                        sessionStorage.setItem('Controller_Setting', 'none');
+                        
+                        history.go(0);  // 重新加載頁面
+                    });
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗，並執行 AJAX 請求來刷新條形碼列表
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        
+                        // 刷新條形碼列表
+                        $.ajax({
+                            url: "?url=Settings/show_Barcodes",
+                            method: "GET",
+                            success: function(html) {
+                                $('#total_barcodes').html(html);  
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("獲取條形碼時出錯:", error);
+                            }
+                        });
+                    }, 3000); // 延遲 3 秒
+                }, 1000); // 延遲 1000 毫秒
             },
             error: function(xhr, status, error) {
                 
@@ -435,3 +497,5 @@ function delete_barcode() {
     }
     
 }
+
+

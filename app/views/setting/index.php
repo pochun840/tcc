@@ -1,5 +1,24 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_setting.css" type="text/css">
+<style>
+    .form-control{
+        width: auto!important; 
+        display: initial!important;
+    }
+
+    .form-control.is-invalid{
+        padding-right:inherit!important;
+    }
+    .is-invalid~.invalid-feedback{
+        display: inline!important;
+    }
+
+    .main-content.overlay-active {
+    filter: grayscale(100%); /* 完全灰化 */
+    pointer-events: none; /* 禁止點擊 */
+    opacity: 0.3; /* 降低不透明度 */
+    }
+</style>
 
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -131,6 +150,7 @@
                 </div>          
             </div>
 
+            <!-- barcode Setting -->
             <div id="Barcode_Setting" class="divMode" style="display: none">
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_barcode_setting'] ;?></div>
                 <div class="table-container">
@@ -157,9 +177,9 @@
                                             </td> 
                                             <td><?php echo $v_b['barcode_selected_job'];?></td>
                                             <td><?php echo $v_b['job_name'];?></td>
-                                            <td><?php echo $v_b['barcode'];?></td>
-                                            <td><?php echo $v_b['barcode_range_from'];?></td>
-                                            <td><?php echo $v_b['barcode_range_count'];?></td>
+                                            <td><?php echo $v_b['barcode_content'];?></td>
+                                            <td><?php echo $v_b['barcode_mask_from'];?></td>
+                                            <td><?php echo $v_b['barcode_mask_count'];?></td>
                                         </tr>
                                     <?php } ?>
                                   
@@ -174,34 +194,56 @@
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_barcode'];?>:</div>
                     <div class="col-6 t2">
-                        <input id="barcode_name" name="barcode_name" style="height: 32px" type="text" value="" maxlength="54" class="form-control" required>
+                        <input id="barcode_content" name="barcode_content" style="height: 32px" type="text" value="" maxlength="54" class="form-control" required>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
+                
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_barcode_match_from'];?>:</div>
                     <div class="col-3 t2">
-                        <input id="barcode_from" name="barcode_from" style="height: 32px" type="text" value="" class="form-control">
+                        <input id="barcode_mask_from" name="barcode_mask_from" style="height: 32px" type="text" value="" class="form-control">
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
+                
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_barcode_match_to'];?>:</div>
                     <div class="col-3 t2">
-                        <input id="barcode_count" name="barcode_count" style="height: 32px" type="text" value="" class="form-control">
+                        <input id="barcode_mask_count" name="barcode_mask_count" style="height: 32px" type="text" value="" class="form-control">
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
+
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['select_job'];?>:</div>
                     <div class="col-3 t2">
-                        <select class="form-select" id="barcode_job" name="barcode_job">
+                        <select class="form-select" id="barcode_selected_job" name="barcode_selected_job">
                             <option value="-1"><?php echo $text['system_barcode_select_job_m'];?></option>
                                 <?php
                                 foreach ($data['job_list'] as $key => $value) {?>
                                     <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
                                 <?php }?>
-                                
                         </select>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
+
+                <div class="row t2">
+                    
+                    <div class="col-3 t1"><?php echo  $text['system_barcode_mode'];?>:</div>
+                    <div class="col-3 t2">
+                        <select class="form-select" id="barcode_enable" name="barcode_enable">
+                            <option value="-1"><?php echo $text['system_barcode_select'];?></option>
+                                <?php
+                                foreach ($data['barcode_mode'] as $key_barcode => $value_barcode) {?>
+                                    <option value='<?php echo $key_barcode;?>'><?php echo $value_barcode;?></option>
+                                <?php }?>
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+
                 <div style="text-align: center;margin-top: 50px;">
                     <button class="all-btn w3-button w3-border w3-round-large" onclick="update_barcode()" ><?php echo $text['save'];?></button>&nbsp;&nbsp;
                     <button class="all-btn w3-button w3-border w3-round-large" onclick="delete_barcode()" ><?php echo $text['delete_text'];?></button>
@@ -337,12 +379,27 @@
                 </div> 
             </div>
         </div>
-    </div>        
+    </div>  
+    
+    <!-- 加载動畫 OP -->
+    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    <!-- 加载動畫 ED -->
+
 </div>
 
 <script>
-
-
+window.onload = function() {
+    // 檢查 sessionStorage 中的設置，並恢復顯示狀態
+    if (sessionStorage.getItem('Barcode_Setting') === 'block') {
+        document.getElementById('Barcode_Setting').style.display = "block";
+        document.getElementById('System_Setting').style.display = "none";
+        document.getElementById('Controller_Setting').style.display = "none";
+    }
+};
 function edit_password(){
     var new_password = document.getElementById('new_password').value;
     var comfirm_password = document.getElementById('comfirm_password').value;
@@ -541,5 +598,66 @@ function OpenButton(ButtonMode){
     {
         //alert("Function ["+ ButtonMode +"] is under constructing ...");
     }
+}
+
+
+function input_check_savebarcode() {
+
+    let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+
+    let conditions = [
+        { id: 'barcode_content', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
+        { id: 'barcode_mask_from', pattern: /^[0-9]+$/, min: 1, max: 54 },
+        { id: 'barcode_mask_count', pattern: /^[0-9]+$/, min: 1, max: 54 },
+        
+
+    ];
+
+    let isFormValid = true;
+
+    conditions.forEach(function(input) {
+        var element = document.getElementById(input.id);
+        if (input.id !== 'barcode_content') {
+            element.nextElementSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
+        }
+
+        if (!validateInput(element, input.pattern, input.min, input.max)) {
+            isFormValid = false;
+        }
+    });
+
+    return isFormValid;
+}
+
+function validateInput(element, pattern, min, max) {
+    let value = element.value.trim();
+    let isValid = true;
+
+    // 验证空值
+    if (value === "") {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证正则
+    else if (!pattern.test(value)) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最小值
+    else if (min !== null && parseFloat(value) < min) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最大值
+    else if (max !== null && parseFloat(value) > max) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 通过验证
+    else {
+        element.classList.remove("is-invalid");
+    }
+
+    return isValid;
 }
 </script>    

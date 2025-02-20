@@ -398,6 +398,7 @@ $text['system_barcode_notice_3'] = '条码有效位数超出范围';//Match To E
 $text['system_barcode_notice_4'] = '请扫描条码';//Match To Error
 $text['system_barcode_del_notice2'] = '条码删除确认';
 $text['cancel'] = '取消';
+$text['system_barcode_select']  = "请选择模式";
 
 //admin setting
 $text['system_connect_setting'] = '连线设定';

@@ -154,6 +154,14 @@ class Miscellaneous{
             );    
         }
 
+
+        if($mode =="barcode_mode"){
+            $array = array(
+                0 => 'BS',
+                1 => 'BS (free)',
+            );    
+        }
+
         return $array;
 
     }

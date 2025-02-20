@@ -408,6 +408,7 @@ $text['system_barcode_notice_3'] = 'Match to out of range';//Match To Error
 $text['system_barcode_notice_4'] = 'Please scan barcode';//Match To Error
 $text['system_barcode_del_notice2'] = 'Are you sure you want to delete this barcode';
 $text['cancel'] = 'Cancel';
+$text['system_barcode_select']  = "Please select a mode";
 
 //admin setting
 $text['system_connect_setting'] = 'Connection Setting';
