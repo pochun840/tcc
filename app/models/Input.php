@@ -76,31 +76,32 @@ class Input{
 
     }
 
-    public function create_input($jobdata){   
+    public function create_input($input_data){   
 
-        $sql = "INSERT INTO `input` (input_job_id, input_event, input_pin1, input_pin2, input_pin3, input_pin4, input_pin5, input_pin6, input_pin7, input_pin8, input_pin9, input_pin10, input_wave, gateconfirm, pagemode, input_seqid) ";
-        $sql .= "VALUES (:input_job_id, :input_event, :input_pin1, :input_pin2, :input_pin3, :input_pin4, :input_pin5, :input_pin6, :input_pin7, :input_pin8, :input_pin9, :input_pin10, :input_wave, :gateconfirm, :pagemode, :input_seqid);";
+        $sql = "INSERT INTO `input` (input_jobid, input_event, input_pin1, input_pin2, input_pin3, input_pin4, input_pin5, input_pin6, input_pin7, input_pin8, input_pin9, input_pin10, input_gateconfirm, input_pagemode, input_seqid) ";
+        $sql .= "VALUES (:input_jobid, :input_event, :input_pin1, :input_pin2, :input_pin3, :input_pin4, :input_pin5, :input_pin6, :input_pin7, :input_pin8, :input_pin9, :input_pin10, :input_gateconfirm, :input_pagemode, :input_seqid);";
     
         // 準備 SQL 查詢語句
         $statement = $this->db_iDas->prepare($sql);
     
         // 綁定參數
-        $statement->bindValue(':input_job_id', $jobdata['input_job_id']);
-        $statement->bindValue(':input_event', $jobdata['input_event']);
-        $statement->bindValue(':input_pin1', isset($jobdata['input_pin1']) ? $jobdata['input_pin1'] : null);
-        $statement->bindValue(':input_pin2', isset($jobdata['input_pin2']) ? $jobdata['input_pin2'] : null);
-        $statement->bindValue(':input_pin3', isset($jobdata['input_pin3']) ? $jobdata['input_pin3'] : null);
-        $statement->bindValue(':input_pin4', isset($jobdata['input_pin4']) ? $jobdata['input_pin4'] : null);
-        $statement->bindValue(':input_pin5', isset($jobdata['input_pin5']) ? $jobdata['input_pin5'] : null);
-        $statement->bindValue(':input_pin6', isset($jobdata['input_pin6']) ? $jobdata['input_pin6'] : null);
-        $statement->bindValue(':input_pin7', isset($jobdata['input_pin7']) ? $jobdata['input_pin7'] : null);
-        $statement->bindValue(':input_pin8', isset($jobdata['input_pin8']) ? $jobdata['input_pin8'] : null);
-        $statement->bindValue(':input_pin9', isset($jobdata['input_pin9']) ? $jobdata['input_pin9'] : null);
-        $statement->bindValue(':input_pin10', isset($jobdata['input_pin10']) ? $jobdata['input_pin10'] : null);
-        $statement->bindValue(':input_wave', $jobdata['input_wave']);
-        $statement->bindValue(':gateconfirm', $jobdata['gateconfirm']);
-        $statement->bindValue(':pagemode', $jobdata['pagemode']);
-        $statement->bindValue(':input_seqid', $jobdata['input_seqid']);
+        $statement->bindValue(':input_jobid', $input_data['input_jobid']);
+        $statement->bindValue(':input_event', $input_data['input_event']);
+        $statement->bindValue(':input_pin1', isset($input_data['input_pin1'])  ? $input_data['input_pin1'] : 0);
+        $statement->bindValue(':input_pin2', isset($input_data['input_pin2'])  ? $input_data['input_pin2'] : 0);
+        $statement->bindValue(':input_pin3', isset($input_data['input_pin3'])  ? $input_data['input_pin3'] : 0);
+        $statement->bindValue(':input_pin4', isset($input_data['input_pin4'])  ? $input_data['input_pin4'] : 0);
+        $statement->bindValue(':input_pin5', isset($input_data['input_pin5'])  ? $input_data['input_pin5'] : 0);
+        $statement->bindValue(':input_pin6', isset($input_data['input_pin6'])  ? $input_data['input_pin6'] : 0);
+        $statement->bindValue(':input_pin7', isset($input_data['input_pin7'])  ? $input_data['input_pin7'] : 0);
+        $statement->bindValue(':input_pin8', isset($input_data['input_pin8'])  ? $input_data['input_pin8'] : 0);
+        $statement->bindValue(':input_pin9', isset($input_data['input_pin9'])  ? $input_data['input_pin9'] : 0);
+        $statement->bindValue(':input_pin10',isset($input_data['input_pin10']) ? $input_data['input_pin10'] : 0);
+
+
+        $statement->bindValue(':input_gateconfirm', $input_data['input_gateconfirm']);
+        $statement->bindValue(':input_pagemode', $input_data['input_pagemode']);
+        $statement->bindValue(':input_seqid', $input_data['input_seqid']);
     
         // 執行 SQL 查詢
         $results = $statement->execute();
@@ -179,24 +180,29 @@ class Input{
         return $results;
     }
 
-    public function generateTableCell($value,$value2) {
-        if($value >= 2 && $value <= 10){
-            $tableCells = "";
-            for($i = 2; $i <= 10; $i++){
-                if($i == $value){ 
-                    if($value2 == 1){
-                        $img = '<img src="./img/high.png" style="max-width: 50px;">';
-                    }else{
-                        $img = '<img src="./img/low.png" style="max-width: 50px;">';
-                    }
-                    $tableCells .= "<td>".$img."</td>";
-                }else{
-                    $tableCells .= "<td></td>";
+    public function generateTableCell($input_data) {
+        $tableCells = "";
+        
+        // 循環處理每個 input_pin1 到 input_pin10 
+        // input_pin1 沒用到 從 input_pin2 開始
+        for ($i = 2; $i <= 10; $i++) {
+            // 動態構建 input_pin 名稱
+            $pin_name = 'input_pin' . $i;
+            
+            // 檢查對應的 input_pin 是否有值
+            if (!empty($input_data[$pin_name])) {
+            
+                if ($input_data[$pin_name] == 1) {
+                    $img = '<img src="./img/high.png" style="max-width: 50px;">';
+                } else if ($input_data[$pin_name] == 2) {
+                    $img = '<img src="./img/low.png" style="max-width: 50px;">';
                 }
+                $tableCells .= "<td>".$img."</td>";
+            } else {
+                $tableCells .= "<td></td>";
             }
-            return $tableCells;
-        }else{
-            return ""; 
         }
+        return $tableCells;
     }
+    
 }

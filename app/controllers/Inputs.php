@@ -42,88 +42,100 @@ class Inputs extends Controller
     }
 
     // get_input_by_job_id
-    public function get_input_by_job_id($job_id){
-
+    public function get_input_by_job_id($job_id) {
         $event = $this->MiscellaneousModel->details('io_input');
-
+    
         $input_check = true;
         if (!empty($_POST['jobid']) && isset($_POST['jobid'])) {
             $job_id = $_POST['jobid'];
         } else {
             $input_check = false; 
         }
-
+    
         if ($input_check) {
             $job_inputs = $this->InputModel->get_input_by_job_id($job_id);
-            $temp  = array(); 
+            $temp = array(); 
             $tempA = array();
             $temp_gateconfirm = array();
-           
             $job_inputlist = ''; 
     
             if (!empty($job_inputs)) {
                 foreach ($job_inputs as $kk => $vv) {
-                    if (!empty($vv['input_pin'])) {
-                        $pin_number = $vv['input_pin'];
-                        $gateconfirm = "1";
-                        $temp[] = "pin" . $pin_number . "_high";
-                        $temp[] = "pin" . $pin_number . "_low";
-                        $temp[] = "edit_pin" . $pin_number . "_high";
-                        $temp[] = "edit_pin" . $pin_number . "_low";
-                        $temp[] = "check_".$gateconfirm;
-
+                    // 遍歷 input_pin1 到 input_pin10 並檢查其是否為非零值
+                    for ($i = 1; $i <= 10; $i++) {
+                        $pin_key = 'input_pin' . $i;
+                        if (isset($vv[$pin_key]) && $vv[$pin_key] != 0) {
+                            // 取得非零的 pin 編號
+                            $pin_number = $i; // 這是針對每個 pin 的編號
+                            $gateconfirm = "1";  // 假設 gateconfirm 固定為 1
+                            $temp[] = "pin" . $pin_number . "_high";
+                            $temp[] = "pin" . $pin_number . "_low";
+                            $temp[] = "edit_pin" . $pin_number . "_high";
+                            $temp[] = "edit_pin" . $pin_number . "_low";
+                            $temp[] = "check_" . $gateconfirm;
+                        }
                     }
-
+    
                     if (!empty($vv['input_event'])) {
                         $tempA[] = $vv['input_event'];
                     }
-
-                    if(!empty($vv['gateconfirm'])){
-                        $temp_gateconfirm[] = $vv['gateconfirm'];
-
-                    }
-
-                    $isMobile = $this->isMobileCheck();
-
-                    if($isMobile){
-
-                        if($vv['input_wave'] == 1){
-                            $img = '<img src="./img/high.png" style="max-width: 50px;">';
-                        }else{
-                            $img = '<img src="./img/low.png" style="max-width: 50px;">';
-                        }
-                        
-                        $job_inputlist .= "<tr data-event = '".$vv['input_event']."' >";
-                        $job_inputlist .= "<td id='".$vv['input_event']."'>".$event[$vv['input_event']]."</td>";
-                        $job_inputlist .= '<td>'.$vv['input_pin'].'</td>';
-                        $job_inputlist .= '<td>'.$img.'</td>';
-                        $job_inputlist .= '</tr>';
-                        
-                    }else{
-               
-                        $job_inputlist .= "<tr data-event = '".$vv['input_event']."' >";
-                        $job_inputlist .= "<td id='".$vv['input_event']."'>".$event[$vv['input_event']]."</td>";
-                        $job_inputlist .= $this->InputModel->generateTableCell($vv['input_pin'],$vv['input_wave']);
-                        $job_inputlist .= '<td>'.$vv['gateconfirm'].'</td>';
-                        $job_inputlist .= '</tr>';
+    
+                    if (!empty($vv['input_gateconfirm'])) {
+                        $temp_gateconfirm[] = $vv['input_gateconfirm'];
                     }
     
-                    
+                    $isMobile = $this->isMobileCheck();
+    
+                    if ($isMobile) {
+                        // 根據 input_pin1 到 input_pin10 檢查並顯示
+                        $pin_display = ''; // 初始化 pin 顯示
+                        for ($i = 1; $i <= 10; $i++) {
+                            $pin_key = 'input_pin' . $i;
+                            if (isset($vv[$pin_key]) && $vv[$pin_key] != 0) {
+                                $pin_display .= $pin_number . "<br>";
+                            }
+                        }
+    
+                        // 根據 input_wave 顯示不同的圖片 (這裡假設使用 input_wave 或其他欄位)
+                        $wave_img = '';
+                        for ($i = 1; $i <= 10; $i++) {
+                            $wave_key = 'input_wave' . $i;  // 假設你使用 input_wave1 到 input_wave10
+                            if (isset($vv[$wave_key]) && $vv[$wave_key] == 1) {
+                                $wave_img = '<img src="./img/high.png" style="max-width: 50px;">';
+                            } else {
+                                $wave_img = '<img src="./img/low.png" style="max-width: 50px;">';
+                            }
+                        }
+    
+                        // 將所有資料顯示為行 (行動版格式)
+                        $job_inputlist .= "<tr data-event = '" . $vv['input_event'] . "' >";
+                        $job_inputlist .= "<td id='" . $vv['input_event'] . "'>" . $event[$vv['input_event']] . "</td>";
+                        $job_inputlist .= "<td>" . $pin_display . "</td>"; // 顯示 pin 的資料
+                        $job_inputlist .= "<td>" . $wave_img . "</td>";  // 顯示 wave 的圖片
+                        $job_inputlist .= "</tr>";
+                    } else {
+                        // 桌面版格式
+                        $job_inputlist .= "<tr data-event = '" . $vv['input_event'] . "' >";
+                        $job_inputlist .= "<td id='" . $vv['input_event'] . "'>" . $event[$vv['input_event']] . "</td>";
+                        $job_inputlist .= $this->InputModel->generateTableCell($vv); // 呼叫 generateTableCell
+                        $job_inputlist .= '<td>' . $vv['input_gateconfirm'] . '</td>';
+                        $job_inputlist .= '</tr>';
+                    }
                 }
-
             }
         }
-        
+    
         $response = array(
             'job_inputlist' => $job_inputlist,
             'temp' => $temp,
             'tempA' => $tempA,
             'temp_gateconfirm' => $temp_gateconfirm
-            
         );
-
+    
         echo json_encode($response);
     }
+    
+    
 
 
 
@@ -148,119 +160,75 @@ class Inputs extends Controller
         print_r($job_inputs);
     }
 
-    public function create_input_event()
-    {
+    public function create_input_event(){
 
+        // 載入語言包
         $file = $this->MiscellaneousModel->lang_load();
-        if(!empty($file)){
+        if (!empty($file)) {
             include $file;
         }
 
-        $event    = $this->MiscellaneousModel->details('io_input');
-
+        $event = $this->MiscellaneousModel->details('io_input');
+        
         $input_check = true;
         $input_data = array();
 
         // 初始化所有的 input_pin_1 到 input_pin_10 設為 0
         for ($i = 1; $i <= 10; $i++) {
-            $_POST["input_pin_$i"] = 0;
+            $_POST["input_pin$i"] = 0;
         }
-        
-        // 處理 $_POST['input_pin']
+
+        // 處理 $_POST['input_pin']，從中提取出具體的 pin 編號並賦值給 input_pin
         if (isset($_POST['input_pin'])) {
-            // 從 input_pin 取得數字部分
-            preg_match('/input_pin(\d+)/', $_POST['input_pin'], $matches);
-        
-            // 如果找到數字，則動態建立新的 key
+            // 從 input_pin 取得數字部分 
+            preg_match('/pin(\d+)/', $_POST['input_pin'], $matches);
+            
+            // 如果找到數字部分，則建立對應的 input_pin key
             if (isset($matches[1])) {
-                $pin_number = $matches[1]; 
-                $new_key = 'input_pin_' . $pin_number;
-        
-                // 把 input_wave 的值賦給新的 key
+                $pin_number = $matches[1];  // 取得 pin 的編號
+                $new_key = 'input_pin' . $pin_number;  // 根據編號動態建立新的 key 
+                
+                // 把 input_wave 的值賦給新的 input_pin
                 if (isset($_POST['input_wave'])) {
-                    $_POST[$new_key] = $_POST['input_wave'];  
+                    $_POST[$new_key] = $_POST['input_wave'];  // 這裡將 input_wave 的值賦給對應的 input_pin
                 }
             }
         }
 
-        if(!empty($_POST)){
+        // 檢查是否有其他資料
+        if (!empty($_POST)) {
             $input_data = $_POST;
-            $input_data['input_jobid'] = $input_data['job_id'];
+            $input_data['input_jobid'] = $input_data['job_id'];  // 設定 input_jobid 為 job_id
         }
 
-
-        /*if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $input_data['input_jobid'] = $_POST['job_id'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( !empty($_POST['input_event']) && isset($_POST['input_event'])  ){
-            $input_data['input_event'] = $_POST['input_event'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( !empty($_POST['input_pin']) && isset($_POST['input_pin'])  ){
-            $input_data['input_pin'] = intval($_POST['input_pin']);
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( !empty($_POST['input_wave']) && isset($_POST['input_wave'])  ){
-            $input_data['input_wave'] = $_POST['input_wave'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( isset($_POST['input_gateconfirm'])  ){
-            $jobdata['input_gateconfirm'] = $_POST['input_gateconfirm'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( isset($_POST['input_pagemode'])  ){
-            $input_data['input_pagemode'] = $_POST['input_pagemode'];
-            $input_data['input_seqid']    = $_POST['input_seqid'];
-        }else{ 
-            $input_check = false; 
-        }
-
-
-        $input_data['input_seqid'] = '';*/
-
-        echo "<pre>";
-        print_r($input_data);
-        echo "</pre>";
-
-
-        die();
-
-      
-        if($input_check){
-            $count = $this->InputModel->check_job_event_conflict($jobdata['input_jobid'],$jobdata['input_event']);
-            if(!$count){
-               
-                $res  = $this->InputModel->create_input($jobdata);
+        // 進行檢查並將資料寫入資料庫
+        if ($input_check) {
+            $count = $this->InputModel->check_job_event_conflict($input_data['input_jobid'], $input_data['input_event']);
+            
+            if (!$count) {
+                // 創建新事件
+                $res = $this->InputModel->create_input($input_data);
                 $result = array();
-                if($res){
+                
+                if ($res) {
                     $res_type = 'Success';
-                    $res_msg  = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_jobid'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
-                }else{
+                    $res_msg = $text['new_event'] . "  " . $text['job_id'] . ':' . $input_data['input_jobid'] . ',' . $text['event'] . ':' . $text[$event[$input_data['input_event']]] . "  " . $text['success'];
+                } else {
                     $res_type = 'Error';
-                    $res_msg  = $text['new_event']."  ".$text['job_id'].':'.$jobdata['input_jobid'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
+                    $res_msg = $text['new_event'] . "  " . $text['job_id'] . ':' . $input_data['input_jobid'] . ',' . $text['event'] . ':' . $text[$event[$input_data['input_event']]] . "  " . $text['fail'];
                 }
                 
                 $result = array(
                     'res_type' => $res_type,
-                    'res_msg'  => $res_msg 
+                    'res_msg' => $res_msg
                 );
-    
+                
+                // 返回結果
                 echo json_encode($result);
-
             }
         }
     }
+
 
     public function edit_input_event()
     {
@@ -345,7 +313,6 @@ class Inputs extends Controller
         if (!empty($_POST['to_job_id']) && isset($_POST['to_job_id'])) {
             $to_job_id = $_POST['to_job_id'];
             
-            //$this->InputModel->delete_input_by_id($to_job_id);
         } else {
             $input_check = false;
         }

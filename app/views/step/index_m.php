@@ -1127,9 +1127,9 @@ function input_check_savestep() {
         conditions = [
             { id: 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
             { id: 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0 max: Tool_Max_Torque },
             { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
-            { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
             { id: 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
             { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
             { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
@@ -1141,9 +1141,9 @@ function input_check_savestep() {
         conditions = [
             { id: 'target_ang', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
             { id: 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: Tool_Max_Torque },
             { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
-            { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+            { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
         ];
     }
 
