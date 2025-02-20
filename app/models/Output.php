@@ -103,7 +103,6 @@ class Output{
         $statement->bindValue(':wave_off', $jobdata['wave_off']);
         $statement->bindValue(':output_seqid', $jobdata['output_seqid']);
         $results = $statement->execute();
-
         return $results;
     }
 

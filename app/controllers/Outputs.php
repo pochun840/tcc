@@ -172,7 +172,7 @@ class Outputs extends Controller
         }else{ 
             $input_check = false; 
         }
-        if( isset($_POST['wave_on']) && $_POST['wave_on']>=100 && $_POST['wave_on'] <= 10000 ){
+        if( isset($_POST['wave_on']) && $_POST['wave_on']>=0 && $_POST['wave_on'] <= 10000 ){
             $jobdata['wave_on'] = $_POST['wave_on'];
             if($jobdata['wave_on'] == ''){
                 $jobdata['wave_on'] = 0;//預設值
@@ -181,9 +181,12 @@ class Outputs extends Controller
             $input_check = false; 
         }
 
-        $jobdata['wave_off'] = '';
-        $jobdata['output_seqid'] = '';
+        $jobdata['wave_off'] = 0;
+        $jobdata['output_seqid'] = 0;
         if($input_check){
+
+          
+
             $res = $this->OutputModel->create_output($jobdata);
             $result = array();
             if($res){
@@ -240,8 +243,8 @@ class Outputs extends Controller
                     $jobdata[$key]['output_event'] = $val['output_event'];
                     $jobdata[$key]['wave'] = $val['wave'];
                     $jobdata[$key]['wave_on'] = $val['wave_on'];
-                    $jobdata[$key]['wave_off'] = '';
-                    $jobdata[$key]['output_seqid'] = '';
+                    $jobdata[$key]['wave_off'] = 0;
+                    $jobdata[$key]['output_seqid'] = 0;
 
                     $res = $this->OutputModel->create_output($jobdata[$key]);
                     $result = array();
@@ -399,8 +402,8 @@ class Outputs extends Controller
             $input_check = false; 
         }
 
-        $jobdata['wave_off'] = '';
-        $jobdata['output_seqid'] = '';
+        $jobdata['wave_off'] = 0;
+        $jobdata['output_seqid'] = 0;
 
         $count = $this->OutputModel->check_event_conflict($jobdata['output_jobid'],$jobdata['output_event']);
 
