@@ -21,11 +21,11 @@ class Output{
     }
 
     //get_input_by_job_id
-    public function get_output_by_job_id($output_job_id)
+    public function get_output_by_job_id($output_jobid)
     {   
-        $sql = "SELECT * FROM output WHERE output_job_id = ? ORDER BY output_event ";
+        $sql = "SELECT * FROM output WHERE output_jobid = ? ORDER BY output_event ";
         $statement = $this->db_iDas->prepare($sql);
-        $results = $statement->execute([$output_job_id]);
+        $results = $statement->execute([$output_jobid]);
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
 
         return $row;
@@ -45,21 +45,21 @@ class Output{
         }
     }
 
-    public function check_job_event_conflict($output_job_id,$output_event){
+    public function check_job_event_conflict($output_jobid,$output_event){
         
-        $sql = "SELECT *   FROM output WHERE output_job_id = ? AND output_event = ? ";
+        $sql = "SELECT *   FROM output WHERE output_jobid = ? AND output_event = ? ";
         $statement = $this->db_iDas->prepare($sql);
-        $statement->execute([$output_job_id,$output_event]);
+        $statement->execute([$output_jobid,$output_event]);
         $rows = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $rows;
     }
 
-    public function check_event_conflict($output_job_id,$output_event){
+    public function check_event_conflict($output_jobid,$output_event){
         
-        $sql = "SELECT count(*) FROM output WHERE output_job_id = ? AND output_event = ? ";
+        $sql = "SELECT count(*) FROM output WHERE output_jobid = ? AND output_event = ? ";
         $statement = $this->db_iDas->prepare($sql);
-        $statement->execute([$output_job_id,$output_event]);
+        $statement->execute([$output_jobid,$output_event]);
         $count = $statement->fetchColumn();
 
         return (int)$count;
@@ -67,11 +67,11 @@ class Output{
 
  
 
-    public function check_event_conflict_by_job_id($output_job_id){
+    public function check_event_conflict_by_job_id($output_jobid){
         
-        $sql = "SELECT * FROM output WHERE output_job_id = ? AND output_event NOT IN('6','7','8') ";
+        $sql = "SELECT * FROM output WHERE output_jobid = ? AND output_event NOT IN('6','7','8') ";
         $statement = $this->db_iDas->prepare($sql);
-        $statement->execute([$output_job_id]);
+        $statement->execute([$output_jobid]);
         $rows = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $rows;
@@ -79,11 +79,11 @@ class Output{
 
 
     
-    public function check_event_pin_by_job_id($output_job_id,$wave){
+    public function check_event_pin_by_job_id($output_jobid,$wave){
         
-        $sql = "SELECT * FROM output WHERE output_job_id = ? AND  wave = ? ";
+        $sql = "SELECT * FROM output WHERE output_jobid = ? AND  wave = ? ";
         $statement = $this->db_iDas->prepare($sql);
-        $statement->execute([$output_job_id,$wave]);
+        $statement->execute([$output_jobid,$wave]);
         $rows = $statement->fetch(PDO::FETCH_ASSOC);
 
         return !empty($rows);
@@ -91,15 +91,17 @@ class Output{
 
 
     public function create_output($jobdata){    
-        $sql = "INSERT INTO `output` (output_job_id, output_pin, output_event, wave, wave_on) ";
-        $sql .= "VALUES (:output_job_id, :output_pin, :output_event, :wave, :wave_on);";
+        $sql = "INSERT INTO `output` (output_jobid, output_pin, output_event, wave, wave_on,wave_off,output_seqid) ";
+        $sql .= "VALUES (:output_jobid, :output_pin, :output_event, :wave, :wave_on,:wave_off,:output_seqid);";
 
         $statement = $this->db_iDas->prepare($sql);
-        $statement->bindValue(':output_job_id', $jobdata['output_job_id']);
+        $statement->bindValue(':output_jobid', $jobdata['output_jobid']);
         $statement->bindValue(':output_pin', $jobdata['output_pin']);
         $statement->bindValue(':output_event', $jobdata['output_event']);
         $statement->bindValue(':wave', $jobdata['wave']);
         $statement->bindValue(':wave_on', $jobdata['wave_on']);
+        $statement->bindValue(':wave_off', $jobdata['wave_off']);
+        $statement->bindValue(':output_seqid', $jobdata['output_seqid']);
         $results = $statement->execute();
 
         return $results;
@@ -113,10 +115,10 @@ class Output{
             output_pin  = :output_pin,
             wave = :wave, 
             wave_on = :wave_on ";
-        $sql .= "WHERE output_event = :output_event  AND output_job_id = :output_job_id ";
+        $sql .= "WHERE output_event = :output_event  AND output_jobid = :output_jobid ";
 
         $statement = $this->db_iDas->prepare($sql);
-        $statement->bindValue(':output_job_id', $jobdata['output_job_id']);
+        $statement->bindValue(':output_jobid', $jobdata['output_jobid']);
         $statement->bindValue(':output_event', $jobdata['output_event']);
         $statement->bindValue(':output_pin', $jobdata['output_pin']);
         $statement->bindValue(':wave', $jobdata['wave']);
@@ -132,8 +134,8 @@ class Output{
         if(true){//先刪除再複製
             $this->delete_output_by_id($to_job_id);
         }
-        $sql= "INSERT INTO output ( output_jobid,output_pin,output_event,wave,wave_on,wave_off )
-                SELECT  ?,output_pin,output_event,wave,wave_on,wave_off 
+        $sql= "INSERT INTO output ( output_jobid,output_pin,output_event,wave,wave_on,wave_off,output_seqid)
+                SELECT  ?,output_pin,output_event,wave,wave_on,wave_off,output_seqid 
                 FROM    output
                 WHERE output_jobid = ? ";
         $statement = $this->db->prepare($sql);
@@ -144,28 +146,28 @@ class Output{
     //delete output by job_id
     public function delete_output_by_id($job_id){
 
-        $sql= "DELETE FROM output WHERE output_job_id = ?";
+        $sql= "DELETE FROM output WHERE output_jobid = ?";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$job_id]);
 
         return $results;
     }
     //delete output by job_id and event_id
-    public function delete_output_event_by_id($output_job_id,$output_event){
+    public function delete_output_event_by_id($output_jobid,$output_event){
 
-        $sql= "DELETE FROM output WHERE output_job_id = ? AND output_event = ?";
+        $sql= "DELETE FROM output WHERE output_jobid = ? AND output_event = ?";
         $statement = $this->db_iDas->prepare($sql);
-        $results = $statement->execute([$output_job_id,$output_event]);
+        $results = $statement->execute([$output_jobid,$output_event]);
 
         return $results;
     }
 
     //set input_alljob
-    public function set_output_alljob($output_job_id){
+    public function set_output_alljob($output_jobid){
 
         $sql= "UPDATE device SET device_output_all_job = ? ";
         $statement = $this->db_iDas_device->prepare($sql);
-        $results = $statement->execute([$output_job_id]);
+        $results = $statement->execute([$output_jobid]);
 
         return $results;
     }

@@ -153,7 +153,7 @@ class Outputs extends Controller
         $input_check = true;
         $jobdata = array();
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $jobdata['output_job_id'] = $_POST['job_id'];
+            $jobdata['output_jobid'] = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
@@ -172,7 +172,7 @@ class Outputs extends Controller
         }else{ 
             $input_check = false; 
         }
-        if( isset($_POST['wave_on']) && $_POST['wave_on']>=0 && $_POST['wave_on'] <= 10000 ){
+        if( isset($_POST['wave_on']) && $_POST['wave_on']>=100 && $_POST['wave_on'] <= 10000 ){
             $jobdata['wave_on'] = $_POST['wave_on'];
             if($jobdata['wave_on'] == ''){
                 $jobdata['wave_on'] = 0;//預設值
@@ -181,16 +181,17 @@ class Outputs extends Controller
             $input_check = false; 
         }
 
-
+        $jobdata['wave_off'] = '';
+        $jobdata['output_seqid'] = '';
         if($input_check){
             $res = $this->OutputModel->create_output($jobdata);
             $result = array();
             if($res){
                 $res_type = 'Success';
-                $res_msg = $text['new_event'].$text['job_id'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['success'];
+                $res_msg = $text['new_event'].$text['job_id'].':'.$jobdata['output_jobid'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['success'];
             }else{
                 $res_type = 'Error';
-                $res_msg = $text['new_event'].$text['job_id'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['fail'];
+                $res_msg = $text['new_event'].$text['job_id'].':'.$jobdata['output_jobid'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['fail'];
             }
             
             $result = array(
@@ -212,7 +213,7 @@ class Outputs extends Controller
         
         $input_check = true;
         if( !empty($_POST['from_job_id']) && isset($_POST['from_job_id'])  ){
-            $output_job_id = $_POST['from_job_id'];
+            $output_jobid = $_POST['from_job_id'];
         }else{ 
             $input_check = false; 
         }
@@ -224,13 +225,13 @@ class Outputs extends Controller
         }
 
         if($input_check){
-            $job_outputs_from = $this->OutputModel->get_output_by_job_id($output_job_id);
+            $job_outputs_from = $this->OutputModel->get_output_by_job_id($output_jobid);
             if (!empty($job_outputs_from)) {
                 $jobdata = array();
                 foreach ($job_outputs_from as $key => $val) {
                 
-                    if (isset($val['output_job_id'])) {
-                        $jobdata[$key]['output_job_id'] = $to_job_id;
+                    if (isset($val['output_jobid'])) {
+                        $jobdata[$key]['output_jobid'] = $to_job_id;
                     } else {
                         continue; 
                     }
@@ -239,6 +240,8 @@ class Outputs extends Controller
                     $jobdata[$key]['output_event'] = $val['output_event'];
                     $jobdata[$key]['wave'] = $val['wave'];
                     $jobdata[$key]['wave_on'] = $val['wave_on'];
+                    $jobdata[$key]['wave_off'] = '';
+                    $jobdata[$key]['output_seqid'] = '';
 
                     $res = $this->OutputModel->create_output($jobdata[$key]);
                     $result = array();
@@ -274,7 +277,7 @@ class Outputs extends Controller
 
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])){
-            $output_job_id	 = $_POST['job_id'];
+            $output_jobid	 = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
@@ -286,15 +289,15 @@ class Outputs extends Controller
 
         if($input_check){
             
-            $ans = $this->OutputModel->check_job_event_conflict($output_job_id,$output_event);
-            $res = $this->OutputModel->delete_output_event_by_id($output_job_id,$output_event);
+            $ans = $this->OutputModel->check_job_event_conflict($output_jobid,$output_event);
+            $res = $this->OutputModel->delete_output_event_by_id($output_jobid,$output_event);
             $result = array();
             if($res){
                 $res_type = 'Success';
-                $res_msg  = $text['del_event'].$text['job_id'].':'.$output_job_id.','.$text['event'].':'.$text[$event[$output_event]]."  ".$text['success'];
+                $res_msg  = $text['del_event'].$text['job_id'].':'.$output_jobid.','.$text['event'].':'.$text[$event[$output_event]]."  ".$text['success'];
             }else{
                 $res_type = 'Error';
-                $res_msg  = $text['del_event'].$text['job_id'].':'.$output_job_id.','.$text['event'].':'.$text[$event[$output_event]]."  ".$text['fail'];
+                $res_msg  = $text['del_event'].$text['job_id'].':'.$output_jobid.','.$text['event'].':'.$text[$event[$output_event]]."  ".$text['fail'];
             }
             $result = array(
                 'res_type' => $res_type,
@@ -310,19 +313,19 @@ class Outputs extends Controller
     {
         $input_check = true;
         if( isset($_POST['job_id']) && $_POST['job_id'] >= 0 ){
-            $output_job_id = $_POST['job_id'];
+            $output_jobid = $_POST['job_id'];
         }else if(isset($_POST['job_id_new']) && $_POST['job_id_new'] >= 0){
-            $output_job_id  = '';
+            $output_jobid  = '';
         }else{ 
             $input_check = false; 
         }
 
         if($input_check){
-            $res = $this->OutputModel->set_output_alljob($output_job_id);
+            $res = $this->OutputModel->set_output_alljob($output_jobid);
             if ($res) {
-                $res_msg = 'set outputall job:'.$output_job_id.' success';
+                $res_msg = 'set outputall job:'.$output_jobid.' success';
             } else {
-                $res_msg  = 'set outputall job:'.$output_job_id.' fail';
+                $res_msg  = 'set outputall job:'.$output_jobid.' fail';
             }
             echo $res_msg;
         }
@@ -334,7 +337,7 @@ class Outputs extends Controller
 
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $output_job_id  = $_POST['job_id'];
+            $output_jobid  = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
@@ -346,7 +349,7 @@ class Outputs extends Controller
 
         if($input_check){
             $job_outputs = array();
-            $job_outputs = $this->OutputModel->check_job_event_conflict($output_job_id,$output_event);    
+            $job_outputs = $this->OutputModel->check_job_event_conflict($output_jobid,$output_event);    
         }
         print_r($job_outputs);
 
@@ -368,7 +371,7 @@ class Outputs extends Controller
 
         $jobdata = array();
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $jobdata['output_job_id'] = $_POST['job_id'];
+            $jobdata['output_jobid'] = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
@@ -396,20 +399,23 @@ class Outputs extends Controller
             $input_check = false; 
         }
 
-        $count = $this->OutputModel->check_event_conflict($jobdata['output_job_id'],$jobdata['output_event']);
+        $jobdata['wave_off'] = '';
+        $jobdata['output_seqid'] = '';
+
+        $count = $this->OutputModel->check_event_conflict($jobdata['output_jobid'],$jobdata['output_event']);
 
         if ($count > 0){
             
-            $ans = $this->OutputModel->check_job_event_conflict($jobdata['output_job_id'],$jobdata['output_event']);
+            $ans = $this->OutputModel->check_job_event_conflict($jobdata['output_jobid'],$jobdata['output_event']);
             $res = $this->OutputModel->edit_output($jobdata);
         }
         
         if($res){
             $res_type = 'Success';
-            $res_msg = $text['edit_event'].$text['job_id'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['success'];
+            $res_msg = $text['edit_event'].$text['job_id'].':'.$jobdata['output_jobid'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['success'];
         }else{
             $res_type = 'Error';
-            $res_msg = $text['edit_event'].$text['job_id'].':'.$jobdata['output_job_id'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['fail'];
+            $res_msg = $text['edit_event'].$text['job_id'].':'.$jobdata['output_jobid'].','.$text['event'].':'.$text[$event[$jobdata['output_event']]]."  ".$text['fail'];
         }
 
         $result = array(
@@ -430,13 +436,13 @@ class Outputs extends Controller
         
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $output_job_id = $_POST['job_id'];
+            $output_jobid = $_POST['job_id'];
         }else{ 
             $input_check = false; 
         }
 
         if($input_check){
-            $res   = $this->OutputModel->check_event_conflict_by_job_id($output_job_id);
+            $res   = $this->OutputModel->check_event_conflict_by_job_id($output_jobid);
             echo "<pre>";
             print_r($res);
             echo "</pre>";

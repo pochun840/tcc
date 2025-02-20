@@ -932,7 +932,7 @@ function get_output_info(job_id,output_event){
                 var responseJSON = JSON.stringify(response);
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
                 var cleanString = cleanString.substring(2, cleanString.length - 2);
-                var [, job_id] = cleanString.match(/\[output_job_id]\s*=>\s*([^ ]+)/) || [, null];
+                var [, job_id] = cleanString.match(/\[output_jobid]\s*=>\s*([^ ]+)/) || [, null];
                 var [, output_event] = cleanString.match(/\[output_event]\s*=>\s*([^ ]+)/) || [, null];
                 var [, output_pin] = cleanString.match(/\[output_pin]\s*=>\s*([^ ]+)/) || [, null];
                 var [, wave] = cleanString.match(/\[wave]\s*=>\s*([^ ]+)/) || [, null];
