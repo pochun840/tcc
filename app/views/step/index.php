@@ -717,32 +717,51 @@ function edit_step(stepid){
 
 
 function create_step() {
-
+    // 顯示新步驟
     document.getElementById('newstep').style.display = 'block';
 
+    // 設定預設值
     document.getElementById('rpm').value = 200;
     document.getElementById('th_tor').value = 0;
     document.getElementById('ds_tor').value = 0.3;
-    document.getElementById('ds_speed').value =100;
+    document.getElementById('ds_speed').value = 100;
 
+    // 預設 downshift_ON 需要被選中
+    document.getElementById("downshift_ON").checked = true;
+    toggleDisabledFields();  // 根據 downshift 的選項來控制其他欄位的狀態
 
+    // downshift 變更
+    document.getElementById("downshift_ON").addEventListener('change', toggleDisabledFields);
+    document.getElementById("downshift_OFF").addEventListener('change', toggleDisabledFields);
+
+    // target_opt 變更
     var targetoptionselect = document.getElementById('target_opt');
     targetoptionselect.addEventListener('change', function() {
-
-    var target_opt_Value = targetoptionselect.value;
+        var target_opt_Value = targetoptionselect.value;
         localStorage.setItem('target_option', target_opt_Value);
         toggleVisibility(target_opt_Value);
     });
 
-
-    //處理th_mode 
-    detectDownshiftSelection();
-
+    // 處理 th_mode
+    //detectDownshiftSelection();
 }
+
+// 用來根據 downshift 的選項來控制其他欄位的 disabled 狀態
+function toggleDisabledFields() {
+    if (document.getElementById("downshift_ON").checked) {
+        // 當 downshift_ON 被選中時，解除 disabled
+        document.getElementById('th_tor').disabled = false;
+        document.getElementById('ds_tor').disabled = false;
+        document.getElementById('ds_speed').disabled = false;
+    } else {
+        // 當 downshift_OFF 被選中時，設置 disabled
+        document.getElementById('th_tor').disabled = true;
+        document.getElementById('ds_tor').disabled = true;
+        document.getElementById('ds_speed').disabled = true;
+    }
+}
+
   
-
-
-
 function add_step() {
     
     // 防止重複處理的標誌

@@ -1078,11 +1078,34 @@ function get_input_info(){
 
                 var [, jobid] = cleanString.match(/\[input_jobid]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_event] = cleanString.match(/\[input_event]\s*=>\s*([^ ]+)/) || [, null];
-                var [, input_pin] = cleanString.match(/\[input_pin]\s*=>\s*([^ ]+)/) || [, null];
-                var [, input_wave] = cleanString.match(/\[input_wave]\s*=>\s*([^ ]+)/) || [, null];
-                var [, gateconfirm] = cleanString.match(/\[gateconfirm]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin1] = cleanString.match(/\[input_pin1]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin2] = cleanString.match(/\[input_pin2]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin3] = cleanString.match(/\[input_pin3]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin4] = cleanString.match(/\[input_pin4]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin5] = cleanString.match(/\[input_pin5]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin6] = cleanString.match(/\[input_pin6]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin7] = cleanString.match(/\[input_pin7]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin8] = cleanString.match(/\[input_pin8]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin9] = cleanString.match(/\[input_pin9]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin10] = cleanString.match(/\[input_pin10]\s*=>\s*([^ ]+)/) || [, null];
+                //var [, input_wave] = cleanString.match(/\[input_wave]\s*=>\s*([^ ]+)/) || [, null];
+                var [, gateconfirm] = cleanString.match(/\[input_gateconfirm]\s*=>\s*([^ ]+)/) || [, null];
 
-                if(input_wave == 1){
+
+
+                if(input_event == 109){
+                    document.getElementById('edit_work_goc').style.display='block';
+                    if (gateconfirm == 0) {
+                        document.getElementById('edit_gateconfirm_0').checked = true;
+                    } else  {
+                        document.getElementById('edit_gateconfirm_1').checked = true;
+                    }
+                }
+
+                alert(input_pin10);
+
+
+                /*if(input_wave == 1){
                     var wave = "_high";
                 }else{
                     var wave = "_low";
@@ -1120,7 +1143,7 @@ function get_input_info(){
                 document.getElementById("edit_Event_Option").onchange = function() {
                     var selectedValue = this.value; 
                     edit_handleEventChange(selectedValue); 
-                };
+                };*/
 
              
             },
