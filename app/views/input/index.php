@@ -447,11 +447,11 @@
                                 <div for="Workpice Ready Confirm" class="col-6 t1"><?php echo $text['gate_confirm'];?> :</div>
                                 <div class="col t2" >
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_0" value="0">
+                                    <input class="form-check-input" type="radio" name="edit_input_gateconfirm" id="edit_gateconfirm_0" value="0">
                                     <label class="form-check-label"><?php echo $text['NO'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_gateconfirm" id="edit_gateconfirm_1" value="1">
+                                    <input class="form-check-input" type="radio" name="edit_input_gateconfirm" id="edit_gateconfirm_1" value="1">
                                     <label class="form-check-label" ><?php echo $text['YES'];?></label>
                                     </div>
                                 </div>
@@ -906,9 +906,9 @@ function create_input_id(){
 
     if(input_event == 109){
         var selectedOption = document.querySelector('input[name="input_gateconfirm"]:checked');
-        var input_gateconfirm    = selectedOption ? selectedOption.value : 0;
+        var input_gateconfirm = selectedOption ? selectedOption.value : 0;
     }else{
-        var input_gateconfirm	 = 0;
+        var input_gateconfirm = 0;
     }
 
     var input_pagemode = 0;
@@ -1088,40 +1088,38 @@ function get_input_info(){
                 var [, input_pin8] = cleanString.match(/\[input_pin8]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_pin9] = cleanString.match(/\[input_pin9]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_pin10] = cleanString.match(/\[input_pin10]\s*=>\s*([^ ]+)/) || [, null];
-                //var [, input_wave] = cleanString.match(/\[input_wave]\s*=>\s*([^ ]+)/) || [, null];
                 var [, gateconfirm] = cleanString.match(/\[input_gateconfirm]\s*=>\s*([^ ]+)/) || [, null];
 
+                var input_wave = [];
+                var foudpin = null;
+                for (var i = 1; i <= 10; i++) {
+                    var match = cleanString.match(new RegExp(`\\[input_pin${i}\\]\\s*=>\\s*([^ ]+)`));
+                    if (match && match[1] !== '0' && match[1] !== 'null') {
+                        input_wave.push(match[1]);
+                        foudpin = i;
 
-
-                if(input_event == 109){
-                    document.getElementById('edit_work_goc').style.display='block';
-                    if (gateconfirm == 0) {
-                        document.getElementById('edit_gateconfirm_0').checked = true;
-                    } else  {
-                        document.getElementById('edit_gateconfirm_1').checked = true;
                     }
                 }
 
-                alert(input_pin10);
-
-
-                /*if(input_wave == 1){
+                if(input_wave == 1){
                     var wave = "_high";
                 }else{
                     var wave = "_low";
                 }
-                
-                var edit_input_pin = "edit_pin" + input_pin + wave;
+
+
+                var edit_input_pin = "edit_pin" + foudpin + wave;
+
                 var radioButton = document.getElementById(edit_input_pin);
                 radioButton.removeAttribute('disabled');
                 old_input_event = input_event;
-                
+
                 if(radioButton){
                     radioButton.checked = true;
                     if(wave == '_high'){
-                        var nstr = "edit_pin" + input_pin + '_low';
+                        var nstr = "edit_pin" + foudpin + '_low';
                     }else{
-                        var nstr = "edit_pin" + input_pin + '_high';
+                        var nstr = "edit_pin" + foudpin + '_high';
                     }
                     var element = document.getElementById(nstr);
                     if(element){
@@ -1137,14 +1135,14 @@ function get_input_info(){
                         document.getElementById('edit_gateconfirm_1').checked = true;
                     }
                 }
-                
-                document.querySelector("select[name='edit_Event_Option']").value = input_event;
 
+
+                //顯示EVENT的事件 在下拉式選單上
+                document.querySelector("select[name='edit_Event_Option']").value = input_event;
                 document.getElementById("edit_Event_Option").onchange = function() {
                     var selectedValue = this.value; 
                     edit_handleEventChange(selectedValue); 
-                };*/
-
+                };
              
             },
             error: function(xhr, status, error) {
@@ -1228,21 +1226,64 @@ function get_input_by_job_id(jobid){
 function edit_input_id(){
 
     var input_event = document.getElementById("edit_Event_Option").value;
-    var pinval      = collectPinValues('input[name="edit_pin_option"]');
-    var pin_old   = pinval[0]['id'];
-    var input_wave  = pinval[0]['value'];
-    var pagemode    = 1;
-    var input_seqid = 0;
-    var input_pin = pin_old.match(/\d+/)[0];
+
+    // 選擇所有 name 為 "pin_option" 的 radio 按鈕
+    var allRadioButtons = document.querySelectorAll('input[name="edit_pin_option"]');
+
+    // 初始化變數來存儲選中的 id 和 value
+    var input_pin  = '';
+    var input_wave = '';
+
+    // 遍歷所有的 radio 按鈕，找出已選中的
+    allRadioButtons.forEach(function(radio) {
+        if (radio.checked) {
+            input_pin  = radio.id; // 存儲選中的 radio 的 id
+            input_wave = radio.value; // 存儲選中的 radio 的 value
+        }
+    });
+
 
     if(input_event == 109){
-        var selectedOption = document.querySelector('input[name="edit_gateconfirm"]:checked');
-        var gateconfirm    = selectedOption ? selectedOption.value : 0;
+        var selectedOption = document.querySelector('input[name="edit_input_gateconfirm"]:checked');
+        var input_gateconfirm = selectedOption ? selectedOption.value : 0;
     }else{
-        var gateconfirm	 = 0;
+        var input_gateconfirm = 0;
     }
 
+    var input_pagemode = 0;
+    var input_seqid = 0;
+
     if(job_id){
+        $.ajax({
+            url: "?url=Inputs/edit_input_event",
+            method: "POST",
+            data: { 
+                job_id: job_id,
+                input_event: input_event,
+                input_pin: 	input_pin,
+                input_wave: input_wave,
+                input_gateconfirm: input_gateconfirm,
+                input_pagemode: input_pagemode,
+                input_seqid: input_seqid
+            },
+            success: function(response) {
+
+                document.getElementById('edit_input').style.display='none';
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                    get_input_by_job_id(job_id);
+                });
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+
+    }
+
+   
+
+    /*if(job_id){
         $.ajax({
             url: "?url=Inputs/edit_input_event",
             method: "POST",
@@ -1276,7 +1317,7 @@ function edit_input_id(){
             }
         });
 
-    }
+    }*/
 }
 
 function getLanguageMessage(cookieName) {

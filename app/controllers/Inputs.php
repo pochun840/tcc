@@ -139,8 +139,8 @@ class Inputs extends Controller
 
 
 
-    public function check_job_event_conflict($value='')
-    {
+    public function check_job_event_conflict($value=''){
+
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
             $job_id = $_POST['job_id'];
@@ -230,9 +230,7 @@ class Inputs extends Controller
     }
 
 
-    public function edit_input_event()
-    {
-
+    public function edit_input_event(){
 
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
@@ -240,59 +238,60 @@ class Inputs extends Controller
         }
 
         $event    = $this->MiscellaneousModel->details('io_input');
+
+        //
+        if(!empty($_POST['input_pin'])){
+            $input_pins = array();
+            $input_pins = array(
+                0 =>$_POST['input_pin']
+            );
+            $numbers = [];
+            foreach ($input_pins as $pin) {
+                if (preg_match('/\d+/', $pin, $matches)) {
+                    $numbers[] = $matches[0]; // 只保留數字部分
+                }
+            }
+            $pin = $numbers[0];
+        }
         
+
+        // 初始化所有的 input_pin_1 到 input_pin_10 設為 0
+        for ($i = 1; $i <= 10; $i++) {
+            $_POST["input_pin$i"] = 0;
+        }
+
+        if(!empty($_POST)){
+            $input_data = array();
+            $input_data = $_POST;
+            $input_data['input_jobid'] = $input_data['job_id'];
+            $input_data['input_pin'.$pin] = $_POST['input_wave'];
+
+        }
+
         $input_check = true;
-        $jobdata = array();
-        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
-            $jobdata['input_jobid'] = $_POST['job_id'];
-        }else{ 
-            $input_check = false; 
-        }
 
-        if( !empty($_POST['input_event']) && isset($_POST['input_event'])  ){
-            $jobdata['input_event'] = $_POST['input_event'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( !empty($_POST['input_pin']) && isset($_POST['input_pin'])  ){
-            $jobdata['input_pin'] = intval($_POST['input_pin']);
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( !empty($_POST['input_wave']) && isset($_POST['input_wave'])  ){
-            $jobdata['input_wave'] = $_POST['input_wave'];
-        }else{ 
-            $input_check = false; 
-        }
-
-      
         if($input_check){
 
-            $count = $this->InputModel->check_job_event_conflict($jobdata['input_jobid'],$jobdata['input_event']);
-            $ans  = $this->InputModel->delete_input_event_by_id($jobdata['input_jobid'],$jobdata['input_event']);
-            $res  = $this->InputModel->create_input($jobdata);
-
-
+          
+            $ans  = $this->InputModel->delete_input_event_by_id($input_data['input_jobid'],$input_data['input_event']);
+            $res  = $this->InputModel->create_input($input_data);
 
             $result = array();
             if($res){
                 $res_type = 'Success';
-                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_jobid'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['success'];
+                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$input_data['input_jobid'].','.$text['event'].':'.$text[$event[$input_data['input_event']]]."  ".$text['success'];
             } else {
                 $res_type = 'Error';
-                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$jobdata['input_jobid'].','.$text['event'].':'.$text[$event[$jobdata['input_event']]]."  ".$text['fail'];
+                $res_msg  = $text['edit_event']."  ".$text['job_id'].':'.$input_data['input_jobid'].','.$text['event'].':'.$text[$event[$input_data['input_event']]]."  ".$text['fail'];
             }
             
             $result = array(
                 'res_type' => $res_type,
-                'res_msg'  => $res_msg,
-                'old_input_pin' =>$count['input_pin']
+                'res_msg'  => $res_msg
+                //'old_input_pin' =>$count['input_pin']
             );
 
             echo json_encode($result);
-
         }
     }
 
@@ -395,7 +394,6 @@ class Inputs extends Controller
         if($input_check){
             //先取得要刪除資料的PIN角位
             $ans = $this->InputModel->check_job_event_conflict($job_id,$input_event);
-
             //進行資料的刪除
             $res = $this->InputModel->delete_input_event_by_id($job_id,$input_event);
             $result = array();
