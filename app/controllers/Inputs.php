@@ -319,24 +319,34 @@ class Inputs extends Controller
         
 
         if ($input_check) {
+
+            //強制 把 $to_job_id 原本設定的event 移除
+            $this->InputModel->delete_input_by_id($to_job_id);
             $job_inputs_from = $this->InputModel->check_job_event($input_jobid);
             if (!empty($job_inputs_from)) {
-                $jobdata = array();
+                $copy_input_data = array();
                 foreach ($job_inputs_from as $key => $val) {
-                
                     if (isset($val['input_jobid'])) {
-                        $jobdata[$key]['input_jobid'] = $to_job_id;
+                        $copy_input_data[$key]['input_jobid'] = $to_job_id;
                     } else {
                         continue; 
                     }
 
-                    $jobdata[$key]['input_event'] = $val['input_event'];
-                    $jobdata[$key]['input_pin'] = $val['input_pin'];
-                    $jobdata[$key]['input_wave'] = $val['input_wave'];
-                    $jobdata[$key]['gateconfirm'] = $val['gateconfirm'];
-                    $jobdata[$key]['pagemode'] = $val['pagemode'];
-                    $jobdata[$key]['input_seqid'] = 0;
-                    $res = $this->InputModel->create_input($jobdata[$key]);
+                    $copy_input_data[$key]['input_event'] = $val['input_event'];
+                    $copy_input_data[$key]['input_pin1'] = $val['input_pin1'];
+                    $copy_input_data[$key]['input_pin2'] = $val['input_pin2'];
+                    $copy_input_data[$key]['input_pin3'] = $val['input_pin3'];
+                    $copy_input_data[$key]['input_pin4'] = $val['input_pin4'];
+                    $copy_input_data[$key]['input_pin5'] = $val['input_pin5'];
+                    $copy_input_data[$key]['input_pin6'] = $val['input_pin6'];
+                    $copy_input_data[$key]['input_pin7'] = $val['input_pin7'];
+                    $copy_input_data[$key]['input_pin8'] = $val['input_pin8'];
+                    $copy_input_data[$key]['input_pin9'] = $val['input_pin9'];
+                    $copy_input_data[$key]['input_pin10'] = $val['input_pin10'];
+                    $copy_input_data[$key]['input_gateconfirm'] = $val['input_gateconfirm'];
+                    $copy_input_data[$key]['input_pagemode'] = $val['input_pagemode'];
+                    $copy_input_data[$key]['input_seqid'] = 0;
+                    $res = $this->InputModel->create_input($copy_input_data[$key]);
              
                 }
 
@@ -351,11 +361,9 @@ class Inputs extends Controller
                 $result = array(
                     'res_type' => $res_type,
                     'res_msg'  => $res_msg 
-                );
+                ); 
     
                 echo json_encode($result);      
-               
-
             }
         }
 
