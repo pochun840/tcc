@@ -639,29 +639,50 @@ function job_confirm(){
 //delete
 function delete_output_id(job_id,del_output_val){
     if(job_id){
-        $.ajax({
-            url: "?url=Outputs/delete_output",
-            method: "POST",
-            data: { 
-                job_id: job_id,
-                output_event: del_output_val,
-             
-            },
-            success: function(response) {
 
-                var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                    // 在刪除成功後執行 get_output_by_job_id
-                    updateEventSelectAndPins(responseData.old_output_pin);
-                    
-                    get_output_by_job_id(job_id);
+        var language = getCookie('language');
+        if(language == "zh-cn"){
+            var text_info ='若设定已存在，将会取代原有设定';
+        }else if(language == "zh-tw"){
+            var text_info ='若設定已存在，將會取代原有設定';
+        }else{
+            var text_info ='If the job input already exists, it will replace the original setting';
+        }
 
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-            }
-        });     
+        alertify.confirm( text_info, function (e) {
+            if (e) {
+                var to_job_id = document.getElementById("JobSelect1").value;
+                if(to_job_id){
+                    $.ajax({
+                        url: "?url=Outputs/delete_output",
+                        method: "POST",
+                        data: { 
+                            job_id: job_id,
+                            output_event: del_output_val,
+                        
+                        },
+                        success: function(response) {
+
+                            var responseData = JSON.parse(response);
+                            alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                // 在刪除成功後執行 get_output_by_job_id
+                                updateEventSelectAndPins(responseData.old_output_pin);
+                                
+                                get_output_by_job_id(job_id);
+
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX request failed:", status, error);
+                        }
+                    });   
+            
+                } 
+            }else {
+                // cancel
+            } 
+        });
+      
     }   
 }
 

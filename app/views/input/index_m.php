@@ -842,6 +842,11 @@ function get_input_info(){
                 input_event: input_event,
             },
             success: function(response) {
+                if (response === 'no_data') {
+                    getLanguageMessage('language');
+                    return;
+                }
+                
                 
                 var responseJSON = JSON.stringify(response);
                 var cleanString = responseJSON.replace(/Array|\\n/g, '');
@@ -849,27 +854,48 @@ function get_input_info(){
 
                 var [, jobid] = cleanString.match(/\[input_jobid]\s*=>\s*([^ ]+)/) || [, null];
                 var [, input_event] = cleanString.match(/\[input_event]\s*=>\s*([^ ]+)/) || [, null];
-                var [, input_pin] = cleanString.match(/\[input_pin]\s*=>\s*([^ ]+)/) || [, null];
-                var [, input_wave] = cleanString.match(/\[input_wave]\s*=>\s*([^ ]+)/) || [, null];
-                var [, gateconfirm] = cleanString.match(/\[gateconfirm]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin1] = cleanString.match(/\[input_pin1]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin2] = cleanString.match(/\[input_pin2]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin3] = cleanString.match(/\[input_pin3]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin4] = cleanString.match(/\[input_pin4]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin5] = cleanString.match(/\[input_pin5]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin6] = cleanString.match(/\[input_pin6]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin7] = cleanString.match(/\[input_pin7]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin8] = cleanString.match(/\[input_pin8]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin9] = cleanString.match(/\[input_pin9]\s*=>\s*([^ ]+)/) || [, null];
+                var [, input_pin10] = cleanString.match(/\[input_pin10]\s*=>\s*([^ ]+)/) || [, null];
+                var [, gateconfirm] = cleanString.match(/\[input_gateconfirm]\s*=>\s*([^ ]+)/) || [, null];
+
+                var input_wave = [];
+                var foudpin = null;
+                for (var i = 1; i <= 10; i++) {
+                    var match = cleanString.match(new RegExp(`\\[input_pin${i}\\]\\s*=>\\s*([^ ]+)`));
+                    if (match && match[1] !== '0' && match[1] !== 'null') {
+                        input_wave.push(match[1]);
+                        foudpin = i;
+
+                    }
+                }
 
                 if(input_wave == 1){
                     var wave = "_high";
                 }else{
                     var wave = "_low";
                 }
-                
-                var edit_input_pin = "edit_pin" + input_pin + wave;
+
+
+                var edit_input_pin = "edit_pin" + foudpin + wave;
+
                 var radioButton = document.getElementById(edit_input_pin);
                 radioButton.removeAttribute('disabled');
                 old_input_event = input_event;
-                
+
                 if(radioButton){
                     radioButton.checked = true;
                     if(wave == '_high'){
-                        var nstr = "edit_pin" + input_pin + '_low';
+                        var nstr = "edit_pin" + foudpin + '_low';
                     }else{
-                        var nstr = "edit_pin" + input_pin + '_high';
+                        var nstr = "edit_pin" + foudpin + '_high';
                     }
                     var element = document.getElementById(nstr);
                     if(element){
@@ -885,16 +911,15 @@ function get_input_info(){
                         document.getElementById('edit_gateconfirm_1').checked = true;
                     }
                 }
-                
 
+
+                //顯示EVENT的事件 在下拉式選單上
                 document.querySelector("select[name='edit_Event_Option']").value = input_event;
-
                 document.getElementById("edit_Event_Option").onchange = function() {
                     var selectedValue = this.value; 
                     edit_handleEventChange(selectedValue); 
                 };
 
-             
             },
             error: function(xhr, status, error) {
                 

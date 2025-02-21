@@ -407,8 +407,7 @@ class Inputs extends Controller
             
             $result = array(
                 'res_type' => $res_type,
-                'res_msg'  => $res_msg,
-                'old_input_pin' => $ans['input_pin']
+                'res_msg'  => $res_msg
             );
 
             echo json_encode($result);
