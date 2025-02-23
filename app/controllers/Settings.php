@@ -387,7 +387,7 @@ class Settings extends Controller
         if( PHP_OS_FAMILY == 'Linux'){
 
             //檢查.idas_data.db 是否存在
-            $file = '/var/www/html/database/iDas_data.db';
+            $file = '/var/www/html/database/idas_data.db';
             $filename = "data.cfg"; 
             if (file_exists($file)) {
                 //echo json_encode(array('status' => 'success', 'message' => 'Database exists.'));
@@ -405,8 +405,8 @@ class Settings extends Controller
             
         }else{
             
-            $file = "../data.db"; 
-            $filename = "data.cfg"; 
+            $file = "../idas_data.db"; 
+            $filename = "idas_data.cfg"; 
 
             $cfgContent = file_get_contents($file);
             

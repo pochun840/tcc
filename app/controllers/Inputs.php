@@ -99,10 +99,10 @@ class Inputs extends Controller
                         // 根據 input_wave 顯示不同的圖片 (這裡假設使用 input_wave 或其他欄位)
                         $wave_img = '';
                         for ($i = 1; $i <= 10; $i++) {
-                            $wave_key = 'input_wave' . $i;  // 假設你使用 input_wave1 到 input_wave10
-                            if (isset($vv[$wave_key]) && $vv[$wave_key] == 1) {
+                            $wave_key = 'input_pin' . $i;  // 假設你使用 input_wave1 到 input_wave10
+                            if ( $vv[$wave_key] == 1) {
                                 $wave_img = '<img src="./img/high.png" style="max-width: 50px;">';
-                            } else {
+                            } else if( $vv[$wave_key] == 2){
                                 $wave_img = '<img src="./img/low.png" style="max-width: 50px;">';
                             }
                         }
@@ -115,10 +115,13 @@ class Inputs extends Controller
                         $job_inputlist .= "</tr>";
                     } else {
                         // 桌面版格式
+
+                        $input_gateconfirm = $vv['input_gateconfirm'];
+                        if($input_gateconfirm == 0){$input_gateconfirm_text ="NO";}else{$input_gateconfirm_text ="YES";}
                         $job_inputlist .= "<tr data-event = '" . $vv['input_event'] . "' >";
                         $job_inputlist .= "<td id='" . $vv['input_event'] . "'>" . $event[$vv['input_event']] . "</td>";
                         $job_inputlist .= $this->InputModel->generateTableCell($vv); // 呼叫 generateTableCell
-                        $job_inputlist .= '<td>' . $vv['input_gateconfirm'] . '</td>';
+                        $job_inputlist .= '<td>' . $input_gateconfirm_text . '</td>';
                         $job_inputlist .= '</tr>';
                     }
                 }
@@ -237,7 +240,7 @@ class Inputs extends Controller
             include $file;
         }
 
-        $event    = $this->MiscellaneousModel->details('io_input');
+        $event = $this->MiscellaneousModel->details('io_input');
 
         //
         if(!empty($_POST['input_pin'])){
@@ -266,8 +269,9 @@ class Inputs extends Controller
             $input_data['input_jobid'] = $input_data['job_id'];
             $input_data['input_pin'.$pin] = $_POST['input_wave'];
 
-        }
 
+        }
+     
         $input_check = true;
 
         if($input_check){

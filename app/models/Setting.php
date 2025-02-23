@@ -184,8 +184,8 @@ class Setting{
     }
     
 
-    public function Edit_Priviledge($value)
-    {   
+    public function Edit_Priviledge($value){
+
         if($value >= 65472 && $value <= 65535){
             $sql = "UPDATE `operator` SET operator_priviledge = ? ";
             $statement = $this->db->prepare($sql);
@@ -193,13 +193,10 @@ class Setting{
         }else{
             $results = false;
         }
-        // $row = $statement->fetchall(PDO::FETCH_ASSOC);
-
         return $results;
     }
 
-    public function Controller_Setting($con_setting)
-    {
+    public function Controller_Setting($con_setting){
        
         $sql = "UPDATE `device` 
         SET device_name = :device_name,
@@ -305,17 +302,17 @@ class Setting{
         $rows = $statement->fetch();
         
         if ($rows['count'] > 0) {
-            return true; // job event已存在
+            return true; 
         }else{
-            return false; // job event不存在
+            return false; 
         }
 
     }
 
 
     //get all job
-    public function get_job_list()
-    {
+    public function get_job_list(){
+
         $sql = "SELECT * FROM job ORDER BY job_id";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute();
@@ -325,8 +322,8 @@ class Setting{
     }
 
     //get all job seq
-    public function get_seq_list($job_id)
-    {
+    public function get_seq_list($job_id){
+
         $sql = "SELECT job_id,seq_id,seq_name FROM sequence WHERE job_id = :job_id AND seq_en = 1 order by seq_id";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
@@ -337,8 +334,8 @@ class Setting{
     }
 
     //get job barcdoe
-    public function get_job_barcode($job_id)
-    {
+    public function get_job_barcode($job_id){
+
         $sql = "SELECT * FROM barcode WHERE barcode_selected_job = :job_id ";
         $statement = $this->db->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
@@ -349,15 +346,14 @@ class Setting{
     }
 
     //delete job barcdoe
-    public function delete_job_barcode($barcode)
-    {
+    public function delete_job_barcode($barcode){
+
         foreach($barcode as $key =>$val){
             $sql = "DELETE FROM barcode WHERE barcode_selected_job = :barcode_selected_job ";
             $statement = $this->db_iDas->prepare($sql);
             $statement->bindValue(':barcode_selected_job', $val);
             $results = $statement->execute();
     
-            
         }
 
         return $results;
@@ -482,8 +478,6 @@ class Setting{
         return true; // 成功時返回 true
     }
     
-
-
     public function backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile) {
         // 檢查源文件是否存在
         if (!file_exists($sourceFile)) {

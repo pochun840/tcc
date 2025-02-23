@@ -70,7 +70,7 @@ function Export_SystemConfig(argument) {
         if (xhr.status === 200) {
             var a = document.createElement("a");
             a.href = window.URL.createObjectURL(xhr.response);
-            a.download = "data.cfg"; 
+            a.download = "idas_data.cfg"; 
             a.style.display = "none";
             document.body.appendChild(a);
             a.click();

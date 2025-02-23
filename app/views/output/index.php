@@ -350,6 +350,8 @@ function crud_job_event(argument){
             });
         } 
 
+
+
         var filtered_array = [];
         temp.forEach(function(element) {
             // 檢查是否是以 'pin' 開頭並且不包含 'edit_pin'
@@ -361,19 +363,25 @@ function crud_job_event(argument){
     
         disableElements(filtered_array);
 
+
         document.getElementById('new_output').style.display='block';
         var eventOption = document.getElementById('Event_Option');
         eventOption.addEventListener('change', function() {
             var selectedOptionId = parseInt(eventOption.options[eventOption.selectedIndex].value); // 轉換為整數
             const disableOptions = [7, 8, 9, 12, 13, 14, 15, 16]; // 需要停用的選項值陣列
 
-            toggleElementsInRange(1, 10, 3); // 先重置所有元素的狀態
+            toggleElementsInRange(1, 10, 3,filtered_array); // 先重置所有元素的狀態
 
             if (!disableOptions.includes(selectedOptionId)) { // 如果選擇的選項不在停用列表中
                 disableElements(filtered_array); // 則執行停用特定元素的函式
             }
         });
 
+
+    
+        disableNextPin(filtered_array);
+
+    
 
         
     }
@@ -530,16 +538,18 @@ function collectPinValues(selector) {
     return selectedValues;
 }
 
-function toggleElementsInRange(start, end, suffix) {
+function toggleElementsInRange(start, end, suffix, filtered_array = []) {
     let selectedOptionId = eventOption.options[eventOption.selectedIndex].value;
     const disableOptions = [7, 8, 9, 12, 13, 14, 15, 16]; 
-    let disableAll = disableOptions.includes(parseInt(selectedOptionId)); // Use includes()
+    let disableAll = disableOptions.includes(parseInt(selectedOptionId));
 
     for (let i = start; i <= end; i++) {
         for (let j = 1; j <= suffix; j++) {
             let id = 'pin' + i + '_' + j;
             let element = document.getElementById(id);
+
             if (element) {
+                // 原本的禁用邏輯
                 element.disabled = disableAll && (j === 1 || j === 2);
             }
         }
@@ -550,7 +560,49 @@ function toggleElementsInRange(start, end, suffix) {
             timeElement.disabled = disableAll;
         }
     }
+
+    const pinDisableMap = {};
+
+    for(let i = 1; i <= 9; i++) {
+        pinDisableMap[`pin${i}_1`] = `pin${i}_3`;
+        pinDisableMap[`pin${i}_2`] = `pin${i}_3`;
+    }
+
+    Object.entries(pinDisableMap).forEach(([triggerPin, targetPin]) => {
+        if (filtered_array.includes(triggerPin)) {
+            const targetElement = document.getElementById(targetPin);
+            if (targetElement) {
+                targetElement.disabled = true;
+                //console.log(`${targetPin} 已被禁用 (因為 filtered_array 包含 ${triggerPin})`);
+            }
+        }
+    });
 }
+
+
+
+function disableNextPin(filteredArray) {
+    filteredArray.forEach(function(pinId) {
+  
+        var match = pinId.match(/^pin(\d+)_(\d+)$/);
+
+        if (match) {
+            var pinNumber = parseInt(match[1]); 
+            var subNumber = parseInt(match[2]); 
+            var nextPinId = 'pin' + pinNumber + '_' + (subNumber + 1); 
+            //console.log(nextPinId);
+            var nextPinElement = document.getElementById(nextPinId);
+            
+            if (nextPinElement) {
+                nextPinElement.disabled = true; 
+            }
+
+            console.log(document.getElementById(nextPinId).disabled);
+        }
+    });
+}
+
+
 
 
 var old_output_event; 
