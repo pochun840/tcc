@@ -1320,7 +1320,4 @@ function restoreBackupOptions() {
     });
 
 }
-
-
-
 </script>
