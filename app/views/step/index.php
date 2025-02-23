@@ -106,7 +106,7 @@
     <!-- Add New Step -->
     <div id="newstep" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 80%">
+            <div class="modal-content w3-animate-zoom" style="width: 90%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('newstep');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
@@ -119,8 +119,8 @@
                     <form id="new_step_form" style="padding-left: 5%">
                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
-                            <div class="col-3 t2">
-                                <select id="target_opt" name="target_opt" class="col custom-file">
+                            <div class="col-4 t2">
+                                <select id="target_opt" name="target_opt" class="custom-file" style="width:225px">
                                     <?php if($data['check'][0]['count_records'] == "1"){?>
                                         <?php foreach($data['target_option_change'] as $key => $val){?>
                                              <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
@@ -140,8 +140,8 @@
                         <div id='target_tor_item' style="display:block;">
                             <div class="row">
                                 <div  class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2">
-                                    <input type="text" class="form-control input-ms" id="target_tor" maxlength="" >
+                                <div class="col-4 t2">
+                                    <input type="text" class="form-control input-ms" id="target_tor" maxlength="">
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@
                         <div id='target_ang_item' style="display:none;">                     
                             <div class="row">
                                 <div class="col-6 t1"><?php echo $text['Target_Angle'];?> :</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="target_ang" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -160,7 +160,7 @@
                         <div id='target_delay_item' style="display:none;">       
                             <div class="row">
                                     <div for="target-torque" class="col-6 t1"><?php echo $text['Target Delay Time'];?> :</div>
-                                    <div class="col-3 t2">
+                                    <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="target_delay" maxlength="" >
                                         <div class="invalid-feedback"></div>
                                     </div>
@@ -170,7 +170,7 @@
                         <div id="tor_hi_item">                   
                             <div class="row">
                                 <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="tor_hi" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -180,7 +180,7 @@
                         <div id="tor_lo_item">
                             <div class="row">
                                 <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="tor_lo" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -190,7 +190,7 @@
                         <div id="ang_hi_item">
                             <div class="row">
                                 <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?> :</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="ang_hi" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -200,7 +200,7 @@
                         <div id="ang_lo_item">
                             <div class="row">
                                 <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="ang_lo" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -210,7 +210,7 @@
                         <div id="rpm_item">
                             <div class="row">
                                 <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="rpm" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -243,16 +243,16 @@
                                     </div>
                                     <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="th_mode" id="downshift_ON" value="1" >
-                                    <label class="form-check-label" for="ownshift_ON"><?php echo $text['switch_on'];?></label>
+                                    <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div id='th_tor_item'>
-                            <div class="row" >
+                            <div class="row">
                                 <div id="downshift_threshold_title" for="th_tor" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2" id="downshift_threshold_item"> 
+                                <div class="col-4 t2" id="downshift_threshold_item"> 
                                     <input type="text" class="form-control input-ms" id="th_tor" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -262,7 +262,7 @@
                         <div id='ds_tor_item'>
                             <div class="row" >
                                 <div id="downshift_torque_title" for="ds_tor" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2" id="downshift_torque_item">
+                                <div class="col-4 t2" id="downshift_torque_item">
                                     <input type="text" class="form-control input-ms" id="ds_tor" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -272,7 +272,7 @@
                         <div id='ds_speed_item'>
                             <div class="row" >
                                 <div id="downshift_speed_title" for="downshift-speed" class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
-                                <div class="col-3 t2" id="downshift_speed_item">
+                                <div class="col-4 t2" id="downshift_speed_item">
                                     <input type="text" class="form-control input-ms" id="ds_speed" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -304,7 +304,7 @@
                     <form id="new_step_form" style="padding-left: 5%">
                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
-                            <div class="col-3 t2">
+                            <div class="col-4 t2">
                                 <select id="edit_target_opt" name="edit_target_opt" class="col custom-file" onchange="targetOptChangeHandler()">
                                     <?php foreach($data['target_option'] as $key => $val){?>
                                         <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
@@ -318,7 +318,7 @@
                         <div id='edit_target_tor_item' style="display:block;">
                             <div class="row">
                                 <div  class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_target_tor" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -328,7 +328,7 @@
                         <div id='edit_target_ang_item' style="display:none;">                     
                             <div class="row">
                                 <div class="col-6 t1"><?php echo $text['Target_Angle'];?> :</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_target_ang" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -338,7 +338,7 @@
                         <div id='edit_target_delay_item' style="display:none;">       
                             <div class="row">
                                     <div for="target-torque" class="col-6 t1"><?php echo $text['Target Delay Time'];?> :</div>
-                                    <div class="col-3 t2">
+                                    <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_target_delay" maxlength="" >
                                         <div class="invalid-feedback"></div>
                                     </div>
@@ -348,7 +348,7 @@
                         <div id="edit_tor_hi_item">                
                             <div class="row">
                                 <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_tor_hi" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -358,7 +358,7 @@
                         <div id="edit_tor_lo_item"> 
                             <div class="row">
                                 <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_tor_lo" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -368,7 +368,7 @@
                         <div id="edit_ang_hi_item"> 
                             <div class="row">
                                 <div for="hi-angle" class="col-6 t1"><?php echo $text['High_Angle'];?>:</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_ang_hi" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -378,7 +378,7 @@
                         <div id="edit_ang_lo_item"> 
                             <div class="row">
                                 <div for="lo-angle" class="col-6 t1"><?php echo $text['Low_Angle'];?>:</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_ang_lo" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -388,7 +388,7 @@
                         <div id="edit_rpm_item">
                             <div class="row">
                                 <div for="RPM" class="col-6 t1"><?php echo $text['rpm'];?>:</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_rpm" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -430,7 +430,7 @@
                         <div id="edit_th_tor_item">
                             <div class="row">
                                 <div class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_th_tor" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -439,7 +439,7 @@
                         <div id="edit_ds_tor_item">
                             <div class="row">
                                 <div class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
-                                <div class="col-3 t2" id="edit_downshift_torque_item">
+                                <div class="col-4 t2" id="edit_downshift_torque_item">
                                     <input type="text" class="form-control input-ms" id="edit_ds_tor" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -449,7 +449,7 @@
                         <div id="edit_ds_speed_item">
                             <div class="row">
                                 <div class="col-6 t1"><?php echo $text['Downshift_Speed'];?>:</div>
-                                <div class="col-3 t2">
+                                <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_ds_speed" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
