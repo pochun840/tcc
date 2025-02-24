@@ -1,6 +1,24 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_output.css" type="text/css">
+<style>
+.overlay-active {
+    position: relative;
+    min-height: 150vh;
+}
 
+.overlay-active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 120%;
+    background-color: rgba(0, 0, 0, 0.3); /* semi-transparent black background */
+    z-index: 999; /* Ensure it overlays on top */
+}
+
+</style>   
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -88,7 +106,7 @@
                 <div class="modal-dialog modal-lg" style="top: 3%;">
                     <div class="modal-content w3-animate-zoom" style="width:65%">
                         <header class="w3-container modal-header">
-                            <span onclick="document.getElementById('new_output').style.display='none'"
+                            <span onclick="closebutton('new_output')"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                             <h3 id='modal_title'><?php echo $text['new_event'];?></h3>
                         </header>
@@ -133,7 +151,7 @@
 
                         <div class="modal-footer justify-content-center">
                             <button id="" class="button-modal" onclick="create_output_id()"><?php echo $text['save'];?></button>
-                            <button id="" class="button-modal" onclick="document.getElementById('new_output').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
+                            <button id="" class="button-modal" onclick="closebutton('new_output')" class="closebtn"><?php echo $text['close'];?></button>
                         </div>
                     </div>
                 </div>
@@ -144,7 +162,7 @@
                 <div class="modal-dialog modal-lg" style="top: 3%;">
                     <div class="modal-content w3-animate-zoom" style="width:65%">
                         <header class="w3-container modal-header">
-                            <span onclick="document.getElementById('edit_output').style.display='none'"
+                            <span onclick="closebutton('edit_output')"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                             <h3 id='modal_title'><?php echo $text['edit_event'];?></h3>
                         </header>
@@ -189,7 +207,7 @@
 
                         <div class="modal-footer justify-content-center">
                             <button id="" class="button-modal" onclick="edit_output_id()"><?php echo $text['save'];?></button>
-                            <button id="" class="button-modal" onclick="document.getElementById('edit_output').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
+                            <button id="" class="button-modal" onclick="closebutton('edit_output')" class="closebtn"><?php echo $text['close'];?></button>
                         </div>
                     </div>
                 </div>
@@ -200,7 +218,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content w3-animate-zoom" style="width: 60%;">
                         <header class="w3-container modal-header">
-                            <span onclick="document.getElementById('copy_output').style.display='none'"
+                            <span onclick="closebutton('copy_output')"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                             <h3 id='modal_title'><?php echo $text['copy_input'];?></h3>
                         </header>
@@ -243,13 +261,23 @@
 
                         <div class="modal-footer justify-content-center">
                             <button id="" class="button-modal" onclick="copy_output_id()"><?php echo $text['save'];?></button>
-                            <button id="" class="button-modal" onclick="document.getElementById('copy_output').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
+                            <button id="" class="button-modal" onclick="closebutton('copy_output')" class="closebtn"><?php echo $text['close'];?></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- 加载動畫 OP -->
+    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>--
+    <!-- 加载動畫 ED -->
+
+
 </div>
 
 
@@ -323,7 +351,7 @@ function crud_job_event(argument){
             //getLanguageMessage('language'); 
             return;
         }
-
+        document.querySelector(".main-content").classList.add("overlay-active");
         delete_output_id(job_id,del_output_val);
     }
 
@@ -363,8 +391,10 @@ function crud_job_event(argument){
     
         disableElements(filtered_array);
 
-
+        document.querySelector(".main-content").classList.add("overlay-active");
         document.getElementById('new_output').style.display='block';
+        
+
         var eventOption = document.getElementById('Event_Option');
         eventOption.addEventListener('change', function() {
             var selectedOptionId = parseInt(eventOption.options[eventOption.selectedIndex].value); // 轉換為整數
@@ -473,10 +503,10 @@ function crud_job_event(argument){
             
         }
 
-
-
-        get_output_info(job_id, output_event);
+        document.querySelector(".main-content").classList.add("overlay-active");
         document.getElementById('edit_output').style.display = 'block';
+        get_output_info(job_id, output_event);
+     
     }
 
     if(argument == 'copy' && job_id != '' && output_event != ''){
@@ -506,6 +536,7 @@ function crud_job_event(argument){
                 options[i].classList.add('disabled_input'); 
             }
         }
+        document.querySelector(".main-content").classList.add("overlay-active");
         document.getElementById('copy_output').style.display='block';
     }
 
@@ -573,7 +604,7 @@ function toggleElementsInRange(start, end, suffix, filtered_array = []) {
             const targetElement = document.getElementById(targetPin);
             if (targetElement) {
                 targetElement.disabled = true;
-                //console.log(`${targetPin} 已被禁用 (因為 filtered_array 包含 ${triggerPin})`);
+            
             }
         }
     });
@@ -690,52 +721,61 @@ function job_confirm(){
 
 //delete
 function delete_output_id(job_id,del_output_val){
-    if(job_id){
 
-        var language = getCookie('language');
-        if(language == "zh-cn"){
-            var text_info ='若设定已存在，将会取代原有设定';
-        }else if(language == "zh-tw"){
-            var text_info ='若設定已存在，將會取代原有設定';
-        }else{
-            var text_info ='If the job input already exists, it will replace the original setting';
-        }
+    var language = getCookie('language');
+    var text_info, title;
 
-        alertify.confirm( text_info, function (e) {
-            if (e) {
-                var to_job_id = document.getElementById("JobSelect1").value;
-                if(to_job_id){
-                    $.ajax({
-                        url: "?url=Outputs/delete_output",
-                        method: "POST",
-                        data: { 
-                            job_id: job_id,
-                            output_event: del_output_val,
-                        
-                        },
-                        success: function(response) {
+    if (language === "zh-cn") {
+        text_info = '你确定吗？';
+        title = '刪除任務';
+    } else if (language === "zh-tw") {
+        text_info = '你確定嗎？';
+        title = '刪除任務';
+    } else {
+        text_info = 'Are you sure?';
+        title = 'Delete Job';
+    }
 
-                            var responseData = JSON.parse(response);
-                            alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                                // 在刪除成功後執行 get_output_by_job_id
-                                updateEventSelectAndPins(responseData.old_output_pin);
-                                
-                                get_output_by_job_id(job_id);
+   // 如果 job_id 有值才進行操作
+    if (job_id) {
+        alertify.confirm(
+            title, // 標題
+            text_info, // 提示文字
+            function() {
+                //使用者選擇「是」後執行刪除動作
+                document.getElementById('spinner').style.display = 'block';
 
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("AJAX request failed:", status, error);
-                        }
-                    });   
-            
-                } 
-            }else {
-                // cancel
-            } 
-        });
-      
-    }   
+                $.ajax({
+                    url: "?url=Outputs/delete_output",
+                    method: "POST",
+                    data: { 
+                        job_id: job_id,
+                output_event: del_output_val,
+                    },
+                    success: function(response) {
+                        var responseData = JSON.parse(response);
+                        alertify.alert(responseData.res_type, responseData.res_msg);
+
+                        setTimeout(function() {
+                            alertify.closeAll(); // 關閉所有 alertify 彈窗
+                            updateEventSelectAndPins(responseData.old_input_pin); // 更新 pins
+                            get_output_by_job_id(job_id); 
+                            document.getElementById('spinner').style.display = 'none'; 
+                            document.querySelector(".main-content").classList.remove("overlay-active");
+                        }, 1000); 
+                    },
+                    error: function(xhr, status, error) {
+                        alertify.error("刪除失敗，請稍後再試！");
+                        document.getElementById('spinner').style.display = 'none';
+                    }
+                });
+            },
+            function() {
+                //使用者選擇「否」時不做任何事
+                alertify.message('已取消刪除');
+            }
+        ).set('labels', {ok:'YES', cancel:'NO'}); // 修改按鈕文字
+    }
 }
 
 function get_output_by_job_id(job_id){
@@ -751,10 +791,8 @@ function get_output_by_job_id(job_id){
             temp = data.temp;
             tempA = data.tempA;
 
-            console.log('temp:',temp);
-            console.log('tempA:',tempA);
-
-
+            //console.log('temp:',temp);
+            //console.log('tempA:',tempA);
             document.getElementById("output_jobid_select").innerHTML = job_outputlist;
             document.getElementById("JobSelect").style.display = 'none';
             document.getElementById("job_id").value = job_id;
@@ -813,6 +851,9 @@ function create_output_id() {
         var wave_on =  document.getElementById(time_ms).value;
 
         if (job_id) {
+
+            document.getElementById('spinner').style.display = 'block';
+
             $.ajax({
                 url: "?url=Outputs/create_output_event",
                 method: "POST",
@@ -823,13 +864,18 @@ function create_output_id() {
                     wave: wave,
                     wave_on: wave_on
                 },
-                success: function(response) {
-                    var responseData = JSON.parse(response);
-                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        get_output_by_job_id(job_id);
-                    });
-                    document.getElementById('new_output').style.display = 'none';
 
+                success: function(response) {
+
+                    document.getElementById('new_output').style.display = 'none';
+                    var responseData = JSON.parse(response);
+                    alertify.alert(responseData.res_type, responseData.res_msg);
+                    setTimeout(function() {
+                        alertify.closeAll(); 
+                        document.getElementById('spinner').style.display = 'none';
+                        document.querySelector(".main-content").classList.remove("overlay-active"); 
+                        get_output_by_job_id(job_id); 
+                    }, 1000); 
                 },
                 error: function(xhr, status, error) {
                     console.error("AJAX request failed:", status, error);
@@ -853,6 +899,9 @@ function edit_output_id(){
     var wave_on =  document.getElementById(time_ms).value;
 
     if(job_id){
+
+        document.getElementById('spinner').style.display = 'block';
+
         $.ajax({
             url: "?url=Outputs/edit_output_event",
             method: "POST",
@@ -866,15 +915,16 @@ function edit_output_id(){
             },
             success: function(response) {
                 
+                document.getElementById('edit_output').style.display='none';
                 var responseData = JSON.parse(response);
-                alertify.alert(responseData.res_type, responseData.res_msg, function() {
-
+                alertify.alert(responseData.res_type, responseData.res_msg);
+                setTimeout(function() {
+                    alertify.closeAll(); 
                     get_output_by_job_id(job_id);
                     updateEventSelectAndPins(responseData.old_output_pin);
-                });
-
-                document.getElementById('edit_output').style.display='none';
-                
+                    document.getElementById('spinner').style.display = 'none';
+                    document.querySelector(".main-content").classList.remove("overlay-active"); 
+                }, 1000);                  
             },
             error: function(xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -945,6 +995,9 @@ function copy_output_id(){
         if (e) {
             var to_job_id = document.getElementById("JobSelect1").value;
             if(to_job_id){
+
+                document.getElementById('spinner').style.display = 'block';
+
                 $.ajax({
                     url: "?url=Outputs/copy_output",
                     method: "POST",
@@ -954,12 +1007,16 @@ function copy_output_id(){
                     },
                     success: function(response) {
 
-                        var responseData = JSON.parse(response);
-                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                            get_output_by_job_id(job_id);
-                        });
-
                         document.getElementById('copy_output').style.display='none';
+                        var responseData = JSON.parse(response);
+                        alertify.alert(responseData.res_type, responseData.res_msg);
+                        setTimeout(function() {
+                            alertify.closeAll(); 
+                            get_output_by_job_id(job_id);
+                            document.getElementById('spinner').style.display = 'none';
+                            document.querySelector(".main-content").classList.remove("overlay-active"); 
+                        }, 1000);     
+                        
 
                     },
                     error: function(xhr, status, error) {

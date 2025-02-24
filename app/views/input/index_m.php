@@ -1,6 +1,24 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_input_m.css" type="text/css">
+<style>
+.overlay-active {
+    position: relative;
+    min-height: 150vh;
+}
 
+.overlay-active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 120%;
+    background-color: rgba(0, 0, 0, 0.3); /* semi-transparent black background */
+    z-index: 999; /* Ensure it overlays on top */
+}
+
+</style>   
 
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -133,7 +151,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content w3-animate-zoom" style="width: 90%">
                         <header class="w3-container modal-header">
-                            <span onclick="document.getElementById('newinput').style.display='none'"
+                            <span onclick="closebutton('newinput')"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                             <h3 id='modal_title'><?php echo $text['new_event'];?></h3>
                         </header>
@@ -194,7 +212,7 @@
 
                         <div class="modal-footer justify-content-center">
                             <button id="" class="button-modal" onclick="create_input_id()"><?php echo $text['save'];?></button>
-                            <button id="" class="button-modal" onclick="document.getElementById('newinput').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
+                            <button id="" class="button-modal" onclick="closebutton('newinput')" class="closebtn"><?php echo $text['close'];?></button>
                         </div>
                     </div>
                 </div>
@@ -206,7 +224,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content w3-animate-zoom" style="width: 90%">
                         <header class="w3-container modal-header">
-                            <span onclick="document.getElementById('edit_input').style.display='none'"
+                            <span onclick="closebutton('edit_input')"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                             <h3 id='modal_title'><?php echo $text['edit_event'];?></h3>
                         </header>
@@ -259,7 +277,7 @@
 
                         <div class="modal-footer justify-content-center">
                             <button id="" class="button-modal" onclick="edit_input_id()"><?php echo $text['save'];?></button>
-                            <button id="" class="button-modal" onclick="document.getElementById('edit_input').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
+                            <button id="" class="button-modal" onclick="closebutton('edit_input')" class="closebtn"><?php echo $text['close'];?></button>
                         </div>
                     </div>
                 </div>
@@ -270,7 +288,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content w3-animate-zoom" style="width: auto">
                         <header class="w3-container modal-header">
-                            <span onclick="document.getElementById('copyinput').style.display='none'"
+                            <span onclick="closebutton('copyinput')"
                                 class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                             <h3 id='modal_title'><?php echo $text['copy_input'];?></h3>
                         </header>
@@ -313,7 +331,7 @@
 
                         <div class="modal-footer justify-content-center">
                             <button id="" class="button-modal" onclick="copy_input_id()"><?php echo $text['save'];?></button>
-                            <button id="" class="button-modal" onclick="document.getElementById('copyinput').style.display='none'" class="closebtn"><?php echo $text['close'];?></button>
+                            <button id="" class="button-modal" onclick="closebutton('copyinput')" class="closebtn"><?php echo $text['close'];?></button>
                         </div>
                     </div>
                 </div>
@@ -442,10 +460,13 @@ function crud_job_event(argument){
 
 
         document.getElementById('newinput').style.display='block';
+        document.querySelector(".main-content").classList.add("overlay-active");
     } 
     
     if(argument == 'del' && job_id != '' && input_event != '' ){
+        document.querySelector(".main-content").classList.add("overlay-active");
         delete_input_id(job_id,input_event);
+        
     }
 
 
@@ -474,6 +495,7 @@ function crud_job_event(argument){
         }
         get_input_info(job_id,input_event);
         handleEventChange(input_event); 
+        document.querySelector(".main-content").classList.add("overlay-active");
         document.getElementById('edit_input').style.display='block';
        
     }
@@ -496,7 +518,7 @@ function crud_job_event(argument){
              
             }
         }
-
+        document.querySelector(".main-content").classList.add("overlay-active");
         document.getElementById('copyinput').style.display='block';
     }
 
@@ -682,18 +704,20 @@ function delete_input_id(job_id,input_event){
                             updateEventSelectAndPins(responseData.old_input_pin); // 更新 pins
                             get_input_by_job_id(job_id); // 重新取得輸入資訊
                             document.getElementById('spinner').style.display = 'none'; 
+                            document.querySelector(".main-content").classList.remove("overlay-active"); 
                         }, 1000); 
                     },
                     error: function(xhr, status, error) {
                         //console.error("AJAX request failed:", status, error);
                         alertify.error("刪除失敗，請稍後再試！");
+                        document.querySelector(".main-content").classList.remove("overlay-active"); 
                         document.getElementById('spinner').style.display = 'none';
                     }
                 });
             },
             function() {
                 //使用者選擇「否」時不做任何事
-                alertify.message('已取消刪除');
+                //alertify.message('已取消刪除');
             }
         ).set('labels', {ok:'YES', cancel:'NO'}); // 修改按鈕文字
     }
@@ -758,8 +782,10 @@ function create_input_id(){
                 alertify.alert(responseData.res_type, responseData.res_msg);
                 setTimeout(function() {
                     alertify.closeAll(); 
-                    get_input_by_job_id(job_id); 
+                    document.querySelector(".main-content").classList.remove("overlay-active"); 
                     document.getElementById('spinner').style.display = 'none'; 
+                    get_input_by_job_id(job_id); 
+                  
                 }, 1000); 
             },
             error: function(xhr, status, error) {
@@ -784,6 +810,8 @@ function copy_input_id(){
         if (e) {
             var to_job_id = document.getElementById("JobSelect1").value;
             if(to_job_id){
+                document.getElementById('spinner').style.display = 'block';
+
                 $.ajax({
                     url: "?url=Inputs/copy_input_event",
                     method: "POST",
@@ -796,6 +824,8 @@ function copy_input_id(){
                         document.getElementById('copyinput').style.display='none';
                         var responseData = JSON.parse(response);
                         alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            document.querySelector(".main-content").classList.remove("overlay-active"); 
+                            document.getElementById('spinner').style.display = 'none';
                             get_input_by_job_id(job_id);
                         });
 
@@ -1079,6 +1109,9 @@ function edit_input_id(){
     var input_seqid = 0;
 
     if(job_id){
+
+        document.getElementById('spinner').style.display = 'block';
+
         $.ajax({
             url: "?url=Inputs/edit_input_event",
             method: "POST",
@@ -1098,6 +1131,8 @@ function edit_input_id(){
                 alertify.alert(responseData.res_type, responseData.res_msg);
                 setTimeout(function() {
                     alertify.closeAll(); 
+                    document.querySelector(".main-content").classList.remove("overlay-active"); 
+                    document.getElementById('spinner').style.display = 'none';
                     get_input_by_job_id(job_id); 
                 }, 1000);  
             },

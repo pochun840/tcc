@@ -868,6 +868,70 @@ function collectPinValues(selector) {
 }
 
 //delete
+
+function delete_input_id(job_id,input_event){
+
+    var language = getCookie('language');
+    var text_info, title;
+
+    if (language === "zh-cn") {
+        text_info = '你确定吗？';
+        title = '刪除任務';
+    } else if (language === "zh-tw") {
+        text_info = '你確定嗎？';
+        title = '刪除任務';
+    } else {
+        text_info = 'Are you sure?';
+        title = 'Delete Job';
+    }
+
+    if (job_id) {
+        alertify.confirm(
+            title, // 標題
+            text_info, // 提示文字
+            function() {
+                //使用者選擇「是」後執行刪除動作
+                document.getElementById('spinner').style.display = 'block';
+
+               
+
+                $.ajax({
+                    url: "?url=Inputs/delete_input",
+                    method: "POST",
+                    data: { 
+                        job_id: job_id,
+                        input_event: input_event
+                    },
+                    success: function(response) {
+                        var responseData = JSON.parse(response);
+                        alertify.alert(responseData.res_type, responseData.res_msg);
+
+                        setTimeout(function() {
+                            alertify.closeAll(); // 關閉所有 alertify 彈窗
+                            updateEventSelectAndPins(responseData.old_input_pin); // 更新 pins
+                            get_input_by_job_id(job_id); // 重新取得輸入資訊
+                            document.getElementById('spinner').style.display = 'none'; 
+                            document.querySelector(".main-content").classList.remove("overlay-active"); 
+                        }, 1000); 
+                    },
+                    error: function(xhr, status, error) {
+                        //console.error("AJAX request failed:", status, error);
+                        alertify.error("刪除失敗，請稍後再試！");
+                        document.querySelector(".main-content").classList.remove("overlay-active"); 
+                        document.getElementById('spinner').style.display = 'none';
+                    }
+                });
+            },
+            function() {
+                //使用者選擇「否」時不做任何事
+                //alertify.message('已取消刪除');
+            }
+        ).set('labels', {ok:'YES', cancel:'NO'}); // 修改按鈕文字
+}
+
+
+
+
 function delete_input_id(job_id, input_event) {
     var language = getCookie('language');
     var text_info, title;
