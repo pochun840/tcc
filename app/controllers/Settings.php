@@ -301,10 +301,16 @@ class Settings extends Controller
         }
         
 
+
         if($input_check){
           $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
           if($res['count'] =="1"){
                 //UPDATE
+
+                /*echo "<pre>";
+                print_r($con_setting);
+                echo "</pre>";
+                die();*/
                 $res = $this->SettingModel->Controller_Setting($con_setting);
                 $result = array();
                 if($res){

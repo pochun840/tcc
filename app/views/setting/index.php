@@ -57,10 +57,16 @@
                     <div class="col-3 t1"><?php echo $text['system_language'];?>:</div>
                     <div class="col-3 t2">
                         <select class="form-select" id="select_language" name="select_language">
-                            <?php foreach($data['lang_arr'] as $k_lang =>$v_lang){?>
-                            <option value="<?php echo $k_lang;?>"  <?php echo $k_lang == $data['controller_info']['device_language'] ? 'selected' : ''; ?> ><?php echo $v_lang;?></option>
+                            <?php 
+                            foreach($data['lang_arr'] as $k_lang =>$v_lang) { 
+                                $selected = ($data['controller_info']['device_language'] ==$k_lang) ? 'selected' : '';
+                            ?>
+                                <option value="<?php echo $k_lang; ?>" <?php echo $selected; ?>>
+                                    <?php echo $v_lang; ?>
+                                </option>
                             <?php } ?>
                         </select>
+
                     </div>
                 </div>
                 
@@ -68,10 +74,16 @@
                     <div class="col-3 t1"><?php echo $text['torque_unit'];?>:</div>
                     <div class="col-3 t2">
                         <select class="form-select" id="select_torque_unit" name="select_torque_unit">
-                            <?php foreach($data['unit_arr'] as $k_unit =>$v_unit){?>
-                            <option value="<?php echo  $k_unit;?>"  <?php echo $k_lang == $data['controller_info']['torque_unit'] ? 'selected' : ''; ?> ><?php echo $v_unit;?></option>
+                            <?php 
+                            foreach($data['unit_arr'] as $k_unit => $v_unit) { 
+                                $selected = ($data['controller_info']['torque_unit'] == $k_unit) ? 'selected' : '';
+                            ?>
+                                <option value="<?php echo $k_unit; ?>" <?php echo $selected; ?>>
+                                    <?php echo $v_unit; ?>
+                                </option>
                             <?php } ?>
                         </select>
+
                     </div>
                 </div>    
 
@@ -398,7 +410,14 @@ window.onload = function() {
         document.getElementById('Barcode_Setting').style.display = "block";
         document.getElementById('System_Setting').style.display = "none";
         document.getElementById('Controller_Setting').style.display = "none";
+        
     }
+
+    //
+    var tourque_unit = '<?php echo $data['controller_info']['torque_unit']?>'; // 3
+
+    
+
 };
 function edit_password(){
     var new_password = document.getElementById('new_password').value;
