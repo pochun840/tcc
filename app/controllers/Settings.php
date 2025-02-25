@@ -293,6 +293,12 @@ class Settings extends Controller
         }else{ 
             $input_check = false; 
         }
+        //torque_unit
+        if(!empty($_POST['torque_unit']) && isset($_POST['torque_unit']) ){
+            $con_setting['torque_unit'] = $_POST['torque_unit'];
+        }else{
+            $input_check = false; 
+        }
         
 
         if($input_check){

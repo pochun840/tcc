@@ -202,14 +202,16 @@ class Setting{
         SET device_name = :device_name,
             device_language = :language_val,
             batch = :batch,
-            buzzer_mode = :buzzer_mode
+            buzzer_mode = :buzzer_mode,
+            torque_unit = :torque_unit 
         WHERE device_id = :device_id ";
         
         $statement = $this->db_iDas_device->prepare($sql);
         $statement->bindValue(':device_name', $con_setting['control_name']);
         $statement->bindValue(':language_val', $con_setting['lang_val']);
         $statement->bindValue(':batch', $con_setting['batch_val']);
-        $statement->bindValue(':buzzer_mode', $con_setting['buzzer_val'] );
+        $statement->bindValue(':buzzer_mode', $con_setting['buzzer_val']);
+        $statement->bindValue(':torque_unit', $con_setting['torque_unit']);
         $statement->bindValue(':device_id', $con_setting['control_id'] );
 
         $results = $statement->execute();

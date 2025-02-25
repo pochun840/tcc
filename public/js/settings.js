@@ -41,6 +41,8 @@ function cc_save(){
     var selectedValue = selectElement.value;
     var batch_val = document.querySelector('input[name="batch-mode-option"]:checked').value;
     var buzzer_val = document.querySelector('input[name="buzzer-option"]:checked').value;
+    var selectElement1 = document.getElementById('select_torque_unit');
+    var torque_unit = selectElement1.value;
 
     if(control_id){
         document.querySelector(".main-content").classList.add("overlay-active");
@@ -54,7 +56,8 @@ function cc_save(){
                 control_name: control_name,
                 lang_val: selectedValue,
                 batch_val:batch_val,
-                buzzer_val:buzzer_val
+                buzzer_val:buzzer_val,
+                torque_unit:torque_unit
 
             },
             success: function(response) {

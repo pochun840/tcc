@@ -45,14 +45,14 @@
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['controller_setting'];?></div>
                 <div class="row t2">
                     <div class="col-5 t1"><?php echo $text['system_id'];?>:</div>
-                    <div class="col-4 t2">
+                    <div class="col-5 t2">
                         <input id="control_id" name="control_id" type="number" max=250 min=1 maxlength="3" value="<?php echo $data['controller_info']['device_id'];?>" class="t3 form-control"  required>
                     </div>
                 </div>    
                 <div class="row t2">
                     <div class="col-5 t1"><?php echo $text['system_name'];?>:</div>
                     <div class="col-5 t2">
-                        <input id="control_name" name="control_name" maxlength="14" type="text" value="<?php echo $data['controller_info']['device_name'];?>"  class="t3 form-control"  required>
+                        <input id="control_name" name="control_name" maxlength="" type="text" value="<?php echo $data['controller_info']['device_name'];?>"  class="t3 form-control"  required>
                     </div>
                 </div>    
                 <div class="row t2">
@@ -65,6 +65,18 @@
                         </select>
                     </div>
                 </div>    
+
+                <div class="row t2">
+                    <div class="col-5 t1"><?php echo $text['torque_unit'];?>:</div>
+                    <div class="col-5 t2">
+                        <select class="form-select" id="select_torque_unit" name="select_torque_unit">
+                            <?php foreach($data['unit_arr'] as $k_unit =>$v_unit){?>
+                            <option value="<?php echo  $k_unit;?>"  <?php echo $k_lang == $data['controller_info']['torque_unit'] ? 'selected' : ''; ?> ><?php echo $v_unit;?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>  
+
                 <div class="row t2">
                     <div class="col-5 t1"><?php echo $text['system_batch'];?>:</div>
                     <div class="col t2" >
