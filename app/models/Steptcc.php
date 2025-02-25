@@ -71,8 +71,6 @@ class Steptcc{
     }
 
 
-
-
     #透過 job_id 及 seq_id 及 step_id 刪除對應的資料
     public function delete_step_id($jobid,$seqid,$stepid){
 
@@ -218,7 +216,7 @@ class Steptcc{
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
             // 如果找到步驟資料
-            if ($result) {
+            if ($result) {-
                 $new_val = 'New_Value' . ($k_s + 1);
                 
                 // 更新步驟的 step_id
@@ -236,6 +234,17 @@ class Steptcc{
         return true;
     }
 
+
+    #輸入tools_id  及 最佳化
+    public function check_seq_opt($tools_id,$seq_opt,$torque){
+
+        $tools_arr =array();
+        if($tools_id == 4 && $seq_opt == 1){
+             
+
+        }
+
+    }
 
 
     

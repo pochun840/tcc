@@ -885,9 +885,16 @@ class Settings extends Controller
       
     }
 
-    public function iDas_Update()
-    {
-        $filename = 'update_package.pack';
+    public function iDas_Update(){
+
+
+        if(empty($_FILES)){
+            echo json_encode(["message" => 'no file']);
+            exit();
+        }
+
+         
+        /*$filename = 'update_package.pack';
         $file_location = '';
         $message = '';
         if( PHP_OS_FAMILY == 'Linux'){
@@ -957,7 +964,7 @@ class Settings extends Controller
             $message = 'wrong file';
         }
 
-        echo json_encode(["message" => $message]);
+        echo json_encode(["message" => $message]);*/
     }
 
     public function Extract_File($file_location,$filename)

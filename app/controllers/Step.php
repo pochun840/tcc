@@ -11,6 +11,7 @@ class Step extends Controller
         $this->stepModel = $this->model('Steptcc');
         $this->sequenceModel = $this->model('Sequence');
         $this->SettingModel = $this->model('Setting');
+
         
     }
 
@@ -73,7 +74,18 @@ class Step extends Controller
             $check_step_torque = '';   
             $count_records = ''; 
         }
-    
+
+        #取得tools的型號
+        $tools = $this->ToolModel->GetToolInfo();
+        if(!empty($tools)){
+            $tools_id = (int)$tools['SID5'];
+        }
+
+        #用job_id && seq_id查詢是否有使用最佳化 
+        $seq_data = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
+        if(!empty($seq_data)){
+            $seq_opt = (int)$seq_data[0]['seq_opt'];
+        }
 
         $data = array(
             'isMobile' => $isMobile,
@@ -94,11 +106,11 @@ class Step extends Controller
             'check' => $check,
             'step_count' => $step_count,
             'tools' => $tools,
-            'count_records' => $count_records
+            'count_records' => $count_records,
+            'tools_id' => $tools_id,
+            'seq_opt'  => $seq_opt
 
         );
-
-
 
         if($isMobile){
             $this->view('step/index_m', $data);
@@ -141,6 +153,9 @@ class Step extends Controller
             #同一個step 只能有一個Target Torque
             //$check = $this->stepModel->check_step_target($jobid,$seqid);
             //$check = intval($check[0]['count_records']);
+
+
+            #
 
 
             if($target_opt  == 0 && $target_opt  == 1){

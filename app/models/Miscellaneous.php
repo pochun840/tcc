@@ -119,7 +119,6 @@ class Miscellaneous{
             );
         }
 
-
         if($mode == "status"){
             $array = array(
                 0 => 'INIT', 
@@ -160,7 +159,9 @@ class Miscellaneous{
                 0 => 'BS',
                 1 => 'BS (free)',
             );    
+            
         }
+
 
         return $array;
 
@@ -173,7 +174,7 @@ class Miscellaneous{
                 if (strlen($jobName) > 12) {
                     return  false;
                 } else {
-                    return true;
+                    return true; 
                 }
             } else {
                 return false;
@@ -375,10 +376,7 @@ class Miscellaneous{
 
         return $convertedValues;
 
-        
-
     }
-
 
 
     public function lang_load(){
