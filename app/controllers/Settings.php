@@ -251,8 +251,14 @@ class Settings extends Controller
         return $decimalValue;
     }
 
-    public function control_setting()
-    {
+    public function control_setting(){
+
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
         $input_check = true;
 
         if( !empty($_POST['control_id']) && isset($_POST['control_id'])  ){
@@ -292,17 +298,19 @@ class Settings extends Controller
         if($input_check){
           $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
           if($res['count'] =="1"){
-            //UPDATE
-            $result = $this->SettingModel->Controller_Setting($con_setting);
-            if($result){
-                $res_msg = 'edit:'. $con_setting['control_id'].'success';
-            }else{
-                $res_msg = 'edit:'. $con_setting['control_id'].'fail';
-            }
-            echo $res_msg;
-
-          }else{
-            //INSERT 
+                //UPDATE
+                $res = $this->SettingModel->Controller_Setting($con_setting);
+                $result = array();
+                if($res){
+                    $res_type = 'Succes';
+                    $res_msg = $text['Edit']." : ". $con_setting['control_id']."  ".$text['success'];
+                    $this->MiscellaneousModel->generateErrorResponse('Succes', $res_msg );
+                }else{
+                    $res_type = 'Error';
+                    $res_msg = $text['Edit']." : ". $con_setting['control_id']."  ".$text['fail'];
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
+                }
+                
           }
 
         }    

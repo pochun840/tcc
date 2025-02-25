@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function cc_save(){
+
+
     var control_id = document.getElementById('control_id').value;
     if (isNaN(control_id) || control_id < 1 || control_id > 250) {
         return false;
@@ -41,6 +43,9 @@ function cc_save(){
     var buzzer_val = document.querySelector('input[name="buzzer-option"]:checked').value;
 
     if(control_id){
+        document.querySelector(".main-content").classList.add("overlay-active");
+        document.getElementById('spinner').style.display = 'block';
+
         $.ajax({
             url: "?url=Settings/control_setting",
             method: "POST",
@@ -53,8 +58,16 @@ function cc_save(){
 
             },
             success: function(response) {
-                //history.go(0);
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg);
+                
+                setTimeout(function() {
+                    alertify.closeAll(); 
+                    document.getElementById('spinner').style.display = 'none';
+                    document.querySelector(".main-content").classList.remove("overlay-active"); 
+                }, 3000); 
             },
+            
             error: function(xhr, status, error) {
                 
             }
@@ -391,6 +404,7 @@ function update_barcode(){
                 // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                 setTimeout(function() {
                     // 隱藏 'copyjob' 和 'spinner' 加載動畫
+                    document.querySelector(".main-content").classList.remove("overlay-active");
                     document.getElementById('spinner').style.display = 'none';  
 
                     // 顯示 alertify 彈跳視窗
