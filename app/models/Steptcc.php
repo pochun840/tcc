@@ -142,7 +142,8 @@ class Steptcc{
     
         $results = $statement->execute();
         if (!$results) {
-            echo "执行错误: " . implode(", ", $statement->errorInfo());
+            //echo "执行错误: " . implode(", ", $statement->errorInfo());
+            //echo die();
         }
     
         return $results;

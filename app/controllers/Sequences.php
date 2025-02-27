@@ -71,7 +71,7 @@ class Sequences extends Controller
             $seq_k_val = isset($_POST['seq_k_val']) ? intval($_POST['seq_k_val']) : 100;
             $seq_tr = isset($_POST['seq_tr']) ? intval($_POST['seq_tr']) : 1;
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
-            $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
+            $seq_ok_stop = isset($_POST['seq_ok_stop']) ? intval($_POST['seq_ok_stop']) : 0;
             $seq_opt = isset($_POST['seq_opt']) ? intval($_POST['seq_opt']) : 0;
             $seq_ns = isset($_POST['seq_ns']) ? intval($_POST['seq_ns']) : 0;
             $seq_ofs = isset($_POST['seq_ofs']) ? intval($_POST['seq_ofs']) : 0;  
@@ -112,11 +112,14 @@ class Sequences extends Controller
                 'seq_tr' => $seq_tr,
                 'seq_ns' => $seq_ns,
                 'seq_ok'  => $seq_ok,
-                'stop_seq_ok' => $stop_seq_ok, 
+                'seq_ok_stop' => $seq_ok_stop, 
                 'seq_opt' => $seq_opt,
                 'seq_k_val' => $seq_k_val,
                 'seq_ofs' => $seq_ofs,
             );
+
+
+     
 
            
             $mode = "create";
@@ -202,7 +205,7 @@ class Sequences extends Controller
             $seq_tr = isset($_POST['seq_tr']) ? intval($_POST['seq_tr']) : 1;
             $seq_ns = isset($_POST['seq_ns']) ? intval($_POST['seq_ns']) : 0;
             $seq_ok = isset($_POST['seq_ok']) ? intval($_POST['seq_ok']) : 0;
-            $stop_seq_ok = isset($_POST['stop_seq_ok']) ? intval($_POST['stop_seq_ok']) : 0;
+            $seq_ok_stop = isset($_POST['seq_ok_stop']) ? intval($_POST['seq_ok_stop']) : 0;
             $seq_opt = isset($_POST['seq_opt']) ? intval($_POST['seq_opt']) : 0;
             $seq_k_val = isset($_POST['seq_k_val']) ? floatval($_POST['seq_k_val']) : 100;
             $seq_ofs = isset($_POST['seq_ofs']) ? intval($_POST['seq_ofs']) : 0;  
@@ -247,7 +250,7 @@ class Sequences extends Controller
                 'seq_tr' => $seq_tr,
                 'seq_ns' => $seq_ns,
                 'seq_ok'  => $seq_ok,
-                'stop_seq_ok' =>$stop_seq_ok,
+                'seq_ok_stop' =>$seq_ok_stop,
                 'seq_opt' => $seq_opt,
                 'seq_k_val' => $seq_k_val,
                 'seq_ofs' => $seq_ofs,
@@ -346,7 +349,7 @@ class Sequences extends Controller
                 $new_temp_seq[$kk]['seq_tr'] = $vv['seq_tr'];
                 $new_temp_seq[$kk]['seq_ns'] = $vv['seq_ns']; 
                 $new_temp_seq[$kk]['seq_ok'] = $vv['seq_ok']; 
-                $new_temp_seq[$kk]['stop_seq_ok'] = $vv['stop_seq_ok']; 
+                $new_temp_seq[$kk]['seq_ok_stop'] = $vv['seq_ok_stop']; 
                 $new_temp_seq[$kk]['seq_opt'] = $vv['seq_opt']; 
                 $new_temp_seq[$kk]['seq_k_val'] = $vv['seq_k_val']; 
                 $new_temp_seq[$kk]['seq_ofs'] = $vv['seq_ofs'];

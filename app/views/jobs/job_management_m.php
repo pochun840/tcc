@@ -137,12 +137,12 @@
                             <div class="col t2" >
 
                                 <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="stop_job_ok" id="stop_job_ok_off" value="0" >
+            					  <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_off" value="0" >
             					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
 
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="stop_job_ok" id="stop_job_ok_ok" value="1">
+            					  <input class="form-check-input" type="radio" name="job_ok_stop" id="sjob_ok_stop_ok" value="1">
             					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
                             </div>
@@ -239,12 +239,12 @@
                             <div class="col t2" >
 
                                 <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_stop_job_ok" id="stop_job_ok_off" value="0" >
+            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="job_ok_stop_off" value="0" >
             					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
 
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_stop_job_ok" id="stop_job_ok_ok" value="1">
+            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="job_ok_stop_ok" value="1">
             					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
                             </div>
@@ -526,8 +526,8 @@ function savejob() {
     var jobElement = document.querySelector('input[name="job_ok"]:checked');
     var job_ok_val = jobElement ? jobElement.value : null;
 
-    var stopjobokElement = document.querySelector('input[name="stop_job_ok"]:checked');
-    var stop_job_ok_val = stopjobokElement ? stopjobokElement .value : null;
+    var stopjobokElement = document.querySelector('input[name="job_ok_stop"]:checked');
+    var job_ok_stop_val = stopjobokElement ? stopjobokElement .value : null;
 
      //驗證
     let check = input_check_savejob();
@@ -546,7 +546,7 @@ function savejob() {
                 rev_force_val: rev_force_val,
                 direction_val: direction_val, //起子方向
                 job_ok_val: job_ok_val,
-                stop_job_ok_val:stop_job_ok_val
+                job_ok_stop_val:job_ok_stop_val
             },
             success: function(response) {
 

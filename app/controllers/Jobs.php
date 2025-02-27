@@ -74,7 +74,7 @@ class Jobs extends Controller
                 'rev_speed' => $_POST['rev_speed_val'],
                 'rev_direction' => $_POST['direction_val'],
                 'job_ok' => $_POST['job_ok_val'],
-                'stop_job_ok' => $_POST['stop_job_ok_val']
+                'job_ok_stop' => $_POST['job_ok_stop_val']
             );
 
             $resultName  = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
@@ -131,7 +131,7 @@ class Jobs extends Controller
                 'rev_speed' => $_POST['speedvalue'],
                 'rev_direction' => $_POST['directionValue'],
                 'job_ok' => $_POST['jobokValue'],
-                'stop_job_ok' => $_POST['stopjobValue']
+                'job_ok_stop' => $_POST['stopjobValue']
 
             );
 
@@ -260,7 +260,7 @@ class Jobs extends Controller
                         'rev_speed' => $old_res['rev_speed'],  
                         'rev_force' => $old_res['rev_force'],  
                         'job_ok' =>$old_res['job_ok'],
-                        'stop_job_ok' => $old_res['stop_job_ok']
+                        'job_ok_stop' => $old_res['job_ok_stop']
 
                     );
                     $res = $this->jobModel->create_job($jobdata);
@@ -279,7 +279,7 @@ class Jobs extends Controller
                             $new_temp_seq[$key]['seq_tr'] = $val['seq_tr'];
                             $new_temp_seq[$key]['seq_ns'] = $val['seq_ns']; 
                             $new_temp_seq[$key]['seq_ok'] = $val['seq_ok']; 
-                            $new_temp_seq[$key]['stop_seq_ok'] = $val['stop_seq_ok']; 
+                            $new_temp_seq[$key]['seq_ok_stop'] = $val['seq_ok_stop']; 
                             $new_temp_seq[$key]['seq_opt'] = $val['seq_opt']; 
                             $new_temp_seq[$key]['seq_k_val'] = $val['seq_k_val']; 
                             $new_temp_seq[$key]['seq_ofs'] = $val['seq_ofs'];

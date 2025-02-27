@@ -163,13 +163,13 @@
                                     <div class="col t2" >
 
                                         <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="stop_seq_ok" id="stop_seq_ok_off" value="0" >
-                                        <label class="form-check-label" for="stop_seq_ok_off"> <?php  echo $text['OFF_text']; ?></label>
+                                        <input class="form-check-input" type="radio" name="seq_ok_stop" id="seq_ok_stop_off" value="0" >
+                                        <label class="form-check-label" for="seq_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
                                         </div>
 
                                         <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="stop_seq_ok" id="stop_seq_ok_ok" value="1">
-                                        <label class="form-check-label" for="stop_seq_ok_ok"><?php  echo $text['ON_text']; ?></label>
+                                        <input class="form-check-input" type="radio" name="seq_ok_stop" id="seq_ok_stop_ok" value="1">
+                                        <label class="form-check-label" for="seq_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
                                         </div>
                                     </div>
                                 </div>
@@ -289,13 +289,13 @@
                                     <div class="col t2" >
 
                                         <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="edit_stop_seq_ok" id="stop_seq_ok_off" value="0" >
-                                        <label class="form-check-label" for="stop_seq_ok_off"> <?php  echo $text['OFF_text']; ?></label>
+                                        <input class="form-check-input" type="radio" name="edit_seq_ok_stop" id="seq_ok_stop_off" value="0" >
+                                        <label class="form-check-label" for="seq_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
                                         </div>
 
                                         <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="edit_stop_seq_ok" id="stop_seq_ok_ok" value="1">
-                                        <label class="form-check-label" for="stop_seq_ok_ok"><?php  echo $text['ON_text']; ?></label>
+                                        <input class="form-check-input" type="radio" name="edit_seq_ok_stop" id="seq_ok_stop_ok" value="1">
+                                        <label class="form-check-label" for="seq_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
                                         </div>
                                     </div>
                                 </div>
@@ -657,8 +657,8 @@ function saveseq(){
     var seqElement = document.querySelector('input[name="seq_ok"]:checked');
     var seq_ok = seqElement ? seqElement.value : null;
 
-    var seq_stop_Element = document.querySelector('input[name="stop_seq_ok"]:checked');
-    var stop_seq_ok = seq_stop_Element ? seq_stop_Element.value : null;
+    var seq_stop_Element = document.querySelector('input[name="seq_ok_stop"]:checked');
+    var seq_ok_stop = seq_stop_Element ? seq_stop_Element.value : null;
 
     var opt_val = getSelectedValue('opt_option', null);
     var seq_k_val = document.getElementById("seq_k_val").value;
@@ -678,7 +678,7 @@ function saveseq(){
                 seq_tr: seq_tr,
                 seq_ns: seq_ns,
                 seq_ok:seq_ok,
-                stop_seq_ok:stop_seq_ok,
+                seq_ok_stop:seq_ok_stop,
                 opt_val: opt_val,
                 seq_k_val: seq_k_val,
                 seq_ofs: seq_ofs
@@ -742,7 +742,7 @@ function edit_seq(seqid) {
                 
                 var [, opt] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ok] = cleanString.match(/\[seq_ok]\s*=>\s*([^ ]+)/) || [, null];
-                var [, stop_seq_ok] = cleanString.match(/\[stop_seq_ok]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seq_ok_stop] = cleanString.match(/\[seq_ok_stop]\s*=>\s*([^ ]+)/) || [, null];
                 var [, opt_val] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
                
    
@@ -759,8 +759,8 @@ function edit_seq(seqid) {
                 var radioButtons_seq = document.getElementsByName("edit_seq_ok");
                 setRadioButton_value(radioButtons_seq, seq_ok);
 
-                var radioButtons_stop_seq = document.getElementsByName("edit_stop_seq_ok");
-                setRadioButton_value(radioButtons_stop_seq, stop_seq_ok);
+                var radioButtons_stop_seq = document.getElementsByName("edit_seq_ok_stop");
+                setRadioButton_value(radioButtons_stop_seq, seq_ok_stop);
 
 
                 var radioButtons_2 = document.getElementsByName("edit_opt_option");
@@ -781,7 +781,7 @@ function edit_seq_save(){
     var seq_name = document.getElementById("edit_seq_name").value;
     var seq_tr = document.getElementById("edit_seq_tr").value;
     var seq_ok = document.querySelector('input[name="edit_seq_ok"]:checked').value;
-    var stop_seq_ok = document.querySelector('input[name="edit_stop_seq_ok"]:checked').value;
+    var seq_ok_stop = document.querySelector('input[name="edit_seq_ok_stop"]:checked').value;
     var seq_k_val = document.getElementById("edit_seq_k_val").value;
     var seq_ofs = document.getElementById("edit_seq_ofs").value;
     var seq_ns = document.getElementById('edit_seq_ns').value;
@@ -803,7 +803,7 @@ function edit_seq_save(){
                 seq_name: seq_name,
                 seq_tr: seq_tr,
                 seq_ok:seq_ok,
-                stop_seq_ok:stop_seq_ok,
+                seq_ok_stop:seq_ok_stop,
                 seq_k_vale: seq_k_val,
                 seq_ofs: seq_ofs,
                 seq_ns: seq_ns,

@@ -5,17 +5,13 @@ class Admin{
     private $db_data;//devdb tool
     private $dbh;
     private $db_iDas;//iDas db
+    private $db_iDas_login;
 
     // 在建構子將 Database 物件實例化
-    public function __construct()
-    {
-        $this->db = new Database;
-        $this->db = $this->db->getDb();
+    public function __construct(){
 
         $this->db_data = new Database;
         $this->db_data = $this->db_data->getDb_data();
-
-        $this->dbh = new Database;
 
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();

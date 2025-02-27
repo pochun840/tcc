@@ -893,8 +893,11 @@ class Settings extends Controller
             exit();
         }
 
+
+        //var_dump($_FILES);die();
+
          
-        /*$filename = 'update_package.pack';
+        $filename = 'tcc_idas.pack';
         $file_location = '';
         $message = '';
         if( PHP_OS_FAMILY == 'Linux'){
@@ -920,6 +923,17 @@ class Settings extends Controller
 
         $extract_result = $this->Extract_File($file_location,$filename);
         $file_path = $file_location.'package_temp/package/verify';
+
+
+        var_dump($file_location);
+        echo "<br>";
+        var_dump($filename);
+        echo "<br>";
+        var_dump($extract_result);
+        echo "<br>";
+        var_dump($file_path);
+        die();
+
         
         if (file_exists($file_path) && $extract_result) {
             $str = file_get_contents($file_path); //將整個檔案內容讀入到一個字串中
@@ -933,22 +947,28 @@ class Settings extends Controller
 
             $current_device_info = $this->SettingModel->get_update_info();
 
-            //gtcs與gtcs db版本與更新包相符才會將檔案升級
+            //tcc與tcc db版本與更新包相符才會將檔案升級
             if( $match_gtcs_version == $current_device_info['device_version'] && $match_gtcs_db_version == $current_device_info['tcscondb_version'] ){
                 if( PHP_OS_FAMILY == 'Linux'){
-                    $destination = '/var/www/html/tcc/';
+                    $destination = '/var/www/html/tccidas/';
                 }else{
-                    $destination = $file_location.'/tcc';
+                    $destination = $file_location.'/tccidas';
                 }
-                exec("sudo chmod 777 -R /var/www/html/tcc");
+                exec("sudo chmod 777 -R /var/www/html/tccidas");
+
+
+                echo $file_location.'/package_temp/package/das';die();
 
                 $this->copyFolder($file_location.'/package_temp/package/das',$destination); //複製資料夾
+                //sleep(1);
+                //exec("sync");//強制將ram寫回硬碟，避免控制器馬上關機時會遺失資料
+                //sleep(1);
                 
                 //update current idas version
                 $this->SettingModel->update_idas_vesrion($package_version);
                 $this->SettingModel->update_idas_match_gtcs_app_version($match_gtcs_version);
                 //update file permissions
-                exec("sudo chmod 777 -R /var/www/html/das");
+                exec("sudo chmod 777 -R /var/www/html/tccidas");
 
             }else{
                 $message = 'version not match';
@@ -964,7 +984,7 @@ class Settings extends Controller
             $message = 'wrong file';
         }
 
-        echo json_encode(["message" => $message]);*/
+        echo json_encode(["message" => $message]);
     }
 
     public function Extract_File($file_location,$filename)

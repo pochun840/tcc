@@ -1,24 +1,18 @@
 <?php
 
 class Setting{
-    //private $db;//condb control box
-    //private $db_dev;//devdb tool
-    private $db_data;//devdb tool
-    //private $db_das;//devdb tool
+
     private $db_iDas;
     private $db_iDas_device;
-    private $dbh;
 
     // 在建構子將 Database 物件實例化
-    public function __construct()
-    {
+    public function __construct(){
+
         $this->db_iDas_device = new Database;
         $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
 
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
-
-        $this->dbh = new Database;
 
     }
 

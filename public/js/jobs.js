@@ -96,7 +96,7 @@ function create_job() {
     document.getElementById('rev_force').value = 50;
     document.getElementById('rev_direction_CCW').checked = true;
     document.getElementById('job_ok').checked = true;
-    document.getElementById('stop_job_ok_off').checked = true;
+    document.getElementById('job_ok_stop_off').checked = true;
 }
 
 function copy_job(jobid){
@@ -112,7 +112,7 @@ function updatejob(){
     var forcevalue = document.getElementById("edit_rev_force").value;
     var directionValue = document.querySelector('input[name="edit_direction"]:checked').value;
     var jobokValue = document.querySelector('input[name="edit_job_ok"]:checked').value;
-    var stopjobValue = document.querySelector('input[name="edit_stop_job_ok"]:checked').value;
+    var stopjobValue = document.querySelector('input[name="edit_job_ok_stop"]:checked').value;
 
     //驗證
     let check = input_check_editjob();
@@ -190,7 +190,7 @@ function edit_job(jobid) {
                 var [, rev_force] = cleanString.match(/\[rev_force]\s*=>\s*([^ ]+)/) || [, null];
                 var [, rev_speed] = cleanString.match(/\[rev_speed]\s*=>\s*([^ ]+)/) || [, null];
                 var [, job_ok] = cleanString.match(/\[job_ok]\s*=>\s*([^ ]+)/) || [, null];
-                var [, stop_job_ok] = cleanString.match(/\[stop_job_ok]\s*=>\s*([^ ]+)/) || [, null];
+                var [, job_ok_stop] = cleanString.match(/\[job_ok_stop]\s*=>\s*([^ ]+)/) || [, null];
           
                 document.getElementById('editjob').style.display = 'block';
 
@@ -207,8 +207,8 @@ function edit_job(jobid) {
                 var radioButtons_job = document.getElementsByName("edit_job_ok");
                 setRadioButtonValue(radioButtons_job, job_ok);
 
-                var radioButtons_stop_job = document.getElementsByName("edit_stop_job_ok");
-                setRadioButtonValue(radioButtons_stop_job, stop_job_ok);
+                var radioButtons_stop_job = document.getElementsByName("edit_job_ok_stop");
+                setRadioButtonValue(radioButtons_stop_job, job_ok_stop);
               
               
             },

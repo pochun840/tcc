@@ -20,44 +20,63 @@ class Database
         // 實例化 PDO
         // 為避免控制器與iDas同時寫入sqlite3導致 db lock，iDas先將db複製出來，最後再透過call modbus的方式去更新db
         // 1.將DB複製一份到ramdisk根目錄，名稱調整為iDas-tcscon.db與iDas-tcsdev.db
-        $this->iDasDB_Initail();
 
 
         // 透過 PHP_OS_FAMILY 判斷，目前執行的系統，決定要採用的DB路徑
+        
         $Year = date("Y");// data db 用西元年命名
         $data_db_name = "data".$Year.".db";
         if( PHP_OS_FAMILY == 'Linux'){
+            if(file_exists('sqlite:/var/www/html/database/tcscon.db') ){
+                $source = '/var/www/html/database/tcscon.db';
+                $destination = '/var/www/html/database/idas_data.db';
+                copy($source, $destination);
+                $this->db_iDas = new PDO('sqlite:' . $destination);
+            }
 
-            $this->db_iDas = new PDO('sqlite:/var/www/html/database/idas_data.db'); 
             $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/das.db'); 
             $this->db_iDas_device = new PDO('sqlite:/var/www/html/database/data_device.db');
             $this->db_tools = new PDO('sqlite:/var/www/html/database/tccdev.db');
 
             if( file_exists('/var/www/html/database/'.$data_db_name) ){
                 $this->db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); 
-            }else{
-                $this->db_data = new PDO('sqlite:/var/www/html/database/data.db'); 
             }
+
+            if (!file_exists('/var/www/html/database/idas_data.db')) {
+                $source = '/var/www/html/database/tcscon.db';
+                $destination = '/var/www/html/database/idas_data.db';
+                copy($source, $destination);
+                $this->db_iDas = new PDO('sqlite:' . $destination);
+            } else {
+                $this->db_iDas = new PDO('sqlite:/var/www/html/database/idas_data.db');
+            }
+
             
         }else{
             $this->db_con = new PDO('sqlite:../idas_data.db'); 
             if(file_exists('../'.$data_db_name)){
                 $this->db_data = new PDO('sqlite:../'.$data_db_name); 
-            }else{
-                $this->db_data = new PDO('sqlite:../idas_data.db'); 
             }
-            $this->db_iDas = new PDO('sqlite:../idas_data.db'); 
+
+            if (!file_exists('../idas_data.db')) {
+                $source = '../tcscon.db';
+                $destination = '../idas_data.db';
+                copy($source, $destination);
+                $this->db_iDas = new PDO('sqlite:' . $destination);
+            } else {
+                $this->db_iDas = new PDO('sqlite:../idas_data.db');
+            }
+
             $this->db_iDas_login = new PDO('sqlite:../das.db'); 
             $this->db_iDas_device = new PDO('sqlite:../data_device.db'); 
-            $this->db_tools = new PDO('sqlite:../tccdev.db');
-            //$this->db_iDas_device = new PDO('sqlite:../data.db'); 
+            $this->db_tools = new PDO('sqlite:../tccdev.db'); 
 
         }
-        //$this->db_con->exec('set names utf-8'); 
-        //$this->db_data->exec('set names utf-8'); 
+
         $this->db_iDas->exec('set names utf-8'); 
         $this->db_iDas_login->exec('set names utf-8'); 
         $this->db_iDas_device->exec('set names utf-8'); 
+        $this->db_tools->exec('set names utf-8'); 
 
     }
 
@@ -108,26 +127,6 @@ class Database
         }
     }
 
-    private function iDasDB_Initail()
-    {
-        if( PHP_OS_FAMILY == 'Linux'){
-            $source = "/home/kls/tcc/resource/db_emmc/data.db";
-            $destination = "/home/kls/tcc/resource/db_emmc/iDas-data.db";
-            $source1 = "/home/kls/tcc/resource/db_emmc/data.db";
-            $destination1 = "/home/kls/tcc/resource/db_emmc/iDas-data.db";
-        }else{
-            $source = "/var/www/html/database/data.db";
-            $destination = "/var/www/html/database/iDasdata.db";
-            $source1 = "/var/www/html/database/data.db";
-            $destination1 = "/var/www/html/database/iDas-data.db";
-        }
 
-        if( file_exists($source) && !file_exists($destination)){
-            copy($source, $destination);
-        }
-        if( file_exists($source1) && !file_exists($destination1)){            
-            copy($source1, $destination1);
-        }
-    }
 
 }

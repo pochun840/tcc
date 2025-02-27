@@ -6,15 +6,10 @@ class Datas{
     private $dbh;
 
     // 在建構子將 Database 物件實例化
-    public function __construct()
-    {
-        $this->db = new Database;
-        $this->db = $this->db->getDb();
+    public function __construct(){
 
         $this->db_data = new Database;
         $this->db_data = $this->db_data->getDb_data();
-
-        $this->dbh = new Database;
 
     }
 

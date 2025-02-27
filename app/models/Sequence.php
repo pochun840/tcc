@@ -37,8 +37,9 @@ class Sequence{
     #新增sequence
     public function create_seq($mode, $jobdata) {
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, seq_opt, seq_k_val, seq_ofs)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :seq_opt, :seq_k_val, :seq_ofs);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs);";
+   
         $statement = $this->db_iDas->prepare($sql);
     
         if ($mode == "create") {
@@ -55,14 +56,18 @@ class Sequence{
     
         $statement->bindValue(':seq_tr', $jobdata['seq_tr']);
         $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
-        $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
+        $statement->bindValue(':seq_ok_stop', $jobdata['seq_ok_stop']);
         $statement->bindValue(':seq_ns', $jobdata['seq_ns']);
         $statement->bindValue(':seq_en', $jobdata['seq_en']);
         $statement->bindValue(':seq_opt', $jobdata['seq_opt']);
         $statement->bindValue(':seq_k_val', $jobdata['seq_k_val']);
         $statement->bindValue(':seq_ofs', $jobdata['seq_ofs']);
+
+
     
         $results = $statement->execute();
+
+
 
         return $results;
 
@@ -70,8 +75,8 @@ class Sequence{
 
     public function copy_seq_by_seq_id($new_temp_seq){
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, seq_opt, seq_k_val, seq_ofs)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :seq_opt, :seq_k_val, :seq_ofs);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs);";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -150,7 +155,7 @@ class Sequence{
                                   seq_tr = :seq_tr, 
                                   seq_ns = :seq_ns, 
                                   seq_ok  =:seq_ok,
-                                  stop_seq_ok =:stop_seq_ok,
+                                  seq_ok_stop =:seq_ok_stop,
                                   seq_opt = :seq_opt,
                                   seq_k_val = :seq_k_val,
                                   seq_ofs = :seq_ofs
@@ -161,7 +166,7 @@ class Sequence{
         $statement->bindValue(':seq_name', $jobdata['seq_name']);
         $statement->bindValue(':seq_tr', $jobdata['seq_tr']);
         $statement->bindValue(':seq_ok', $jobdata['seq_ok']);
-        $statement->bindValue(':stop_seq_ok', $jobdata['stop_seq_ok']);
+        $statement->bindValue(':seq_ok_stop', $jobdata['seq_ok_stop']);
         $statement->bindValue(':seq_ns', $jobdata['seq_ns']);
         $statement->bindValue(':seq_opt', $jobdata['seq_opt']);
         $statement->bindValue(':seq_k_val', $jobdata['seq_k_val']);

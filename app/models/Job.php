@@ -83,11 +83,12 @@ class Job{
     }
     
 
-    #新增JOB
+
+    
     public function create_job($jobdata){
       
-        $sql = "INSERT INTO `job` (job_id, job_name, job_ok,stop_job_ok,rev_direction,rev_force,rev_speed)";
-        $sql .= " VALUES (:job_id, :job_name, :job_ok,:stop_job_ok,:rev_direction,:rev_force,:rev_speed );";
+        $sql = "INSERT INTO `job` (job_id, job_name, job_ok,job_ok_stop,rev_direction,rev_force,rev_speed)";
+        $sql .= " VALUES (:job_id, :job_name, :job_ok,:job_ok_stop,:rev_direction,:rev_force,:rev_speed );";
     
         $jobdata['job_id'] = intval($jobdata['job_id']);
     
@@ -96,7 +97,7 @@ class Job{
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $statement->bindValue(':job_name', $jobdata['job_name']);
         $statement->bindValue(':job_ok', $jobdata['job_ok']);
-        $statement->bindValue(':stop_job_ok', $jobdata['stop_job_ok']);
+        $statement->bindValue(':job_ok_stop', $jobdata['job_ok_stop']);
         $statement->bindValue(':rev_direction', $jobdata['rev_direction']);
         $statement->bindValue(':rev_force', $jobdata['rev_force']);
         $statement->bindValue(':rev_speed', $jobdata['rev_speed']);
@@ -113,7 +114,7 @@ class Job{
                 rev_speed = :rev_speed, 
                 rev_force = :rev_force,
                 job_ok = :job_ok,
-                stop_job_ok =:stop_job_ok
+                job_ok_stop =:job_ok_stop
                 WHERE job_id = :job_id ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':job_name', $jobdata['job_name']);
@@ -121,7 +122,7 @@ class Job{
         $statement->bindValue(':rev_speed', $jobdata['rev_speed']);
         $statement->bindValue(':rev_direction', $jobdata['rev_direction']);
         $statement->bindValue(':job_ok', $jobdata['job_ok']);
-        $statement->bindValue(':stop_job_ok', $jobdata['stop_job_ok']);
+        $statement->bindValue(':job_ok_stop', $jobdata['job_ok_stop']);
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $results = $statement->execute();
 
@@ -195,8 +196,8 @@ class Job{
 
     public function copy_sequence_by_job_id($new_temp_seq) {
       
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, stop_seq_ok, seq_opt, seq_k_val, seq_ofs)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :stop_seq_ok, :seq_opt, :seq_k_val, :seq_ofs);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs);";
         
         
         $statement = $this->db_iDas->prepare($sql);

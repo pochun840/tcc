@@ -6,10 +6,7 @@ class Login{
     private $db_iDas;//iDas db
 
     // 在建構子將 Database 物件實例化
-    public function __construct()
-    {
-        $this->db = new Database;
-        $this->db = $this->db->getDb();
+    public function __construct(){
 
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
@@ -133,6 +130,11 @@ class Login{
 
         return (int)$max_user;
     }
+
+
+
+    //
+
 
 
 
