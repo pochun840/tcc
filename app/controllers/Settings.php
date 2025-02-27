@@ -1205,9 +1205,9 @@ class Settings extends Controller
         $dbPath2 = '/var/www/html/database/data.db';
 
         if ($this->validateTableStructure($dbPath1, $dbPath2)) {
-            echo "两个数据库的表结构相同。\n";
+           //echo "两个数据库的表结构相同。\n";
         } else {
-            echo "两个数据库的表结构不同。\n";
+            //echo "两个数据库的表结构不同。\n";
             return false;
         }
 

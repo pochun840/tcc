@@ -178,8 +178,6 @@ class Jobs extends Controller
  
         $jobid = $_POST['jobid'] ?? null;
 
-        var_dump($jobid);die();
-        
         if(!empty($jobid)){
 
             $res = $this->jobModel->delete_job_by_id($jobid);
