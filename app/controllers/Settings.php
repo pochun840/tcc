@@ -693,8 +693,8 @@ class Settings extends Controller
             $argument = '';
         }
 
-        $Das_DB_Location = '/var/www/html/database/iDas_data.db'; //idas 
-        $Con_DB_Location = '/var/www/html/database/data.db'; //控制器
+        $Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
+        $Con_DB_Location = '/var/www/html/database/tcscon.db'; //控制器
 
         if(!empty($argument)){
             if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
@@ -710,9 +710,9 @@ class Settings extends Controller
                 }
 
 
-                $sourceFile = '/var/www/html/database/data.db';
-                $backupFile = '/var/www/html/database/data_bk.db';
-                $newFile = '/var/www/html/database/iDas_data.db';
+                $sourceFile = '/var/www/html/database/tcscon.db';
+                $backupFile = '/var/www/html/database/tcscon_bk.db';
+                $newFile = '/var/www/html/database/idas_data.db';
 
                 $res  = $this->SettingModel->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
                 $result = array();

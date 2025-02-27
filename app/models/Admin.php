@@ -19,7 +19,7 @@ class Admin{
         $this->db_iDas_login = new Database;
         $this->db_iDas_login = $this->db_iDas_login->getDb_das_login();
 
-    }
+    } 
 
     public function GetActiveSession(){
 

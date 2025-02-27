@@ -118,10 +118,6 @@ class Sequences extends Controller
                 'seq_ofs' => $seq_ofs,
             );
 
-
-     
-
-           
             $mode = "create";
             $res = $this->sequenceModel->create_seq($mode,$jobdata);
             $result = array();
@@ -153,7 +149,6 @@ class Sequences extends Controller
             include $file;
         }
         
-
         $jobid = $_POST['jobid'] ?? null;
         $seqid = $_POST['seqid'] ?? null;
 
@@ -170,9 +165,6 @@ class Sequences extends Controller
                 $res_msg  = $text['del_seq'].':'. $seqid."  ".$text['fail'];
                 $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg );
             }
-
-         
-
         }
     }
 
@@ -407,14 +399,10 @@ class Sequences extends Controller
    
     #seq 排序
     public function adjustment_order(){
-        
-
-
+    
         if(isset($_POST['jobid'])){
             $jobid = $_POST['jobid'];
             $rowInfoArray = $_POST['rowInfoArray'];
-
-        
 
             if(!empty($rowInfoArray)){
 
@@ -425,9 +413,7 @@ class Sequences extends Controller
                     $index++;
                 }
 
-           
                 $res = $this->sequenceModel->swapupdate($jobid,$rowInfoArray,$new_info);
-                
                 if($res){
                     $this->sequenceModel->finalizeStepSeqId($jobid);
                     $res_msg = 'success';

@@ -179,10 +179,16 @@ function DB_sync_idas_load(argument){
                     method: "POST",
                     data: { argument: argument },
                     success: function (response) {
-                        /*var responseData = JSON.parse(response);
+                        var responseData = JSON.parse(response);
+                    
+                        // 顯示來自伺服器的 res_type 和 res_msg
                         alertify.alert(responseData.res_type, responseData.res_msg, function () {
-                            history.go(0);
-                        });*/
+                            // 在 3 秒後自動關閉視窗
+                            setTimeout(function() {
+                                alertify.closeAll(); // 關閉所有 Alertify 視窗
+                                history.go(0); // 重新載入頁面
+                            }, 3000);
+                        });
                     },
                     error: function (xhr, status, error) {
                         console.error("AJAX request failed:", status, error);
