@@ -58,7 +58,7 @@ class Inputs extends Controller
             $tempA = array();
             $temp_gateconfirm = array();
             $job_inputlist = ''; 
-    
+
             if (!empty($job_inputs)) {
                 foreach ($job_inputs as $kk => $vv) {
                     // 遍歷 input_pin1 到 input_pin10 並檢查其是否為非零值
@@ -125,6 +125,8 @@ class Inputs extends Controller
                         $job_inputlist .= '</tr>';
                     }
                 }
+            }else{
+               
             }
         }
     

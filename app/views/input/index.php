@@ -548,8 +548,17 @@
 
 </div>
 
+<style>
+    #input_table td,
+    #input_table th {
+        width: 100px; 
+        padding: 10px;
+    }
+</style>
+
+
+
 <script>
-// Change the color of a row in a table
 
 var job_id; 
 var input_event;
@@ -563,9 +572,10 @@ var buttonDisabled = false;
 var backgroundColorYellow = false;
 var input_job;
 
+
 $(document).ready(function () {
     highlight_row_input('input_table');
- 
+
     var all_input_job = '<?php echo $data['device_data']['device_input_all_job']?>';
     job_id = all_input_job;
     input_job = all_input_job;
@@ -575,6 +585,7 @@ $(document).ready(function () {
         document.getElementById('job_id').style.backgroundColor = 'yellow';
     }
 
+    
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -590,10 +601,7 @@ document.addEventListener('DOMContentLoaded', function() {
   observer.observe(document.body, { childList: true, subtree: true });
 });
 
-document.getElementById("Event_Option").onchange = function() {
-    var selectedValue = this.value; 
-    handleEventChange(selectedValue); 
-};
+
 
 // Div Mode
 function toggleDivs() {
@@ -612,23 +620,27 @@ function toggleDivs() {
 function showTableInputSetting() {
     document.getElementById('TableInputSetting').style.display = 'block';
     document.getElementById('TableDataInput').style.display = 'none';
-
     document.getElementById('input_menu').style.display = 'block';
 }
 
 // Get the modal
 var modal = document.getElementById('newinput');
-
-
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
 
-function crud_job_event(argument){
 
-    if(argument == 'new' && job_id != ''){
+document.getElementById("Event_Option").onchange = function() {
+    var selectedValue = this.value; 
+    handleEventChange(selectedValue); 
+};
+
+
+
+function crud_job_event(argument){
+    if(argument == 'new' && job_id != '' ){
         //針對已設定的pin角位disable
         if (Array.isArray(temp)){ 
             temp.forEach(function(element) {
@@ -653,27 +665,26 @@ function crud_job_event(argument){
                 }
             });
         }
-        //document.querySelector(".main-content").classList.add("overlay-active");
-        document.getElementById('newinput').style.display = 'block';
+
+
+
+        document.getElementById('newinput').style.display='block';
         document.querySelector(".main-content").classList.add("overlay-active");
-        
     } 
     
-    if(argument == 'del' && job_id  != '' &&  input_event != '')  {
+    if(argument == 'del' && job_id != '' && input_event != '' ){
         document.querySelector(".main-content").classList.add("overlay-active");
         delete_input_id(job_id,input_event);
+        
     }
 
 
-    if(argument == 'edit' && job_id != ''  && input_event != ''){
 
-        var selectedRows = document.querySelectorAll('#input_jobid_select tr.selected');
-        if (!selectedRows.length > 0) {
-            return;
-        }
-
+    if(argument == 'edit' && job_id != '' && input_event != ''){
 
         var selectElement = document.getElementById('edit_Event_Option');
+
+        
         if(selectElement){
             selectElement.disabled = true;
             var options = selectElement.options;
@@ -691,13 +702,11 @@ function crud_job_event(argument){
                 }
             });
         }
- 
         get_input_info(job_id,input_event);
         handleEventChange(input_event); 
-        document.getElementById('edit_input').style.display='block';
         document.querySelector(".main-content").classList.add("overlay-active");
-
-    
+        document.getElementById('edit_input').style.display='block';
+       
     }
 
     if(argument == 'copy' && job_id != '' && input_event != ''){
@@ -718,14 +727,6 @@ function crud_job_event(argument){
              
             }
         }
-
-        var selectedRows = document.querySelectorAll('#input_jobid_select tr.selected');
-        if (selectedRows.length > 0) {
-            document.getElementById('copyinput').style.display='block';
-        }else{
-            getLanguageMessage('language');
-        }    
-
         document.querySelector(".main-content").classList.add("overlay-active");
         document.getElementById('copyinput').style.display='block';
     }
@@ -733,7 +734,6 @@ function crud_job_event(argument){
     if(argument == 'unified' && job_id != ''){
         enableButton();
         resetBackgroundColor();
-
         if(input_job != job_id){
             alignsubmit(job_id);  
         }else{
@@ -785,7 +785,12 @@ function job_confirm(){
                 document.getElementById("job_id").value = jobid;
 
                 var s3Button = document.getElementById('S3');
-          
+                if (!job_inputlist.trim()) {  // 检查 job_inputlist 是否为空或仅包含空白字符
+                    s3Button.disabled = true;
+                } else {
+                    s3Button.disabled = false;
+                }
+                
             
                 var rows = document.querySelectorAll('#input_jobid_select tr');
                 rows.forEach(function(row) {
@@ -868,7 +873,6 @@ function collectPinValues(selector) {
 }
 
 //delete
-
 function delete_input_id(job_id,input_event){
 
     var language = getCookie('language');
@@ -884,7 +888,7 @@ function delete_input_id(job_id,input_event){
         text_info = 'Are you sure?';
         title = 'Delete Job';
     }
-
+    
     if (job_id) {
         alertify.confirm(
             title, // 標題
@@ -892,8 +896,6 @@ function delete_input_id(job_id,input_event){
             function() {
                 //使用者選擇「是」後執行刪除動作
                 document.getElementById('spinner').style.display = 'block';
-
-               
 
                 $.ajax({
                     url: "?url=Inputs/delete_input",
@@ -927,73 +929,16 @@ function delete_input_id(job_id,input_event){
                 //alertify.message('已取消刪除');
             }
         ).set('labels', {ok:'YES', cancel:'NO'}); // 修改按鈕文字
-}
-
-
-
-
-function delete_input_id(job_id, input_event) {
-    var language = getCookie('language');
-    var text_info, title;
-
-    if (language === "zh-cn") {
-        text_info = '你确定吗？';
-        title = '刪除任務';
-    } else if (language === "zh-tw") {
-        text_info = '你確定嗎？';
-        title = '刪除任務';
-    } else {
-        text_info = 'Are you sure?';
-        title = 'Delete Job';
     }
 
-    // 如果 job_id 有值才進行操作
-    if (job_id) {
-        alertify.confirm(
-            title, // 標題
-            text_info, // 提示文字
-            function() {
-                //使用者選擇「是」後執行刪除動作
-                document.getElementById('spinner').style.display = 'block';
+   
 
-                $.ajax({
-                    url: "?url=Inputs/delete_input",
-                    method: "POST",
-                    data: { 
-                        job_id: job_id,
-                        input_event: input_event
-                    },
-                    success: function(response) {
-                        var responseData = JSON.parse(response);
-                        alertify.alert(responseData.res_type, responseData.res_msg);
-
-                        setTimeout(function() {
-                            alertify.closeAll(); // 關閉所有 alertify 彈窗
-                            updateEventSelectAndPins(responseData.old_input_pin); // 更新 pins
-                            get_input_by_job_id(job_id); 
-                            document.getElementById('spinner').style.display = 'none'; 
-                            document.querySelector(".main-content").classList.remove("overlay-active");
-                        }, 1000); 
-                    },
-                    error: function(xhr, status, error) {
-                        alertify.error("刪除失敗，請稍後再試！");
-                        document.getElementById('spinner').style.display = 'none';
-                    }
-                });
-            },
-            function() {
-                //使用者選擇「否」時不做任何事
-                alertify.message('已取消刪除');
-            }
-        ).set('labels', {ok:'YES', cancel:'NO'}); // 修改按鈕文字
-    }
 }
-
 
 
 //create
-function create_input_id() {
-
+function create_input_id(){
+ 
     var input_event = document.getElementById("Event_Option").value;
 
     // 選擇所有 name 為 "pin_option" 的 radio 按鈕
@@ -1013,15 +958,18 @@ function create_input_id() {
 
     if(input_event == 109){
         var selectedOption = document.querySelector('input[name="input_gateconfirm"]:checked');
-        var input_gateconfirm = selectedOption ? selectedOption.value : 0;
-    } else {
-        var input_gateconfirm = 0;
+        var input_gateconfirm    = selectedOption ? selectedOption.value : 0;
+    }else{
+        var input_gateconfirm	 = 0;
     }
 
     var input_pagemode = 0;
     var input_seqid = 0;
 
-    if (job_id) {
+
+
+    if(job_id){
+
         document.getElementById('spinner').style.display = 'block';
 
         $.ajax({
@@ -1030,7 +978,7 @@ function create_input_id() {
             data: { 
                 job_id: job_id,
                 input_event: input_event,
-                input_pin: input_pin,
+                input_pin: 	input_pin,
                 input_wave: input_wave,
                 input_gateconfirm: input_gateconfirm,
                 input_pagemode: input_pagemode,
@@ -1043,19 +991,19 @@ function create_input_id() {
                 alertify.alert(responseData.res_type, responseData.res_msg);
                 setTimeout(function() {
                     alertify.closeAll(); 
-                    document.getElementById('spinner').style.display = 'none';
                     document.querySelector(".main-content").classList.remove("overlay-active"); 
+                    document.getElementById('spinner').style.display = 'none'; 
                     get_input_by_job_id(job_id); 
+                  
                 }, 1000); 
             },
             error: function(xhr, status, error) {
-              
+                
             }
         });
+
     }
 }
-
-
 
 //copy
 function copy_input_id(){
@@ -1072,6 +1020,7 @@ function copy_input_id(){
             var to_job_id = document.getElementById("JobSelect1").value;
             if(to_job_id){
                 document.getElementById('spinner').style.display = 'block';
+
                 $.ajax({
                     url: "?url=Inputs/copy_input_event",
                     method: "POST",
@@ -1080,17 +1029,16 @@ function copy_input_id(){
                         to_job_id: to_job_id
                     },
                     success: function(response) {
-                         
+                        
                         document.getElementById('copyinput').style.display='none';
                         var responseData = JSON.parse(response);
-                        alertify.alert(responseData.res_type, responseData.res_msg);
-                        setTimeout(function() {
-                            alertify.closeAll(); 
-                            document.getElementById('spinner').style.display = 'none';
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
                             document.querySelector(".main-content").classList.remove("overlay-active"); 
-                            get_input_by_job_id(to_job_id); 
-                        }, 1000); 
+                            document.getElementById('spinner').style.display = 'none';
+                            get_input_by_job_id(job_id);
+                        });
 
+                        
                     },
                     error: function(xhr, status, error) {
                         
@@ -1181,7 +1129,6 @@ function get_input_info(){
                 input_event: input_event,
             },
             success: function(response) {
-
                 if (response === 'no_data') {
                     getLanguageMessage('language');
                     return;
@@ -1259,7 +1206,7 @@ function get_input_info(){
                     var selectedValue = this.value; 
                     edit_handleEventChange(selectedValue); 
                 };
-             
+
             },
             error: function(xhr, status, error) {
                 
@@ -1341,6 +1288,7 @@ function get_input_by_job_id(jobid){
 
 function edit_input_id(){
 
+    
     var input_event = document.getElementById("edit_Event_Option").value;
 
     // 選擇所有 name 為 "pin_option" 的 radio 按鈕
@@ -1370,7 +1318,9 @@ function edit_input_id(){
     var input_seqid = 0;
 
     if(job_id){
+
         document.getElementById('spinner').style.display = 'block';
+
         $.ajax({
             url: "?url=Inputs/edit_input_event",
             method: "POST",
@@ -1390,8 +1340,8 @@ function edit_input_id(){
                 alertify.alert(responseData.res_type, responseData.res_msg);
                 setTimeout(function() {
                     alertify.closeAll(); 
-                    document.getElementById('spinner').style.display = 'none';
                     document.querySelector(".main-content").classList.remove("overlay-active"); 
+                    document.getElementById('spinner').style.display = 'none';
                     get_input_by_job_id(job_id); 
                 }, 1000);  
             },
@@ -1401,25 +1351,6 @@ function edit_input_id(){
         });
 
     }
-
-   
-}
-
-function getLanguageMessage(cookieName) {
-    var value = "; " + document.cookie;
-    var parts = value.split("; " + cookieName + "=");
-    var language = (parts.length == 2) ? parts.pop().split(";").shift() : '';
-    var message;
-    if (language === 'en-us') {
-       message =  'Please select the event to delete';
-    } else if (language === 'zh-cn') {
-       message =  '请选择要删除的事件';
-    } else if (language === 'zh-tw') {
-       message =  '請點選要刪除的事件';
-    } else {
-      message =  'Please select the event to delete';
-    }
-  
 }
 
 
@@ -1457,10 +1388,3 @@ function updateEventSelectAndPins(old_input_pin) {
 
 
 </script>
-<style>
-    #input_table td,
-    #input_table th {
-        width: 100px; 
-        padding: 10px;
-    }
-</style>
