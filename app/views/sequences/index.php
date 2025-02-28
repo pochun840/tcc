@@ -982,7 +982,7 @@ function input_check_saveseq() {
     let conditions = [
         { id: 'seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'seq_tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
-        { id: 'seq_k_val',  pattern: /^[0-9]+$/, min: 40, max: 300 },
+        { id: 'seq_k_val', pattern: /^[0-9]+$/, min: 40, max: 300 },
         { id: 'seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
 
@@ -999,6 +999,19 @@ function input_check_saveseq() {
             }
         }
 
+
+        if (input.id === 'seq_ofs') {
+            var value = element.value;
+
+            if (value.match(/^-\d+/)) {
+                value = '-' + parseInt(value.slice(1), 10);
+                element.value = value; 
+            } else if (value.match(/^0\d+/)) {
+                value = parseInt(value, 10); 
+                element.value = value; 
+            }
+        }
+
         if (!validateInput(element, input.pattern, input.min, input.max)) {
             isFormValid = false;
         }
@@ -1006,6 +1019,7 @@ function input_check_saveseq() {
 
     return isFormValid;
 }
+
 
 function input_check_editseq() {
 
@@ -1015,7 +1029,7 @@ function input_check_editseq() {
         { id: 'edit_seq_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'edit_seq_tr', pattern: /^[0-9]+$/, min: 1, max: 99 },
         { id: 'edit_seq_k_val', pattern: /^[0-9]+$/, min: 40, max: 300 },
-        { id: 'edit_seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 },
+        { id: 'edit_seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
 
     let isFormValid = true;
@@ -1028,6 +1042,19 @@ function input_check_editseq() {
                 nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
             } else {
                 console.warn(`No next sibling found for element with id ${input.id}`);
+            }
+        }
+
+        
+        if (input.id === 'edit_seq_ofs') {
+            var value = element.value;
+
+            if (value.match(/^-\d+/)) {
+                value = '-' + parseInt(value.slice(1), 10);
+                element.value = value; 
+            } else if (value.match(/^0\d+/)) {
+                value = parseInt(value, 10); 
+                element.value = value; 
             }
         }
 
