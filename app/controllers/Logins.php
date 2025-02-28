@@ -190,7 +190,5 @@ class Logins extends Controller
         return $reslut;
     }
 
-
-
 }
 ?>
