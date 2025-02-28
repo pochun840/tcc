@@ -362,9 +362,7 @@ class Step extends Controller
                 }
             }
 
-
             $record_ang = 0;
-
             $jobdata = array(
                 'job_id'           => $jobid,
                 'seq_id'           => $seqid,
@@ -388,19 +386,6 @@ class Step extends Controller
                 
             );
 
-
-            #同一個step 只能有一個Target Torque
-            /*$check = $this->stepModel->check_step_target($jobid,$seqid,$stepid,1);
-            $check = intval($check[0]['count_records']);
-            
-            if($check > 1 && $target_option == 0){
-                $this->MiscellaneousModel->generateErrorResponse('Error', $text['check_step_target']);
-                exit();
-
-            }*/
-
-
-    
 
             $res = $this->stepModel->update_step_by_id($jobdata);
             $result = array();
@@ -447,7 +432,6 @@ class Step extends Controller
                     $res_msg = $text['del_step'].':'. $stepid."  ".$text['fail'];
                     $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
                 }
-
             }
       
         }
@@ -510,8 +494,6 @@ class Step extends Controller
                         $res_msg = $text['copy_step'].':'.$new_step_id."  ".$text['fail'];
                         $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
                     }
-
-
                 }
             }else{
 
@@ -519,8 +501,6 @@ class Step extends Controller
                 exit();
 
             }
-        
-        
         }
           
 
@@ -561,22 +541,10 @@ class Step extends Controller
     #排序step
     public function adjustment_order(){
 
-        //var_dump($_POST);die();
-
         if (isset($_POST['jobid']) && isset($_POST['rowInfoArray'])) {
             $jobid = $_POST['jobid'];
             $rowInfoArray = $_POST['rowInfoArray'];
-
-
-            echo "<pre>";
-            print_r($rowInfoArray);
-            echo "</pre>";
-            //die();
-
-
             $this->stepModel->swapupdate($jobid,$rowInfoArray);
-        } else {
-            
         }
         
     }
