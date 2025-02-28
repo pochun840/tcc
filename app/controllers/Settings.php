@@ -729,14 +729,10 @@ class Settings extends Controller
     }
         
 
-
-    
-    
     //get barcode
-    public function GetBarcodes()
-    {
-        $barcodes = $this->SettingModel->GetAllBarcodes();
+    public function GetBarcodes(){
 
+        $barcodes = $this->SettingModel->GetAllBarcodes();
         return $barcodes;
     }
 
@@ -778,15 +774,13 @@ class Settings extends Controller
 
             }
           
-
         }
 
     }
 
     //update barcode
-    public function Update_Barcode()
-    {
-        //$input_check = true;
+    public function Update_Barcode(){
+        
         $barcode = array();
 
         $barcode['barcode_content']       = $_POST['barcode_content'] ?? null;
@@ -806,14 +800,15 @@ class Settings extends Controller
                 $res_msg = 'edit barcode :'. $barcode['barcode_content'].' fail';
                 $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
             }
-            //echo $res_msg;    
+               
         }
     }
 
-    public function GetJobSeq()
-    {
+    public function GetJobSeq(){
+
         $input_check = true;
         $error_message = '';
+        
         if( !empty($_GET['job_id']) && isset($_GET['job_id'])  ){
             $job_id = $_GET['job_id'];
         }else{ 
@@ -835,8 +830,8 @@ class Settings extends Controller
         }
     }
 
-    public function GetJobBarcode()
-    {
+    public function GetJobBarcode(){
+
         $input_check = true;
         $error_message = '';
         if( !empty($_GET['job_id']) && isset($_GET['job_id'])  ){
@@ -892,10 +887,6 @@ class Settings extends Controller
             echo json_encode(["message" => 'no file']);
             exit();
         }
-
-
-        //var_dump($_FILES);die();
-
          
         $filename = 'tcc_idas.pack';
         $file_location = '';
@@ -957,7 +948,8 @@ class Settings extends Controller
                 exec("sudo chmod 777 -R /var/www/html/tccidas");
 
 
-                echo $file_location.'/package_temp/package/das';die();
+                echo $file_location.'/package_temp/package/das';
+                die();
 
                 $this->copyFolder($file_location.'/package_temp/package/das',$destination); //複製資料夾
                 //sleep(1);
@@ -987,8 +979,8 @@ class Settings extends Controller
         echo json_encode(["message" => $message]);
     }
 
-    public function Extract_File($file_location,$filename)
-    {
+    public function Extract_File($file_location,$filename){
+
         // $filename = 'update_package.pack';
         $zip = new ZipArchive;
 
@@ -1032,7 +1024,8 @@ class Settings extends Controller
         }
     }
 
-    public function deleteFolder($dir) {
+    public function deleteFolder($dir){
+
         if (is_dir($dir)) {
             $objects = scandir($dir);
             foreach ($objects as $object) {
@@ -1049,8 +1042,8 @@ class Settings extends Controller
         }
     }
 
-    public function Import_Config()
-    {
+    public function Import_Config(){
+
         $file_location = '';
         $result = '';
 
@@ -1117,8 +1110,8 @@ class Settings extends Controller
         echo json_encode(["message" => $result]);
     }
 
-    public function FirmwareUpdate()
-    {
+    public function FirmwareUpdate(){
+
         $file_location = '';
         $result = '';
 
@@ -1284,25 +1277,25 @@ class Settings extends Controller
 
     // 檢查SQLite資料庫中所有表格的欄位是否有NULL值
     function checkForNullValues($dbPath) {
-         $pdo = $this->connectToSQLite($dbPath);
 
-         if (!$pdo) {
-             return false;
-         }
+        $pdo = $this->connectToSQLite($dbPath);
 
-         $tables = $this->getTablesInfo($pdo);
+        if (!$pdo) {
+            return false;
+        }
 
-         foreach ($tables as $tableName => $columns) {
-             foreach ($columns as $column) {
-                 $stmt = $pdo->query("SELECT COUNT(*) FROM $tableName WHERE $column IS NULL");
-                 $rowCount = $stmt->fetchColumn();
-                 if ($rowCount > 0) {
-                     // echo "在表 $tableName 的欄位 $column 中發現了 NULL 值。\n";
-                     return false;
-                 }
-             }
-         }
+        $tables = $this->getTablesInfo($pdo);
 
-         return true;
+        foreach ($tables as $tableName => $columns) {
+            foreach ($columns as $column) {
+                $stmt = $pdo->query("SELECT COUNT(*) FROM $tableName WHERE $column IS NULL");
+                $rowCount = $stmt->fetchColumn();
+                if ($rowCount > 0) {
+                return false;
+                }
+            }
+        }
+
+        return true;
     }    
 }
