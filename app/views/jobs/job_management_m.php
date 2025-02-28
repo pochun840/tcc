@@ -582,7 +582,7 @@ function validateInput(element, pattern, min, max) {
 
     // 验证空值
     if (value === "") {
-        element.classList.add("is-invalid");
+        element.classList.add("is-invalid"); 
         isValid = false;
     }
     // 验证正则
