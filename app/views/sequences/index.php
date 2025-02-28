@@ -827,7 +827,7 @@ function edit_seq_save(){
                 seq_ok_stop:seq_ok_stop,
                 seq_k_val: seq_k_val,
                 seq_ofs: seq_ofs,
-                seq_nss: seq_ns,
+                seq_ns: seq_ns,
                 seq_opt: seq_opt
 
             },

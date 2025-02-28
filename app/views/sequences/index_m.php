@@ -739,20 +739,18 @@ function edit_seq(seqid) {
                 var [, seq_k_val] = cleanString.match(/\[seq_k_val]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ofs] = cleanString.match(/\[seq_ofs]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ns] = cleanString.match(/\[seq_ns]\s*=>\s*([^ ]+)/) || [, null];
-                
-                var [, opt] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
+
                 var [, seq_ok] = cleanString.match(/\[seq_ok]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ok_stop] = cleanString.match(/\[seq_ok_stop]\s*=>\s*([^ ]+)/) || [, null];
-                var [, opt_val] = cleanString.match(/\[opt]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seq_opt] = cleanString.match(/\[seq_opt]\s*=>\s*([^ ]+)/) || [, null];
                
-   
         
                 document.getElementById('editseq').style.display = 'block';
                 document.getElementById("old_seqid").value = seqid;
                 document.getElementById("edit_seq_name").value = seqname;
                 document.getElementById("edit_seq_tr").value = seq_tr;
 
-                document.getElementById("edit_K").value = k_value;
+                document.getElementById("edit_seq_k_val").value = seq_k_val;
                 document.getElementById("edit_seq_ofs").value = seq_ofs;
                 document.getElementById("edit_seq_ns").value = seq_ns;
         
@@ -764,7 +762,7 @@ function edit_seq(seqid) {
 
 
                 var radioButtons_2 = document.getElementsByName("edit_opt_option");
-                setRadioButton_value(radioButtons_2, opt_val);
+                setRadioButton_value(radioButtons_2, seq_opt);
   
             },
             error: function(xhr, status, error) {

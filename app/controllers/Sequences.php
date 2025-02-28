@@ -61,7 +61,6 @@ class Sequences extends Controller
             include $file;
         }
 
-        
         if(isset($_POST['jobid'])){
             
             #如果 POST 中沒有，則使用預設值
@@ -117,6 +116,7 @@ class Sequences extends Controller
                 'seq_k_val' => $seq_k_val,
                 'seq_ofs' => $seq_ofs,
             );
+
 
             $mode = "create";
             $res = $this->sequenceModel->create_seq($mode,$jobdata);
@@ -183,7 +183,6 @@ class Sequences extends Controller
 
     public function edit_seq(){
 
-
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
@@ -208,7 +207,6 @@ class Sequences extends Controller
                 exit();
             }
 
-
             #驗證顆數
             if(!$this->MiscellaneousModel->seq_validate($seq_tr, 'seq_tr')) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['tr']);
@@ -226,7 +224,6 @@ class Sequences extends Controller
                 $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['joint_offset_val']);
                 exit();
             }
-
 
             //$seq_ofs = sprintf("%+03d", $seq_ofs);
 
@@ -247,7 +244,7 @@ class Sequences extends Controller
                 'seq_k_val' => $seq_k_val,
                 'seq_ofs' => $seq_ofs,
             );
-           
+
             $res = $this->sequenceModel->update_seq_by_id($jobdata);
             $result = array();
             if($res){

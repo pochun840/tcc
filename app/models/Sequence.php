@@ -177,7 +177,6 @@ class Sequence{
 
         return $results;
 
-
     }
 
     #修改單筆的sequence的狀態
@@ -316,7 +315,6 @@ class Sequence{
             return "False"; // seq_id不存在
         }
     }
-
 
 
     public function search_stepinfo($jobid,$seqid){
