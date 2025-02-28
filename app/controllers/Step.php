@@ -157,34 +157,62 @@ class Step extends Controller
 
             #
 
+            if($target_opt  == 0 ){
+                if ($ds_tor > $target_tor) {
 
-            if($target_opt  == 0 && $target_opt  == 1){
-                //需要驗證 tor_lo 必須 小於 tor_hi
+                    $res_type = 'Error';
+                    $res_msg  =  $error_message['downshift_torque_error'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
+                    exit();
+                }
+
+                if ($th_tor > $target_tor) {
+
+                    $res_type = 'Error';
+                    $res_msg  =  $error_message['threshold_torque_error'];
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+                    echo json_encode($result);
+                    exit();
+                }
+
+            }
+
+            if($target_opt  == 1){
+
                 if($tor_lo  > $tor_hi){
                     $res_type = 'Error';
-                    $res_msg  =  $error_message['angle_error'];
+                    $res_msg  =  $error_message['torque_error'];
+                    
                     $result = array(
                         'res_type' => $res_type,
                         'res_msg'  => $res_msg 
                     );
+                    
                     echo json_encode($result);
                     exit();
-                }
+                }   
 
-                //需要驗證 ang_lo 必須 小於 ang_hi
                 if($ang_lo  > $ang_hi){
                     $res_type = 'Error';
-                    $res_msg  =  $error_message['torque_error'];
+                    $res_msg  = $error_message['angle_error'];
+
                     $result = array(
                         'res_type' => $res_type,
                         'res_msg'  => $res_msg 
                     );
+                    
                     echo json_encode($result);
                     exit();
                 }
-            }   
-
-            
+            }
+           
             if ($target_opt == 0) {
                 $target_ang = 0;
                 $target_delay = 0;
@@ -279,26 +307,52 @@ class Step extends Controller
             $tor_unit = isset($_POST['tor_unit'])? intval($_POST['tor_unit']) : $step_torque_unit;
 
 
+            if($target_opt  == 0 ){
 
+                if ($ds_tor > $target_tor) {
+                    $res_type = 'Error';
+                    $res_msg  =  $error_message['downshift_torque_error'];
+                    
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
 
+                    echo json_encode($result);
+                    exit();
+                }
 
-            if($target_opt  == 0 && $target_opt  == 1){
-                //需要驗證 tor_lo 必須 小於 tor_hi
+                if ($th_tor > $target_tor) {
+                    $res_type = 'Error';
+                    $res_msg  =  $error_message['threshold_torque_error'];
+                    
+                    $result = array(
+                        'res_type' => $res_type,
+                        'res_msg'  => $res_msg 
+                    );
+
+                    echo json_encode($result);
+                    exit();
+                }
+
+            }
+
+            if($target_opt  == 1){
+
                 if($tor_lo  > $tor_hi){
                     $res_type = 'Error';
-                    $res_msg  =  $error_message['angle_error'];
+                    $res_msg  =  $error_message['torque_error'];
                     $result = array(
                         'res_type' => $res_type,
                         'res_msg'  => $res_msg 
                     );
                     echo json_encode($result);
                     exit();
-                }
+                }   
 
-                //需要驗證 ang_lo 必須 小於 ang_hi
                 if($ang_lo  > $ang_hi){
                     $res_type = 'Error';
-                    $res_msg  =  $error_message['torque_error'];
+                    $res_msg  = $error_message['angle_error'];
                     $result = array(
                         'res_type' => $res_type,
                         'res_msg'  => $res_msg 

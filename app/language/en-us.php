@@ -535,6 +535,8 @@ $error_message['k_value'] = 'Out of range 30 - 300';
 $error_message['joint_offset_val'] = 'Out of range -254 - 254';
 $error_message['angle_error'] = 'The hi angle cannot be lower than the lo angle';
 $error_message['torque_error'] = 'The hi torque cannot be lower than the lo torque';
+$error_message['threshold_torque_error'] = 'The threshold torque value must not exceed the target torque value';
+$error_message['downshift_torque_error'] = 'The downshift torque value must not exceed the target torque value';
 
 if(isset($data['tool_info'])){
 	$error_message['Pre_Run_RPM'] = 'Out of range '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];

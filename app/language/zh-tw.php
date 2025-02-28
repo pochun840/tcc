@@ -497,6 +497,8 @@ $error_message['Target_Angle'] = '超出範圍 1 - 30600';
 $text['error_tr'] = '超出範圍 1 - 99';
 $error_message['angle_error'] = '最大角度 不可低於 最小角度';
 $error_message['torque_error'] = '最大扭力 不可低於 最小扭力';
+$error_message['threshold_torque_error'] = '門檻點扭力不可大於目標扭力';
+$error_message['downshift_torque_error'] = '降速點扭力不可大於目標扭力';
 
 if(isset($data['tool_info'])){
 	// $error_message['Hi_Torque'] = '需大於 Target_Torque 且小於'.$data['tool_info']['tool_maxtorque'];
