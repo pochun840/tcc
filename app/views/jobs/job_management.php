@@ -151,26 +151,27 @@
                         </div>
 
 
-
                         <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['rev_direction'];?> :</div>
+                            <div for="Unscrew-Direction" class="col-6 t1" ><?php echo $text['rev_direction'];?> :</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="direction" id="rev_direction_CW" value="0">
-            					  <label class="form-check-label" for="rev_direction_CW"><?php  echo $text['CW']; ?></label>
+            					  <label class="form-check-label" for="rev_direction_CW" style="white-space: nowrap;"><?php  echo $text['CW']; ?></label>
             					</div>
             					<div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="direction" id="rev_direction_CCW" value="1">
-            					  <label class="form-check-label" for="rev_direction_CCW"> <?php  echo $text['CCW']; ?></label>
+            					  <label class="form-check-label" for="rev_direction_CCW" style="white-space: nowrap;"> <?php  echo $text['CCW']; ?></label>
             					</div>
 
                                 <div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="direction" id="rev_direction_disable" value="2">
-            					  <label class="form-check-label" for="rev_direction_disable"> <?php  echo $text['Disable']; ?></label>
+            					  <label class="form-check-label" for="rev_direction_disable" style="white-space: nowrap;"> <?php  echo $text['Disable']; ?></label>
             					</div>
 
                             </div>
                         </div>
+
+                        
                         <div class="row">
                             <div for="reverse-RPM" class="col-6 t1"><?php echo $text['rev_speed'];?>(Max:1100):</div>
                             <div class="col-4 t2">
@@ -262,20 +263,21 @@
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_CW" value="0">
-            					  <label class="form-check-label" for="rev_direction_CW"><?php  echo $text['CW'];?></label>
+            					  <label class="form-check-label" for="rev_direction_CW" style="white-space: nowrap;"><?php  echo $text['CW'];?></label>
             					</div>
 
             					<div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio"  name="edit_direction" id="direction_CCW" value="1">
-            					  <label class="form-check-label" for="rev_direction_CCW"><?php  echo $text['CCW'];?></label>
+            					  <label class="form-check-label" for="rev_direction_CCW" style="white-space: nowrap;"><?php  echo $text['CCW'];?></label>
             					</div>
 
                                 <div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_disable" value="2">
-            					  <label class="form-check-label" for="rev_direction_disable"> <?php  echo $text['Disable']; ?></label>
+            					  <label class="form-check-label" for="rev_direction_disable" style="white-space: nowrap;"> <?php  echo $text['Disable']; ?></label>
             					</div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div for="reverse-RPM" class="col-6 t1"><?php echo $text['rev_speed'];?>(Max:1100):</div>
                             <div class="col-4 t2">
