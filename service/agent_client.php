@@ -60,8 +60,8 @@ run(function () {
 
 
 
-function GetLastResult()
-{
+function GetLastResult(){
+    
     $Year = date("Y");// data db 用西元年命名
     $data_db_name = "data".$Year.".db";
     if(file_exists('/home/kls/tcc/resource/db_emmc/'.$data_db_name)){
@@ -92,18 +92,18 @@ function GetLastResult()
     
 }
 
-function getIp()
-    {
-        if( PHP_OS_FAMILY == 'Linux'){
-            // $eth0Ip = '';
-            // $eth0Ip = trim(shell_exec("/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1"));
-            $Ips = trim(shell_exec("/sbin/ip -o -4 addr list  | awk '{print $4}' | cut -d/ -f1"));
-            $Ip = explode(PHP_EOL, $Ips);
-            
-            return strtoupper($Ip[1]);
-        }else{
-            $host_addr= gethostname();
-            $ip_addr = gethostbyname($host_addr);
-            return strtoupper($ip_addr);
-        }
+function getIp(){
+
+    if( PHP_OS_FAMILY == 'Linux'){
+        // $eth0Ip = '';
+        // $eth0Ip = trim(shell_exec("/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1"));
+        $Ips = trim(shell_exec("/sbin/ip -o -4 addr list  | awk '{print $4}' | cut -d/ -f1"));
+        $Ip = explode(PHP_EOL, $Ips);
+        
+        return strtoupper($Ip[1]);
+    }else{
+        $host_addr= gethostname();
+        $ip_addr = gethostbyname($host_addr);
+        return strtoupper($ip_addr);
     }
+}
