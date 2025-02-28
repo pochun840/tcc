@@ -1101,7 +1101,7 @@ function input_check_editstep(){
     // 檢查 downshift_OFF 是否被選中
     let isDownshiftOff = document.getElementById("downshift_OFF").checked;
 
-    
+
     if (target_opt == 0) {
         conditions = [
             { id: 'edit_target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
@@ -1338,4 +1338,4 @@ function restoreBackupOptions() {
     });
 
 }
-</script>
+</script>   
