@@ -2,7 +2,6 @@
 function create_step() {
 
     document.getElementById('newstep').style.display = 'block';
-
     document.getElementById('rpm').value = 200;
     document.getElementById('th_tor').value = 0;
     document.getElementById('ds_tor').value = 0.3;
@@ -26,7 +25,6 @@ function countrows() {
     return rowCount;
 }
 
-
 function cound_step(argument){
 
     var table = document.getElementById('step_table');
@@ -44,9 +42,7 @@ function cound_step(argument){
     }
 
     if(argument =="new"){
-
         document.querySelector(".main-content").classList.add("overlay-active");
-
         var step_count = countrows();
         if(step_count  < 4){
             create_step();
@@ -103,13 +99,13 @@ function enableElementById(id, value = '') {
     }
 }
 function enableElementByName(name, value = '') {
-    var elements = document.getElementsByName(name);  // 根據 name 屬性選擇元素
+    var elements = document.getElementsByName(name); 
     if (elements.length > 0) {
         // 遍歷所有具有該 name 的元素
         elements.forEach(function(element) {
             if (element.disabled) {
-                element.disabled = false;  // 啟用元素
-                element.value = value;     // 設置元素的值
+                element.disabled = false;  
+                element.value = value;     
                 //console.log('元素已启用:', name, '并设置值为:', value);
             } else {
                 //console.log('元素已是启用状态:', name);

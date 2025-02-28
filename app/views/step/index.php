@@ -1097,6 +1097,11 @@ function input_check_editstep(){
     let hi_angle_min = 1;
 
     let conditions = []; // 初始化為空數組
+
+    // 檢查 downshift_OFF 是否被選中
+    let isDownshiftOff = document.getElementById("downshift_OFF").checked;
+
+    
     if (target_opt == 0) {
         conditions = [
             { id: 'edit_target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
@@ -1105,9 +1110,9 @@ function input_check_editstep(){
             { id: 'edit_ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
             { id: 'edit_ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
             { id: 'edit_rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-            { id: 'edit_th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'edit_ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'edit_ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+            //{ id: 'edit_th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            //{ id: 'edit_ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            //{ id: 'edit_ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
         ];
     }
 
@@ -1162,6 +1167,10 @@ function input_check_savestep() {
     let hi_angle_min = 1;
 
     let conditions = []; // 初始化為空數組
+
+    // 檢查 downshift_OFF 是否被選中
+    let isDownshiftOff = document.getElementById("downshift_OFF").checked;
+
     if (target_opt == 0) {
         conditions = [
             { id: 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
@@ -1170,10 +1179,19 @@ function input_check_savestep() {
             { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
             { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
             { id: 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-            { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+            //{ id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            //{ id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            //{ id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
         ];
+
+        // 如果 downshift_OFF 被選中，跳過 th_tor, ds_tor, ds_speed 的驗證
+        if (!isDownshiftOff) {
+            conditions.push(
+                { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                { id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
+            );
+        }
     }
 
     if (target_opt == 1) {

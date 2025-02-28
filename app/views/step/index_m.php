@@ -501,799 +501,816 @@
 
 <script>
 
-let selected_target_opt_val = '';
+    let selected_target_opt_val = '';
 
-let jobid = '<?php echo $data['job_id']?>';
-let seqid = '<?php echo $data['seq_id']?>';
-let add_stepid = '<?php echo $data['step_id']?>';
+    let jobid = '<?php echo $data['job_id']?>';
+    let seqid = '<?php echo $data['seq_id']?>';
+    let add_stepid = '<?php echo $data['step_id']?>';
 
-let step_torque_unit = '<?php echo $data['step_torque_unit']?>';
-let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
-let isProcessing = false; 
-let stepid_new  = '<?php echo $data['step_id']?>';
- 
-$(document).ready(function () {
-    highlight_row('step_table');
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      var headerElements = document.querySelectorAll('.ajs-header');
-      headerElements.forEach(function(headerElement) {
-        headerElement.parentNode.removeChild(headerElement);
-      });
+    let step_torque_unit = '<?php echo $data['step_torque_unit']?>';
+    let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
+    let isProcessing = false; 
+    let stepid_new  = '<?php echo $data['step_id']?>';
+    
+    $(document).ready(function () {
+        highlight_row('step_table');
     });
-  });
 
-  observer.observe(document.body, { childList: true, subtree: true });
-});
+    document.addEventListener('DOMContentLoaded', function() {
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+        var headerElements = document.querySelectorAll('.ajs-header');
+        headerElements.forEach(function(headerElement) {
+            headerElement.parentNode.removeChild(headerElement);
+        });
+        });
+    });
 
-// Get the modal
-var modal = document.getElementById('newstep');
+    observer.observe(document.body, { childList: true, subtree: true });
+    });
 
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+    // Get the modal
+    var modal = document.getElementById('newstep');
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
     }
-}
-var check_step_torque = '<?php echo $data['check_step_torque']?>';
+    var check_step_torque = '<?php echo $data['check_step_torque']?>';
 
-var rows = document.getElementsByTagName("tr");
-for (var i = 0; i < rows.length; i++) {
-    (function(row) {
-        var cells = row.getElementsByTagName("td");
-        if (cells.length > 0) {
-            cells[0].addEventListener("click", function() {
-           
-                checkstep_id   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
-                localStorage.setItem("stepid", checkstep_id);
+    var rows = document.getElementsByTagName("tr");
+    for (var i = 0; i < rows.length; i++) {
+        (function(row) {
+            var cells = row.getElementsByTagName("td");
+            if (cells.length > 0) {
+                cells[0].addEventListener("click", function() {
+            
+                    checkstep_id   = cells[0] ? (cells[0].textContent || cells[0].innerText) : null;
+                    localStorage.setItem("stepid", checkstep_id);
+                });
+            }
+        })(rows[i]);
+    }
+
+
+
+    function edit_step(stepid){
+
+        if(jobid){
+            $.ajax({
+                url: "?url=Step/search_stepinfo",
+                method: "POST",
+                data:{ 
+                    job_id: jobid,
+                    seq_id: seqid,
+                    step_id:stepid
+
+                },
+                success: function(response) {
+
+                    var responseJSON = JSON.stringify(response);
+                    var cleanString = responseJSON.replace(/Array|\\n/g, '');
+                    var cleanString = cleanString.substring(2, cleanString.length - 2);
+
+                    var [, job_id] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, seq_id] = cleanString.match(/\[seq_id]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, step_id] = cleanString.match(/\[step_id]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, target_opt] = cleanString.match(/\[target_opt]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, target_tor] = cleanString.match(/\[target_tor]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, target_ang] = cleanString.match(/\[target_ang]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, target_delay] = cleanString.match(/\[target_delay]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, tor_hi] = cleanString.match(/\[tor_hi]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, tor_lo] = cleanString.match(/\[tor_lo]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, ang_hi] = cleanString.match(/\[ang_hi]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, ang_lo] = cleanString.match(/\[ang_lo]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, rpm] = cleanString.match(/\[rpm]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, direction] = cleanString.match(/\[direction]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, th_mode] = cleanString.match(/\[th_mode]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, ds_tor] = cleanString.match(/\[ds_tor]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, ds_speed] = cleanString.match(/\[ds_speed]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, th_tor] = cleanString.match(/\[th_tor]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, record_ang] = cleanString.match(/\[record_ang]\s*=>\s*([^ ]+)/) || [, null];
+                    var [, tor_unit] = cleanString.match(/\[tor_unit]\s*=>\s*([^ ]+)/) || [, null];
+
+                    document.getElementById('editstep').style.display = 'block';
+
+
+                    document.querySelector("select[name='edit_target_opt']").value = target_opt;
+                    if(target_opt == 0){
+                        
+                        document.getElementById("edit_target_tor").value = target_tor;
+                        document.getElementById("edit_target_ang_item").style.display='none';
+                        document.getElementById("edit_target_delay_item").style.display='none';
+                        document.getElementById("edit_target_tor_item").style.display='block';
+                    }
+
+                    if(target_opt == 1){
+                        document.getElementById("edit_target_ang").value = target_ang;
+                        document.getElementById("edit_target_tor_item").style.display='none';
+                        document.getElementById("edit_target_delay_item").style.display='none';
+                        document.getElementById("edit_target_ang_item").style.display='block';
+
+                        disableElementById('edit_ds_tor');
+                        disableElementById('edit_ds_speed');
+                        disableElementById('edit_th_tor');
+                        disableElementById('edit_rpm');
+                        disableElementsByName("edit_th_mode");
+
+                        //隱藏欄位
+                        /*document.getElementById("edit_rpm_item").style.display = 'none';
+                        document.getElementById("edit_th_mode_item").style.display = 'none';
+                        document.getElementById("edit_th_tor_item").style.display = 'none';
+                        document.getElementById("edit_ds_tor_item").style.display = 'none';
+                        document.getElementById("edit_ds_speed_item").style.display = 'none';
+                        document.getElementById("edit_th_mode_item").style.display = 'none';*/
+
+
+                        
+                    }
+
+                    if(target_opt == 2){
+        
+                        document.getElementById("edit_target_delay").value = target_delay;
+                        document.getElementById("edit_target_tor_item").style.display='none';
+                        document.getElementById("edit_target_ang_item").style.display='none';
+                        document.getElementById("edit_target_delay_item").style.display='block';
+                        disableElementById('edit_rpm');
+                        disableElementById('edit_ds_tor');
+                        disableElementById('edit_ds_speed');
+                        disableElementById('edit_th_tor');
+                        disableElementById('edit_tor_hi');
+                        disableElementById('edit_tor_lo');
+                        disableElementById('edit_ang_hi');
+                        disableElementById('edit_ang_lo');
+                        disableElementsByName("edit_th_mode");
+                        disableElementsByName("edit_direction");
+
+                        //隱藏欄位
+                        /*document.getElementById("edit_tor_hi_item").style.display= 'none';
+                        document.getElementById("edit_tor_lo_item").style.display= 'none';
+                        document.getElementById("edit_ang_hi_item").style.display= 'none';
+                        document.getElementById("edit_ang_lo_item").style.display= 'none';
+                        document.getElementById("edit_rpm_item").style.display= 'none';
+                        document.getElementById("edit_direction_item").style.display= 'none';
+                        document.getElementById("edit_th_mode_item").style.display = 'none';
+                        document.getElementById("edit_th_tor_item").style.display = 'none';
+                        document.getElementById("edit_ds_tor_item").style.display = 'none';
+                        document.getElementById("edit_ds_speed_item").style.display = 'none';
+                        document.getElementById("edit_th_mode_item").style.display = 'none';*/
+
+
+                        
+                    }
+
+
+                    document.getElementById("edit_rpm").value = rpm;
+                    document.getElementById("edit_ds_speed").value = ds_speed;
+                    document.getElementById("edit_ds_tor").value = ds_tor;
+                    document.getElementById("edit_th_tor").value = th_tor;
+                    document.getElementById("edit_tor_hi").value = tor_hi;
+                    document.getElementById("edit_tor_lo").value = tor_lo;
+                    document.getElementById("edit_ang_hi").value = ang_hi;
+                    document.getElementById("edit_ang_lo").value = ang_lo;
+
+
+                    var radioButtons_th_mode = document.getElementsByName("edit_th_mode");
+                    setRadioButton_value(radioButtons_th_mode, th_mode);
+
+                    var radioButtons_direction = document.getElementsByName("edit_direction");
+                    setRadioButton_value(radioButtons_direction, direction);
+
+
+            
+    
+                },
+                error: function(xhr, status, error) {
+                
+                }
             });
         }
-    })(rows[i]);
-}
+    }
 
+    function create_step() {
+        // 顯示新步驟
+        document.getElementById('newstep').style.display = 'block';
 
-function edit_step(stepid){
+        // 設定預設值
+        document.getElementById('rpm').value = 200;
+        document.getElementById('th_tor').value = 0;
+        document.getElementById('ds_tor').value = 0.3;
+        document.getElementById('ds_speed').value = 100;
 
-    if(jobid){
-        $.ajax({
-            url: "?url=Step/search_stepinfo",
-            method: "POST",
-            data:{ 
-                job_id: jobid,
-                seq_id: seqid,
-                step_id:stepid
+        // 預設 downshift_ON 需要被選中
+        document.getElementById("downshift_ON").checked = true;
+        toggleDisabledFields();  // 根據 downshift 的選項來控制其他欄位的狀態
 
-            },
-            success: function(response) {
+        // downshift 變更
+        document.getElementById("downshift_ON").addEventListener('change', toggleDisabledFields);
+        document.getElementById("downshift_OFF").addEventListener('change', toggleDisabledFields);
 
-                var responseJSON = JSON.stringify(response);
-                var cleanString = responseJSON.replace(/Array|\\n/g, '');
-                var cleanString = cleanString.substring(2, cleanString.length - 2);
-
-                var [, job_id] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, seq_id] = cleanString.match(/\[seq_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, step_id] = cleanString.match(/\[step_id]\s*=>\s*([^ ]+)/) || [, null];
-                var [, target_opt] = cleanString.match(/\[target_opt]\s*=>\s*([^ ]+)/) || [, null];
-                var [, target_tor] = cleanString.match(/\[target_tor]\s*=>\s*([^ ]+)/) || [, null];
-                var [, target_ang] = cleanString.match(/\[target_ang]\s*=>\s*([^ ]+)/) || [, null];
-                var [, target_delay] = cleanString.match(/\[target_delay]\s*=>\s*([^ ]+)/) || [, null];
-                var [, tor_hi] = cleanString.match(/\[tor_hi]\s*=>\s*([^ ]+)/) || [, null];
-                var [, tor_lo] = cleanString.match(/\[tor_lo]\s*=>\s*([^ ]+)/) || [, null];
-                var [, ang_hi] = cleanString.match(/\[ang_hi]\s*=>\s*([^ ]+)/) || [, null];
-                var [, ang_lo] = cleanString.match(/\[ang_lo]\s*=>\s*([^ ]+)/) || [, null];
-                var [, rpm] = cleanString.match(/\[rpm]\s*=>\s*([^ ]+)/) || [, null];
-                var [, direction] = cleanString.match(/\[direction]\s*=>\s*([^ ]+)/) || [, null];
-                var [, th_mode] = cleanString.match(/\[th_mode]\s*=>\s*([^ ]+)/) || [, null];
-                var [, ds_tor] = cleanString.match(/\[ds_tor]\s*=>\s*([^ ]+)/) || [, null];
-                var [, ds_speed] = cleanString.match(/\[ds_speed]\s*=>\s*([^ ]+)/) || [, null];
-                var [, th_tor] = cleanString.match(/\[th_tor]\s*=>\s*([^ ]+)/) || [, null];
-                var [, record_ang] = cleanString.match(/\[record_ang]\s*=>\s*([^ ]+)/) || [, null];
-                var [, tor_unit] = cleanString.match(/\[tor_unit]\s*=>\s*([^ ]+)/) || [, null];
-
-                document.getElementById('editstep').style.display = 'block';
-
-
-                document.querySelector("select[name='edit_target_opt']").value = target_opt;
-                if(target_opt == 0){
-                    
-                    document.getElementById("edit_target_tor").value = target_tor;
-                    document.getElementById("edit_target_ang_item").style.display='none';
-                    document.getElementById("edit_target_delay_item").style.display='none';
-                    document.getElementById("edit_target_tor_item").style.display='block';
-                }
-
-                if(target_opt == 1){
-                    document.getElementById("edit_target_ang").value = target_ang;
-                    document.getElementById("edit_target_tor_item").style.display='none';
-                    document.getElementById("edit_target_delay_item").style.display='none';
-                    document.getElementById("edit_target_ang_item").style.display='block';
-
-                    disableElementById('edit_ds_tor');
-                    disableElementById('edit_ds_speed');
-                    disableElementById('edit_th_tor');
-                    disableElementById('edit_rpm');
-                    disableElementsByName("edit_th_mode");
-
-                    //隱藏欄位
-                    /*document.getElementById("edit_rpm_item").style.display = 'none';
-                    document.getElementById("edit_th_mode_item").style.display = 'none';
-                    document.getElementById("edit_th_tor_item").style.display = 'none';
-                    document.getElementById("edit_ds_tor_item").style.display = 'none';
-                    document.getElementById("edit_ds_speed_item").style.display = 'none';
-                    document.getElementById("edit_th_mode_item").style.display = 'none';*/
-
-
-                     
-                }
-
-                if(target_opt == 2){
-    
-                    document.getElementById("edit_target_delay").value = target_delay;
-                    document.getElementById("edit_target_tor_item").style.display='none';
-                    document.getElementById("edit_target_ang_item").style.display='none';
-                    document.getElementById("edit_target_delay_item").style.display='block';
-                    disableElementById('edit_rpm');
-                    disableElementById('edit_ds_tor');
-                    disableElementById('edit_ds_speed');
-                    disableElementById('edit_th_tor');
-                    disableElementById('edit_tor_hi');
-                    disableElementById('edit_tor_lo');
-                    disableElementById('edit_ang_hi');
-                    disableElementById('edit_ang_lo');
-                    disableElementsByName("edit_th_mode");
-                    disableElementsByName("edit_direction");
-
-                    //隱藏欄位
-                    /*document.getElementById("edit_tor_hi_item").style.display= 'none';
-                    document.getElementById("edit_tor_lo_item").style.display= 'none';
-                    document.getElementById("edit_ang_hi_item").style.display= 'none';
-                    document.getElementById("edit_ang_lo_item").style.display= 'none';
-                    document.getElementById("edit_rpm_item").style.display= 'none';
-                    document.getElementById("edit_direction_item").style.display= 'none';
-                    document.getElementById("edit_th_mode_item").style.display = 'none';
-                    document.getElementById("edit_th_tor_item").style.display = 'none';
-                    document.getElementById("edit_ds_tor_item").style.display = 'none';
-                    document.getElementById("edit_ds_speed_item").style.display = 'none';
-                    document.getElementById("edit_th_mode_item").style.display = 'none';*/
-
-
-                    
-                }
-
-
-                document.getElementById("edit_rpm").value = rpm;
-                document.getElementById("edit_ds_speed").value = ds_speed;
-                document.getElementById("edit_ds_tor").value = ds_tor;
-                document.getElementById("edit_th_tor").value = th_tor;
-                document.getElementById("edit_tor_hi").value = tor_hi;
-                document.getElementById("edit_tor_lo").value = tor_lo;
-                document.getElementById("edit_ang_hi").value = ang_hi;
-                document.getElementById("edit_ang_lo").value = ang_lo;
-
-
-                var radioButtons_th_mode = document.getElementsByName("edit_th_mode");
-                setRadioButton_value(radioButtons_th_mode, th_mode);
-
-                var radioButtons_direction = document.getElementsByName("edit_direction");
-                setRadioButton_value(radioButtons_direction, direction);
-
-            },
-            error: function(xhr, status, error) {
-             
-            }
+        // target_opt 變更
+        var targetoptionselect = document.getElementById('target_opt');
+        targetoptionselect.addEventListener('change', function() {
+            var target_opt_Value = targetoptionselect.value;
+            localStorage.setItem('target_option', target_opt_Value);
+            toggleVisibility(target_opt_Value);
         });
-    }
-}
 
-
-function create_step() {
-    // 顯示新步驟
-    document.getElementById('newstep').style.display = 'block';
-
-    // 設定預設值
-    document.getElementById('rpm').value = 200;
-    document.getElementById('th_tor').value = 0;
-    document.getElementById('ds_tor').value = 0.3;
-    document.getElementById('ds_speed').value = 100;
-
-    // 預設 downshift_ON 需要被選中
-    document.getElementById("downshift_ON").checked = true;
-    toggleDisabledFields();  // 根據 downshift 的選項來控制其他欄位的狀態
-
-    // downshift 變更
-    document.getElementById("downshift_ON").addEventListener('change', toggleDisabledFields);
-    document.getElementById("downshift_OFF").addEventListener('change', toggleDisabledFields);
-
-    // target_opt 變更
-    var targetoptionselect = document.getElementById('target_opt');
-    targetoptionselect.addEventListener('change', function() {
-        var target_opt_Value = targetoptionselect.value;
-        localStorage.setItem('target_option', target_opt_Value);
-        toggleVisibility(target_opt_Value);
-    });
-
-    // 處理 th_mode
-    //detectDownshiftSelection();
-}
-
-// 用來根據 downshift 的選項來控制其他欄位的 disabled 狀態
-function toggleDisabledFields() {
-    if (document.getElementById("downshift_ON").checked) {
-        // 當 downshift_ON 被選中時，解除 disabled
-        document.getElementById('th_tor').disabled = false;
-        document.getElementById('ds_tor').disabled = false;
-        document.getElementById('ds_speed').disabled = false;
-    } else {
-        // 當 downshift_OFF 被選中時，設置 disabled
-        document.getElementById('th_tor').disabled = true;
-        document.getElementById('ds_tor').disabled = true;
-        document.getElementById('ds_speed').disabled = true;
-    }
-}
-
-
-
-
-function add_step() {
-    
-    // 防止重複處理的標誌
-    if (isProcessing) return;
-    isProcessing = true; // 設置為處理中
-
-    var target_opt = document.getElementById('target_opt').value;
-    var target_tor = document.getElementById('target_tor').value;
-    var target_ang = document.getElementById('target_ang').value;
-    var target_delay = document.getElementById('target_delay').value;
-    var tor_hi = document.getElementById('tor_hi').value;
-    var tor_lo = document.getElementById('tor_lo').value;
-    var ang_hi = document.getElementById('ang_hi').value;
-    var ang_lo = document.getElementById('ang_lo').value;
-    var rpm = document.getElementById('rpm').value;
-    var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
-    var th_mode = document.querySelector('input[name="th_mode"]:checked').value;
-    var th_tor = document.getElementById('th_tor').value;
-    var ds_tor = document.getElementById('ds_tor').value;
-    var ds_speed = document.getElementById('ds_speed').value;
-    var record_ang = 0; //紀錄 累計角度
-    var tor_unit = 3; //預設
-
-    // 驗證
-    let check = input_check_savestep();
-    if (check) {
-        // 顯示加載動畫
-        document.getElementById('spinner').style.display = 'block';
-
-        $.ajax({
-            url: "?url=Step/create_step",
-            method: "POST",
-            data: {
-                jobid: jobid,
-                seqid: seqid,
-                stepid: add_stepid,
-                target_opt: target_opt,
-                target_ang: target_ang,
-                target_delay: target_delay,
-                tor_hi: tor_hi,
-                tor_lo: tor_lo,
-                ang_hi: ang_hi,
-                ang_lo: ang_lo,
-                rpm: rpm,
-                direction: direction,
-                th_mode: th_mode,
-                th_tor: th_tor,
-                ds_tor: ds_tor,
-                ds_speed: ds_speed,
-                record_ang: record_ang,
-                tor_unit: tor_unit
-            },
-            success: function(response) {
-                var responseData = JSON.parse(response);
-                // 延遲 1000 毫秒後隱藏加載動畫，並顯示 alertify 彈跳視窗
-                setTimeout(function() {
-                    // 隱藏加載動畫
-                    document.getElementById('spinner').style.display = 'none';
-
-                    // 顯示 alertify 彈跳視窗
-                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        // 只刷新一次頁面
-                        if (!window.pageRefreshed) {
-                            window.pageRefreshed = true; // 防止無限重複刷新
-                            history.go(0);
-                        }
-                    });
-
-                    // 在 3 秒後自動關閉 alertify 彈跳視窗
-                    setTimeout(function() {
-                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                        if (!window.pageRefreshed) {
-                            window.pageRefreshed = true;
-                            history.go(0);
-                        }
-                    }, 3000); 
-                }, 1000); // 延遲 1000 毫秒
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-                // 顯示錯誤信息
-                document.getElementById('spinner').style.display = 'none';
-                alertify.alert('Error', 'There was an issue with the request. Please try again later.');
-            },
-            complete: function() {
-                isProcessing = false; // 處理結束
-            }
-        });
-    } else {
-        isProcessing = false; // 如果驗證不通過，重置處理狀態
-    }
-}
-
-function edit_step_save() {
-
-    // 防止重複處理的標誌
-    if (isProcessing) return;
-    isProcessing = true; // 設置為處理中
-
-    var target_opt = document.getElementById('edit_target_opt').value;
-    var target_tor = document.getElementById('edit_target_tor').value;
-    var target_ang = document.getElementById('edit_target_ang').value;
-    var target_delay = document.getElementById('edit_target_delay').value;
-    var tor_hi = document.getElementById('edit_tor_hi').value;
-    var tor_lo = document.getElementById('edit_tor_lo').value;
-    var ang_hi = document.getElementById('edit_ang_hi').value;
-    var ang_lo = document.getElementById('edit_ang_lo').value;
-    var rpm = document.getElementById('edit_rpm').value;
-    var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
-    var th_mode = document.querySelector('input[name="edit_th_mode"]:checked').value;
-    var th_tor = document.getElementById('edit_th_tor').value;
-    var ds_tor = document.getElementById('edit_ds_tor').value;
-    var ds_speed = document.getElementById('edit_ds_speed').value;
-    var record_ang = 0; //紀錄 累計角度
-    var tor_unit = 3; //預設
-
-
-    //驗證
-    let check = input_check_editstep();
-    if (check) {
-        // 顯示加載動畫
-        document.getElementById('spinner').style.display = 'block';
-
-        $.ajax({
-            url: "?url=Step/edit_step",
-            method: "POST",
-            data: {
-                jobid: jobid,
-                seqid: seqid,
-                stepid: stepid,
-                target_opt: target_opt,
-                target_ang: target_ang,
-                target_delay: target_delay,
-                tor_hi: tor_hi,
-                tor_lo: tor_lo,
-                ang_hi: ang_hi,
-                ang_lo: ang_lo,
-                rpm: rpm,
-                direction: direction,
-                th_mode: th_mode,
-                th_tor: th_tor,
-                ds_tor: ds_tor,
-                ds_speed: ds_speed,
-                record_ang: record_ang,
-                tor_unit: tor_unit
-            },
-            success: function(response) {
-                var responseData = JSON.parse(response);
-                // 延遲 1000 毫秒後隱藏加載動畫，並顯示 alertify 彈跳視窗
-                setTimeout(function() {
-                    // 隱藏加載動畫
-                    document.getElementById('spinner').style.display = 'none';
-
-                    // 顯示 alertify 彈跳視窗
-                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        // 只刷新一次頁面
-                        if (!window.pageRefreshed) {
-                            window.pageRefreshed = true; // 防止無限重複刷新
-                            history.go(0);
-                        }
-                    });
-
-                    // 在 3 秒後自動關閉 alertify 彈跳視窗
-                    setTimeout(function() {
-                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                        if (!window.pageRefreshed) {
-                            window.pageRefreshed = true;
-                            history.go(0);
-                        }
-                    }, 3000); 
-                }, 1000); // 延遲 1000 毫秒
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-                // 顯示錯誤信息
-                document.getElementById('spinner').style.display = 'none';
-                alertify.alert('Error', 'There was an issue with the request. Please try again later.');
-            },
-            complete: function() {
-                isProcessing = false; // 處理結束
-            }
-        });
-    } else {
-        isProcessing = false; // 如果驗證不通過，重置處理狀態
+        // 處理 th_mode
+        //detectDownshiftSelection();
     }
 
-
-}
-
-function copy_step_by_id(stepid){
-    var stepid_new  = '<?php echo $data['step_id']?>';
-    
-    document.getElementById('from_step_id').value = stepid;    
-    document.getElementById("to_step_id").value = stepid_new;
-
-
-}
-
-function copy_step_by_id_ajax() {
-    
-    var language = getCookie('language');
-    if(language == "zh-cn"){
-        var text_info ='你确定吗？';
-        var title = 'Copy Job';
-    }else if(language == "zh-tw"){
-        var text_info ='你確定嗎 ?';
-        var title = 'Copy Job';
-    }else{
-        var text_info ='Are you sure ?';
-        var title = 'Copy Job';
+    // 用來根據 downshift 的選項來控制其他欄位的 disabled 狀態
+    function toggleDisabledFields() {
+        if (document.getElementById("downshift_ON").checked) {
+            // 當 downshift_ON 被選中時，解除 disabled
+            document.getElementById('th_tor').disabled = false;
+            document.getElementById('ds_tor').disabled = false;
+            document.getElementById('ds_speed').disabled = false;
+        } else {
+            // 當 downshift_OFF 被選中時，設置 disabled
+            document.getElementById('th_tor').disabled = true;
+            document.getElementById('ds_tor').disabled = true;
+            document.getElementById('ds_speed').disabled = true;
+        }
     }
 
-    if (isProcessing) {
-        return; // 如果正在處理中，直接返回
-    }
+  
+    function add_step() {
+        
+        // 防止重複處理的標誌
+        if (isProcessing) return;
+        isProcessing = true; // 設置為處理中
 
-    isProcessing = true; // 設置為處理
+        var target_opt = document.getElementById('target_opt').value;
+        var target_tor = document.getElementById('target_tor').value;
+        var target_ang = document.getElementById('target_ang').value;
+        var target_delay = document.getElementById('target_delay').value;
+        var tor_hi = document.getElementById('tor_hi').value;
+        var tor_lo = document.getElementById('tor_lo').value;
+        var ang_hi = document.getElementById('ang_hi').value;
+        var ang_lo = document.getElementById('ang_lo').value;
+        var rpm = document.getElementById('rpm').value;
+        var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
+        var th_mode = document.querySelector('input[name="th_mode"]:checked').value;
+        var th_tor = document.getElementById('th_tor').value;
+        var ds_tor = document.getElementById('ds_tor').value;
+        var ds_speed = document.getElementById('ds_speed').value;
+        var record_ang = 0; //紀錄 累計角度
+        var tor_unit = 3; //預設
 
-    if (stepid_new) {
-      
+        // 驗證
+        let check = input_check_savestep();
+        if (check) {
+            // 顯示加載動畫
+            document.getElementById('spinner').style.display = 'block';
 
-        $.ajax({
-            url: "?url=Step/copy_tcc_step",
-            method: "POST",
-            data: { 
-                job_id: jobid,
-                seq_id: seqid,
-                old_step_id: stepid,
-                new_step_id: stepid_new
-            },
-           success: function(response) {
-                alertify.confirm(text_info, function (result) {
-
-                    // 顯示加載動畫
-                    document.getElementById('spinner').style.display = 'block';
-
+            $.ajax({
+                url: "?url=Step/create_step",
+                method: "POST",
+                data: {
+                    jobid: jobid,
+                    seqid: seqid,
+                    stepid: add_stepid,
+                    target_opt: target_opt,
+                    target_ang: target_ang,
+                    target_delay: target_delay,
+                    tor_hi: tor_hi,
+                    tor_lo: tor_lo,
+                    ang_hi: ang_hi,
+                    ang_lo: ang_lo,
+                    rpm: rpm,
+                    direction: direction,
+                    th_mode: th_mode,
+                    th_tor: th_tor,
+                    ds_tor: ds_tor,
+                    ds_speed: ds_speed,
+                    record_ang: record_ang,
+                    tor_unit: tor_unit
+                },
+                success: function(response) {
                     var responseData = JSON.parse(response);
-                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                    // 延遲 1000 毫秒後隱藏加載動畫，並顯示 alertify 彈跳視窗
                     setTimeout(function() {
                         // 隱藏加載動畫
                         document.getElementById('spinner').style.display = 'none';
 
                         // 顯示 alertify 彈跳視窗
                         alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                            // 刷新頁面
-                            history.go(0);  
+                            // 只刷新一次頁面
+                            if (!window.pageRefreshed) {
+                                window.pageRefreshed = true; // 防止無限重複刷新
+                                history.go(0);
+                            }
                         });
 
                         // 在 3 秒後自動關閉 alertify 彈跳視窗
                         setTimeout(function() {
                             alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                            history.go(0); 
+                            if (!window.pageRefreshed) {
+                                window.pageRefreshed = true;
+                                history.go(0);
+                            }
                         }, 3000); 
                     }, 1000); // 延遲 1000 毫秒
-
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-                // 顯示錯誤信息
-                document.getElementById('spinner').style.display = 'none';
-                alertify.alert('Error', 'There was an issue with the request. Please try again later.');
-            },
-            complete: function() {
-                isProcessing = false; // 處理結束
-            }
-        });
-    } else {
-        //alert('stepid_new 變數未定義或為空');
-        isProcessing = false; // 如果 stepid_new 不正確，重置處理狀態
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                    // 顯示錯誤信息
+                    document.getElementById('spinner').style.display = 'none';
+                    alertify.alert('Error', 'There was an issue with the request. Please try again later.');
+                },
+                complete: function() {
+                    isProcessing = false; // 處理結束
+                }
+            });
+        } else {
+            isProcessing = false; // 如果驗證不通過，重置處理狀態
+        }
     }
-}
+
+    function edit_step_save() {
+
+        // 防止重複處理的標誌
+        if (isProcessing) return;
+        isProcessing = true; // 設置為處理中
+
+        var target_opt = document.getElementById('edit_target_opt').value;
+        var target_tor = document.getElementById('edit_target_tor').value;
+        var target_ang = document.getElementById('edit_target_ang').value;
+        var target_delay = document.getElementById('edit_target_delay').value;
+        var tor_hi = document.getElementById('edit_tor_hi').value;
+        var tor_lo = document.getElementById('edit_tor_lo').value;
+        var ang_hi = document.getElementById('edit_ang_hi').value;
+        var ang_lo = document.getElementById('edit_ang_lo').value;
+        var rpm = document.getElementById('edit_rpm').value;
+        var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
+        var th_mode = document.querySelector('input[name="edit_th_mode"]:checked').value;
+        var th_tor = document.getElementById('edit_th_tor').value;
+        var ds_tor = document.getElementById('edit_ds_tor').value;
+        var ds_speed = document.getElementById('edit_ds_speed').value;
+        var record_ang = 0; //紀錄 累計角度
+        var tor_unit = 3; //預設
 
 
+        //驗證
+        let check = input_check_editstep();
+        if (check) {
+            // 顯示加載動畫
+            document.getElementById('spinner').style.display = 'block';
+
+            $.ajax({
+                url: "?url=Step/edit_step",
+                method: "POST",
+                data: {
+                    jobid: jobid,
+                    seqid: seqid,
+                    stepid: stepid,
+                    target_opt: target_opt,
+                    target_ang: target_ang,
+                    target_delay: target_delay,
+                    tor_hi: tor_hi,
+                    tor_lo: tor_lo,
+                    ang_hi: ang_hi,
+                    ang_lo: ang_lo,
+                    rpm: rpm,
+                    direction: direction,
+                    th_mode: th_mode,
+                    th_tor: th_tor,
+                    ds_tor: ds_tor,
+                    ds_speed: ds_speed,
+                    record_ang: record_ang,
+                    tor_unit: tor_unit
+                },
+                success: function(response) {
+                    var responseData = JSON.parse(response);
+                    // 延遲 1000 毫秒後隱藏加載動畫，並顯示 alertify 彈跳視窗
+                    setTimeout(function() {
+                        // 隱藏加載動畫
+                        document.getElementById('spinner').style.display = 'none';
+
+                        // 顯示 alertify 彈跳視窗
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            // 只刷新一次頁面
+                            if (!window.pageRefreshed) {
+                                window.pageRefreshed = true; // 防止無限重複刷新
+                                history.go(0);
+                            }
+                        });
+
+                        // 在 3 秒後自動關閉 alertify 彈跳視窗
+                        setTimeout(function() {
+                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                            if (!window.pageRefreshed) {
+                                window.pageRefreshed = true;
+                                history.go(0);
+                            }
+                        }, 3000); 
+                    }, 1000); // 延遲 1000 毫秒
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                    // 顯示錯誤信息
+                    document.getElementById('spinner').style.display = 'none';
+                    alertify.alert('Error', 'There was an issue with the request. Please try again later.');
+                },
+                complete: function() {
+                    isProcessing = false; // 處理結束
+                }
+            });
+        } else {
+            isProcessing = false; // 如果驗證不通過，重置處理狀態
+        }
 
 
+    }
 
-var rowInfoArray = [];
-<?php foreach($data['step'] as $key =>$val) {?>
-        var sequenceId = "<?php echo $val['seq_id'];?>";
-        var stepid = "<?php echo $val['step_id'];?>";
-      
+    function copy_step_by_id(stepid){
+        var stepid_new  = '<?php echo $data['step_id']?>';
         
-        var rowInfo = {
-            job_id: jobid,
-            sequence_id: sequenceId,
-            step_id: stepid,
-        };
+        document.getElementById('from_step_id').value = stepid;    
+        document.getElementById("to_step_id").value = stepid_new;
+
+
+    }
+
+    function copy_step_by_id_ajax() {
         
-        rowInfoArray.push(rowInfo);
-<?php } ?>
+        var language = getCookie('language');
+        if(language == "zh-cn"){
+            var text_info ='你确定吗？';
+            var title = 'Copy Job';
+        }else if(language == "zh-tw"){
+            var text_info ='你確定嗎 ?';
+            var title = 'Copy Job';
+        }else{
+            var text_info ='Are you sure ?';
+            var title = 'Copy Job';
+        }
 
+        if (isProcessing) {
+            return; // 如果正在處理中，直接返回
+        }
 
+        isProcessing = true; // 設置為處理
 
-function sendRowInfoArray() {
-    var jobid = '<?php echo $data['job_id']?>';
-    var dataToSend = {
-        jobid: jobid,
-        rowInfoArray: rowInfoArray
-    };
- 
-    if(rowInfoArray){
+        if (stepid_new) {
+            // 顯示加載動畫
+        
 
-        $.ajax({
-            url: "?url=Step/adjustment_order", 
-            method: "POST",
-            data: dataToSend,
+            $.ajax({
+                url: "?url=Step/copy_tcc_step",
+                method: "POST",
+                data: { 
+                    job_id: jobid,
+                    seq_id: seqid,
+                    old_step_id: stepid,
+                    new_step_id: stepid_new
+                },
             success: function(response) {
-                history.go(0); 
-            },
-            error: function(xhr, status, error) {
-                console.error('Error sending data:', error);
+                    alertify.confirm(text_info, function (result) {
+
+                        document.getElementById('spinner').style.display = 'block';
+                        
+                        var responseData = JSON.parse(response);
+                        // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                        setTimeout(function() {
+                            // 隱藏加載動畫
+                            document.getElementById('spinner').style.display = 'none';
+
+                            // 顯示 alertify 彈跳視窗
+                            alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                // 刷新頁面
+                                history.go(0);  
+                            });
+
+                            // 在 3 秒後自動關閉 alertify 彈跳視窗
+                            setTimeout(function() {
+                                alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                                history.go(0); 
+                            }, 3000); 
+                        }, 1000); // 延遲 1000 毫秒
+
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                    // 顯示錯誤信息
+                    document.getElementById('spinner').style.display = 'none';
+                    alertify.alert('Error', 'There was an issue with the request. Please try again later.');
+                },
+                complete: function() {
+                    isProcessing = false; // 處理結束
+                }
+            });
+        } else {
+            //alert('stepid_new 變數未定義或為空');
+            isProcessing = false; // 如果 stepid_new 不正確，重置處理狀態
+        }
+    }
+
+
+
+
+
+    var rowInfoArray = [];
+    <?php foreach($data['step'] as $key =>$val) {?>
+            var sequenceId = "<?php echo $val['seq_id'];?>";
+            var stepid = "<?php echo $val['step_id'];?>";
+        
+            
+            var rowInfo = {
+                job_id: jobid,
+                sequence_id: sequenceId,
+                step_id: stepid,
+            };
+            
+            rowInfoArray.push(rowInfo);
+    <?php } ?>
+
+    function sendRowInfoArray() {
+        var jobid = '<?php echo $data['job_id']?>';
+        var dataToSend = {
+            jobid: jobid,
+            rowInfoArray: rowInfoArray
+        };
+    
+        if(rowInfoArray){
+
+            $.ajax({
+                url: "?url=Step/adjustment_order", 
+                method: "POST",
+                data: dataToSend,
+                success: function(response) {
+                    history.go(0); 
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error sending data:', error);
+                }
+            });
+        }
+    }
+
+    function countrows() {
+        var tbody = document.querySelector('#step_table tbody');
+        var rows = tbody.querySelectorAll('tr');
+        var rowCount = rows.length;
+
+        return rowCount;
+    }
+
+
+    function input_check_editstep(){
+        
+        let target_opt = document.getElementById("edit_target_opt").value;
+        let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor').value);
+        let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor').value);
+        let Tool_Max_RPM = document.getElementById('tool_max_rpm').value;
+        let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
+        let hi_angle_max = 9999;
+        let hi_angle_min = 1;
+
+        let conditions = []; // 初始化為空數組
+
+        // 檢查 downshift_OFF 是否被選中
+        let isDownshiftOff = document.getElementById("downshift_OFF").checked;
+
+        
+        if (target_opt == 0) {
+            conditions = [
+                { id: 'edit_target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                { id: 'edit_tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                { id: 'edit_tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: Tool_Max_Torque },
+                { id: 'edit_ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+                { id: 'edit_ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
+                { id: 'edit_rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+                //{ id: 'edit_th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                //{ id: 'edit_ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                //{ id: 'edit_ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+            ];
+        }
+
+        if (target_opt == 1) {
+            conditions = [
+                { id: 'edit_target_ang', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+                { id: 'edit_tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                { id: 'edit_tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: Tool_Max_Torque },
+                { id: 'edit_ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+                { id: 'edit_ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
+            ];
+        }
+
+        if (target_opt == 2) {
+            conditions = [
+                { id: 'edit_target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
+            ];
+        }
+
+        let isFormValid = true;
+        conditions.forEach(function(input) {
+            var element = document.getElementById(input.id);
+            if (input.id !== 'target_opt') {
+                let nextSibling = element.nextElementSibling;
+                if (nextSibling) {
+                    nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
+                } else {
+                    console.warn(`No next sibling found for element with id ${input.id}`);
+                }
+            }
+
+            // 移除先前的錯誤樣式
+            element.classList.remove("is-invalid");
+
+            if (!validateInput(element, input.pattern, input.min, input.max)) {
+                isFormValid = false;
             }
         });
-    }
-}
 
-function countrows() {
-    var tbody = document.querySelector('#step_table tbody');
-    var rows = tbody.querySelectorAll('tr');
-    var rowCount = rows.length;
+        return isFormValid;
 
-    return rowCount;
-}
-
-
-function input_check_editstep(){
-    
-    let target_opt = document.getElementById("edit_target_opt").value;
-    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor').value);
-    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor').value);
-    let Tool_Max_RPM = document.getElementById('tool_max_rpm').value;
-    let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
-    let hi_angle_max = 9999;
-    let hi_angle_min = 1;
-
-    let conditions = []; // 初始化為空數組
-    if (target_opt == 0) {
-        conditions = [
-            { id: 'edit_target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'edit_tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'edit_tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'edit_ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
-            { id: 'edit_ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
-            { id: 'edit_rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-            { id: 'edit_th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'edit_ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'edit_ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-        ];
     }
 
-    if (target_opt == 1) {
-        conditions = [
-            { id: 'edit_target_ang', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
-            { id: 'edit_tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'edit_tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'edit_ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
-            { id: 'edit_ang_lo', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
-        ];
-    }
+    function input_check_savestep() {
 
-    if (target_opt == 2) {
-        conditions = [
-            { id: 'edit_target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
-        ];
-    }
+        let target_opt = document.getElementById("target_opt").value;
+        let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor').value);
+        let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor').value);
+        let Tool_Max_RPM = document.getElementById('tool_max_rpm').value;
+        let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
+        let hi_angle_max = 9999;
+        let hi_angle_min = 1;
 
-    let isFormValid = true;
-    conditions.forEach(function(input) {
-        var element = document.getElementById(input.id);
-        if (input.id !== 'target_opt') {
-            let nextSibling = element.nextElementSibling;
-            if (nextSibling) {
-                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
-            } else {
-                console.warn(`No next sibling found for element with id ${input.id}`);
+        let conditions = []; // 初始化為空數組
+
+        // 檢查 downshift_OFF 是否被選中
+        let isDownshiftOff = document.getElementById("downshift_OFF").checked;
+
+        if (target_opt == 0) {
+            conditions = [
+                { id: 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                { id: 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: Tool_Max_Torque },
+                { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+                { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
+                { id: 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+                //{ id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                //{ id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                //{ id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+            ];
+
+            // 如果 downshift_OFF 被選中，跳過 th_tor, ds_tor, ds_speed 的驗證
+            if (!isDownshiftOff) {
+                conditions.push(
+                    { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                    { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                    { id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
+                );
             }
         }
 
-        // 移除先前的錯誤樣式
-        element.classList.remove("is-invalid");
-
-        if (!validateInput(element, input.pattern, input.min, input.max)) {
-            isFormValid = false;
+        if (target_opt == 1) {
+            conditions = [
+                { id: 'target_ang', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+                { id: 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: Tool_Max_Torque },
+                { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
+                { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
+            ];
         }
-    });
 
-    return isFormValid;
+        if (target_opt == 2) {
+            conditions = [
+                { id: 'target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
+            ];
+        }
 
-}
-
-function input_check_savestep() {
-
-    let target_opt = document.getElementById("target_opt").value;
-    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor').value);
-    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor').value);
-    let Tool_Max_RPM = document.getElementById('tool_max_rpm').value;
-    let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
-    let hi_angle_max = 9999;
-    let hi_angle_min = 1;
-
-    let conditions = []; // 初始化為空數組
-    if (target_opt == 0) {
-        conditions = [
-            { id: 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0 max: Tool_Max_Torque },
-            { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
-            { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
-            { id: 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-            { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-        ];
-    }
-
-    if (target_opt == 1) {
-        conditions = [
-            { id: 'target_ang', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
-            { id: 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: Tool_Max_Torque },
-            { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
-            { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
-        ];
-    }
-
-    if (target_opt == 2) {
-        conditions = [
-            { id: 'target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
-        ];
-    }
-
-    let isFormValid = true;
-    conditions.forEach(function(input) {
-        var element = document.getElementById(input.id);
-        if (input.id !== 'target_opt') {
-            let nextSibling = element.nextElementSibling;
-            if (nextSibling) {
-                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
-            } else {
-                console.warn(`No next sibling found for element with id ${input.id}`);
+        let isFormValid = true;
+        conditions.forEach(function(input) {
+            var element = document.getElementById(input.id);
+            if (input.id !== 'target_opt') {
+                let nextSibling = element.nextElementSibling;
+                if (nextSibling) {
+                    nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
+                } else {
+                    console.warn(`No next sibling found for element with id ${input.id}`);
+                }
             }
+
+            // 移除先前的錯誤樣式
+            element.classList.remove("is-invalid");
+
+            if (!validateInput(element, input.pattern, input.min, input.max)) {
+                isFormValid = false;
+            }
+        });
+
+        return isFormValid;
+    }
+
+    function validateInput(element, pattern, min, max) {
+        let value = element.value.trim();
+        let isValid = true;
+
+        // 验证空值
+        if (value === "") {
+            element.classList.add("is-invalid");
+            isValid = false;
+        }
+        // 验证正则
+        else if (!pattern.test(value)) {
+            element.classList.add("is-invalid");
+            isValid = false;
+        }
+        // 验证最小值
+        else if (min !== null && min !== undefined && parseFloat(value) < min) {
+            element.classList.add("is-invalid");
+            isValid = false;
+        }
+        // 验证最大值
+        else if (max !== null && max !== undefined && parseFloat(value) > max) {
+            element.classList.add("is-invalid");
+            isValid = false;
+        }
+        // 通过验证
+        else {
+            element.classList.remove("is-invalid");
         }
 
-        // 移除先前的錯誤樣式
-        element.classList.remove("is-invalid");
+        return isValid;
+    }
 
-        if (!validateInput(element, input.pattern, input.min, input.max)) {
-            isFormValid = false;
+
+
+    let backupOptions = [];  // 用來存儲備份的選項
+
+    // 根據 target_option_only_tor 更新 select options
+    function updateTargetOption() {
+        try {
+            // 假設 target_option_only_tor 是從 PHP 傳過來的 JSON 資料
+            let target_option_only_tor = JSON.parse('<?php echo $data["target_option_only_tor_json"]; ?>');
+
+            // 檢查 target_option_only_tor 是否是有效的陣列
+            if (!Array.isArray(target_option_only_tor)) {
+                return; // 如果不是陣列，則終止函數
+            }
+
+            // 取得 select 元素
+            const selectElement = document.getElementById("target_opt");
+
+            // 檢查 select 元素是否存在
+            if (!selectElement) {
+                //console.error('未能找到 id="target_opt" 的元素');
+                return; 
+            }
+
+            // 備份目前的選項
+            backupOptions = Array.from(selectElement.options).map(option => ({
+                value: option.value,
+                text: option.text
+            }));
+
+            // 清空現有的選項
+            while (selectElement.options.length > 0) {
+                selectElement.remove(0);  // 移除第一個選項
+            }
+
+            console.log('target_option_only_tor:', target_option_only_tor);
+
+            // 遍歷 target_option_only_tor 並創建新的 option 元素
+            target_option_only_tor.forEach((option) => {
+                // 確保每個選項有有效的 value 和 text
+                if (option.value !== undefined && option.text !== undefined) {
+                    const optionElement = document.createElement("option");
+                    optionElement.value = option.value;  // 設定選項的 value 屬性
+                    optionElement.textContent = option.text;  // 設定選項的顯示文字
+                    selectElement.appendChild(optionElement);  // 將選項加入到 select 中
+                } else {
+                    //console.warn('無效的選項:', option);  // 如果選項格式不正確，輸出警告
+                }
+            });
+
+        } catch (error) {
+            //console.error('解析 JSON 發生錯誤:', error);
         }
-    });
-
-    return isFormValid;
-}
-
-function validateInput(element, pattern, min, max) {
-    let value = element.value.trim();
-    let isValid = true;
-
-    // 验证空值
-    if (value === "") {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 验证正则
-    else if (!pattern.test(value)) {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 验证最小值
-    else if (min !== null && min !== undefined && parseFloat(value) < min) {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 验证最大值
-    else if (max !== null && max !== undefined && parseFloat(value) > max) {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 通过验证
-    else {
-        element.classList.remove("is-invalid");
     }
 
-    return isValid;
-}
-
-
-
-let backupOptions = [];  // 用來存儲備份的選項
-
-// 根據 target_option_only_tor 更新 select options
-function updateTargetOption() {
-    try {
-        // 假設 target_option_only_tor 是從 PHP 傳過來的 JSON 資料
-        let target_option_only_tor = JSON.parse('<?php echo $data["target_option_only_tor_json"]; ?>');
-
-        // 檢查 target_option_only_tor 是否是有效的陣列
-        if (!Array.isArray(target_option_only_tor)) {
-            return; // 如果不是陣列，則終止函數
-        }
-
-        // 取得 select 元素
+    // 恢復原本的選項
+    function restoreBackupOptions() {
         const selectElement = document.getElementById("target_opt");
-
-        // 檢查 select 元素是否存在
-        if (!selectElement) {
-            //console.error('未能找到 id="target_opt" 的元素');
-            return; 
-        }
-
-        // 備份目前的選項
-        backupOptions = Array.from(selectElement.options).map(option => ({
-            value: option.value,
-            text: option.text
-        }));
 
         // 清空現有的選項
         while (selectElement.options.length > 0) {
-            selectElement.remove(0);  // 移除第一個選項
+            selectElement.remove(0);
         }
 
-        console.log('target_option_only_tor:', target_option_only_tor);
-
-        // 遍歷 target_option_only_tor 並創建新的 option 元素
-        target_option_only_tor.forEach((option) => {
-            // 確保每個選項有有效的 value 和 text
-            if (option.value !== undefined && option.text !== undefined) {
-                const optionElement = document.createElement("option");
-                optionElement.value = option.value;  // 設定選項的 value 屬性
-                optionElement.textContent = option.text;  // 設定選項的顯示文字
-                selectElement.appendChild(optionElement);  // 將選項加入到 select 中
-            } else {
-                //console.warn('無效的選項:', option);  // 如果選項格式不正確，輸出警告
-            }
+        // 恢復備份的選項
+        backupOptions.forEach((option) => {
+            const optionElement = document.createElement("option");
+            optionElement.value = option.value;
+            optionElement.textContent = option.text;
+            selectElement.appendChild(optionElement);
         });
 
-    } catch (error) {
-        //console.error('解析 JSON 發生錯誤:', error);
     }
-}
-
-// 恢復原本的選項
-function restoreBackupOptions() {
-    const selectElement = document.getElementById("target_opt");
-
-    // 清空現有的選項
-    while (selectElement.options.length > 0) {
-        selectElement.remove(0);
-    }
-
-    // 恢復備份的選項
-    backupOptions.forEach((option) => {
-        const optionElement = document.createElement("option");
-        optionElement.value = option.value;
-        optionElement.textContent = option.text;
-        selectElement.appendChild(optionElement);
-    });
-
-}
 </script>
