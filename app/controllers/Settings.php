@@ -880,7 +880,108 @@ class Settings extends Controller
       
     }
 
+    #IDAS上傳 
+    #排除檢查DB
     public function iDas_Update(){
+
+        if (empty($_FILES) || !isset($_FILES['file'])) {
+            echo json_encode(["message" => 'no file']);
+            exit();
+        }
+    
+        $filename = 'tcc_idas.pack';
+        $file_location = (PHP_OS_FAMILY == 'Linux') ? '/mnt/ramdisk/' : $_SERVER['DOCUMENT_ROOT'] . '/';
+    
+        // 檢查上傳文件是否有錯誤
+        if ($_FILES['file']['error'] !== 0) {
+            echo json_encode(["message" => 'File upload error: ' . $_FILES['file']['error']]);
+            exit();
+        }
+
+        // 檢查上傳文件是否有錯誤
+        if ($_FILES['file']['error'] !== 0) {
+            echo json_encode(["message" => 'File upload error: ' . $_FILES['file']['error']]);
+            exit();
+        }
+
+        // 移動上傳的文件
+        if (!move_uploaded_file($_FILES['file']['tmp_name'], $file_location . $filename)) {
+            echo json_encode(["message" => 'Failed to move uploaded file']);
+            exit();
+        }
+
+        // 解壓文件
+        if (!$this->Extract_File($file_location, $filename)) {
+            echo json_encode(["message" => 'Failed to extract file']);
+            unlink($file_location . $filename); // 刪除上傳的文件
+            exit();
+        }
+
+        // 嘗試尋找 JSON 檔案
+        $json_file_path = $file_location . 'tccidas/info.json'; // 你可以根據實際情況修改路徑
+        if (!file_exists($json_file_path)) {
+            /*echo json_encode(["message" => 'Extracted JSON file not found']);
+            unlink($file_location . $filename);
+            exit();*/
+        }
+
+        // 直接讀取 JSON 並解析
+        $verify_data = json_decode(@file_get_contents($json_file_path), true) ?? [];
+
+        // 確保 JSON 解析成功
+        if (empty($verify_data)) {
+            /*echo json_encode(["message" => 'Invalid or empty JSON data']);
+            unlink($file_location . $filename);
+            exit();*/
+        }
+
+        // 取得版本資訊（如果鍵不存在則給空值）
+        $package_version = $verify_data['Package_Version'] ?? '';
+        $match_gtcs_version = $verify_data['Match_GTCS_Version'] ?? '';
+        $match_gtcs_db_version = $verify_data['Match_GTCS_DB_Version'] ?? '';
+
+
+        // 獲取設備當前版本資訊
+        /*$current_device_info = $this->SettingModel->get_update_info();
+        if (
+            $match_gtcs_version !== $current_device_info['device_version'] ||
+            $match_gtcs_db_version !== $current_device_info['tcscondb_version']
+        ) {
+            echo json_encode(["message" => 'Version not match']);
+            unlink($file_location . $filename);
+            exit();
+        }*/
+
+        // 設置目標路徑
+        $destination = (PHP_OS_FAMILY == 'Linux') ? '/var/www/html/tccidas/' : $file_location . '/tccidas';
+
+        // 更新文件權限（必要時）
+        exec("sudo chmod 755 -R /var/www/html/tccidas");
+
+        // 複製新版本的資料
+        if (!$this->copyFolder($file_location . '/package_temp/package/das', $destination)) {
+            echo json_encode(["message" => 'Failed to copy files']);
+            exit();
+        }
+
+        // 更新 IDAS 版本
+        $this->SettingModel->update_idas_vesrion($package_version);
+        $this->SettingModel->update_idas_match_gtcs_app_version($match_gtcs_version);
+
+        // 最後清理文件
+        $this->deleteFolder($file_location . 'package_temp');
+        unlink($file_location . $filename);
+
+        echo json_encode(["message" => 'Update successful']);
+
+
+
+
+    }
+
+
+    
+    /*public function iDas_Update_bk(){
 
 
         if(empty($_FILES)){
@@ -895,8 +996,8 @@ class Settings extends Controller
             $file_location = '/mnt/ramdisk/';
         }else{//windows暫不考慮升級，可能整包升級
             $file_location = $_SERVER['DOCUMENT_ROOT'].'/';
-            echo json_encode(["message" => 'not for windows']);
-            exit();
+            //echo json_encode(["message" => 'not for windows']);
+            //exit();
         }
 
         if(empty($_FILES)){
@@ -913,7 +1014,7 @@ class Settings extends Controller
         }
 
         $extract_result = $this->Extract_File($file_location,$filename);
-        $file_path = $file_location.'package_temp/package/verify';
+        $file_path = $file_location.'tccidas/';
 
 
         var_dump($file_location);
@@ -977,7 +1078,7 @@ class Settings extends Controller
         }
 
         echo json_encode(["message" => $message]);
-    }
+    }*/
 
     public function Extract_File($file_location,$filename){
 
