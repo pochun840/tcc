@@ -137,6 +137,8 @@ function DB_sync_idas(argument) {
             }
         )
 }
+
+
 function DB_sync_idas_load(argument){
     var language = getCookie('language');
     var titles = {
@@ -172,6 +174,26 @@ function DB_sync_idas_load(argument){
     var title = titles[language] ? titles[language][argument] : titles["default"][argument];
     var message = messages[language] ? messages[language][argument] : messages["default"][argument];
 
+    // 设置 alertify 默认配置
+    alertify.defaults = alertify.defaults || {};
+    alertify.defaults.transition = 'zoom'; // 可选的过渡动画效果
+    alertify.defaults.glossary.title = title;
+    alertify.defaults.glossary.ok = '确认'; // 设置中文的确认按钮文本
+    alertify.defaults.glossary.cancel = '取消'; // 设置中文的取消按钮文本
+
+    // 设置中文默认语言的对话框
+    if (language === 'zh-cn' || language === 'zh-tw') {
+        alertify.defaults.glossary.ok = '确认';
+        alertify.defaults.glossary.cancel = '取消';
+    } else {
+        alertify.defaults.glossary.ok = 'OK';
+        alertify.defaults.glossary.cancel = 'Cancel';
+    }
+
+    // 自定义 CSS 类来设置对话框的样式
+    alertify.defaults.cssClass = 'alertify-custom-dialog'; // 为对话框添加自定义类
+
+    // 调整确认框尺寸
     alertify.confirm(title, message, 
             function () {
                 $.ajax({
@@ -181,26 +203,27 @@ function DB_sync_idas_load(argument){
                     success: function (response) {
                         var responseData = JSON.parse(response);
                     
-                        // 顯示來自伺服器的 res_type 和 res_msg
+                        // 显示来自服务器的 res_type 和 res_msg
                         alertify.alert(responseData.res_type, responseData.res_msg, function () {
-                            // 在 3 秒後自動關閉視窗
+                            // 在 3 秒后自动关闭窗口
                             setTimeout(function() {
-                                alertify.closeAll(); // 關閉所有 Alertify 視窗
-                                history.go(0); // 重新載入頁面
+                                alertify.closeAll(); // 关闭所有 Alertify 对话框
+                                history.go(0); // 重新加载页面
                             }, 3000);
                         });
                     },
                     error: function (xhr, status, error) {
-                        console.error("AJAX request failed:", status, error);
+                        console.error("AJAX 请求失败:", status, error);
                     }
                 });
             }, 
             function () {
-                alertify.error('Cancelled');
+                alertify.error('已取消');
             }
-        )
-
+        );
 }
+
+
 </script>
 
 <style>
@@ -273,5 +296,47 @@ function DB_sync_idas_load(argument){
     #agent:hover {
         background: url("<?php echo $text['img_agent_hover']; ?>") no-repeat;
     }
+
+
+ 
+    .alertify-custom-dialog .ajs-buttons {
+        padding: 5px 10px !important; 
+        text-align: center;
+    }
+
+    .alertify-custom-dialog .ajs-buttons .ajs-ok, 
+    .alertify-custom-dialog .ajs-buttons .ajs-cancel {
+        font-size: 12px !important; 
+        padding: 5px 10px !important;
+        margin: 0 3px !important; 
+        font-weight: bold; 
+        border-radius: 3px !important; 
+    }
+
+    .alertify-custom-dialog .ajs-buttons .ajs-ok {
+        background-color: #4CAF50; 
+        color: white;
+    }
+
+    .alertify-custom-dialog .ajs-buttons .ajs-cancel {
+        background-color: #f44336; 
+        color: white;
+    }
+
+    .alertify-custom-dialog .ajs-buttons .ajs-ok:hover,
+    .alertify-custom-dialog .ajs-buttons .ajs-cancel:hover {
+        background-color: #45a049;*/
+    }
+
+    .ajs-button {
+        padding: 5px 10px;
+        font-size: 12px;
+        transform: translateY(-30px); /* 向上移動 30px */
+    }
+
+    .ajs-footer {
+        height: 85px; /* 設定區塊的高度為50px */
+    }
+
             
 </style>
