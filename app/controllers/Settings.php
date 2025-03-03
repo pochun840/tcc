@@ -636,9 +636,9 @@ class Settings extends Controller
         }
     
         $argument = 'D2C';
-        $Das_DB_Location = '/var/www/html/database/iDas_data.db'; // iDas 資料庫路徑
-        $Con_DB_Location = '/var/www/html/database/data.db'; // 控制器資料庫路徑
-        $Backup_DB_Location = '/var/www/html/database/data_bk.db'; // 備份資料庫路徑
+        $Das_DB_Location = '/var/www/html/database/idas_data.db'; // iDas 資料庫路徑
+        $Con_DB_Location = '/var/www/html/database/tcscon.db'; // 控制器資料庫路徑
+        $Backup_DB_Location = '/var/www/html/database/tcscon_bk.db'; // 備份資料庫路徑
     
         if (!empty($argument)) {
             if (PHP_OS_FAMILY == 'Linux' && $argument == 'D2C') {
@@ -657,12 +657,12 @@ class Settings extends Controller
                 $res_backup = $this->SettingModel->backup_CopyFile($Con_DB_Location, $Backup_DB_Location);
     
                 if ($res_backup) {
-                    // 複製備份文件為 iDas_data.db
+                    // 複製備份文件為 idas_data.db
                     if (file_exists($Backup_DB_Location)) {
                         if (file_exists($Das_DB_Location)) {
-                            unlink($Das_DB_Location); // 刪除已存在的 iDas_data.db
+                            unlink($Das_DB_Location); // 刪除已存在的 idas_data.db
                         }
-                        copy($Backup_DB_Location, $Das_DB_Location); // 複製備份文件為 iDas_data.db
+                        copy($Backup_DB_Location, $Das_DB_Location); // 複製備份文件為 idas_data.db
                         $res_msg = "同步成功";
                         $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
                     } else {
@@ -980,7 +980,7 @@ class Settings extends Controller
     }
 
 
-    
+
     /*public function iDas_Update_bk(){
 
 
