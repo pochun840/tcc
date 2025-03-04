@@ -159,7 +159,7 @@
                   row.insertCell(3).textContent = data.client_ip;
                   row.insertCell(4).textContent = data.data_time;
                   row.insertCell(5).textContent = data.job_id;
-                  row.insertCell(6).textContent = data.sequence_id;
+                  row.insertCell(6).textContent = data.sequence_id;  
                   row.insertCell(7).textContent = data.fasten_torque;
                   row.insertCell(8).textContent = torque_unit[data.torque_unit].status;
                   row.insertCell(9).textContent = data.fasten_angle;

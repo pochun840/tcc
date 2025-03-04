@@ -156,6 +156,9 @@ function toggleVisibility(targetValue) {
         enableElementById('downshift_ON','');
         enableElementById('downshift_OFF','');
 
+        document.getElementById("downshift_ON").checked = true;
+
+
         //控制欄位 顯示 / 隱藏
         /*document.getElementById("tor_hi_item").style.display= 'block';
         document.getElementById("tor_lo_item").style.display= 'block';
@@ -179,11 +182,13 @@ function toggleVisibility(targetValue) {
         enableElementById('direction_CW','');
         enableElementById('direction_CCW','');
         disableElementById('rpm','200');
-        disableElementById('downshift_ON','');
-        disableElementById('downshift_OFF','');
         disableElementById('th_tor','0');
         disableElementById('ds_tor','0.3');
         disableElementById('ds_speed','100');
+        disableElementById('downshift_ON','');
+        disableElementById('downshift_OFF','');
+        document.getElementById("downshift_OFF").checked = true;
+
 
         //控制欄位 顯示 / 隱藏
         /*document.getElementById("tor_hi_item").style.display= 'block';
@@ -213,6 +218,7 @@ function toggleVisibility(targetValue) {
         disableElementById('direction_CCW','');
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
+        document.getElementById("downshift_OFF").checked = true;
 
 
         //控制欄位 顯示 / 隱藏
