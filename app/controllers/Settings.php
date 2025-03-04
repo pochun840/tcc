@@ -614,8 +614,6 @@ class Settings extends Controller
 
     }
 
-
-
     //把  /var/www/html/database/data.db 備份為 /var/www/html/database/data_bk.db
     //並把 data_bk.db 再另存一個.db 檔名為iDas_data.db
     public function Sync_check_db() {
@@ -950,9 +948,6 @@ class Settings extends Controller
         unlink($file_location . $filename);
 
         echo json_encode(["message" => 'Update successful']);
-
-
-
 
     }
 
