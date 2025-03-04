@@ -56,7 +56,7 @@
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_language'];?>:</div>
                     <div class="col-3 t2">
-                        <select class="form-select" id="select_language" name="select_language">
+                        <select class="form-select" id="select_language" name="select_language" style="height: 35px;">
                             <?php 
                             foreach($data['lang_arr'] as $k_lang =>$v_lang) { 
                                 $selected = ($data['controller_info']['device_language'] ==$k_lang) ? 'selected' : '';
@@ -73,7 +73,7 @@
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['torque_unit'];?>:</div>
                     <div class="col-3 t2">
-                        <select class="form-select" id="select_torque_unit" name="select_torque_unit">
+                        <select class="form-select" id="select_torque_unit" name="select_torque_unit" style="height: 35px;">
                             <?php 
                             foreach($data['unit_arr'] as $k_unit => $v_unit) { 
                                 $selected = ($data['controller_info']['torque_unit'] == $k_unit) ? 'selected' : '';

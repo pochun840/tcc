@@ -14,7 +14,6 @@ class Tools extends Controller
 
         $isMobile = $this->isMobileCheck();
         $Controller_Info = $this->ToolModel->GetControllerInfo();
-        //$Device_Info = $this->ToolModel->GetDeviceInfo();
         $Tool_Info = $this->ToolModel->GetToolInfo();
 
         if (!empty($Tool_Info['calibration_time'])) {
@@ -25,16 +24,12 @@ class Tools extends Controller
 
         $MAC = $this->getMacAddress();
         $ip_addr = $this->getIp();
-        //$device_info = $this->Device_Info();
-
         $data = [
             'isMobile' => $isMobile,
             'controller_info' => $Controller_Info,
-            //'Device_Info' => $Device_Info,
             'tools_info' => $Tool_Info,
             'IP' => $ip_addr,
             'MAC' => $MAC,
-            //'device_info' => $device_info
         ];
 
 
