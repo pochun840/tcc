@@ -16,7 +16,13 @@ class Tools extends Controller
         $Controller_Info = $this->ToolModel->GetControllerInfo();
         //$Device_Info = $this->ToolModel->GetDeviceInfo();
         $Tool_Info = $this->ToolModel->GetToolInfo();
-        
+
+        if (!empty($Tool_Info['calibration_time'])) {
+            if ($date = DateTime::createFromFormat('YmdHis', $Tool_Info['calibration_time'])) {
+                $Tool_Info['calibration_time'] = $date->format('Y/m/d');
+            }
+        }
+
         $MAC = $this->getMacAddress();
         $ip_addr = $this->getIp();
         //$device_info = $this->Device_Info();
@@ -31,9 +37,7 @@ class Tools extends Controller
             //'device_info' => $device_info
         ];
 
-        /*echo "<pre>";
-        print_r($data);
-        echo "</pre>";*/
+
         $this->view('tool/index', $data);
     }
 

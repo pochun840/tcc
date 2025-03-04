@@ -311,6 +311,7 @@ $text['total_counts'] = '本周期拧紧次数';
 $text['tool_max_torque2'] = '最大扭力';
 $text['tool_max_speed'] = '最大转速';
 $text['calibration_value'] = '校准值';
+$text['calibration_time'] = '校准時間';
 
 $text['controller_info'] = '控制器信息';
 $text['controller_sn'] = '控制器序号';

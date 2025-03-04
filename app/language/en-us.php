@@ -326,6 +326,7 @@ $text['total_counts'] = 'Total Counts';
 $text['tool_max_torque2'] = 'Max Torque';
 $text['tool_max_speed'] = 'Max Speed';
 $text['calibration_value'] = 'Calibration Value';
+$text['calibration_time'] = 'Calibration Time';
 
 $text['controller_info'] = 'Controller Information';
 $text['controller_sn'] = 'Controller SN';

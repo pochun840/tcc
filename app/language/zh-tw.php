@@ -311,6 +311,7 @@ $text['total_counts'] = '維護顆數';
 $text['tool_max_torque2'] = '最大扭力';
 $text['tool_max_speed'] = '最大轉速';
 $text['calibration_value'] = '校準值';
+$text['calibration_time'] = '校準時間';
 
 $text['controller_info'] = '控制器資訊';
 $text['controller_sn'] = '控制器序號';

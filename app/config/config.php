@@ -6,7 +6,7 @@ define('APPROOT', dirname(dirname(__FILE__)) . '/');
 define('URLROOT', '../public/'); //local用
 
 // 網站名稱
-define('SITENAME', 'iDAS');
+define('SITENAME', 'iDAS DEVICE');
 
 // iDAS連線模式 0:單機版 1:連線版
 define('IDASMODE', '1');
