@@ -427,10 +427,6 @@
 </div>
 
 <script>
-
-
-
-
 function time_save(){
     var newTime = document.getElementById('newTime').value;
     var device_id = <?php echo $data['controller_info']['device_id'];?>;

@@ -100,6 +100,7 @@
             			</div>
                     </div>
                 </div>
+                
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_buzzer'];?>:</div>
                     <div class="col t2">
