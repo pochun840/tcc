@@ -27,36 +27,39 @@
                             <div class="col-6" style="font-size: 18px; margin: 5px 10px 5px"><?php echo $text['tool_sn'];?>:</div>
                             <div class="col" style="font-size: 18px; margin: 5px 5px 5px"><?php echo $data['tools_info']['tool_sn'];?></div>
                         </div>
-
-                        <div class="row border-bottom">
-                            <div class="col-6" style="font-size: 18px; margin: 5px 10px 5px"><?php echo $text['calibration_time'];?>:</div>
-                            <div class="col" style="font-size: 18px; margin: 5px 5px 5px"><?php echo $data['tools_info']['calibration_time'];?></div>
-                        </div>
-                        
+            
                         <div class="row border-bottom">
                             <div class="col-6" style="font-size: 18px; margin: 5px 10px 5px"><?php echo $text['sw_version'];?>:</div>
                             <div class="col" style="font-size: 18px; margin: 5px 5px 5px">---------</div>
                         </div>
                         <div class="row border-bottom">
                             <div class="col-6" style="font-size: 18px; margin: 5px 10px 5px"><?php echo $text['maintain_counts'];?>:</div>
-                            <div class="col-2" style="font-size: 18px; margin: 5px 5px 5px"><?php echo $data['tools_info']['tool_maintain_counts'];?></div>&nbsp;
-                           
+                            <div class="col-2" style="font-size: 18px; margin: 5px 5px 5px"><?php echo $data['tools_info']['tool_maintain_counts'];?></div>&nbsp;   
                         </div>
+
                         <div class="row border-bottom">
                             <div class="col-6" style="font-size: 18px; margin: 5px 10px 5px"><?php echo $text['total_counts'];?>:</div>
                             <div class="col" style="font-size: 18px; margin: 5px 5px 5px"><?php echo $data['tools_info']['tool_total_counts'];?></div>
                         </div>
+
                         <div class="row border-bottom">
                             <div class="col-6" style="font-size: 18px; margin: 5px 10px 5px"><?php echo $text['tool_max_torque2'];?>:</div>
                             <div class="col" style="font-size: 18px; margin: 5px 5px 5px"><?php echo  $data['tools_info']['tool_maxtorque'];?></div>
                         </div>
+
                         <div class="row border-bottom">
                             <div class="col-6" style="font-size: 18px; margin: 5px 10px 5px"><?php echo $text['tool_max_speed'];?>:</div>
                             <div class="col" style="font-size: 18px; margin: 5px 5px 5px"><?php echo $data['tools_info']['tool_maxrpm'];?></div>
                         </div>
+
                         <div class="row border-bottom">
                             <div class="col-6" style="font-size: 18px; margin: 5px 10px 5px"><?php echo $text['calibration_value'];?>:</div>
                             <div class="col" style="font-size: 18px; margin: 5px 5px 5px"><?php echo $data['tools_info']['tool_calibration'];?></div>
+                        </div>
+
+                        <div class="row border-bottom">
+                            <div class="col-6" style="font-size: 18px; margin: 5px 10px 5px"><?php echo $text['calibration_time'];?>:</div>
+                            <div class="col" style="font-size: 18px; margin: 5px 5px 5px"><?php echo $data['tools_info']['calibration_time'];?></div>
                         </div>
 
                         <hr>
