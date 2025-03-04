@@ -306,7 +306,7 @@ class Settings extends Controller
           $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
           if($res['count'] =="1"){
                 //UPDATE
-                
+
                 $res = $this->SettingModel->Controller_Setting($con_setting);
                 $result = array();
                 if($res){
@@ -619,61 +619,42 @@ class Settings extends Controller
     //把  /var/www/html/database/data.db 備份為 /var/www/html/database/data_bk.db
     //並把 data_bk.db 再另存一個.db 檔名為iDas_data.db
     public function Sync_check_db() {
+
         $file = $this->MiscellaneousModel->lang_load();
         if (!empty($file)) {
             include $file;
         }
     
-        $input_check = true;
         if (!empty($_POST['argument']) && isset($_POST['argument'])) {
             $argument = $_POST['argument'];
         } else {
             $argument = '';
-        }
-    
-        $argument = 'D2C';
-        $Das_DB_Location = '/var/www/html/database/idas_data.db'; // iDas 資料庫路徑
-        $Con_DB_Location = '/var/www/html/database/tcscon.db'; // 控制器資料庫路徑
-        $Backup_DB_Location = '/var/www/html/database/tcscon_bk.db'; // 備份資料庫路徑
+        }    
+
+        $Das_DB_Location = '/var/www/html/database/idas_data.db'; 
+        $Con_DB_Location = '/var/www/html/database/tcscon.db'; 
     
         if (!empty($argument)) {
             if (PHP_OS_FAMILY == 'Linux' && $argument == 'D2C') {
     
-                // 時間差異提醒
-                if (filemtime($Con_DB_Location) > filemtime($Das_DB_Location)) {
-                    $notice = $text['system_sync_notice'] . date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
+                if (!file_exists($Con_DB_Location)) {
+                    
+                    $res_msg = "Error: tcscon.db does not exist.";
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                    return;
                 }
     
-                // DB 欄位差異判斷
-                if (!$this->Database_Column_Diff()) {
-                    $warning .= 'DB 結構不相同';
-                }
-    
-                // 備份並複製文件
-                $res_backup = $this->SettingModel->backup_CopyFile($Con_DB_Location, $Backup_DB_Location);
-    
-                if ($res_backup) {
-                    // 複製備份文件為 idas_data.db
-                    if (file_exists($Backup_DB_Location)) {
-                        if (file_exists($Das_DB_Location)) {
-                            unlink($Das_DB_Location); // 刪除已存在的 idas_data.db
-                        }
-                        copy($Backup_DB_Location, $Das_DB_Location); // 複製備份文件為 idas_data.db
-                        $res_msg = "同步成功";
-                        $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
-                    } else {
-                        $res_msg = "備份文件不存在";
-                        $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
-                    }
+                if (copy($Con_DB_Location, $Das_DB_Location)) {
+                    $res_msg = "SYNC Success";
+                    $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
                 } else {
-                    $res_msg = "備份錯誤";
+                    $res_msg = "SYNC Error";
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
-    
-                echo $res_msg;
             }
         }
     }
+    
     
     
     public  function Sync_check_db_load(){
