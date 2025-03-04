@@ -116,32 +116,29 @@ function DB_sync_idas(argument) {
     var message = messages[language] ? messages[language][argument] : messages["default"][argument];
 
     alertify.confirm(title, message, 
-            function () {
-                $.ajax({
-                    url: "?url=Settings/Sync_check_db",
-                    method: "POST",
-                    data: { argument: argument },
-                    success: function (response) {
-                        var responseData = JSON.parse(response);
-                        
-                        // 显示来自服务器的 res_type 和 res_msg
-                        alertify.alert(responseData.res_type, responseData.res_msg, function () {
-                            // 在 3 秒后自动关闭窗口
-                            setTimeout(function() {
-                                alertify.closeAll(); // 关闭所有 Alertify 对话框
-                                history.go(0); // 重新加载页面
-                            }, 3000);
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("AJAX request failed:", status, error);
-                    }
-                });
-            }, 
-            function () {
-                alertify.error('Cancelled');
-            }
-        )
+        function () {
+            $.ajax({
+                url: "?url=Settings/Sync_check_db",
+                method: "POST",
+                data: { argument: argument },
+                success: function (response) {
+                    var responseData = JSON.parse(response);
+                    alertify.alert(responseData.res_type, responseData.res_msg, function () {
+                        setTimeout(function() {
+                            alertify.dismissAll(); 
+                            history.go(0); 
+                        }, 3000);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                }
+            });
+        }, 
+        function () {
+            alertify.error('Cancelled');
+        }
+    )
 }
 
 
@@ -211,10 +208,9 @@ function DB_sync_idas_load(argument){
                     
                         // 显示来自服务器的 res_type 和 res_msg
                         alertify.alert(responseData.res_type, responseData.res_msg, function () {
-                            // 在 3 秒后自动关闭窗口
                             setTimeout(function() {
-                                alertify.closeAll(); // 关闭所有 Alertify 对话框
-                                history.go(0); // 重新加载页面
+                                alertify.dismissAll();
+                                history.go(0); 
                             }, 3000);
                         });
                     },

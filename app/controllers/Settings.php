@@ -645,10 +645,10 @@ class Settings extends Controller
                 }
     
                 if (copy($Con_DB_Location, $Das_DB_Location)) {
-                    $res_msg = "SYNC Success";
+                    $res_msg = $text['sync'].$text['success'] ;
                     $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
                 } else {
-                    $res_msg = "SYNC Error";
+                    $res_msg  = $text['sync'].$text['fail'];
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
             }
@@ -694,10 +694,10 @@ class Settings extends Controller
                 $res  = $this->SettingModel->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
                 $result = array();
                 if($res){
-                    $res_msg  = "SYNC Success";
+                    $res_msg  = $text['sync'].$text['success'];
                     $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
                 }else{
-                    $res_msg  = "SYNC Error";
+                    $res_msg  = $text['sync'].$text['fail'];
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
 

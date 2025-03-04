@@ -387,6 +387,8 @@ $text['system_sync_notice'] = 'Controller last update time (UTC):';
 $text['system_sync_warning'] = 'The DB version of iDas is smaller than the controller';
 $text['system_sync_warning_title'] = 'iDas update time is older than the controller, do you still need to synchronize';
 $text['system_sync_warning_login'] = 'Controller has logged in';
+$text['sync'] = 'SYNC';
+
 
 //barcode setting
 $text['system_barcode_setting'] = 'Barcode Setting';

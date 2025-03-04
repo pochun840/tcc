@@ -377,6 +377,7 @@ $text['system_sync_notice'] = '控制器最后更新时间(UTC)：';
 $text['system_sync_warning'] = 'iDas的DB版本小于控制器';
 $text['system_sync_warning_title'] = 'iDas更新时间较控制器旧，是否仍要同步';
 $text['system_sync_warning_login'] = '控制器已登入';
+$text['sync'] = '同步';
 
 //barcode setting
 $text['system_barcode_setting'] = '条码设定';
