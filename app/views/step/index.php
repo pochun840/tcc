@@ -238,7 +238,7 @@
                                 <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                                 <div class="col t2" >
                                     <div class="col-4 form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="th_mode" id="downshift_OFF" value="0" checked="checked">
+                                    <input class="form-check-input" type="radio" name="th_mode" id="downshift_OFF" value="0">
                                     <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
@@ -416,12 +416,12 @@
                                 <div for="edit_th_mode" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                                 <div class="col t2" >
                                     <div class="col-4 form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_ON" value="1">
-                                    <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
+                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_OFF" value="0" onchange="toggleThTorDisabled()" >
+                                    <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_OFF" value="0" >
-                                    <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
+                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_ON" value="1" onchange="toggleThTorDisabled()">
+                                    <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
                                     </div>
                                 </div>
                             </div>
@@ -702,7 +702,9 @@ function edit_step(stepid){
                 setRadioButton_value(radioButtons_direction, direction);
 
 
-        
+                toggleThTorDisabled();
+
+
   
             },
             error: function(xhr, status, error) {
@@ -742,8 +744,6 @@ function create_step() {
         toggleVisibility(target_opt_Value);
     });
 
-    // 處理 th_mode
-    //detectDownshiftSelection();
 }
 
 // 用來根據 downshift 的選項來控制其他欄位的 disabled 狀態
@@ -760,6 +760,8 @@ function toggleDisabledFields() {
         document.getElementById('ds_speed').disabled = true;
     }
 }
+
+
 
   
 function add_step() {
@@ -1167,7 +1169,8 @@ function input_check_savestep() {
     let hi_angle_min = 1;
 
     let conditions = []; // 初始化為空數組
-
+  
+    let target_tor_value = document.getElementById('target_tor').value;
     // 檢查 downshift_OFF 是否被選中
     let isDownshiftOff = document.getElementById("downshift_OFF").checked;
 
@@ -1179,16 +1182,14 @@ function input_check_savestep() {
             { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
             { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
             { id: 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-            //{ id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            //{ id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            //{ id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+
         ];
 
         // 如果 downshift_OFF 被選中，跳過 th_tor, ds_tor, ds_speed 的驗證
         if (!isDownshiftOff) {
             conditions.push(
-                { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-                { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: target_tor_value },
+                { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: target_tor_value},
                 { id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
             );
         }
@@ -1338,4 +1339,6 @@ function restoreBackupOptions() {
     });
 
 }
+
+
 </script>   

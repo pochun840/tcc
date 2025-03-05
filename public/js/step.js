@@ -218,6 +218,7 @@ function toggleVisibility(targetValue) {
         disableElementById('direction_CCW','');
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
+
         document.getElementById("downshift_OFF").checked = true;
 
 
@@ -275,19 +276,9 @@ function handleTargetOptChange(target_opt) {
         enableElementByName("edit_direction");
         enableElementByName("edit_th_mode");
 
-
-        //欄位 控制
-        /*document.getElementById("edit_tor_hi_item").style.display= 'block';
-        document.getElementById("edit_tor_lo_item").style.display= 'block';
-        document.getElementById("edit_ang_hi_item").style.display= 'block';
-        document.getElementById("edit_ang_lo_item").style.display= 'block';
-        document.getElementById("edit_rpm_item").style.display= 'block';
-        document.getElementById("edit_direction_item").style.display= 'block';
-        document.getElementById("edit_th_mode_item").style.display = 'block';
-        document.getElementById("edit_th_tor_item").style.display = 'block';
-        document.getElementById("edit_ds_tor_item").style.display = 'block';
-        document.getElementById("edit_ds_speed_item").style.display = 'block';
-        document.getElementById("edit_th_mode_item").style.display = 'block';*/
+        document.getElementById("downshift_ON").checked = true;
+        //document.getElementById("downshift_OFF").checked = true;
+  
 
     }
 
@@ -307,19 +298,8 @@ function handleTargetOptChange(target_opt) {
         disableElementsByName("edit_th_mode");
         enableElementByName("edit_direction");
 
-
-        //欄位 控制
-        /*document.getElementById("edit_tor_hi_item").style.display= 'block';
-        document.getElementById("edit_tor_lo_item").style.display= 'block';
-        document.getElementById("edit_ang_hi_item").style.display= 'block';
-        document.getElementById("edit_ang_lo_item").style.display= 'block';
-        document.getElementById("edit_rpm_item").style.display= 'none';
-        document.getElementById("edit_direction_item").style.display= 'block';
-        document.getElementById("edit_th_mode_item").style.display = 'none';
-        document.getElementById("edit_th_tor_item").style.display = 'none';
-        document.getElementById("edit_ds_tor_item").style.display = 'none';
-        document.getElementById("edit_ds_speed_item").style.display = 'none';
-        document.getElementById("edit_th_mode_item").style.display = 'none';*/
+        alert('123');
+        document.getElementById("downshift_OFF").checked = true;
   
     }
 
@@ -340,18 +320,7 @@ function handleTargetOptChange(target_opt) {
         disableElementsByName("edit_th_mode");
         disableElementsByName("edit_direction");
 
-        //欄位 控制
-        /*document.getElementById("edit_tor_hi_item").style.display= 'none';
-        document.getElementById("edit_tor_lo_item").style.display= 'none';
-        document.getElementById("edit_ang_hi_item").style.display= 'none';
-        document.getElementById("edit_ang_lo_item").style.display= 'none';
-        document.getElementById("edit_rpm_item").style.display= 'none';
-        document.getElementById("edit_direction_item").style.display= 'none';
-        document.getElementById("edit_th_mode_item").style.display = 'none';
-        document.getElementById("edit_th_tor_item").style.display = 'none';
-        document.getElementById("edit_ds_tor_item").style.display = 'none';
-        document.getElementById("edit_ds_speed_item").style.display = 'none';
-        document.getElementById("edit_th_mode_item").style.display = 'none';*/
+        document.getElementById("downshift_OFF").checked = true;
 
 
     }
@@ -432,5 +401,18 @@ function del_stepid(step_id){
 
 
 
+function toggleThTorDisabled() {
+
+    const radios = document.getElementsByName('edit_th_mode');
+    const edit_th_tor = document.getElementById('edit_th_tor');
+    const edit_ds_tor = document.getElementById('edit_ds_tor');
+    const edit_ds_speed = document.getElementById('edit_ds_speed');
+
+    // 檢查是否有 "downshift_OFF" 單選框被選中
+    const isDownshiftOffChecked = Array.from(radios).some(radio => radio.checked && radio.value === '0');
+    edit_th_tor.disabled = isDownshiftOffChecked;
+    edit_ds_tor.disabled = isDownshiftOffChecked;
+    edit_ds_speed.disabled = isDownshiftOffChecked;
+}
 
 

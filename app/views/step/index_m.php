@@ -394,12 +394,12 @@
                                 <div for="edit_th_mode" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                                 <div class="col t2" >
                                     <div class="col-4 form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_ON" value="1">
-                                    <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
+                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_OFF" value="0">
+                                    <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_OFF" value="0" >
-                                    <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
+                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_ON" value="1" >
+                                    <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
                                     </div>
                                 </div>
                             </div>
@@ -617,13 +617,6 @@
                         disableElementById('edit_rpm');
                         disableElementsByName("edit_th_mode");
 
-                        //隱藏欄位
-                        /*document.getElementById("edit_rpm_item").style.display = 'none';
-                        document.getElementById("edit_th_mode_item").style.display = 'none';
-                        document.getElementById("edit_th_tor_item").style.display = 'none';
-                        document.getElementById("edit_ds_tor_item").style.display = 'none';
-                        document.getElementById("edit_ds_speed_item").style.display = 'none';
-                        document.getElementById("edit_th_mode_item").style.display = 'none';*/
 
 
                         
@@ -646,18 +639,7 @@
                         disableElementsByName("edit_th_mode");
                         disableElementsByName("edit_direction");
 
-                        //隱藏欄位
-                        /*document.getElementById("edit_tor_hi_item").style.display= 'none';
-                        document.getElementById("edit_tor_lo_item").style.display= 'none';
-                        document.getElementById("edit_ang_hi_item").style.display= 'none';
-                        document.getElementById("edit_ang_lo_item").style.display= 'none';
-                        document.getElementById("edit_rpm_item").style.display= 'none';
-                        document.getElementById("edit_direction_item").style.display= 'none';
-                        document.getElementById("edit_th_mode_item").style.display = 'none';
-                        document.getElementById("edit_th_tor_item").style.display = 'none';
-                        document.getElementById("edit_ds_tor_item").style.display = 'none';
-                        document.getElementById("edit_ds_speed_item").style.display = 'none';
-                        document.getElementById("edit_th_mode_item").style.display = 'none';*/
+     
 
 
                         
@@ -1143,6 +1125,8 @@
 
         let conditions = []; // 初始化為空數組
 
+        let target_tor_value = document.getElementById('target_tor').value;
+
         // 檢查 downshift_OFF 是否被選中
         let isDownshiftOff = document.getElementById("downshift_OFF").checked;
 
@@ -1154,16 +1138,14 @@
                 { id: 'ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
                 { id: 'ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
                 { id: 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-                //{ id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-                //{ id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-                //{ id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+
             ];
 
             // 如果 downshift_OFF 被選中，跳過 th_tor, ds_tor, ds_speed 的驗證
             if (!isDownshiftOff) {
                 conditions.push(
-                    { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-                    { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+                    { id: 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: target_tor_value },
+                    { id: 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: target_tor_value },
                     { id: 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
                 );
             }

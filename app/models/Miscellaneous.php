@@ -282,12 +282,12 @@ class Miscellaneous{
 
         
         $convertedValues = array();
-        if (!is_array($torValues)) {
-            $torValues = [$torValues];
+        if (!is_array($torValue)) {
+            $torValue = [$torValue];
         }
 
-        foreach($torValues as $torValue){
-            $torValue = floatval($torValue);
+        foreach($torValue as $value){
+            $torValue = floatval($value);
 
             #當輸入的單位是N.m
             if($inputType == $new_TorqueUnit["N.m"]){

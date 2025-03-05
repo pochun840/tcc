@@ -59,6 +59,7 @@ class Step extends Controller
         if(!empty($res_device)){
             $step_torque_unit = $res_device['torque_unit'];
             $unit_name = $torque_unit[$step_torque_unit];
+  
         }
         
         if(empty($step)){
@@ -86,6 +87,14 @@ class Step extends Controller
         if(!empty($seq_data)){
             $seq_opt = (int)$seq_data[0]['seq_opt'];
         }
+
+        #扭力單位換算 
+        if(!empty($tools)){
+
+            $tools['tool_maxtorque'] = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_maxtorque'],1, $step_torque_unit)[0];
+            $tools['tool_mintorque'] = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_mintorque'],1, $step_torque_unit)[0];
+        }
+
 
         $data = array(
             'isMobile' => $isMobile,
@@ -118,7 +127,7 @@ class Step extends Controller
             $this->view('step/index', $data);
         }
         
-        
+        //cat /boot/firmware/version
     }
 
     public function create_step(){

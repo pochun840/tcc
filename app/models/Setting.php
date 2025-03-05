@@ -191,6 +191,13 @@ class Setting{
     }
 
     public function Controller_Setting($con_setting){
+
+
+        /*echo "<pre>";
+        print_r($con_setting);
+        echo "</pre>";
+        die();*/
+
        
         $sql = "UPDATE `device` 
         SET device_name = :device_name,

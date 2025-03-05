@@ -261,62 +261,35 @@ class Settings extends Controller
 
         $input_check = true;
 
-        if( !empty($_POST['control_id']) && isset($_POST['control_id'])  ){
-            $con_setting['control_id'] = $_POST['control_id'];
-        }else{ 
-            $input_check = false; 
-        }
 
-        if( !empty($_POST['control_name']) && isset($_POST['control_name'])){
-            $con_setting['control_name'] = $_POST['control_name'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( !empty($_POST['lang_val']) && isset($_POST['lang_val'])){
-            $lang_val =  $_POST['lang_val'];
-            intval($lang_val);
-        }else{ 
-            $lang_val = 0;
-        }
-
-        $con_setting['lang_val']  = $lang_val;
-
-        if( !empty($_POST['batch_val']) && isset($_POST['batch_val'])  ){
-            $con_setting['batch_val'] = $_POST['batch_val'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( !empty($_POST['buzzer_val']) && isset($_POST['buzzer_val'])  ){
-            $con_setting['buzzer_val'] = $_POST['buzzer_val'];
-        }else{ 
-            $input_check = false; 
-        }
-        //torque_unit
-        if(!empty($_POST['torque_unit']) && isset($_POST['torque_unit']) ){
-            $con_setting['torque_unit'] = $_POST['torque_unit'];
+        if(!empty($_POST)){
+            $con_setting = array();
+            $con_setting = $_POST;
         }else{
             $input_check = false; 
         }
+       
         
-
-
+    
         if($input_check){
           $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
           if($res['count'] =="1"){
                 //UPDATE
-
+                //echo "ew";//die();
                 $res = $this->SettingModel->Controller_Setting($con_setting);
                 $result = array();
                 if($res){
+                    //echo "eeer";//die();
                     $res_type = 'Succes';
                     $res_msg = $text['Edit']." : ". $con_setting['control_id']."  ".$text['success'];
                     $this->MiscellaneousModel->generateErrorResponse('Succes', $res_msg );
                 }else{
+                    //echo "eeer11";//die();
                     $res_type = 'Error';
                     $res_msg = $text['Edit']." : ". $con_setting['control_id']."  ".$text['fail'];
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
+
+                    
                 }
                 
           }
