@@ -725,7 +725,7 @@ function create_step() {
     // 設定預設值
     document.getElementById('rpm').value = 200;
     document.getElementById('th_tor').value = 0;
-    document.getElementById('ds_tor').value = 0.3;
+    document.getElementById('ds_tor').value = 0;
     document.getElementById('ds_speed').value = 100;
 
     // 預設 downshift_ON 需要被選中
