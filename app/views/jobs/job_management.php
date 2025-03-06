@@ -98,7 +98,7 @@
             <div class="modal-content w3-animate-zoom" style="width: 70%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('newjob');"
-                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 1px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_job'];?></h3>
                 </header>
 
@@ -140,12 +140,12 @@
 
                                 <div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_off" value="0" >
-            					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
+            					  <label class="form-check-label" for="job_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
 
             			      	<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_ok" value="1">
-            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
+            					  <label class="form-check-label" for="job_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
                             </div>
                         </div>
@@ -205,7 +205,7 @@
             <div class="modal-content w3-animate-zoom" style="width: 70%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('editjob');"
-                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 1px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['edit_job'];?></h3>
                 </header>
 
@@ -230,13 +230,13 @@
                             <div class="col t2" >
 
                                 <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_job_ok" id="job_off" value="0" >
-            					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_job_ok" id="edit_job_off" value="0" >
+            					  <label class="form-check-label" for="edit_job_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
 
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_job_ok" id="job_ok" value="1">
-            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_job_ok" id="edit_job_ok" value="1">
+            					  <label class="form-check-label" for="edit_job_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
                             </div>
                         </div>
@@ -246,13 +246,13 @@
                             <div class="col t2" >
 
                                 <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="job_ok_stop_off" value="0" >
-            					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="edit_job_ok_stop_off" value="0" >
+            					  <label class="form-check-label" for="edit_job_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
 
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="job_ok_stop_ok" value="1">
-            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="edit_job_ok_stop_ok" value="1">
+            					  <label class="form-check-label" for="edit_job_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
                             </div>
                         </div>
@@ -262,18 +262,18 @@
                             <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['rev_direction'];?> :</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline col-md-3">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_CW" value="0">
-            					  <label class="form-check-label" for="rev_direction_CW" style="white-space: nowrap;"><?php  echo $text['CW'];?></label>
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="edit_direction_CW" value="0">
+            					  <label class="form-check-label" for="edit_direction_CW" style="white-space: nowrap;"><?php  echo $text['CW'];?></label>
             					</div>
 
             					<div class="form-check form-check-inline col-md-3">
-            					  <input class="form-check-input" type="radio"  name="edit_direction" id="direction_CCW" value="1">
-            					  <label class="form-check-label" for="rev_direction_CCW" style="white-space: nowrap;"><?php  echo $text['CCW'];?></label>
+            					  <input class="form-check-input" type="radio"  name="edit_direction" id="edit_direction_CCW" value="1">
+            					  <label class="form-check-label" for="edit_direction_CCW" style="white-space: nowrap;"><?php  echo $text['CCW'];?></label>
             					</div>
 
                                 <div class="form-check form-check-inline col-md-3">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="direction_disable" value="2">
-            					  <label class="form-check-label" for="rev_direction_disable" style="white-space: nowrap;"> <?php  echo $text['Disable']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="edit_direction_disable" value="2">
+            					  <label class="form-check-label" for="edit_direction_disable" style="white-space: nowrap;"> <?php  echo $text['Disable']; ?></label>
             					</div>
                             </div>
                         </div>
