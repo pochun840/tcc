@@ -298,7 +298,6 @@ function handleTargetOptChange(target_opt) {
         disableElementsByName("edit_th_mode");
         enableElementByName("edit_direction");
 
-        alert('123');
         document.getElementById("downshift_OFF").checked = true;
   
     }
