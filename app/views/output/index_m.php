@@ -593,6 +593,11 @@ function crud_job_event(argument){
                     if (timeElement) {
                         timeElement.disabled = true;
                     }
+
+                    if(output_event  == 7 || output_event == 8 || output_event  == 9){
+                        //disabled edit_time1-9 
+                        disableTimeFields();
+                    }
                 }
             });
 

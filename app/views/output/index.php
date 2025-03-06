@@ -453,6 +453,7 @@ function crud_job_event(argument){
         
    
             const filtered_C = tempC.filter(item => item.includes("edit_pin"));
+
             filtered_C.forEach(function(id) {
       
                 var match = id.match(/(edit_pin\d+)_(\d+)/);
@@ -472,13 +473,17 @@ function crud_job_event(argument){
                     // 禁用 edit_time 相關的元素
                     var timeElementId = 'edit_time' + basePinId.slice(3);
                     const toremove = "t_pin"; 
-                    timeElementId = timeElementId.replace(toremove,'');
-                 
-                    
+                    timeElementId = timeElementId.replace(toremove,''); 
                     var timeElement = document.getElementById(timeElementId);
                     if (timeElement) {
                         timeElement.disabled = true;
                     }
+
+                    if(output_event  == 7 || output_event == 8 || output_event  == 9){
+                        //disabled edit_time1-9 
+                        disableTimeFields();
+                    }
+
                 }
             });
 

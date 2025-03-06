@@ -15,3 +15,9 @@ function getLanguageMessage(cookieName) {
     }
    //alertify.alert(message);
 }
+
+function disableTimeFields() {
+   for (let i = 1; i <= 9; i++) {
+       document.getElementById(`edit_time${i}`).disabled = true;
+   }
+}
