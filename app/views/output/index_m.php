@@ -14,8 +14,8 @@
     right: 0;
     bottom: 0;
     height: 120%;
-    background-color: rgba(0, 0, 0, 0.3); /* semi-transparent black background */
-    z-index: 999; /* Ensure it overlays on top */
+    background-color: rgba(0, 0, 0, 0.3); 
+    z-index: 999; 
 }
 
 </style>   
@@ -530,7 +530,7 @@ function crud_job_event(argument){
             var eventOption = document.getElementById('Event_Option');
             eventOption.addEventListener('change', function() {
                 var selectedOptionId = parseInt(eventOption.options[eventOption.selectedIndex].value); // 轉換為整數
-                const disableOptions = [7, 8, 9, 12, 13, 14, 15, 16]; // 需要停用的選項值陣列
+                const disableOptions = [7, 8, 9];
 
                 toggleElementsInRange(1, 10, 3,filtered_array); // 先重置所有元素的狀態
 
@@ -1206,8 +1206,8 @@ function get_output_info(job_id,output_event){
                     }
                 }
            
-                //完工信號 && 馬達信號 && 啟動信號
-                if (output_event == 7  || output_event == 8 || output_event == 9 ) {
+                //完工信號 && 馬達信號 && 啟動信號 && 自定義1,2
+                if (output_event == 7  || output_event == 8 || output_event == 9  || output_event == 12  || output_event == 13) {
                     for(let i = 1; i <= 11; i++) {
                         let element1 = document.getElementById(`edit_pin${i}_1`);
                         if (element1) {
