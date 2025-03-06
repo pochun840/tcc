@@ -68,7 +68,7 @@ class Miscellaneous{
                 103 => 'Clear',
                 104 => 'Confirm',
                 105 => 'Start-IN(Remote)',
-                106 => 'Unscrew(Remote)',
+                106 => 'Reverse(Remote)',
                 107 => 'Sequence Clear',
                 108 => 'Reboot',
                 109 => 'Gate Once',

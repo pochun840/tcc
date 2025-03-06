@@ -209,7 +209,7 @@ $text['mode'] = '模式';
 
 $text['Start-IN(Remote)'] = '启动';
 $text['REVERSE_IN'] = '拆螺丝';
-$text['Unscrew(Remote)'] = '拆螺丝';
+$text['Reverse(Remote)'] = '拆螺丝';
 $text['Disable'] = '禁用';
 $text['Enable'] = '启用';
 $text['Confirm'] = '确认';

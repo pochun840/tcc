@@ -208,7 +208,7 @@ $text['YES'] = 'YES';
 $text['NO'] = 'NO';
 
 $text['Start-IN(Remote)'] = 'Start IN(Remote)';
-$text['Unscrew(Remote)'] = 'Unscrew(Remote)';
+$text['Reverse(Remote)'] = 'Reverse(Remote)';
 $text['REVERSE_IN'] = 'Reverse(Remote)';
 $text['Disable'] = 'Disable';
 $text['Enable'] = 'Enable';

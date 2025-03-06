@@ -124,7 +124,7 @@
                                 <td class="w3-left-align">105 <?php echo $text['Start-IN(Remote)'];?></td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">106 <?php echo $text['Unscrew(Remote)'];?></td>
+                                <td class="w3-left-align">106 <?php echo $text['Reverse(Remote)'];?></td>
                                 <td class="w3-left-align">107 <?php echo $text['Sequence Clear'];?></td>
                                 <td class="w3-left-align">108 <?php echo $text['Reboot'];?></td>
                             </tr>
