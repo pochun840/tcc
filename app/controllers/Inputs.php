@@ -77,8 +77,19 @@ class Inputs extends Controller
                     }
     
                     if (!empty($vv['input_event'])) {
-                        $tempA[] = $vv['input_event'];
+                        $event_value = $vv['input_event'];
+                        //Disable & Enable 不能同時存在event_option
+                        if ($event_value == 101 && !in_array(102, $tempA)) {
+                            $tempA[] = 102;
+                        }
+               
+                        if ($event_value == 102 && !in_array(101, $tempA)) {
+                            $tempA[] = 101;
+                        }
+                    
+                        $tempA[] = $event_value;
                     }
+                    
     
                     if (!empty($vv['input_gateconfirm'])) {
                         $temp_gateconfirm[] = $vv['input_gateconfirm'];
@@ -294,7 +305,6 @@ class Inputs extends Controller
             $result = array(
                 'res_type' => $res_type,
                 'res_msg'  => $res_msg
-                //'old_input_pin' =>$count['input_pin']
             );
 
             echo json_encode($result);
@@ -398,6 +408,7 @@ class Inputs extends Controller
 
 
         if($input_check){
+
             //先取得要刪除資料的PIN角位
             $ans = $this->InputModel->check_job_event_conflict($job_id,$input_event);
             //進行資料的刪除

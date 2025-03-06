@@ -784,6 +784,7 @@ function job_confirm(){
                 document.getElementById("JobSelect").style.display = 'none';
                 document.getElementById("job_id").value = jobid;
 
+
                 var s3Button = document.getElementById('S3');
                 if (!job_inputlist.trim()) {  // 检查 job_inputlist 是否为空或仅包含空白字符
                     s3Button.disabled = true;
@@ -1232,6 +1233,16 @@ function get_input_by_job_id(jobid){
             temp = data.temp;
             tempA = data.tempA;
 
+            /*if (tempA.includes(101) ) {
+                console.log('eeee');
+                tempA.push(102); 
+            } else if (tempA.includes(102) ) {
+                console.log('eeeqq');
+                tempA.push(101); 
+            }*/
+
+
+    
             document.getElementById("input_jobid_select").innerHTML = job_inputlist;
             document.getElementById("JobSelect").style.display = 'none';
             document.getElementById("job_id").value = jobid;
