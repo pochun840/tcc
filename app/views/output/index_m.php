@@ -411,7 +411,7 @@
         <div class="spinner-border text-primary" role="status">
             <span class="sr-only"></span>
         </div>
-    </div>--
+    </div>
     <!-- 加载動畫 ED -->
 
 </div>
