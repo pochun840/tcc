@@ -150,7 +150,7 @@
                             <div for="OK_Sequence" class="col-6 t1"><?php echo $text['OK_Sequence'];?> :</div>
                             <div class="col t2" >
 
-                                <div class="form-check form-check-inline">
+                                <div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="seq_ok" id="seq_off" value="0" >
             					  <label class="form-check-label" for="seq_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
@@ -169,7 +169,7 @@
                             <div for="OK_Sequence_Stop" class="col-6 t1"><?php echo $text['OK_Sequence_Stop'];?> :</div>
                             <div class="col t2" >
 
-                                <div class="form-check form-check-inline">
+                                <div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="seq_ok_stop" id="seq_ok_stop_off" value="0" >
             					  <label class="form-check-label" for="seq_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
@@ -200,8 +200,8 @@
                         
                         <div class="row">
                             <div for="NG-stop" class="col-6 t1"><?php echo $text['ns'];?> :</div>
-                            <div class="col-4 t2">
-                                <select id="seq_ns" class="col custom-file">
+                            <div class="col t2">
+                                <select id="seq_ns" class="custom-file">
                                
                                     <?php for($i=0;$i<=9;$i++) {?>
                                                 <option value="<?php echo $i;?>"><?php echo $i;?></option>
@@ -215,7 +215,7 @@
                         <div class="row">
                             <div for="OPT" class="col-6 t1"><?php  echo $text['opt'];?> :</div>
                             <div class="col t2" >
-            			      	<div class=" col-4 form-check form-check-inline">
+            			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_OFF" value="0">
             					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
             					</div>
@@ -282,14 +282,14 @@
                             <div for="OK_Sequence" class="col-6 t1"><?php echo $text['OK_Sequence'];?> :</div>
                             <div class="col t2" >
 
-                                <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_seq_ok" id="seq_off" value="0" >
-            					  <label class="form-check-label" for="seq_off"> <?php  echo $text['OFF_text']; ?></label>
+                                <div class="col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_seq_ok" id="edit_seq_off" value="0" >
+            					  <label class="form-check-label" for="edit_seq_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
 
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_seq_ok" id="seq_ok" value="1">
-            					  <label class="form-check-label" for="seq_ok"><?php  echo $text['ON_text']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_seq_ok" id="edit_seq_ok" value="1">
+            					  <label class="form-check-label" for="edit_seq_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
                             </div>
                         </div>
@@ -298,14 +298,14 @@
                             <div for="OK_Sequence_Stop" class="col-6 t1"><?php echo $text['OK_Sequence_Stop'];?> :</div>
                             <div class="col t2" >
 
-                                <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_seq_ok_stop" id="seq_ok_stop_off" value="0" >
-            					  <label class="form-check-label" for="seq_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
+                                <div class="col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_seq_ok_stop" id="edit_seq_ok_stop_off" value="0" >
+            					  <label class="form-check-label" for="edit_seq_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
 
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_seq_ok_stop" id="seq_ok_stop_ok" value="1">
-            					  <label class="form-check-label" for="seq_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_seq_ok_stop" id="edit_seq_ok_stop_ok" value="1">
+            					  <label class="form-check-label" for="edit_seq_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
                             </div>
                         </div>
@@ -328,8 +328,8 @@
                        
                         <div class="row">
                             <div for="NG-stop" class="col-6 t1"><?php echo $text['ns'];?> :</div>
-                            <div class="col-4 t2">
-                                <select id="edit_seq_ns" class="col custom-file">
+                            <div class="col t2">
+                                <select id="edit_seq_ns" class="custom-file">
                                 
                                     <?php for($i=0;$i<=9;$i++) {?>
                                         <option value="<?php echo $i;?>"><?php echo $i;?></option>
@@ -341,13 +341,13 @@
                         <div class="row">
                             <div for="OPT" class="col-6 t1"><?php  echo $text['opt'];?> :</div>
                             <div class="col t2" >
-            			      	<div class=" col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_opt_option" id="OPT_OFF" value="0">
-            					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
+            			      	<div class="col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="edit_opt_option" id="edit_OPT_OFF" value="0">
+            					  <label class="form-check-label" for="edit_OPT_OFF"><?php echo $text['switch_off'];?></label>
             					</div>
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_opt_option" id="OPT_ON" value="1">
-            					  <label class="form-check-label" for="OPT_ON"><?php echo $text['switch_on'];?></label>
+            					  <input class="form-check-input" type="radio" name="edit_opt_option" id="edit_OPT_ON" value="1">
+            					  <label class="form-check-label" for="edit_OPT_ON"><?php echo $text['switch_on'];?></label>
             					</div>
                             </div>
                         </div>
