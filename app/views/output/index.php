@@ -796,8 +796,7 @@ function get_output_by_job_id(job_id){
             temp = data.temp;
             tempA = data.tempA;
 
-            //console.log('temp:',temp);
-            //console.log('tempA:',tempA);
+          
             document.getElementById("output_jobid_select").innerHTML = job_outputlist;
             document.getElementById("JobSelect").style.display = 'none';
             document.getElementById("job_id").value = job_id;
@@ -1094,7 +1093,8 @@ function get_output_info(job_id,output_event){
                 }
 
                 //完工信號 && 馬達信號 && 啟動信號
-                if (output_event == 8  || output_event == 6 || output_event == 7 ) {
+               
+                if (output_event == 7  || output_event == 8 || output_event == 9 ) {
                     for(let i = 1; i <= 11; i++) {
                         let element1 = document.getElementById(`edit_pin${i}_1`);
                         if (element1) {
@@ -1128,6 +1128,8 @@ function get_output_info(job_id,output_event){
                             }
                         });
                     }
+
+                  
                     
                 }
 

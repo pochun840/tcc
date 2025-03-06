@@ -1207,7 +1207,7 @@ function get_output_info(job_id,output_event){
                 }
            
                 //完工信號 && 馬達信號 && 啟動信號
-                if (output_event == 8  || output_event == 6 || output_event == 7 ) {
+                if (output_event == 7  || output_event == 8 || output_event == 9 ) {
                     for(let i = 1; i <= 11; i++) {
                         let element1 = document.getElementById(`edit_pin${i}_1`);
                         if (element1) {
