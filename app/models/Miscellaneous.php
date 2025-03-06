@@ -74,9 +74,9 @@ class Miscellaneous{
                 109 => 'Gate Once',
                 110 => 'UserDefine1',
                 111 => 'UserDefine2',
-                112 => 'UserDefine3',
-                113 => 'UserDefine4',
-                114 => 'UserDefine5',
+                //112 => 'UserDefine3',
+                //113 => 'UserDefine4',
+                //114 => 'UserDefine5',
             );
         }
 
@@ -95,9 +95,9 @@ class Miscellaneous{
                 11  => 'Barcode',
                 12  => 'UserDefine1',
                 13  => 'UserDefine2',
-                14  => 'UserDefine3',
-                15  => 'UserDefine4',
-                16  => 'UserDefine5',
+                //14  => 'UserDefine3',
+                //15  => 'UserDefine4',
+                //16  => 'UserDefine5',
             );
         }
 

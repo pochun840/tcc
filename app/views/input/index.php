@@ -129,9 +129,6 @@
                             <tr>
                                 <td class="w3-left-align">110 <?php echo $text['UDEFINE'];?>1</td>
                                 <td class="w3-left-align">111 <?php echo $text['UDEFINE'];?>2</td>
-                                <td class="w3-left-align">112 <?php echo $text['UDEFINE'];?>3</td>
-                                <td class="w3-left-align">113 <?php echo $text['UDEFINE'];?>4</td>
-                                <td class="w3-left-align">114 <?php echo $text['UDEFINE'];?>5</td>
                             </tr>
                         </table>
                     </div>
