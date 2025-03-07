@@ -239,13 +239,13 @@
                             <div class="col t2" >
 
                                 <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="job_ok_stop_off" value="0" >
-            					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="edit_job_ok_stop_off" value="0" >
+            					  <label class="form-check-label" for="edit_job_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
 
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="job_ok_stop_ok" value="1">
-            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="edit_job_ok_stop_ok" value="1">
+            					  <label class="form-check-label" for="edit_job_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
                             </div>
                         </div>
@@ -254,18 +254,18 @@
                             <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['rev_direction'];?>:</div>
                             <div class="col t2" >
             			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="rev_direction_CW" value="0">
-            					  <label class="form-check-label" for="rev_direction_CW"><?php echo $text['CW'];?></label>
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="edit_rev_direction_CW" value="0">
+            					  <label class="form-check-label" for="edit_rev_direction_CW"><?php echo $text['CW'];?></label>
             					</div>
 
             					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="rev_direction__CCW" value="1">
-            					  <label class="form-check-label" for="rev_direction_CCW"><?php echo $text['CCW'];?></label>
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="edit_rev_direction__CCW" value="1">
+            					  <label class="form-check-label" for="edit_rev_direction_CCW"><?php echo $text['CCW'];?></label>
             					</div>
 
                                 <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="rev_direction_disable" value="2">
-            					  <label class="form-check-label" for="rev_direction_disable"> <?php  echo $text['Disable']; ?></label>
+            					  <input class="form-check-input" type="radio" name="edit_direction" id="edit_rev_direction_disable" value="2">
+            					  <label class="form-check-label" for="edit_rev_direction_disable"> <?php  echo $text['Disable']; ?></label>
             					</div>
 
                             </div>
