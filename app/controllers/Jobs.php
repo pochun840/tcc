@@ -77,23 +77,7 @@ class Jobs extends Controller
                 'job_ok_stop' => $_POST['job_ok_stop_val']
             );
 
-
-        
-            $resultName  = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
-            $resultPower = $this->MiscellaneousModel->validate($jobdata['rev_force'], 'rev_force');
-            $resultRpm   = $this->MiscellaneousModel->validate($jobdata['rev_speed'],'rev_speed');
-
-            if($resultPower == false){
-                $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
-                exit();
-            }
-
-            if($resultName == false){
-                $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_job_name']);
-                exit();
-            }
-
-            if ($resultName  == true  && $resultPower == true && $resultRpm == true) {
+            if ($jobdata) {
 
                 $job_count = $this->jobModel->countjob();
                 if($job_count > 50) {
@@ -137,23 +121,7 @@ class Jobs extends Controller
 
             );
 
-
-            
-            $resultName  = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
-            $resultPower = $this->MiscellaneousModel->validate($jobdata['rev_force'], 'rev_force');
-            $resultspeed = $this->MiscellaneousModel->validate($jobdata['rev_speed'], 'rev_speed');
-
-            if($resultPower == false){
-                $this->MiscellaneousModel->generateErrorResponse('Error', $text['unfasten_force']);
-                exit();
-            }
-
-            if($resultName == false){
-                $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_job_name']);
-                exit();
-            }
-
-            if ($resultName  == true  && $resultPower == true && $resultspeed  == true) {
+            if ($jobdata) {
                 
                 $res = $this->jobModel->update_job_by_id($jobdata);
                 $result = array();

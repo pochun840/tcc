@@ -196,29 +196,6 @@ class Miscellaneous{
         }
     }
 
-    public function validate($value, $type) {
-        switch ($type) {
-            case 'name':
-                return !empty($value) && 
-                       preg_match('/^[a-zA-Z0-9-]+$/', $value) && 
-                       strlen($value) <= 12;
-                       
-            case 'rev_force':
-                return is_numeric($value) && 
-                       $value > 10 && 
-                       $value <= 110;
-            
-                       
-            case 'rev_speed':
-            return is_numeric($value) && 
-                    $value > 0 && 
-                    $value <= 1100;
-                                    
-            default:
-                return false;
-        }
-    }
-
 
     public function seq_validate($value, $type) {
         switch ($type) {
