@@ -44,7 +44,7 @@ function exportData() {
             },
             success: function(response, status, xhr) {
                 var contentType = xhr.getResponseHeader('Content-Type');
-                var filename = expert_val === "1" ? 'exported_data.zip' : 'data.csv';  
+                var filename = expert_val === "1" ? 'tcc_data.zip' : 'tcc_data.csv';  
                 var blob = new Blob([response], { type: contentType });
                 var link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);

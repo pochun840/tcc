@@ -125,7 +125,7 @@ class Data extends Controller
                
                 $csv_headers = array_keys($dataset[0]);
                 header('Content-Type: text/csv; charset=utf-8');
-                header('Content-Disposition: attachment; filename=data.csv');
+                header('Content-Disposition: attachment; filename=tcc_data.csv');
     
                 $output = fopen('php://output', 'w');
                 fputcsv($output, $csv_headers);
@@ -147,14 +147,14 @@ class Data extends Controller
                 }
     
                 $zip = new ZipArchive();
-                $zip_filename = tempnam(sys_get_temp_dir(), 'exported_data') . '.zip';
+                $zip_filename = tempnam(sys_get_temp_dir(), 'tcc_data') . '.zip';
     
                 if ($zip->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
                     $zip->addFromString("data.csv", $csv_content);
                     $zip->close();
     
                     header('Content-Type: application/zip');
-                    header('Content-Disposition: attachment; filename=exported_data.zip');
+                    header('Content-Disposition: attachment; filename=tcc_data.zip');
                     header('Content-Length: ' . filesize($zip_filename));
                     readfile($zip_filename);
                     unlink($zip_filename);
