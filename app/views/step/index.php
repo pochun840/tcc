@@ -755,6 +755,7 @@ function create_step() {
     }
 
     if(firstOptionValue == 2){
+
         document.getElementById("downshift_OFF").checked = true;
         document.getElementById("downshift_OFF").disabled = true;
         document.getElementById("downshift_ON").disabled = true;
