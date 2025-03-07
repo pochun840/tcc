@@ -48,7 +48,7 @@
             </div>
 
             <div class="table-container">
-                <table id="step_table" class="table w3-table-all w3-hoverable">
+                <table id="step_table" class="table w3-table">
                     <thead id="header-table">
                         <tr class="w3-dark-grey">
                             <th><?php echo $text['step_id'];?></th>
@@ -226,7 +226,7 @@
                                     <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">
+                                    <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1">
                                     <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
                                     </div>
                                 </div>
@@ -305,7 +305,7 @@
                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col-4 t2">
-                                <select id="edit_target_opt" name="edit_target_opt" class="col custom-file" onchange="targetOptChangeHandler()">
+                                <select id="edit_target_opt" name="edit_target_opt" class="col custom-file" onchange="targetOptChangeHandler()" style="width:225px">
                                     <?php foreach($data['target_option'] as $key => $val){?>
                                         <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
                                     <?php }?>
@@ -400,12 +400,12 @@
                                 <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
                                 <div class="col t2" >
                                     <div class="col-4 form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_direction" id="direction_CW" value="0">
-                                    <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
+                                    <input class="form-check-input" type="radio" name="edit_direction" id="edit_direction_CW" value="0">
+                                    <label class="form-check-label" for="edit_direction_CW"><?php echo $text['CW'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_direction" id="direction_CCW" value="1">
-                                    <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
+                                    <input class="form-check-input" type="radio" name="edit_direction" id="edit_direction_CCW" value="1">
+                                    <label class="form-check-label" for="edit_direction_CCW"><?php echo $text['CCW'];?></label>
                                     </div>
                                 </div>
                             </div>
@@ -416,12 +416,12 @@
                                 <div for="edit_th_mode" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
                                 <div class="col t2" >
                                     <div class="col-4 form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_OFF" value="0" onchange="toggleThTorDisabled()" >
-                                    <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
+                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="edit_downshift_OFF" value="0" onchange="toggleThTorDisabled()" >
+                                    <label class="form-check-label" for="edit_downshift_OFF"><?php echo $text['switch_off'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="downshift_ON" value="1" onchange="toggleThTorDisabled()">
-                                    <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
+                                    <input class="form-check-input" type="radio" name="edit_th_mode" id="edit_downshift_ON" value="1" onchange="toggleThTorDisabled()">
+                                    <label class="form-check-label" for="edit_downshift_ON"><?php echo $text['switch_on'];?></label>
                                     </div>
                                 </div>
                             </div>
@@ -727,6 +727,7 @@ function create_step() {
     document.getElementById('th_tor').value = 0;
     document.getElementById('ds_tor').value = 0;
     document.getElementById('ds_speed').value = 100;
+    document.getElementById("direction_CW").checked = true;
 
     // 預設 downshift_ON 需要被選中
     document.getElementById("downshift_ON").checked = true;

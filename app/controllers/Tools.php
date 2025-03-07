@@ -16,9 +16,9 @@ class Tools extends Controller
         $Controller_Info = $this->ToolModel->GetControllerInfo();
         $Tool_Info = $this->ToolModel->GetToolInfo();
 
-        if (!empty($Tool_Info['calibration_time'])) {
-            if ($date = DateTime::createFromFormat('YmdHis', $Tool_Info['calibration_time'])) {
-                $Tool_Info['calibration_time'] = $date->format('Y/m/d');
+        if (!empty($Tool_Info['tool_calib_time'])) {
+            if ($date = DateTime::createFromFormat('YmdHis', $Tool_Info['tool_calib_time'])) {
+                $Tool_Info['tool_calib_time'] = $date->format('Y/m/d');
             }
         }
 

@@ -42,7 +42,7 @@
             <div class="table-container">
                 <div class="scrollbar" id="style-jobtable">
                     <div class="force-overflow">
-                        <table id="seq_table" class="table w3-table-all w3-hoverable">
+                        <table id="seq_table" class="table w3-table">
                             <thead id="header-table">
                                 <tr class="w3-dark-grey">
                                     <th><?php echo $text['seq_id'];?></th>
@@ -71,7 +71,7 @@
                                         
 
                                     </td>
-                                    <td><img src="./img/btn_up.png"   onclick="MoveUp(this);"></td>
+                                    <td><img src="./img/btn_up.png" onclick="MoveUp(this);"></td>
                                     <td><img src="./img/btn_down.png" onclick="MoveDown(this);"></td>
                                     <td><?php echo $val['total_step'];?></td>
                                     <?php $url ='?url=Step/index/'.$data['job_id']."/".$val['seq_id'];?>

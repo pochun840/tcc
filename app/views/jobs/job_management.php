@@ -38,7 +38,7 @@
             <div class="table-container">
                 <div class="scrollbar" id="style-jobtable">
                     <div class="force-overflow">
-                        <table id="job_table"  class="table w3-table-all w3-hoverable">
+                        <table id="job_table"  class="table w3-table">
                             <thead id="header-table">
                                 <tr class="w3-dark-grey">
                                     <th><?php echo $text['job_id'];?></th>

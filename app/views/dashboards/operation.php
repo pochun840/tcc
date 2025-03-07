@@ -86,7 +86,7 @@
                             </tbody>
                         </table>
 
-                            <div id="chart" style="width: 100%; height: 80%"></div>
+                            <div id="chart" style="height: calc(50vh - 100px)"></div>
                         </div>      
 
                         
