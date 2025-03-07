@@ -714,10 +714,6 @@ function edit_step(stepid){
     }
 }
 
-
-
-
-
 function create_step() {
     // 顯示新步驟
     document.getElementById('newstep').style.display = 'block';
@@ -730,7 +726,7 @@ function create_step() {
     document.getElementById("direction_CW").checked = true;
 
     // 預設 downshift_ON 需要被選中
-    document.getElementById("downshift_ON").checked = true;
+    document.getElementById("downshift_OFF").checked = true;
     toggleDisabledFields();  // 根據 downshift 的選項來控制其他欄位的狀態
 
     // downshift 變更
@@ -739,11 +735,53 @@ function create_step() {
 
     // target_opt 變更
     var targetoptionselect = document.getElementById('target_opt');
+    var firstOptionValue = targetoptionselect.options[0].value;
+    
+    if(firstOptionValue == 1){
+
+        document.getElementById("downshift_OFF").checked = true;
+        document.getElementById("downshift_OFF").disabled = true;
+        document.getElementById("downshift_ON").disabled = true;
+        document.getElementById('th_tor').disabled = true;
+        document.getElementById('ds_tor').disabled = true;
+        document.getElementById('ds_speed').disabled = true;
+        document.getElementById('rpm').disabled = true;
+
+        document.getElementById('target_tor_item').style.display='none';
+        document.getElementById('target_ang_item').style.display='block';
+        document.getElementById('target_delay_item').style.display='none';
+  
+
+    }
+
+    if(firstOptionValue == 2){
+        document.getElementById("downshift_OFF").checked = true;
+        document.getElementById("downshift_OFF").disabled = true;
+        document.getElementById("downshift_ON").disabled = true;
+        document.getElementById('th_tor').disabled = true;
+        document.getElementById('ds_tor').disabled = true;
+        document.getElementById('ds_speed').disabled = true;
+        document.getElementById('rpm').disabled = true;
+        document.getElementById('tor_hi').disabled = true;
+        document.getElementById('tor_lo').disabled = true;
+        document.getElementById('ang_hi').disabled = true;
+        document.getElementById('ang_lo').disabled = true;
+
+        document.getElementById('target_tor_item').style.display='none';
+        document.getElementById('target_ang_item').style.display='none';
+        document.getElementById('target_delay_item').style.display='block';
+    }
+
+
+
     targetoptionselect.addEventListener('change', function() {
         var target_opt_Value = targetoptionselect.value;
         localStorage.setItem('target_option', target_opt_Value);
         toggleVisibility(target_opt_Value);
     });
+
+    
+    
 
 }
 
@@ -1029,12 +1067,11 @@ function copy_step_by_id_ajax() {
                 alertify.alert('Error', 'There was an issue with the request. Please try again later.');
             },
             complete: function() {
-                isProcessing = false; // 處理結束
+                isProcessing = false; 
             }
         });
     } else {
-        //alert('stepid_new 變數未定義或為空');
-        isProcessing = false; // 如果 stepid_new 不正確，重置處理狀態
+        isProcessing = false; 
     }
 }
 
@@ -1113,9 +1150,7 @@ function input_check_editstep(){
             { id: 'edit_ang_hi', pattern: /^\d{0,5}?$/, min: 1, max: 9999 },
             { id: 'edit_ang_lo', pattern: /^\d{0,5}?$/, min: 0, max: 9999 },
             { id: 'edit_rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
-            //{ id: 'edit_th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            //{ id: 'edit_ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            //{ id: 'edit_ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM },
+   
         ];
     }
 

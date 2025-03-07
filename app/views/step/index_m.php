@@ -693,6 +693,42 @@
 
         // target_opt 變更
         var targetoptionselect = document.getElementById('target_opt');
+        var firstOptionValue = targetoptionselect.options[0].value;
+        if(firstOptionValue == 1){
+            document.getElementById("downshift_OFF").checked = true;
+            document.getElementById("downshift_OFF").disabled = true;
+            document.getElementById("downshift_ON").disabled = true;
+            document.getElementById('th_tor').disabled = true;
+            document.getElementById('ds_tor').disabled = true;
+            document.getElementById('ds_speed').disabled = true;
+            document.getElementById('rpm').disabled = true;
+
+            document.getElementById('target_tor_item').style.display='none';
+            document.getElementById('target_ang_item').style.display='block';
+            document.getElementById('target_delay_item').style.display='none';
+  
+
+        }
+
+        if(firstOptionValue == 2){
+            document.getElementById("downshift_OFF").checked = true;
+            document.getElementById("downshift_OFF").disabled = true;
+            document.getElementById("downshift_ON").disabled = true;
+            document.getElementById('th_tor').disabled = true;
+            document.getElementById('ds_tor').disabled = true;
+            document.getElementById('ds_speed').disabled = true;
+            document.getElementById('rpm').disabled = true;
+            document.getElementById('tor_hi').disabled = true;
+            document.getElementById('tor_lo').disabled = true;
+            document.getElementById('ang_hi').disabled = true;
+            document.getElementById('ang_lo').disabled = true;
+
+            document.getElementById('target_tor_item').style.display='none';
+            document.getElementById('target_ang_item').style.display='none';
+            document.getElementById('target_delay_item').style.display='block';
+        }
+
+
         targetoptionselect.addEventListener('change', function() {
             var target_opt_Value = targetoptionselect.value;
             localStorage.setItem('target_option', target_opt_Value);
