@@ -86,7 +86,7 @@ class Job{
 
     
     public function create_job($jobdata){
-      
+    
         $sql = "INSERT INTO `job` (job_id, job_name, job_ok,job_ok_stop,rev_direction,rev_force,rev_speed)";
         $sql .= " VALUES (:job_id, :job_name, :job_ok,:job_ok_stop,:rev_direction,:rev_force,:rev_speed );";
     

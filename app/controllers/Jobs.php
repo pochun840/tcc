@@ -77,6 +77,8 @@ class Jobs extends Controller
                 'job_ok_stop' => $_POST['job_ok_stop_val']
             );
 
+
+        
             $resultName  = $this->MiscellaneousModel->validate($jobdata['job_name'], 'name');
             $resultPower = $this->MiscellaneousModel->validate($jobdata['rev_force'], 'rev_force');
             $resultRpm   = $this->MiscellaneousModel->validate($jobdata['rev_speed'],'rev_speed');
