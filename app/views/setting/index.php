@@ -43,19 +43,19 @@
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['controller_setting'];?></div>
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_id'];?>:</div>
-                    <div class="col-3 t2">
+                    <div class="col-3 t1">
                         <input id="control_id" name="control_id" type="number" max=250 min=1 maxlength="3" value="<?php echo $data['controller_info']['device_id'];?>" class="t3 form-control"  required>
                     </div>
                 </div>    
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_name'];?>:</div>
-                    <div class="col-3 t2">
+                    <div class="col-3 t1">
                         <input id="control_name" name="control_name" maxlength="12" type="text" value="<?php echo $data['controller_info']['device_name'];?>" class="t3 form-control"  required>
                     </div>
                 </div>    
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_language'];?>:</div>
-                    <div class="col-3 t2">
+                    <div class="col-3 t1">
                         <select class="form-select" id="select_language" name="select_language" style="height: 35px;">
                             <?php 
                             foreach($data['lang_arr'] as $k_lang =>$v_lang) { 
@@ -72,7 +72,7 @@
                 
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['torque_unit'];?>:</div>
-                    <div class="col-3 t2">
+                    <div class="col-3 t1">
                         <select class="form-select" id="select_torque_unit" name="select_torque_unit" style="height: 35px;">
                             <?php 
                             foreach($data['unit_arr'] as $k_unit => $v_unit) { 
@@ -89,8 +89,8 @@
 
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_batch'];?>:</div>
-                    <div class="col t2" >
-      			      	<div class="col-1 form-check form-check-inline">
+                    <div class="col t1">
+      			      	<div class="col-2 form-check form-check-inline">
         				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="1"  <?php echo $data['controller_info']['batch'] == 1 ? 'checked="checked"' : ''; ?>>
             				<label class="form-check-label" for="dec"><?php echo $text['system_dec'];?></label>
             			</div>
@@ -103,8 +103,8 @@
                 
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_buzzer'];?>:</div>
-                    <div class="col t2">
-      			      	<div class="col-1 form-check form-check-inline">
+                    <div class="col t1">
+      			      	<div class="col-2 form-check form-check-inline">
            				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
                				<label class="form-check-label" for="buzzer-on"><?php echo $text['switch_on'];?></label>
                			</div>
@@ -123,7 +123,7 @@
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_setting'];?></div>
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_password'];?>:</div>
-                    <div class="col t2">
+                    <div class="col t3">
                         <form id="edit_password"  style="margin: 3px 0px">
                             <input type="password" id="new_password" size="15" placeholder="<?php echo $text['system_new_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
                             <input type="password" id="comfirm_password" size="15" placeholder="<?php echo $text['system_confirm_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">
@@ -133,7 +133,7 @@
                 </div>          
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_sys_date'];?>(UTC):</div>
-                    <div class="col t2">
+                    <div class="col t3">
                         <form style="margin: 3px 0px">
                             <span id="currentSystemTime"></span>&nbsp;
                             <input type="datetime-local" id="newTime" value="" required class="t3 w3-submit w3-border w3-round">
@@ -143,20 +143,20 @@
                 </div>          
                 <div class="row t2">
                     <div class="col t1"><?php echo $text['system_export_config'];?>:</div>
-                    <div class="col t2">
+                    <div class="col t3">
                         <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Export_SystemConfig();"><?php echo $text['system_export_config'];?></button>
                     </div>        
                 </div>          
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_import_config'];?>:</div>
-                    <div class="col t2">
+                    <div class="col t3">
                         <input type="file" id="import-file-uploader" data-target="import-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round">
                         <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Import_SystemConfig();"><?php echo $text['system_import_config'];?></button>
                     </div>        
                 </div>          
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_firmware_update'];?>:</div>
-                    <div class="col t2">
+                    <div class="col t3">
                         <input type="file" id="firmware-file-uploader" data-target="firmware-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round">
                         <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Firmware_Update();"><?php echo $text['system_firmware_update'];?></button>
                     </div>        
@@ -168,8 +168,8 @@
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_barcode_setting'] ;?></div>
                 <div class="table-container">
                     <div class="scrollbar" id="style-table">
-                        <div class="scrollbar-force-overflow">
-                            <table id="job_table" class="table w3-table-all w3-hoverable">
+                        <div class="force-overflow">
+                            <table id="job_table" class="table w3-table">
                                 <thead id="header-table">
                                     <tr class="w3-dark-grey">
                                         <th></th>
@@ -267,7 +267,7 @@
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_connect_setting'];?></div>
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_connect_number'];?>:</div>
-                    <div class="col t2">
+                    <div class="col t3">
                         <form id="edit_max_link" style="margin: 3px 0px" method="post">
                             <input type="text" name="max_user" id="max_user" inputmode="numeric" pattern="[0-9]*" min='1' size="15" maxlength="2" required class="t3 w3-submit w3-border w3-round">&nbsp;
                             <span><?php echo $text['system_connect_max_number'];?> : <?php echo $data['max_user']; ?></span>
@@ -277,7 +277,7 @@
                 </div>
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_connect_guest_pwd'];?>:</div>
-                    <div class="col t2">
+                    <div class="col t3">
                         <form id="edit_guest_password" method="post" style="margin: 3px 0px">
                             <input type="password" id="new_password_guest" size="15" placeholder="<?php echo $text['system_new_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
                             <input type="password" id="comfirm_password_guest" size="15" placeholder="<?php echo $text['system_confirm_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">
@@ -287,7 +287,7 @@
                 </div>          
                 <div class="row t2">
                     <div class="col-3 t1">Agent IP:</div>
-                    <div class="col t2">
+                    <div class="col t3">
                         <form id="agent_ip" style="margin: 3px 0px" method="post">
                             <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" required class="t3 w3-submit w3-border w3-round">&nbsp;
                             <span>Agent IP : <?php echo $data['agent_server_ip']; ?></span>
@@ -297,7 +297,7 @@
                 </div>
                 <div class="row t2">
                     <div class="col-3 t1">Agent Type:</div>
-                    <div class="col t2">
+                    <div class="col t3">
                         <form id="agent_type_form" method="post">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0">
@@ -317,7 +317,7 @@
                     </div>
                     <div class="row">
                         <div class="col-3 t1"></div>
-                        <div class="col t2">
+                        <div class="col t3">
                             <span>Client Status:<div id="c_status" style="display:inline-block;"></div></span>
                             <span>Server Status:<div id="s_status" style="display:inline-block;"></div></span>
 
@@ -331,13 +331,18 @@
                 <hr>
                 
                 <form action="" method="post" style="padding: 0px 15px; ">
-                    <div class="table-responsive" style="overflow-y: auto; margin-bottom: 20px">
+                    <div class="table-responsive" style="overflow-y: auto;">
+                        
                         <div class="scrollbar" id="style-table">
-                            <div class="scrollbar-force-overflow">
-                                <table class="table w3-table-all w3-hoverable">
+                            <div class="force-overflow">
+                                <table class="table w3-table">
                                     <thead id="header-table">
                                         <tr class="w3-dark-grey">
-                                            <th><?php echo $text['select'];?></th>
+                                            <th>
+                                                <button class="w3-dark-grey" style="font-size:18px; color: #FFFFFF; border-radius: 5px; border-color: #888888">
+                                                    <img id="delete-btn" src="./img/delete.png">
+                                                </button>
+                                            </th>
                                             <th><?php echo $text['system_connect_username'];?></th>
                                             <th>IP</th>
                                             <th><?php echo $text['system_connect_timestamp'];?></th>
@@ -358,11 +363,13 @@
                                     </tbody>
                                 </table>
                             </div>    
-                        </div>  
+                        </div> 
+                        <!-- 
+                        <?php  if($_SESSION['privilege'] == 'admin'){?>
+                            <input type="submit" value="<?php echo $text['Delete'];?>" class="all-btn delete-btn w3-submit w3-border w3-round-large">
+                        <?php } ?>
+                        -->
                     </div>
-                    <?php  if($_SESSION['privilege'] == 'admin'){?>
-                            <input type="submit" value="<?php echo $text['Delete'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right;">
-                    <?php } ?>
                 </form>
             </div>
 

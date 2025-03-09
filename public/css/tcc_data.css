@@ -98,13 +98,13 @@ th, td
     vertical-align: middle;
 }
 
-.w3-table-all
+.w3-table
 {
     width: 100%;
     border-collapse: collapse;
 }
 
-.w3-table-all th, .w3-table-all td
+.w3-table th, .w3-table td
 {
     border: 1px solid #ddd;
     padding: 8px;

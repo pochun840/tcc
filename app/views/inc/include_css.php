@@ -22,6 +22,7 @@ function includecss_file($part, $cssFileName) {
 
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/datatables.min.css">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/font-awesome.min.css">
 
     <script src="<?php echo URLROOT; ?>js/all.js"></script>
     <script src="<?php echo URLROOT; ?>js/echarts_min.js"></script>

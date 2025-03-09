@@ -42,8 +42,8 @@
                     <div  id ='res_title' style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data_history_success'];?></div>
                     <div class="table-container" id='res_data_all'>
                         <div class="scrollbar" id="style-data">
-                            <div class="scrollbar-force-overflow">
-                                <table id="fasten_log_all" class="table w3-table-all w3-hoverable">
+                            <div class="force-overflow">
+                                <table id="fasten_log_all" class="table w3-table w3-hoverable">
                                     <thead id="header-table">
                                         <tr>
                                             <th><?php echo $text['column_no'];?></th>
@@ -99,7 +99,7 @@
                         <div style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data_history_success'];?></div>
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
-                                <table id="fasten_log" class="table w3-table-all w3-hoverable">
+                                <table id="fasten_log" class="table w3-table w3-hoverable">
                                     <thead id="header-table">
                                         <tr>
                                             <th><?php echo $text['column_no'];?></th>
@@ -131,11 +131,11 @@
                                                 <td><?php echo $val_ok['system_sn'];?></td>
                                                 <td><?php echo $val_ok['data_time'];?></td>
                                                 <td><?php echo $val_ok['job_name'];?></td>
-                                                <td><?php echo $val_ok['sequence_name'];?></td>
-                                                <td><?php echo $val_ok['target_torque'];?></td>
-                                                <td><?php echo $text[$data['unit_arr'][$val_ok['torque_unit']]];?></td>
-                                                <td><?php echo $val_ok['target_angle'];?></td>
-                                                <td><?php echo $val_ok['total_screw_count'];?></td>
+                                                <td><?php echo $val_ok['seq_name'];?></td>
+                                                <td><?php echo $val_ok['fasten_torque'];?></td>
+                                                <td><?php echo $text[$data['unit_arr'][$val_ok['step_tor_unit']]];?></td>
+                                                <td><?php echo $val_ok['fasten_angle'];?></td>
+                                                <td><?php echo $val_ok['max_screw_count'];?></td>
                                                 <td><?php echo $val_ok['last_screw_count'];?></td>
                                                 <td <?php echo $style;?>><?php echo $data['status_arr'][$val_ok['fasten_status']];?></td>
                                             </tr>
@@ -151,7 +151,7 @@
                         <div style="font-weight: bold; font-size: 20px; padding-left: 1%"><?php echo $text['data_history_fail'];?></div>
                         <div class="scrollbar" id="style-data">
                             <div class="scrollbar-force-overflow">
-                                <table id="error_fasten_log" class="table w3-table-all w3-hoverable">
+                                <table id="error_fasten_log" class="table w3-table w3-hoverable">
                                     <thead id="header-table">
                                         <tr>
                                             <th><?php echo $text['column_no'];?></th>
@@ -180,16 +180,16 @@
                                                 }
                                             ?>
                                             <tr>
-                                                <td><?php echo $val_ok['system_sn'];?></td>
-                                                <td><?php echo $val_ok['data_time'];?></td>
-                                                <td><?php echo $val_ok['job_name'];?></td>
-                                                <td><?php echo $val_ok['sequence_name'];?></td>
-                                                <td><?php echo $val_ok['target_torque'];?></td>
-                                                <td><?php echo $text[$data['unit_arr'][$val_ok['torque_unit']]];?></td>
-                                                <td><?php echo $val_ok['target_angle'];?></td>
-                                                <td><?php echo $val_ok['total_screw_count'];?></td>
-                                                <td><?php echo $val_ok['last_screw_count'];?></td>
-                                                <td <?php echo $style;?>><?php echo $data['status_arr'][$val_ok['fasten_status']];?></td>
+                                                <td><?php echo $val_nok['system_sn'];?></td>
+                                                <td><?php echo $val_nok['data_time'];?></td>
+                                                <td><?php echo $val_nok['job_name'];?></td>
+                                                <td><?php echo $val_nok['seq_name'];?></td>
+                                                <td><?php echo $val_nok['fasten_torque'];?></td>
+                                                <td><?php echo $text[$data['unit_arr'][$val_nok['step_tor_unit']]];?></td>
+                                                <td><?php echo $val_nok['fasten_angle'];?></td>
+                                                <td><?php echo $val_nok['max_screw_count'];?></td>
+                                                <td><?php echo $val_nok['last_screw_count'];?></td>
+                                                <td <?php echo $style;?>><?php echo $data['status_arr'][$val_nok['fasten_status']];?></td>
                                             </tr>
                                         <?php }?>
                                     </tbody>
