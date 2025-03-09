@@ -100,21 +100,21 @@ class Settings extends Controller
         }
         
 
-        if ($input_check) {
-            $result = $this->SettingModel->Edit_Login_Password($conset);
-            if($result){
-                $res_msg = 'edit:'. $conset['device_id'].'password  success';
+
+        if($input_check){
+            $result = array();
+            $res = $this->SettingModel->Edit_Login_Password($conset);
+            if($res){
+                $res_type = 'Succes';
+                $res_msg = $text['Edit']." : ". $conset['device_id']."  ".$text['success'];
+                $this->MiscellaneousModel->generateErrorResponse('Succes', $res_msg );
             }else{
-                $res_msg = 'edit:'. $conset['device_id'].'password  fail';
+                $res_type = 'Error';
+                $res_msg = $text['Edit']." : ". $conset['device_id']."  ".$text['fail'];
+                $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
             }
-            echo $res_msg;
-
-        }else{
-            $result = false;
         }
-        
-
-
+        $result = array();
     }
 
 
@@ -261,35 +261,62 @@ class Settings extends Controller
 
         $input_check = true;
 
+        if( !empty($_POST['control_id']) && isset($_POST['control_id'])  ){
+            $con_setting['control_id'] = $_POST['control_id'];
+        }else{ 
+            $input_check = false; 
+        }
 
-        if(!empty($_POST)){
-            $con_setting = array();
-            $con_setting = $_POST;
+        if( !empty($_POST['control_name']) && isset($_POST['control_name'])){
+            $con_setting['control_name'] = $_POST['control_name'];
+        }else{ 
+            $input_check = false; 
+        }
+
+        if( !empty($_POST['lang_val']) && isset($_POST['lang_val'])){
+            $lang_val =  $_POST['lang_val'];
+            intval($lang_val);
+        }else{ 
+            $lang_val = 0;
+        }
+
+        $con_setting['lang_val']  = $lang_val;
+
+        if( !empty($_POST['batch_val']) && isset($_POST['batch_val'])  ){
+            $con_setting['batch_val'] = $_POST['batch_val'];
+        }else{ 
+            $input_check = false; 
+        }
+
+        if( !empty($_POST['buzzer_val']) && isset($_POST['buzzer_val'])  ){
+            $con_setting['buzzer_val'] = $_POST['buzzer_val'];
+        }else{ 
+            $input_check = false; 
+        }
+        //torque_unit
+        if(!empty($_POST['torque_unit']) && isset($_POST['torque_unit']) ){
+            $con_setting['torque_unit'] = $_POST['torque_unit'];
         }else{
             $input_check = false; 
         }
-       
         
-    
+
+
         if($input_check){
           $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
           if($res['count'] =="1"){
                 //UPDATE
-                //echo "ew";//die();
+
                 $res = $this->SettingModel->Controller_Setting($con_setting);
                 $result = array();
                 if($res){
-                    //echo "eeer";//die();
                     $res_type = 'Succes';
                     $res_msg = $text['Edit']." : ". $con_setting['control_id']."  ".$text['success'];
                     $this->MiscellaneousModel->generateErrorResponse('Succes', $res_msg );
                 }else{
-                    //echo "eeer11";//die();
                     $res_type = 'Error';
                     $res_msg = $text['Edit']." : ". $con_setting['control_id']."  ".$text['fail'];
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
-
-                    
                 }
                 
           }
@@ -587,6 +614,8 @@ class Settings extends Controller
 
     }
 
+
+
     //把  /var/www/html/database/data.db 備份為 /var/www/html/database/data_bk.db
     //並把 data_bk.db 再另存一個.db 檔名為iDas_data.db
     public function Sync_check_db() {
@@ -616,10 +645,10 @@ class Settings extends Controller
                 }
     
                 if (copy($Con_DB_Location, $Das_DB_Location)) {
-                    $res_msg = $text['sync'].$text['success'] ;
+                    $res_msg = "SYNC".$text['success'] ;
                     $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
                 } else {
-                    $res_msg  = $text['sync'].$text['fail'];
+                    $res_msg  = "SYNC".$text['fail'];
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
             }
@@ -665,10 +694,10 @@ class Settings extends Controller
                 $res  = $this->SettingModel->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
                 $result = array();
                 if($res){
-                    $res_msg  = $text['sync'].$text['success'];
+                    $res_msg  = "SYNC".$text['success'];
                     $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
                 }else{
-                    $res_msg  = $text['sync'].$text['fail'];
+                    $res_msg  = "SYNC".$text['fail'];
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
 
@@ -698,7 +727,7 @@ class Settings extends Controller
                     $barcode_list .= "<td><input class='form-check-input' type='checkbox' name='barcode_check' id='barcode_check' style='zoom:1.2' value='".$vv['barcode_selected_job']."'></td>";
                     $barcode_list .= '<td>'.$vv['barcode_selected_job'].'</td>';
                     $barcode_list .= '<td>'.$vv['job_name'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_content'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode'].'</td>';
                     $barcode_list .= '<td>'.$vv['barcode_mask_from'].'</td>';
                     $barcode_list .= '<td>'.$vv['barcode_mask_count'].'</td>';
                     $barcode_list .= '<tr>';
@@ -712,7 +741,7 @@ class Settings extends Controller
                     $barcode_list .= "<td><input class='form-check-input' type='checkbox' name='barcode_check' id='barcode_check' style='zoom:1.2' value='".$vv['barcode_selected_job']."'></td>";
                     $barcode_list .= '<td>'.$vv['barcode_selected_job'].'</td>';
                     $barcode_list .= '<td>'.$vv['job_name'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_content'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode'].'</td>';
                     $barcode_list .= '<td>'.$vv['barcode_mask_from'].'</td>';
                     $barcode_list .= '<td>'.$vv['barcode_mask_count'].'</td>';
                     $barcode_list .= '<tr>';
@@ -921,6 +950,9 @@ class Settings extends Controller
         unlink($file_location . $filename);
 
         echo json_encode(["message" => 'Update successful']);
+
+
+
 
     }
 

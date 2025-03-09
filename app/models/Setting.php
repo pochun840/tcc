@@ -4,6 +4,7 @@ class Setting{
 
     private $db_iDas;
     private $db_iDas_device;
+    Private $db_iDas_login;
 
     // 在建構子將 Database 物件實例化
     public function __construct(){
@@ -13,6 +14,10 @@ class Setting{
 
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
+
+        $this->db_iDas_login = new Database;
+        $this->db_iDas_login = $this->db_iDas_login->getDb_das_login();
+
 
     }
 
@@ -105,62 +110,41 @@ class Setting{
 
 
     public function Edit_Login_Password($conset){
-        
-      
-        $conset['device_id'] = intval($conset['device_id']);
-    
-        try {
-      
-            $sql = "UPDATE `device` 
-                    SET device_password = :device_password
-                    WHERE device_id = :device_id";
-    
-            $statement = $this->db_iDas_device->prepare($sql);
-    
-            if ($statement === false) {
-                $errorInfo = $this->db_iDas_device->errorInfo();
-                throw new Exception("Failed to prepare SQL statement: " . $errorInfo[2]);
-            }
-    
-            $statement->bindValue(':device_password', $conset['new_password']);
-            $statement->bindValue(':device_id', $conset['device_id']);
-    
-            $results = $statement->execute();
-    
-            if ($results === false) {
-                $errorInfo = $statement->errorInfo();
-                throw new Exception("Failed to execute SQL statement: " . $errorInfo[2]);
-            }
-    
-            $sql_1 = "UPDATE `operator` 
-                      SET operator_adminpwd = :operator_adminpwd
-                      WHERE operator_loginflag = :operator_loginflag";
-    
-            $statement_1 = $this->db_iDas->prepare($sql_1);
-    
-            if ($statement_1 === false) {
-                $errorInfo = $this->db_iDas->errorInfo();
-                throw new Exception("Failed to prepare SQL statement: " . $errorInfo[2]);
-            }
-    
-            $statement_1->bindValue(':operator_adminpwd', $conset['new_password']);
-            $statement_1->bindValue(':operator_loginflag', 1);
-    
-            $results1 = $statement_1->execute();
-    
-            if ($results1 === false) {
-                $errorInfo = $statement_1->errorInfo();
-                throw new Exception("Failed to execute SQL statement: " . $errorInfo[2]);
-            }
-    
-            return $results && $results1;
-        } catch (Exception $e) {
-            $this->logMessage('Error: ' . $e->getMessage());
-            echo json_encode(array('error' => $e->getMessage()));
-            return false;
-        }
-    }
 
+        $conset['device_id'] = intval($conset['device_id']);
+
+        $sql = "UPDATE `device` 
+                SET device_password = :device_password
+                WHERE device_id = :device_id";
+    
+        $statement = $this->db_iDas_device->prepare($sql);
+        
+        $statement->bindValue(':device_password', $conset['new_password']);
+        $statement->bindValue(':device_id', $conset['device_id']);
+        $results = $statement->execute();
+
+        $sql_1 = "UPDATE `operator` 
+        SET operator_adminpwd = :operator_adminpwd
+        WHERE operator_loginflag = :operator_loginflag";
+
+        $statement1 = $this->db_iDas_login->prepare($sql_1);
+        $statement1->bindValue(':operator_adminpwd', $conset['new_password']);
+        $statement1->bindValue(':operator_loginflag', '1');
+        $results1  = $statement1->execute();
+
+
+        $sql_2 = "UPDATE `operator` 
+        SET operator_adminpwd = :operator_adminpwd
+        WHERE operator_loginflag = :operator_loginflag";
+
+        $statement2 = $this->db_iDas->prepare($sql_2);
+        $statement2->bindValue(':operator_adminpwd', $conset['new_password']);
+        $statement2->bindValue(':operator_loginflag', '0');
+        $results2  = $statement2->execute();
+
+        return $results; 
+    }
+    
     public function system_date_edit($conset){
 
         $conset['device_id'] = intval($conset['device_id']);
@@ -191,13 +175,6 @@ class Setting{
     }
 
     public function Controller_Setting($con_setting){
-
-
-        /*echo "<pre>";
-        print_r($con_setting);
-        echo "</pre>";
-        die();*/
-
        
         $sql = "UPDATE `device` 
         SET device_name = :device_name,
@@ -261,13 +238,13 @@ class Setting{
 
         
             $sql = "UPDATE `barcode` 
-                    SET barcode_content = :barcode_content,
+                    SET barcode = :barcode,
                         barcode_mask_from  = :barcode_mask_from,
                         barcode_mask_count = :barcode_mask_count,
                         barcode_enable = :barcode_enable
                     WHERE barcode_selected_job = :barcode_selected_job ";
             $statement = $this->db_iDas->prepare($sql);
-            $statement->bindValue(':barcode', $barcode['barcode_name']);
+            $statement->bindValue(':barcode', $barcode['barcode_content']);
             $statement->bindValue(':barcode_mask_from', $barcode['barcode_mask_from']);
             $statement->bindValue(':barcode_mask_count', $barcode['barcode_mask_count']);
             $statement->bindValue(':barcode_selected_job',$barcode['barcode_selected_job']);
@@ -278,17 +255,15 @@ class Setting{
 
         }else{ //不存在，用insert
 
-            $sql = "INSERT INTO `barcode` ('barcode_content','barcode_mask_from','barcode_mask_count','barcode_selected_job','barcode_enable','barcode_selected_seq')
-                    VALUES (:barcode_content,:barcode_mask_from,:barcode_mask_count,:barcode_selected_job,:barcode_enable,:barcode_selected_seq)";
+            $sql = "INSERT INTO `barcode` ('barcode','barcode_mask_from','barcode_mask_count','barcode_selected_job','barcode_enable','barcode_selected_seq')
+                    VALUES (:barcode,:barcode_mask_from,:barcode_mask_count,:barcode_selected_job,:barcode_enable,:barcode_selected_seq)";
             $statement = $this->db_iDas->prepare($sql);
-            $statement->bindValue(':barcode_content', $barcode['barcode_content']);
+            $statement->bindValue(':barcode', $barcode['barcode_content']);
             $statement->bindValue(':barcode_mask_from', $barcode['barcode_mask_from']);
             $statement->bindValue(':barcode_mask_count', $barcode['barcode_mask_count']);
             $statement->bindValue(':barcode_selected_job', $barcode['barcode_selected_job']);
             $statement->bindValue(':barcode_enable', $barcode['barcode_enable']);
             $statement->bindValue(':barcode_selected_seq', $barcode['barcode_selected_seq']);
-            //barcode_enable
-            //barcode_selected_seq
             $results = $statement->execute();
 
         }

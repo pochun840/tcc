@@ -1,4 +1,5 @@
 
+
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_setting.css" type="text/css">
 <style>
     .form-control{
@@ -190,7 +191,7 @@
                                             </td> 
                                             <td><?php echo $v_b['barcode_selected_job'];?></td>
                                             <td><?php echo $v_b['job_name'];?></td>
-                                            <td><?php echo $v_b['barcode_content'];?></td>
+                                            <td><?php echo $v_b['barcode'];?></td>
                                             <td><?php echo $v_b['barcode_mask_from'];?></td>
                                             <td><?php echo $v_b['barcode_mask_count'];?></td>
                                         </tr>
@@ -434,6 +435,9 @@ function edit_password(){
     var device_id = <?php echo $data['controller_info']['device_id'];?>;
 
     if(new_password == comfirm_password){
+
+        document.getElementById('spinner').style.display = 'block';
+
         $.ajax({
             url: "?url=Settings/edit_password",
             method: "POST",
@@ -443,13 +447,45 @@ function edit_password(){
 
             },
             success: function(response) {
-                alert(response);
-                history.go(0);
+                var responseData = JSON.parse(response);  // 解析返回的 JSON 資料
+                
+                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    // 隱藏 'copyjob' 和 'spinner' 加載動畫
+                    document.getElementById('spinner').style.display = 'none';  
+
+                    // 顯示 alertify 彈跳視窗
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        // 彈跳視窗關閉後刷新頁面
+                        // 存儲頁面顯示狀態到 sessionStorage
+                        sessionStorage.setItem('System_Setting', 'block');
+                        sessionStorage.setItem('Controller_Setting', 'none');
+                        
+                        history.go(0);  // 重新加載頁面
+                    });
+
+                    // 在 3 秒後自動關閉 alertify 彈跳視窗，並執行 AJAX 請求來刷新條形碼列表
+                    setTimeout(function() {
+                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                        
+                        // 刷新條形碼列表
+                        /*$.ajax({
+                            url: "?url=Settings/show_Barcodes",
+                            method: "GET",
+                            success: function(html) {
+                                $('#total_barcodes').html(html);  
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("獲取條形碼時出錯:", error);
+                            }
+                        });*/
+                    }, 3000); // 延遲 3 秒
+                }, 1000); // 延遲 1000 毫秒
             },
             error: function(xhr, status, error) {
                 
             }
-        });   
+        });  
     }else{
         //alert("請確認密碼");
         return false;
