@@ -121,7 +121,7 @@
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col-4 t2">
                                 <select id="target_opt" name="target_opt" class="custom-file" style="width:225px">
-                                    <?php if($data['check'][0]['count_records'] == "1"){?>
+                                    <?php if($data['check'][0]['count_records'] == 1 || $data['counts_torque'] == 1){?>
                                         <?php foreach($data['target_option_change'] as $key => $val){?>
                                              <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
                                         <?php }?>   
@@ -131,6 +131,10 @@
                                              <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
                                         <?php }?>     
                                     <?php } ?>
+
+                                    <?php 
+                                    
+                                    ?>
                                    
                                     
                                 </select>
@@ -618,6 +622,8 @@ function edit_step(stepid){
 
 
                 document.querySelector("select[name='edit_target_opt']").value = target_opt;
+                alert(target_opt);
+
                 if(target_opt == 0){
                     
                     document.getElementById("edit_target_tor").value = target_tor;
@@ -635,16 +641,14 @@ function edit_step(stepid){
                     disableElementById('edit_ds_tor');
                     disableElementById('edit_ds_speed');
                     disableElementById('edit_th_tor');
-                    disableElementById('edit_rpm');
+                    //disableElementById('edit_rpm');
+
+                    enableElementById('edit_rpm');
                     disableElementsByName("edit_th_mode");
 
-                    //隱藏欄位
-                    /*document.getElementById("edit_rpm_item").style.display = 'none';
-                    document.getElementById("edit_th_mode_item").style.display = 'none';
-                    document.getElementById("edit_th_tor_item").style.display = 'none';
-                    document.getElementById("edit_ds_tor_item").style.display = 'none';
-                    document.getElementById("edit_ds_speed_item").style.display = 'none';
-                    document.getElementById("edit_th_mode_item").style.display = 'none';*/
+                    
+
+            
 
 
                      
@@ -667,18 +671,6 @@ function edit_step(stepid){
                     disableElementsByName("edit_th_mode");
                     disableElementsByName("edit_direction");
 
-                    //隱藏欄位
-                    /*document.getElementById("edit_tor_hi_item").style.display= 'none';
-                    document.getElementById("edit_tor_lo_item").style.display= 'none';
-                    document.getElementById("edit_ang_hi_item").style.display= 'none';
-                    document.getElementById("edit_ang_lo_item").style.display= 'none';
-                    document.getElementById("edit_rpm_item").style.display= 'none';
-                    document.getElementById("edit_direction_item").style.display= 'none';
-                    document.getElementById("edit_th_mode_item").style.display = 'none';
-                    document.getElementById("edit_th_tor_item").style.display = 'none';
-                    document.getElementById("edit_ds_tor_item").style.display = 'none';
-                    document.getElementById("edit_ds_speed_item").style.display = 'none';
-                    document.getElementById("edit_th_mode_item").style.display = 'none';*/
 
 
                     
@@ -745,7 +737,6 @@ function create_step() {
         document.getElementById('th_tor').disabled = true;
         document.getElementById('ds_tor').disabled = true;
         document.getElementById('ds_speed').disabled = true;
-        document.getElementById('rpm').disabled = true;
 
         document.getElementById('target_tor_item').style.display='none';
         document.getElementById('target_ang_item').style.display='block';

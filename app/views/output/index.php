@@ -841,20 +841,38 @@ function collectPinValues(selector) {
 function create_output_id() {
     var output_event = document.getElementById("Event_Option").value;
     var pinval = collectPinValues('input[name="pin_option"]');
-  
 
     if (pinval.length > 0) {
         var pin_old = pinval[0]['id']; 
         var wave = pinval[0]['value'];
-        
+
         var match = pin_old.match(/\d+/); 
         var output_pin = match ? parseInt(match[0]) : null;
-        
-        var time_ms = 'time'+ output_pin;
-        var wave_on =  document.getElementById(time_ms).value;
+
+        var time_ms = 'time' + output_pin;
+        var wave_on = document.getElementById(time_ms).value;
+
+        // Retrieve language from the cookie
+        var language = getCookie('language'); // Assuming the language is stored as 'en', 'zh-tw', or 'zh-cn'
+
+        // Localized messages based on the language
+        var messages = {
+            en: "Please enter a wave value between 100 and 10000.",
+            'zh-tw': "範圍介於100和10000之間。",
+            'zh-cn': "范围介于100和10000之间。"
+        };
+
+
+        if(!language){
+            language = 'en';
+        }
+        // Check if wave_on is within the range 100-10000
+        if (wave_on < 100 || wave_on > 10000) {
+            alertify.alert(messages[language]);
+            return; // Prevent further execution
+        }
 
         if (job_id) {
-
             document.getElementById('spinner').style.display = 'block';
 
             $.ajax({
@@ -869,7 +887,6 @@ function create_output_id() {
                 },
 
                 success: function(response) {
-
                     document.getElementById('new_output').style.display = 'none';
                     var responseData = JSON.parse(response);
                     alertify.alert(responseData.res_type, responseData.res_msg);
@@ -889,6 +906,32 @@ function create_output_id() {
         console.error("No pinval found or pinval[0] is undefined.");
     }
 }
+
+// Function to get the value of a cookie by its name
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+
+// Function to get the value of a cookie by its name
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
 
 function edit_output_id(){
     var output_event = document.getElementById("edit_event_option").value;
@@ -1125,14 +1168,8 @@ function get_output_info(job_id,output_event){
                                 radio.disabled = true;
                             }
                         });
-                    }
-
-                  
-                    
-                }
-
-                //document.getElementById(time_ms).value = wave_on;
- 
+                    }   
+                } 
                  old_output_even = output_event;
  
                  if(radioButton){

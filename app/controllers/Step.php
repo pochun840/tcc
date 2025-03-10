@@ -96,6 +96,16 @@ class Step extends Controller
         }
 
 
+        $check_torque = $this->stepModel->chek_step_target_torque($job_id,$seq_id);
+        if(!empty($check_torque)){
+            $counts_torque = intval($check_torque[0]['counts']);
+            //counts
+        }
+        //var_dump($check_torque);
+        //$check = intval($check[0]['count_records']);
+
+
+
         $data = array(
             'isMobile' => $isMobile,
             'step' => $step,
@@ -117,17 +127,17 @@ class Step extends Controller
             'tools' => $tools,
             'count_records' => $count_records,
             'tools_id' => $tools_id,
-            'seq_opt'  => $seq_opt
+            'seq_opt'  => $seq_opt,
+            'counts_torque' => $counts_torque
 
         );
-
+        
         if($isMobile){
             $this->view('step/index_m', $data);
         }else{
             $this->view('step/index', $data);
         }
         
-        //cat /boot/firmware/version
     }
 
     public function create_step(){

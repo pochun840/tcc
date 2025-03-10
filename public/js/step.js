@@ -158,20 +158,6 @@ function toggleVisibility(targetValue) {
 
         document.getElementById("downshift_ON").checked = true;
 
-
-        //控制欄位 顯示 / 隱藏
-        /*document.getElementById("tor_hi_item").style.display= 'block';
-        document.getElementById("tor_lo_item").style.display= 'block';
-        document.getElementById("ang_hi_item").style.display= 'block';
-        document.getElementById("ang_lo_item").style.display= 'block';
-        document.getElementById("rpm_item").style.display= 'block';
-        document.getElementById("direction_item").style.display= 'block';
-        document.getElementById("th_mode_item").style.display = 'block';
-        document.getElementById("th_tor_item").style.display = 'block';
-        document.getElementById("ds_tor_item").style.display = 'block';
-        document.getElementById("ds_speed_item").style.display = 'block';
-        document.getElementById("th_mode_item").style.display = 'block';*/
-
     } else if (targetValue == 1) {
         targetAngItem.style.display = "block";
 
@@ -181,7 +167,6 @@ function toggleVisibility(targetValue) {
         enableElementById('ang_lo', ''); 
         enableElementById('direction_CW','');
         enableElementById('direction_CCW','');
-        disableElementById('rpm','200');
         disableElementById('th_tor','0');
         disableElementById('ds_tor','0');
         disableElementById('ds_speed','100');
@@ -189,19 +174,6 @@ function toggleVisibility(targetValue) {
         disableElementById('downshift_OFF','');
         document.getElementById("downshift_OFF").checked = true;
 
-
-        //控制欄位 顯示 / 隱藏
-        /*document.getElementById("tor_hi_item").style.display= 'block';
-        document.getElementById("tor_lo_item").style.display= 'block';
-        document.getElementById("ang_hi_item").style.display= 'block';
-        document.getElementById("ang_lo_item").style.display= 'block';
-        document.getElementById("rpm_item").style.display= 'none';
-        document.getElementById("direction_item").style.display= 'block';
-        document.getElementById("th_mode_item").style.display = 'none';
-        document.getElementById("th_tor_item").style.display = 'none';
-        document.getElementById("ds_tor_item").style.display = 'none';
-        document.getElementById("ds_speed_item").style.display = 'none';
-        document.getElementById("th_mode_item").style.display = 'none';*/
 
          
     } else if (targetValue == 2) {
@@ -220,20 +192,6 @@ function toggleVisibility(targetValue) {
         disableElementById('downshift_OFF','');
 
         document.getElementById("downshift_OFF").checked = true;
-
-
-        //控制欄位 顯示 / 隱藏
-        /*document.getElementById("tor_hi_item").style.display= 'none';
-        document.getElementById("tor_lo_item").style.display= 'none';
-        document.getElementById("ang_hi_item").style.display= 'none';
-        document.getElementById("ang_lo_item").style.display= 'none';
-        document.getElementById("rpm_item").style.display= 'none';
-        document.getElementById("direction_item").style.display= 'none';
-        document.getElementById("th_mode_item").style.display = 'none';
-        document.getElementById("th_tor_item").style.display = 'none';
-        document.getElementById("ds_tor_item").style.display = 'none';
-        document.getElementById("ds_speed_item").style.display = 'none';
-        document.getElementById("th_mode_item").style.display = 'none';*/
 
     }
 }
@@ -277,7 +235,6 @@ function handleTargetOptChange(target_opt) {
         enableElementByName("edit_th_mode");
 
         document.getElementById("downshift_ON").checked = true;
-        //document.getElementById("downshift_OFF").checked = true;
   
 
     }

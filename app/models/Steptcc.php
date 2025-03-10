@@ -59,6 +59,15 @@ class Steptcc{
         return $statement->fetchAll();
     }
 
+    public function chek_step_target_torque($job_id,$seq_id){
+        $sql = "SELECT COUNT(*) AS counts FROM step WHERE job_id = ? AND seq_id = ?  AND target_opt = '0'";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$job_id, $seq_id]);
+        return $statement->fetchAll();
+    }
+
+
+
 
 
     #COPY專用 檢查被複製的Step_id 有沒有設置Target Torque

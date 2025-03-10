@@ -97,7 +97,7 @@
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col t2">
                                 <select id="target_opt" name="target_opt" class="custom-file">
-                                    <?php if($data['check'][0]['count_records'] == "1"){?>
+                                    <?php if($data['check'] == 1 || $data['counts_torque'] == 1 ){?>
                                         <?php foreach($data['target_option_change'] as $key => $val){?>
                                              <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
                                         <?php }?>   

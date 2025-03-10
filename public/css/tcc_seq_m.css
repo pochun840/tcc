@@ -335,7 +335,8 @@ th, td
     width: 60px;
 }
 
-.button-modal:hover {
+.button-modal:hover 
+{
     cursor: pointer;
     background: #336699;
     color: white;
@@ -353,7 +354,11 @@ select
     transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
-
+input:disabled 
+{
+    opacity: 1; /* Giữ độ rõ nét */
+    color: #000; /* Đảm bảo chữ vẫn có màu đen rõ ràng */
+}
 
 .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
 .t2{font-size: 17px; margin: 5px 0px;}

@@ -1,12 +1,14 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_input_m.css" type="text/css">
 <style>
-.overlay-active {
+.overlay-active 
+{
     position: relative;
     min-height: 150vh;
 }
 
-.overlay-active::before {
+.overlay-active::before 
+{
     content: '';
     position: absolute;
     top: 0;
@@ -16,6 +18,12 @@
     height: 120%;
     background-color: rgba(0, 0, 0, 0.3); /* semi-transparent black background */
     z-index: 999; /* Ensure it overlays on top */
+}
+
+input:disabled 
+{
+    opacity: 1; /* Giữ độ rõ nét */
+    color: #000; /* Đảm bảo chữ vẫn có màu đen rõ ràng */
 }
 
 </style>   
@@ -69,9 +77,9 @@
                 <div id="TableInputSetting" class="table-container">
                     <div class="scrollbar-inputtable" id="style-inputtable">
                         <div class="force-overflow-inputtable">
-                            <table id="input_table" class="table w3-table-all w3-hoverable">
+                            <table id="input_table" class="table w3-table">
                                 <thead id="header-table">
-                                    <tr class="w3-dark-grey" style="font-size: 2.6vmin">
+                                    <tr class="w3-dark-grey" style="font-size: 3vmin">
                                         <th width="60%"><?php echo $text['event'];?></th>
                                         <th style="display: none;">2</th>
                                         <th style="display: none;">3</th>
@@ -87,7 +95,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody id="input_jobid_select"  style="font-size: 2.5vmin;text-align: center;">
+                                <tbody id="input_jobid_select"  style="font-size: 3vmin;text-align: center;">
                                    
                                    
                                 </tbody>
@@ -124,7 +132,7 @@
                                 <td class="w3-left-align">105 <?php echo $text['Start-IN(Remote)'];?></td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">106 <?php echo $text['Reverse(Remote)'];?></td>
+                                <td class="w3-left-align">106 <?php echo $text['Unscrew(Remote)'];?></td>
                                 <td class="w3-left-align">107 <?php echo $text['Sequence Clear'];?></td>
                                 <td class="w3-left-align">108 <?php echo $text['Reboot'];?></td>
                             </tr>
@@ -161,7 +169,7 @@
                                 <div class="row">
                                     <div for="event" class="col-3 t1"><?php echo $text['event'];?> :</div>
                                     <div class="col-2 t2">
-                                        <select id="Event_Option" name ="Event_Option" class="col custom-file">
+                                        <select id="Event_Option" name ="Event_Option" class="custom-file">
                                         <option value="-1" disabled selected><?php echo $text['Choose_option']; ?></option>
                                                 <?php foreach($data['event'] as $key =>$val){?>
                                                     <option value ='<?php echo $key;?>'><?php echo $text[$val];?></option>
@@ -172,41 +180,35 @@
                                 </div>
 
                                 <?php for($i = 2; $i <= 10; $i++){?>     
-                                        <div class="row input-pin">
-                                            <div class="col-2 t1" style="margin-left: 5%"><?php echo $i; ?>:</div>
-                                            <div class="col t2">
-                                                <div class="col-4 form-check form-check-inline">
-                                                    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_high" value="1">
-                                                    <label class="form-check-label" for="pin<?php echo $i; ?>_high"><img src="./img/high.png"></label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="zoom form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_low" value="2">
-                                                    <label class="form-check-label" for="pin<?php echo $i; ?>_low"><img src="./img/low.png"></label>
-                                                </div>
+                                    <div class="row input-pin">
+                                        <div class="col-2 t1" style="margin-left: 5%"><?php echo $i; ?>:</div>
+                                        <div class="col t2">
+                                            <div class="col-4 form-check form-check-inline">
+                                                <input class="zoom form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_high" value="1">
+                                                <label class="form-check-label" for="pin<?php echo $i; ?>_high"><img src="./img/high.png"></label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="zoom form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_low" value="2">
+                                                <label class="form-check-label" for="pin<?php echo $i; ?>_low"><img src="./img/low.png"></label>
                                             </div>
                                         </div>
+                                    </div>
                                 <?php } ?>
                                 <div id="work_goc" style="display: none;">
-                                <div class="row" style="display: flex; align-items: center;">
-                                    <div class="col t1"><?php echo $text['gate_confirm'];?>:</div>
-                                    <div class="col t2">
-                                                <div class="col form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_0" 
-                                                        value="0" checked="">
-                                                        <label class="form-check-label"><?php echo $text['NO'];?></label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_1" 
-                                                        value="1">
-                                                        <label class="form-check-label"><?php echo $text['YES'];?></label>
-                                                    </div>
+                                    <div class="row" style="display: flex; align-items: center;">
+                                        <div class="col t1"><?php echo $text['gate_confirm'];?>:</div>
+                                        <div class="col t2">
+                                            <div class="col form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_0" value="0" checked="">
+                                                <label class="form-check-label"><?php echo $text['NO'];?></label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="gateconfirm" id="gateconfirm_1" value="1">
+                                                <label class="form-check-label"><?php echo $text['YES'];?></label>
+                                            </div>
                                         </div>
+                                    </div>
                                 </div>
-                                </div>
-
-
-                                
-
                             </form>
                         </div>
 

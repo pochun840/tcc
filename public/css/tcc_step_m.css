@@ -251,7 +251,7 @@ th, td
 select
 {
     height: 35px;
-    width: 140px;
+    width: 150px;
     font-size: 18px;
     border: 1px solid #CCCCCC;
     cursor: pointer;
@@ -316,4 +316,10 @@ select
 #style-newstep::-webkit-scrollbar-thumb:hover
 {
     background: linear-gradient(left, #8391A6, #536175);
+}
+
+input:disabled 
+{
+    opacity: 1; /* Giữ độ rõ nét */
+    color: #000; /* Đảm bảo chữ vẫn có màu đen rõ ràng */
 }
