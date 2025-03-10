@@ -21,14 +21,14 @@ html, body
 
 .center-content
 {
-   width: 100%;
+   justify-content: space-evenly;
 }
 
 @media (max-width: 768px)
 {
     .center-content
     {
-        width: 100%;
+        justify-content: space-evenly;
     }
 }
 

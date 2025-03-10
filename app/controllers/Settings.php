@@ -85,6 +85,13 @@ class Settings extends Controller
 
     public function edit_password(){
 
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+        
         $conset = array();
         $input_check = true;
         if( !empty($_POST['device_id']) && isset($_POST['device_id'])  ){

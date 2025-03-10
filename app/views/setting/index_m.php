@@ -450,34 +450,72 @@ function time_save(){
 
 }
 
-function edit_password(){
+
+function edit_password() {
     var new_password = document.getElementById('new_password').value;
-    var comfirm_password = document.getElementById('comfirm_password').value;
+    var confirm_password = document.getElementById('comfirm_password').value;
+
+    var language = getCookie('language') || 'en'; 
+    var text_info, title, confirm_text;
+    
+    if(language == "zh-cn") {
+        text_info = '新密码与确认密码不一致，请重新输入。';
+        title = '修改密码';
+        confirm_text = '您确定要修改密码吗？'; 
+    } else if(language == "zh-tw") {
+        text_info = '新密碼與確認密碼不一致，請重新輸入。';
+        title = '修改密碼';
+        confirm_text = '您確定要修改密碼嗎？'; 
+    } else {
+        text_info = 'The new password and confirm password do not match. Please try again.';
+        title = 'Edit Password';
+        confirm_text = 'Are you sure you want to change the password?'; 
+    }
+
+
+    if (new_password !== confirm_password) {
+        alertify.alert(title, text_info);
+        return; 
+    }
 
     var device_id = <?php echo $data['controller_info']['device_id'];?>;
 
-    if(new_password == comfirm_password){
-        $.ajax({
-            url: "?url=Settings/edit_password",
-            method: "POST",
-            data:{ 
-                device_id: device_id,
-                new_password: new_password
+    alertify.confirm(confirm_text, function(result) {
+        if (result) {
+            document.getElementById('spinner').style.display = 'block';
 
-            },
-            success: function(response) {
-                alert(response);
-                history.go(0);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });   
-    }else{
-        alert("請確認密碼");
-        return false;
-    }
+            $.ajax({
+                url: "?url=Settings/edit_password",
+                method: "POST",
+                data: { 
+                    device_id: device_id,
+                    new_password: new_password
+                },
+                success: function(response) {
+                    var responseData = JSON.parse(response);  
+
+                    setTimeout(function() {
+                        document.getElementById('spinner').style.display = 'none';
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            sessionStorage.setItem('System_Setting', 'block');
+                            sessionStorage.setItem('Controller_Setting', 'none');
+                            history.go(0); 
+                        });
+
+                        setTimeout(function() {
+                            alertify.closeAll(); 
+                        }, 3000);
+                    }, 1000);
+                },
+                error: function(xhr, status, error) {
+                    alertify.alert('Error', 'An error occurred while updating the password.');
+                }
+            });
+        }
+    });
 }
+
+
 
 function button_save_password_gust(){
 

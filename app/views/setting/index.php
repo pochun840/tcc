@@ -428,69 +428,8 @@ window.onload = function() {
     
 
 };
-function edit_password(){
-    var new_password = document.getElementById('new_password').value;
-    var comfirm_password = document.getElementById('comfirm_password').value;
 
-    var device_id = <?php echo $data['controller_info']['device_id'];?>;
 
-    if(new_password == comfirm_password){
-
-        document.getElementById('spinner').style.display = 'block';
-
-        $.ajax({
-            url: "?url=Settings/edit_password",
-            method: "POST",
-            data:{ 
-                device_id: device_id,
-                new_password: new_password
-
-            },
-            success: function(response) {
-                var responseData = JSON.parse(response);  // 解析返回的 JSON 資料
-                
-                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
-                setTimeout(function() {
-                    // 隱藏 'copyjob' 和 'spinner' 加載動畫
-                    document.getElementById('spinner').style.display = 'none';  
-
-                    // 顯示 alertify 彈跳視窗
-                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        // 彈跳視窗關閉後刷新頁面
-                        // 存儲頁面顯示狀態到 sessionStorage
-                        sessionStorage.setItem('System_Setting', 'block');
-                        sessionStorage.setItem('Controller_Setting', 'none');
-                        
-                        history.go(0);  // 重新加載頁面
-                    });
-
-                    // 在 3 秒後自動關閉 alertify 彈跳視窗，並執行 AJAX 請求來刷新條形碼列表
-                    setTimeout(function() {
-                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                        
-                        // 刷新條形碼列表
-                        /*$.ajax({
-                            url: "?url=Settings/show_Barcodes",
-                            method: "GET",
-                            success: function(html) {
-                                $('#total_barcodes').html(html);  
-                            },
-                            error: function(xhr, status, error) {
-                                console.error("獲取條形碼時出錯:", error);
-                            }
-                        });*/
-                    }, 3000); // 延遲 3 秒
-                }, 1000); // 延遲 1000 毫秒
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });  
-    }else{
-        //alert("請確認密碼");
-        return false;
-    }
-}
 
 function time_save(){
     var newTime = document.getElementById('newTime').value;
@@ -517,6 +456,71 @@ function time_save(){
     }
 
 }
+
+function edit_password() {
+    var new_password = document.getElementById('new_password').value;
+    var confirm_password = document.getElementById('comfirm_password').value;
+
+    var language = getCookie('language') || 'en'; 
+    var text_info, title, confirm_text;
+    
+    if(language == "zh-cn") {
+        text_info = '新密码与确认密码不一致，请重新输入。';
+        title = '修改密码';
+        confirm_text = '您确定要修改密码吗？'; 
+    } else if(language == "zh-tw") {
+        text_info = '新密碼與確認密碼不一致，請重新輸入。';
+        title = '修改密碼';
+        confirm_text = '您確定要修改密碼嗎？'; 
+    } else {
+        text_info = 'The new password and confirm password do not match. Please try again.';
+        title = 'Edit Password';
+        confirm_text = 'Are you sure you want to change the password?'; 
+    }
+
+
+    if (new_password !== confirm_password) {
+        alertify.alert(title, text_info);
+        return; 
+    }
+
+    var device_id = <?php echo $data['controller_info']['device_id'];?>;
+
+    alertify.confirm(confirm_text, function(result) {
+        if (result) {
+            document.getElementById('spinner').style.display = 'block';
+
+            $.ajax({
+                url: "?url=Settings/edit_password",
+                method: "POST",
+                data: { 
+                    device_id: device_id,
+                    new_password: new_password
+                },
+                success: function(response) {
+                    var responseData = JSON.parse(response);  
+
+                    setTimeout(function() {
+                        document.getElementById('spinner').style.display = 'none';
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            sessionStorage.setItem('System_Setting', 'block');
+                            sessionStorage.setItem('Controller_Setting', 'none');
+                            history.go(0); 
+                        });
+
+                        setTimeout(function() {
+                            alertify.closeAll(); 
+                        }, 3000);
+                    }, 1000);
+                },
+                error: function(xhr, status, error) {
+                    alertify.alert('Error', 'An error occurred while updating the password.');
+                }
+            });
+        }
+    });
+}
+
 
 
 function button_save_password_gust(){

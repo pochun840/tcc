@@ -606,7 +606,7 @@ function copy_seq(seqid){
     document.getElementById('copyseq').style.display = 'block';   
     document.getElementById('from_seq_id').value =seqid;
     document.getElementById('from_seq_name').value =seqname;
-    copy_seq_by_id(seqid);
+    //copy_seq_by_id(seqid);
 }
 
 

@@ -34,7 +34,7 @@
             <div class="topnav">
                 <label style="font-size:3vmin;color: #000; padding-left: 2%" for="job_id"><?php echo $text['job_id'];?> :</label>&nbsp;&nbsp;
                 <input type="text" id="job_id" name="job_id" size="10" maxlength="20" value="<?php echo $data['job_id'];?>" disabled
-                style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
+                style="height:30px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
                 <button id="back_btn" type="button" onclick="window.location.href='?url=Jobs/index'"><?php echo $text['return'];?></button>
             </div>
@@ -42,9 +42,9 @@
             <div class="table-container">
                 <div class="scrollbar" id="style-seqtable">
                     <div class="force-overflow">
-                        <table id="seq_table" class="table w3-table-all w3-hoverable">
+                        <table id="seq_table" class="table w3-table">
                             <thead id="header-table">
-                                <tr class="w3-dark-grey" style="font-size: 2.4vmin">
+                                <tr class="w3-dark-grey" style="font-size: 3vmin">
                                     <th><?php echo $text['seq_id'];?></th>
                                     <th><?php echo $text['seq_name'];?></th>
                                     <th><?php echo $text['tr'];?></th>
@@ -56,7 +56,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 2vmin;text-align: center;">
+                            <tbody style="font-size: 3vmin;text-align: center;">
                                 <?php foreach($data['sequences'] as $key =>$val) {?>
                                     <tr>
                                         <td class="seq-id"> <?php echo $val['seq_id'];?></td>
@@ -109,7 +109,7 @@
             <div class="modal-content w3-animate-zoom" style="width: auto">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('newseq');" 
-                        class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px;font-size: 4.5vmin; margin: 3px">&times;</span>
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; height: 45px; margin: 1px; font-size: 20px">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_seq'];?></h3>
                 </header>
                 <div class="scrollbar-newseq" id="style-newseq">
@@ -191,8 +191,8 @@
                               
                                 <div class="row">
                                     <div for="NG-stop" class="col-6 t1"><?php echo $text['ns'];?>:</div>
-                                    <div class="col-4 t2">
-                                        <select id="seq_ns" class="col custom-file">
+                                    <div class="t2">
+                                        <select id="seq_ns" class="custom-file">
                                             <?php for($i=0;$i<=9;$i++) {?>
                                                 <option value="<?php echo $i;?>"><?php echo $i;?></option>
                                             <?php } ?> 
@@ -204,7 +204,7 @@
                                 <div class="row">
                                     <div for="OPT" class="col-6 t1"><?php echo $text['opt'];?> :</div>
                                     <div class="col t2" >
-                    			      	<div class=" col-4 form-check form-check-inline">
+                    			      	<div class="form-check form-check-inline">
                     					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_OFF" value="0">
                     					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
                     					</div>
@@ -234,7 +234,7 @@
             <div class="modal-content w3-animate-zoom" style="width: auto">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('editseq');"
-                        class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px;font-size: 4.5vmin; margin: 3px">&times;</span>
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; height: 45px; margin: 1px; font-size: 20px">&times;</span>
                     <h3 id='modal_title'><?php echo $text['edit_seq'];?></h3>
                 </header>
                 <div class="scrollbar-newseq" id="style-newseq">
@@ -273,13 +273,13 @@
                                     <div class="col t2" >
 
                                         <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="edit_seq_ok" id="seq_off" value="0" >
-                                        <label class="form-check-label" for="seq_off"> <?php  echo $text['OFF_text']; ?></label>
+                                        <input class="form-check-input" type="radio" name="edit_seq_ok" id="edit_seq_off" value="0" >
+                                        <label class="form-check-label" for="edit_seq_off"> <?php  echo $text['OFF_text']; ?></label>
                                         </div>
 
                                         <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="edit_seq_ok" id="seq_ok" value="1">
-                                        <label class="form-check-label" for="seq_ok"><?php  echo $text['ON_text']; ?></label>
+                                        <input class="form-check-input" type="radio" name="edit_seq_ok" id="edit_seq_ok" value="1">
+                                        <label class="form-check-label" for="edit_seq_ok"><?php  echo $text['ON_text']; ?></label>
                                         </div>
                                     </div>
                                 </div>
@@ -289,13 +289,13 @@
                                     <div class="col t2" >
 
                                         <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="edit_seq_ok_stop" id="seq_ok_stop_off" value="0" >
-                                        <label class="form-check-label" for="seq_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
+                                        <input class="form-check-input" type="radio" name="edit_seq_ok_stop" id="edit_seq_ok_stop_off" value="0" >
+                                        <label class="form-check-label" for="edit_seq_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
                                         </div>
 
                                         <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="edit_seq_ok_stop" id="seq_ok_stop_ok" value="1">
-                                        <label class="form-check-label" for="seq_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
+                                        <input class="form-check-input" type="radio" name="edit_seq_ok_stop" id="edit_seq_ok_stop_ok" value="1">
+                                        <label class="form-check-label" for="edit_seq_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
                                         </div>
                                     </div>
                                 </div>
@@ -332,13 +332,13 @@
                                 <div class="row">
                                     <div for="OPT" class="col-6 t1"><?php echo $text['opt'];?>:</div>
                                     <div class="col t2" >
-                    			      	<div class=" col-4 form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="edit_opt_option" id="OPT_ON" value="0">
-                    					  <label class="form-check-label" for="OPT_ON"><?php echo $text['switch_on'];?></label>
+                    			      	<div class="form-check form-check-inline">
+                    					  <input class="form-check-input" type="radio" name="edit_opt_option" id="edit_OPT_ON" value="0">
+                    					  <label class="form-check-label" for="edit_OPT_ON"><?php echo $text['switch_on'];?></label>
                     					</div>
                     					<div class="form-check form-check-inline">
-                    					  <input class="form-check-input" type="radio" name="edit_opt_option" id="OPT_OFF" value="1">
-                    					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
+                    					  <input class="form-check-input" type="radio" name="edit_opt_option" id="edit_OPT_OFF" value="1">
+                    					  <label class="form-check-label" for="edit_OPT_OFF"><?php echo $text['switch_off'];?></label>
                     					</div>
                                     </div>
                                 </div>
@@ -360,44 +360,40 @@
             <div class="modal-content w3-animate-zoom" style="width: auto">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('copyseq');"
-                        class="w3-button w3-red w3-display-topright" style="width: 50px; height: 43px;font-size: 4.5vmin; margin: 3px">&times;</span>
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; height: 45px; margin: 1px; font-size: 20px">&times;</span>
                     <h3 id='modal_title'><?php echo $text['Copy_Sequence'];?></h3>
                 </header>
 
                 <div class="modal-body">
                     <form id="new_seq_form">
-        	            <label for="from_seq_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_from'];?></label>
-        	            <div style="padding-left: 10%">
-        		            <div class="row">
-        				        <label for="from_seq_id" class="t1 col-4 col-form-label"><?php echo $text['seq_id'];?> :</label>
-        				        <div class="col-5 t2 ">
-        				            <input type="text" class="form-control" id="from_seq_id" disabled>
-        				        </div>
+        	            <div for="from_seq_id" class="col" style="font-weight: bold"><?php echo $text['copy_from'];?></div>
+        		        <div class="row" style="padding-left: 10%">
+        				    <div for="from_seq_id" class="t1 col-6"><?php echo $text['seq_id'];?> :</div>
+        				    <div class="col-4 t2 ">
+        				        <input type="text" class="form-control" id="from_seq_id" disabled>
         				    </div>
-        				    <div class="row">
-        				        <label for="from_seq_name" class="t1 col-4 col-form-label"><?php echo $text['seq_name'];?> :</label>
-        				        <div class="t2 col-5">
-        				            <input type="text" class="form-control" id="from_seq_name" disabled>
-        				        </div>
+        				</div>
+        				<div class="row" style="padding-left: 10%">
+            				<div for="from_seq_name" class="t1 col-6"><?php echo $text['seq_name'];?> :</div>
+            				<div class="t2 col-4">
+            				    <input type="text" class="form-control" id="from_seq_name" disabled>
+            				</div>
+        				</div>
+ 
+        			    <div for="from_seq_id" class="col" style="font-weight: bold"><?php echo $text['copy_to'];?></div>
+        				<div class="row" style="padding-left: 10%">
+            				<div for="to_seq_id" class="t1 col-6"><?php echo $text['seq_id'];?> :</div>
+        				    <div class="t2 col-4">
+        				        <input type="number" class="form-control" id="to_seq_id" value= '<?php echo $data['next_seq_id'];?>'>
         				    </div>
-        			    </div>
-
-        			    <label for="from_seq_id" class="col col-form-label" style="font-weight: bold"><?php echo $text['copy_to'];?></label>
-        			    <div style="padding-left: 10%">
-        				    <div class="row">
-        				        <label for="to_seq_id" class="t1 col-4 col-form-label"><?php echo $text['seq_id'];?> :</label>
-        				        <div class="t2 col-5">
-        				            <input type="number" class="form-control" id="to_seq_id" value= '<?php echo $data['next_seq_id'];?>'>
-        				        </div>
+        				</div>
+        				<div class="row" style="padding-left: 10%">
+            				<div for="to_seq_name" class="t1 col-6"><?php echo $text['seq_name'];?> :</div>
+        				    <div class="t2 col-4">
+        				        <input type="text" class="form-control" id="to_seq_name" value ='<?php echo "SEQ"."-".$data['next_seq_id'];?>'>
         				    </div>
-        				    <div class="row">
-        				        <label for="to_seq_name" class="t1 col-4 col-form-label"><?php echo $text['seq_name'];?> :</label>
-        				        <div class="t2 col-5">
-        				            <input type="text" class="form-control" id="to_seq_name" value ='<?php echo "SEQ"."-".$data['next_seq_id'];?>'>
-        				        </div>
-        				    </div>
-        			    </div>
-        			  </form>
+        				</div>
+        			</form>
                 </div>
 
                 <div class="modal-footer justify-content-center">
@@ -527,6 +523,7 @@ function copy_seq_by_id(){
     }
 
     if(newseqname){
+
         $.ajax({
             url: "?url=Sequences/check_seq_type",
             method: "POST",
@@ -538,6 +535,10 @@ function copy_seq_by_id(){
             success: function(response) {
                 alertify.confirm(text_info, function (result) {
                 if(result){
+
+                    document.getElementById('spinner').style.display = 'block';
+
+
                     $.ajax({
                         url: "?url=Sequences/copy_seq_data",
                         method: "POST",
@@ -549,20 +550,30 @@ function copy_seq_by_id(){
                             newseqname: newseqname
                         },
                         success: function(response) {
-                            console.log(response);
-                            
                             var responseData = JSON.parse(response);
-                            alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                                history.go(0);
-                            });
-                            
+                            // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                            setTimeout(function() {
+                                // 隱藏 'copyjob' 和 'spinner' 加載動畫
+                                document.getElementById('copyseq').style.display = 'none';
+                                document.getElementById('spinner').style.display = 'none';  
+
+                                // 顯示 alertify 彈跳視窗
+                                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                    // 刷新頁面
+                                    history.go(0);  
+                                });
+
+                                // 在 3 秒後自動關閉 alertify 彈跳視窗
+                                setTimeout(function() {
+                                    alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                                    history.go(0); 
+                                }, 3000); 
+                            }, 1000); // 延遲 1000 毫秒
                         },
                         error: function(xhr, status, error) {
                             
                         }
                     });
-
-                    //alert('eeew');
                 }else {
                     alertify.error('Cancelled');
                     // 用户点击取消按钮的处理逻辑
@@ -583,7 +594,7 @@ function copy_seq(seqid){
     document.getElementById('copyseq').style.display = 'block';   
     document.getElementById('from_seq_id').value =seqid;
     document.getElementById('from_seq_name').value =seqname;
-    copy_seq_by_id(seqid);
+    //copy_seq_by_id(seqid);
 }
 
 

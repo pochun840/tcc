@@ -21,32 +21,26 @@
 
             </div>
 
-            <div class="button col pt-5">
-                <button class="menu-item blue" id="job_manager" style="font-size: 20px;" onclick="window.location.href='?url=Jobs/index'"><span style="visibility: hidden;">Job</span></button>
-                <button class="menu-item purple" id="operation" style="font-size: 20px" onclick="window.location.href='?url=Dashboards/operation'"><span style="visibility: hidden;">Operation</span></button>
-                <br>
+            <div class="w3-center button-container" style="margin: 20px">
+                <button class="menu-item blue" id="job_manager" onclick="window.location.href='?url=Jobs/index'"><span style="visibility: hidden;">Job</span></button>
+                <button class="menu-item purple" id="operation" onclick="window.location.href='?url=Dashboards/operation'"><span style="visibility: hidden;">Operation</span></button>
                 
-                <button class="menu-item green" id="io_input" style="font-size: 20px;"   onclick="window.location.href='?url=Inputs/index'"><span style="visibility: hidden;">IO Input</span></button>
-                <button class="menu-item orange" id="io_output" style="font-size: 20px"  onclick="window.location.href='?url=Outputs/index'"><span style="visibility: hidden;">IO Output</span></button>
-                <br>
+                <button class="menu-item green" id="io_input" onclick="window.location.href='?url=Inputs/index'"><span style="visibility: hidden;">IO Input</span></button>
+                <button class="menu-item orange" id="io_output" onclick="window.location.href='?url=Outputs/index'"><span style="visibility: hidden;">IO Output</span></button>
 
-                <button class="menu-item lightblue" id="data" style="font-size: 20px" onclick="window.location.href='?url=Data/index'"><span style="visibility: hidden;">Data</span></button>
-                <button class="menu-item pink" id="tool" style="font-size: 20px" onclick="window.location.href='?url=Tools/index'"><span style="visibility: hidden;">Tool</span></button>
-                <br>
+                <button class="menu-item lightblue" id="data" onclick="window.location.href='?url=Data/index'"><span style="visibility: hidden;">Data</span></button>
+                <button class="menu-item pink" id="tool" onclick="window.location.href='?url=Tools/index'"><span style="visibility: hidden;">Tool</span></button>
                 
-                <button class="menu-item PaleGreen" id="setting" style="font-size: 20px;" onclick="window.location.href='?url=Settings/index'"><span style="visibility: hidden;">Setting</span></button>
-                <button class="menu-item lime" id="" style="font-size: 24px" onclick="window.location.href='?url=Agents'">Agent</button>
-                <br>
+                <button class="menu-item PaleGreen" id="setting" onclick="window.location.href='?url=Settings/index'"><span style="visibility: hidden;">Setting</span></button>
+                <button class="menu-item lime" id="agent" onclick="window.location.href='?url=Agents'"><span style="visibility: hidden;">Agent</span></button>
                
                 <?php if($_SESSION['privilege'] == 'admin'){ ?>
-                <div>
                     <?php if($data['agent_type'] == '2'){ ?>
                             <!--<button class="menu-item lime" id="" style="font-size: 24px" onclick="window.location.href='?url=Agents'">Agent</button>-->
                             <!--<button class="menu-item lime" id="agent" style="font-size: 24px" ><span style="visibility: hidden;">Agent</span></button>-->
                     <?php } ?>
-                            <button class="menu-item indigo" id="load" style="font-size: 24px" onclick="DB_sync_idas_load('C2D')"><span style="visibility: hidden;">Load</span></button>
-                            <button class="menu-item deep-orange" id="save" style="font-size: 24px;" onclick="DB_sync_idas('D2C')"><span style="visibility: hidden;">Save</span></button>
-                </div>
+                        <button class="menu-item indigo" id="load" onclick="DB_sync_idas_load('C2D')"><span style="visibility: hidden;">Load</span></button>
+                        <button class="menu-item deep-orange" id="save" onclick="DB_sync_idas('D2C')"><span style="visibility: hidden;">Save</span></button>
                 <?php } ?>
 
             </div>
@@ -54,9 +48,24 @@
     </div>
 </div>
 
-</body>
+<style>
+.button-container 
+{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center buttons in the container */
+    gap: 10px; /* Adjust space between buttons */
+}
 
-</html>
+/* Khi màn hình nhỏ (dưới 768px), hiển thị 2 nút trên 1 hàng */
+@media (max-width: 768px) {
+    .button-container {
+        justify-content: space-evenly; /* Chia đều không gian giữa các nút */
+    }
+    
+}
+</style>
+
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -135,10 +144,13 @@ function DB_sync_idas(argument) {
                     data: { argument: argument },
                     success: function (response) {
                         var responseData = JSON.parse(response);
+
+                        // 显示来自服务器的 res_type 和 res_msg
                         alertify.alert(responseData.res_type, responseData.res_msg, function () {
+                            // 在 3 秒后自动关闭窗口
                             setTimeout(function() {
-                                alertify.dismissAll(); 
-                                history.go(0); 
+                                alertify.dismissAll(); // 关闭所有 Alertify 对话框
+                                history.go(0); // 重新加载页面
                             }, 3000);
                         });
                     },
@@ -196,10 +208,13 @@ function DB_sync_idas_load(argument){
                     success: function (response) {
 
                         var responseData = JSON.parse(response);
+                        
+                        // 显示来自服务器的 res_type 和 res_msg
                         alertify.alert(responseData.res_type, responseData.res_msg, function () {
+                            // 在 3 秒后自动关闭窗口
                             setTimeout(function() {
-                                alertify.dismissAll();
-                                history.go(0); 
+                                alertify.dismissAll(); // 关闭所有 Alertify 对话框
+                                history.go(0); // 重新加载页面
                             }, 3000);
                         });
                     },
