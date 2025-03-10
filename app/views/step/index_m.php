@@ -19,7 +19,7 @@
                 <input type="text" id="seq_id" name="seq_id" size="5" maxlength="20" value="1" disabled
                 style="height:28px; font-size:3vmin;text-align: center; background-color: #DDDDDD; border:0; margin: 3px;">
 
-                <button id="back_btn" type="button" onclick="goToPage()"><?php echo $text['return'];?></button>
+                <button id="back_btn" type="button"  onclick="window.history.back()"><?php echo $text['return'];?></button>
             </div>
 
             <div class="table-container">
