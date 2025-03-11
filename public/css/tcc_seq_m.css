@@ -258,14 +258,14 @@ th, td
 .scrollbar-newseq
 {
     float: left;
-    height: calc(50vh - 80px);
+    height: calc(100vh - 200px);
     width: 100%;
     overflow-y: scroll;
 }
 
 .newseq-force-overflow
 {
-    min-height: 30vh;
+    min-height: 40vh;
 }
 
 #wrapper
