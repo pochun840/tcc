@@ -384,7 +384,7 @@
         				<div class="row" style="padding-left: 10%">
             				<div for="to_seq_id" class="t1 col-6"><?php echo $text['seq_id'];?> :</div>
         				    <div class="t2 col-4">
-        				        <input type="number" class="form-control" id="to_seq_id" value= '<?php echo $data['next_seq_id'];?>'>
+        				        <input type="number" class="form-control" id="to_seq_id" value= '<?php echo $data['next_seq_id'];?>' disabled style="background-color: #fff; color: #000; border: 1px solid #ccc;">
         				    </div>
         				</div>
         				<div class="row" style="padding-left: 10%">

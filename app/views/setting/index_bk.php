@@ -1,4 +1,5 @@
 
+
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_setting.css" type="text/css">
 <style>
     .form-control{
@@ -428,6 +429,34 @@ window.onload = function() {
 
 };
 
+
+
+function time_save(){
+    var newTime = document.getElementById('newTime').value;
+    var device_id = <?php echo $data['controller_info']['device_id'];?>;
+
+    //console.log(newTime);
+    if(newTime){
+        $.ajax({
+            url: "?url=Settings/edit_system_date",
+            method: "POST",
+            data:{ 
+                device_id: device_id,
+                newTime: newTime
+
+            },
+            success: function(response){
+                alert(response);
+                //history.go(0);
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });       
+    }
+
+}
+
 function edit_password() {
     var new_password = document.getElementById('new_password').value;
     var confirm_password = document.getElementById('comfirm_password').value;
@@ -492,32 +521,6 @@ function edit_password() {
     });
 }
 
-
-function time_save(){
-    var newTime = document.getElementById('newTime').value;
-    var device_id = <?php echo $data['controller_info']['device_id'];?>;
-
-    //console.log(newTime);
-    if(newTime){
-        $.ajax({
-            url: "?url=Settings/edit_system_date",
-            method: "POST",
-            data:{ 
-                device_id: device_id,
-                newTime: newTime
-
-            },
-            success: function(response){
-                alert(response);
-                //history.go(0);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });       
-    }
-
-}
 
 
 function button_save_password_gust(){

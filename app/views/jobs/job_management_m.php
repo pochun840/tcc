@@ -325,7 +325,7 @@
         				<div class="row" style="padding-left: 10%;">
         				    <div for="to_job_id" class="t1 col-6"><?php echo $text['job_id'];?> :</div>
         				    <div class="t2 col-4" >
-        				        <input type="number" class="form-control" id="to_job_id" value ='<?php echo $data['next_job_id'];?>'>
+        				        <input type="number" class="form-control" id="to_job_id" value ='<?php echo $data['next_job_id'];?>' disabled style="background-color: #fff; color: #000; border: 1px solid #ccc;">
         				    </div>
         				</div>
         				<div class="row" style="padding-left: 10%;">
