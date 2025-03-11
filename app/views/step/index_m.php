@@ -613,12 +613,23 @@
                     }
 
                     if(target_opt == 1){
+
+                        var inputs = document.querySelectorAll("input[type='text'], input[type='radio'], select");
+                        inputs.forEach(function(input) {
+                        
+                            if (input.type === 'radio' && input.name === 'edit_direction') {
+                                input.disabled = false;  
+                            } else if (input.type !== 'radio') {
+                                input.disabled = false;  
+                            }
+                        });
+
                         document.getElementById("edit_target_ang").value = target_ang;
                         document.getElementById("edit_target_tor_item").style.display='none';
                         document.getElementById("edit_target_delay_item").style.display='none';
                         document.getElementById("edit_target_ang_item").style.display='block';
                         disableElementsByName("edit_th_mode");
-                        disableElementsByName("edit_direction");
+      
 
                         disableElementById('edit_ds_tor');
                         disableElementById('edit_ds_speed');
