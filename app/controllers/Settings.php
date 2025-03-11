@@ -639,14 +639,14 @@ class Settings extends Controller
         }    
 
         $Das_DB_Location = '/var/www/html/database/idas_data.db'; 
-        $Con_DB_Location = '/var/www/html/database/tcscon.db'; 
+        $Con_DB_Location = '/var/www/html/database/tcccon.db'; 
     
         if (!empty($argument)) {
             if (PHP_OS_FAMILY == 'Linux' && $argument == 'D2C') {
     
                 if (!file_exists($Con_DB_Location)) {
                     
-                    $res_msg = "Error: tcscon.db does not exist.";
+                    $res_msg = "Error: tcccon.db does not exist.";
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                     return;
                 }
@@ -678,7 +678,7 @@ class Settings extends Controller
         }
 
         $Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
-        $Con_DB_Location = '/var/www/html/database/tcscon.db'; //控制器
+        $Con_DB_Location = '/var/www/html/database/tcccon.db'; //控制器
 
         if(!empty($argument)){
             if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
@@ -694,8 +694,8 @@ class Settings extends Controller
                 }
 
 
-                $sourceFile = '/var/www/html/database/tcscon.db';
-                $backupFile = '/var/www/html/database/tcscon_bk.db';
+                $sourceFile = '/var/www/html/database/tcccon.db';
+                $backupFile = '/var/www/html/database/tcccon_bk.db';
                 $newFile = '/var/www/html/database/idas_data.db';
 
                 $res  = $this->SettingModel->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);

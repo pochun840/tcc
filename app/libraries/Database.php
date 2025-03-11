@@ -17,18 +17,15 @@ class Database
     public function __construct()
     {
         // 透過 PDO 建立資料庫連線
-        // 實例化 PDO
-        // 為避免控制器與iDas同時寫入sqlite3導致 db lock，iDas先將db複製出來，最後再透過call modbus的方式去更新db
-        // 1.將DB複製一份到ramdisk根目錄，名稱調整為iDas-tcscon.db與iDas-tcsdev.db
-
+  
 
         // 透過 PHP_OS_FAMILY 判斷，目前執行的系統，決定要採用的DB路徑
         
         $Year = date("Y");// data db 用西元年命名
         $data_db_name = "data".$Year.".db";
         if( PHP_OS_FAMILY == 'Linux'){
-            if(file_exists('sqlite:/var/www/html/database/tcscon.db') ){
-                $source = '/var/www/html/database/tcscon.db';
+            if(file_exists('sqlite:/var/www/html/database/tcccon.db') ){
+                $source = '/var/www/html/database/tcccon.db';
                 $destination = '/var/www/html/database/idas_data.db';
                 copy($source, $destination);
                 $this->db_iDas = new PDO('sqlite:' . $destination);
@@ -43,7 +40,7 @@ class Database
             }
 
             if (!file_exists('/var/www/html/database/idas_data.db')) {
-                $source = '/var/www/html/database/tcscon.db';
+                $source = '/var/www/html/database/tcccon.db';
                 $destination = '/var/www/html/database/idas_data.db';
                 copy($source, $destination);
                 $this->db_iDas = new PDO('sqlite:' . $destination);
@@ -59,7 +56,7 @@ class Database
             }
 
             if (!file_exists('../idas_data.db')) {
-                $source = '../tcscon.db';
+                $source = '../tcccon.db';
                 $destination = '../idas_data.db';
                 copy($source, $destination);
                 $this->db_iDas = new PDO('sqlite:' . $destination);

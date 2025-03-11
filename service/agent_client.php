@@ -69,8 +69,8 @@ function GetLastResult(){
         $result = $db_data->query("SELECT * FROM data ORDER BY system_sn DESC LIMIT 1");
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        if(file_exists('/home/kls/tcc/resource/db_emmc/tcscon.db')){
-            $db_tcscon = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/tcscon.db'); //鎖附結果DB
+        if(file_exists('/home/kls/tcc/resource/db_emmc/tccon.db')){
+            $db_tcscon = new PDO('sqlite:/home/kls/tcc/resource/db_emmc/tcccon.db'); //鎖附結果DB
             $result = $db_tcscon->query("SELECT * FROM device");
             $device_info = $result->fetch(PDO::FETCH_ASSOC);
             $row['device_name'] = $device_info['device_name'];
