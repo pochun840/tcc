@@ -132,14 +132,17 @@
 											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_1" value="1"  onclick="toggleOnputTime('pin<?php echo $i; ?>_1', this.checked,'1')">
 											<label class="form-check-label" for="pin<?php echo $i; ?>_1"><img src="./img/signal01.png"></label>
 										</div>
-										<div class="col-sm-2 t2 form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_2" value="2"  onclick="toggleOnputTime('pin<?php echo $i; ?>_2', this.checked,'2')">
-											<label class="form-check-label" for="pin<?php echo $i; ?>_2"><img src="./img/signal02.png"></label>
-										</div>
+										
 										<div class="col-sm-2 t2 form-check form-check-inline">
 											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_3" value="3" onclick="toggleOnputTime('pin<?php echo $i; ?>_3', this.checked,'3')">
 											<label class="form-check-label" for="pin<?php echo $i; ?>_3"><img src="./img/trigger.png"></label>
 										</div>
+
+                                        <div class="col-sm-2 t2 form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_2" value="2"  onclick="toggleOnputTime('pin<?php echo $i; ?>_2', this.checked,'2')">
+											<label class="form-check-label" for="pin<?php echo $i; ?>_2"><img src="./img/signal02.png"></label>
+										</div>
+
 										<div class="col-sm-2 t2">
 											<input type="text" class="form-control" id="time<?php echo $i; ?>" placeholder="ms" style="height: 28px; text-align: center;">
 										</div>
@@ -187,14 +190,17 @@
 												<input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin<?php echo $i; ?>_1" value="1" onclick="toggleOnputTime_edit('edit_pin<?php echo $i; ?>_1', this.checked,'1')" >
 												<label class="form-check-label" for="edit_pin<?php echo $i; ?>_1"><img src="./img/signal01.png"></label>
 											</div>
-											<div class="col-sm-2 t2 form-check form-check-inline">
-												<input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin<?php echo $i; ?>_2" value="2" onclick="toggleOnputTime_edit('edit_pin<?php echo $i; ?>_2', this.checked,'2')">
-												<label class="form-check-label" for="edit_pin<?php echo $i; ?>_2"><img src="./img/signal02.png"></label>
-											</div>
+											
 											<div class="col-sm-2 t2 form-check form-check-inline">
 												<input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin<?php echo $i; ?>_3" value="3" onclick="toggleOnputTime_edit('edit_pin<?php echo $i; ?>_3', this.checked,'3')">
 												<label class="form-check-label" for="edit_pin<?php echo $i; ?>_3"><img src="./img/trigger.png"></label>
 											</div>
+
+                                            <div class="col-sm-2 t2 form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="edit_pin_option" id="edit_pin<?php echo $i; ?>_2" value="2" onclick="toggleOnputTime_edit('edit_pin<?php echo $i; ?>_2', this.checked,'2')">
+												<label class="form-check-label" for="edit_pin<?php echo $i; ?>_2"><img src="./img/signal02.png"></label>
+											</div>
+                                            
 											<div class="col-sm-2 t2">
 												<input type="text" class="form-control" id="edit_time<?php echo $i; ?>" placeholder="ms" style="height: 28px; text-align: center;">
 											</div>
@@ -902,6 +908,7 @@ function create_output_id() {
 
 
                     if (document.getElementById("Event_Option").value !== "-1") {
+                      
                         document.getElementById("Event_Option").value = "-1"; 
                     }
 
