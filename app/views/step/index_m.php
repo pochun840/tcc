@@ -123,7 +123,7 @@
                             </div>
                         </div>
 
-                        <div id='target_ang_item' style="display:block;">                     
+                        <div id='target_ang_item' style="display:none;">                     
                             <div class="row">
                                 <div class="col-6 t1"><?php echo $text['Target_Angle'];?> :</div>
                                 <div class="col-4 t2">
@@ -133,7 +133,7 @@
                             </div>
                         </div>
 
-                        <div id='target_delay_item' style="display:block;">       
+                        <div id='target_delay_item' style="display:none;">       
                             <div class="row">
                                     <div for="target-torque" class="col-6 t1"><?php echo $text['Target Delay Time'];?> :</div>
                                     <div class="col-4 t2">
@@ -745,8 +745,7 @@
             toggleVisibility(target_opt_Value);
         });
 
-        // 處理 th_mode
-        //detectDownshiftSelection();
+  
     }
 
     // 用來根據 downshift 的選項來控制其他欄位的 disabled 狀態
