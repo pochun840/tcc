@@ -851,25 +851,25 @@ function create_output_id() {
 
         var time_ms = 'time' + output_pin;
         var wave_on = document.getElementById(time_ms).value;
+        var language = getCookie('language');
 
-        // Retrieve language from the cookie
-        var language = getCookie('language'); // Assuming the language is stored as 'en', 'zh-tw', or 'zh-cn'
-
-        // Localized messages based on the language
         var messages = {
-            en: "Please enter a wave value between 100 and 10000.",
+            'en-us':"Please enter a wave value between 100 and 10000.",
             'zh-tw': "範圍介於100和10000之間。",
             'zh-cn': "范围介于100和10000之间。"
         };
 
-
         if(!language){
-            language = 'en';
+            language = 'en-us';
         }
-        // Check if wave_on is within the range 100-10000
+
         if (wave_on < 100 || wave_on > 10000) {
             alertify.alert(messages[language]);
-            return; // Prevent further execution
+
+            setTimeout(function() {
+                alertify.closeAll(); 
+            }, 3000); 
+            return; 
         }
 
         if (job_id) {

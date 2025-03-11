@@ -979,20 +979,38 @@ function collectPinValues(selector) {
 function create_output_id() {
     var output_event = document.getElementById("Event_Option").value;
     var pinval = collectPinValues('input[name="pin_option"]');
-  
 
     if (pinval.length > 0) {
         var pin_old = pinval[0]['id']; 
         var wave = pinval[0]['value'];
-        
+
         var match = pin_old.match(/\d+/); 
         var output_pin = match ? parseInt(match[0]) : null;
-        
-        var time_ms = 'time'+ output_pin;
-        var wave_on =  document.getElementById(time_ms).value;
+
+        var time_ms = 'time' + output_pin;
+        var wave_on = document.getElementById(time_ms).value;
+        var language = getCookie('language');
+
+        var messages = {
+            'en-us':"Please enter a wave value between 100 and 10000.",
+            'zh-tw': "範圍介於100和10000之間。",
+            'zh-cn': "范围介于100和10000之间。"
+        };
+
+        if(!language){
+            language = 'en-us';
+        }
+
+        if (wave_on < 100 || wave_on > 10000) {
+            alertify.alert(messages[language]);
+
+            setTimeout(function() {
+                alertify.closeAll(); 
+            }, 3000); 
+            return; 
+        }
 
         if (job_id) {
-
             document.getElementById('spinner').style.display = 'block';
 
             $.ajax({
@@ -1005,6 +1023,7 @@ function create_output_id() {
                     wave: wave,
                     wave_on: wave_on
                 },
+
                 success: function(response) {
                     document.getElementById('new_output').style.display = 'none';
                     var responseData = JSON.parse(response);
@@ -1025,7 +1044,6 @@ function create_output_id() {
         console.error("No pinval found or pinval[0] is undefined.");
     }
 }
-
 function edit_output_id(){
     var output_event = document.getElementById("edit_event_option").value;
     var pinval       = collectPinValues('input[name="edit_pin_option"]');
