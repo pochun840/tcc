@@ -464,7 +464,7 @@
                 <div class="modal-footer justify-content-center">
                     <input type='hidden' id='step_torque_unit' name='step_torque_unit' value='<?php echo $data['step_torque_unit'];?>'>
                     <button id="" class="button-modal" onclick="edit_step_save()" ><?php echo $text['save'];?></button>
-                    <button id="" class="button-modal" onclick="closebutton('edittep');"  class="closebtn"><?php echo $text['close'];?></button>
+                    <button id="" class="button-modal" onclick="closebutton('editstep');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
             </div>
         </div>
