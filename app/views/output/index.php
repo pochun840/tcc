@@ -863,14 +863,17 @@ function create_output_id() {
             language = 'en-us';
         }
 
-        if (wave_on < 100 || wave_on > 10000) {
-            alertify.alert(messages[language]);
+        if(wave ==2){
+            if (wave_on < 100 || wave_on > 10000) {
+                alertify.alert(messages[language]);
 
-            setTimeout(function() {
-                alertify.closeAll(); 
-            }, 3000); 
-            return; 
+                setTimeout(function() {
+                    alertify.closeAll(); 
+                }, 3000); 
+                return; 
+            }
         }
+   
 
         if (job_id) {
             document.getElementById('spinner').style.display = 'block';
@@ -896,6 +899,12 @@ function create_output_id() {
                         document.querySelector(".main-content").classList.remove("overlay-active"); 
                         get_output_by_job_id(job_id); 
                     }, 1000); 
+
+
+                    if (document.getElementById("Event_Option").value !== "-1") {
+                        document.getElementById("Event_Option").value = "-1"; 
+                    }
+
                 },
                 error: function(xhr, status, error) {
                     console.error("AJAX request failed:", status, error);
