@@ -622,14 +622,23 @@ function edit_step(stepid){
 
 
                 document.querySelector("select[name='edit_target_opt']").value = target_opt;
-                alert(target_opt);
+
 
                 if(target_opt == 0){
                     
+
+                    var inputs = document.querySelectorAll("input[type='text'], input[type='radio'], select");
+                    inputs.forEach(function(input) {
+                        input.disabled = false; 
+                    });
+
                     document.getElementById("edit_target_tor").value = target_tor;
                     document.getElementById("edit_target_ang_item").style.display='none';
                     document.getElementById("edit_target_delay_item").style.display='none';
                     document.getElementById("edit_target_tor_item").style.display='block';
+
+                   
+
                 }
 
                 if(target_opt == 1){
@@ -637,25 +646,21 @@ function edit_step(stepid){
                     document.getElementById("edit_target_tor_item").style.display='none';
                     document.getElementById("edit_target_delay_item").style.display='none';
                     document.getElementById("edit_target_ang_item").style.display='block';
+                    disableElementsByName("edit_th_mode");
+                    disableElementsByName("edit_direction");
 
                     disableElementById('edit_ds_tor');
                     disableElementById('edit_ds_speed');
                     disableElementById('edit_th_tor');
-                    //disableElementById('edit_rpm');
-
                     enableElementById('edit_rpm');
-                    disableElementsByName("edit_th_mode");
-
+                    enableElementById('edit_tor_hi');
+                    enableElementById('edit_tor_lo');
+                    enableElementById('edit_ang_hi');
+                    enableElementById('edit_ang_lo');
                     
-
-            
-
-
-                     
                 }
 
                 if(target_opt == 2){
-    
                     document.getElementById("edit_target_delay").value = target_delay;
                     document.getElementById("edit_target_tor_item").style.display='none';
                     document.getElementById("edit_target_ang_item").style.display='none';
