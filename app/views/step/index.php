@@ -724,7 +724,7 @@ function edit_step(stepid){
 }
 
 function create_step() {
-    // 顯示新步驟
+
     document.getElementById('newstep').style.display = 'block';
 
     // 設定預設值
@@ -849,6 +849,7 @@ function add_step() {
                 seqid: seqid,
                 stepid: add_stepid,
                 target_opt: target_opt,
+                target_tor:target_tor,
                 target_ang: target_ang,
                 target_delay: target_delay,
                 tor_hi: tor_hi,

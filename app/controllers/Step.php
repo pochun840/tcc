@@ -101,10 +101,6 @@ class Step extends Controller
             $counts_torque = intval($check_torque[0]['counts']);
             //counts
         }
-        //var_dump($check_torque);
-        //$check = intval($check[0]['count_records']);
-
-
 
         $data = array(
             'isMobile' => $isMobile,
@@ -174,7 +170,7 @@ class Step extends Controller
             //$check = intval($check[0]['count_records']);
 
 
-            #
+        
 
             if($target_opt  == 0 ){
                 if ($ds_tor > $target_tor) {

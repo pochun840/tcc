@@ -812,6 +812,7 @@
                     seqid: seqid,
                     stepid: add_stepid,
                     target_opt: target_opt,
+                    target_tor:target_tor,
                     target_ang: target_ang,
                     target_delay: target_delay,
                     tor_hi: tor_hi,
