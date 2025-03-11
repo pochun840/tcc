@@ -396,7 +396,7 @@ class Outputs extends Controller
         if( isset($_POST['wave_on']) && $_POST['wave_on']>=0 && $_POST['wave_on'] <= 10000 ){
             $jobdata['wave_on'] = $_POST['wave_on'];
             if($jobdata['wave_on'] == ''){
-                $jobdata['wave_on'] = 0;//預設值
+                $jobdata['wave_on'] = 0;
             }
         }else{ 
             $input_check = false; 
