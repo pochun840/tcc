@@ -402,6 +402,10 @@ class Outputs extends Controller
             $input_check = false; 
         }
 
+        if($jobdata['wave'] == 1 || $jobdata['wave'] == 3){
+            $jobdata['wave_on'] = 0;
+        }
+
         $jobdata['wave_off'] = 0;
         $jobdata['output_seqid'] = 0;
 

@@ -22,15 +22,17 @@ class Sequences extends Controller
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
 
 
-        $next_seq_id_arr = $this->sequenceModel->get_head_seq_id($job_id);
-        $next_seq_id = (int)$next_seq_id_arr['missing_id'];
+    
 
         if(empty($sequences)){
             $seq_id = 1;
+            $next_seq_id = 1;
         }else{
             $seq_id = count($sequences) + 1 ;
+            $next_seq_id = $seq_id;
         }
 
+        
 
         $isMobile = $this->isMobileCheck();
      
@@ -44,6 +46,7 @@ class Sequences extends Controller
             'next_seq_id' => $next_seq_id
 
         );
+
 
         if($isMobile){
             $this->view('sequences/index_m', $data);
