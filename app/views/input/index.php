@@ -938,11 +938,7 @@ function delete_input_id(job_id,input_event){
 function create_input_id(){
  
     var input_event = document.getElementById("Event_Option").value;
-
-    // 選擇所有 name 為 "pin_option" 的 radio 按鈕
     var allRadioButtons = document.querySelectorAll('input[name="pin_option"]');
-
-    // 初始化變數來存儲選中的 id 和 value
     var input_pin  = '';
     var input_wave = '';
 
@@ -964,12 +960,31 @@ function create_input_id(){
     var input_pagemode = 0;
     var input_seqid = 0;
 
+    var language = getCookie('language');
+    
+    var messages = {
+        'en-us': "Please select a wave value.",
+        'zh-tw': "請選擇波形值。",
+        'zh-cn': "请选择波形值。"
+    };
 
+    if (!language) {
+        language = 'en-us';
+    }
 
+   
+    if (input_wave === '') {
+        alertify.alert(messages[language]);
+
+        setTimeout(function() {
+            alertify.closeAll(); 
+        }, 3000);  
+
+        return; 
+    }
+    
     if(job_id){
-
         document.getElementById('spinner').style.display = 'block';
-
         $.ajax({
             url: "?url=Inputs/create_input_event",
             method: "POST",

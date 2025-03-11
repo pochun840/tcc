@@ -759,6 +759,28 @@ function create_input_id(){
     var input_pagemode = 0;
     var input_seqid = 0;
 
+    var language = getCookie('language');
+    
+    var messages = {
+        'en-us': "Please select a wave value.",
+        'zh-tw': "請選擇波形值。",
+        'zh-cn': "请选择波形值。"
+    };
+
+    if (!language) {
+        language = 'en-us';
+    }
+
+   
+    if (input_wave === '') {
+        alertify.alert(messages[language]);
+
+        setTimeout(function() {
+            alertify.closeAll(); 
+        }, 3000);  
+
+        return; 
+    }
 
 
     if(job_id){
