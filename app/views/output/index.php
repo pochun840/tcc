@@ -484,7 +484,7 @@ function crud_job_event(argument){
                         timeElement.disabled = true;
                     }
 
-                    if(output_event  == 7 || output_event == 8 || output_event  == 9){
+                    if(output_event  == 7 || output_event == 8 || output_event  == 9 || output_event  == 12 || output_event  == 13){
                         //disabled edit_time1-9 
                         disableTimeFields();
                     }

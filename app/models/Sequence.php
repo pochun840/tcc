@@ -338,8 +338,7 @@ class Sequence{
         $count = $statement->fetchColumn();
         $count = intval($count);
        
-        //var_dump($count);
-        //die();
+
         if ($count > 0) {
             #如果資料存在，則刪除
             $deleteSql = "DELETE FROM sequence  WHERE job_id = ? AND seq_id = ?";
@@ -352,7 +351,7 @@ class Sequence{
         }
     }
 
-    /*public function del_step_type($jobid, $newseqid){
+    public function del_step_type($jobid, $newseqid){
 
         #查詢資料是否存在
         $sql = "SELECT COUNT(*) FROM step WHERE job_id = ? AND seq_id = ?";
@@ -370,7 +369,7 @@ class Sequence{
         } else {
             return false;
         }
-    }*/
+    }
 
      //查詢 seq_id 還沒有 被使用的 取出 最小值
      public function get_head_seq_id($job_id) {

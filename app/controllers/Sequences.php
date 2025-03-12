@@ -315,32 +315,22 @@ class Sequences extends Controller
         $oldseqname = $_POST['oldseqname'] ?? null;
         $newseqname = $_POST['newseqname'] ?? null;
 
-        //檢查 $seqid 是否有存在 
-        //$res = $this->sequenceModel->seq_id_repeat($jobid,$seqid);
 
-        /*if(!empty($res['job_id'])){
+        //檢查 $seqid 是否有存在 
+        $res_check = $this->sequenceModel->search_seqinfo($jobid,$seqid);
+        if(!empty($res['job_id'])){
             $this->MiscellaneousModel->generateErrorResponse('Error', $error_message['job_id']);
             exit();
-        }*/
-
-
+        }
         //用jobid 及 seqid 去找出 對應的資料
         $old_res = $this->sequenceModel->search_seqinfo($jobid,$seqid);
+
+
         
-        //$this->sequenceModel->del_seq_type($jobid,$newseqid);
-        //$this->sequenceModel->del_step_type($jobid,$newseqid);
+        $this->sequenceModel->del_seq_type($jobid,$newseqid);
+        $this->sequenceModel->del_step_type($jobid,$newseqid);
 
-       // $select_step = $this->sequenceModel->search_stepinfo($jobid,$seqid);
-
-        echo $jobid;
-        echo "<br>";
-        echo $seqid;
-        echo "<br>";
-        echo $newseqid;
-        die();
-
-
-        /*if(!empty($old_res)){
+        if(!empty($old_res)){
             $new_temp_seq = array();
             foreach($old_res as $kk =>$vv){
                 $new_temp_seq[$kk]['job_id'] = $vv['job_id'];
@@ -357,14 +347,19 @@ class Sequences extends Controller
 
             }  
 
-            //$rows = $this->sequenceModel->copy_seq_by_seq_id($new_temp_seq);
+            $rows = $this->sequenceModel->copy_seq_by_seq_id($new_temp_seq);
      
-        }*/
-        /*if(!empty($select_step)){
+        }
+
+
+        $select_step = $this->sequenceModel->search_stepinfo($jobid,$seqid);
+
+
+        if(!empty($select_step)){
             $new_temp_step = array();
-            foreach($select_step as $k_step =>$v_step){
-                $new_temp_step[$key_step]['job_id'] = $new_jobid;
-                $new_temp_step[$key_step]['seq_id'] = $val_step['seq_id'];
+            foreach($select_step as $key_step =>$val_step){
+                $new_temp_step[$key_step]['job_id'] = $val_step['job_id'];
+                $new_temp_step[$key_step]['seq_id'] = $newseqid;
                 $new_temp_step[$key_step]['step_id'] = $val_step['step_id'];
                 $new_temp_step[$key_step]['target_opt'] = $val_step['target_opt']; 
                 $new_temp_step[$key_step]['target_tor'] = $val_step['target_tor'];
@@ -385,12 +380,8 @@ class Sequences extends Controller
 
             }
 
-            echo "<pre>";
-            print_r($new_temp_step);
-            echo "</pre>";
-            die();
-            //$rows_temp = $this->sequenceModel->copy_step_by_seq_id($new_temp_step);
-        
+            $rows_temp = $this->sequenceModel->copy_step_by_seq_id($new_temp_step);
+
         }
 
         if($rows){
@@ -406,7 +397,9 @@ class Sequences extends Controller
             'res_msg'  => $res_msg 
         );
 
-        echo json_encode($result);*/
+        echo json_encode($result);
+
+        
     
     }
    
