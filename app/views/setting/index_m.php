@@ -32,7 +32,7 @@
     </div>
     <div class="main-content">
         <div class="center-content">
-            <div class="w3-center">
+            <div class="menu-button w3-center">
                 <button id="bnt1" name="Controller_Display" class="button active" onclick="OpenButton('Controller')"><?php echo $text['controller_setting'];?></button>
                 <button id="bnt2" name="System_Display" class="button" onclick="OpenButton('System')"><?php echo $text['system_setting'];?></button>
                 <button id="bnt3" name="Barcode_Display" class="button" onclick="OpenButton('Barcode')"><?php echo $text['system_barcode_setting'] ;?></button>
@@ -43,77 +43,81 @@
             <!-- Controller Setting -->        
             <div id="Controller_Setting" class="divMode">
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['controller_setting'];?></div>
-                <div class="row t2">
-                    <div class="col-5 t1"><?php echo $text['system_id'];?>:</div>
-                    <div class="col-5 t2">
-                        <input id="control_id" name="control_id" type="number" max=250 min=1 maxlength="3" value="<?php echo $data['controller_info']['device_id'];?>" class="t3 form-control"  required>
-                    </div>
-                </div>    
-                <div class="row t2">
-                    <div class="col-5 t1"><?php echo $text['system_name'];?>:</div>
-                    <div class="col-5 t2">
-                        <input id="control_name" name="control_name" maxlength="" type="text" maxlength="" value="<?php echo $data['controller_info']['device_name'];?>"  class="t3 form-control"  required>
-                    </div>
-                </div>    
-                <div class="row t2">
-                    <div class="col-5 t1"><?php echo $text['system_language'];?>:</div>
-                    <div class="col-5 t2">
-                        <select class="form-select" id="select_language" name="select_language" style="height: 35px;" >
-                            <?php 
-                            foreach($data['lang_arr'] as $k_lang =>$v_lang) { 
-                                $selected = ($data['controller_info']['device_language'] ==$k_lang) ? 'selected' : '';
-                            ?>
-                                <option value="<?php echo $k_lang; ?>" <?php echo $selected; ?>>
-                                    <?php echo $v_lang; ?>
-                                </option>
-                            <?php } ?>
-                        </select>       
-                    </div>
-                </div>    
+                <div class="barcode-scrollbar" id="style-barcode">
+                    <div class="barcode-force-overflow">   
+                        <div class="row t2">
+                            <div class="col-6 t1"><?php echo $text['system_id'];?>:</div>
+                            <div class="col-4 t2">
+                                <input id="control_id" name="control_id" type="number" max=250 min=1 maxlength="3" value="<?php echo $data['controller_info']['device_id'];?>" class="t3 form-control"  required>
+                            </div>
+                        </div>    
+                        <div class="row t2">
+                            <div class="col-6 t1"><?php echo $text['system_name'];?>:</div>
+                            <div class="col-4 t2">
+                                <input id="control_name" name="control_name" maxlength="" type="text" value="<?php echo $data['controller_info']['device_name'];?>"  class="t3 form-control"  required>
+                            </div>
+                        </div>    
+                        <div class="row t2">
+                            <div class="col-6 t1"><?php echo $text['system_language'];?>:</div>
+                            <div class="col-4 t2">
+                                <select class="form-select" id="select_language" name="select_language" style="height: 35px;" >
+                                    <?php 
+                                    foreach($data['lang_arr'] as $k_lang =>$v_lang) { 
+                                        $selected = ($data['controller_info']['device_language'] ==$k_lang) ? 'selected' : '';
+                                    ?>
+                                        <option value="<?php echo $k_lang; ?>" <?php echo $selected; ?>>
+                                            <?php echo $v_lang; ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>       
+                            </div>
+                        </div>    
 
-                <div class="row t2">
-                    <div class="col-5 t1"><?php echo $text['torque_unit'];?>:</div>
-                    <div class="col-5 t2">
-                        <select class="form-select" id="select_torque_unit" name="select_torque_unit" style="height: 35px;" >
-                            <?php 
-                            foreach($data['unit_arr'] as $k_unit => $v_unit) { 
-                                $selected = ($data['controller_info']['torque_unit'] == $k_unit) ? 'selected' : '';
-                            ?>
-                                <option value="<?php echo $k_unit; ?>" <?php echo $selected; ?>>
-                                    <?php echo $v_unit; ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                </div>  
+                        <div class="row t2">
+                            <div class="col-6 t1"><?php echo $text['torque_unit'];?>:</div>
+                            <div class="col-4 t2">
+                                <select class="form-select" id="select_torque_unit" name="select_torque_unit" style="height: 35px;" >
+                                    <?php 
+                                    foreach($data['unit_arr'] as $k_unit => $v_unit) { 
+                                        $selected = ($data['controller_info']['torque_unit'] == $k_unit) ? 'selected' : '';
+                                    ?>
+                                        <option value="<?php echo $k_unit; ?>" <?php echo $selected; ?>>
+                                            <?php echo $v_unit; ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>  
 
-                <div class="row t2">
-                    <div class="col-5 t1"><?php echo $text['system_batch'];?>:</div>
-                    <div class="col t2" >
-      			      	<div class="col-3 form-check form-check-inline">
-        				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="1" <?php echo $data['controller_info']['batch'] == 1 ? 'checked="checked"' : ''; ?> >
-            				<label class="form-check-label" for="dec"><?php echo $text['system_dec'];?></label>
-            			</div>
-            			<div class="form-check form-check-inline">
-            			    <input class="form-check-input" type="radio" name="batch-mode-option" id="inc" value="2" <?php echo $data['controller_info']['batch'] == 2 ? 'checked="checked"' : ''; ?>>
-            				<label class="form-check-label" for="inc"><?php echo $text['system_inc'];?></label>
-            			</div>
+                        <div class="row t2">
+                            <div class="col-6 t1"><?php echo $text['system_batch'];?>:</div>
+                            <div class="col t2" >
+              			      	<div class="col-3 form-check form-check-inline">
+                				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="1" <?php echo $data['controller_info']['batch'] == 1 ? 'checked="checked"' : ''; ?> >
+                    				<label class="form-check-label" for="dec"><?php echo $text['system_dec'];?></label>
+                    			</div>
+                    			<div class="form-check form-check-inline">
+                    			    <input class="form-check-input" type="radio" name="batch-mode-option" id="inc" value="2" <?php echo $data['controller_info']['batch'] == 2 ? 'checked="checked"' : ''; ?>>
+                    				<label class="form-check-label" for="inc"><?php echo $text['system_inc'];?></label>
+                    			</div>
+                            </div>
+                        </div>
+                        <div class="row t2">
+                            <div class="col-6 t1"><?php echo $text['system_buzzer'];?>:</div>
+                            <div class="col t2">
+              			      	<div class="col-3 form-check form-check-inline">
+                   				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
+                       				<label class="form-check-label" for="buzzer-on"><?php echo $text['switch_on'];?></label>
+                       			</div>
+                      			<div class="form-check form-check-inline">
+                       			    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-off" value="2" <?php echo $data['controller_info']['buzzer_mode'] == 2 ? 'checked="checked"' : ''; ?>>
+                       				<label class="form-check-label" for="buzzer-off"><?php echo $text['switch_off'];?></label>
+                       			</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row t2">
-                    <div class="col-5 t1"><?php echo $text['system_buzzer'];?>:</div>
-                    <div class="col t2">
-      			      	<div class="col-3 form-check form-check-inline">
-           				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
-               				<label class="form-check-label" for="buzzer-on"><?php echo $text['switch_on'];?></label>
-               			</div>
-              			<div class="form-check form-check-inline">
-               			    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-off" value="2" <?php echo $data['controller_info']['buzzer_mode'] == 2 ? 'checked="checked"' : ''; ?>>
-               				<label class="form-check-label" for="buzzer-off"><?php echo $text['switch_off'];?></label>
-               			</div>
-                    </div>
-                </div>
-                <div style="text-align: center;margin-top: 50px;">
+                <div style="text-align: center;margin-top: 10px;">
                     <button class="all-btn w3-button w3-border w3-round-large" onclick="cc_save()"><?php echo $text['save'];?></button>
                 </div>
             </div>
@@ -126,7 +130,7 @@
                         <div class="col t1"><?php echo $text['system_password'];?>:</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
-                                <form id="edit_password" method="get" style="margin: 3px 0px; margin-left: 15%">
+                                <form id="edit_password" method="get" style="margin: 3px 0px; margin-left: 5%">
                                     <input type="password" id="new_password" size="18" placeholder="<?php echo $text['system_new_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round"><br>
                                     <input type="password" id="comfirm_password" size="18" placeholder="<?php echo $text['system_confirm_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">
                                     <input type="button" value="<?php echo $text['save'];?>"  onclick="edit_password()"  class="all-btn w3-submit w3-border w3-round-large" style="float: right">
@@ -137,7 +141,7 @@
                         <div class="col t1"><?php echo $text['system_sys_date'];?>(UTC):</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
-                                <form style="margin-left: 15%">
+                                <form style="margin-left: 5%">
                                     <span id="currentSystemTime"></span><br>
                                     <input type="datetime-local" id="newTime" value="" required class="t3 w3-submit w3-border w3-round" style="width: 200px">
                                     
@@ -154,8 +158,8 @@
                         
                         <div class="col t1"><?php echo $text['system_import_config'];?>:</div>         
                         <div class="row t2 border-bottom">
-                            <div class="col t2" style="margin-left: 15%">
-                                <input type="file" id="import-file-uploader" data-target="import-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round" style="width: 250px">
+                            <div class="col t2" style="margin-left: 5%">
+                                <input type="file" id="import-file-uploader" data-target="import-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round" style="width: 300px; height: 34px">
                             </div>        
                             <div class="col t2">
                                 <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Import_SystemConfig();"><?php echo $text['system_import_config'];?></button>
@@ -164,8 +168,8 @@
                         
                         <div class="col t1"><?php echo $text['system_firmware_update'];?>:</div>
                         <div class="row t2">
-                            <div class="col t2" style="margin-left: 15%">
-                                <input type="file" id="firmware-file-uploader" data-target="firmware-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round" style="width: 250px">
+                            <div class="col t2" style="margin-left: 5%">
+                                <input type="file" id="firmware-file-uploader" data-target="firmware-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round" style="width: 300px; height: 34px">
                             </div>        
                             <div class="col t2">
                                 <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Firmware_Update();" ><?php echo $text['system_firmware_update'];?></button>
@@ -179,99 +183,109 @@
             <div id="Barcode_Setting" class="divMode" style="display: none">
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_barcode_setting'] ;?></div>
                 <div class="barcode-scrollbar" id="style-barcode">
-                    <div class="barcode-force-overflow">                
-                        <div class="table-container" style="padding: 0px 10px;">
-                            <div class="scrollbar" id="style-table">
-                                <div class="force-overflow">
-                                    <table id="job_table" class="table w3-table-all w3-hoverable">
-                                        <thead id="header-table" style="font-size: 2.3vmin;text-align: center;">
-                                            <tr class="w3-dark-grey">
-                                                <th></th>
-                                                <th><?php echo $text['job_id'];?></th>
-                                                <th><?php echo $text['job_name'];?></th>
-                                                <th><?php echo $text['system_barcode'];?></th>
-                                                <th><?php echo $text['system_barcode_from'];?></th>
-                                                <th>Count</th>
-                                            </tr>
-                                        </thead>
+                    <div class="barcode-force-overflow">   
+                        <div style="position: relative; max-width: 100%;">             
+                            <div class="table-container" id="tableContainer">
+                                <table id="job_table" class="setting-table w3-table w3-hoverable">
+                                    <thead style="font-size: 3vmin;">
+                                        <tr class="w3-dark-grey">
+                                            <th></th>
+                                            <th><?php echo $text['job_id'];?></th>
+                                            <th><?php echo $text['job_name'];?></th>
+                                            <th><?php echo $text['system_barcode'];?></th>
+                                            <th><?php echo $text['system_barcode_from'];?></th>
+                                            <th>Count</th>
+                                        </tr>
+                                    </thead>
 
-                                        <tbody style="font-size: 2.2vmin;text-align: center;" id='total_barcodes'>
+                                    <tbody style="font-size: 3vmin;" id='total_barcodes'>
                                         <?php foreach ($data['barcodes'] as $k_b =>$v_b){?>
-                                            <tr >
-
+                                            <tr>
                                                 <td style="text-align: center; vertical-align: middle;" >
                                                     <input class="form-check-input" type="checkbox" name="barcode_check" id="barcode_check" value="<?php echo $v_b['barcode_selected_job'];?>" style="zoom:1.2">
                                                 </td> 
                                                 <td><?php echo $v_b['barcode_selected_job'];?></td>
                                                 <td><?php echo $v_b['job_name'];?></td>
-                                                <td><?php echo $v_b['barcode_content'];?></td>
+                                                <td><?php echo $v_b['barcode'];?></td>
                                                 <td><?php echo $v_b['barcode_mask_from'];?></td>
                                                 <td><?php echo $v_b['barcode_mask_count'];?></td>
                                             </tr>
                                         <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                         
+                            <div class="bacode-btn-container">
+                                <button class="bacode-btn" onclick="changePage('job_table', -1)">&#60;</button>
+                                <button class="bacode-btn" onclick="changePage('job_table', 1)">&#62;</button>
+                            </div>
+                        </div> 
+                            
                         <hr>
                                        
                         <div class="row t2">
-                            <div class="col-4 t1"><?php echo $text['system_barcode'];?>:</div>
-                            <div class="col-8 t2">
+                            <div class="col-5 t1"><?php echo $text['system_barcode'];?>:</div>
+                            <div class="col-7 t2">
                                 <input id="barcode_content" name="barcode_content" style="height: 32px" type="text" value="" maxlength="54" class="form-control" required>
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row t2">
-                            <div class="col-4 t1"><?php echo $text['system_barcode_match_from'];?>:</div>
-                            <div class="col-5 t2">
+                            <div class="col-5 t1"><?php echo $text['system_barcode_match_from'];?>:</div>
+                            <div class="col-7 t2">
                                 <input id="barcode_mask_from" name="barcode_mask_from" style="height: 32px" type="text" value="" class="form-control">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row t2">
-                            <div class="col-4 t1"><?php echo $text['system_barcode_match_to'];?>:</div>
-                            <div class="col-5 t2">
+                            <div class="col-5 t1"><?php echo $text['system_barcode_match_to'];?>:</div>
+                            <div class="col-7 t2">
                                 <input id="barcode_mask_count" name="barcode_mask_count" style="height: 32px" type="text" value="" class="form-control">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
                         <div class="row t2">
-                            <div class="col-4 t1"><?php echo $text['select_job'];?>:</div>
-                            <div class="col-5 t2">
-                            <select class="form-select" id="barcode_selected_job" name="barcode_selected_job">
-                                <option value="-1"><?php echo $text['system_barcode_select_job_m'];?></option>
-                                    <?php
-                                    foreach ($data['job_list'] as $key => $value) {?>
-                                        <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
-                                    <?php }?>
-                            </select>
-                            <div class="invalid-feedback"></div>
+                            <div class="col-5 t1"><?php echo $text['select_job'];?>:</div>
+                            <div class="col t2">
+                                <select class="form-select" id="barcode_selected_job" name="barcode_selected_job">
+                                    <option value="-1"><?php echo $text['system_barcode_select_job_m'];?></option>
+                                    
+                                    <?php if (!empty($data['job_list']) && is_array($data['job_list'])) { ?>
+                                        <?php foreach ($data['job_list'] as $key => $value) { ?>
+                                            <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
+                                        <?php } ?>
+                                    <?php } ?>
+                                    
+                                    <!--
+                                        <?php
+                                        foreach ($data['job_list'] as $key => $value) {?>
+                                            <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
+                                        <?php }?>
+                                    -->    
+                                </select>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
                         <div class="row t2">
-                            <div class="col-4 t1"><?php echo $text['system_barcode_mode']?>:</div>
-                            <div class="col-5 t2">
-                            <select class="form-select" id="barcode_enable" name="barcode_enable">
-                                    <option value="-1"><?php echo $text['system_barcode_select'];?></option>
-                                    <?php
-                                    foreach ($data['barcode_mode'] as $key_barcode => $value_barcode) {?>
-                                        <option value='<?php echo $key_barcode;?>'><?php echo $value_barcode;?></option>
-                                    <?php }?>
-                            </select>
-                            <div class="invalid-feedback"></div>
+                            <div class="col-5 t1"><?php echo $text['system_barcode_mode']?>:</div>
+                                <div class="col t2">
+                                <select class="form-select" id="barcode_enable" name="barcode_enable">
+                                        <option value="-1"><?php echo $text['system_barcode_select'];?></option>
+                                        <?php
+                                        foreach ($data['barcode_mode'] as $key_barcode => $value_barcode) {?>
+                                            <option value='<?php echo $key_barcode;?>'><?php echo $value_barcode;?></option>
+                                        <?php }?>
+                                </select>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                     </div>
                 </div>    
                         
-                <div style="text-align: center;margin-top: 30px;">
-                    <button class="all-btn w3-button w3-border w3-round-large" onclick="update_barcode()" ><?php echo $text['save'];?></button>&nbsp;&nbsp;
-                    <button class="all-btn w3-button w3-border w3-round-large" onclick="delete_barcode()" ><?php echo $text['delete_text'];?></button>
+                <div style="text-align: center;margin-top: 10px;">
+                    <button class="all-btn w3-button w3-border w3-round-large" onclick="update_barcode()"><?php echo $text['save'];?></button>&nbsp;&nbsp;
+                    <button class="all-btn w3-button w3-border w3-round-large" onclick="delete_barcode()"><?php echo $text['delete_text'];?></button>
                 </div>               
             </div>
 
@@ -283,7 +297,7 @@
                         <div class="col t1"><?php echo $text['system_connect_number'];?>:</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
-                                <form id="edit_max_link" style="margin: 3px 0px; margin-left: 14%" method="post">
+                                <form id="edit_max_link" style="margin: 3px 0px; margin-left: 5%" method="post">
                                     <input type="text" name="max_user" id="max_user" inputmode="numeric" pattern="[0-9]*" min='1' size="15" maxlength="2" required class="t3 w3-submit w3-border w3-round"><br>
                                     <span><?php echo $text['system_connect_max_number'];?> : <?php echo $data['max_user']; ?></span>
                                     <input type="button" onclick="set_max_link()" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
@@ -294,7 +308,7 @@
                         <div class="col t1"><?php echo $text['system_connect_guest_pwd'];?>:</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
-                                <form  style="margin: 3px 0px; margin-left: 14%">
+                                <form  style="margin: 3px 0px; margin-left: 5%">
                                     <input type="password" id="new_password_guest" size="15" placeholder="<?php echo $text['system_new_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
                                     <input type="password" id="comfirm_password_guest" size="15" placeholder="<?php echo $text['system_confirm_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">
                                     <input type="button" value="Save" onclick ="button_save_password_gust()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
@@ -305,7 +319,7 @@
                         <div class="col t1">Agent IP:</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
-                                <form id="agent_ip" style="margin: 3px 0px; margin-left: 14%" method="post">
+                                <form id="agent_ip" style="margin: 3px 0px; margin-left: 5%" method="post">
                                     <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" required class="t3 w3-submit w3-border w3-round"><br>
                                     <span>Agent IP : <?php echo $data['agent_server_ip']; ?></span> 
                                     <input type="button" value="Save" onclick="set_agent_ip()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
@@ -316,7 +330,7 @@
                         <div class="col t1">Agent Type:</div>
                         <div class="row t2">
                             <div class="col t2">
-                                <form id="agent_type_form"  method="post" style="margin: 3px 0px; margin-left: 9%">
+                                <form id="agent_type_form"  method="post" style="margin: 3px 0px; margin-left: 5%">
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0">
                                         <label class="form-check-label" for="agent_type_0">None</label>
@@ -330,11 +344,12 @@
                                         <label class="form-check-label" for="agent_type_2">Server</label>
                                     </div>
                                     <input type="button" value="Save" onclick="set_agent_type()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                                </form>    
                             </div>
                             <div class="row">
-                                <div class="col t2" style="margin: 3px 0px; margin-left: 9%">
+                                <div class="col t2" style="margin: 3px 0px; margin-left: 5%">
                                     <span>Client Status:<div id="c_status" style="display:inline-block;"></div></span>
-                                    <span>Server Status:<div id="s_status" style="display:inline-block;"></div></span>
+                                    <span>Server Status:<div id="s_status" style="display:inline-block;"></div></span>&nbsp;
 
                                     <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck()"  >Check</button>
                                     <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px;" onclick="StatusCheck('start')">START</button>
@@ -345,20 +360,24 @@
 
                         <hr>
                         
-                        <form action="" method="post" style="padding: 0px 10px">
-                            <div class="table-responsive" style="overflow-y: auto; margin-bottom: 20px">
-                                <div class="scrollbar" id="style-table">
-                                    <div class="scrollbar-force-overflow">
-                                        <table class="table w3-table-all w3-hoverable">
-                                            <thead id="header-table" style="font-size: 2.3vmin;text-align: center;">
+                        <form action="" method="post" style="padding: 0px 5px">
+                                <div style="position: relative; width: 100%;"> 
+                                    <div class="table-container" id="tableContainer" style="width: 100%;height: 190px;">
+                                        <table id="connection-table" class="setting-table w3-table w3-hoverable">
+                                            <thead  style="font-size: 3vmin;text-align: center;">
                                                 <tr class="w3-dark-grey">
-                                                    <th><?php echo $text['select'];?></th>
+                                                    <th>
+                                                        <button type="button" class="w3-dark-grey" style=" color: #FFFFFF; border-radius: 5px; border-color: #888888">
+                                                            <img id="delete-btn" src="./img/delete.png">
+                                                        </button>
+                                                    
+                                                    </th>
                                                     <th><?php echo $text['system_connect_username'];?></th>
                                                     <th>IP</th>
                                                     <th><?php echo $text['system_connect_timestamp'];?></th>
                                                 </tr>
                                             </thead>
-                                            <tbody style="font-size: 2.2vmin;text-align: center;">
+                                            <tbody style="font-size: 3vmin;text-align: center;">
                                                 <?php foreach($data['active_session'] as $key =>$val){?>
                                                     <tr>
                                                         <td style="text-align: center; vertical-align: middle;">
@@ -369,18 +388,19 @@
                                                         <td><?php echo $val['timestamp'];?></td>
 
                                                     </tr>
+                                                    
                                                 <?php }?>
-                                                
-                                              
-                                            
-                                              
-                                                
                                             </tbody>
                                         </table>
-                                    </div>    
-                                </div>
+                                    </div> 
+                                    <div class="connection-btn-container">
+                                        <button type="button" class="connection-btn" onclick="changePage('connection-table', -1)">&#60;</button>
+                                        <button type="button" class="connection-btn" onclick="changePage('connection-table', 1)">&#62;</button>
+                                    </div>   
+                                </div>    
+                                <!--
                                 <input type="submit" value="<?php echo $text['Delete'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right; margin-top: 10px">                              
-                            </div>
+                                -->
                         </form>
                     </div>
                 </div>
@@ -390,21 +410,21 @@
             <div id="iDas-Update_Setting" class="divMode" style="display: none;">
                 <div class="col t1" style="padding-top: 5%">Current iDAS Version:</div>
                 <div class="row t2">
-                    <div class="col-6 t2" style="margin-left: 20%">
+                    <div class="col-6 t2" style="margin-left: 5%">
                         <input id="idas_software_version" name="idas_software_version" type="text" value="<?php echo $data['iDas_Vesion'];?>"  style="height: 32px" class="form-control" disabled>
                     </div>
                 </div>
 
                 <div class="col t1">Match Controller Version:</div>
                 <div class="row t2">
-                    <div class="col-6 t2" style="margin-left: 20%">
+                    <div class="col-6 t2" style="margin-left: 5%">
                         <input id="match_control_version" name="match_control_version" type="text" value="" style="height: 32px" class="form-control" disabled>
                     </div>
                 </div>
 
                 <div class="col t1">Upload file:</div>
                 <div class="row t2">
-                    <div class="col-8 t2" style="margin-left: 20%">
+                    <div class="col-6 t2" style="margin-left: 5%">
                         <input type="file" id="file-uploader" data-target="file-uploader" accept=".pack" class="form-control" style="height: 32px;">
                     </div>
                 </div>
@@ -449,7 +469,6 @@ function time_save(){
     }
 
 }
-
 
 function edit_password() {
     var new_password = document.getElementById('new_password').value;
@@ -681,6 +700,61 @@ function validateInput(element, pattern, min, max) {
 
     return isValid;
 }
+
+// Bacode & Connection Change page
+// Bacode & Connection Change page
+// 儲存每個表格的當前頁面狀態
+const rowsPerPage = 2; // 每頁顯示的行數
+
+// 儲存各表格的頁面狀態
+const tableState = {
+    "job_table": 0,
+    "connection-table": 0
+};
+
+// 顯示指定表格頁面的資料
+function showPage(tableId, page) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+
+    const tableRows = Array.from(table.getElementsByTagName("tr"));
+    const totalRows = tableRows.length - 1; // 不算標題行
+
+    const start = page * rowsPerPage + 1; // 因為第0行是標題，實際資料從第1行開始
+    const end = Math.min(start + rowsPerPage, totalRows + 1);
+
+    tableRows.forEach((row, index) => {
+        // 隱藏或顯示資料行，跳過標題行
+        row.style.display = (index >= start && index < end) ? "" : "none";
+    });
+}
+
+// 切換表格頁面
+function changePage(tableId, direction) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+
+    const tableRows = table.getElementsByTagName("tr");
+    const totalRows = tableRows.length - 1; // 不算標題行
+
+    // 更新表格的頁面狀態
+    tableState[tableId] += direction;
+
+    // 確保頁面不會超過總頁數
+    const totalPages = Math.ceil(totalRows / rowsPerPage);
+    if (tableState[tableId] < 0) tableState[tableId] = 0;
+    if (tableState[tableId] >= totalPages) tableState[tableId] = totalPages - 1;
+
+    // 顯示當前頁面
+    showPage(tableId, tableState[tableId]);
+}
+
+// **當頁面載入完成時，確保表格顯示第一頁的兩行資料**
+document.addEventListener("DOMContentLoaded", () => {
+    showPage("job_table", 0);
+    showPage("connection-table", 0);
+});
+
 </script>    
 <style>
     #control_name {

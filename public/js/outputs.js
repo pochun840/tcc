@@ -16,8 +16,12 @@ function getLanguageMessage(cookieName) {
    //alertify.alert(message);
 }
 
+
 function disableTimeFields() {
    for (let i = 1; i <= 9; i++) {
-       document.getElementById(`edit_time${i}`).disabled = true;
+       const timeField = document.getElementById(`time${i}`);
+       if (timeField) {
+           timeField.disabled = true;  // 禁用欄位
+       }
    }
 }

@@ -18,6 +18,12 @@
     z-index: 999; 
 }
 
+input:disabled 
+{
+    opacity: 1; 
+    color: #000; 
+}
+
 </style>   
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -69,9 +75,9 @@
                 <div class="table-container">
                     <div class="scrollbar" id="style-outputtable">
                         <div class="force-overflow">
-                            <table id="output_table" class="table w3-table-all w3-hoverable">
+                            <table id="output_table" class="table w3-table">
                                 <thead id="header-table">
-                                    <tr class="w3-dark-grey" style="font-size: 2.6vmin">
+                                    <tr class="w3-dark-grey" style="font-size: 3vmin">
                                         <th class="w3-center"><?php echo $text['event'];?></th>
                                         <th class="w3-center">Pin</th>
                                         <th class="w3-center"></th>
@@ -79,7 +85,7 @@
                                     </tr>
                                </thead>
 
-                                <tbody style="font-size: 2.5vmin;text-align: center;" id="output_jobid_select" >
+                                <tbody style="font-size: 3vmin;" id="output_jobid_select" >
                                 </tbody>
                             </table>
                         </div>
@@ -462,8 +468,7 @@ function crud_job_event(argument){
                         timeElement.disabled = true;
                     }
 
-                    if(output_event  == 7 || output_event == 8 || output_event  == 9 || output_event  == 12 || output_event  == 13){
-                        //disabled edit_time1-9 
+                    if ([7, 8, 9].includes(output_event)) {
                         disableTimeFields();
                     }
                 }
