@@ -13,7 +13,7 @@ function getLanguageMessage(cookieName) {
     } else {
       message =  'Please select the event to delete';
     }
-   //alertify.alert(message);
+
 }
 
 
@@ -24,4 +24,4 @@ function disableTimeFields() {
            timeField.disabled = true;  // 禁用欄位
        }
    }
-}
+} 
