@@ -430,6 +430,12 @@ function crud_job_event(argument){
             return;
         }
         
+        //針對text 及 radio 都變成 enabled
+        const inputs = document.querySelectorAll('input[type="text"], input[type="radio"]');
+        inputs.forEach(input => {
+            input.disabled = false;
+        });
+        
 
  
         var selectElement = document.getElementById('edit_event_option');
