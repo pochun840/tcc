@@ -33,7 +33,7 @@
         <div class="center-content">
             <div class="topnav">
                 <label style="font-size:2.5vmin;color: #000; padding-left: 2%" for="job_id"><?php echo $text['job_id'];?> :</label>&nbsp;
-                <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="" disabled style="height:30px; font-size:2.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
+                <input type="text" id="job_id" name="job_id" size="8" maxlength="20"  disabled style="height:30px; font-size:2.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
                 <button id="Button_Select" type="button" onclick="document.getElementById('JobSelect').style.display='block'"   style="height:30px;width:100px;font-size:2.5vmin; line-height:30px; padding: 0; vertical-align: middle; margin-top: -10px;"><?php echo $text['select'];?></button>
             </div>
 
@@ -452,10 +452,11 @@ function crud_job_event(argument){
                 }
             });
 
+
+
+
             let tempC = temp.slice(); 
 
-            
-        
    
             const filtered_C = tempC.filter(item => item.includes("edit_pin"));
 
@@ -488,9 +489,9 @@ function crud_job_event(argument){
                         disableTimeFields();
                     }
 
+
                 }
             });
-
         }
 
         //該事件的pin的 所有radio 及 input 全部都要可以填
@@ -1176,7 +1177,6 @@ function get_output_info(job_id,output_event){
                             return item.slice(0, -1) + '3';
                         });
                         
-                        console.log("Updated Array:", updatedArray);
                         updatedArray.forEach(item => {
                             const radio = document.getElementById(item);
                             if (radio && radio.type === 'radio') {
@@ -1187,9 +1187,19 @@ function get_output_info(job_id,output_event){
                 } 
                  old_output_even = output_event;
  
-                 if(radioButton){
+                if(radioButton){
                     radioButton.checked = true;
-                 }
+                }
+
+
+
+                if(output_event == 7 || output_event == 8 || output_event == 9 ||output_event == 12  || output_event == 13 ){
+                    const chekElement = document.getElementById(edit_output_pin);
+                    if (chekElement) {
+                        chekElement.disabled = false;  
+                    }
+                }
+
                  
                  document.querySelector("select[name='edit_event_option']").value = output_event;
                  document.getElementById("edit_event_option").onchange = function() {

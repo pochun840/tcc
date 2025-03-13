@@ -39,7 +39,7 @@ input:disabled
         <div class="center-content">
             <div class="topnav">
                 <label style="font-size:3vmin;color: #000; padding-left: 2%" for="job_id"><?php echo $text['job_id'];?> :</label>&nbsp;
-                <input type="text" id="job_id" name="job_id" size="8" maxlength="20" value="1" disabled style="height:30px; font-size:3.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
+                <input type="text" id="job_id" name="job_id" size="8" maxlength="20"  disabled style="height:30px; font-size:3.5vmin;text-align: center; background-color: #DDDDDD; border:0;">&nbsp;&nbsp;
                 <button id="Button_Select" type="button" onclick="document.getElementById('JobSelect').style.display='block'"><?php echo $text['select'];?></button>
             </div>
 
@@ -1142,6 +1142,15 @@ function get_output_info(job_id,output_event){
                     }
                     
                 }
+
+                if(output_event == 7 || output_event == 8 || output_event == 9 ||output_event == 12  || output_event == 13 ){
+                    const chekElement = document.getElementById(edit_output_pin);
+                    if (chekElement) {
+                        chekElement.disabled = false;  
+                    }
+                }
+
+
 
                 if (wave_on !== "0") {
                     document.getElementById(time_ms).value = wave_on;

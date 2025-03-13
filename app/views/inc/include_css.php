@@ -9,9 +9,9 @@ function includecss_file($part, $cssFileName) {
 
     if($firstPart == $part){
         if($extension == 'css'){ ?>
-            <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHis');?>">
+            <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>">
         <?php }elseif($extension == 'js'){ ?>
-            <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo date('YmdHis'); ?>"></script>
+            <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>"></script>
         <?php }
     }
 }

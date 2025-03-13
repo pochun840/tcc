@@ -4,12 +4,15 @@ class Miscellaneous{
     private $db;//condb control box
     private $db_data;//devdb tool
     private $dbh;
-
+    private $db_tools;
     // 在建構子將 Database 物件實例化
     public function __construct()
     {
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
+
+        $this->db_tools = new Database;
+        $this->db_tools = $this->db_tools->getDb_tools();
 
     }
 
@@ -372,5 +375,20 @@ class Miscellaneous{
             'res_msg'  => $errorMessage
         );
         echo json_encode($response);
-    }    
+    }   
+
+
+    
+    public function get_tcc_controller_login(){
+        
+        $sql = "SELECT * FROM device_info";
+        $statement = $this->db_tools->prepare($sql);
+        $results = $statement->execute();
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $row;
+    
+
+    }
+     
 }
