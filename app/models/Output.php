@@ -15,6 +15,23 @@ class Output{
 
     }
 
+
+    //檢查pin 是否有被使用
+    public function check_output_pin($output_jobid,$output_pin){
+
+        $sql = "SELECT count(*) as count FROM output WHERE output_jobid = ? AND output_pin = ?";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute([$output_jobid,$output_pin]);
+        $rows = $statement->fetch();
+
+        if ($rows['count'] > 0) {
+            return true; // job event已存在
+        }else{
+            return false; // job event不存在
+        }
+
+    }
+
     //get_input_by_job_id
     public function get_output_by_job_id($output_jobid)
     {   

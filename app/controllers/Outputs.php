@@ -141,8 +141,7 @@ class Outputs extends Controller
         echo json_encode($job_inputs);
     }
 
-    public function create_output_event()
-    {
+    public function create_output_event(){
 
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
@@ -184,6 +183,23 @@ class Outputs extends Controller
         $jobdata['wave_off'] = 0;
         $jobdata['output_seqid'] = 0;
         if($input_check){
+
+             #檢查pin 是否有被使用
+            $res_count = $this->OutputModel->check_output_pin( $jobdata['output_jobid'], $jobdata['output_pin']);
+
+            if($res_count > 0){
+                $res_type = 'Error';
+                $res_msg = $error_message['check_pin_error'];
+
+                $result = array(
+                    'res_type' => $res_type,
+                    'res_msg'  => $res_msg 
+                );
+    
+                echo json_encode($result);
+                exit();
+            }
+
 
           
 
@@ -408,6 +424,7 @@ class Outputs extends Controller
 
         $jobdata['wave_off'] = 0;
         $jobdata['output_seqid'] = 0;
+
 
         $count = $this->OutputModel->check_event_conflict($jobdata['output_jobid'],$jobdata['output_event']);
 

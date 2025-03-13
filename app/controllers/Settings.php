@@ -663,7 +663,6 @@ class Settings extends Controller
     }
     
     
-    
     public  function Sync_check_db_load(){
 
         $file = $this->MiscellaneousModel->lang_load();
@@ -677,11 +676,28 @@ class Settings extends Controller
             $argument = '';
         }
 
+        
+
         $Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
         $Con_DB_Location = '/var/www/html/database/tcccon.db'; //控制器
 
         if(!empty($argument)){
             if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
+
+
+                //判斷控制器是否有登出
+                $Controller_Info = $this->SettingModel->GetControllerInfo();
+                if(!empty($Controller_Info)){
+                    $user_logIn = $Controller_Info['user_logIn'];
+                    $user_logIn = (int)$user_logIn;
+                    if($user_logIn != 0){
+                        $res_msg  = $error_message['system_sync_warning_logout'];
+                        $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                        exit();
+                                
+                    }
+                }
+
 
                 //時間差異提醒
                 if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){

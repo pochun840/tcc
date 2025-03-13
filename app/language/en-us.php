@@ -288,7 +288,7 @@ $text['column_status'] = 'Status';
 $text['kgf.m'] = 'Kgf-m';
 $text['N.m'] = 'N-m';
 $text['kgf.cm'] = 'Kgf-cm';
-$text['lbf.in'] = 'In-lbs';
+$text['lbf.in'] = 'Lbf.in';
 
 
 
@@ -463,6 +463,7 @@ $error_message['copy_to_id'] = 'JOB ID input error 1 - 50';
 $error_message['copy_to_name'] = 'JOB name input error';
 
 $error_message['OOR'] = 'Out of range :';
+$error_message['check_pin_error'] = 'The pin has already been used';
 
 if(isset($data['tool_info'])){
 	$error_message['unfasten_RPM'] = 'Out of range'.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
@@ -578,3 +579,4 @@ $error_message['SEQ_COMPLETED'] = 'SEQ-COMPLETED';
 $error_message['JOB_COMPLETED'] = 'JOB-COMPLETED';
 $error_message['WORKPIECE_RECOVERY'] = 'WORKPIECE-RECOVERY';
 $error_message['target_torque_empty'] = 'target_torque is a required field';
+$error_message['system_sync_warning_logout'] = 'The controller has not logged out';

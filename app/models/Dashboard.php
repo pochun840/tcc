@@ -231,4 +231,27 @@ class Dashboard{
     
         return $resultarr;
     }
+
+
+
+    public function get_data_csv() {
+
+        #CSV 所在的目錄
+        $directory = '/mnt/ramdisk/ftp/';
+    
+        //取得該目錄中的所有文件
+        $files = glob($directory . '*.csv');  // 只要.csv檔案
+        if (empty($files)) {
+            return null;
+        }
+    
+        // 取得最新的檔案
+        $latestFile = max($files, function($a, $b) {
+            //按照檔案的時間 進行排序
+            return filemtime($a) - filemtime($b); 
+        });
+    
+        return $latestFile;
+    }
+    
 }

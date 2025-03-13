@@ -10,6 +10,7 @@ class Dashboards extends Controller
         $this->DashboardModel = $this->model('Dashboard');
         $this->AdminModel = $this->model('Admin');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
+        $this->DataModel = $this->model('Datas');
     }
 
     // 取得所有Jobs
@@ -40,18 +41,45 @@ class Dashboards extends Controller
 
         $isMobile = $this->isMobileCheck();
 
-        #顯示 當前的鎖附記錄最新一筆的資料
-        //$data_info  = $this->DashboardModel->get_Data();
-        //$status_arr = $this->MiscellaneousModel->details('status_ntcs');
 
+        
+        //$data_info  = $this->DashboardModel->get_Data();
+        $status_arr = $this->MiscellaneousModel->details('status');
+        $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
+        #當前的鎖附記錄最新一筆的資料
+        $first_data = $this->get_new_data();
+        
+        if(!empty($first_data)){
+
+            #整理代碼 及 bg 
+            $first_data['status_explain'] = $status_arr[$first_data['fasten_status']];
+            if($first_data['fasten_status'] =="4"){
+                $first_data['fasten_status_bg'] ='#99CC66';
+
+            }else if($first_data['fasten_status'] =="5" || $first_data['fasten_status']=="6"){
+                $first_data['fasten_status_bg'] ='#99CC66';
+            }else{
+                $first_data['fasten_status_bg'] ='red';
+            }   
+
+            #整理扭力單位
+            $first_data['status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
+
+
+
+        }
+      
 
         #處理曲線圖的樣式
         $chart_mode = !empty($_GET['chart']) ? $_GET['chart'] : 1;
         if ($chart_mode < 1 || $chart_mode > 6) {
             $chart_mode = 1;
         } 
+
+
         $id = "None";
         $chat_mode_arr = $chart_mode;
+
 
 
         $x_val = $this->DashboardModel->get_csv_first_column($id);
@@ -59,7 +87,7 @@ class Dashboards extends Controller
             $x_val = array_slice($x_val, 1);
         }
 
-        $other_data = $this->DashboardModel->get_csv_selected_columns($id);
+        //$other_data = $this->DashboardModel->get_csv_selected_columns($id);
       
 
      
@@ -88,10 +116,8 @@ class Dashboards extends Controller
             'echart_name' => $echart_name,
             'chart_mode'  => $chart_mode,
             'chart_menu_arr' => $chart_menu_arr,
-            'other_data' => $other_data
-
-            //'data_info' => $data_info,
-            //'status_arr' => $status_arr
+            //'other_data' => $other_data,
+            'first_data' => $first_data
         ];
 
         if($isMobile){
@@ -100,6 +126,13 @@ class Dashboards extends Controller
             $this->view('dashboards/operation', $data);
         }
        
+    }
+
+
+    public function get_new_data(){
+        $res = $this->DataModel->get_new_info();
+        return $res;
+  
     }
 
    

@@ -32,10 +32,10 @@ class Miscellaneous{
 
         if($mode == "torque_unit"){
             $array = array(
-                0 => 'kgf.cm',
-                1 => 'lbf.in',
-                2 => 'kgf.m',
-                3 => 'N.m',
+                0 => 'kgf.m',
+                1 => 'N.m',
+                2 => 'kgf.cm',
+                3 => 'Lbf.in',
                 4 => 'cN.m'
                 
             );
@@ -253,10 +253,10 @@ class Miscellaneous{
         $TransType = (int)$TransType;
 
         $new_TorqueUnit = [
-            "kgf.cm" => 0,
+            "kgf.m"  => 0,
             "N.m"    => 1,
-            "lbf.in" => 2,
-            "kgf.m"  => 3,
+            "kgf.m"  => 2,
+            "lbf.in" => 3,
             "cN.m"   => 4
         ];
 

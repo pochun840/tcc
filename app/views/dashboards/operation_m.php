@@ -116,15 +116,15 @@
                     <tr>
                         <td>
                             <label style="color: #FFF; font-weight: bold" for="Job_Name"><?php echo $text['job']; ?>:</label>
-                            <input style=" color: #000" type="text" id="Job_Name" name="Job_Name" size="10" maxlength="15" value="" disabled>
+                            <input style=" color: #000" type="text" id="Job_Name" name="Job_Name" size="10" maxlength="15" value="<?php echo $data['first_data']['job_name'];?>" disabled>
                         </td>
                         <td>
                             <label style="color: #FFF; font-weight: bold" for="Seq_Name"><?php echo $text['sequence']; ?>:</label>
-                            <input style=" color: #000" type="text" id="Seq_Name" name="Seq_Name" size="10" maxlength="15" value="" disabled>
+                            <input style=" color: #000" type="text" id="Seq_Name" name="Seq_Name" size="10" maxlength="15" value="<?php echo $data['first_data']['seq_name'];?>" disabled>
                         </td>
                         <td>
                             <label style="color: #FFF; font-weight: bold" for="Screws"><?php echo $text['screws']; ?>:</label>
-                            <input style=" color: #000; text-align: center" type="text" id="Screws" name="Screws" size="4" maxlength="5" value="" disabled>
+                            <input style=" color: #000; text-align: center" type="text" id="Screws" name="Screws" size="4" maxlength="5" value="<?php echo $data['first_data']['max_screw_count'];?>" disabled>
                         </td>
                     </tr>
                 </table>
@@ -134,21 +134,25 @@
                 <div class="column">
                     <div class="item-target-torque w3-display-container">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_torque'] ;?>(<?php echo $text['N.m'];?>)</div>
-                        <div id="Target_Torque" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0;"></div>
+                        <div id="Target_Torque" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0;"><?php echo $data['first_data']['fasten_torque'];?></div>
                     </div>
-                    <div class="item-result w3-display-container">
+                    <div class="item-result w3-display-container " style="background-color: '<?php echo $data['first_data']['fasten_status_bg'];?>';">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-black"><?php echo $text['final_result'];?></div>
-                        <div id="Torque_Result" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0"></div>            
+                        <div id="Torque_Result" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0">
+                            <?php echo $data['first_data']['status_explain'];?>
+                        </div>            
                     </div>
                 </div>
                 <div class="column">
                     <div class="item-targer-angle w3-display-container">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_angle'];?></div>
-                        <div id="Target_Angle" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0"></div>                        
+                        <div id="Target_Angle" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0"><?php echo $data['first_data']['fasten_angle'];?></div>                        
                     </div>
                     <div class="item-message w3-display-container">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_message'];?></div>
-                        <div id="Message" class="w3-display-middle" style="font-size: 5vmin; margin: 5px 0"></div>                                    
+                        <div id="Message" class="w3-display-middle" style="font-size: 5vmin; margin: 5px 0">
+                            <?php echo ($data['first_data']['error_message'] == "0") ? "N.A" : $data['first_data']['error_message']; ?>
+                        </div>                                    
                     </div>
                 </div>
             </div>

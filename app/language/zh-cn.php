@@ -450,6 +450,7 @@ $error_message['copy_to_id'] = '工作ID输入有误 1 - 50';
 $error_message['copy_to_name'] = '工作名称输入有误';
 
 $error_message['OOR'] = '超出范围:';
+$error_message['check_pin_error'] = '该pin已被使用过';
 
 if(isset($data['tool_info'])){
 	$error_message['unfasten_RPM'] = '超出范围 '.$data['tool_info']['tool_minrpm'].' - '.$data['tool_info']['tool_maxrpm'];
@@ -556,3 +557,4 @@ $error_message['SEQ_COMPLETED'] = '工序完成按确认';
 $error_message['JOB_COMPLETED'] = '工作完成按确认';
 $error_message['WORKPIECE_RECOVERY'] = '工件复归按确认';
 $error_message['target_torque_empty'] = '目标扭力为必填栏位';
+$error_message['system_sync_warning_logout'] = '控制器尚未登出';
