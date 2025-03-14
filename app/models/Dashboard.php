@@ -82,35 +82,46 @@ class Dashboard{
         return $rows;
     }
 
-    public function get_csv_first_column($no) {
+    public function get_csv_first_column() {
+        
+        //ini_set('memory_limit', '256M');
+
         $first_column = array();
-        
-        // 檔案類型
-        $file_arr = array('_0p5', '_1p0', '_2p0');
-        
-        foreach ($file_arr as $v_f) {
-            $infile = "../public/data/DATALOG_20241220150526_DEVICE_".$no. $v_f . ".csv";
-            if (file_exists($infile)) {
-                $csvdata_tmp = file_get_contents($infile);
-                
-                if (!empty($csvdata_tmp)) {
-                    $csvdata = $csvdata_tmp;
-                    $lines = explode("\n", $csvdata);
-                    $csv_array = array_map('str_getcsv', $lines);
-                    
-                    // 取得每行的第一個欄位 (即 A 欄位)
-                    foreach ($csv_array as $subarray) {
-                        // 確保該行有數據
-                        if (isset($subarray[0])) {
-                            $first_column[] = $subarray[0];  // 將 A 欄位的數據加入
-                        }
-                    }
-                    break;  // 若找到檔案後，就退出循環
-                }
+        $directory = "/mnt/ramdisk/ftp/"; // CSV 檔案所在目錄
+    
+        // 取得最新的 CSV 檔案
+        $files = glob($directory . "DATALOG_*_DEVICE_*_25.csv");
+        if (empty($files)) {
+            return null; // 如果沒有找到 CSV 檔案，回傳 null
+        }
+    
+        // 根據檔案修改時間排序，取得最新的檔案
+        usort($files, function($a, $b) {
+            return filemtime($b) - filemtime($a);
+        });
+    
+        $latestFile = $files[0]; // 最新的 CSV 檔案
+    
+        // 讀取 CSV 檔案內容
+        $csvdata_tmp = file_get_contents($latestFile);
+    
+        if (empty($csvdata_tmp)) {
+            return null; // 如果檔案內容為空，回傳 null
+        }
+    
+        $lines = explode("\n", $csvdata_tmp); // 將檔案內容按行拆分
+        $csv_array = array_map('str_getcsv', $lines); // 將每行轉換為 CSV 陣列格式
+    
+        // 取得每行的第一個欄位 (即 A 欄位)
+        foreach ($csv_array as $subarray) {
+            if (isset($subarray[0])) { // 確認該行有數據
+                $first_column[] = $subarray[0]; // 將 A 欄位資料加入結果陣列
             }
         }
-        return $first_column;
+    
+        return $first_column; // 回傳第一欄的資料陣列
     }
+    
 
 
     public function get_csv_selected_columns($no) {
@@ -174,63 +185,64 @@ class Dashboard{
 
 
 
-    public function get_info($no, $chat_mode) {
+    public function get_info($chat_mode) {
+
         $resultarr = array();
+        $csv_array = array();
+        $directory = "/mnt/ramdisk/ftp/"; // CSV 檔案所在目錄
         
-        if (!empty($no)) {
-            #檔案類型
-            $file_arr = array('_0p5', '_1p0', '_2p0');
-            $csv_array = array();
-            $resultarr = array();
-            
-            foreach ($file_arr as $v_f) {
-                $infile = "../public/data/DATALOG_20241220150526_DEVICE_".$no. $v_f . ".csv";
-                if (file_exists($infile)) {
-                    $csvdata_tmp = file_get_contents($infile);
-                    
-                    if (!empty($csvdata_tmp)) {
-                        $csvdata = $csvdata_tmp;
-                        $lines = explode("\n", $csvdata);
-                        $csv_array = array_map('str_getcsv', $lines);
-                        break;
-                    }
-                }
-            }
-            
-            if (empty($csv_array)) {
-                $resultarr = null;
-            } else {
-                $position = (int)$chat_mode;
-                
-                // 如果是 $chat_mode == "5"，則先獲取 $chat_mode == "1" 和 $chat_mode == "3" 的結果
-                if ($chat_mode == "5") {
-                    // 取得 chat_mode == "1" 的結果並儲存至 $resultarr['torque']
-                    $resultarr['torque'] = $this->get_info($no, "1");
-                    // 取得 chat_mode == "3" 的結果並儲存至 $resultarr['rpm']
-                    $resultarr['rpm'] = $this->get_info($no, "3");
-                }
+        // 取得最新的 CSV 檔案
+        $files = glob($directory . "DATALOG_*_DEVICE_*_25.csv");
+        if (empty($files)) {
+            return null; // 如果沒有找到 CSV 檔案，回傳 null
+        }
+        
+        // 根據檔案修改時間排序，取得最新的檔案
+        usort($files, function($a, $b) {
+            return filemtime($b) - filemtime($a);
+        });
+        
+        $latestFile = $files[0]; // 最新的 CSV 檔案
+
     
-                // 處理當前的 $chat_mode 邏輯
-                foreach ($csv_array as $subarray) {
-                    if (isset($subarray[$position])) {
-                        // 如果是 chat_mode == "5" 或 "6"
-                        if ($chat_mode == "5" || $chat_mode == "6") {
-                            if ($chat_mode == "6" && $position == 6) {
-                                $resultarr['torque'][] = $subarray[1];
-                            } else {
-                                // 存儲數據到 torque
-                                $resultarr['torque'][] = $subarray[$position];
-                            }
-                        } else {
-                            $resultarr[] = $subarray[$position];
-                        }
+        // 讀取 CSV 檔案內容
+        $csvdata_tmp = file_get_contents($latestFile);
+        
+        if (empty($csvdata_tmp)) {
+            return null; // 如果檔案內容為空，回傳 null
+        }
+        
+        $lines = explode("\n", $csvdata_tmp); // 將檔案內容按行拆分
+        $csv_array = array_map('str_getcsv', $lines); // 將每行轉換為 CSV 陣列格式
+    
+        $position = (int)$chat_mode; // 轉換 chat_mode 為數字，作為欄位位置
+    
+        // 如果 chat_mode 是 "5"，先取得 "1" 和 "3" 的結果
+        if ($chat_mode == "5") {
+            $resultarr['torque'] = $this->get_info("1"); // 取得 chat_mode = "1" 的結果（扭力）
+            $resultarr['rpm'] = $this->get_info("3");    // 取得 chat_mode = "3" 的結果（轉速）
+        }
+    
+        // 處理當前 chat_mode 的邏輯
+        foreach ($csv_array as $subarray) {
+            if (isset($subarray[$position])) { // 檢查該位置是否存在
+                if ($chat_mode == "5" || $chat_mode == "6") { // 如果 chat_mode 為 "5" 或 "6"
+                    if ($chat_mode == "6" && $position == 6) { 
+                        // 如果 chat_mode 為 "6" 且位置為 6，將第 1 欄資料加入 torque
+                        $resultarr['torque'][] = $subarray[1];
+                    } else {
+                        // 否則，將指定位置的資料加入 torque
+                        $resultarr['torque'][] = $subarray[$position];
                     }
+                } else {
+                    $resultarr[] = $subarray[$position];
                 }
             }
         }
     
-        return $resultarr;
+        return $resultarr; // 回傳結果陣列
     }
+    
 
 
 

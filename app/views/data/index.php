@@ -45,7 +45,7 @@
                             <div class="force-overflow">
                                 <table id="fasten_log_all" class="table w3-table w3-hoverable">
                                     <thead id="header-table">
-                                        <tr>
+                                        <tr style="font-size: 16px">
                                             <th><?php echo $text['column_no'];?></th>
                                             <th><?php echo $text['column_datetime'];?></th>
                                             <th><?php echo $text['job_name'];?></th>
@@ -59,7 +59,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody  style="font-size: 1.8vmin;text-align: center;" id='res_data'>
+                                    <tbody  style="font-size: 16px;text-align: center;" id='res_data'>
                                     
                                             <?php foreach($data['res_data'] as $key =>$val){?>
 
@@ -101,7 +101,7 @@
                             <div class="scrollbar-force-overflow">
                                 <table id="fasten_log" class="table w3-table w3-hoverable">
                                     <thead id="header-table">
-                                        <tr>
+                                        <tr style="font-size: 16px">
                                             <th><?php echo $text['column_no'];?></th>
                                             <th><?php echo $text['column_datetime'];?></th>
                                             <th><?php echo $text['job_name'];?></th>
@@ -115,7 +115,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody style="font-size: 1.8vmin;text-align: center;">
+                                    <tbody style="font-size: 16px;text-align: center;">
                                         <?php foreach($data['res_data_ok'] as $key_ok =>$val_ok){?>
 
                                             <?php ////#FFEF62
@@ -153,7 +153,7 @@
                             <div class="scrollbar-force-overflow">
                                 <table id="error_fasten_log" class="table w3-table w3-hoverable">
                                     <thead id="header-table">
-                                        <tr>
+                                        <tr style="font-size: 16px">
                                             <th><?php echo $text['column_no'];?></th>
                                             <th><?php echo $text['column_datetime'];?></th>
                                             <th><?php echo $text['job_name'];?></th>
@@ -167,7 +167,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody style="font-size: 1.8vmin;text-align: center;" >
+                                    <tbody style="font-size: 16px;text-align: center;" >
                                         <?php foreach($data['res_data_nok'] as $key_nok =>$val_nok){?>
 
                                             <?php ////#FFEF62

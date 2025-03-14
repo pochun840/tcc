@@ -46,18 +46,23 @@ class Dashboards extends Controller
         //$data_info  = $this->DashboardModel->get_Data();
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
+        
         #當前的鎖附記錄最新一筆的資料
-        $first_data = $this->get_new_data();
+        /*$first_data = $this->get_new_data();
         
         if(!empty($first_data)){
 
             #整理代碼 及 bg 
             $first_data['status_explain'] = $status_arr[$first_data['fasten_status']];
-            if($first_data['fasten_status'] =="4"){
-                $first_data['fasten_status_bg'] ='#99CC66';
 
-            }else if($first_data['fasten_status'] =="5" || $first_data['fasten_status']=="6"){
-                $first_data['fasten_status_bg'] ='#99CC66';
+            if($first_data['fasten_status'] == "4"){
+                $first_data['fasten_status_bg'] ='green';
+
+            }else if($first_data['fasten_status'] =="5"){
+                $first_data['fasten_status_bg'] ='#FFCC00';
+                
+            }else if($first_data['fasten_status']=="6"){
+                $first_data['fasten_status_bg'] ='#FFCC00';
             }else{
                 $first_data['fasten_status_bg'] ='red';
             }   
@@ -65,9 +70,7 @@ class Dashboards extends Controller
             #整理扭力單位
             $first_data['status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
 
-
-
-        }
+        }*/
       
 
         #處理曲線圖的樣式
@@ -76,28 +79,23 @@ class Dashboards extends Controller
             $chart_mode = 1;
         } 
 
-
-        $id = "None";
         $chat_mode_arr = $chart_mode;
 
-
-
-        $x_val = $this->DashboardModel->get_csv_first_column($id);
+        $x_val = $this->DashboardModel->get_csv_first_column();
         if(!empty($x_val)){
             $x_val = array_slice($x_val, 1);
         }
 
+        //取得Step1-4的 torque及 angle
         //$other_data = $this->DashboardModel->get_csv_selected_columns($id);
-      
 
-     
 
         #取得目前的曲線圖模式 制定曲線圖的座標名稱
         $chart_menu_arr = $this->MiscellaneousModel->details('chart_menu');
         $chart_mode_arr = $this->MiscellaneousModel->details('chart_mode');
         $echart_name = explode("/",$chart_mode_arr[$chart_mode]);
 
-        $csvdata_arr = $this->DashboardModel->get_info($id,$chart_mode);
+        $csvdata_arr = $this->DashboardModel->get_info($chart_mode);
     
         if(!empty($csvdata_arr)){
             if($chart_mode != 5){
@@ -109,15 +107,15 @@ class Dashboards extends Controller
  
             $temp_chart = $this->ChartData($chart_mode, $csvdata_arr,$chat_mode_arr,$x_val);       
         }
+
    
         $data = [
             'isMobile'    => $isMobile,
             'chart_info'  => $temp_chart,
             'echart_name' => $echart_name,
             'chart_mode'  => $chart_mode,
-            'chart_menu_arr' => $chart_menu_arr,
-            //'other_data' => $other_data,
-            'first_data' => $first_data
+            'chart_menu_arr' => $chart_menu_arr
+            //'first_data' => $first_data
         ];
 
         if($isMobile){
@@ -129,16 +127,42 @@ class Dashboards extends Controller
     }
 
 
+
     public function get_new_data(){
-        $res = $this->DataModel->get_new_info();
-        return $res;
+
+
+        $status_arr = $this->MiscellaneousModel->details('status');
+        $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
+
+
+        $first_data = $this->DataModel->get_new_info(); 
+        
+
+        if(!empty($first_data)){
+
+            #整理代碼 及 bg 
+            $first_data['fasten_status_explain'] = $status_arr[$first_data['fasten_status']];
+
+            if($first_data['fasten_status'] == "4"){
+                $first_data['fasten_status_bg'] ='green';
+
+            }else if($first_data['fasten_status'] =="5"){
+                $first_data['fasten_status_bg'] ='#FFCC00';
+                
+            }else if($first_data['fasten_status']=="6"){
+                $first_data['fasten_status_bg'] ='#FFCC00';
+            }else{
+                $first_data['fasten_status_bg'] ='red';
+            }   
+
+            #整理扭力單位
+            $first_data['fasten_status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
+
+        }
+
+        echo json_encode($first_data);
   
     }
-
-   
-
-
-
 
 
     public function change_language()

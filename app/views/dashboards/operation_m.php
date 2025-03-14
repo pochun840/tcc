@@ -1,5 +1,6 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_operation_m.css" type="text/css">
+<script src="<?php echo URLROOT; ?>js/tcc_operation.js"></script>
 
 <style type="text/css">
     @font-face
@@ -136,7 +137,7 @@
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_torque'] ;?>(<?php echo $text['N.m'];?>)</div>
                         <div id="Target_Torque" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0;"><?php echo $data['first_data']['fasten_torque'];?></div>
                     </div>
-                    <div class="item-result w3-display-container " style="background-color: '<?php echo $data['first_data']['fasten_status_bg'];?>';">
+                    <div class="item-result w3-display-container" style="background-color: <?php echo htmlspecialchars($data['first_data']['fasten_status_bg']); ?>;">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-black"><?php echo $text['final_result'];?></div>
                         <div id="Torque_Result" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0">
                             <?php echo $data['first_data']['status_explain'];?>

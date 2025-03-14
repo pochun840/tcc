@@ -16,37 +16,37 @@
         <div class="center-content">
             <div class="topnav">
                 <label style="font-size:18px;color: #fff; padding-left: 1%" for="job_name"><?php echo $text['job_name'];?> :</label>&nbsp;
-                <input type="text" id="job_name" name="job_name" size="15" maxlength="20" disabled>
+                <input type="text" id="Job_Name" name="Job_Name" size="15" maxlength="20" value="<?php echo $data['first_data']['job_name'];?>" disabled>
 
                 <label style="font-size:18px;color: #fff; padding-left: 2%" for="seq_name"><?php echo $text['seq_name'];?> :</label>&nbsp;
-                <input type="text" id="seq_name" name="seq_name" size="15" maxlength="20"  disabled>
+                <input type="text" id="Seq_Name" name="Seq_Name" size="15" maxlength="20" value="<?php echo $data['first_data']['seq_name'];?>" disabled>
 
                 <label style="font-size:18px;color: #fff; padding-left: 2%" for="screw"><?php echo $text['screws'];?> :</label>&nbsp;
-                <input type="text" id="max_screw_count" name="max_screw_count" size="4" maxlength="20"  disabled>
+                <input type="text" id="Screws" name="Screws" size="4" maxlength="20" value="<?php echo $data['first_data']['max_screw_count'];?>" disabled>
             </div>
             
             <div class="operation-setting">
                 <div class="column">
                     <div class="item-target-torque w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_torque'] ;?>(<span id='fasten_status_unit_explain'></span>)</div>
-                        <div id="fasten_torque" class="w3-display-middle" style="font-size: 6vmin"></div>
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_torque'] ;?>(<?php  echo $data['first_data']['status_unit_explain'];?>)</div>
+                        <div id="Target_Torque" class="w3-display-middle" style="font-size: 6vmin"><?php echo $data['first_data']['fasten_torque'];?></div>
                     </div>
-                    <div id='fasten_status_bg' class="item-result w3-display-container">
+                    <div class="item-result w3-display-container" style="background-color: <?php echo htmlspecialchars($data['first_data']['fasten_status_bg']); ?>;">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-black"><?php echo $text['final_result'];?></div>
-                        <div id="fasten_status_explain" class="w3-display-middle" style="font-size: 6vmin">
-
+                        <div id="Torque_Result" class="w3-display-middle" style="font-size: 6vmin">
+                            <?php echo $data['first_data']['status_explain'];?>
                         </div>            
                     </div>
                 </div>
                 <div class="column">
                     <div class="item-targer-angle w3-display-container">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_angle'];?></div>
-                        <div id="fasten_angle" class="w3-display-middle" style="font-size: 6vmin"></div>                        
+                        <div id="Target_Angle" class="w3-display-middle" style="font-size: 6vmin"><?php echo $data['first_data']['fasten_angle'];?></div>                        
                     </div>
                     <div class="item-message w3-display-container">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_message'];?></div>
-                        <div id="" class="w3-display-middle" style="font-size: 28px">
-
+                        <div id="Message" class="w3-display-middle" style="font-size: 28px">
+                            <?php echo ($data['first_data']['error_message'] == "0") ? "N.A" : $data['first_data']['error_message']; ?>
                         </div>                                    
                     </div>
                 </div>
