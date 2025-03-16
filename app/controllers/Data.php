@@ -113,13 +113,17 @@ class Data extends Controller
             }
 
             $dataset = $this->DataModel->get_range_data($start_date, $end_date);
-    
+
+           
             $dataset = array_slice($dataset, 0, 10000);
 
             foreach ($dataset as $key => $val) {
-                $dataset[$key]['torque_unit'] = $unit_arr[$val['torque_unit']];
+                $dataset[$key]['torque_unit'] = $unit_arr[$val['step_tor_unit']];
                 $dataset[$key]['fasten_status'] = $status_arr[$val['fasten_status']];
             }
+
+
+    
     
             if ($dataset && $expert_val == "0") {
                
