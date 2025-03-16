@@ -208,9 +208,9 @@ class Controller
     public function Device_Info()
     {
         if( PHP_OS_FAMILY == 'Linux'){
-            $con_db = new PDO('sqlite:/var/www/html/database/data_device.db'); 
+            $con_db = new PDO('sqlite:/var/www/html/database/idas_data.db'); 
         }else{
-            $con_db = new PDO('sqlite:../data_device.db'); 
+            $con_db = new PDO('sqlite:../idas_data.db'); 
             
         }
 

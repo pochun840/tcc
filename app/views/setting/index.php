@@ -91,11 +91,11 @@
                     <div class="col-3 t1"><?php echo $text['system_batch'];?>:</div>
                     <div class="col t1">
       			      	<div class="col-2 form-check form-check-inline">
-        				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="1"  <?php echo $data['controller_info']['batch'] == 1 ? 'checked="checked"' : ''; ?>>
+        				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="0"  <?php echo $data['controller_info']['device_batch_mode'] == 0 ? 'checked="checked"' : ''; ?>>
             				<label class="form-check-label" for="dec"><?php echo $text['system_dec'];?></label>
             			</div>
             			<div class="form-check form-check-inline">
-            			    <input class="form-check-input" type="radio" name="batch-mode-option" id="inc" value="2"  <?php echo $data['controller_info']['batch'] == 2 ? 'checked="checked"' : ''; ?> >
+            			    <input class="form-check-input" type="radio" name="batch-mode-option" id="inc" value="1"  <?php echo $data['controller_info']['device_batch_mode'] == 1 ? 'checked="checked"' : ''; ?> >
             				<label class="form-check-label" for="inc"><?php echo $text['system_inc'];?></label>
             			</div>
                     </div>
@@ -105,12 +105,12 @@
                     <div class="col-3 t1"><?php echo $text['system_buzzer'];?>:</div>
                     <div class="col t1">
       			      	<div class="col-2 form-check form-check-inline">
-           				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
-               				<label class="form-check-label" for="buzzer-on"><?php echo $text['switch_on'];?></label>
+           				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-off" value="0"  <?php echo $data['controller_info']['device_buzzer_mode'] == 0 ? 'checked="checked"' : ''; ?>>
+               				<label class="form-check-label" for="buzzer-off"><?php echo $text['switch_off'];?></label>
                			</div>
               			<div class="form-check form-check-inline">
-               			    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-off" value="2"  <?php echo $data['controller_info']['buzzer_mode'] == 2 ? 'checked="checked"' : ''; ?>>
-               				<label class="form-check-label" for="buzzer-off"><?php echo $text['switch_off'];?></label>
+               			    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['device_buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
+               				<label class="form-check-label" for="buzzer-on"><?php echo $text['switch_on'];?></label>
                			</div>
                     </div>
                 </div>
@@ -422,7 +422,7 @@ window.onload = function() {
     }
 
     //
-    var tourque_unit = '<?php echo $data['controller_info']['torque_unit']?>'; // 3
+    var tourque_unit = '<?php echo $data['controller_info']['device_torque_unit']?>'; // 3
 
     
 

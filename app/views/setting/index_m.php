@@ -93,11 +93,11 @@
                             <div class="col-6 t1"><?php echo $text['system_batch'];?>:</div>
                             <div class="col t2" >
               			      	<div class="col-3 form-check form-check-inline">
-                				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="1" <?php echo $data['controller_info']['batch'] == 1 ? 'checked="checked"' : ''; ?> >
+                				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="0" <?php echo $data['controller_info']['device_batch_mode'] == 0 ? 'checked="checked"' : ''; ?> >
                     				<label class="form-check-label" for="dec"><?php echo $text['system_dec'];?></label>
                     			</div>
                     			<div class="form-check form-check-inline">
-                    			    <input class="form-check-input" type="radio" name="batch-mode-option" id="inc" value="2" <?php echo $data['controller_info']['batch'] == 2 ? 'checked="checked"' : ''; ?>>
+                    			    <input class="form-check-input" type="radio" name="batch-mode-option" id="inc" value="1" <?php echo $data['controller_info']['device_batch_mode'] == 1 ? 'checked="checked"' : ''; ?>>
                     				<label class="form-check-label" for="inc"><?php echo $text['system_inc'];?></label>
                     			</div>
                             </div>
@@ -447,6 +447,20 @@
 </div>
 
 <script>
+
+window.onload = function() {
+    // 檢查 sessionStorage 中的設置，並恢復顯示狀態
+    if (sessionStorage.getItem('Barcode_Setting') === 'block') {
+        document.getElementById('Barcode_Setting').style.display = "block";
+        document.getElementById('System_Setting').style.display = "none";
+        document.getElementById('Controller_Setting').style.display = "none";
+        
+    }
+    //
+    var tourque_unit = '<?php echo $data['controller_info']['device_torque_unit']?>'; // 3
+};
+
+
 function time_save(){
     var newTime = document.getElementById('newTime').value;
     var device_id = <?php echo $data['controller_info']['device_id'];?>;

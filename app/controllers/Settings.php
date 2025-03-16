@@ -298,7 +298,7 @@ class Settings extends Controller
         if( !empty($_POST['buzzer_val']) && isset($_POST['buzzer_val'])  ){
             $con_setting['buzzer_val'] = $_POST['buzzer_val'];
         }else{ 
-            $input_check = false; 
+            $input_check = false;    
         }
         //torque_unit
         if(!empty($_POST['torque_unit']) && isset($_POST['torque_unit']) ){
@@ -306,14 +306,17 @@ class Settings extends Controller
         }else{
             $input_check = false; 
         }
+
+
+        if(!empty($_POST)){
+            $con_setting = $_POST;
+        }
+
+        if($con_setting){
         
-
-
-        if($input_check){
           $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
           if($res['count'] =="1"){
-                //UPDATE
-
+               
                 $res = $this->SettingModel->Controller_Setting($con_setting);
                 $result = array();
                 if($res){
@@ -328,7 +331,7 @@ class Settings extends Controller
                 
           }
 
-        }    
+        }
     }
 
     public function edit_system_date()

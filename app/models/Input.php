@@ -2,7 +2,7 @@
 
 class Input{
     private $db_iDas;
-    private $db_iDas_device;
+    //private $db_iDas_device;
 
     // 在建構子將 Database 物件實例化
     public function __construct(){
@@ -10,8 +10,8 @@ class Input{
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
 
-        $this->db_iDas_device = new Database;
-        $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
+        /*$this->db_iDas_device = new Database;
+        $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();*/
 
 
     }
@@ -30,8 +30,8 @@ class Input{
     //get device_input_alljob
     public function get_input_alljob()
     {   
-        $sql = "SELECT * FROM device ";
-        $statement = $this->db_iDas_device->prepare($sql);
+        $sql = "SELECT * FROM device";
+        $statement = $this->db_iDas->prepare($sql);
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 

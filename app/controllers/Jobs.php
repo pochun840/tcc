@@ -21,12 +21,10 @@ class Jobs extends Controller
 
         
         $data = array();
-        
-
         $isMobile  = $this->isMobileCheck();
         $jobs      = $this->jobModel->getJobs();
-        $tools     = $this->ToolModel->GetToolInfo();
         $direction = $this->MiscellaneousModel->details('rev_direction');
+        $tools     = $this->ToolModel->GetToolInfo();
 
         $next_job_id_arr = $this->jobModel->get_head_job_id();
         $next_job_id = (int)$next_job_id_arr['missing_id'];
@@ -37,8 +35,6 @@ class Jobs extends Controller
             $lastRow  = 1; 
             $jobIdInt = 1;
         }
-
-
 
         $data = array(
             'jobint' => $jobIdInt,

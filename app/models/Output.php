@@ -2,7 +2,7 @@
 
 class Output{
     private $db_iDas;
-    private $db_iDas_device;
+    //private $db_iDas_device;
 
     // 在建構子將 Database 物件實例化
     public function __construct(){
@@ -10,8 +10,8 @@ class Output{
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
 
-        $this->db_iDas_device = new Database;
-        $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
+        //$this->db_iDas_device = new Database;
+        //$this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
 
     }
 
@@ -177,7 +177,7 @@ class Output{
     public function set_output_alljob($output_jobid){
 
         $sql= "UPDATE device SET device_output_all_job = ? ";
-        $statement = $this->db_iDas_device->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute([$output_jobid]);
 
         return $results;

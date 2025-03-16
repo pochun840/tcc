@@ -369,7 +369,7 @@ var input_job;
 $(document).ready(function () {
     highlight_row_input('input_table');
 
-    var all_input_job = '<?php echo $data['device_data']['device_input_all_job']?>';
+    var all_input_job = '';
     job_id = all_input_job;
     input_job = all_input_job;
     if(job_id){

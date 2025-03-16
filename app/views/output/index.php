@@ -303,7 +303,7 @@ var dataoutput_pin_val;
 $(document).ready(function () {
     highlight_row_input('output_table');
 
-    var all_output_job = '<?php echo $data['device_data']['device_output_all_job']?>';
+    var all_output_job = '';
     job_id = all_output_job ;
     output_job = all_output_job;
     if(job_id){

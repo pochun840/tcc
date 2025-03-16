@@ -3,14 +3,14 @@
 class Setting{
 
     private $db_iDas;
-    private $db_iDas_device;
+    //private $db_iDas_device;
     Private $db_iDas_login;
 
     // 在建構子將 Database 物件實例化
     public function __construct(){
 
-        $this->db_iDas_device = new Database;
-        $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();
+        /*$this->db_iDas_device = new Database;
+        $this->db_iDas_device = $this->db_iDas_device->getDb_das_device();*/
 
         $this->db_iDas = new Database;
         $this->db_iDas = $this->db_iDas->getDb_das();
@@ -24,7 +24,7 @@ class Setting{
     public function GetControllerInfo()
     {
         $sql = "SELECT * FROM device ";
-        $statement = $this->db_iDas_device->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -36,13 +36,10 @@ class Setting{
     public function GetControllerInfo_count($control_id){
 
         $sql = "SELECT count(*) AS count FROM device WHERE device_id = :device_id";
-        $statement = $this->db_iDas_device->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':device_id', $control_id);
         $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC); 
-
-
-    
         return $row;
     }
 
@@ -56,7 +53,7 @@ class Setting{
         return $row;
     }*/
 
-    public function GetToolInfo()
+    /*public function GetToolInfo()
     {
         $sql = "SELECT * FROM tool_info ";
         $statement = $this->db_dev->prepare($sql);
@@ -64,7 +61,7 @@ class Setting{
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $row;
-    }
+    }*/
 
     public function GetOperator_priviledge()
     {
@@ -86,7 +83,7 @@ class Setting{
         return $row;
     }
 
-    public function GetAllSequences()
+    /*public function GetAllSequences()
     {
         $sql = "SELECT * FROM sequence ORDER BY job_id,seq_id";
         $statement = $this->db->prepare($sql);
@@ -94,9 +91,9 @@ class Setting{
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
 
         return $row;
-    }
+    }*/
 
-    public function GetAllSteps()
+    /*public function GetAllSteps()
     {
         $sql = "SELECT job_id,seq_id,step_id,step_name FROM normalstep WHERE 1 
                 union 
@@ -106,14 +103,14 @@ class Setting{
         $row = $statement->fetchall(PDO::FETCH_ASSOC);
 
         return $row;
-    }
+    }*/
 
 
     public function Edit_Login_Password($conset){
 
         $conset['device_id'] = intval($conset['device_id']);
 
-        $sql = "UPDATE `device` 
+        /*$sql = "UPDATE `device` 
                 SET device_password = :device_password
                 WHERE device_id = :device_id";
     
@@ -121,7 +118,7 @@ class Setting{
         
         $statement->bindValue(':device_password', $conset['new_password']);
         $statement->bindValue(':device_id', $conset['device_id']);
-        $results = $statement->execute();
+        $results = $statement->execute();*/
 
         $sql_1 = "UPDATE `operator` 
         SET operator_adminpwd = :operator_adminpwd
@@ -142,7 +139,7 @@ class Setting{
         $statement2->bindValue(':operator_loginflag', '0');
         $results2  = $statement2->execute();
 
-        return $results; 
+        return $results1; 
     }
     
     public function system_date_edit($conset){
@@ -153,7 +150,7 @@ class Setting{
         SET device_time = :device_time
         WHERE device_id = :device_id";
 
-        $statement = $this->db_iDas_device->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':device_time', $conset['newTime']);
         $statement->bindValue(':device_id', $conset['device_id']);
         $results = $statement->execute();
@@ -179,12 +176,12 @@ class Setting{
         $sql = "UPDATE `device` 
         SET device_name = :device_name,
             device_language = :language_val,
-            batch = :batch,
-            buzzer_mode = :buzzer_mode,
-            torque_unit = :torque_unit 
+            device_batch_mode = :batch,
+            device_buzzer_mode = :buzzer_mode,
+            device_torque_unit = :torque_unit 
         WHERE device_id = :device_id ";
         
-        $statement = $this->db_iDas_device->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':device_name', $con_setting['control_name']);
         $statement->bindValue(':language_val', $con_setting['lang_val']);
         $statement->bindValue(':batch', $con_setting['batch_val']);
@@ -303,7 +300,7 @@ class Setting{
     public function get_seq_list($job_id){
 
         $sql = "SELECT job_id,seq_id,seq_name FROM sequence WHERE job_id = :job_id AND seq_en = 1 order by seq_id";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
         $results = $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -315,7 +312,7 @@ class Setting{
     public function get_job_barcode($job_id){
 
         $sql = "SELECT * FROM barcode WHERE barcode_selected_job = :job_id ";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
         $results = $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);
@@ -376,7 +373,7 @@ class Setting{
                     VALUES ('idas_version',:new_version )";
         }
 
-        $statement = $this->db_das->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':new_version', $new_version);
         $results = $statement->execute();
 
@@ -397,7 +394,7 @@ class Setting{
                     VALUES ('match_gtcs_app_version',:new_version )";
         }
 
-        $statement = $this->db_das->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':new_version', $new_version);
         $results = $statement->execute();
 
@@ -422,7 +419,7 @@ class Setting{
     public function Get_System_Toq_Unit()
     {
         $sql = "SELECT device_torque_unit FROM device";
-        $statement = $this->db->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
