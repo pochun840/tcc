@@ -60,5 +60,16 @@ class Datas{
 
         return $result;
     }
+
+
+    public function get_operation_info(){
+        
+        $sql = "SELECT * FROM data ORDER BY system_sn DESC LIMIT 1";
+        $statement = $this->db_data->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC); 
+
+        return $result;
+    }
     
 }

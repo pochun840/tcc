@@ -48,7 +48,7 @@ class Dashboards extends Controller
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
         
         #當前的鎖附記錄最新一筆的資料
-        /*$first_data = $this->get_new_data();
+        $first_data = $this->get_current_data();
         
         if(!empty($first_data)){
 
@@ -70,7 +70,7 @@ class Dashboards extends Controller
             #整理扭力單位
             $first_data['status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
 
-        }*/
+        }
       
 
         #處理曲線圖的樣式
@@ -115,7 +115,6 @@ class Dashboards extends Controller
             'echart_name' => $echart_name,
             'chart_mode'  => $chart_mode,
             'chart_menu_arr' => $chart_menu_arr
-            //'first_data' => $first_data
         ];
 
         if($isMobile){
@@ -128,45 +127,101 @@ class Dashboards extends Controller
 
 
 
-    public function get_new_data(){
-
+    public function get_current_data(){
 
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
 
+        $current_data = $this->DataModel->get_operation_info(); 
 
-        $first_data = $this->DataModel->get_new_info(); 
-        
-
-        if(!empty($first_data)){
-
-            #整理代碼 及 bg 
-            $first_data['fasten_status_explain'] = $status_arr[$first_data['fasten_status']];
-
-            if($first_data['fasten_status'] == "4"){
-                $first_data['fasten_status_bg'] ='green';
-
-            }else if($first_data['fasten_status'] =="5"){
-                $first_data['fasten_status_bg'] ='#FFCC00';
-                
-            }else if($first_data['fasten_status']=="6"){
-                $first_data['fasten_status_bg'] ='#FFCC00';
-            }else{
-                $first_data['fasten_status_bg'] ='red';
-            }   
-
-            #整理扭力單位
-            $first_data['fasten_status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
-
-        }
-
-        echo json_encode($first_data);
-  
+        return $current_data;
+    
     }
 
 
-    public function change_language()
-    {
+
+    public function get_new_data() {
+
+        $system_sn = isset($_POST['system_sn']) ? trim($_POST['system_sn']) : '';
+    
+        $status_arr = $this->MiscellaneousModel->details('status');
+        $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
+    
+        // 根據 system_sn 取得最新資料
+        $first_data = $this->DataModel->get_new_info($system_sn); 
+    
+        if (!empty($first_data)) {
+            // 整理狀態說明與背景顏色
+            $first_data['fasten_status_explain'] = $status_arr[$first_data['fasten_status']] ?? '未知狀態';
+    
+            switch ($first_data['fasten_status']) {
+                case "4":
+                    $first_data['fasten_status_bg'] = 'green';
+                    break;
+                case "5":
+                case "6":
+                    $first_data['fasten_status_bg'] = '#FFCC00';
+                    break;
+                default:
+                    $first_data['fasten_status_bg'] = 'red';
+                    break;
+            }
+    
+            // 整理扭力單位說明
+            $first_data['fasten_status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']] ?? '未知單位';
+        }
+
+
+        #即時曲線圖
+        if(!empty($first_data)){
+            $chart_data = $this->live_line_chart();
+            $first_data['chart_data'] = $chart_data;
+        }
+        
+        echo json_encode($first_data);
+
+    }
+
+
+
+    public function live_line_chart() {
+
+        //預設 
+        $chart_mode = 1; 
+    
+        $x_val = $this->DashboardModel->get_csv_first_column();
+        if (!empty($x_val)) {
+            $x_val = array_slice($x_val, 1);
+        }
+    
+        $chart_mode_arr = $this->MiscellaneousModel->details('chart_mode');
+        $echart_name = explode("/", $chart_mode_arr[$chart_mode]);
+    
+        $csvdata_arr = $this->DashboardModel->get_info($chart_mode);
+    
+        if (!empty($csvdata_arr)) {
+            if ($chart_mode != 5) {
+                $csvdata_arr = array_slice($csvdata_arr, 1);
+            } else {
+                array_shift($csvdata_arr['torque']);
+                array_shift($csvdata_arr['rpm']);
+            }
+        }
+    
+        // 返回曲線圖數據
+        return [
+            'x_val' => $x_val ?? [],
+            'y_val' => $csvdata_arr ?? [],
+            'x_title' => $echart_name[1] ?? 'Time',
+            'y_title' => $echart_name[0] ?? 'Value'
+        ];
+    }
+    
+    
+
+
+    public function change_language(){
+
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
@@ -229,10 +284,6 @@ class Dashboards extends Controller
         }, $x_val);
 
         $chart_info['x_val'] = json_encode($x_val);
-
-
-
-        
         return $chart_info;
     }
 

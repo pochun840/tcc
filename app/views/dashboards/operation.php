@@ -1,6 +1,5 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_operation.css" type="text/css">
-<script src="<?php echo URLROOT; ?>js/tcc_operation.js"></script>
 
 <body>
 <div class="container-ms">
@@ -17,6 +16,7 @@
             <div class="topnav">
                 <label style="font-size:18px;color: #fff; padding-left: 1%" for="job_name"><?php echo $text['job_name'];?> :</label>&nbsp;
                 <input type="text" id="job_name" name="job_name" size="15" maxlength="20" disabled>
+                <input type="hidden" id="system_sn" name="system_sn" size="15" disabled>
 
                 <label style="font-size:18px;color: #fff; padding-left: 2%" for="seq_name"><?php echo $text['seq_name'];?> :</label>&nbsp;
                 <input type="text" id="seq_name" name="seq_name" size="15" maxlength="20"  disabled>
@@ -314,6 +314,96 @@ function generateDataZoom() {
         }
     ];
 }
+
+
+
+let pollingActive = true;
+async function fetchData(url, system_sn) {
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ system_sn: system_sn }) // 將 system_sn 包裝成 JSON 物件並發送
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP 錯誤！狀態碼: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('最新資料:', data);
+        updateDataOnPage(data); // 更新頁面數據
+
+    } catch (error) {
+        console.error('API 調用錯誤:', error);
+    }
+}
+
+// 每隔 interval 毫秒調用一次 API
+function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 3000) {
+    const system_sn = document.getElementById('system_sn').value || '--'; 
+
+    async function poll() {
+        if (pollingActive) {
+            await fetchData(url, system_sn);
+            setTimeout(poll, interval); // 使用 setTimeout 來保證每個請求完成後再發送下一次請求
+        }
+    }
+    poll();
+}
+
+// 更新頁面數據的函式
+function updateDataOnPage(data) {
+    if (!data) return;
+
+    document.getElementById('system_sn').value = data.system_sn || '--';
+    document.getElementById('job_name').value = data.job_name || '--';
+    document.getElementById('seq_name').value = data.seq_name || '--';
+    document.getElementById('max_screw_count').value = data.max_screw_count || '--';
+    document.getElementById('fasten_torque').innerText = data.fasten_torque || 'N/A';
+    document.getElementById('fasten_angle').innerText = data.fasten_angle || 'N/A';
+    document.getElementById('fasten_status_explain').innerText = data.fasten_status_explain || 'N/A';
+    document.getElementById('fasten_status_unit_explain').innerText = data.fasten_status_unit_explain || '';
+
+    const bgColor = data.fasten_status_bg || '';  
+    document.getElementById('fasten_status_bg').style.backgroundColor = bgColor;
+
+    if (data.chart_data) {
+        updateChart(data.chart_data);  // 更新圖表
+    }
+}
+
+// 更新圖表
+function updateChart(chartData) {
+    if (!chartData) return;
+
+    var option = {
+        xAxis: {
+            name: chartData.x_title,
+            data: chartData.x_val
+        },
+        yAxis: {
+            name: chartData.y_title
+        },
+        series: [
+            {
+                type: 'line',
+                data: chartData.y_val
+            }
+        ]
+    };
+
+    if (myChart) {
+        myChart.setOption(option);  // 確保 ECharts 實例已經初始化
+    }
+}
+
+// 開始即時 API 調用，每 3 秒更新一次數據
+startApiPolling();
+
+
 </script>
 
 </body>

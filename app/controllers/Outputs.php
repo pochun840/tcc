@@ -37,8 +37,6 @@ class Outputs extends Controller
             'device_data'  => $device_data,
         );
 
-
-      
         if($isMobile){
             $this->view('output/index_m', $data);
         }else{
@@ -117,8 +115,6 @@ class Outputs extends Controller
         
 
     }
-
-   
 
     public function check_job_output_conflict($value='')
     {
@@ -470,7 +466,6 @@ class Outputs extends Controller
             echo "<pre>";
             print_r($res);
             echo "</pre>";
-            //die();
 
         }
 

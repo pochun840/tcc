@@ -19,7 +19,6 @@ class Jobs extends Controller
     // 取得所有Jobs
     public function index(){
 
-        
         $data = array();
         $isMobile  = $this->isMobileCheck();
         $jobs      = $this->jobModel->getJobs();
@@ -102,7 +101,6 @@ class Jobs extends Controller
             include $file;
         }
 
-        
         $jobdata  = array();
         if(isset($_POST['jobid'])){
 
