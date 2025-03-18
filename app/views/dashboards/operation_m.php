@@ -324,7 +324,9 @@ input:disabled
                 type: 'category',
                 boundaryGap: false,
                 name: x_title,
-                data: x_data_val
+                data: x_data_val,
+                nameLocation: 'middle',  // 讓標題在中間
+                nameGap: 30,  // 調整標題與x軸的距離
             },
             yAxis: {
                 type: 'value',
