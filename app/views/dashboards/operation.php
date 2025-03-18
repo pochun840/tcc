@@ -45,7 +45,7 @@
                     </div>
                     <div class="item-message w3-display-container">
                         <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_message'];?></div>
-                        <div id="" class="w3-display-middle" style="font-size: 28px">
+                        <div id="error_massage_explanation" class="w3-display-middle" style="font-size: 28px">
 
                         </div>                                    
                     </div>
@@ -106,304 +106,283 @@
 
 
 <script>
-// Button Home
+    // Button Home
 
-
-// change button background coler
-function changeBackgroundColor(button) {
-    var buttons = document.getElementsByClassName('btn-chart');
-    for (var i = 0; i < buttons.length; i++) {
-        buttons[i].classList.remove('active');
-    }
-    button.classList.add('active');
-}
-
-function chart_type(argument){
-
-    var currentUrl = window.location.href;
-
-    // 處理button的class 
-    var buttons = document.getElementsByClassName("btn-chart");
-    for (var i = 0; i < buttons.length; i++) {
-        buttons[i].classList.remove("active");
-    }
-    var activeButton = document.getElementById(argument);
-    activeButton.classList.add("active");
-
-    var chartIndex = currentUrl.indexOf('chart=');
-    var chart;
-
-    if(argument == "torque_time"){
-        chart = 1;
-    }
-    
-    if(argument == "angle_time"){
-        chart = 2;
-    }
-
-    if(argument == "rpm_time"){
-        chart = 3;
-    }
-
-    if(argument == "torque_angle"){
-        chart = 4;
-    }
-
-    var nextinfo_url;
-
-    if (chartIndex !== -1) {
-        var nextChartValue = 'chart=' + chart;
-        nextinfo_url = currentUrl.substring(0, chartIndex) + nextChartValue;
-    } else {
-        var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
-        nextinfo_url = currentUrl + separator + 'chart=' + chart;
-    }
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            window.location.assign(nextinfo_url);
+    // 改變按鈕背景顏色
+    function changeBackgroundColor(button) {
+        var buttons = document.getElementsByClassName('btn-chart');
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove('active');
         }
-    };
-    xhttp.open("GET", nextinfo_url, true);
-    xhttp.send();
-}
-
-var language = getCookie('language');
-
-var myChart = echarts.init(document.getElementById('chart'));
-var x_data_val = <?php echo  $data['chart_info']['x_val']; ?>;
-var y_data_val = <?php echo  $data['chart_info']['y_val']; ?>;
-var x_title    = '<?php echo addslashes($data['echart_name'][1]); ?>';
-var y_title    = '<?php echo addslashes($data['echart_name'][0]); ?>';
-
-if(language =="zh-tw"){
-    if(x_title =="Time(MS)"){
-        x_title ="時間";
+        button.classList.add('active');
     }
 
-    if(x_title =="Angle"){
-        x_title ="角度";
-    }
-    if(x_title =="Torque"){
-        x_title ="扭力";
-    }
+    function chart_type(argument) {
+        var currentUrl = window.location.href;
 
-    if(y_title =="Angle"){
-        y_title ="角度";
-    }
-    if(y_title =="Torque"){
-        y_title ="扭力";
-    }
+        // 處理按鈕的class
+        var buttons = document.getElementsByClassName("btn-chart");
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove("active");
+        }
+        var activeButton = document.getElementById(argument);
+        activeButton.classList.add("active");
 
-    if(y_title =="RPM"){
-        y_title ="轉速";
-    }
+        var chartIndex = currentUrl.indexOf('chart=');
+        var chart;
 
-}
-
-if(language =="zh-cn"){
-    if(x_title =="Time(MS)"){
-        x_title ="时间";
-    }
-
-    if(x_title =="Angle"){
-        x_title ="角度";
-    }
-    if(x_title =="Torque"){
-        x_title ="扭力";
-    }
-
-    if(y_title =="Angle"){
-        y_title ="角度";
-    }
-    if(y_title =="Torque"){
-        y_title ="扭力";
-    }
-
-    if(y_title =="RPM"){
-        y_title ="转速";
-    }
-
-}
-
-console.log (x_title);
-
-var language = getCookie('language');
-
-var option = {
-    title: {
-        text: ''
-    },
-    tooltip: {
-        trigger: 'axis',
-        position: function (pt) {
-            return [pt[0], '10%'];
-        },
-        formatter: function (params) {
-            var state = '<span style="color: red;">' + y_title + '</span>';
-            var value = '<span style="color: red;">' + params[0].value + '</span>';
-            return state + ': ' + value; 
-        },
+        // 根據選擇的圖表類型設定圖表編號
+        if(argument == "torque_time"){
+            chart = 1;
+        }
         
-    },
-    xAxis:{
-        type: 'category',
-        boundaryGap: false,
-        name: x_title,
-        data: x_data_val
-    },
-    yAxis: {
-        type: 'value',
-        name: y_title,
-        boundaryGap: [0, '100%']
-    },
-    dataZoom: generateDataZoom(),
-    series: [
-            {
-                name:'',
-                type:'line',
-                symbol: 'none',
-                sampling: 'average',
-                
-                itemStyle: {
-                    normal: {
-                        color: 'rgb(255,0,0)'
-                    }
-                },
-                areaStyle: {
-                    normal: {
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [{
-                            offset: 0,
-                            color: 'rgb(255,255,255)'
-                        }, {
-                            offset: 0,
-                            color: 'rgb(255,255,255)'
-                        }])
-                    }
-                },
-                lineStyle: {width: 0.75},
-                data: y_data_val
-            }
-        ]
-};
-
-myChart.setOption(option);
-
-function generateDataZoom() {
-    return [
-        {
-            type: 'inside',
-            start: 0,
-            end: 100
-        },
-        {
-            show: false,
-            type: 'slider',
-            start: 0,
-            end: 100,
-            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-            handleSize: '80%',
-            handleStyle: {
-                color: '#fff',
-                shadowBlur: 3,
-                shadowColor: 'rgba(0, 0, 0, 0)',
-                shadowOffsetX: 0,
-                shadowOffsetY: 0
-            }
+        if(argument == "angle_time"){
+            chart = 2;
         }
-    ];
-}
 
+        if(argument == "rpm_time"){
+            chart = 3;
+        }
 
+        if(argument == "torque_angle"){
+            chart = 4;
+        }
+        
+        var nextinfo_url;
 
-let pollingActive = true;
-async function fetchData(url, system_sn) {
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
+        // 如果 URL 已經包含 chart 參數，更新該參數
+        if (chartIndex !== -1) {
+            var nextChartValue = 'chart=' + chart;
+            nextinfo_url = currentUrl.substring(0, chartIndex) + nextChartValue;
+        } else {
+            var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
+            nextinfo_url = currentUrl + separator + 'chart=' + chart;
+        }
+
+        // 發送請求並跳轉到新的 URL
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                window.location.assign(nextinfo_url);
+            }
+        };
+        xhttp.open("GET", nextinfo_url, true);
+        xhttp.send();
+    }
+
+    var language = getCookie('language');
+
+    // 宣告 myChart 為全域變數
+    var myChart;
+
+    function initializeChart() {
+        // 取得 x 和 y 的數值
+        var x_data_val = <?php echo json_encode($data['chart_info']['x_val']); ?>;
+        var y_data_val = <?php echo json_encode($data['chart_info']['y_val']); ?>;
+        var x_title = '<?php echo addslashes($data['echart_name'][1]); ?>';
+        var y_title = '<?php echo addslashes($data['echart_name'][0]); ?>';
+
+        // 檢查 x 和 y 的數值是否為空或 null，如果是則停止執行
+        if (!x_data_val || !y_data_val || x_data_val.length === 0 || y_data_val.length === 0) {
+            console.log("x_val 或 y_val 为空，停止执行图表初始化。");
+            return;  // 停止後續執行
+        }
+
+        // 根據語言來本地化圖表標題
+        if (language == "zh-tw") {
+            if (x_title == "Time(MS)") x_title = "時間";
+            if (x_title == "Angle") x_title = "角度";
+            if (x_title == "Torque") x_title = "扭力";
+            if (y_title == "Angle") y_title = "角度";
+            if (y_title == "Torque") y_title = "扭力";
+            if (y_title == "RPM") y_title = "轉速";
+        }
+
+        if (language == "zh-cn") {
+            if (x_title == "Time(MS)") x_title = "时间";
+            if (x_title == "Angle") x_title = "角度";
+            if (x_title == "Torque") x_title = "扭力";
+            if (y_title == "Angle") y_title = "角度";
+            if (y_title == "Torque") y_title = "扭力";
+            if (y_title == "RPM") y_title = "转速";
+        }
+
+        // 初始化圖表
+        myChart = echarts.init(document.getElementById('chart'));
+
+        var option = {
+            title: {
+                text: ''
             },
-            body: JSON.stringify({ system_sn: system_sn }) // 將 system_sn 包裝成 JSON 物件並發送
-        });
+            tooltip: {
+                trigger: 'axis',
+                position: function (pt) {
+                    return [pt[0], '10%'];
+                },
+                formatter: function (params) {
+                    var state = '<span style="color: red;">' + y_title + '</span>';
+                    var value = '<span style="color: red;">' + params[0].value + '</span>';
+                    return state + ': ' + value; 
+                },
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                name: x_title,
+                data: x_data_val
+            },
+            yAxis: {
+                type: 'value',
+                name: y_title,
+                boundaryGap: [0, '100%']
+            },
+            dataZoom: generateDataZoom(),
+            series: [
+                {
+                    name: '',
+                    type: 'line',
+                    symbol: 'none',
+                    sampling: 'average',
+                    itemStyle: {
+                        normal: {
+                            color: 'rgb(255,0,0)'
+                        }
+                    },
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [
+                                { offset: 0, color: 'rgb(255,255,255)' },
+                                { offset: 0, color: 'rgb(255,255,255)' }
+                            ])
+                        }
+                    },
+                    lineStyle: { width: 0.75 },
+                    data: y_data_val
+                }
+            ]
+        };
 
-        if (!response.ok) {
-            throw new Error(`HTTP 錯誤！狀態碼: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('最新資料:', data);
-        updateDataOnPage(data); // 更新頁面數據
-
-    } catch (error) {
-        console.error('API 調用錯誤:', error);
+        myChart.setOption(option);
     }
-}
 
-// 每隔 interval 毫秒調用一次 API
-function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 3000) {
-    const system_sn = document.getElementById('system_sn').value || '--'; 
-
-    async function poll() {
-        if (pollingActive) {
-            await fetchData(url, system_sn);
-            setTimeout(poll, interval); // 使用 setTimeout 來保證每個請求完成後再發送下一次請求
-        }
-    }
-    poll();
-}
-
-// 更新頁面數據的函式
-function updateDataOnPage(data) {
-    if (!data) return;
-
-    document.getElementById('system_sn').value = data.system_sn || '--';
-    document.getElementById('job_name').value = data.job_name || '--';
-    document.getElementById('seq_name').value = data.seq_name || '--';
-    document.getElementById('max_screw_count').value = data.max_screw_count || '--';
-    document.getElementById('fasten_torque').innerText = data.fasten_torque || 'N/A';
-    document.getElementById('fasten_angle').innerText = data.fasten_angle || 'N/A';
-    document.getElementById('fasten_status_explain').innerText = data.fasten_status_explain || 'N/A';
-    document.getElementById('fasten_status_unit_explain').innerText = data.fasten_status_unit_explain || '';
-
-    const bgColor = data.fasten_status_bg || '';  
-    document.getElementById('fasten_status_bg').style.backgroundColor = bgColor;
-
-    if (data.chart_data) {
-        updateChart(data.chart_data);  // 更新圖表
-    }
-}
-
-// 更新圖表
-function updateChart(chartData) {
-    if (!chartData) return;
-
-    var option = {
-        xAxis: {
-            name: chartData.x_title,
-            data: chartData.x_val
-        },
-        yAxis: {
-            name: chartData.y_title
-        },
-        series: [
+    // 生成 DataZoom 配置
+    function generateDataZoom() {
+        return [
             {
-                type: 'line',
-                data: chartData.y_val
+                type: 'inside',
+                start: 0,
+                end: 100
+            },
+            {
+                show: false,
+                type: 'slider',
+                start: 0,
+                end: 100,
+                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0)',
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 0
+                }
             }
-        ]
-    };
-
-    if (myChart) {
-        myChart.setOption(option);  // 確保 ECharts 實例已經初始化
+        ];
     }
-}
 
-// 開始即時 API 調用，每 3 秒更新一次數據
-startApiPolling();
+    // 在頁面加載後調用 initializeChart 函數
+    initializeChart();
 
+    let pollingActive = true;
+    async function fetchData(url, system_sn, chart_mode) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ system_sn: system_sn, chart_mode: chart_mode })// 將 system_sn  && chart_mode 包裝成 JSON 物件並發送
+            });
 
+            if (!response.ok) {
+                throw new Error(`HTTP 錯誤！狀態碼: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('最新資料:', data);
+            updateDataOnPage(data); // 更新頁面數據
+
+        } catch (error) {
+            console.error('API 調用錯誤:', error);
+        }
+    }
+
+    // 每隔 interval 毫秒調用一次 API
+    function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 3000) {
+        const system_sn = document.getElementById('system_sn').value || '--'; 
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const chart_mode = urlParams.get('chart') || 1;  // 如果沒有 chart 參數，默認為 1
+        console.log("chart_mode:", chart_mode);
+        async function poll() {
+            if (pollingActive) {
+                await fetchData(url, system_sn,chart_mode);
+                setTimeout(poll, interval); 
+            }
+        }
+        poll();
+    }
+
+    // 更新頁面數據的函式
+    function updateDataOnPage(data) {
+        if (!data) return;
+
+        document.getElementById('system_sn').value = data.system_sn || '--';
+        document.getElementById('job_name').value = data.job_name || '--';
+        document.getElementById('seq_name').value = data.seq_name || '--';
+        document.getElementById('max_screw_count').value = data.max_screw_count || '--';
+        document.getElementById('fasten_torque').innerText = data.fasten_torque || 'N/A';
+        document.getElementById('fasten_angle').innerText = data.fasten_angle || 'N/A';
+        document.getElementById('fasten_status_explain').innerText = data.fasten_status_explain || 'N/A';
+        document.getElementById('fasten_status_unit_explain').innerText = data.fasten_status_unit_explain || '';
+        document.getElementById('error_massage_explanation').innerText = data.error_massage_explanation || '';
+
+        const bgColor = data.fasten_status_bg || '';  
+        document.getElementById('fasten_status_bg').style.backgroundColor = bgColor;
+
+        if (data.chart_data) {
+            updateChart(data.chart_data);  // 更新圖表
+        }
+    }
+
+    // 更新圖表
+    function updateChart(chartData) {
+        if (!chartData) return;
+
+        var option = {
+            xAxis: {
+                name: chartData.x_title,
+                data: chartData.x_val
+            },
+            yAxis: {
+                name: chartData.y_title
+            },
+            series: [
+                {
+                    type: 'line',
+                    data: chartData.y_val
+                }
+            ]
+        };
+
+        if (myChart) {
+            myChart.setOption(option);  // 確保 ECharts 實例已經初始化
+        }
+    }
+
+    // 開始即時 API 調用，每 3 秒更新一次數據
+    startApiPolling();
 </script>
 
 </body>

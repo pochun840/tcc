@@ -41,7 +41,6 @@ class Dashboards extends Controller
 
         $isMobile = $this->isMobileCheck();
 
-
         
         //$data_info  = $this->DashboardModel->get_Data();
         $status_arr = $this->MiscellaneousModel->details('status');
@@ -75,13 +74,14 @@ class Dashboards extends Controller
 
         #處理曲線圖的樣式
         $chart_mode = !empty($_GET['chart']) ? $_GET['chart'] : 1;
-        if ($chart_mode < 1 || $chart_mode > 6) {
+        if ($chart_mode < 1 || $chart_mode > 4) {
             $chart_mode = 1;
         } 
 
         $chat_mode_arr = $chart_mode;
 
-        $x_val = $this->DashboardModel->get_csv_first_column();
+        $x_val = $this->DashboardModel->get_csv_first_column($chart_mode);
+        
         if(!empty($x_val)){
             $x_val = array_slice($x_val, 1);
         }
@@ -104,7 +104,8 @@ class Dashboards extends Controller
                 array_shift($csvdata_arr['torque']);
                 array_shift($csvdata_arr['rpm']);
             }
- 
+            
+
             $temp_chart = $this->ChartData($chart_mode, $csvdata_arr,$chat_mode_arr,$x_val);       
         }
 
@@ -142,8 +143,16 @@ class Dashboards extends Controller
 
     public function get_new_data() {
 
-        $system_sn = isset($_POST['system_sn']) ? trim($_POST['system_sn']) : '';
-    
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+        $inputData = json_decode(file_get_contents('php://input'), true);
+
+        $system_sn = isset($inputData['system_sn']) ? trim($inputData['system_sn']) : '';
+        $chart_mode = isset($inputData['chart_mode']) ? (int)$inputData['chart_mode'] : 1;
+
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
     
@@ -152,7 +161,7 @@ class Dashboards extends Controller
     
         if (!empty($first_data)) {
             // 整理狀態說明與背景顏色
-            $first_data['fasten_status_explain'] = $status_arr[$first_data['fasten_status']] ?? '未知狀態';
+            $first_data['fasten_status_explain'] = $status_arr[$first_data['fasten_status']] ?? '';
     
             switch ($first_data['fasten_status']) {
                 case "4":
@@ -168,13 +177,16 @@ class Dashboards extends Controller
             }
     
             // 整理扭力單位說明
-            $first_data['fasten_status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']] ?? '未知單位';
+            $first_data['fasten_status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']] ?? '';
+
+            $first_data['error_massage_explanation'] = $error_message['ERR_'.$first_data['error_message']];
         }
 
 
         #即時曲線圖
         if(!empty($first_data)){
-            $chart_data = $this->live_line_chart();
+         
+            $chart_data = $this->live_line_chart($chart_mode);
             $first_data['chart_data'] = $chart_data;
         }
         
@@ -184,12 +196,12 @@ class Dashboards extends Controller
 
 
 
-    public function live_line_chart() {
+    public function live_line_chart($chart_mode) {
 
         //預設 
-        $chart_mode = 1; 
-    
-        $x_val = $this->DashboardModel->get_csv_first_column();
+        //$chart_mode = isset($_GET['chart']) ? (int)$_GET['chart'] : 1;
+
+        $x_val = $this->DashboardModel->get_csv_first_column($chart_mode);
         if (!empty($x_val)) {
             $x_val = array_slice($x_val, 1);
         }
@@ -253,6 +265,8 @@ class Dashboards extends Controller
             
             $chart_info['y_val'] = json_encode($csvdata_arr);
 
+            //var_dump($csvdata_arr);die();
+
             $temp_val = json_decode($chart_info['y_val']); 
 
             $chart_info['max'] = max($temp_val);
@@ -284,6 +298,19 @@ class Dashboards extends Controller
         }, $x_val);
 
         $chart_info['x_val'] = json_encode($x_val);
+
+
+        /*echo "<pre>";
+        print_r($chart_info);
+        echo "</pre>";
+        die();*/
+
+
+
+
+
+
+
         return $chart_info;
     }
 

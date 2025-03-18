@@ -549,6 +549,7 @@ if(isset($data['tool_info'])){
 }
 
 //operation error message
+
 $error_message['NO_ERROR'] = '';
 $error_message['ERR_CONT_TEMP'] = 'ERR-CONT-TEMP';
 $error_message['ERR_MOT_TEMP'] = 'ERR-MOT-TEMP';
@@ -580,3 +581,37 @@ $error_message['JOB_COMPLETED'] = 'JOB-COMPLETED';
 $error_message['WORKPIECE_RECOVERY'] = 'WORKPIECE-RECOVERY';
 $error_message['target_torque_empty'] = 'target_torque is a required field';
 $error_message['system_sync_warning_logout'] = 'The controller has not logged out';
+
+
+$error_message['ERR_0'] = '';
+$error_message['ERR_1'] = 'ERR-CONT-TEMP';
+$error_message['ERR_2'] = 'ERR-MOT-TEMP';
+$error_message['ERR_3'] = 'ERR-MOT-CURR';
+$error_message['ERR_4'] = 'ERR-MOT-PEAK-CURR';
+$error_message['ERR_5'] = 'ERR-HIGH-TORQUE';
+$error_message['ERR_6'] = 'ERR-DEADLOCK';
+$error_message['ERR_7'] = 'ERR-PROC-MINTIME';
+$error_message['ERR_8'] = 'ERR-PROC-MAXTIME';
+$error_message['ERR_9'] = 'ERR-ENCODER';
+$error_message['ERR_10'] = 'ERR-HALL';
+$error_message['ERR_11'] = 'ERR-BUSVOLT-HIGH';
+$error_message['ERR_12'] = 'ERR-BUSVOLT-LOW';
+$error_message['ERR_13'] = 'ERR-PROC-NA';
+$error_message['ERR_14'] = 'ERR-STEP-NA';
+$error_message['ERR_15'] = 'ERR-DMS-COMM';
+$error_message['ERR_16'] = 'ERR-FLASH';
+$error_message['ERR_17'] = 'ERR-FRAM';
+$error_message['ERR_18'] = 'ERR-HIGH-ANGLE';
+$error_message['ERR_19'] = 'ERR-PROTECT-CIRCUIT';
+$error_message['ERR_20'] = 'ERR-SWITCH-CONFIG';
+$error_message['ERR_21'] = 'ERR-STEP-NOT-REC';
+$error_message['ERR_22'] = 'ERR-TMD-FRAM';
+$error_message['ERR_23'] = 'ERR-LOW-TORQUE';
+$error_message['ERR_24'] = 'ERR-LOW-ANGLE';
+$error_message['ERR_25'] = 'ERR-PROC-NOT-FINISH';
+$error_message['ERR_26'] = 'SEQ-COMPLETED';
+$error_message['ERR_27'] = 'JOB-COMPLETED';
+$error_message['ERR_28'] = 'WORKPIECE-RECOVERY';
+$error_message['ERR_29'] = 'target_torque is a required field';
+$error_message['ERR_30'] = 'The controller has not logged out';
+

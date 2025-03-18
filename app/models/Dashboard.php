@@ -79,10 +79,8 @@ class Dashboard{
         return $rows;
     }
 
-    public function get_csv_first_column() {
+    public function get_csv_first_column($chart_mode) {
         
-        //ini_set('memory_limit', '256M');
-
         $first_column = array();
         $directory = "/mnt/ramdisk/ftp/"; // CSV 檔案所在目錄
     
@@ -109,15 +107,23 @@ class Dashboard{
         $lines = explode("\n", $csvdata_tmp); // 將檔案內容按行拆分
         $csv_array = array_map('str_getcsv', $lines); // 將每行轉換為 CSV 陣列格式
     
-        // 取得每行的第一個欄位 (即 A 欄位)
+        // 取得每行的第一個或第三個欄位，根據 $chart_mode 決定
         foreach ($csv_array as $subarray) {
             if (isset($subarray[0])) { // 確認該行有數據
-                $first_column[] = $subarray[0]; // 將 A 欄位資料加入結果陣列
+                if ($chart_mode == 4 && isset($subarray[2])) {
+                    // 如果 $chart_mode 是 4，則取第三個欄位 (索引 2)
+                    $first_column[] = $subarray[2];
+                } else {
+                    // 否則取第一個欄位 (索引 0)
+                    $first_column[] = $subarray[0];
+                }
             }
         }
     
-        return $first_column; // 回傳第一欄的資料陣列
+        //var_dump($first_column);die(); // 查看結果
+        return $first_column; // 回傳第一或第三欄的資料陣列
     }
+    
     
 
 
@@ -179,9 +185,6 @@ class Dashboard{
     }
     
 
-
-
-
     public function get_info($chat_mode) {
 
         $resultarr = array();
@@ -200,7 +203,6 @@ class Dashboard{
         });
         
         $latestFile = $files[0]; // 最新的 CSV 檔案
-
     
         // 讀取 CSV 檔案內容
         $csvdata_tmp = file_get_contents($latestFile);
@@ -223,15 +225,14 @@ class Dashboard{
         // 處理當前 chat_mode 的邏輯
         foreach ($csv_array as $subarray) {
             if (isset($subarray[$position])) { // 檢查該位置是否存在
-                if ($chat_mode == "5" || $chat_mode == "6") { // 如果 chat_mode 為 "5" 或 "6"
-                    if ($chat_mode == "6" && $position == 6) { 
-                        // 如果 chat_mode 為 "6" 且位置為 6，將第 1 欄資料加入 torque
-                        $resultarr['torque'][] = $subarray[1];
-                    } else {
-                        // 否則，將指定位置的資料加入 torque
-                        $resultarr['torque'][] = $subarray[$position];
-                    }
+                if ($chat_mode == "4") {
+                    // 如果 chat_mode 為 "4"，將每行的第二個欄位（即 $subarray[1]）加入結果
+                    $resultarr[] = $subarray[1];
+                } elseif ($chat_mode == "6" && $position == 6) {
+                    // 如果 chat_mode 為 "6" 且位置為 6，將第 1 欄資料加入 torque
+                    $resultarr['torque'][] = $subarray[1];
                 } else {
+                    // 否則，將指定位置的資料加入結果陣列
                     $resultarr[] = $subarray[$position];
                 }
             }
@@ -240,9 +241,6 @@ class Dashboard{
         return $resultarr; // 回傳結果陣列
     }
     
-
-
-
     public function get_data_csv() {
 
         #CSV 所在的目錄
