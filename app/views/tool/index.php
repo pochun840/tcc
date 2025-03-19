@@ -89,6 +89,13 @@
                             <div class="col-4 t1"><?php echo $text['Mac'];?>:</div>
                             <div class="col t1"><?php echo $data['MAC']; ?></div>
                         </div>
+
+                        <hr>
+
+                        <div class="row border-bottom" style="display: flex; justify-content: center; align-items: center; height: 150px;">
+                            <img src="img/qr_code.jpeg" style="width: 150px; height: 150px;">
+                        </div>
+
                 </div>
             </div>
         </div>
