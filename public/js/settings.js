@@ -244,30 +244,6 @@ function getCookie(name)
     return null;
 }
 
-function set_max_link(argument) {
-    var  max_user = document.getElementById('max_user').value;
-
-    if(max_user){
-        $.ajax({
-            url: "?url=Admins/EditMaxLink",
-            method: "POST",
-            data:{ 
-                max_user: max_user
-            },
-            success: function(response) {
-                console.log(response);
-                alert(response);
-                //history.go(0);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });   
-
-    }
-
-}
-
 function set_agent_ip(){
     var agent_server_ip = document.getElementById('agent_server_ip').value;
     agent_server_ip = agent_server_ip.replace(/\s*/g,""); 

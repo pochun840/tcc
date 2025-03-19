@@ -23,6 +23,15 @@ class Settings extends Controller
         $controller_info = $this->SettingModel->GetControllerInfo();
         $active_session = $this->AdminModel->GetActiveSession();
         $iDas_Vesion = $this->AdminModel->Get_Das_Config('idas_version');
+
+
+        $res = $this->ToolModel->GetControllerInfo();
+        if(!empty($res)){
+            $this->AdminModel->Set_TCC_DB_Version($res['devdb_version']);
+            //$this->AdminModel->Set_Agent_Ip($_SERVER['SERVER_ADDR']);
+      
+        }
+          
         $max_user = $this->AdminModel->Get_Das_Config('max_concurrent_users');
         $agent_server_ip = $this->AdminModel->Get_Das_Config('agent_server_ip');
         $agent_type = $this->AdminModel->Get_Das_Config('agent_type');
@@ -30,7 +39,6 @@ class Settings extends Controller
         $barcodes = $this->GetBarcodes();
         $unit_arr = $this->MiscellaneousModel->details('torque_unit');
         $barcode_mode = $this->MiscellaneousModel->details('barcode_mode');
-
      
         $data = array(
             'lang_arr'        => $lang,

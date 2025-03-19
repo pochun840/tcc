@@ -294,12 +294,36 @@
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_connect_setting'];?></div>
                 <div class="connect-scrollbar" id="style-connection">
                     <div class="connect-force-overflow">
-            
+                        <div class="col t1"><?php echo $text['system_connect_number'];?>:</div>
+                        <div class="row t2 border-bottom">
+                            <div class="col t2">
+                                <form id="edit_max_link" style="margin: 3px 0px; margin-left: 5%" method="post">
+                                    <input type="text" name="max_user" id="max_user" inputmode="numeric" pattern="[0-9]*" min='1' size="15" maxlength="2" required class="t3 w3-submit w3-border w3-round"><br>
+                                    <span><?php echo $text['system_connect_max_number'];?> : <?php echo $data['max_user']; ?></span>
+                                    <input type="button" onclick="set_max_link()" value="Save" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="col t1"><?php echo $text['system_connect_guest_pwd'];?>:</div>
+                        <div class="row t2 border-bottom">
+                            <div class="col t2">
+                                <form  style="margin: 3px 0px; margin-left: 5%">
+                                    <input type="password" id="new_password_guest" size="15" placeholder="<?php echo $text['system_new_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">&nbsp;
+                                    <input type="password" id="comfirm_password_guest" size="15" placeholder="<?php echo $text['system_confirm_password'];?>" maxlength="10" required class="t3 w3-submit w3-border w3-round">
+                                    <input type="button" value="Save" onclick ="button_save_password_gust()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                                </form>
+                            </div>        
+                        </div>          
+
                         <div class="col t1">Agent IP:</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
+                                <form id="agent_ip" style="margin: 3px 0px; margin-left: 5%" method="post">
                                     <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" required class="t3 w3-submit w3-border w3-round"><br>
-                                    <input type="button" value="Save" onclick="agent_ip_save()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                                    <span>Agent IP : <?php echo $data['agent_server_ip']; ?></span> 
+                                    <input type="button" value="Save" onclick="set_agent_ip()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                                </form>
                             </div>
                         </div>
 
@@ -336,6 +360,48 @@
 
                         <hr>
                         
+                        <form action="" method="post" style="padding: 0px 5px">
+                                <div style="position: relative; width: 100%;"> 
+                                    <div class="table-container" id="tableContainer" style="width: 100%;height: 190px;">
+                                        <table id="connection-table" class="setting-table w3-table w3-hoverable">
+                                            <thead  style="font-size: 3vmin;text-align: center;">
+                                                <tr class="w3-dark-grey">
+                                                    <th>
+                                                        <button type="button" class="w3-dark-grey" style=" color: #FFFFFF; border-radius: 5px; border-color: #888888">
+                                                            <img id="delete-btn" src="./img/delete.png">
+                                                        </button>
+                                                    
+                                                    </th>
+                                                    <th><?php echo $text['system_connect_username'];?></th>
+                                                    <th>IP</th>
+                                                    <th><?php echo $text['system_connect_timestamp'];?></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="font-size: 3vmin;text-align: center;">
+                                                <?php foreach($data['active_session'] as $key =>$val){?>
+                                                    <tr>
+                                                        <td style="text-align: center; vertical-align: middle;">
+                                                            <input class="form-check-input" type="checkbox" name="barcode_check" id="" value="<?php echo $val['id'];?>" style="zoom:1.2">
+                                                        </td>
+                                                        <td><?php echo $val['username'];?></td>
+                                                        <td><?php echo $val['ip'];?></td>
+                                                        <td><?php echo $val['timestamp'];?></td>
+
+                                                    </tr>
+                                                    
+                                                <?php }?>
+                                            </tbody>
+                                        </table>
+                                    </div> 
+                                    <div class="connection-btn-container">
+                                        <button type="button" class="connection-btn" onclick="changePage('connection-table', -1)">&#60;</button>
+                                        <button type="button" class="connection-btn" onclick="changePage('connection-table', 1)">&#62;</button>
+                                    </div>   
+                                </div>    
+                                <!--
+                                <input type="submit" value="<?php echo $text['Delete'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right; margin-top: 10px">                              
+                                -->
+                        </form>
                     </div>
                 </div>
             </div>
@@ -392,63 +458,7 @@ window.onload = function() {
     }
     //
     var tourque_unit = '<?php echo $data['controller_info']['device_torque_unit']?>'; // 3
-    
-    var agent_server_ip_current = '<?php echo $data['agent_server_ip']?>';
-    document.getElementById('agent_server_ip').value =agent_server_ip_current;
-
-    var agent_type_current = '<?php echo $data['agent_type']?>'; 
-    document.getElementById('agent_type_' + agent_type_current).checked = true; 
-
 };
-
-function agent_ip_save(){
-
-    var agent_server_ip = document.getElementById('agent_server_ip').value;
-    if(agent_server_ip){
-        document.getElementById('spinner').style.display = 'block';
-
-
-        $.ajax({
-            url: "?url=Admins/SetAgentIp",
-            method: "POST",
-            data:{ 
-                agent_server_ip: agent_server_ip
-            },
-            success: function(response) {
-                var responseData = JSON.parse(response);  // 解析返回的 JSON 資料                
-                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
-                setTimeout(function() {
-                    // 隱藏 'copyjob' 和 'spinner' 加載動畫
-                    document.querySelector(".main-content").classList.remove("overlay-active");
-                    document.getElementById('spinner').style.display = 'none';  
-
-                    sessionStorage.setItem('Connect_Setting', 'block');
-                    sessionStorage.setItem('Controller_Setting', 'none');
-
-                    // 顯示 alertify 彈跳視窗
-                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
-   
-                        history.go(0);
-                        
-                    });
-
-                    // 在 3 秒後自動關閉 alertify 彈跳視窗，並執行 AJAX 請求來刷新條形碼列表
-                    setTimeout(function() {
-                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                    
-                    }, 3000); // 延遲 3 秒
-                }, 1000); // 延遲 1000 毫秒
-                // 更新顯示的 max_user
-                document.getElementById('agent_server_ip').innerText = responseData.res_number;
-            },
-
-            error: function(xhr, status, error) {
-                
-            }
-        });   
-    }
-
-}
 
 
 function time_save(){

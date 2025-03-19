@@ -4,6 +4,7 @@ class Login{
     private $db;//condb control box
     private $db_dev;//devdb tool
     private $db_iDas;//iDas db
+    private $db_iDas_login;
 
     // 在建構子將 Database 物件實例化
     public function __construct(){
@@ -20,7 +21,7 @@ class Login{
     public function getpwd()
     {
         $sql = "SELECT operator_loginflag,operator_adminpwd,operator_priviledge FROM operator";
-        $statement = $this->db_iDas_login->prepare($sql);
+        $statement = $this->db_iDas->prepare($sql);
         $statement->execute();
 
         return $statement->fetch();

@@ -68,6 +68,19 @@ class Admin{
         return $results;
     }
 
+    
+    public function Set_TCC_DB_Version($devdb_version)
+    {
+        $sql = "UPDATE `config` SET config_value = :devdb_version WHERE config_name = 'match_tcc_db_version' ";
+        $statement = $this->db_iDas_login->prepare($sql);
+        $statement->bindValue(':devdb_version', $devdb_version);
+        $results = $statement->execute();
+
+        return $results;
+    }
+
+
+
     public function Set_Agent_Ip($ip)
     {
         $sql = "UPDATE `config` SET config_value = :ip WHERE config_name = 'agent_server_ip' ";

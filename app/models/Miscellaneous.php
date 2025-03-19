@@ -377,6 +377,15 @@ class Miscellaneous{
         echo json_encode($response);
     }   
 
+    public function generateErrorResponse_1($errorType, $errorMessage,$res_number) {
+        $response = array(
+            'res_type' => $errorType,
+            'res_msg'  => $errorMessage,
+            'res_number' => $res_number
+        );
+        echo json_encode($response);
+    }   
+
 
     
     public function get_tcc_controller_login(){

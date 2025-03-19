@@ -98,9 +98,9 @@ class Controller
     public function LoginCheck($value='')
     {
         if( PHP_OS_FAMILY == 'Linux'){
-            $con_db = new PDO('sqlite:/var/www/html/database/das.db'); 
+            $con_db = new PDO('sqlite:/var/www/html/database/itccdev.db'); 
         }else{
-            $con_db = new PDO('sqlite:../data.db'); 
+            $con_db = new PDO('sqlite:../itccdev.db'); 
         }
 
         $con_db->exec('set names utf-8'); 

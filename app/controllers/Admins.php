@@ -6,6 +6,7 @@ class Admins extends Controller
     public function __construct()
     {
         $this->AdminModel = $this->model('Admin');
+        $this->MiscellaneousModel = $this->model('Miscellaneous');
     }
 
     // 取得所有info
@@ -53,11 +54,17 @@ class Admins extends Controller
             $max_user = $_POST['max_user'];
             $result = $this->AdminModel->Edit_Max_Link($max_user);
             if($result){
+                $res_type = $max_user;
+                $res_number = $max_user;
                 $res_msg = 'Edit: Number of Connection  success';
+                $this->MiscellaneousModel->generateErrorResponse_1('Succes', $res_msg,$res_number);
+
             }else{
+                $res_type = $max_user;
+                //$res_number = $max_user;
                 $res_msg = 'Edit: Number of Connection  fail';
+                $this->MiscellaneousModel->generateErrorResponse_1('Error', $res_msg,$res_number);
             }
-            echo $res_msg;
         }
     }
 
@@ -100,16 +107,23 @@ class Admins extends Controller
     {
         $result = false;
         $error_message = '';
-        if (isset($_POST['ip']) ) {
-            $ip = $_POST['ip'];
+        if (isset($_POST['agent_server_ip']) ) {
+            $ip = $_POST['agent_server_ip'];
             $result = $this->AdminModel->Set_Agent_Ip($ip);
         }
+
         if($result){
+            $res_ip = $ip;
             $res_msg = 'Edit: IP  success';
+            $this->MiscellaneousModel->generateErrorResponse_1('Succes', $res_msg,$res_ip);
+
         }else{
+            $res_ip = $ip;
             $res_msg = 'Edit: IP  fail';
+            $this->MiscellaneousModel->generateErrorResponse_1('Error', $res_msg,$res_ip);
         }
-        echo $res_msg;
+
+      
 
       
     }
