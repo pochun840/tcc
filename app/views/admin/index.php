@@ -235,6 +235,7 @@
             },
         }).done(function(result) { //成功且有回傳值才會執行
             $('#overlay').addClass('hidden');
+
             if(result.server_status == "true"){
                 document.getElementById('s_status').innerHTML = work_icon;
             }else{
