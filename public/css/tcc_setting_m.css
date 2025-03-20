@@ -305,7 +305,7 @@ select
 }
 
 @media screen and (orientation: landscape) {
-    .barcode-scrollbar {
+    .connect-scrollbar {
         height: 40vh !important; /* Tăng chiều cao khi quay ngang */
     }
 }

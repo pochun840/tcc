@@ -131,9 +131,15 @@ th, td
 .scrollbar
 {
     float: left;
-    height: calc(100vh - 220px);
+    height: calc(100vh - 340px);
     width: 100%;
     overflow-y: scroll;
+}
+
+@media screen and (orientation: landscape) {
+    .scrollbar {
+        height: 38vh !important; /* Tăng chiều cao khi quay ngang */
+    }
 }
 
 .force-overflow

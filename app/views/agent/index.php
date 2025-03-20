@@ -63,8 +63,9 @@
         <div class="footer">
             <div class="w3-center">
                 <!-- <button class="custom-btn btn-12" onclick="change_page('previous')"><span style="font-size: 24px">&#60;</span><span>Prev</span></button> -->
-                <button type="button" class="custom-btn btn-13" onclick="open_das()"><span style="font-size: 24px">&#8629;</span><span>Open</span></button>
+                <!--<button type="button" class="custom-btn btn-13" onclick="open_das()"><span style="font-size: 24px">&#8629;</span><span>Open</span></button>-->
                 <!-- <button class="custom-btn btn-14" onclick="change_page('next')"><span style="font-size: 24px">&#62;</span><span>Next</span></button> -->
+                <button type="button" class="custom-btn btn-13" onclick="window.location.href='?url=Dashboards'"><span style="font-size: 24px">&#8629;</span><span>Open</span></button>
                 <button class="custom-btn btn-15" onclick="window.location.href='?url=Dashboards'"><span style="font-size: 24px">&#8678;</span><span>Back</span></button>
             </div>
         </div>

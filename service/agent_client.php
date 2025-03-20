@@ -12,7 +12,6 @@ use function Swoole\Coroutine\run;
 // $Year = date("Y");// data db 用西元年命名
 // $data_db_name = "data".$Year.".db";
 // $db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); //鎖附結果DB
-///var/www/html/database
 
 $db_iDas = new PDO('sqlite:/var/www/html/database/itccdev.db'); //das設定DB
 
@@ -71,7 +70,7 @@ function GetLastResult(){
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
         if(file_exists('/var/www/html/database/tcccon.db')){
-            $db_tcscon = new PDO('sqlite:/var/www/html/database/tccccon.db'); //鎖附結果DB
+            $db_tcscon = new PDO('sqlite:/var/www/html/database/tcccon.db'); //鎖附結果DB
             $result = $db_tcscon->query("SELECT * FROM device");
             $device_info = $result->fetch(PDO::FETCH_ASSOC);
             $row['device_name'] = $device_info['device_name'];
