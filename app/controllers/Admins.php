@@ -103,46 +103,55 @@ class Admins extends Controller
     }
 
     //
-    public function SetAgentIp()
-    {
-        $result = false;
-        $error_message = '';
-        if (isset($_POST['agent_server_ip']) ) {
+    public function SetAgentIp(){
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+        if (isset($_POST['agent_server_ip'])) {
             $ip = $_POST['agent_server_ip'];
             $result = $this->AdminModel->Set_Agent_Ip($ip);
         }
 
         if($result){
             $res_ip = $ip;
-            $res_msg = 'Edit: IP  success';
+            $res_msg = $text['Edit'].' IP:'.$res_ip."  ".$text['success'];
             $this->MiscellaneousModel->generateErrorResponse_1('Succes', $res_msg,$res_ip);
 
         }else{
             $res_ip = $ip;
-            $res_msg = 'Edit: IP  fail';
+            $res_msg = $text['Edit'].' IP:'.$res_ip."  ".$text['fail'];
             $this->MiscellaneousModel->generateErrorResponse_1('Error', $res_msg,$res_ip);
         }
-
-      
-
-      
     }
 
     //
-    public function SetAgentType()
-    {
-        $result = false;
+    public function SetAgentType(){
+
+        $file = $this->MiscellaneousModel->lang_load();
+
+        if(!empty($file)){
+            include $file;
+        }
+
         if (isset($_POST['agent_type']) && $_POST['agent_type']>=0 && $_POST['agent_type'] <=2 ) {
             $agent_type = $_POST['agent_type'];
             $result = $this->AdminModel->Set_Das_Config('agent_type',$agent_type);
         }
-        
+
         if($result){
-            $res_msg = 'Edit: AgentType  success';
+            $res_ip = $agent_type;
+            $res_msg = $text['Edit'].' AgentType:'.$agent_type."  ".$text['success'];
+            $this->MiscellaneousModel->generateErrorResponse_1('Succes', $res_msg,$res_ip);
+
         }else{
-            $res_msg = 'Edit: AgentType  fail';
+            $res_ip = $agent_type;
+            $res_msg = $text['Edit'].' AgentType:'.$agent_type."  ".$text['fail'];
+            $this->MiscellaneousModel->generateErrorResponse_1('Error', $res_msg,$res_ip);
         }
-        echo $res_msg;
+
     }
 
     public function AgentTest()
@@ -180,13 +189,13 @@ class Admins extends Controller
         sleep(1);
 
         if ($agent_type == 1) {
-            $this->StartService("/var/www/html/tcc/service/agent_client.php");
+            $this->StartService("/var/www/html/tccidas/service/agent_client.php");
         }
 
         if ($agent_type == 2) {
-            $this->StartService("/var/www/html/tcc/service/agent_server.php");
+            $this->StartService("/var/www/html/tccidas/service/agent_server.php");
             sleep(1);
-            $this->StartService("/var/www/html/tcc/service/agent_client.php");
+            $this->StartService("/var/www/html/tccidas/service/agent_client.php");
         }
 
         $message['server_status'] = $this->ProcessCheck('agent_server.php');//1.檢測server.php

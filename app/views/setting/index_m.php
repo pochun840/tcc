@@ -390,7 +390,6 @@ window.onload = function() {
         document.getElementById('Controller_Setting').style.display = "none";
         
     }
-    //
     var tourque_unit = '<?php echo $data['controller_info']['device_torque_unit']?>'; // 3
     
     var agent_server_ip_current = '<?php echo $data['agent_server_ip']?>';
@@ -401,21 +400,69 @@ window.onload = function() {
 
 };
 
-function agent_ip_save(){
+function agent_type_save(){
 
-    var agent_server_ip = document.getElementById('agent_server_ip').value;
-    if(agent_server_ip){
+    var agent_type = document.querySelector('input[name="agent_type"]:checked').value;
+    if(agent_type){
+        document.querySelector(".main-content").classList.add("overlay-active");
         document.getElementById('spinner').style.display = 'block';
 
+        $.ajax({
+            url: "?url=Admins/SetAgentType",
+            method: "POST",
+            data:{ 
+                agent_type: agent_type
+            },
+            success: function(response) {
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg);
+                
+                setTimeout(function() {
+                    alertify.closeAll(); 
+                    document.getElementById('spinner').style.display = 'none';
+                    document.querySelector(".main-content").classList.remove("overlay-active"); 
+                }, 3000); 
+            },
+            
+            error: function(xhr, status, error) {
+                
+            }
+        });   
+    }
+
+}
+
+function agent_ip_save() {
+    var language = getCookie('language') || 'en-us'; 
+    var agent_server_ip = document.getElementById('agent_server_ip').value;
+
+    // 正規表達式：檢查 IPv4 位址的格式是否正確
+    var ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+    // 錯誤提示訊息
+    var errorMessage = {
+        'en-us': "Please enter a valid IP address.",
+        'zh-tw': "請輸入有效的 IP 地址。",
+        'zh_cn': "请输入有效的 IP 地址。"  
+    };
+
+    // 如果有填寫 IP，且格式符合正規表達式
+    if (agent_server_ip && ipRegex.test(agent_server_ip)) {  
+        
+        // 顯示加載動畫
+        document.getElementById('spinner').style.display = 'block';
 
         $.ajax({
             url: "?url=Admins/SetAgentIp",
             method: "POST",
-            data:{ 
+            data: { 
                 agent_server_ip: agent_server_ip
             },
             success: function(response) {
-                var responseData = JSON.parse(response);  // 解析返回的 JSON 資料                
+                var responseData = JSON.parse(response); 
+
+                console.log(responseData);  
+                
                 // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                 setTimeout(function() {
                     // 隱藏 'copyjob' 和 'spinner' 加載動畫
@@ -425,29 +472,27 @@ function agent_ip_save(){
                     sessionStorage.setItem('Connect_Setting', 'block');
                     sessionStorage.setItem('Controller_Setting', 'none');
 
-                    // 顯示 alertify 彈跳視窗
                     alertify.alert(responseData.res_type, responseData.res_msg, function() {
-   
-                        history.go(0);
-                        
+                        history.go(0); 
                     });
-
-                    // 在 3 秒後自動關閉 alertify 彈跳視窗，並執行 AJAX 請求來刷新條形碼列表
                     setTimeout(function() {
-                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                    
-                    }, 3000); // 延遲 3 秒
-                }, 1000); // 延遲 1000 毫秒
-                // 更新顯示的 max_user
+                        alertify.closeAll(); 
+                    }, 3000); 
+                }, 1000); 
+                
                 document.getElementById('agent_server_ip').innerText = responseData.res_number;
             },
 
             error: function(xhr, status, error) {
-                
             }
-        });   
+        });
+    } else {
+        alertify.alert("Error", language === 'en-us' ? errorMessage.en : (language === 'zh-tw' ? errorMessage.zh : errorMessage.zh_cn), function() {
+            setTimeout(function() {
+                alertify.closeAll();  
+            }, 3000); 
+        });
     }
-
 }
 
 

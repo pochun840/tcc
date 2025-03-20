@@ -244,30 +244,6 @@ function getCookie(name)
     return null;
 }
 
-function set_agent_ip(){
-    var agent_server_ip = document.getElementById('agent_server_ip').value;
-    agent_server_ip = agent_server_ip.replace(/\s*/g,""); 
-    if(agent_server_ip){
-        $.ajax({
-            url: "?url=Admins/SetAgentIp",
-            method: "POST",
-            data:{ 
-                ip: agent_server_ip
-            },
-            success: function(response) {
-                console.log(response);
-                alert(response);
-                //history.go(0);
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });   
-
-    }
-
-}
-
 function set_agent_type(argument) {
     var  agent_type = document.querySelector('input[name="agent_type"]:checked').value;
     if(agent_type ){
@@ -290,36 +266,6 @@ function set_agent_type(argument) {
  
 }
 
-function StatusCheck(action) {
-    var work_icon = '<svg height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M9.001.666A8.336 8.336 0 0 0 .668 8.999c0 4.6 3.733 8.334 8.333 8.334s8.334-3.734 8.334-8.334S13.6.666 9 .666Zm0 15a6.676 6.676 0 0 1-6.666-6.667A6.676 6.676 0 0 1 9 2.333a6.676 6.676 0 0 1 6.667 6.666A6.676 6.676 0 0 1 9 15.666Zm-1.666-4.833L5.168 8.666 4.001 9.833l3.334 3.333L14 6.499l-1.166-1.166-5.5 5.5Z" fill="#1E8E3E" fill-rule="evenodd"></path></svg>';
-    var not_work_icon = '<svg height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M11.16 5.666 9 7.824 6.843 5.666 5.668 6.841l2.158 2.158-2.158 2.159 1.175 1.175 2.158-2.159 2.159 2.159 1.175-1.175-2.159-2.159 2.159-2.158-1.175-1.175ZM9 .666A8.326 8.326 0 0 0 .668 8.999a8.326 8.326 0 0 0 8.333 8.334 8.326 8.326 0 0 0 8.334-8.334A8.326 8.326 0 0 0 9 .666Zm0 15a6.676 6.676 0 0 1-6.666-6.667A6.676 6.676 0 0 1 9 2.333a6.676 6.676 0 0 1 6.667 6.666A6.676 6.676 0 0 1 9 15.666Z" fill="#D93025" fill-rule="evenodd"></path></svg>';
-
-    var url = '?url=Admins/AgentTest';
-    if(action == 'start'){
-        url = '?url=Admins/StartAgent';
-    }
-    if(action == 'stop'){
-        url = '?url=Admins/CloseAgent';
-    }
-
-    if(action ){
-        $.ajax({
-            url: url,
-            method: "POST",
-            data:{ 
-           
-            },
-            success: function(response) {
-                console.log(response);
-        
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });   
-    }
-
-}
 
 function idas_update() {
     var ff = document.querySelector('#file-uploader').files;

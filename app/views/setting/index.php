@@ -290,7 +290,7 @@
                                 <label class="form-check-label" for="agent_type_2">Server</label>
                             </div>
 
-                            <input type="button" onclick="set_agent_type()" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                            <input type="button" onclick="agent_type_save()" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                         </form>
                     </div>
                     <div class="row">
@@ -367,24 +367,102 @@ window.onload = function() {
 
 };
 
-function agent_ip_save(){
 
-    var agent_server_ip = document.getElementById('agent_server_ip').value;
-    if(agent_server_ip){
+function StatusCheck(action) {
+    var work_icon = '<svg height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M9.001.666A8.336 8.336 0 0 0 .668 8.999c0 4.6 3.733 8.334 8.333 8.334s8.334-3.734 8.334-8.334S13.6.666 9 .666Zm0 15a6.676 6.676 0 0 1-6.666-6.667A6.676 6.676 0 0 1 9 2.333a6.676 6.676 0 0 1 6.667 6.666A6.676 6.676 0 0 1 9 15.666Zm-1.666-4.833L5.168 8.666 4.001 9.833l3.334 3.333L14 6.499l-1.166-1.166-5.5 5.5Z" fill="#1E8E3E" fill-rule="evenodd"></path></svg>';
+    var not_work_icon = '<svg height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M11.16 5.666 9 7.824 6.843 5.666 5.668 6.841l2.158 2.158-2.158 2.159 1.175 1.175 2.158-2.159 2.159 2.159 1.175-1.175-2.159-2.159 2.159-2.158-1.175-1.175ZM9 .666A8.326 8.326 0 0 0 .668 8.999a8.326 8.326 0 0 0 8.333 8.334 8.326 8.326 0 0 0 8.334-8.334A8.326 8.326 0 0 0 9 .666Zm0 15a6.676 6.676 0 0 1-6.666-6.667A6.676 6.676 0 0 1 9 2.333a6.676 6.676 0 0 1 6.667 6.666A6.676 6.676 0 0 1 9 15.666Z" fill="#D93025" fill-rule="evenodd"></path></svg>';
+
+    var url = '?url=Admins/AgentTest';
+    if(action == 'start'){
+        url = '?url=Admins/StartAgent';
+    }
+    if(action == 'stop'){
+        url = '?url=Admins/CloseAgent';
+    }
+
+    if(action ){
+        $.ajax({
+            url: url,
+            method: "POST",
+            data:{ 
+           
+            },
+            success: function(response) {
+                console.log(response);
+        
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });   
+    }
+
+}
+
+
+
+function agent_type_save(){
+
+    var agent_type = document.querySelector('input[name="agent_type"]:checked').value;
+    if(agent_type){
+        document.querySelector(".main-content").classList.add("overlay-active");
         document.getElementById('spinner').style.display = 'block';
 
+        $.ajax({
+            url: "?url=Admins/SetAgentType",
+            method: "POST",
+            data:{ 
+                agent_type: agent_type
+            },
+            success: function(response) {
+                var responseData = JSON.parse(response);
+                alertify.alert(responseData.res_type, responseData.res_msg);
+                
+                setTimeout(function() {
+                    alertify.closeAll(); 
+                    document.getElementById('spinner').style.display = 'none';
+                    document.querySelector(".main-content").classList.remove("overlay-active"); 
+                }, 3000); 
+            },
+            
+            error: function(xhr, status, error) {
+                
+            }
+        });   
+    }
+
+}
+
+function agent_ip_save() {
+    var language = getCookie('language') || 'en-us'; 
+    var agent_server_ip = document.getElementById('agent_server_ip').value;
+
+    // 正規表達式：檢查 IPv4 位址的格式是否正確
+    var ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+    // 錯誤提示訊息
+    var errorMessage = {
+        'en-us': "Please enter a valid IP address.",
+        'zh-tw': "請輸入有效的 IP 地址。",
+        'zh_cn': "请输入有效的 IP 地址。"  
+    };
+
+    // 如果有填寫 IP，且格式符合正規表達式
+    if (agent_server_ip && ipRegex.test(agent_server_ip)) {  
+        
+        // 顯示加載動畫
+        document.getElementById('spinner').style.display = 'block';
 
         $.ajax({
             url: "?url=Admins/SetAgentIp",
             method: "POST",
-            data:{ 
+            data: { 
                 agent_server_ip: agent_server_ip
             },
             success: function(response) {
-                var responseData = JSON.parse(response);  // 解析返回的 JSON 資料
+                var responseData = JSON.parse(response); 
 
-                console.log(responseData);  // 在控制台輸出整個 responseData，確保 max_user 存在並有值
-                
+                console.log(responseData);  
                 
                 // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                 setTimeout(function() {
@@ -395,31 +473,30 @@ function agent_ip_save(){
                     sessionStorage.setItem('Connect_Setting', 'block');
                     sessionStorage.setItem('Controller_Setting', 'none');
 
-                    // 顯示 alertify 彈跳視窗
                     alertify.alert(responseData.res_type, responseData.res_msg, function() {
-   
-                        history.go(0);
-                        
+                        history.go(0); 
                     });
-
-
-                    // 在 3 秒後自動關閉 alertify 彈跳視窗，並執行 AJAX 請求來刷新條形碼列表
                     setTimeout(function() {
-                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                    
-                    }, 3000); // 延遲 3 秒
-                }, 1000); // 延遲 1000 毫秒
-                // 更新顯示的 max_user
+                        alertify.closeAll(); 
+                    }, 3000); 
+                }, 1000); 
+                
                 document.getElementById('agent_server_ip').innerText = responseData.res_number;
             },
 
             error: function(xhr, status, error) {
-                
             }
-        });   
+        });
+    } else {
+        alertify.alert("Error", language === 'en-us' ? errorMessage.en : (language === 'zh-tw' ? errorMessage.zh : errorMessage.zh_cn), function() {
+            setTimeout(function() {
+                alertify.closeAll();  
+            }, 3000); 
+        });
     }
-
 }
+
+
 
 
 function edit_password() {
@@ -490,8 +567,6 @@ function edit_password() {
 function time_save(){
     var newTime = document.getElementById('newTime').value;
     var device_id = <?php echo $data['controller_info']['device_id'];?>;
-
-    //console.log(newTime);
     if(newTime){
         $.ajax({
             url: "?url=Settings/edit_system_date",
@@ -514,94 +589,30 @@ function time_save(){
 }
 
 
-function set_max_user_button() {
-    var  max_user = document.getElementById('max_user').value;
 
-    let check = input_check();
-    if(check){
-        document.getElementById('spinner').style.display = 'block';
+function set_agent_type(argument) {
 
-
+    var  agent_type = document.querySelector('input[name="agent_type"]:checked').value;
+    if(agent_type ){
         $.ajax({
-            url: "?url=Admins/EditMaxLink",
+            url: "?url=Admins/SetAgentType",
             method: "POST",
             data:{ 
-                max_user: max_user
+                agent_type: agent_type
             },
             success: function(response) {
-                var responseData = JSON.parse(response);  // 解析返回的 JSON 資料
-
-                console.log(responseData);  // 在控制台輸出整個 responseData，確保 max_user 存在並有值
-                console.log(responseData.max_user);  // 檢查 max_user 是否存在且有值
-                
-                
-                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
-                setTimeout(function() {
-                    // 隱藏 'copyjob' 和 'spinner' 加載動畫
-                    document.querySelector(".main-content").classList.remove("overlay-active");
-                    document.getElementById('spinner').style.display = 'none';  
-
-                    sessionStorage.setItem('Connect_Setting', 'block');
-                    sessionStorage.setItem('Controller_Setting', 'none');
-
-                    // 顯示 alertify 彈跳視窗
-                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
-   
-                        history.go(0);
-                        
-                    });
-
-
-                    // 在 3 秒後自動關閉 alertify 彈跳視窗，並執行 AJAX 請求來刷新條形碼列表
-                    setTimeout(function() {
-                        alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                    
-                    }, 3000); // 延遲 3 秒
-                }, 1000); // 延遲 1000 毫秒
-                // 更新顯示的 max_user
-                document.getElementById('final_max_user').innerText = responseData.res_number;
-            },
-
-            error: function(xhr, status, error) {
-                
-            }
-        });   
-    }
-
-}
-
-
-function button_save_password_gust(){
-
-    var device_id = <?php echo $data['controller_info']['device_id'];?>;
-
-    var pass_guest1 = document.getElementById('new_password_guest').value;
-    var pass_guest2 = document.getElementById('comfirm_password_guest').value;
-
-    //正規化 密碼格式(1個英文+1個數字,長度:4)
-    var pattern = /^(?=.*[A-Za-z])(?=.*\d).{4,}$/;
-    if(pass_guest1 == pass_guest2 && pattern.test(pass_guest1)){
-        $.ajax({
-            url: "?url=Admins/EditGuestPwd",
-            method: "POST",
-            data:{ 
-                device_id: device_id,
-                new_password: pass_guest1
-
-            },
-            success: function(response) {
+                console.log(response);
                 alert(response);
-                history.go(0);
+                //history.go(0);
             },
             error: function(xhr, status, error) {
                 
             }
         });   
-    }else{
-        alert('密碼格式不符合要求');
     }
-    
+ 
 }
+
 
 
 /*const fileUploader = document.querySelector('#file-uploader');
@@ -709,39 +720,7 @@ function OpenButton(ButtonMode){
         document.getElementById('bnt2').classList.remove("active");
         document.getElementById('bnt1').classList.remove("active");
     }
-    else
-    {
-        //alert("Function ["+ ButtonMode +"] is under constructing ...");
-    }
 }
-
-function input_check() {
-
-    let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
-
-    let conditions = [
-        { id: 'max_user', pattern: /^[0-9]+$/, min: 1, max: 30 },
-        
-        
-
-    ];
-
-    let isFormValid = true;
-
-    conditions.forEach(function(input) {
-        var element = document.getElementById(input.id);
-        if (input.id !== 'barcode_content') {
-            element.nextElementSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
-        }
-
-        if (!validateInput(element, input.pattern, input.min, input.max)) {
-            isFormValid = false;
-        }
-    });
-
-    return isFormValid;
-}
-
 
 function input_check_savebarcode() {
 
@@ -751,9 +730,6 @@ function input_check_savebarcode() {
         { id: 'barcode_content', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'barcode_mask_from', pattern: /^[0-9]+$/, min: 1, max: 54 },
         { id: 'barcode_mask_count', pattern: /^[0-9]+$/, min: 1, max: 54 },
-        //{ id: 'max_user', pattern: /^[0-9]+$/, min: 1, max: 30 },
-        
-        
 
     ];
 

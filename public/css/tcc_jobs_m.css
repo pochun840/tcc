@@ -181,7 +181,8 @@ th, td
 {
     display: flex;
     justify-content: space-around;
-    padding: 0px 30%;
+    padding: 0px 0px;
+    font-size: 3vmin;
 }
 
 .buttonbox input

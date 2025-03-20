@@ -156,7 +156,7 @@ th, td
 {
     display: flex;
     justify-content: space-around;
-    padding: 0px 30%;
+    padding: 0px 15%;
 }
 
 .buttonbox input

@@ -69,8 +69,8 @@ class Admin{
     }
 
     
-    public function Set_TCC_DB_Version($devdb_version)
-    {
+    public function Set_TCC_DB_Version($devdb_version){
+
         $sql = "UPDATE `config` SET config_value = :devdb_version WHERE config_name = 'match_tcc_db_version' ";
         $statement = $this->db_iDas_login->prepare($sql);
         $statement->bindValue(':devdb_version', $devdb_version);
@@ -81,18 +81,20 @@ class Admin{
 
 
 
-    public function Set_Agent_Ip($ip)
-    {
-        $sql = "UPDATE `config` SET config_value = :ip WHERE config_name = 'agent_server_ip' ";
+    public function Set_Agent_Ip($ip) {
+        
+        $sql = "UPDATE `config` SET config_value = :ip WHERE config_name = 'agent_server_ip'";
+        // 準備語句並執行
         $statement = $this->db_iDas_login->prepare($sql);
         $statement->bindValue(':ip', $ip);
         $results = $statement->execute();
-
+    
         return $results;
     }
+    
 
-    public function Set_Das_Config($config_name,$value)
-    {
+    public function Set_Das_Config($config_name,$value){
+        
         //check config_name exist 
         $sql = "SELECT COUNT(*) as count FROM  `config` WHERE config_name = :config_name ";
         $statement = $this->db_iDas_login->prepare($sql);

@@ -32,12 +32,10 @@
                 <button class="menu-item pink" id="tool" onclick="window.location.href='?url=Tools/index'"><span style="visibility: hidden;">Tool</span></button>
                 
                 <button class="menu-item PaleGreen" id="setting" onclick="window.location.href='?url=Settings/index'"><span style="visibility: hidden;">Setting</span></button>
-                <button class="menu-item lime" id="agent" onclick="window.location.href='?url=Agents'"><span style="visibility: hidden;">Agent</span></button>
-               
+                
                 <?php if($_SESSION['privilege'] == 'admin'){ ?>
                     <?php if($data['agent_type'] == '2'){ ?>
-                            <!--<button class="menu-item lime" id="" style="font-size: 24px" onclick="window.location.href='?url=Agents'">Agent</button>-->
-                            <!--<button class="menu-item lime" id="agent" style="font-size: 24px" ><span style="visibility: hidden;">Agent</span></button>-->
+                            <button class="menu-item lime" id="agent" style="font-size: 24px" onclick="window.location.href='?url=Agents'"><span style="visibility: hidden;">Agent</span></button>
                     <?php } ?>
                         <button class="menu-item indigo" id="load" onclick="DB_sync_idas_load('C2D')"><span style="visibility: hidden;">Load</span></button>
                         <button class="menu-item deep-orange" id="save" onclick="DB_sync_idas('D2C')"><span style="visibility: hidden;">Save</span></button>

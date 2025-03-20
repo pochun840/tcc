@@ -1,7 +1,8 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_agent.css" type="text/css">
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/agent.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_agent.css" type="text/css">
 
 
 <div class="container">
@@ -95,16 +96,20 @@
           { index: 1, status: "N-m", color: "" },
           { index: 2, status: "Kgf-cm", color: "" },
           { index: 3, status: "In-lbs", color: "" },
+          { index: 4, status: "CN.m", color: "" },
         ];
   const device_type = [
-          { index: 0, status: "<?php echo DEVICE_TYPE_7; ?>", color: "" },
-          { index: 1, status: "<?php echo DEVICE_TYPE_7; ?>", color: "" },
-          { index: 2, status: "<?php echo DEVICE_TYPE_7; ?>", color: "" },
-          { index: 3, status: "<?php echo DEVICE_TYPE_7; ?>", color: "" },
-          { index: 4, status: "<?php echo DEVICE_TYPE_7; ?>", color: "" },
-          { index: 5, status: "<?php echo DEVICE_TYPE_7; ?>", color: "" },
-          { index: 6, status: "<?php echo DEVICE_TYPE_7; ?>", color: "" },
+          { index: 0, status: "<?php echo DEVICE_TYPE_0; ?>", color: "" },
+          { index: 1, status: "<?php echo DEVICE_TYPE_1; ?>", color: "" },
+          { index: 2, status: "<?php echo DEVICE_TYPE_2; ?>", color: "" },
+          { index: 3, status: "<?php echo DEVICE_TYPE_3; ?>", color: "" },
+          { index: 4, status: "<?php echo DEVICE_TYPE_4; ?>", color: "" },
+          { index: 5, status: "<?php echo DEVICE_TYPE_5; ?>", color: "" },
+          { index: 6, status: "<?php echo DEVICE_TYPE_6; ?>", color: "" },
           { index: 7, status: "<?php echo DEVICE_TYPE_7; ?>", color: "" },
+          { index: 8, status: "<?php echo DEVICE_TYPE_8; ?>", color: "" },
+          { index: 9, status: "<?php echo DEVICE_TYPE_9; ?>", color: "" },
+          { index: 10, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
         ];
   // 用于跟踪IP到表格行的映射
   const ipToTableRow = new Map();
@@ -123,19 +128,23 @@
           try {
               const data = JSON.parse(jsonMessage);
 
+              //console.log(data);
+
               // 检查IP是否在映射中
               if (ipToTableRow.has(data.client_ip)) {
                   // 如果IP已存在，更新现有行
                   const row = ipToTableRow.get(data.client_ip);
+
+          
                   // row.cells[0].textContent = 1;
                   row.cells[1].textContent = device_type[data.device_type].status;
                   row.cells[2].textContent = data.device_name;
                   row.cells[3].textContent = data.client_ip;
                   row.cells[4].textContent = data.data_time;
                   row.cells[5].textContent = data.job_id;
-                  row.cells[6].textContent = data.sequence_id;
+                  row.cells[6].textContent = data.seq_id;
                   row.cells[7].textContent = data.fasten_torque;
-                  row.cells[8].textContent = torque_unit[data.torque_unit].status;
+                  row.cells[8].textContent = torque_unit[data.step_tor_unit].status;
                   row.cells[9].textContent = data.fasten_angle;
                   row.cells[10].textContent = data.max_screw_count;
                   row.cells[11].textContent = data.last_screw_count;
@@ -153,15 +162,16 @@
                   // 如果IP不存在，创建一行
                   const table = document.getElementById("data-table").getElementsByTagName('tbody')[0];
                   const row = table.insertRow();
+
                   row.insertCell(0).textContent = ipToTableRow.size+1;
                   row.insertCell(1).textContent = device_type[data.device_type].status;
                   row.insertCell(2).textContent = data.device_name;
                   row.insertCell(3).textContent = data.client_ip;
                   row.insertCell(4).textContent = data.data_time;
                   row.insertCell(5).textContent = data.job_id;
-                  row.insertCell(6).textContent = data.sequence_id;  
+                  row.insertCell(6).textContent = data.seq_id;  
                   row.insertCell(7).textContent = data.fasten_torque;
-                  row.insertCell(8).textContent = torque_unit[data.torque_unit].status;
+                  row.insertCell(8).textContent = torque_unit[data.step_tor_unit].status;
                   row.insertCell(9).textContent = data.fasten_angle;
                   row.insertCell(10).textContent = data.max_screw_count;
                   row.insertCell(11).textContent = data.last_screw_count;
