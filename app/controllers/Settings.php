@@ -1181,11 +1181,29 @@ class Settings extends Controller
     
         // 檢查操作系統並處理檔案上傳
         if (PHP_OS_FAMILY === 'Linux') {
-            // 如果是 Linux，這裡可以加入 Linux 上的特殊處理邏輯
-            // 例如：設定檔案的權限等操作
+
+            $destination = '/var/www/html/database/' . $new_file_name;
+
+            // 確保目標目錄存在
+            if (!is_dir('/var/www/html/database/')) {
+                mkdir('/var/www/html/database/', 0777, true);
+            }
+    
+            // 嘗試將上傳的檔案移動到新的位置並重命名
+            $result = move_uploaded_file($_FILES['file']['tmp_name'], $destination);
+    
+            // 檢查檔案是否成功上傳
+            if ($result) {
+                $res_type = 'Success';
+                $res_msg = 'File uploaded and renamed successfully to ' . $new_file_name . ' in Linux environment.';
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);  // 假設有這個成功的回應方法
+            } else {
+                $res_type = 'Error';
+                $res_msg = 'Failed to move the uploaded file in Linux environment.';
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+            }
 
 
-            
         } else {
             // 在非 Linux 系統中，將上傳的檔案移動到指定路徑
             $destination = "../" . $new_file_name; // 需要替換的檔案位置
