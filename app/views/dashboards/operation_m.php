@@ -192,7 +192,7 @@ input:disabled
                             </tbody>
                     </table>
                 <?php } ?>
-                    <div id="chart" style="max-width: 100%; height: 290px;"></div>
+                    <div id="chart" align='center' style="max-width: 100%; height: 290px;"></div>
                 </div>                         
             </div>
         </div>
