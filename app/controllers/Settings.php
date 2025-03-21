@@ -5,6 +5,7 @@ class Settings extends Controller
     private $SettingModel;
     private $AdminModel;
     private $ToolModel;
+    private $MiscellaneousModel;
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
@@ -260,7 +261,6 @@ class Settings extends Controller
 
     public function control_setting(){
 
-
         $file = $this->MiscellaneousModel->lang_load();
         if(!empty($file)){
             include $file;
@@ -419,9 +419,9 @@ class Settings extends Controller
                 //echo json_encode(array('status' => 'success', 'message' => 'Database exists.'));
                 $cfgContent = file_get_contents($file);
             
-                if (strpos($cfgContent, 'table - device') !== false) {
+                /*if (strpos($cfgContent, 'table - device') !== false) {
                     $cfgContent = preg_replace('/table - device.*?\n/', '', $cfgContent);
-                }
+                }*/
 
             } else {
                 
@@ -436,9 +436,9 @@ class Settings extends Controller
 
             $cfgContent = file_get_contents($file);
             
-            if (strpos($cfgContent, 'table - device') !== false) {
+            /*if (strpos($cfgContent, 'table - device') !== false) {
                 $cfgContent = preg_replace('/table - device.*?\n/', '', $cfgContent);
-            }          
+            }*/          
         }
 
                     
@@ -1146,7 +1146,68 @@ class Settings extends Controller
         }
     }
 
-    public function Import_Config(){
+    public function Import_Config() {
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+        // 初始化
+        $result = '';
+        
+        // 檢查是否有上傳檔案
+        if (empty($_FILES) || !isset($_FILES['file'])) {
+            $res_type = 'Error';
+            $res_msg = 'No file uploaded.';
+            $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+            exit();
+        }
+    
+        // 檢查檔案名稱
+        $file_name = $_FILES['file']['name'];
+        $file_info = pathinfo($file_name);
+    
+        // 檢查檔案的副檔名是否為 .cfg
+        if (!isset($file_info['extension']) || strtolower($file_info['extension']) !== 'cfg') {
+            $res_type = 'Error';
+            $res_msg = 'The uploaded file is not a .cfg file.';
+            $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+            exit();
+        }
+    
+        // 指定目標文件名
+        $new_file_name = 'idas_data.db';  // 新檔案名稱，不管原檔案名稱如何
+    
+        // 檢查操作系統並處理檔案上傳
+        if (PHP_OS_FAMILY === 'Linux') {
+            // 如果是 Linux，這裡可以加入 Linux 上的特殊處理邏輯
+            // 例如：設定檔案的權限等操作
+
+
+            
+        } else {
+            // 在非 Linux 系統中，將上傳的檔案移動到指定路徑
+            $destination = "../" . $new_file_name; // 需要替換的檔案位置
+    
+            // 嘗試將上傳的檔案移動到新的位置並重命名
+            $result = move_uploaded_file($_FILES['file']['tmp_name'], $destination);
+    
+            // 檢查檔案是否成功上傳
+            if ($result) {
+                $res_type = 'Success';
+                $res_msg = 'File uploaded and renamed successfully to ' . $new_file_name . '.';
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);  // 假設有這個成功的回應方法
+            } else {
+                $res_type = 'Error';
+                $res_msg = 'Failed to move the uploaded file.';
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+            }
+        }
+    }
+
+    
+    public function Import_Config11(){
 
         $file_location = '';
         $result = '';
@@ -1154,7 +1215,15 @@ class Settings extends Controller
         if(empty($_FILES)){
             echo json_encode(["Error" => 'no file']);
             exit();
+        }else{
+
+            var_dump($_FILES['name']);
+            die();
         }
+
+
+
+
 
 
         if( PHP_OS_FAMILY == 'Linux'){

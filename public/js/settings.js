@@ -98,33 +98,6 @@ function Export_SystemConfig(argument) {
     xhr.send();
 }
 
-function Import_SystemConfig(){
-
-    var bbs = document.getElementById("import-file-uploader").files[0];
-    var form = new FormData();
-    form.append("file", bbs)
-    var url = '?url=Settings/Import_Config';        
-
-    if(bbs == undefined){
-        
-    }else{
-        $.ajax({ // 提醒
-            type: "POST",
-            processData: false,
-            cache: false,
-            contentType: false,
-            data: form,
-            dataType: "json",
-            url: url,
-            beforeSend: function() {
-                $('#overlay').removeClass('hidden');
-            },
-        }).done(function(result) { //成功且有回傳值才會執行
-            $('#overlay').addClass('hidden');
-            document.getElementById("import-file-uploader").value = '';
-        });
-    }
-}
 
 function Firmware_Update() {
     var bb_file = document.getElementById("firmware-file-uploader").files[0];
