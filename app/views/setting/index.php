@@ -257,7 +257,7 @@
                     </div>
                 </div>
 
-                <div style="text-align: center;margin-top: 50px;">
+                <div style="text-align: center;margin-top: 30px;">
                     <button class="all-btn w3-button w3-border w3-round-large" onclick="update_barcode()" ><?php echo $text['save'];?></button>&nbsp;&nbsp;
                     <button class="all-btn w3-button w3-border w3-round-large" onclick="delete_barcode()" ><?php echo $text['delete_text'];?></button>
                 </div>               

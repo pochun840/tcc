@@ -27,7 +27,6 @@ function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 3000) 
 function updateDataOnPage(data) {
 
     if (!data) return;
-
     const systemSnField = document.getElementById('data_time');
     if (systemSnField) {
         // 设置输入框的值

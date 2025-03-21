@@ -83,6 +83,31 @@
     background-color: #0d6efd;
 }
 
+.divMode 
+{
+    font-size: 2vmin;
+    height: calc(100vh - 180px);
+    margin: 4px 0px;
+    background-color: #FCFCFC;
+    box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.2);
+
+    width: 100%;
+    overflow: auto; /* Ẩn thanh cuộn */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Vẫn cho phép cuộn nhưng ẩn thanh cuộn */
+.divMode::-webkit-scrollbar {
+    display: none; /* Ẩn thanh cuộn trên Chrome, Safari */
+}
+
+.divMode {
+    -ms-overflow-style: none;  /* Ẩn thanh cuộn trên IE, Edge */
+    scrollbar-width: none;  /* Ẩn thanh cuộn trên Firefox */
+}
+
+/*
 .divMode
 {
     border-radius: 10px;
@@ -92,6 +117,7 @@
     background-color: #FCFCFC;
     box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.2);    
 }
+*/
 
 select
 {
