@@ -635,8 +635,8 @@ class Settings extends Controller
 
 
 
-    //把  /var/www/html/database/data.db 備份為 /var/www/html/database/data_bk.db
-    //並把 data_bk.db 再另存一個.db 檔名為iDas_data.db
+    //把  /var/www/html/database/tcccon.db 備份為 /var/www/html/database/tcccon_bk.db
+    //並把 tcccon_bk.db 再另存一個.db 檔名為iDas_data.db
     public function Sync_check_db() {
 
         $file = $this->MiscellaneousModel->lang_load();
@@ -652,17 +652,30 @@ class Settings extends Controller
 
         $Das_DB_Location = '/var/www/html/database/idas_data.db'; 
         $Con_DB_Location = '/var/www/html/database/tcccon.db'; 
+        $Backup_DB_Location = '/var/www/html/database/tcccon_bk.db'; // 備份資料庫的路徑
+        $destination = "/mnt/ramdisk/ftp/iDas.cfg";
     
         if (!empty($argument)) {
             if (PHP_OS_FAMILY == 'Linux' && $argument == 'D2C') {
     
+                //確認控制器資料庫是否存在
                 if (!file_exists($Con_DB_Location)) {
-                    
                     $res_msg = "Error: tcccon.db does not exist.";
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                     return;
                 }
-    
+
+
+                // 1. 先備份 tcccon.db 為 tcccon_bk.db
+                if (copy($Con_DB_Location, $Backup_DB_Location)) {
+                    $this->logMessage("tcccon.db backup successful to tcccon_bk.db");
+                } else {
+                    $res_msg = "Error: Failed to backup tcccon.db to tcccon_bk.db.";
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                    return;
+                }
+
+                //2. 複製控制器的資料庫到 iDas 使用的資料庫
                 if (copy($Con_DB_Location, $Das_DB_Location)) {
                     $res_msg = "SYNC".$text['success'] ;
                     $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
@@ -670,8 +683,45 @@ class Settings extends Controller
                     $res_msg  = "SYNC".$text['fail'];
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
+
+                //3.使用modbus
+                if (copy($Das_DB_Location, $destination)) {
+
+                    require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+                    $modbus = new ModbusMaster("127.0.0.1", "TCP");
+
+                    try {
+                        $modbus->port = 502;
+                        $modbus->timeout_sec = 10;
+                        $data = array(1, 26948, 24947);
+                        $dataTypes = array("INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT");
+
+                        // FC 3
+                        // $recData = $modbus->readMultipleRegisters(1, 4096, 6);
+
+                        // FC 16
+                        $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
+                        $this->logMessage('modbus write 506 ,array = '.implode("','",$data));
+                        $this->logMessage('modbus status:'.$modbus->status);
+                        //echo json_encode(array('error' => ''));
+                        exit();
+
+                    }
+                    catch (Exception $e) {
+                        // Print error information if any
+                        // echo $modbus;
+                        // echo $e;
+                        $this->logMessage('modbus write 506 fail');
+                        $this->logMessage('modbus status:'.$modbus->status);
+                        $this->logMessage('db_sync D2C end');
+                        //echo json_encode(array('error' => 'modbus error'));
+                        exit();
+                    }
+                }
             }
         }
+
+        
     }
     
     
