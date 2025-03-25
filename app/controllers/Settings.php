@@ -411,34 +411,43 @@ class Settings extends Controller
     public function export_sysytem_config()
     {
         if( PHP_OS_FAMILY == 'Linux'){
+            require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+            $modbus = new ModbusMaster("127.0.0.1", "TCP");
+            try {
+                $modbus->port = 502;
+                $data = array(1);
+                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
 
-            //檢查.idas_data.db 是否存在
-            $file = '/var/www/html/database/idas_data.db';
-            $filename = "data.cfg"; 
-            if (file_exists($file)) {
-                //echo json_encode(array('status' => 'success', 'message' => 'Database exists.'));
-                $cfgContent = file_get_contents($file);
+                // FC 16
+                $modbus->writeMultipleRegister(0, 505, $data, $dataTypes);
+                $this->logMessage('modbus write 505 ,array = '.implode("','", $data));
+                $this->logMessage('modbus status:'.$modbus->status);
             
-                /*if (strpos($cfgContent, 'table - device') !== false) {
-                    $cfgContent = preg_replace('/table - device.*?\n/', '', $cfgContent);
-                }*/
 
-            } else {
-                
-                echo json_encode(array('status' => 'error', 'message' => 'Database file not found.'));
+                header("Content-type: text/html; charset=utf-8");
+                $file="/mnt/ramdisk/FTP/tcccon.cfg"; // 實際檔案的路徑+檔名
+                $filename="tcscon.cfg"; // 下載的檔名
+                //指定類型
+                header("Content-type: ".filetype("$file"));
+                //指定下載時的檔名
+                header("Content-Disposition: attachment; filename=".$filename."");
+                //輸出下載的內容。
+                readfile($file);
+
+            } catch (Exception $e) {
+                $this->logMessage('modbus write 505 fail');
+                $this->logMessage('db_sync D2C end');
+                echo json_encode(array('error' => 'modbus error'));
                 exit();
             }
+   
             
         }else{
             
             $file = "../idas_data.db"; 
             $filename = "idas_data.cfg"; 
-
             $cfgContent = file_get_contents($file);
-            
-            /*if (strpos($cfgContent, 'table - device') !== false) {
-                $cfgContent = preg_replace('/table - device.*?\n/', '', $cfgContent);
-            }*/          
+                 
         }
 
                     

@@ -78,25 +78,7 @@ function cc_save(){
     }
 }
 
-function Export_SystemConfig(argument) {
 
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = "blob";
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var a = document.createElement("a");
-            a.href = window.URL.createObjectURL(xhr.response);
-            a.download = "idas_data.cfg"; 
-            a.style.display = "none";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-    };
-
-    xhr.open("GET", "?url=Settings/export_sysytem_config", true);
-    xhr.send();
-}
 
 
 function Firmware_Update() {
@@ -239,6 +221,7 @@ function set_agent_type(argument) {
  
 }
 
+
 function update_barcode(){
     var barcode_content    = document.getElementById("barcode_content").value;
     var barcode_mask_from  = document.getElementById("barcode_mask_from").value;
@@ -308,7 +291,12 @@ function update_barcode(){
         });   
     }
 
+    //document.querySelector(".main-content").classList.remove("overlay-active");
+
+
 }
+
+
 
 function delete_barcode() {
     var del_barcode_id = [];

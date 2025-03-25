@@ -871,4 +871,29 @@ function validateInput(element, pattern, min, max) {
 
     return isValid;
 }
+
+function Export_SystemConfig(argument) {
+
+    var xhr = new XMLHttpRequest();
+    // 設置回應類型為二進位檔案
+    xhr.responseType = "blob";
+    // 當下載完成時執行的函數
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // 創建一個 <a> 元素來觸發下載
+            var a = document.createElement("a");
+            a.href = window.URL.createObjectURL(xhr.response);
+            a.download = "tcccon.cfg"; // 下載時的檔案名稱
+            a.style.display = "none";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    };
+
+    xhr.open("GET", "?url=Settings/export_sysytem_config", true);
+    xhr.send();
+}
+
+
 </script>    
