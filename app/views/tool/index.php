@@ -28,10 +28,10 @@
                             <div class="col t1"><?php echo $data['tools_info']['tool_sn'];?></div>
                         </div>
             
-                        <div class="row border-bottom">
-                            <div class="col-4 t1"><?php echo $text['sw_version'];?>:</div>
+                        <!--<div class="row border-bottom">
+                            <div class="col-4 t1"><?php //echo $text['sw_version'];?>:</div>
                             <div class="col t1">---------</div>
-                        </div>
+                        </div>-->
                         <div class="row border-bottom">
                             <div class="col-4 t1"><?php echo $text['maintain_counts'];?>:</div>
                             <div class="col t1"><?php echo $data['tools_info']['tool_maintain_counts'];?></div>&nbsp;   
