@@ -239,37 +239,6 @@ function set_agent_type(argument) {
  
 }
 
-
-function idas_update() {
-    var ff = document.querySelector('#file-uploader').files;
-    var bb = document.getElementById("file-uploader").files[0];
-    var form = new FormData();
-    form.append("file", bb);
-
-    var url = '?url=Settings/iDas_Update';
-    if(url){
-        $.ajax({
-            type: "POST",
-            processData: false,
-            cache: false,
-            contentType: false,
-            data: form,
-            dataType: "json",
-            url: url,
-            success: function(response) {
-                console.log(response);
-                alert(response);
-                document.getElementById("file-uploader").value = '';
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });      
-    }
-   
-}
-
-
 function update_barcode(){
     var barcode_content    = document.getElementById("barcode_content").value;
     var barcode_mask_from  = document.getElementById("barcode_mask_from").value;
@@ -339,12 +308,7 @@ function update_barcode(){
         });   
     }
 
-    //document.querySelector(".main-content").classList.remove("overlay-active");
-
-
 }
-
-
 
 function delete_barcode() {
     var del_barcode_id = [];

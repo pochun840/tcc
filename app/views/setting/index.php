@@ -315,13 +315,16 @@
                         <input id="idas_software_version" name="idas_software_version" type="text" value="<?php echo $data['iDas_Vesion'];?>" style="height: 32px" class="form-control" value="" disabled>
                     </div>
                 </div>
-                <div class="row t2">
+
+                <!--<div class="row t2">
                     <div class="col-3 t1">Match Controller Version:</div>
                     <div class="col-3 t2">
                         <input id="match_control_version" name="match_control_version" type="text" value="" style="height: 32px" class="form-control" disabled>
                     </div>
-                </div>
+                </div>-->
+                
                 <div class="row t2">
+                    
                     <div class="col-3 t1">Upload file:</div>
                     <div class="col-3 t2">
                         <input type="file" id="file-uploader" data-target="file-uploader" accept=".pack" class="form-control" style="height: 32px">
@@ -568,7 +571,7 @@ function edit_password() {
     var new_password = document.getElementById('new_password').value;
     var confirm_password = document.getElementById('comfirm_password').value;
 
-    var language = getCookie('language') || 'en'; 
+    var language = getCookie('language') || 'en-us'; 
     var text_info, title, confirm_text;
     
     if(language == "zh-cn") {
@@ -679,44 +682,67 @@ function set_agent_type(argument) {
 }
 
 
-
-/*const fileUploader = document.querySelector('#file-uploader');
-
 function idas_update() {
-    let ff = document.querySelector('#file-uploader').files;
-    let bb = document.getElementById("file-uploader").files[0];
-    let form = new FormData();
-    form.append("file", bb)
 
-    let url = '?url=Settings/iDas_Update';
-    $.ajax({ // 提醒
-        type: "POST",
-        processData: false,
-        cache: false,
-        contentType: false,
-        data: form,
-        dataType: "json",
-        url: url,
-        beforeSend: function() {
-            $('#overlay').removeClass('hidden');
-        },
-    }).done(function(result) { //成功且有回傳值才會執行
-        $('#overlay').addClass('hidden');
+    var import_file = document.getElementById("file-uploader").files[0];
+    var form = new FormData();
+    form.append("file", import_file);
+    var url = '?url=Settings/iDas_Update';
 
-        if (result.message != '') {
-            Swal.fire({ // DB sync notice
-                title: 'Error',
-                text: result.message,
-            })
-        } else {
-            Swal.fire('', '', 'success');
-            setTimeout(function() {history.go(0)}, 2000);
-        }
-        document.getElementById("file-uploader").value = '';
-        
-    });
-}*/
+     // 語言設置
+     var language = getCookie('language') || 'en-us';
+    var text_info, title, confirm_text;
+    
+    if(language == "zh-cn") {
+        text_info = '您確定要導入IDAS更新包嗎？';
+        title = 'IDAS UPDATE';
+        confirm_text = '您確定要進行此操作嗎？';
+    } else if(language == "zh-tw") {
+        text_info = '您確定要導入IDAS更新包嗎？';
+        title = 'IDAS UPDATE';
+        confirm_text = '您確定要進行此操作嗎？';
+    } else {
+        text_info = 'Are you sure you want to import the IDAS update package ?';
+        title = 'IDAS UPDATE';
+        confirm_text = 'Are you sure you want to perform this action ?';
+    }
 
+    if (import_file) {
+        alertify.confirm(confirm_text, function(result) {
+            if (result) {
+                document.getElementById('spinner').style.display = 'block'; // 顯示加載動畫
+
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: form,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        var responseData = JSON.parse(response);
+
+                        setTimeout(function() {
+                            document.getElementById('spinner').style.display = 'none';
+                            alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                history.go(0); 
+                            });
+
+                            setTimeout(function() {
+                                alertify.closeAll(); 
+                            }, 3000);
+                        }, 1000);
+                    },
+                    error: function(xhr, status, error) {
+                        alertify.alert('Error', 'An error occurred while importing the configuration file.');
+                    }
+                });
+            }
+        });
+    } else {
+        alertify.alert(title, text_info); // 如果 import_file 沒有值，顯示提示訊息
+    }
+
+}
 function OpenButton(ButtonMode){
 
     if (ButtonMode == "Controller")
