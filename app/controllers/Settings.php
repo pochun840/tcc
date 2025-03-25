@@ -425,8 +425,8 @@ class Settings extends Controller
             
 
                 header("Content-type: text/html; charset=utf-8");
-                $file="/mnt/ramdisk/FTP/tcccon.cfg"; // 實際檔案的路徑+檔名
-                $filename="tcscon.cfg"; // 下載的檔名
+                $file="/mnt/ramdisk/ftp/tcccon.cfg"; // 實際檔案的路徑+檔名
+                $filename="tcccon.cfg"; // 下載的檔名
                 //指定類型
                 header("Content-type: ".filetype("$file"));
                 //指定下載時的檔名
@@ -1087,108 +1087,6 @@ class Settings extends Controller
         }
     }
 
-
-
-
-    /*public function iDas_Update_bk(){
-
-
-        if(empty($_FILES)){
-            echo json_encode(["message" => 'no file']);
-            exit();
-        }
-         
-        $filename = 'tcc_idas.pack';
-        $file_location = '';
-        $message = '';
-        if( PHP_OS_FAMILY == 'Linux'){
-            $file_location = '/mnt/ramdisk/';
-        }else{//windows暫不考慮升級，可能整包升級
-            $file_location = $_SERVER['DOCUMENT_ROOT'].'/';
-            //echo json_encode(["message" => 'not for windows']);
-            //exit();
-        }
-
-        if(empty($_FILES)){
-            echo json_encode(["message" => 'no file']);
-            exit();
-        }
-
-        if ( 0 < $_FILES['file']['error'] ) {
-            echo json_encode(["message" => $_FILES['file']['error']]);
-            exit();
-        } else {
-            //將檔案移到指定位置
-            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $file_location . $filename);
-        }
-
-        $extract_result = $this->Extract_File($file_location,$filename);
-        $file_path = $file_location.'tccidas/';
-
-
-        var_dump($file_location);
-        echo "<br>";
-        var_dump($filename);
-        echo "<br>";
-        var_dump($extract_result);
-        echo "<br>";
-        var_dump($file_path);
-        die();
-
-        
-        if (file_exists($file_path) && $extract_result) {
-            $str = file_get_contents($file_path); //將整個檔案內容讀入到一個字串中
-            $str = str_replace("\r\n", "<br />", $str);
-            $verify_data = json_decode($str,true);
-            $result = $verify_data;
-
-            $package_version = $verify_data['Package_Version'];
-            $match_gtcs_version = $verify_data['Match_GTCS_Version'];
-            $match_gtcs_db_version = $verify_data['Match_GTCS_DB_Version'];
-
-            $current_device_info = $this->SettingModel->get_update_info();
-
-            //tcc與tcc db版本與更新包相符才會將檔案升級
-            if( $match_gtcs_version == $current_device_info['device_version'] && $match_gtcs_db_version == $current_device_info['tcscondb_version'] ){
-                if( PHP_OS_FAMILY == 'Linux'){
-                    $destination = '/var/www/html/tccidas/';
-                }else{
-                    $destination = $file_location.'/tccidas';
-                }
-                exec("sudo chmod 777 -R /var/www/html/tccidas");
-
-
-                echo $file_location.'/package_temp/package/das';
-                die();
-
-                $this->copyFolder($file_location.'/package_temp/package/das',$destination); //複製資料夾
-                //sleep(1);
-                //exec("sync");//強制將ram寫回硬碟，避免控制器馬上關機時會遺失資料
-                //sleep(1);
-                
-                //update current idas version
-                $this->SettingModel->update_idas_vesrion($package_version);
-                $this->SettingModel->update_idas_match_gtcs_app_version($match_gtcs_version);
-                //update file permissions
-                exec("sudo chmod 777 -R /var/www/html/tccidas");
-
-            }else{
-                $message = 'version not match';
-            
-            }
-
-            $this->deleteFolder($file_location.'package_temp'); //刪除資料夾
-            unlink($file_location.''.$filename); //刪除檔案
-
-        }else{
-            $this->deleteFolder($file_location.'/package_temp'); //刪除資料夾
-            unlink($file_location.''.$filename); //刪除檔案
-            $message = 'wrong file';
-        }
-
-        echo json_encode(["message" => $message]);
-    }*/
-
     public function Extract_File($file_location,$filename){
 
         // $filename = 'update_package.pack';
@@ -1282,35 +1180,60 @@ class Settings extends Controller
             exit();
         }
     
-        // 指定目標文件名
-        $new_file_name = 'idas_data.db';  // 新檔案名稱，不管原檔案名稱如何
     
         // 檢查操作系統並處理檔案上傳
         if (PHP_OS_FAMILY === 'Linux') {
 
-            $destination = '/var/www/html/database/' . $new_file_name;
+            $destination = "/mnt/ramdisk/ftp/iDas.cfg";
+            //將檔案移到指定位置
+            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
 
-            // 確保目標目錄存在
-            if (!is_dir('/var/www/html/database/')) {
-                mkdir('/var/www/html/database/', 0777, true);
-            }
-    
-            // 嘗試將上傳的檔案移動到新的位置並重命名
-            $result = move_uploaded_file($_FILES['file']['tmp_name'], $destination);
-    
-            // 檢查檔案是否成功上傳
             if ($result) {
-                $res_type = 'Success';
-                $res_msg = 'File uploaded and renamed successfully to ' . $new_file_name . ' in Linux environment.';
-                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);  // 假設有這個成功的回應方法
+                require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+                $modbus = new ModbusMaster("127.0.0.1", "TCP");
+                try {
+                    $modbus->port = 502;
+                    $modbus->timeout_sec = 10;
+                    $data = array(1, 26948, 24947);
+                    $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+
+                    // FC 16
+                    $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
+                    $this->logMessage('modbus write 506 ,array = '.implode("','", $data));
+                    $this->logMessage('modbus status:'.$modbus->status);
+                    $this->logMessage('Import config end');
+                    //echo json_encode(array('error' => '231005','diff' => $diff));
+
+
+                    $res_type = 'Success';
+                    $res_msg  = 'DB import successful';
+                    $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+
+                    exit();
+
+                } catch (Exception $e) {
+                    // Print error information if any
+                    echo $modbus;
+                    echo $e;
+                    $this->logMessage('modbus write 506 fail');
+                    $this->logMessage('modbus status:'.$modbus->status);
+                    $this->logMessage('Import config end');
+                    echo json_encode(array('error' => 'modbus error','diff' => $diff));
+                    exit();
+                }
             } else {
-                $res_type = 'Error';
-                $res_msg = 'Failed to move the uploaded file in Linux environment.';
-                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+                $this->logMessage('copy db error');
+                $this->logMessage('Import config end');
+                echo json_encode(array('error' => 'copy db error','diff' => $diff));
+                exit();
             }
 
 
         } else {
+
+            // 指定目標文件名
+            $new_file_name = 'idas_data.db';  // 新檔案名稱，不管原檔案名稱如何
+
             // 在非 Linux 系統中，將上傳的檔案移動到指定路徑
             $destination = "../" . $new_file_name; // 需要替換的檔案位置
     
@@ -1330,82 +1253,6 @@ class Settings extends Controller
         }
     }
 
-    
-    public function Import_Config11(){
-
-        $file_location = '';
-        $result = '';
-
-        if(empty($_FILES)){
-            echo json_encode(["Error" => 'no file']);
-            exit();
-        }else{
-
-            var_dump($_FILES['name']);
-            die();
-        }
-
-
-
-
-
-
-        if( PHP_OS_FAMILY == 'Linux'){
-            /*$this->logMessage('Import config start');
-
-            $destination = "/mnt/ramdisk/FTP/iDas.cfg";
-            //將檔案移到指定位置
-            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
-
-            if ($result) {
-                require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-                $modbus = new ModbusMaster("127.0.0.1", "TCP");
-                try {
-                    $modbus->port = 502;
-                    $modbus->timeout_sec = 10;
-                    $data = array(1, 26948, 24947);
-                    $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
-
-                    // FC 16
-                    $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
-                    $this->logMessage('modbus write 506 ,array = '.implode("','", $data));
-                    $this->logMessage('modbus status:'.$modbus->status);
-                    $this->logMessage('Import config end');
-                    echo json_encode(array('error' => ''));
-                    exit();
-
-                } catch (Exception $e) {
-                    // Print error information if any
-                    // echo $modbus;
-                    // echo $e;
-                    $this->logMessage('modbus write 506 fail');
-                    $this->logMessage('modbus status:'.$modbus->status);
-                    $this->logMessage('Import config end');
-                    echo json_encode(array('error' => 'modbus error'));
-                    exit();
-                }
-            } else {
-                $this->logMessage('copy db error');
-                $this->logMessage('Import config end');
-                echo json_encode(array('error' => 'copy db error'));
-                exit();
-            }*/
-
-        }else{
-            // $this->logMessage('Import config start');
-            $destination = "../data.db";
-            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
-            if($result){
-                echo json_encode(["error" => '']);
-                exit();
-            }else{
-                echo json_encode(["error" => 'fail']);
-                exit();
-            }            
-        }
-
-        echo json_encode(["message" => $result]);
-    }
 
     public function FirmwareUpdate(){
 

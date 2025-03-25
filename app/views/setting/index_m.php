@@ -871,6 +871,66 @@ function Export_SystemConfig(argument) {
     xhr.send();
 }
 
+function Import_SystemConfig() {
+    var import_file = document.getElementById("import-file-uploader").files[0];
+    var form = new FormData();
+    form.append("file", import_file);
+    var url = '?url=Settings/Import_Config';
+    
+    // 語言設置
+    var language = getCookie('language') || 'en';
+    var text_info, title, confirm_text;
+    
+    if(language == "zh-cn") {
+        text_info = '您確定要導入資料庫檔案嗎？';
+        title = '導入配置';
+        confirm_text = '您確定要進行此操作嗎？';
+    } else if(language == "zh-tw") {
+        text_info = '您確定要導入資料庫檔案嗎？';
+        title = '導入配置';
+        confirm_text = '您確定要進行此操作嗎？';
+    } else {
+        text_info = 'Are you sure you want to import the database file?';
+        title = 'Import Configuration';
+        confirm_text = 'Are you sure you want to perform this action?';
+    }
+
+    if (import_file) {
+        alertify.confirm(confirm_text, function(result) {
+            if (result) {
+                document.getElementById('spinner').style.display = 'block'; // 顯示加載動畫
+
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: form,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        var responseData = JSON.parse(response);
+
+                        setTimeout(function() {
+                            document.getElementById('spinner').style.display = 'none';
+                            alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                history.go(0); 
+                            });
+
+                            setTimeout(function() {
+                                alertify.closeAll(); 
+                            }, 3000);
+                        }, 1000);
+                    },
+                    error: function(xhr, status, error) {
+                        alertify.alert('Error', 'An error occurred while importing the configuration file.');
+                    }
+                });
+            }
+        });
+    } else {
+        alertify.alert(title, text_info); // 如果 import_file 沒有值，顯示提示訊息
+    }
+}
+
 
 
 // Bacode & Connection Change page
