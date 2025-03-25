@@ -742,6 +742,7 @@ class Settings extends Controller
 
         $Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
         $Con_DB_Location = '/var/www/html/database/tcccon.db'; //控制器
+        $Copy_Destination = '/mnt/ramdisk/ftp/iDas.cfg'; 
 
         if(!empty($argument)){
             if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
@@ -771,6 +772,7 @@ class Settings extends Controller
                     $warning .= 'DB is different';
                 }
 
+                
 
                 $sourceFile = '/var/www/html/database/tcccon.db';
                 $backupFile = '/var/www/html/database/tcccon_bk.db';
@@ -785,6 +787,45 @@ class Settings extends Controller
                     $res_msg  = "SYNC".$text['fail'];
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                 }
+
+
+                //3.使用modbus
+                if ($res) {       
+                    if (copy($Das_DB_Location, $Copy_Destination)) {
+                        require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+                        $modbus = new ModbusMaster("127.0.0.1", "TCP");
+                        try {
+                            $modbus->port = 502;
+                            $modbus->timeout_sec = 10;
+                            $data = array(1, 26948, 24947);
+                            $dataTypes = array("INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT");
+    
+                            // FC 3
+                            // $recData = $modbus->readMultipleRegisters(1, 4096, 6);
+    
+                            // FC 16
+                            $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
+                            $this->logMessage('modbus write 506 ,array = '.implode("','",$data));
+                            $this->logMessage('modbus status:'.$modbus->status);
+                            //echo json_encode(array('error' => ''));
+                            exit();
+    
+                        }
+                        catch (Exception $e) {
+                            // Print error information if any
+                            // echo $modbus;
+                            // echo $e;
+                            $this->logMessage('modbus write 506 fail');
+                            $this->logMessage('modbus status:'.$modbus->status);
+                            $this->logMessage('db_sync D2C end');
+                            //echo json_encode(array('error' => 'modbus error'));
+                            exit();
+                        }
+
+                    }             
+                   
+                }
+
 
             }
         }
