@@ -680,8 +680,4 @@ function input_check_editjob() {
 
     return isFormValid;
 }
-
-
-
-
 </script>

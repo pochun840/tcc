@@ -84,49 +84,62 @@ class Data extends Controller
     public function exportData() {
         $input_check = true;
     
-        #檢查開始日期
+        // 檢查開始日期
         if (!empty($_POST['start_date']) && isset($_POST['start_date'])) {
-            $start_date = $_POST['start_date'] . "0";
+            // 使用 DateTime 類別來解析並格式化日期
+            try {
+                $start_date = new DateTime($_POST['start_date']);
+                $start_date = $start_date->format('Y-m-d H:i:s'); // 格式化為 'Y-m-d H:i:s'
+            } catch (Exception $e) {
+                $input_check = false;  // 如果日期格式錯誤，標示為無效
+            }
         } else {
             $input_check = false;
         }
     
-        #檢查結束日期
+        // 檢查結束日期
         if (!empty($_POST['end_date']) && isset($_POST['end_date'])) {
-            $end_date = $_POST['end_date'] . "0"; //00:00:00
-            $end_date = str_replace("00:00:00","23:59:59",$end_date);
+            try {
+                $end_date = new DateTime($_POST['end_date']);
+                $end_date = $end_date->format('Y-m-d H:i:s');  // 格式化為 'Y-m-d H:i:s'
+                // 將時間部分設置為 23:59:59
+                $end_date = str_replace("00:00:00", "23:59:59", $end_date);
+            } catch (Exception $e) {
+                $input_check = false;  // 如果日期格式錯誤，標示為無效
+            }
         } else {
             $input_check = false;
         }
     
-        #確認是否有選擇類型 
+    
+    
+        // 確認是否有選擇類型
         $expert_val = isset($_POST['expert_val']) ? $_POST['expert_val'] : "0";
     
         if ($input_check) {
             $unit_arr = $this->MiscellaneousModel->details('torque_unit');
             $status_arr = $this->MiscellaneousModel->details('status');
-
-            if (PHP_OS_FAMILY != 'Linux'){
+    
+            if (PHP_OS_FAMILY != 'Linux') {
                 $start_date = str_replace('-', "", $start_date);
                 $end_date = str_replace('-', "", $end_date);
-                
             }
-
+    
+            // 使用處理過的日期範圍來取得資料
             $dataset = $this->DataModel->get_range_data($start_date, $end_date);
-
-           
+    
+            // 取前 10000 條資料
             $dataset = array_slice($dataset, 0, 10000);
-
+    
+            // 給每一筆資料加上 torque_unit 和 fasten_status 的描述
             foreach ($dataset as $key => $val) {
                 $dataset[$key]['torque_unit'] = $unit_arr[$val['step_tor_unit']];
                 $dataset[$key]['fasten_status'] = $status_arr[$val['fasten_status']];
             }
-
-
     
-    
+            // 將資料導出為 CSV 或 ZIP 文件
             if ($dataset && $expert_val == "0") {
-               
+                // 導出為 CSV 格式
                 $csv_headers = array_keys($dataset[0]);
                 header('Content-Type: text/csv; charset=utf-8');
                 header('Content-Disposition: attachment; filename=tcc_data.csv');
@@ -141,7 +154,7 @@ class Data extends Controller
                 fclose($output);
                 exit();
             } elseif ($dataset && $expert_val == "1") {
-               
+                // 導出為 CSV 並壓縮成 ZIP 格式
                 $csv_content = '';
                 $csv_headers = array_keys($dataset[0]);
                 $csv_content .= implode(',', $csv_headers) . "\n";
@@ -150,6 +163,7 @@ class Data extends Controller
                     $csv_content .= implode(',', $row) . "\n";
                 }
     
+                // 創建 ZIP 文件並將 CSV 文件放入其中
                 $zip = new ZipArchive();
                 $zip_filename = tempnam(sys_get_temp_dir(), 'tcc_data') . '.zip';
     
@@ -171,6 +185,7 @@ class Data extends Controller
             echo "輸入參數不正確";
         }
     }
+    
     
 }
 ?>
