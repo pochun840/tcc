@@ -89,7 +89,7 @@ class Data extends Controller
             // 使用 DateTime 類別來解析並格式化日期
             try {
                 $start_date = new DateTime($_POST['start_date']);
-                $start_date = $start_date->format('Y-m-d H:i:s'); // 格式化為 'Y-m-d H:i:s'
+                $start_date = $start_date->format('Ymd H:i:s'); // 格式化為 'Y-m-d H:i:s'
             } catch (Exception $e) {
                 $input_check = false;  // 如果日期格式錯誤，標示為無效
             }
@@ -101,7 +101,7 @@ class Data extends Controller
         if (!empty($_POST['end_date']) && isset($_POST['end_date'])) {
             try {
                 $end_date = new DateTime($_POST['end_date']);
-                $end_date = $end_date->format('Y-m-d H:i:s');  // 格式化為 'Y-m-d H:i:s'
+                $end_date = $end_date->format('Ymd H:i:s');  // 格式化為 'Y-m-d H:i:s'
                 // 將時間部分設置為 23:59:59
                 $end_date = str_replace("00:00:00", "23:59:59", $end_date);
             } catch (Exception $e) {
@@ -120,10 +120,15 @@ class Data extends Controller
             $unit_arr = $this->MiscellaneousModel->details('torque_unit');
             $status_arr = $this->MiscellaneousModel->details('status');
     
-            if (PHP_OS_FAMILY != 'Linux') {
+            /*if (PHP_OS_FAMILY != 'Linux') {
                 $start_date = str_replace('-', "", $start_date);
                 $end_date = str_replace('-', "", $end_date);
-            }
+            }*/
+
+            echo $start_date;
+            echo "<br>";
+            echo $end_date;
+            //die();
     
             // 使用處理過的日期範圍來取得資料
             $dataset = $this->DataModel->get_range_data($start_date, $end_date);
