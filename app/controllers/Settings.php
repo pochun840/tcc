@@ -749,7 +749,7 @@ class Settings extends Controller
 
 
                 //判斷控制器是否有登出
-                $Controller_Info = $this->SettingModel->GetControllerInfo();
+                /*$Controller_Info = $this->SettingModel->GetControllerInfo();
                 if(!empty($Controller_Info)){
                     $user_logIn = $Controller_Info['user_logIn'];
                     $user_logIn = (int)$user_logIn;
@@ -759,7 +759,7 @@ class Settings extends Controller
                         exit();
                                 
                     }
-                }
+                }*/
 
 
                 //時間差異提醒
