@@ -270,6 +270,8 @@ $text['column_unit'] = '单位';
 $text['column_total'] = '总数';
 $text['column_count'] = '颗数';
 $text['column_status'] = '状态';
+$text['device_type'] = '设备类型';
+$text['device_name'] = '设备名称';
 
 $text['kgf.m'] = '公斤米';
 $text['N.m'] = '牛頓米';

@@ -7,6 +7,7 @@ class Agents extends Controller
     public function __construct()
     {
         $this->AdminModel = $this->model('Admin');
+        $this->MiscellaneousModel = $this->model('Miscellaneous');
     }
 
     // 取得所有info

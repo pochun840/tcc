@@ -284,6 +284,8 @@ $text['column_unit'] = 'Unit';
 $text['column_total'] = 'Total';
 $text['column_count'] = 'Count';
 $text['column_status'] = 'Status';
+$text['device_type'] = 'Device Type';
+$text['device_name'] = 'Device Name';
 
 $text['kgf.m'] = 'Kgf-m';
 $text['N.m'] = 'N-m';

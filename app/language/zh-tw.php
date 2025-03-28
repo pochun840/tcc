@@ -272,6 +272,8 @@ $text['column_unit'] = '單位';
 $text['column_total'] = '總數';
 $text['column_count'] = '顆數';
 $text['column_status'] = '狀態';
+$text['device_type'] = '設備類型';
+$text['device_name'] = '設備名稱';
 
 $text['kgf.m'] = '公斤公尺';
 $text['N.m'] = '牛頓公尺';

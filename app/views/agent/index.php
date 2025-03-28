@@ -17,8 +17,8 @@
     <div style="margin-top: 10px">
         <div id="menu">
             <a id="bnt1" onclick="OpenButton('agent')">Agent</a>
-            <a id="bnt2" onclick="OpenButton('button1')">Button2</a>
-            <a id="bnt3" onclick="OpenButton('button2')">Button3</a>
+            <!--<a id="bnt2" onclick="OpenButton('button1')">Button2</a>
+            <a id="bnt3" onclick="OpenButton('button2')">Button3</a>-->
         </div>
 
         <!-- Agent -->
@@ -28,19 +28,19 @@
                     <table id="data-table" class="container2">
                         <thead>
                             <tr>
-                                <th width="5%">No</th>
-                                <th width="10%">Device Type</th>
+                                <th width="5%"><?php echo $text['column_no'];?></th>
+                                <th width="10%"><?php echo $text['device_type'];?></th>
                                 <th width="14%">Device Name</th>
                                 <th width="10%">IP</th>
-                                <th width="12%">Date Time</th>
-                                <th width="6%">Job ID</th>
-                                <th width="6%">Seq ID</th>
-                                <th width="6%">Toque</th>
-                                <th width="6%">Unit</th>
-                                <th width="6%">Angle</th>
-                                <th width="6%">Total</th>
-                                <th width="6%">Count</th>
-                                <th width="15%">Status</th>
+                                <th width="12%"><?php echo $text['column_datetime'];?></th>
+                                <th width="6%"><?php echo $text['job_id'];?></th>
+                                <th width="6%"><?php echo $text['seq_id'];?></th>
+                                <th width="6%"><?php echo $text['torque'];?></th>
+                                <th width="6%"><?php echo $text['column_unit'];?></th>
+                                <th width="6%"><?php echo $text['Angle'];?></th>
+                                <th width="6%"><?php echo $text['column_total'];?></th>
+                                <th width="6%"><?php echo $text['column_count'];?></th>
+                                <th width="15%"><?php echo $text['column_status'];?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,7 +65,7 @@
                 <!-- <button class="custom-btn btn-12" onclick="change_page('previous')"><span style="font-size: 24px">&#60;</span><span>Prev</span></button> -->
                 <!--<button type="button" class="custom-btn btn-13" onclick="open_das()"><span style="font-size: 24px">&#8629;</span><span>Open</span></button>-->
                 <!-- <button class="custom-btn btn-14" onclick="change_page('next')"><span style="font-size: 24px">&#62;</span><span>Next</span></button> -->
-                <button type="button" class="custom-btn btn-13" onclick="window.location.href='?url=Dashboards'"><span style="font-size: 24px">&#8629;</span><span>Open</span></button>
+                <!--<button type="button" class="custom-btn btn-13" onclick="window.location.href='?url=Dashboards'"><span style="font-size: 24px">&#8629;</span><span>Open</span></button>-->
                 <button class="custom-btn btn-15" onclick="window.location.href='?url=Dashboards'"><span style="font-size: 24px">&#8678;</span><span>Back</span></button>
             </div>
         </div>
