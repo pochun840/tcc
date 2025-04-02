@@ -21,10 +21,15 @@ class Dashboards extends Controller
         $agent_type = $this->AdminModel->Get_Das_Config('agent_type');
         $device_info = $this->Device_Info();
 
+        $iDas_Vesion = $this->AdminModel->Get_Das_Config('idas_version');
+        $idas_online_version = $this->AdminModel->Get_Das_Config('idas_online_version');
+
         $data = [
             'isMobile' => $isMobile,
             'agent_type' => $agent_type,
             'device_info' => $device_info,
+            'iDas_Vesion' => $iDas_Vesion,
+            'idas_online_version' =>$idas_online_version
         ];
 
     

@@ -40,6 +40,12 @@
                 <?php } ?>
 
             </div>
+
+
+            <div class='bottom-right'>
+                <?php if (!empty($data['idas_online_version'])) echo "Version: {$data['idas_online_version']}"; ?>
+            </div>
+
         </div>
     </div>
 </div>
@@ -337,6 +343,14 @@ function DB_sync_idas_load(argument){
 
     .ajs-footer {
         height: 85px; /* 設定區塊的高度為50px */
+    }
+
+    .bottom-right {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        color: white;
+        font-size: 18px;
     }
 
             

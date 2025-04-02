@@ -42,9 +42,20 @@
                 <?php } ?>
 
             </div>
+
+            
         </div>
+
+        
     </div>
+
+    
 </div>
+
+<div class='bottom-right'>
+                <?php if (!empty($data['idas_online_version'])) echo "Version: {$data['idas_online_version']}"; ?>
+            </div>
+
 
 <style>
 .button-container 
@@ -298,6 +309,16 @@ function DB_sync_idas_load(argument){
     }
     #agent:hover {
         background: url("<?php echo $text['img_agent_hover']; ?>") no-repeat;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .bottom-right {
+            position: fixed; /* 固定在螢幕右下角 */
+            bottom: 10px;  /* 距離頁面底部 10px */
+            right: 10px;   /* 距離頁面右邊 10px */
+            color: white;
+            font-size: 18px;
+        }
     }
             
 </style>

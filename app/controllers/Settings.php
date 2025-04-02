@@ -747,21 +747,20 @@ class Settings extends Controller
         if(!empty($argument)){
             if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
 
-
                 //判斷控制器是否有登出
-                /*$Controller_Info = $this->SettingModel->GetControllerInfo();
+                $Controller_Info = $this->ToolModel->GetControllerInfo();
                 if(!empty($Controller_Info)){
                     $user_logIn = $Controller_Info['user_logIn'];
                     $user_logIn = (int)$user_logIn;
-                    if($user_logIn != 0){
+                    if($user_logIn == 1){
                         $res_msg  = $error_message['system_sync_warning_logout'];
                         $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                         exit();
                                 
                     }
-                }*/
+                }
 
-
+                
                 //時間差異提醒
                 if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
                     $notice = $text['system_sync_notice'].date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
