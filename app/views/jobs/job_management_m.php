@@ -388,6 +388,9 @@ window.onclick = function(event) {
 </script>
 <script>
 
+window.max_rpm_diff = "<?php echo $data['tools']['tool_maxrpm']?>";
+window.max_rpm_diff = "<?php echo $data['tools']['tool_minrpm']?>";
+
     
 var jobid ='';
 var old_jobname = '';
