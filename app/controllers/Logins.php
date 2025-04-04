@@ -6,6 +6,7 @@ class Logins extends Controller
     public function __construct()
     {
         $this->LoginModel = $this->model('Login');
+        $this->SettingModel = $this->model('Setting');
     }
 
     // 取得所有Jobs
@@ -40,7 +41,13 @@ class Logins extends Controller
             $authToken = hash('sha256', $password);
             
             if($this->verifyCredentials($authToken)){
+                
+                if (PHP_OS === 'Linux') {
+                    $this->SettingModel->login_db_load();
+                }
                 setcookie('auth_token', $authToken, time() + 600, '/');
+
+                
                 return true;
             }else{
                 // 用戶未登錄或身份驗證超時，跳轉到登錄頁面

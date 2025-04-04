@@ -472,4 +472,37 @@ class Setting{
         return true; // 成功完成所有操作
     }
 
+
+    public function login_db_load() {
+        // 設定資料庫目錄
+        
+        $dbDir = '/var/www/html/database';
+        
+        // 設定資料庫檔案路徑
+        $idasDataDb = $dbDir . '/idas_data.db';
+        $tccconDb = $dbDir . '/tcccon.db';
+    
+        // 檢查 idas_data.db 是否存在
+        if (!file_exists($idasDataDb)) {
+            // 如果 idas_data.db 不存在，則檢查 tcccon.db 是否存在
+            if (file_exists($tccconDb)) {
+                // 複製 tcccon.db 到 idas_data.db
+                if (copy($tccconDb, $idasDataDb)) {
+                    // 檔案成功複製，回傳 true
+                    return true;
+                } else {
+                    // 複製檔案失敗，回傳 false
+                    return false;
+                }
+            } else {
+                // 如果 tcccon.db 不存在，回傳 false
+                return false;
+            }
+        } else {
+            // 如果 idas_data.db 已存在，回傳 true（不需要複製）
+            return true;
+        }
+    }
+    
+
 }
