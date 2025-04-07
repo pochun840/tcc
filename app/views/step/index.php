@@ -1152,6 +1152,7 @@ function input_check_editstep(){
     let present_step_id = document.getElementById("edit_step_id").value;
     if (present_step_id == 1) {
         Tool_Min_RPM = 50;
+        //Tool_Max_RPM = 500;
     }
 
     let conditions = []; // 初始化為空數組
@@ -1225,6 +1226,7 @@ function input_check_savestep() {
     let present_step_id = document.getElementById("step_id").value;
     if (present_step_id === "") {
         Tool_Min_RPM = 50; 
+        //Tool_Max_RPM = 500;
     }
 
 
