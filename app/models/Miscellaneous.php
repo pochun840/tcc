@@ -255,7 +255,7 @@ class Miscellaneous{
         $new_TorqueUnit = [
             "kgf.m"  => 0,
             "N.m"    => 1,
-            "kgf.m"  => 2,
+            "kgf.cm"  => 2,
             "lbf.in" => 3,
             "cN.m"   => 4
         ];

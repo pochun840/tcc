@@ -96,6 +96,7 @@
                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col t2">
+                                <input type="text" id='step_id' name='step_id' value='<?php echo $data['count_records'];?>' style="display: none;">
                                 <select id="target_opt" name="target_opt" class="custom-file">
                                     <?php if($data['check'] == 1 || $data['counts_torque'] == 1 ){?>
                                         <?php foreach($data['target_option_change'] as $key => $val){?>
@@ -284,6 +285,7 @@
                          <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col t2">
+                                <input type="text" id='edit_step_id' name='edit_step_id' style="display: none;">
                                 <select id="edit_target_opt" name="edit_target_opt" class="custom-file" onchange="targetOptChangeHandler()">
                                     <?php foreach($data['target_option'] as $key => $val){?>
                                         <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
@@ -672,6 +674,7 @@
                     document.getElementById("edit_tor_lo").value = tor_lo;
                     document.getElementById("edit_ang_hi").value = ang_hi;
                     document.getElementById("edit_ang_lo").value = ang_lo;
+                    document.getElementById('edit_step_id').value =step_id;
 
 
                     var radioButtons_th_mode = document.getElementsByName("edit_th_mode");
@@ -699,7 +702,7 @@
         document.getElementById('newstep').style.display = 'block';
 
         // 設定預設值
-        document.getElementById('rpm').value = 200;
+        document.getElementById('rpm').value = 50;
         document.getElementById('th_tor').value = 0;
         document.getElementById('ds_tor').value = 0.3;
         document.getElementById('ds_speed').value = 100;
@@ -1110,6 +1113,13 @@
         let hi_angle_max = 9999;
         let hi_angle_min = 1;
 
+        // 如果 present_step_id == 1，將 Tool_Min_RPM 設為 50
+        let present_step_id = document.getElementById("edit_step_id").value;
+        if (present_step_id == 1) {
+            Tool_Min_RPM = 50;
+        }
+        
+
         let conditions = []; // 初始化為空數組
 
         // 檢查 downshift_OFF 是否被選中
@@ -1179,6 +1189,12 @@
         let Tool_Min_RPM = document.getElementById('tool_min_rpm').value;
         let hi_angle_max = 9999;
         let hi_angle_min = 1;
+
+        let present_step_id = document.getElementById("step_id").value;
+        if (present_step_id === "") {
+            Tool_Min_RPM = 50; 
+        }
+        
 
         let conditions = []; // 初始化為空數組
 

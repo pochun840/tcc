@@ -2,7 +2,7 @@
 function create_step() {
 
     document.getElementById('newstep').style.display = 'block';
-    document.getElementById('rpm').value = 200;
+    document.getElementById('rpm').value = 50;
     document.getElementById('th_tor').value = 0;
     document.getElementById('ds_tor').value = 0;
     document.getElementById('ds_speed').value =100;

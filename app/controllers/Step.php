@@ -1,4 +1,5 @@
 <?php
+//TCC M7設定step有一個規則, 在第一個step轉速最低都是可以設定到50
 
 class Step extends Controller
 {
@@ -57,7 +58,7 @@ class Step extends Controller
 
         $res_device = $this->SettingModel->GetControllerInfo();
         if(!empty($res_device)){
-            $step_torque_unit = $res_device['torque_unit'];
+            $step_torque_unit = $res_device['device_torque_unit'];
             $unit_name = $torque_unit[$step_torque_unit];
   
         }
@@ -101,6 +102,16 @@ class Step extends Controller
             $counts_torque = intval($check_torque[0]['counts']);
             //counts
         }
+
+        //20250407 新增特別需求 在第一個step轉速最低都是可以設定到50
+        if( $step_id ==1){
+            if(!empty($tools)){
+                $tools['tool_minrpm'] = 50;
+            }
+    
+        }
+        
+         
 
         $data = array(
             'isMobile' => $isMobile,
@@ -156,7 +167,7 @@ class Step extends Controller
             $tor_lo = isset($_POST['tor_lo'])? floatval($_POST['tor_lo']) : 0; 
             $ang_hi  = isset($_POST['ang_hi'])? intval($_POST['ang_hi']) : 0; 
             $ang_lo  = isset($_POST['lo_angle'])? intval($_POST['ang_lo']) : 0; 
-            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 200;
+            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 50;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
             $th_mode = isset($_POST['th_mode'])? intval($_POST['th_mode']) : 0;
             $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0.3; 
@@ -312,7 +323,7 @@ class Step extends Controller
             $tor_lo = isset($_POST['tor_lo'])? floatval($_POST['tor_lo']) : 0; 
             $ang_hi  = isset($_POST['ang_hi'])? intval($_POST['ang_hi']) : 0; 
             $ang_lo  = isset($_POST['ang_lo'])? intval($_POST['ang_lo']) : 0; 
-            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 200;
+            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 50;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
             $th_mode = isset($_POST['th_mode'])? intval($_POST['th_mode']) : 0;
             $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0.3; 
