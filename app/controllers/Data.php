@@ -11,28 +11,53 @@ class Data extends Controller
 
     // 取得所有Jobs
     public function index(){
-  
-        $type ='ALL';
+        
+        $type = 'ALL';
         $isMobile = $this->isMobileCheck();
-        $res_data = $this->DataModel->getData('ALL');
-        $res_data_ok = $this->DataModel->getData('OK');
-        $res_data_nok = $this->DataModel->getData('NOK');
+
+        // 取得當前年份
+        if (PHP_OS_FAMILY === 'Linux') {
+            $db_path = "/var/www/html/database/data".date('Y').".db";
+
+            // 檢查資料庫是否存在
+            $db_exists = file_exists($db_path);
+    
+            if ($db_exists) {
+                $res_data     = $this->DataModel->getData('ALL');
+                $res_data_ok  = $this->DataModel->getData('OK');
+                $res_data_nok = $this->DataModel->getData('NOK');
+            } else {
+                $res_data     = [];
+                $res_data_ok  = [];
+                $res_data_nok = [];
+            }
+
+        }else{
+            $res_data     = $this->DataModel->getData('ALL');
+            $res_data_ok  = $this->DataModel->getData('OK');
+            $res_data_nok = $this->DataModel->getData('NOK');
+            $db_exists = '';
+            $db_path = '';
+        }
+      
 
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
         $status_arr = $this->MiscellaneousModel->details('status');
         $device_info = $this->Device_Info();
-        $data = array(
-            'isMobile' => $isMobile,
-            'res_data' => $res_data,
-            'res_data_ok' => $res_data_ok,
-            'res_data_nok' => $res_data_nok,
-            'device_info' => $device_info,
-            'unit_arr' => $unit_arr,
-            'status_arr' => $status_arr
-        );
-        
-        $this->view('data/index', $data);
 
+        $data = array(
+            'isMobile'      => $isMobile,
+            'res_data'      => $res_data,
+            'res_data_ok'   => $res_data_ok,
+            'res_data_nok'  => $res_data_nok,
+            'device_info'   => $device_info,
+            'unit_arr'      => $unit_arr,
+            'status_arr'    => $status_arr,
+            'db_exists'     => $db_exists,
+            'db_path'       => $db_path
+        );
+
+        $this->view('data/index', $data);
     }
 
     public function search_info() {
