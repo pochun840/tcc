@@ -177,10 +177,12 @@
 
     function initializeChart() {
         // 取得 x 和 y 的數值
-        var x_data_val = <?php echo json_encode($data['chart_info']['x_val']); ?>;
-        var y_data_val = <?php echo json_encode($data['chart_info']['y_val']); ?>;
-        var x_title = '<?php echo addslashes($data['echart_name'][1]); ?>';
-        var y_title = '<?php echo addslashes($data['echart_name'][0]); ?>';
+        var x_data_val = <?php echo isset($data['chart_info']['x_val']) ? json_encode($data['chart_info']['x_val']) : 'null'; ?>;
+        var y_data_val = <?php echo isset($data['chart_info']['y_val']) ? json_encode($data['chart_info']['y_val']) : 'null'; ?>;
+
+        var x_title = '<?php echo isset($data['echart_name'][1]) ? addslashes($data['echart_name'][1]) : ''; ?>';
+        var y_title = '<?php echo isset($data['echart_name'][0]) ? addslashes($data['echart_name'][0]) : ''; ?>';
+
 
         // 檢查 x 和 y 的數值是否為空或 null，如果是則停止執行
         if (!x_data_val || !y_data_val || x_data_val.length === 0 || y_data_val.length === 0) {

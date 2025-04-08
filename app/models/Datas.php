@@ -62,14 +62,24 @@ class Datas{
     }
 
 
-    public function get_operation_info(){
-        
+    public function get_operation_info() {
+        if (is_null($this->db_data)) {
+            return null;
+        }
+    
         $sql = "SELECT * FROM data ORDER BY system_sn DESC LIMIT 1";
-        $statement = $this->db_data->prepare($sql);
-        $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC); 
-
-        return $result;
+    
+        try {
+            $statement = $this->db_data->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetch(PDO::FETCH_ASSOC); 
+    
+            return $result ?: null; // 沒資料也回傳 null
+        } catch (PDOException $e) {
+      
+            return null; // 發生錯誤也回傳 null
+        }
     }
+    
     
 }
