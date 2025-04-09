@@ -177,8 +177,8 @@
 
     function initializeChart() {
         // 取得 x 和 y 的數值
-        var x_data_val = <?php echo isset($data['chart_info']['x_val']) ? json_encode($data['chart_info']['x_val']) : 'null'; ?>;
-        var y_data_val = <?php echo isset($data['chart_info']['y_val']) ? json_encode($data['chart_info']['y_val']) : 'null'; ?>;
+        var x_data_val = <?= isset($data['chart_info']['x_val']) ? json_encode($data['chart_info']['x_val']) : 'null' ?>;
+        var y_data_val = <?= isset($data['chart_info']['y_val']) ? json_encode($data['chart_info']['y_val']) : 'null' ?>;
 
         var x_title = '<?php echo isset($data['echart_name'][1]) ? addslashes($data['echart_name'][1]) : ''; ?>';
         var y_title = '<?php echo isset($data['echart_name'][0]) ? addslashes($data['echart_name'][0]) : ''; ?>';

@@ -74,55 +74,54 @@ class Dashboards extends Controller
             #整理扭力單位
             $first_data['status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
 
-            #處理曲線圖的樣式
-            $chart_mode = !empty($_GET['chart']) ? $_GET['chart'] : 1;
-            if ($chart_mode < 1 || $chart_mode > 4) {
-                $chart_mode = 1;
-            } 
-
-            $chat_mode_arr = $chart_mode;
-
-            $x_val = $this->DashboardModel->get_csv_first_column($chart_mode);
-            
-            if(!empty($x_val)){
-                $x_val = array_slice($x_val, 1);
-            }
-
-            //取得Step1-4的 torque及 angle
-            //$other_data = $this->DashboardModel->get_csv_selected_columns($id);
-
-
-            #取得目前的曲線圖模式 制定曲線圖的座標名稱
-            $chart_menu_arr = $this->MiscellaneousModel->details('chart_menu');
-            $chart_mode_arr = $this->MiscellaneousModel->details('chart_mode');
-            $echart_name = explode("/",$chart_mode_arr[$chart_mode]);
-
-            $csvdata_arr = $this->DashboardModel->get_info($chart_mode);
-        
-            if(!empty($csvdata_arr)){
-                if($chart_mode != 5){
-                    $csvdata_arr = array_slice($csvdata_arr, 1);
-                }else{
-                    array_shift($csvdata_arr['torque']);
-                    array_shift($csvdata_arr['rpm']);
-                }
-                
-
-                $temp_chart = $this->ChartData($chart_mode, $csvdata_arr,$chat_mode_arr,$x_val);       
-            }
-
-
-
-        }else{
-            $temp_chart = [];
-            $chart_mode = 1;
-            $echart_name = '';
-            $chart_menu_arr = $this->MiscellaneousModel->details('chart_menu');
-            $chart_mode_arr = $this->MiscellaneousModel->details('chart_mode');
         }
       
 
-       
+        #處理曲線圖的樣式
+        $chart_mode = !empty($_GET['chart']) ? $_GET['chart'] : 1;
+        if ($chart_mode < 1 || $chart_mode > 4) {
+            $chart_mode = 1;
+        } 
+
+        $chat_mode_arr = $chart_mode;
+
+        $x_val = $this->DashboardModel->get_csv_first_column($chart_mode);
+        
+        if(!empty($x_val)){
+            $x_val = array_slice($x_val, 1);
+        }
+
+        //取得Step1-4的 torque及 angle
+        //$other_data = $this->DashboardModel->get_csv_selected_columns($id);
+
+
+        #取得目前的曲線圖模式 制定曲線圖的座標名稱
+        $chart_menu_arr = $this->MiscellaneousModel->details('chart_menu');
+        $chart_mode_arr = $this->MiscellaneousModel->details('chart_mode');
+        $echart_name = explode("/",$chart_mode_arr[$chart_mode]);
+
+        $csvdata_arr = $this->DashboardModel->get_info($chart_mode);
+        
+        // 預設值，避免未定義錯誤
+        $temp_chart = [];
+    
+        if(!empty($csvdata_arr)){
+            if($chart_mode != 5){
+                $csvdata_arr = array_slice($csvdata_arr, 1);
+            }else{
+                array_shift($csvdata_arr['torque']);
+                array_shift($csvdata_arr['rpm']);
+            }
+            
+
+            $temp_chart = $this->ChartData($chart_mode, $csvdata_arr,$chat_mode_arr,$x_val);       
+        }
+
+        if(empty($first_data)){
+            $temp_chart = [];
+        }
+
+   
         $data = [
             'isMobile'    => $isMobile,
             'chart_info'  => $temp_chart,
@@ -146,13 +145,7 @@ class Dashboards extends Controller
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
 
-        //
-        
         $current_data = $this->DataModel->get_operation_info(); 
-        
-        if (is_null($current_data)) {
-            $current_data  = null;
-        }
 
         return $current_data;
     

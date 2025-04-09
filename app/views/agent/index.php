@@ -100,16 +100,16 @@
           { index: 4, status: "CN.m", color: "" },
         ];
   const device_type = [
-          { index: 0, status: "<?php echo DEVICE_TYPE_0; ?>", color: "" },
-          { index: 1, status: "<?php echo DEVICE_TYPE_1; ?>", color: "" },
-          { index: 2, status: "<?php echo DEVICE_TYPE_2; ?>", color: "" },
-          { index: 3, status: "<?php echo DEVICE_TYPE_3; ?>", color: "" },
-          { index: 4, status: "<?php echo DEVICE_TYPE_4; ?>", color: "" },
-          { index: 5, status: "<?php echo DEVICE_TYPE_5; ?>", color: "" },
-          { index: 6, status: "<?php echo DEVICE_TYPE_6; ?>", color: "" },
-          { index: 7, status: "<?php echo DEVICE_TYPE_7; ?>", color: "" },
-          { index: 8, status: "<?php echo DEVICE_TYPE_8; ?>", color: "" },
-          { index: 9, status: "<?php echo DEVICE_TYPE_9; ?>", color: "" },
+          { index: 0, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
+          { index: 1, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
+          { index: 2, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
+          { index: 3, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
+          { index: 4, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
+          { index: 5, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
+          { index: 6, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
+          { index: 7, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
+          { index: 8, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
+          { index: 9, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
           { index: 10, status: "<?php echo DEVICE_TYPE_10; ?>", color: "" },
         ];
   // 用于跟踪IP到表格行的映射

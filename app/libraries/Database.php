@@ -35,6 +35,8 @@ class Database
 
             if( file_exists('/var/www/html/database/'.$data_db_name) ){
                 $this->db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); 
+            }else{
+                $this->db_data = new PDO('sqlite:/var/www/html/tccidas/default_data.db'); //local
             }
 
             if (!file_exists('/var/www/html/database/idas_data.db')) {

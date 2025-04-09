@@ -14,19 +14,21 @@ class Dashboard{
     }
 
     //驗證job id是否重複
-    public function get_last_data()
-    {
+    public function get_last_data(){
+
+
         $sql = "SELECT * FROM data ORDER BY system_sn DESC LIMIT 1";
         $statement = $this->db_data->prepare($sql);
         $results = $statement->execute();
         $row = $statement->fetch(PDO::FETCH_ASSOC);
+        $statement = null;
 
         return $row;
     }
 
     //get tool max,min rpm
-    public function get_tool_info()
-    {
+    public function get_tool_info(){
+
         $sql = "SELECT *,
                    CASE tool_minrpm 
                        WHEN '20' 
@@ -42,8 +44,8 @@ class Dashboard{
     }
 
     //return datalog csv for graph
-    public function get_device_datalog_frequency()
-    {
+    public function get_device_datalog_frequency(){
+
         $sql = "SELECT device_datalog_frequency  FROM device ";
         $statement = $this->db->prepare($sql);
         $results = $statement->execute();
@@ -54,8 +56,8 @@ class Dashboard{
     }
 
     //get tool max,min rpm
-    public function get_tool_info_unit_convert()
-    {
+    public function get_tool_info_unit_convert(){
+
         $sql = "SELECT * FROM tool_info";
         $statement = $this->db_dev->prepare($sql);
         $results = $statement->execute();
@@ -260,5 +262,6 @@ class Dashboard{
     
         return $latestFile;
     }
+    
     
 }

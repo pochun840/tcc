@@ -12,57 +12,81 @@ class Datas{
 
     }
 
-    public function getData($type)
-    {
-        $sql = "SELECT * FROM data ORDER BY data_time DESC LIMIT 100 ";
-        if($type == 'OK'){
-            $sql = "SELECT * FROM ( SELECT * FROM data WHERE fasten_status = 4 or fasten_status = 5 or fasten_status = 6 ORDER BY data_time DESC LIMIT 100 ) AS recent_data ORDER BY data_time DESC;";
-        }
-        if($type == 'NOK'){
-            $sql = "SELECT * FROM ( SELECT * FROM data WHERE fasten_status = 7 or fasten_status = 8 ORDER BY data_time DESC LIMIT 100 ) AS recent_data ORDER BY data_time DESC;";
-        }
-        
-        $statement = $this->db_data->prepare($sql);
-        if($statement != false){
-            $results = $statement->execute();
-            $row = $statement->fetchall(PDO::FETCH_ASSOC);
+    public function getData($type){
 
-            return $row;
-        }else{
+       
+        
+        $sql = "SELECT * FROM data ORDER BY data_time DESC LIMIT 100";
+        if ($type == 'OK') {
+            $sql = "SELECT * FROM (
+                        SELECT * FROM data 
+                        WHERE fasten_status = 4 OR fasten_status = 5 OR fasten_status = 6 
+                        ORDER BY data_time DESC 
+                        LIMIT 100
+                    ) AS recent_data ORDER BY data_time DESC";
+        }
+        if ($type == 'NOK') {
+            $sql = "SELECT * FROM (
+                        SELECT * FROM data 
+                        WHERE fasten_status = 7 OR fasten_status = 8 
+                        ORDER BY data_time DESC 
+                        LIMIT 100
+                    ) AS recent_data ORDER BY data_time DESC";
+        }
+
+        try {
+            $statement = $this->db_data->prepare($sql);
+            if ($statement !== false) {
+                $statement->execute();
+                $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+                $statement = null; // 查詢完成後釋放資源
+                return $rows;
+            } else {
+                return array();
+            }
+        } catch (PDOException $e) {
+            if (isset($statement)) {
+                $statement = null; // 查詢失敗也釋放資源
+            }
             return array();
         }
     }
 
-    public function get_range_data($start_date,$end_date)
-    {
+
+    public function get_range_data($start_date, $end_date){
+            
+      
+
         $sql = "SELECT * FROM data 
-                WHERE data_time BETWEEN '".$start_date."' AND '".$end_date."'
-                ORDER BY data_time DESC LIMIT 10000";
-     
-        $statement = $this->db_data->prepare($sql);
-        
-        if($statement != false){
-            $results = $statement->execute();
-            $row = $statement->fetchall(PDO::FETCH_ASSOC);
+                WHERE data_time BETWEEN :start_date AND :end_date
+                ORDER BY data_time DESC 
+                LIMIT 10000";
 
-            return $row;
-        }else{
+        try {
+            $statement = $this->db_data->prepare($sql);
+            if ($statement !== false) {
+                $statement->bindParam(':start_date', $start_date);
+                $statement->bindParam(':end_date', $end_date);
+                $statement->execute();
+                $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+                $statement = null; // 釋放資源
+                return $rows;
+            } else {
+                return array();
+            }
+        } catch (PDOException $e) {
+            if (isset($statement)) {
+                $statement = null; // 發生錯誤也釋放資源
+            }
             return array();
         }
     }
+
 
     public function get_new_info() {
 
-        $sql = "SELECT * FROM data ORDER BY system_sn DESC LIMIT 1";
-        $statement = $this->db_data->prepare($sql);
-        $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC); 
+  
 
-        return $result;
-    }
-
-
-    public function get_operation_info() {
         if (is_null($this->db_data)) {
             return null;
         }
@@ -73,13 +97,34 @@ class Datas{
             $statement = $this->db_data->prepare($sql);
             $statement->execute();
             $result = $statement->fetch(PDO::FETCH_ASSOC); 
+            $statement = null; // 釋放資源
+            return $result ?: null;
     
-            return $result ?: null; // 沒資料也回傳 null
         } catch (PDOException $e) {
-      
-            return null; // 發生錯誤也回傳 null
+            return null;
         }
     }
     
+
+
+    public function get_operation_info() {
+
+        
+        if (is_null($this->db_data)) {
+            return null;
+        }
     
+        $sql = "SELECT * FROM data ORDER BY system_sn DESC LIMIT 1";
+    
+        try {
+            $statement = $this->db_data->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetch(PDO::FETCH_ASSOC); 
+            $statement = null; // 釋放資源
+            return $result ?: null; // 沒資料也回傳 null
+        } catch (PDOException $e) {
+            $statement = null; // 釋放資源
+            return null; // 發生錯誤也回傳 null
+        }
+    }
 }
