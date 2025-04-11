@@ -86,6 +86,7 @@ function GetLastResult(){
 
         return json_encode($row);
     }else{
+        //
         $row['message'] = 'data db not found';
         return json_encode($row);
     }
@@ -95,8 +96,6 @@ function GetLastResult(){
 function getIp(){
 
     if( PHP_OS_FAMILY == 'Linux'){
-        // $eth0Ip = '';
-        // $eth0Ip = trim(shell_exec("/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1"));
         $Ips = trim(shell_exec("/sbin/ip -o -4 addr list  | awk '{print $4}' | cut -d/ -f1"));
         $Ip = explode(PHP_EOL, $Ips);
         
@@ -107,3 +106,4 @@ function getIp(){
         return strtoupper($ip_addr);
     }
 }
+

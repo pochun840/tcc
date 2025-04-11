@@ -94,14 +94,8 @@ function create_job() {
 
     //帶入預設值
     document.getElementById('newjob').style.display = 'block';
+    document.getElementById('rev_speed').value = 200;
 
-    if (max_rpm_diff == 0 || min_rpm_diff == 0) {
-        document.getElementById('rev_speed').value = 0;
-    } else {
-        // 否則設定為預設值
-        document.getElementById('rev_speed').value = 200;
-    }
-    
     //document.getElementById('rev_speed').value = 200;
     document.getElementById('rev_force').value = 50;
     document.getElementById('rev_direction_CCW').checked = true;

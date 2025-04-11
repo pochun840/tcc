@@ -33,11 +33,22 @@ class Admin{
 
     public function Get_Das_Config($config_name)
     {
-        $result = $this->db_iDas_login->query("SELECT * FROM config WHERE config_name = '".trim($config_name)."' ");
+        $result = $this->db_iDas_login->query("SELECT * FROM config WHERE config_name = '" . trim($config_name) . "'");
+    
+        if ($result === false) {
+            return null;
+        }
+    
         $rows = $result->fetch(PDO::FETCH_ASSOC);
-
-        return $rows['config_value'];
+    
+        if (is_array($rows) && isset($rows['config_value'])) {
+            return $rows['config_value'];
+        }
+    
+        // 查無資料，或 config_value 不存在
+        return null;
     }
+    
 
     public function DeleteSession($sessionsToDelete){
 
