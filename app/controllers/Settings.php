@@ -6,6 +6,7 @@ class Settings extends Controller
     private $AdminModel;
     private $ToolModel;
     private $MiscellaneousModel;
+    private $LoginModel;
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
@@ -13,6 +14,7 @@ class Settings extends Controller
         $this->AdminModel = $this->model('Admin');
         $this->ToolModel = $this->model('Tool');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
+        $this->LoginModel = $this->model('Login');
     }
 
     // 取得所有info
@@ -1047,6 +1049,8 @@ class Settings extends Controller
              
             // 解壓檔案
             if ($zip->extractTo($extract_path)) {
+
+                //echo "wwer";die();
                 $zip->close();
 
                 // 取得解壓縮後的目錄結構
@@ -1069,9 +1073,13 @@ class Settings extends Controller
 
                 $match_tcc_version = $verify_data['Match_TCC_Version'] ?? '';
 
+            
+
                 if ($match_tcc_version == $iDas_Vesion) {
+                
                     // 目標資料夾 tccidas 的路徑
                     $target_directory = $_SERVER['DOCUMENT_ROOT'] . '/tccidas/';
+             
                 
                     // 確保 tccidas 目錄存在，如果不存在則創建它
                     if (!is_dir($target_directory)) {
@@ -1080,43 +1088,30 @@ class Settings extends Controller
                 
                     // 檢查 $extracted_folders 是否有資料
                     if (!empty($extracted_folders)) {
-                        $source_directory = $extract_path . $extracted_folders[0]; // 解壓後的資料夾路徑
-                
-                        // 使用 scandir() 列出資料夾中的所有檔案
-                        $files = scandir($source_directory);
-                
-                        // 過濾掉 '.' 和 '..' 這兩個特殊目錄
-                        foreach ($files as $file) {
-                            if ($file != '.' && $file != '..') {
-                                $source_file = $source_directory . '/' . $file;
-                                $target_file = $target_directory . $file;
-                
-                                // 如果是資料夾則遞迴拷貝資料夾
-                                if (is_dir($source_file)) {
-                                    $this->copyDirectory($source_file, $target_file);
-                                } else {
-                                    // 如果是檔案，則直接移動檔案
-                                    copy($source_file, $target_file);
-                                }
-                            }
-                        }
-                
-                        // 刪除解壓縮後的原始資料夾及檔案
+                        $source_directory = $extract_path . $extracted_folders[0];
+                    
+                        // 直接把該資料夾裡面的內容搬到 /tccidas 根目錄
+                        $this->copyDirectory($source_directory, $target_directory);
+                    
+                        // 搬完後刪除原始解壓的資料夾
                         $this->deleteDirectory($source_directory);
                     } else {
+
                         $res_type = 'Error';
                         $res_msg = 'No extracted folder found.';
                         $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
                         exit();
                     }
-
                     $this->deleteDirectory($extract_path);  
                     // 確認移動完成
                     $res_type = 'Success';
                     $res_msg  = 'Files successfully moved to the "tccidas" directory.';
                     $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+
+                    $this->setting_logout();
                 }
             } else {
+
                 $res_type = 'Error';
                 $res_msg  = 'Failed to extract the .pack file.';
                 $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
@@ -1124,7 +1119,6 @@ class Settings extends Controller
             }
 
         } else {
-
             $res_type = 'Error';
             $res_msg  = 'Failed to open the uploaded .pack file.';
             $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
@@ -1533,4 +1527,11 @@ class Settings extends Controller
 
         return true;
     }    
+
+
+    public function setting_logout() {
+        foreach ($_COOKIE as $key => $value) {
+            setcookie($key, '', time() - 3600, '/');
+        }
+    }
 }
