@@ -99,7 +99,7 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
                                             <th><?php echo $text['column_status']; ?></th>
                                         </tr>
                                     </thead>
-                                    <tbody style="font-size: 16px; text-align: center;">
+                                    <tbody id="<?php echo $config['id']; ?>_tbody" style="font-size: 16px; text-align: center;">
                                         <?php renderTableRows($config['data'], $data['unit_arr'], $data['status_arr'], $text); ?>
                                     </tbody>
                                 </table>
@@ -192,6 +192,72 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
         }
     }
 
+
+    function fetchRealTimeData(mode = 'ALL') {
+        const formData = new FormData();
+        formData.append('mode', mode);
+
+        const baseURL = `${window.location.protocol}//${window.location.hostname}/tccidas/public/?url=Data/getreal_time_data`;
+
+        fetch(baseURL, {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(result => {
+            if (result.success) {
+                updateTable(mode, result.records, result.unit_arr, result.status_arr);
+            } else {
+                console.warn(result.msg);
+            }
+        })
+        .catch(error => console.error('資料載入失敗', error));
+    }
+
+    function updateTable(mode, records, unit_arr, status_arr) {
+        const tbodyId = `res_data_${mode.toLowerCase()}_tbody`;
+        const tbody = document.getElementById(tbodyId);
+        if (!tbody) return;
+
+        tbody.innerHTML = ''; // 清空原有內容
+
+        records.forEach(row => {
+            let status = row.fasten_status;
+            let className = 'status-ok';
+            if (status == 7 || status == 8) className = 'status-ng';
+            else if (status == 5 || status == 6) className = 'status-warn';
+
+            const html = `
+                <tr>
+                    <td>${row.system_sn}</td>
+                    <td>${row.data_time}</td>
+                    <td>${row.job_name}</td>
+                    <td>${row.seq_name}</td>
+                    <td>${row.fasten_torque}</td>
+                    <td>${unit_arr[row.step_tor_unit]}</td>
+                    <td>${row.fasten_angle}</td>
+                    <td>${row.max_screw_count}</td>
+                    <td>${row.last_screw_count}</td>
+                    <td class="${className}">${status_arr[status]}</td>
+                </tr>`;
+            tbody.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    // 初始載入一次
+    let currentMode = 'ALL';
+    fetchRealTimeData(currentMode);
+
+    // 每 2 秒抓一次
+    setInterval(() => {
+        fetchRealTimeData(currentMode);
+    }, 2000);
+
+    // 若有切換 dropdown（OK/NOK/ALL）
+    document.getElementById('data_select').addEventListener('change', function () {
+        currentMode = this.value;
+        fetchRealTimeData(currentMode);
+    });
 
 </script>
 </body>

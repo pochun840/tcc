@@ -205,7 +205,30 @@ class Data extends Controller
             echo "輸入參數不正確";
         }
     }
-    
+
+
+    public function getreal_time_data() {
+
+        $mode = $_POST['mode'] ?? 'ALL';
+        $db_path = "/var/www/html/database/data" . date('Y') . ".db";
+
+        if (!file_exists($db_path)) {
+            echo json_encode(['success' => false, 'msg' => "資料庫不存在"]);
+            return;
+        }
+
+        $res_data = $this->DataModel->getData($mode);
+        $unit_arr = $this->MiscellaneousModel->details('torque_unit');
+        $status_arr = $this->MiscellaneousModel->details('status');
+
+        echo json_encode([
+            'success' => true,
+            'records' => $res_data,
+            'unit_arr' => $unit_arr,
+            'status_arr' => $status_arr
+        ]);
+        
+    }
     
 }
 ?>
