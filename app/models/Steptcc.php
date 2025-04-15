@@ -225,7 +225,7 @@ class Steptcc{
             $result = $statement->fetch(PDO::FETCH_ASSOC);
 
             // 如果找到步驟資料
-            if ($result) {-
+            if ($result) {
                 $new_val = 'New_Value' . ($k_s + 1);
                 
                 // 更新步驟的 step_id
