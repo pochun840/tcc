@@ -94,9 +94,7 @@ function create_job() {
 
     //帶入預設值
     document.getElementById('newjob').style.display = 'block';
-    document.getElementById('rev_speed').value = 200;
-
-    //document.getElementById('rev_speed').value = 200;
+    document.getElementById('rev_speed').value = 550;
     document.getElementById('rev_force').value = 50;
     document.getElementById('rev_direction_CCW').checked = true;
     document.getElementById('job_ok').checked = true;

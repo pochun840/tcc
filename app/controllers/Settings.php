@@ -1351,7 +1351,7 @@ class Settings extends Controller
 
         if( PHP_OS_FAMILY == 'Linux'){
             
-            /*$this->logMessage('firmware update start');
+            $this->logMessage('firmware update start');
 
             // $destination = "/mnt/ramdisk/FTP/iDas.cfg";
             $destination = "/mnt/ramdisk/FTP/".$_FILES['file']['name'];
@@ -1392,7 +1392,7 @@ class Settings extends Controller
                 $this->logMessage('firmware update end');
                 echo json_encode(array('error' => 'copy db error'));
                 exit();
-            }*/
+            }
 
         }else{
             // $this->logMessage('Import config start');

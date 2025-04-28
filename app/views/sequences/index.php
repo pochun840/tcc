@@ -198,11 +198,10 @@
                             </div>
                         </div>
                         
-                        <div class="row">
+                        <div class="row d-flex align-items-center">
                             <div for="NG-stop" class="col-6 t1"><?php echo $text['ns'];?> :</div>
                             <div class="col t2">
                                 <select id="seq_ns" class="custom-file">
-                               
                                     <?php for($i=0;$i<=9;$i++) {?>
                                                 <option value="<?php echo $i;?>"><?php echo $i;?></option>
                                     <?php } ?> 

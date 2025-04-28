@@ -439,18 +439,27 @@ input:disabled
         document.getElementById('system_sn').value = data.system_sn || '--';
         document.getElementById('job_name').value = data.job_name || '--';
         document.getElementById('seq_name').value = data.seq_name || '--';
-        document.getElementById('max_screw_count').value = data.max_screw_count || '--';
+
+        // 先把 last 和 max 的數字單獨塞進 input 的暫存
+        document.getElementById('last_screw_count').value = data.last_screw_count || '0';
+        document.getElementById('max_screw_count').setAttribute('data-max', data.max_screw_count || '0');
+
+        // 顯示成 "last/max" 格式
+        let lastCount = data.last_screw_count || 0;
+        let maxCount = data.max_screw_count || 0;
+        document.getElementById('max_screw_count').value = `${lastCount}/${maxCount}`;
+
         document.getElementById('fasten_torque').innerText = data.fasten_torque || 'N/A';
         document.getElementById('fasten_angle').innerText = data.fasten_angle || 'N/A';
         document.getElementById('fasten_status_explain').innerText = data.fasten_status_explain || 'N/A';
         document.getElementById('fasten_status_unit_explain').innerText = data.fasten_status_unit_explain || '';
         document.getElementById('error_massage_explanation').innerText = data.error_massage_explanation || '';
 
-        const bgColor = data.fasten_status_bg || '';  
+        const bgColor = data.fasten_status_bg || '';
         document.getElementById('fasten_status_bg').style.backgroundColor = bgColor;
 
         if (data.chart_data) {
-            updateChart(data.chart_data);  // 更新圖表
+            updateChart(data.chart_data); // 更新圖表
         }
     }
 

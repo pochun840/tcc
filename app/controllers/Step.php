@@ -92,9 +92,15 @@ class Step extends Controller
         #扭力單位換算 
         if(!empty($tools)){
 
-            $tools['tool_maxtorque'] = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_maxtorque'],1, $step_torque_unit)[0];
+            $tools['tool_maxtorque']  = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_maxtorque'],1, $step_torque_unit)[0];
+            $tools['tool_maxtorque_diff'] = $tools['tool_maxtorque']* 1.1; 
+
             $tools['tool_mintorque'] = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_mintorque'],1, $step_torque_unit)[0];
+            $tools['tool_mintorque_diff'] = floor($tools['tool_maxtorque_diff'] / 10 * 10) / 10;
         }
+
+
+
 
 
         $check_torque = $this->stepModel->chek_step_target_torque($job_id,$seq_id);
@@ -111,7 +117,10 @@ class Step extends Controller
     
         }
         
-         
+        /*echo "<pre>";
+        print_r($tools);
+        echo "</pre>";*/
+
 
         $data = array(
             'isMobile' => $isMobile,

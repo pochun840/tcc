@@ -2,10 +2,18 @@
 function create_step() {
 
     document.getElementById('newstep').style.display = 'block';
-    document.getElementById('rpm').value = 50;
+    document.getElementById('rpm').value = 100;
     document.getElementById('th_tor').value = 0;
     document.getElementById('ds_tor').value = 0;
-    document.getElementById('ds_speed').value =100;
+    document.getElementById('ds_speed').value = 100;
+    
+    document.getElementById('ang_hi').value= 9999;
+    document.getElementById('ang_lo').value= 0;
+    document.getElementById('tor_hi').value= 55;
+    document.getElementById('tor_lo').value= 0;
+    
+
+
 
     var targetoptionselect = document.getElementById('target_opt');
     targetoptionselect.addEventListener('change', function() {
@@ -14,6 +22,7 @@ function create_step() {
         localStorage.setItem('target_option', target_opt_Value);
         toggleVisibility(target_opt_Value);
     });
+
 
 }
   
@@ -141,6 +150,13 @@ function toggleVisibility(targetValue) {
     targetAngItem.style.display = 'none';
     targetDelayItem.style.display = 'none';
 
+        
+    document.getElementById('ang_hi').value = 9999;
+    document.getElementById('ang_lo').value = 0;
+    document.getElementById('tor_hi').value = 55;
+    document.getElementById('tor_lo').value = 0;
+
+
     if (targetValue == 0) {
         targetTorItem.style.display = "block";
         enableElementById('tor_hi','0');
@@ -173,6 +189,10 @@ function toggleVisibility(targetValue) {
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
         document.getElementById("downshift_OFF").checked = true;
+        document.getElementById('tor_hi').value = 55;
+        document.getElementById('tor_lo').value = 0;
+        document.getElementById('ang_hi').value = 9999;
+        document.getElementById('ang_lo').value = 0;
 
 
          
@@ -190,6 +210,12 @@ function toggleVisibility(targetValue) {
         disableElementById('direction_CCW','');
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
+        document.getElementById('tor_hi').value = 55;
+        document.getElementById('tor_lo').value = 0;
+        document.getElementById('ang_hi').value = 9999;
+        document.getElementById('ang_lo').value = 0;
+        document.getElementById('target_delay').value = (1.0).toFixed(1);
+
 
         document.getElementById("downshift_OFF").checked = true;
 
@@ -207,8 +233,8 @@ function handleTargetOptChange(target_opt) {
     var ds_tor = document.getElementById("edit_ds_tor").value;  
     var ds_speed = document.getElementById("edit_ds_speed").value;  
     var th_tor = document.getElementById("edit_th_tor").value; 
-    var tor_hi = document.getElementById("edit_tor_hi").value; 
-    var tor_lo = document.getElementById("edit_tor_lo").value;
+    var tor_hi =  cleanNumber(document.getElementById("edit_tor_hi").value);
+    var tor_lo =  cleanNumber(document.getElementById("edit_tor_lo").value);
     var ang_hi = document.getElementById("edit_ang_hi").value; 
     var ang_lo = document.getElementById("edit_ang_lo").value;
 
@@ -372,3 +398,21 @@ function toggleThTorDisabled() {
 }
 
 
+
+function cleanNumber(value) {
+    if (value === "" || value === null || value === undefined) {
+        return value;
+    }
+    let num = parseFloat(value);
+    if (isNaN(num)) {
+        return value;  // 不是數字的話，直接回傳原本的
+    }
+    if (Number.isInteger(num)) {
+        return num.toString();
+    }
+    // 如果是小數，檢查是不是 .0 結尾
+    if (num % 1 === 0) {
+        return parseInt(num).toString(); 
+    }
+    return value; // 其他正常小數（例如 12.3）直接回傳
+}
