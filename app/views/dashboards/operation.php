@@ -345,14 +345,7 @@
         document.getElementById('job_name').value = data.job_name || '--';
         document.getElementById('seq_name').value = data.seq_name || '--';
 
-        // 先把 last 和 max 的數字單獨塞進 input 的暫存
-        document.getElementById('last_screw_count').value = data.last_screw_count || '0';
-        document.getElementById('max_screw_count').setAttribute('data-max', data.max_screw_count || '0');
-
-        // 顯示成 "last/max" 格式
-        let lastCount = data.last_screw_count || 0;
-        let maxCount = data.max_screw_count || 0;
-        document.getElementById('max_screw_count').value = `${lastCount}/${maxCount}`;
+        document.getElementById('max_screw_count').value = data.last_screw_count +"/" + data.max_screw_count;
 
         document.getElementById('fasten_torque').innerText = data.fasten_torque || 'N/A';
         document.getElementById('fasten_angle').innerText = data.fasten_angle || 'N/A';
