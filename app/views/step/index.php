@@ -542,13 +542,6 @@ $(document).ready(function () {
 });
 
 
-$(document).ready(function() {
-    var stepCount = <?php echo count($data['step']); ?>;
-    if (stepCount == 0) {
-        $("#target_opt").html('<option value="0">Torque</option>');
-        $("#target_opt").css("pointer-events", "none");
-    }
-});
 
 
 document.addEventListener('DOMContentLoaded', function() {
