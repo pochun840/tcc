@@ -79,7 +79,7 @@
                                 <select class="form-select" id="select_torque_unit" name="select_torque_unit" style="height: 35px;" >
                                     <?php 
                                     foreach($data['unit_arr'] as $k_unit => $v_unit) { 
-                                        $selected = ($data['controller_info']['torque_unit'] == $k_unit) ? 'selected' : '';
+                                        $selected = ($data['controller_info']['device_torque_unit'] == $k_unit) ? 'selected' : '';
                                     ?>
                                         <option value="<?php echo $k_unit; ?>" <?php echo $selected; ?>>
                                             <?php echo $v_unit; ?>

@@ -49,7 +49,6 @@ class Settings extends Controller
             'barcode_mode'   => $barcode_mode
 
         );
-
         if($isMobile){
             $this->view('setting/index_m', $data);
         }else{
@@ -308,6 +307,9 @@ class Settings extends Controller
         }else{
             $input_check = false; 
         }
+
+
+
 
 
         if(!empty($_POST)){
@@ -635,10 +637,6 @@ class Settings extends Controller
 
     }
 
-
-
-    //把  /var/www/html/database/tcccon.db 備份為 /var/www/html/database/tcccon_bk.db
-    //並把 tcccon_bk.db 再另存一個.db 檔名為iDas_data.db
     public function Sync_check_db() {
 
         $file = $this->MiscellaneousModel->lang_load();
@@ -646,191 +644,158 @@ class Settings extends Controller
             include $file;
         }
     
-        if (!empty($_POST['argument']) && isset($_POST['argument'])) {
-            $argument = $_POST['argument'];
-        } else {
-            $argument = '';
-        }    
-
+        $argument = !empty($_POST['argument']) ? $_POST['argument'] : '';
+    
         $Das_DB_Location = '/var/www/html/database/idas_data.db'; 
         $Con_DB_Location = '/var/www/html/database/tcccon.db'; 
-        $Backup_DB_Location = '/var/www/html/database/tcccon_bk.db'; // 備份資料庫的路徑
+        $Backup_DB_Location = '/var/www/html/database/tcccon_bk.db';
         $destination = "/mnt/ramdisk/ftp/iDas.cfg";
+        $Ramdisk_DB_Location = '/mnt/ramdisk/tcccon.db';
     
         if (!empty($argument)) {
             if (PHP_OS_FAMILY == 'Linux' && $argument == 'D2C') {
     
-                //確認控制器資料庫是否存在
-                if (!file_exists($Con_DB_Location)) {
-                    $res_msg = "Error: tcccon.db does not exist.";
+                // 1. 確認 iDas 資料庫是否存在
+                if (!file_exists($Das_DB_Location)) {
+                    $res_msg = "Error: idas_data.db does not exist.";
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
                     return;
                 }
-
-
-                // 1. 先備份 tcccon.db 為 tcccon_bk.db
-                if (copy($Con_DB_Location, $Backup_DB_Location)) {
-                    $this->logMessage("tcccon.db backup successful to tcccon_bk.db");
+    
+                // 2. 備份 tcccon.db
+                if (file_exists($Con_DB_Location)) {
+                    if (copy($Con_DB_Location, $Backup_DB_Location)) {
+                        $this->logMessage("tcccon.db backup successful to tcccon_bk.db");
+                    } else {
+                        $res_msg = "Error: Failed to backup tcccon.db to tcccon_bk.db.";
+                        $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                        return;
+                    }
                 } else {
-                    $res_msg = "Error: Failed to backup tcccon.db to tcccon_bk.db.";
-                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
-                    return;
+                    $this->logMessage("tcccon.db does not exist, skip backup.");
                 }
-
-                //2. 複製控制器的資料庫到 iDas 使用的資料庫
-                if (copy($Con_DB_Location, $Das_DB_Location)) {
-                    $res_msg = "SYNC".$text['success'] ;
+    
+                // 3. 複製 iDas 資料庫到控制器
+                if (copy($Das_DB_Location, $Con_DB_Location)) {
+                    $res_msg = "SYNC" . $text['success'];
                     $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
                 } else {
-                    $res_msg  = "SYNC".$text['fail'];
+                    $res_msg = "SYNC" . $text['fail'];
                     $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                    return;
                 }
-
-                //3.使用modbus
-                if (copy($Das_DB_Location, $destination)) {
-
+    
+                // 4.新增：複製 iDas 資料庫到 /mnt/ramdisk/tcccon.db
+                if (copy($Das_DB_Location, $Ramdisk_DB_Location)) {
+                    $this->logMessage('Successfully copied idas_data.db to /mnt/ramdisk/tcccon.db');
+                } else {
+                    $res_msg = "Error: Failed to copy idas_data.db to /mnt/ramdisk/tcccon.db.";
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                    return;
+                }
+    
+                // 5. 使用 modbus 通知
+                if (copy($Con_DB_Location, $destination)) {
+    
                     require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
                     $modbus = new ModbusMaster("127.0.0.1", "TCP");
-
+    
                     try {
                         $modbus->port = 502;
                         $modbus->timeout_sec = 10;
                         $data = array(1, 26948, 24947);
                         $dataTypes = array("INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT");
-
-                        // FC 3
-                        // $recData = $modbus->readMultipleRegisters(1, 4096, 6);
-
-                        // FC 16
+    
                         $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
-                        $this->logMessage('modbus write 506 ,array = '.implode("','",$data));
-                        $this->logMessage('modbus status:'.$modbus->status);
+                        $this->logMessage('modbus write 506 , array = '.implode("','", $data));
+                        $this->logMessage('modbus status:' . $modbus->status);
+    
+                        $modbus->writeMultipleRegister(0, 462, array(1), $dataTypes);
                         //echo json_encode(array('error' => ''));
+    
                         exit();
-
-                    }
-                    catch (Exception $e) {
-                        // Print error information if any
-                        // echo $modbus;
-                        // echo $e;
-                        $this->logMessage('modbus write 506 fail');
-                        $this->logMessage('modbus status:'.$modbus->status);
-                        $this->logMessage('db_sync D2C end');
-                        //echo json_encode(array('error' => 'modbus error'));
+    
+                    } catch (Exception $e) {
+                        $this->logMessage('modbus write fail: ' . $e->getMessage());
+                        $this->logMessage('db_sync C2D end');
                         exit();
                     }
                 }
             }
         }
-
-        
     }
     
-    
-    public  function Sync_check_db_load(){
 
+    public function Sync_check_db_load(){
+        
         $file = $this->MiscellaneousModel->lang_load();
-        if(!empty($file)){
+        if (!empty($file)) {
             include $file;
         }
-   
-        if (!empty($_POST['argument']) && isset($_POST['argument'])) {
-            $argument = $_POST['argument'];
-        }else{
-            $argument = '';
-        }
 
-        
+        $argument = $_POST['argument'] ?? '';
 
-        $Das_DB_Location = '/var/www/html/database/idas_data.db'; //idas 
-        $Con_DB_Location = '/var/www/html/database/tcccon.db'; //控制器
-        $Copy_Destination = '/mnt/ramdisk/ftp/iDas.cfg'; 
+        $Das_DB_Location = '/var/www/html/database/idas_data.db'; // iDAS DB
+        $Con_DB_Location = '/var/www/html/database/tcccon.db';    // 控制器 DB
+        $Backup_DB_Location = '/var/www/html/database/tcccon_bk.db'; // 控制器備份
+        $Copy_Destination = '/mnt/ramdisk/ftp/iDas.cfg';          // RAMDISK快取位置
 
-        if(!empty($argument)){
-            if( PHP_OS_FAMILY == 'Linux' && $argument == 'C2D'){
+        if (!empty($argument) && PHP_OS_FAMILY === 'Linux' && $argument === 'C2D') {
 
-                //判斷控制器是否有登出
-                $Controller_Info = $this->ToolModel->GetControllerInfo();
-                if(!empty($Controller_Info)){
-                    $user_logIn = $Controller_Info['user_logIn'];
-                    $user_logIn = (int)$user_logIn;
-                    if($user_logIn == 1){
-                        $res_msg  = $error_message['system_sync_warning_logout'];
-                        $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
-                        exit();
-                                
-                    }
+            // （這邊你原本有判斷登入，但現在被註解了）
+
+            // 比對時間差異
+            if (filemtime($Con_DB_Location) > filemtime($Das_DB_Location)) {
+                $notice = ($text['system_sync_notice'] ?? 'Controller DB is newer: ') . date("Y-m-d H:i:s", filemtime($Con_DB_Location));
+                $this->logMessage($notice); // 記錄提醒
+            }
+
+            // 比對資料表結構
+            if (!$this->Database_Column_Diff()) {
+                $this->logMessage('DB structure is different.');
+            }
+
+            // 1. 備份 tcccon.db 成 tcccon_bk.db
+            if (!copy($Con_DB_Location, $Backup_DB_Location)) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', 'Backup tcccon.db to tcccon_bk.db failed');
+                return;
+            }
+
+            // 2. 再從 tcccon_bk.db 複製成 idas_data.db
+            if (!copy($Backup_DB_Location, $Das_DB_Location)) {
+                $this->MiscellaneousModel->generateErrorResponse('Error', 'Copy backup to idas_data.db failed');
+                return;
+            }
+
+            // 複製成功，回傳同步成功
+            $res_msg = "SYNC" . ($text['success'] ?? 'Success');
+            $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
+
+            // 3. 使用modbus通知控制器
+            if (copy($Das_DB_Location, $Copy_Destination)) {
+                require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+                $modbus = new ModbusMaster("127.0.0.1", "TCP");
+                try {
+                    $modbus->port = 502;
+                    $modbus->timeout_sec = 10;
+                    $data = array(1, 26948, 24947);
+                    $dataTypes = array("INT", "INT", "INT");
+
+                    $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
+                    $this->logMessage('modbus write 506, array = ' . implode(',', $data));
+                    $this->logMessage('modbus status: ' . $modbus->status);
+
+                } catch (Exception $e) {
+                    $this->logMessage('modbus write 506 fail: ' . $e->getMessage());
+                    $this->logMessage('modbus status: ' . $modbus->status);
+                    return;
                 }
-
-                
-                //時間差異提醒
-                if( filemtime($Con_DB_Location) > filemtime($Das_DB_Location) ){
-                    $notice = $text['system_sync_notice'].date("Y-m-d H:i:s.", filemtime($Con_DB_Location));
-                }
-
-                //DB欄位差異判斷
-                if(!$this->Database_Column_Diff()){
-                    $warning .= 'DB is different';
-                }
-
-                
-
-                $sourceFile = '/var/www/html/database/tcccon.db';
-                $backupFile = '/var/www/html/database/tcccon_bk.db';
-                $newFile = '/var/www/html/database/idas_data.db';
-
-                $res  = $this->SettingModel->backupRemoveAndCopyDatabase($sourceFile, $backupFile, $newFile);
-                $result = array();
-                if($res){
-                    $res_msg  = "SYNC".$text['success'];
-                    $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
-                }else{
-                    $res_msg  = "SYNC".$text['fail'];
-                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
-                }
-
-
-                //3.使用modbus
-                if ($res) {       
-                    if (copy($Das_DB_Location, $Copy_Destination)) {
-                        require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-                        $modbus = new ModbusMaster("127.0.0.1", "TCP");
-                        try {
-                            $modbus->port = 502;
-                            $modbus->timeout_sec = 10;
-                            $data = array(1, 26948, 24947);
-                            $dataTypes = array("INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT");
-    
-                            // FC 3
-                            // $recData = $modbus->readMultipleRegisters(1, 4096, 6);
-    
-                            // FC 16
-                            $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
-                            $this->logMessage('modbus write 506 ,array = '.implode("','",$data));
-                            $this->logMessage('modbus status:'.$modbus->status);
-                            //echo json_encode(array('error' => ''));
-                            exit();
-    
-                        }
-                        catch (Exception $e) {
-                            // Print error information if any
-                            // echo $modbus;
-                            // echo $e;
-                            $this->logMessage('modbus write 506 fail');
-                            $this->logMessage('modbus status:'.$modbus->status);
-                            $this->logMessage('db_sync D2C end');
-                            //echo json_encode(array('error' => 'modbus error'));
-                            exit();
-                        }
-
-                    }             
-                   
-                }
-
-
+            } else {
+                $this->MiscellaneousModel->generateErrorResponse('Error', 'Failed to copy idas_data.db to iDas.cfg');
             }
         }
     }
+
         
 
     //get barcode
@@ -1532,6 +1497,18 @@ class Settings extends Controller
     public function setting_logout() {
         foreach ($_COOKIE as $key => $value) {
             setcookie($key, '', time() - 3600, '/');
+        }
+    }
+
+
+    public function get_controller_login(){
+
+        //判斷控制器是否有登出
+        $Controller_Info = $this->ToolModel->GetControllerInfo();
+        if(!empty($Controller_Info)){
+            $user_logIn = $Controller_Info['user_logIn'];
+            $user_logIn = (int)$user_logIn;
+            echo $user_logIn;
         }
     }
 }

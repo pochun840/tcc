@@ -99,6 +99,7 @@
         <input id="tool_min_rpm" value="<?php echo $data['tools']['tool_minrpm']; ?>">
         <input id="tool_max_tor_diff" value="<?php echo $data['tools']['tool_maxtorque_diff']; ?>">
         <input id="tool_min_tor_diff" value="<?php echo $data['tools']['tool_mintorque_diff']; ?>">
+        <input id="step_torque_unit" value="<?php echo  $data['step_torque_unit']?>">
     </div>
 
     <!-- Add New Step -->
@@ -855,7 +856,7 @@ function add_step() {
     var ds_tor = document.getElementById('ds_tor').value;
     var ds_speed = document.getElementById('ds_speed').value;
     var record_ang = 0; //紀錄 累計角度
-    var tor_unit = 3; //預設
+    var tor_unit = <?php echo  $data['step_torque_unit'] ?>
 
     // 驗證
     let check = input_check_savestep();
@@ -1371,5 +1372,22 @@ function restoreBackupOptions() {
 
 }
 
+function cleanNumber(value) {
+    if (value === "" || value === null || value === undefined) {
+        return value;
+    }
+    let num = parseFloat(value);
+    if (isNaN(num)) {
+        return value;  // 不是數字的話，直接回傳原本的
+    }
+    if (Number.isInteger(num)) {
+        return num.toString();
+    }
+    // 如果是小數，檢查是不是 .0 結尾
+    if (num % 1 === 0) {
+        return parseInt(num).toString(); 
+    }
+    return value; // 其他正常小數（例如 12.3）直接回傳
+}
 
 </script>   

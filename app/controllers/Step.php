@@ -116,11 +116,6 @@ class Step extends Controller
             }
     
         }
-        
-        /*echo "<pre>";
-        print_r($tools);
-        echo "</pre>";*/
-
 
         $data = array(
             'isMobile' => $isMobile,
@@ -184,6 +179,10 @@ class Step extends Controller
             $th_tor = isset($_POST['th_tor'])? floatval($_POST['th_tor']) : 0;
             $record_ang = isset($_POST['record_ang'])? intval($_POST['record_ang']) : 0;
             $tor_unit = isset($_POST['tor_unit'])? intval($_POST['tor_unit']) : 1;
+
+
+
+
 
             #同一個step 只能有一個Target Torque
             //$check = $this->stepModel->check_step_target($jobid,$seqid);

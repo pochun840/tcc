@@ -312,17 +312,6 @@ class Dashboards extends Controller
         $chart_info['x_val'] = json_encode($x_val);
 
 
-        /*echo "<pre>";
-        print_r($chart_info);
-        echo "</pre>";
-        die();*/
-
-
-
-
-
-
-
         return $chart_info;
     }
 

@@ -37,8 +37,8 @@
                     <?php if($data['agent_type'] == '2'){ ?>
                             <button class="menu-item lime" id="agent" style="font-size: 24px" onclick="window.location.href='?url=Agents'"><span style="visibility: hidden;">Agent</span></button>
                     <?php } ?>
-                        <button class="menu-item indigo" id="load" onclick="DB_sync_idas_load('C2D')"><span style="visibility: hidden;">Load</span></button>
-                        <button class="menu-item deep-orange" id="save" onclick="DB_sync_idas('D2C')"><span style="visibility: hidden;">Save</span></button>
+                        <button class="menu-item indigo" id="load" onclick="DB_sync_idas_common('C2D', 'load');"><span style="visibility: hidden;">Load</span></button>
+                        <button class="menu-item deep-orange" id="save" onclick="DB_sync_idas_common('D2C', 'normal');"><span style="visibility: hidden;">Save</span></button>
                 <?php } ?>
 
             </div>
@@ -110,8 +110,10 @@ function language_change(language){
     }
 }
 
-function DB_sync_idas(argument) {
+
+function DB_sync_idas_common(argument, mode) {
     var language = getCookie('language');
+
     var titles = {
         "zh-cn": {
             "C2D": '同步控制器的DB到iDas',
@@ -142,102 +144,110 @@ function DB_sync_idas(argument) {
         }
     };
 
-    var title = titles[language] ? titles[language][argument] : titles["default"][argument];
-    var message = messages[language] ? messages[language][argument] : messages["default"][argument];
-
-    alertify.confirm(title, message, 
-            function () {
-                $.ajax({
-                    url: "?url=Settings/Sync_check_db",
-                    method: "POST",
-                    data: { argument: argument },
-                    success: function (response) {
-                        var responseData = JSON.parse(response);
-
-                        // 显示来自服务器的 res_type 和 res_msg
-                        alertify.alert(responseData.res_type, responseData.res_msg, function () {
-                            // 在 3 秒后自动关闭窗口
-                            setTimeout(function() {
-                                alertify.dismissAll(); // 关闭所有 Alertify 对话框
-                                history.go(0); // 重新加载页面
-                            }, 3000);
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("AJAX request failed:", status, error);
-                    }
-                });
-            }, 
-            function () {
-                alertify.error('Cancelled');
-            }
-        )
-}
-function DB_sync_idas_load(argument){
-    var language = getCookie('language');
-    var titles = {
-        "zh-cn": {
-            "C2D": '同步控制器的DB到iDas',
-            "D2C": '同步iDas的DB到控制器'
-        },
-        "zh-tw": {
-            "C2D": '同步控制器的DB到iDas',
-            "D2C": '同步iDas的DB到控制器'
-        },
-        "default": {
-            "C2D": 'Sync controller DB to iDas',
-            "D2C": 'Sync iDas DB to controller'
-        }
+    var syncingTexts = {
+        "zh-cn": "同步中，请稍候...",
+        "zh-tw": "同步中，請稍候...",
+        "default": "Syncing, please wait..."
     };
 
-    var messages = {
-        "zh-cn": {
-            "C2D": '同步后目前iDas上的资料将被覆盖，确认是否同步',
-            "D2C": '同步后目前控制器上的资料将被覆盖，确认是否同步'
+    var title = titles[language]?.[argument] || titles["default"][argument];
+    var message = messages[language]?.[argument] || messages["default"][argument];
+    var syncingText = syncingTexts[language] || syncingTexts["default"];
+
+    alertify.confirm(title, message,
+        function () {
+            // --------設定總秒數---------
+            var totalSeconds = 8;
+            // ---------------------------
+
+            addOverlay(); // 加遮罩
+            var progress = 0;
+            var intervalTime = (totalSeconds * 1000) / 100;
+
+            var progressDialog = alertify.alert(
+                '<div id="syncText">' + syncingText + ' 0%</div>' +
+                '<progress id="syncProgress" value="0" max="100" style="width: 100%; height: 20px;"></progress>'
+            );
+
+            var interval = setInterval(function () {
+                progress += 1;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+
+                    // 進度跑完，開始送 AJAX
+                    $.ajax({
+                        url: (mode === 'load') ? "?url=Settings/Sync_check_db_load" : "?url=Settings/Sync_check_db",
+                        method: "POST",
+                        data: { argument: argument },
+                        success: function (response) {
+                            try {
+                                var responseData = JSON.parse(response);
+
+                                if (responseData.res_type === "Success") {
+                                    var successDialog = alertify.alert(responseData.res_type, responseData.res_msg);
+                                    setTimeout(function () {
+                                        alertify.dismissAll();
+                                        removeOverlay();
+                                        history.go(0); // 成功後 reload
+                                    }, 3000);
+                                } else {
+                                    var failDialog = alertify.alert(responseData.res_type, responseData.res_msg);
+                                    removeOverlay(); // 失敗只移除遮罩，不 reload
+                                }
+                            } catch (e) {
+                                console.error("Response JSON parse error:", e, response);
+                                alertify.alert('Error', '回傳資料錯誤');
+                                removeOverlay();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX request failed:", status, error);
+                            alertify.alert('Error', '同步失敗，請稍後再試');
+                            removeOverlay();
+                        }
+                    });
+                }
+
+                // 更新進度條和文字
+                var progressBar = document.getElementById('syncProgress');
+                if (progressBar) {
+                    progressBar.value = progress;
+                }
+                var syncText = document.getElementById('syncText');
+                if (syncText) {
+                    syncText.innerHTML = syncingText + ' ' + progress + '%';
+                }
+            }, intervalTime);
         },
-        "zh-tw": {
-            "C2D": '同步後目前iDas上的資料將被覆蓋，確認是否同步',
-            "D2C": '同步後目前控制器上的資料將被覆蓋，確認是否同步'
-        },
-        "default": {
-            "C2D": 'After synchronization, the current data on iDas will be overwritten',
-            "D2C": 'After synchronization, the data on the controller will be overwritten'
+        function () {
+            alertify.error('已取消');
         }
-    };
+    );
 
-    var title = titles[language] ? titles[language][argument] : titles["default"][argument];
-    var message = messages[language] ? messages[language][argument] : messages["default"][argument];
+    // --- 加遮罩 function ---
+    function addOverlay() {
+        var overlay = document.createElement('div');
+        overlay.id = 'overlayMask';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+        overlay.style.zIndex = '9999';
+        document.body.appendChild(overlay);
+    }
 
-    alertify.confirm(title, message, 
-            function () {
-                $.ajax({
-                    url: "?url=Settings/Sync_check_db_load",
-                    method: "POST",
-                    data: { argument: argument },
-                    success: function (response) {
-
-                        var responseData = JSON.parse(response);
-                        
-                        // 显示来自服务器的 res_type 和 res_msg
-                        alertify.alert(responseData.res_type, responseData.res_msg, function () {
-                            // 在 3 秒后自动关闭窗口
-                            setTimeout(function() {
-                                alertify.dismissAll(); // 关闭所有 Alertify 对话框
-                                history.go(0); // 重新加载页面
-                            }, 3000);
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("AJAX request failed:", status, error);
-                    }
-                });
-            }, 
-            function () {
-                alertify.error('Cancelled');
-            }
-        )
-
+    function removeOverlay() {
+        var overlay = document.getElementById('overlayMask');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
 }
+
+
 </script>
 
 <style>
