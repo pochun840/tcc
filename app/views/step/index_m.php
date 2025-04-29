@@ -719,7 +719,7 @@
         document.getElementById('tor_hi').value= 55;
         document.getElementById('tor_lo').value= 0;
         document.getElementById('target_tor').value = parseFloat(document.getElementById('tool_min_tor').value);
-
+        document.getElementById('target_ang').value= 1800;
         
 
         // 預設 downshift_ON 需要被選中
