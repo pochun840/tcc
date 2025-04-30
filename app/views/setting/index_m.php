@@ -141,11 +141,12 @@
                         <div class="col t1"><?php echo $text['system_sys_date'];?>(UTC):</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
-                                <form style="margin-left: 5%">
-                                    <span id="currentSystemTime"></span><br>
-                                    <input type="datetime-local" id="newTime" value="" required class="t3 w3-submit w3-border w3-round" style="width: 200px">
-                                    
-                                    <input type="button" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right" onclick="time_save()">
+                                <form onsubmit="change_datetime();return false;">
+                                    <span id="currentSystemTime"></span>
+                                    <input type="datetime-local" id="newTime" value="" size="25" required class="w3-submit w3-border" style="margin: 0px 0px 5px; height: 32px">
+                             
+
+                                    <input type="submit" value="<?php echo $text['save']; ?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                                 </form>
                             </div>        
                         </div>          
@@ -225,14 +226,14 @@
                         <div class="row t2">
                             <div class="col-5 t1"><?php echo $text['system_barcode'];?>:</div>
                             <div class="col-7 t2">
-                                <input id="barcode_content" name="barcode_content" style="height: 32px" type="text" value="" maxlength="54" class="form-control" required>
+                                <input id="barcode_content" name="barcode_content" style="height: 32px" type="text" value="" maxlength="100" class="form-control" required>
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row t2">
                             <div class="col-5 t1"><?php echo $text['system_barcode_match_from'];?>:</div>
                             <div class="col-7 t2">
-                                <input id="barcode_mask_from" name="barcode_mask_from" style="height: 32px" type="text" value="" class="form-control">
+                                <input id="barcode_mask_from" name="barcode_mask_from" style="height: 32px" type="text" value="1" class="form-control">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -400,6 +401,57 @@ window.onload = function() {
 
 };
 
+function change_datetime(argument) {
+    let dateTimeInput = document.getElementById('newTime');
+    $.ajax({
+        type: "post",
+        data: {'datetime':dateTimeInput.value},
+        dataType: "json",
+        url: "?url=Settings/edit_system_date",
+        beforeSend: function() {
+            $('#overlay').removeClass('hidden');
+        },
+    }).done(function(data) { //成功且有回傳值才會執行
+        setTimeout(function() {
+            $('#overlay').addClass('hidden');
+        }, 1000);
+        if (data.error != '') {
+            alert('sync error');
+        }else{
+            document.cookie = "group=System";
+            location.reload();
+        }
+    }).fail(function() {
+        history.go(0);
+    });
+
+}    
+
+function getCurrentSystemTime() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var serverTime = xhr.responseText;
+            updateCurrentTime(serverTime);
+        }
+    };
+
+    xhr.open("GET", "?url=Settings/get_system_time", true);
+    xhr.send();
+}
+
+function updateCurrentTime(serverTime) {
+    var currentTimeElement = document.getElementById("currentSystemTime");
+    var serverDateTime = new Date(serverTime);
+
+    setInterval(function() {
+        serverDateTime.setSeconds(serverDateTime.getSeconds() + 1);
+        currentTimeElement.textContent = serverDateTime.toLocaleString();
+    }, 1000);
+}
+
+
+
 function StatusCheck(action) {
     
     let work_icon = '<svg height="18" width="18" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M9.001.666A8.336 8.336 0 0 0 .668 8.999c0 4.6 3.733 8.334 8.333 8.334s8.334-3.734 8.334-8.334S13.6.666 9 .666Zm0 15a6.676 6.676 0 0 1-6.666-6.667A6.676 6.676 0 0 1 9 2.333a6.676 6.676 0 0 1 6.667 6.666A6.676 6.676 0 0 1 9 15.666Zm-1.666-4.833L5.168 8.666 4.001 9.833l3.334 3.333L14 6.499l-1.166-1.166-5.5 5.5Z" fill="#1E8E3E" fill-rule="evenodd"></path></svg>';
@@ -528,9 +580,35 @@ function agent_ip_save() {
 }
 
 
-function time_save(){
+
+getCurrentSystemTime();// 初始化：顯示目前系統時間
+function getCurrentSystemTime() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var serverTime = xhr.responseText;
+            updateCurrentTime(serverTime);
+        }
+    };
+
+    xhr.open("GET", "?url=Settings/edit_system_date", true);
+    xhr.send();
+}
+
+function updateCurrentTime(serverTime) {
+    var currentTimeElement = document.getElementById("currentSystemTime");
+    var serverDateTime = new Date(serverTime);
+
+    setInterval(function() {
+        serverDateTime.setSeconds(serverDateTime.getSeconds() + 1);
+        currentTimeElement.textContent = serverDateTime.toLocaleString();
+    }, 1000);
+}
+
+
+/*function time_save(){
     var newTime = document.getElementById('newTime').value;
-    var device_id = <?php echo $data['controller_info']['device_id'];?>;
+    var device_id = <?php //echo $data['controller_info']['device_id'];?>;
     if(newTime){
         $.ajax({
             url: "?url=Settings/edit_system_date",
@@ -549,7 +627,7 @@ function time_save(){
         });       
     }
 
-}
+}*/
 
 function edit_password() {
     var new_password = document.getElementById('new_password').value;
@@ -749,9 +827,9 @@ function input_check_savebarcode() {
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 
     let conditions = [
-        { id: 'barcode_content', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
+        { id: 'barcode_content',  pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]{1,100}$/, min: null, max: null },
         { id: 'barcode_mask_from', pattern: /^[0-9]+$/, min: 1, max: 54 },
-        { id: 'barcode_mask_count', pattern: /^[0-9]+$/, min: 1, max: 54 },
+        { id: 'barcode_mask_count', pattern: /^[0-9]+$/, min: 1, max: 100 },
         
 
     ];
@@ -889,7 +967,6 @@ function Import_SystemConfig() {
 
 
 
-// Bacode & Connection Change page
 // Bacode & Connection Change page
 // 儲存每個表格的當前頁面狀態
 const rowsPerPage = 2; // 每頁顯示的行數

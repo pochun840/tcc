@@ -39,7 +39,7 @@
                 <button id="bnt5" name="iDas_Display" class="button" onclick="OpenButton('Update')">iDAS</button>
             </div>
         
-            <div id="Controller_Setting" class="divMode hidden"> 
+            <div id="Controller_Setting" class="divMode hidden"> >
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['controller_setting'];?></div>
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_id'];?>:</div>
@@ -119,7 +119,7 @@
                 </div>
             </div>
 
-            <div id="System_Setting" class="divMode hidden" >
+            <div id="System_Setting" class="divMode hidden"> 
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_setting'];?></div>
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_password'];?>:</div>
@@ -265,7 +265,7 @@
                 </div>               
             </div>
 
-            <div id="Connect_Setting" class="divMode hidden" >
+            <div id="Connect_Setting" cclass="divMode hidden" >
                
                          
                 <div class="row t2">
@@ -309,7 +309,7 @@
                 </div>
             </div>
 
-            <div id="iDas-Update_Setting" class="divMode hidden">
+            <div id="iDas-Update_Setting" class="divMode hidden" >
                <div class="row t2" style="padding-top: 30px">
                     <div class="col-3 t1">Current iDAS Version:</div>
                     <div class="col-3 t2">

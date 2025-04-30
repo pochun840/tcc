@@ -338,10 +338,11 @@ class Settings extends Controller
         }
     }
 
-    public function edit_system_date()
-    {
+    
+    public function edit_system_date(){
+        
         if( PHP_OS_FAMILY == 'Linux'){
-            /*$dateTime = $_POST["datetime"];
+            $dateTime = $_POST["datetime"];
             // var_dump($dateTime);
             // 驗證日期時間格式
             if (!preg_match("/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/", $dateTime)) {
@@ -361,59 +362,31 @@ class Settings extends Controller
 
 
             echo json_encode(array('error' => '','result' => $rr));
-            exit();*/
+            exit();
         }else{
-            // post
-            $conset = array();
-            $input_check = true;
-            if( !empty($_POST['device_id']) && isset($_POST['device_id'])){
-                $conset['device_id'] = $_POST['device_id'];
-            }else{ 
-                $input_check = false; 
-            }
-
-            if( !empty($_POST['newTime']) && isset($_POST['newTime'])  ){
-                $conset['newTime'] = $_POST['newTime'];
-                $conset['newTime'] = strtotime($conset['newTime']);
-                $conset['newTime'] = date('Y-m-d H:i:s', $conset['newTime']);
-                
-                if(!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $conset['newTime'])){
-                    echo "格式錯誤";exit();
-                }
-
-            }else{ 
-                $input_check = false; 
-            }
-
-            if($input_check){
-                $result = $this->SettingModel->system_date_edit($conset);
-                if($result){
-                    $res_msg = 'edit:'. $conset['device_id'].'success';
-                }else{
-                    $res_msg = 'edit:'. $conset['device_id'].'fail';
-                }
-                echo $res_msg;
-            }
-
+            echo json_encode(array('error' => ''));
+            exit();
         }
     }
 
-    public function get_system_time()
-    {
+    public function get_system_time(){
+        
         header("Content-Type: text/plain; charset=utf-8");
         
+        // var_dump(date_default_timezone_get());
         date_default_timezone_set("GMT0");
         $systemTime = date('Y-m-d H:i:s');
         echo $systemTime;
     }
 
-    public function firmware_reset()
+
+     function firmware_reset()
     {
         // code...
     }
 
-    public function export_sysytem_config()
-    {
+    public function export_sysytem_config(){
+
         if( PHP_OS_FAMILY == 'Linux'){
             require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
             $modbus = new ModbusMaster("127.0.0.1", "TCP");
@@ -426,10 +399,11 @@ class Settings extends Controller
                 $modbus->writeMultipleRegister(0, 505, $data, $dataTypes);
                 $this->logMessage('modbus write 505 ,array = '.implode("','", $data));
                 $this->logMessage('modbus status:'.$modbus->status);
-            
+                // echo json_encode(array('error' => ''));
+                // exit();
 
                 header("Content-type: text/html; charset=utf-8");
-                $file="/mnt/ramdisk/ftp/tcccon.cfg"; // 實際檔案的路徑+檔名
+                $file="/mnt/ramdisk/tcccon.db"; // 實際檔案的路徑+檔名
                 $filename="tcccon.cfg"; // 下載的檔名
                 //指定類型
                 header("Content-type: ".filetype("$file"));
@@ -444,24 +418,21 @@ class Settings extends Controller
                 echo json_encode(array('error' => 'modbus error'));
                 exit();
             }
-   
-            
-        }else{
-            
-            $file = "../idas_data.db"; 
-            $filename = "idas_data.cfg"; 
-            $cfgContent = file_get_contents($file);
-                 
+        }else{//windows
+            // echo json_encode(array('error' => ''));
+                header("Content-type: text/html; charset=utf-8");
+                $file="../tcccon.db"; // 實際檔案的路徑+檔名
+                $filename="tcccon.cfg"; // 下載的檔名
+                //指定類型
+                header("Content-type: ".filetype("$file"));
+                //指定下載時的檔名
+                header("Content-Disposition: attachment; filename=".$filename."");
+                //輸出下載的內容。
+                readfile($file);
+            exit();
         }
-
-                    
-        header("Content-type: " . filetype("$file"));
-        header("Content-Disposition: attachment; filename=" . $filename);
-        echo $cfgContent;
-        exit();
-        
-
     }
+
 
     public function system_storage()
     {
@@ -726,52 +697,62 @@ class Settings extends Controller
     }
     
 
-    public function Sync_check_db_load(){
-        
+    public function Sync_check_db_load() {
         $file = $this->MiscellaneousModel->lang_load();
         if (!empty($file)) {
             include $file;
         }
-
+    
         $argument = $_POST['argument'] ?? '';
-
-        $Das_DB_Location = '/var/www/html/database/idas_data.db'; // iDAS DB
-        $Con_DB_Location = '/var/www/html/database/tcccon.db';    // 控制器 DB
-        $Backup_DB_Location = '/var/www/html/database/tcccon_bk.db'; // 控制器備份
-        $Copy_Destination = '/mnt/ramdisk/ftp/iDas.cfg';          // RAMDISK快取位置
-
+    
+        $Das_DB_Location     = '/var/www/html/database/idas_data.db'; // iDAS DB
+        $Con_DB_Location     = '/var/www/html/database/tcccon.db';    // 控制器 DB
+        $Backup_DB_Location  = '/var/www/html/database/tcccon_bk.db'; // 控制器備份
+        $Copy_Destination    = '/mnt/ramdisk/ftp/iDas.cfg';           // RAMDISK 快取位置
+    
         if (!empty($argument) && PHP_OS_FAMILY === 'Linux' && $argument === 'C2D') {
-
-            // （這邊你原本有判斷登入，但現在被註解了）
-
-            // 比對時間差異
+    
+            // 時間比對提示（非強制）
             if (filemtime($Con_DB_Location) > filemtime($Das_DB_Location)) {
                 $notice = ($text['system_sync_notice'] ?? 'Controller DB is newer: ') . date("Y-m-d H:i:s", filemtime($Con_DB_Location));
-                $this->logMessage($notice); // 記錄提醒
+                $this->logMessage($notice);
             }
-
-            // 比對資料表結構
+    
+            // 結構比對提示（非強制）
             if (!$this->Database_Column_Diff()) {
                 $this->logMessage('DB structure is different.');
             }
-
-            // 1. 備份 tcccon.db 成 tcccon_bk.db
+    
+            // Step 1: 備份控制器 DB
             if (!copy($Con_DB_Location, $Backup_DB_Location)) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', 'Backup tcccon.db to tcccon_bk.db failed');
                 return;
             }
-
-            // 2. 再從 tcccon_bk.db 複製成 idas_data.db
+    
+            // Step 2: 備份檔複製成 iDAS 使用
             if (!copy($Backup_DB_Location, $Das_DB_Location)) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', 'Copy backup to idas_data.db failed');
                 return;
             }
-
-            // 複製成功，回傳同步成功
+    
+            // Step 2-1: SHA1 比對備份檔與 idas_data.db
+            $sha1_backup = sha1_file($Backup_DB_Location);
+            $sha1_idas   = sha1_file($Das_DB_Location);
+    
+            $this->logMessage("SHA1 tcccon_bk.db = $sha1_backup");
+            $this->logMessage("SHA1 idas_data.db = $sha1_idas");
+    
+            if ($sha1_backup !== $sha1_idas) {
+                $this->logMessage("SHA1 mismatch: tcccon_bk.db != idas_data.db");
+                $this->MiscellaneousModel->generateErrorResponse('Error', 'SHA1 mismatch: sync integrity failed');
+                return;
+            }
+    
+            // Step 3: 成功回應
             $res_msg = "SYNC" . ($text['success'] ?? 'Success');
             $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
-
-            // 3. 使用modbus通知控制器
+    
+            // Step 4: 通知控制器 Modbus 同步完成
             if (copy($Das_DB_Location, $Copy_Destination)) {
                 require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
                 $modbus = new ModbusMaster("127.0.0.1", "TCP");
@@ -780,11 +761,11 @@ class Settings extends Controller
                     $modbus->timeout_sec = 10;
                     $data = array(1, 26948, 24947);
                     $dataTypes = array("INT", "INT", "INT");
-
+    
                     $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
                     $this->logMessage('modbus write 506, array = ' . implode(',', $data));
                     $this->logMessage('modbus status: ' . $modbus->status);
-
+    
                 } catch (Exception $e) {
                     $this->logMessage('modbus write 506 fail: ' . $e->getMessage());
                     $this->logMessage('modbus status: ' . $modbus->status);
@@ -795,6 +776,7 @@ class Settings extends Controller
             }
         }
     }
+    
 
         
 
@@ -1233,7 +1215,7 @@ class Settings extends Controller
         // 檢查操作系統並處理檔案上傳
         if (PHP_OS_FAMILY === 'Linux') {
 
-            $destination = "/mnt/ramdisk/ftp/iDas.cfg";
+            $destination = "/mnt/ramdisk/tcccon.cfg";
             //將檔案移到指定位置
             $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
 

@@ -1083,9 +1083,6 @@
     }
 
 
-
-
-
     var rowInfoArray = [];
     <?php foreach($data['step'] as $key =>$val) {?>
             var sequenceId = "<?php echo $val['seq_id'];?>";
@@ -1156,10 +1153,14 @@
 
         // Step ID
         let present_step_id = document.getElementById(prefix + "step_id")?.value || "";
-        if (present_step_id === "1") {
+
+        //TCC M7設定step有一個規則, 在第一個step轉速最低都是可以設定到50
+        if (add_stepid === "1") {
             Tool_Min_RPM = 50;
         }
 
+       
+        
         let isDownshiftOff = document.getElementById(prefix + "downshift_OFF")?.checked || false;
 
         let conditions = [];
@@ -1190,7 +1191,8 @@
                 { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: 1, max: 55, compareGreaterThanId: prefix + 'target_tor' },
                 { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: 3, compareLessThanId: prefix + 'target_tor' },
                 { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-                { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: 9999, compareLessThanId: prefix + 'target_ang' }
+                { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: 9999, compareLessThanId: prefix + 'target_ang' },
+                   { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
             ];
         }
 
@@ -1220,45 +1222,69 @@
         let isValid = true;
         let customMessage = "";
 
+        // 語系處理
+        let language = getCookie('language') || 'default';
+        const errorText = {
+            "zh-cn": {
+                empty: "不可为空。",
+                pattern: "格式错误。",
+                range: (min, max) => `输入值必须在 ${min} ~ ${max} 之间。`,
+                gt: (label, val) => `必须大于 ${label}（目前值: ${val}）`,
+                lt: (label, val) => `必须小于 ${label}（目前值: ${val}）`
+            },
+            "zh-tw": {
+                empty: "不可空白。",
+                pattern: "格式錯誤。",
+                range: (min, max) => `輸入值必須在 ${min} ~ ${max} 之間。`,
+                gt: (label, val) => `必須大於 ${label}（目前值: ${val}）`,
+                lt: (label, val) => `必須小於 ${label}（目前值: ${val}）`
+            },
+            "default": {
+                empty: "This field is required.",
+                pattern: "Invalid format.",
+                range: (min, max) => `Value must be between ${min} and ${max}.`,
+                gt: (label, val) => `Must be greater than ${label} (current: ${val})`,
+                lt: (label, val) => `Must be less than ${label} (current: ${val})`
+            }
+        };
+        const msg = errorText[language] || errorText["default"];
+
         // 驗證空值
         if (value === "") {
             isValid = false;
-            customMessage = "不可空白。";
+            customMessage = msg.empty;
         }
-        // 驗證正則
+        // 驗證格式
         else if (!pattern.test(value)) {
             isValid = false;
-            customMessage = "格式錯誤。";
+            customMessage = msg.pattern;
         }
-        // 驗證最小值
-        else if (min !== null && min !== undefined && parseFloat(value) < min) {
+        // 驗證範圍（min ~ max）
+        else if ((min !== null && min !== undefined && parseFloat(value) < min) ||
+                (max !== null && max !== undefined && parseFloat(value) > max)) {
             isValid = false;
-            customMessage = `必須 ≥ ${min}`;
-        }
-        // 驗證最大值
-        else if (max !== null && max !== undefined && parseFloat(value) > max) {
-            isValid = false;
-            customMessage = `必須 ≤ ${max}`;
+            customMessage = msg.range(min, max);
         }
         // 驗證必須大於指定欄位
         else if (compareGreaterThanId) {
             const compareElement = document.getElementById(compareGreaterThanId);
             if (compareElement && parseFloat(value) <= parseFloat(compareElement.value)) {
-                isValid = false;
                 let labelText = compareElement.previousElementSibling ? compareElement.previousElementSibling.innerText.replace(':', '') : "";
-                customMessage = `必須大於 ${labelText}。`;
+                customMessage = msg.gt(labelText, compareElement.value);
+                isValid = false;
             }
         }
         // 驗證必須小於指定欄位
         else if (compareLessThanId) {
             const compareElement = document.getElementById(compareLessThanId);
             if (compareElement && parseFloat(value) >= parseFloat(compareElement.value)) {
-                isValid = false;
                 let labelText = compareElement.previousElementSibling ? compareElement.previousElementSibling.innerText.replace(':', '') : "";
-                customMessage = `必須小於 ${labelText}。`;
+                customMessage = msg.lt(labelText, compareElement.value);
+                isValid = false;
             }
         }
 
+        // 顯示或移除錯誤訊息
         if (!isValid) {
             element.classList.add("is-invalid");
             if (element.nextElementSibling) {
@@ -1266,10 +1292,14 @@
             }
         } else {
             element.classList.remove("is-invalid");
+            if (element.nextElementSibling) {
+                element.nextElementSibling.innerHTML = "";
+            }
         }
 
         return isValid;
     }
+
 
     let backupOptions = [];  // 用來存儲備份的選項
 

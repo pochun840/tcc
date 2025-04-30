@@ -1,6 +1,4 @@
 <?php
-//TCC M7設定step有一個規則, 在第一個step轉速最低都是可以設定到50
-
 class Step extends Controller
 {
    
@@ -109,13 +107,6 @@ class Step extends Controller
             //counts
         }
 
-        //20250407 新增特別需求 在第一個step轉速最低都是可以設定到50
-        if( $step_id ==1){
-            if(!empty($tools)){
-                $tools['tool_minrpm'] = 50;
-            }
-    
-        }
 
         $data = array(
             'isMobile' => $isMobile,
