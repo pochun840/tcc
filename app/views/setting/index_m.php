@@ -33,15 +33,15 @@
     <div class="main-content">
         <div class="center-content">
             <div class="menu-button w3-center">
-                <button id="bnt1" name="Controller_Display" class="button active" onclick="OpenButton('Controller')"><?php echo $text['controller_setting'];?></button>
-                <button id="bnt2" name="System_Display" class="button" onclick="OpenButton('System')"><?php echo $text['system_setting'];?></button>
-                <button id="bnt3" name="Barcode_Display" class="button" onclick="OpenButton('Barcode')"><?php echo $text['system_barcode_setting'] ;?></button>
-                <button id="bnt4" name="Connect_Display" class="button" onclick="OpenButton('Connect')"><?php echo $text['system_connect_setting'];?></button>
-                <button id="bnt5" name="iDas_Display" class="button" onclick="OpenButton('Update')">iDAS</button>
+                <button id="bnt1" name="Controller_Display" class="button active" data-mode="Controller"><?php echo $text['controller_setting'];?></button>
+                <button id="bnt2" name="System_Display" class="button" data-mode="System"><?php echo $text['system_setting'];?></button>
+                <button id="bnt3" name="Barcode_Display" class="button" data-mode="Barcode"><?php echo $text['system_barcode_setting'] ;?></button>
+                <button id="bnt4" name="Connect_Display" class="button" data-mode="Connect"><?php echo $text['system_connect_setting'];?></button>
+                <button id="bnt5" name="iDas_Display" class="button" data-mode="Update">iDAS</button>
             </div>
             
             <!-- Controller Setting -->        
-            <div id="Controller_Setting" class="divMode">
+            <div id="Controller_Setting" class="divMode active">
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['controller_setting'];?></div>
                 <div class="barcode-scrollbar" id="style-barcode">
                     <div class="barcode-force-overflow">   
@@ -106,12 +106,12 @@
                             <div class="col-6 t1"><?php echo $text['system_buzzer'];?>:</div>
                             <div class="col t2">
               			      	<div class="col-3 form-check form-check-inline">
-                   				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
-                       				<label class="form-check-label" for="buzzer-on"><?php echo $text['switch_on'];?></label>
+                                    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-off" value="0"  <?php echo $data['controller_info']['device_buzzer_mode'] == 0 ? 'checked="checked"' : ''; ?>>
+                                    <label class="form-check-label" for="buzzer-off"><?php echo $text['switch_off'];?></label>
                        			</div>
                       			<div class="form-check form-check-inline">
-                       			    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-off" value="2" <?php echo $data['controller_info']['buzzer_mode'] == 2 ? 'checked="checked"' : ''; ?>>
-                       				<label class="form-check-label" for="buzzer-off"><?php echo $text['switch_off'];?></label>
+                                    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-on" value="1"  <?php echo $data['controller_info']['device_buzzer_mode'] == 1 ? 'checked="checked"' : ''; ?>>
+                                    <label class="form-check-label" for="buzzer-on"><?php echo $text['switch_on'];?></label>
                        			</div>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
             </div>
             
             <!-- System Setting -->
-            <div id="System_Setting" class="divMode" style="display: none">
+            <div id="System_Setting" class="divMode" >
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%;"><?php echo $text['system_setting'];?></div>
                 <div class="system-scrollbar" id="style-system">
                     <div class="system-force-overflow">
@@ -141,12 +141,10 @@
                         <div class="col t1"><?php echo $text['system_sys_date'];?>(UTC):</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
-                                <form onsubmit="change_datetime();return false;">
+                                <form style="margin-left: 5%"  onsubmit="change_datetime();return false;" >
                                     <span id="currentSystemTime"></span>
                                     <input type="datetime-local" id="newTime" value="" size="25" required class="w3-submit w3-border" style="margin: 0px 0px 5px; height: 32px">
-                             
-
-                                    <input type="submit" value="<?php echo $text['save']; ?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                                    <input type="button" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right" onclick="time_save()">
                                 </form>
                             </div>        
                         </div>          
@@ -181,7 +179,7 @@
             </div>
 
             <!-- barcode Setting -->
-            <div id="Barcode_Setting" class="divMode" style="display: none">
+            <div id="Barcode_Setting" class="divMode">
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_barcode_setting'] ;?></div>
                 <div class="barcode-scrollbar" id="style-barcode">
                     <div class="barcode-force-overflow">   
@@ -226,14 +224,14 @@
                         <div class="row t2">
                             <div class="col-5 t1"><?php echo $text['system_barcode'];?>:</div>
                             <div class="col-7 t2">
-                                <input id="barcode_content" name="barcode_content" style="height: 32px" type="text" value="" maxlength="100" class="form-control" required>
+                                <input id="barcode_content" name="barcode_content" style="height: 32px" type="text" value="" maxlength="54" class="form-control" required>
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="row t2">
                             <div class="col-5 t1"><?php echo $text['system_barcode_match_from'];?>:</div>
                             <div class="col-7 t2">
-                                <input id="barcode_mask_from" name="barcode_mask_from" style="height: 32px" type="text" value="1" class="form-control">
+                                <input id="barcode_mask_from" name="barcode_mask_from" style="height: 32px" type="text" value="" class="form-control">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -291,7 +289,7 @@
             </div>
 
             <!-- Connection Setting -->
-            <div id="Connect_Setting" class="divMode" style="display: none">
+            <div id="Connect_Setting" class="divMode">
                 <div class="col t1" style="padding-left: 3%;font-weight: bold; padding-top: 1%"><?php echo $text['system_connect_setting'];?></div>
                 <div class="connect-scrollbar" id="style-connection">
                     <div class="connect-force-overflow">
@@ -342,7 +340,7 @@
             </div>
 
             <!-- iDas Update Setting -->
-            <div id="iDas-Update_Setting" class="divMode" style="display: none;">
+            <div id="iDas-Update_Setting" class="divMode">
                 <div class="col t1" style="padding-top: 5%">Current iDAS Version:</div>
                 <div class="row t2">
                     <div class="col-6 t2" style="margin-left: 5%">
@@ -383,73 +381,157 @@
 
 <script>
 
-window.onload = function() {
-    // 檢查 sessionStorage 中的設置，並恢復顯示狀態
-    if (sessionStorage.getItem('Barcode_Setting') === 'block') {
-        document.getElementById('Barcode_Setting').style.display = "block";
-        document.getElementById('System_Setting').style.display = "none";
-        document.getElementById('Controller_Setting').style.display = "none";
-        
-    }
-    var tourque_unit = '<?php echo $data['controller_info']['device_torque_unit']?>'; // 3
-    
-    var agent_server_ip_current = '<?php echo $data['agent_server_ip']?>';
-    document.getElementById('agent_server_ip').value =agent_server_ip_current;
+document.addEventListener('DOMContentLoaded', function () {
+    const sectionMap = {
+        "Controller": "Controller_Setting",
+        "System": "System_Setting",
+        "Barcode": "Barcode_Setting",
+        "Connect": "Connect_Setting",
+        "Update": "iDas-Update_Setting"
+    };
 
-    var agent_type_current = '<?php echo $data['agent_type']?>'; 
-    document.getElementById('agent_type_' + agent_type_current).checked = true; 
+    const buttons = document.querySelectorAll('.button');
+    const sections = document.querySelectorAll('.divMode');
 
-};
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const mode = this.getAttribute('data-mode');
+            const targetId = sectionMap[mode];
 
-function change_datetime(argument) {
-    let dateTimeInput = document.getElementById('newTime');
-    $.ajax({
-        type: "post",
-        data: {'datetime':dateTimeInput.value},
-        dataType: "json",
-        url: "?url=Settings/edit_system_date",
-        beforeSend: function() {
-            $('#overlay').removeClass('hidden');
-        },
-    }).done(function(data) { //成功且有回傳值才會執行
-        setTimeout(function() {
-            $('#overlay').addClass('hidden');
-        }, 1000);
-        if (data.error != '') {
-            alert('sync error');
-        }else{
-            document.cookie = "group=System";
-            location.reload();
-        }
-    }).fail(function() {
-        history.go(0);
+            // 清除所有按鈕與區塊的 active/hidden
+            buttons.forEach(btn => btn.classList.remove('active'));
+            sections.forEach(sec => {
+                sec.classList.remove('active');
+                sec.classList.add('hidden');
+            });
+
+            // 顯示對應區塊，標記按鈕為 active
+            this.classList.add('active');
+            document.getElementById(targetId).classList.add('active');
+            document.getElementById(targetId).classList.remove('hidden');
+        });
     });
 
-}    
 
-function getCurrentSystemTime() {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var serverTime = xhr.responseText;
-            updateCurrentTime(serverTime);
+    getCurrentSystemTime();
+});
+
+
+function change_datetime() {
+    var newTime = document.getElementById("newTime").value;
+    var language = getCookie('language') || 'default';
+
+    var messages = {
+        'zh-tw': {
+            'select': '請選擇時間',
+            'success': '設定成功',
+            'fail': '設定失敗',
+            'error': '通訊錯誤，請稍後再試。'
+        },
+        'zh-cn': {
+            'select': '请选择时间',
+            'success': '设置成功',
+            'fail': '设置失败',
+            'error': '通信错误，请稍后再试。'
+        },
+        'default': {
+            'select': 'Please select a time',
+            'success': 'Success',
+            'fail': 'Failed',
+            'error': 'Communication error. Please try again later.'
         }
     };
 
+    alert(newTime);
+
+    var msg = messages[language] || messages['default'];
+
+    if (!newTime) {
+        alert(msg.select);
+        return;
+    }
+
+    document.getElementById('spinner').style.display = 'block';
+
+    $.ajax({
+        type: "POST",
+        url: "?url=Settings/edit_system_date",
+        data: { datetime: newTime },
+        dataType: "json",
+        success: function(response) {
+            document.getElementById('spinner').style.display = 'none';
+
+            if (response.error) {
+                alertify.alert(msg.fail, response.error);
+            } else {
+                alertify.alert(msg.success, msg.success);
+                setTimeout(function () {
+                    alertify.closeAll();
+                    location.reload(); // ✅ 自動重整
+                }, 3000); // ✅ 自動關閉時間：3秒
+            }
+        },
+        error: function() {
+            document.getElementById('spinner').style.display = 'none';
+            alertify.alert(msg.fail, msg.error);
+        }
+    });
+}
+
+
+
+
+function getCurrentSystemTime() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var serverTime = xhr.responseText.trim().replace(/-/g, "/");
+            var serverDateTime = new Date(serverTime);
+            updateCurrentTime(serverDateTime);
+        }
+    };
     xhr.open("GET", "?url=Settings/get_system_time", true);
     xhr.send();
 }
 
-function updateCurrentTime(serverTime) {
-    var currentTimeElement = document.getElementById("currentSystemTime");
-    var serverDateTime = new Date(serverTime);
+function updateCurrentTime(serverDateTime) {
+    var el = document.getElementById("currentSystemTime");
 
-    setInterval(function() {
+    function pad(n) {
+        return n < 10 ? '0' + n : n;
+    }
+
+    function formatTime(date) {
+        var year = date.getFullYear();
+        var month = pad(date.getMonth() + 1);
+        var day = pad(date.getDate());
+        var hour = date.getHours();
+        var minute = pad(date.getMinutes());
+        var second = pad(date.getSeconds());
+
+        let isPM = hour >= 12;
+        let period = isPM ? '下午' : '上午';
+
+        // 使用 12 小時制顯示
+        let hour12 = hour % 12 || 12;
+
+        return `${year}/${month}/${day} ${period} ${pad(hour12)}:${minute}:${second}`;
+    }
+
+    // 初次顯示
+    let lastText = formatTime(serverDateTime);
+    el.innerText = lastText;
+
+    // 每秒更新一次，但只有在內容變化時才更新畫面，避免閃爍
+    setInterval(function () {
         serverDateTime.setSeconds(serverDateTime.getSeconds() + 1);
-        currentTimeElement.textContent = serverDateTime.toLocaleString();
+        let currentText = formatTime(serverDateTime);
+
+        if (el.innerText !== currentText) {
+            el.innerText = currentText;
+        }
     }, 1000);
 }
-
 
 
 function StatusCheck(action) {
@@ -550,19 +632,25 @@ function agent_ip_save() {
             },
             success: function(response) {
                 var responseData = JSON.parse(response); 
-                
-                setTimeout(function() {
-                    document.getElementById('spinner').style.display = 'none';
-                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                        sessionStorage.setItem('Connect_Setting', 'block');
-                        sessionStorage.setItem('Controller_Setting', 'none');
-                        //history.go(0); 
-                    });
 
+                console.log(responseData);  
+                
+                // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                setTimeout(function() {
+                    // 隱藏 'copyjob' 和 'spinner' 加載動畫
+                    document.querySelector(".main-content").classList.remove("overlay-active");
+                    document.getElementById('spinner').style.display = 'none';  
+
+                    sessionStorage.setItem('Connect_Setting', 'block');
+                    sessionStorage.setItem('Controller_Setting', 'none');
+
+                    alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                        history.go(0); 
+                    });
                     setTimeout(function() {
                         alertify.closeAll(); 
-                    }, 3000);
-                }, 1000);
+                    }, 3000); 
+                }, 1000); 
                 
                 document.getElementById('agent_server_ip').innerText = responseData.res_number;
             },
@@ -580,35 +668,9 @@ function agent_ip_save() {
 }
 
 
-
-getCurrentSystemTime();// 初始化：顯示目前系統時間
-function getCurrentSystemTime() {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var serverTime = xhr.responseText;
-            updateCurrentTime(serverTime);
-        }
-    };
-
-    xhr.open("GET", "?url=Settings/edit_system_date", true);
-    xhr.send();
-}
-
-function updateCurrentTime(serverTime) {
-    var currentTimeElement = document.getElementById("currentSystemTime");
-    var serverDateTime = new Date(serverTime);
-
-    setInterval(function() {
-        serverDateTime.setSeconds(serverDateTime.getSeconds() + 1);
-        currentTimeElement.textContent = serverDateTime.toLocaleString();
-    }, 1000);
-}
-
-
-/*function time_save(){
+function time_save(){
     var newTime = document.getElementById('newTime').value;
-    var device_id = <?php //echo $data['controller_info']['device_id'];?>;
+    var device_id = <?php echo $data['controller_info']['device_id'];?>;
     if(newTime){
         $.ajax({
             url: "?url=Settings/edit_system_date",
@@ -627,7 +689,7 @@ function updateCurrentTime(serverTime) {
         });       
     }
 
-}*/
+}
 
 function edit_password() {
     var new_password = document.getElementById('new_password').value;
@@ -787,49 +849,14 @@ function button_save_password_gust(){
 
 }
 
-
-function OpenButton(ButtonMode) {
-    const sectionMap = {
-        "Controller": "Controller_Setting",
-        "System": "System_Setting",
-        "Barcode": "Barcode_Setting",
-        "Connect": "Connect_Setting",
-        "Update": "iDas-Update_Setting"
-    };
-
-    const buttonMap = {
-        "Controller": "bnt1",
-        "System": "bnt2",
-        "Barcode": "bnt3",
-        "Connect": "bnt4",
-        "Update": "bnt5"
-    };
-
-    // 隱藏所有區塊，移除所有按鈕 active
-    Object.values(sectionMap).forEach(id => {
-        document.getElementById(id).style.display = "none";
-    });
-
-    Object.values(buttonMap).forEach(id => {
-        document.getElementById(id).classList.remove("active");
-    });
-
-    // 顯示指定區塊，標記對應按鈕 active
-    if (sectionMap[ButtonMode] && buttonMap[ButtonMode]) {
-        document.getElementById(sectionMap[ButtonMode]).style.display = "";
-        document.getElementById(buttonMap[ButtonMode]).classList.add("active");
-    }
-}
-
-
 function input_check_savebarcode() {
 
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 
     let conditions = [
-        { id: 'barcode_content',  pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]{1,100}$/, min: null, max: null },
+        { id: 'barcode_content', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'barcode_mask_from', pattern: /^[0-9]+$/, min: 1, max: 54 },
-        { id: 'barcode_mask_count', pattern: /^[0-9]+$/, min: 1, max: 100 },
+        { id: 'barcode_mask_count', pattern: /^[0-9]+$/, min: 1, max: 54 },
         
 
     ];
@@ -968,6 +995,7 @@ function Import_SystemConfig() {
 
 
 // Bacode & Connection Change page
+// Bacode & Connection Change page
 // 儲存每個表格的當前頁面狀態
 const rowsPerPage = 2; // 每頁顯示的行數
 
@@ -1021,9 +1049,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>    
+
+
 <style>
-    #control_name {
-    max-width: 100%;
-    box-sizing: border-box; 
+.divMode.hidden {
+  display: none !important;
+}
+.divMode.active {
+  display: block !important;
+}
+
+
+#Controller_Setting,
+#System_Setting,
+#Barcode_Setting,
+#Connect_Setting,
+#iDas-Update_Setting {
+    background-color: transparent !important; /* ✅ 清除藍色背景 */
 }
 </style>

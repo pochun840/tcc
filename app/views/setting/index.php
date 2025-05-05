@@ -135,9 +135,7 @@
                     <div class="col-3 t1"><?php echo $text['system_sys_date'];?>(UTC):</div>
                     <div class="col t3">
                         <form onsubmit="change_datetime();return false;">
-                                    <div id="timeWrapper">
-                                        <span id="currentSystemTime">--/--/-- --:--:--</span>
-                                    </div>
+                                    <span id="currentSystemTime"></span>
                                     <input type="datetime-local" id="newTime" value="" size="25" required class="w3-submit w3-border" style="margin: 0px 0px 5px; height: 32px">
                                     <input type="submit" value="<?php echo $text['save']; ?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                         </form>
@@ -378,6 +376,68 @@ $(document).ready(function () {
 });
 
 
+function change_datetime() {
+    var newTime = document.getElementById("newTime").value;
+    var language = getCookie('language') || 'default';
+
+    var messages = {
+        'zh-tw': {
+            'select': '請選擇時間',
+            'success': '設定成功',
+            'fail': '設定失敗',
+            'error': '通訊錯誤，請稍後再試。'
+        },
+        'zh-cn': {
+            'select': '请选择时间',
+            'success': '设置成功',
+            'fail': '设置失败',
+            'error': '通信错误，请稍后再试。'
+        },
+        'default': {
+            'select': 'Please select a time',
+            'success': 'Success',
+            'fail': 'Failed',
+            'error': 'Communication error. Please try again later.'
+        }
+    };
+
+    var msg = messages[language] || messages['default'];
+
+    if (!newTime) {
+        alert(msg.select);
+        return;
+    }
+
+    document.getElementById('spinner').style.display = 'block';
+
+    $.ajax({
+        type: "POST",
+        url: "?url=Settings/edit_system_date",
+        data: { datetime: newTime },
+        dataType: "json",
+        success: function(response) {
+            document.getElementById('spinner').style.display = 'none';
+
+            if (response.error) {
+                alertify.alert(msg.fail, response.error);
+            } else {
+                alertify.alert(msg.success, msg.success);
+                setTimeout(function () {
+                    alertify.closeAll();
+                    location.reload(); // ✅ 自動重整
+                }, 3000); // ✅ 自動關閉時間：3秒
+            }
+        },
+        error: function() {
+            document.getElementById('spinner').style.display = 'none';
+            alertify.alert(msg.fail, msg.error);
+        }
+    });
+}
+
+
+
+
 function getCurrentSystemTime() {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
@@ -402,19 +462,31 @@ function updateCurrentTime(serverDateTime) {
         var year = date.getFullYear();
         var month = pad(date.getMonth() + 1);
         var day = pad(date.getDate());
-        var hour = pad(date.getHours());
+        var hour = date.getHours();
         var minute = pad(date.getMinutes());
         var second = pad(date.getSeconds());
-        return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
+
+        let isPM = hour >= 12;
+        let period = isPM ? '下午' : '上午';
+
+        // 使用 12 小時制顯示
+        let hour12 = hour % 12 || 12;
+
+        return `${year}/${month}/${day} ${period} ${pad(hour12)}:${minute}:${second}`;
     }
 
     // 初次顯示
-    el.textContent = formatTime(serverDateTime);
+    let lastText = formatTime(serverDateTime);
+    el.innerText = lastText;
 
-    // 每秒更新一次
+    // 每秒更新一次，但只有在內容變化時才更新畫面，避免閃爍
     setInterval(function () {
         serverDateTime.setSeconds(serverDateTime.getSeconds() + 1);
-        el.textContent = formatTime(serverDateTime);
+        let currentText = formatTime(serverDateTime);
+
+        if (el.innerText !== currentText) {
+            el.innerText = currentText;
+        }
     }, 1000);
 }
 
@@ -641,8 +713,6 @@ function edit_password() {
         return; 
     }
 
-    var device_id = <?php echo $data['controller_info']['device_id'];?>;
-
     alertify.confirm(confirm_text, function(result) {
         if (result) {
             document.getElementById('spinner').style.display = 'block';
@@ -651,24 +721,29 @@ function edit_password() {
                 url: "?url=Settings/edit_password",
                 method: "POST",
                 data: { 
-                    device_id: device_id,
                     new_password: new_password
                 },
                 success: function(response) {
-                    var responseData = JSON.parse(response);  
+                    try {
+                        var responseData = JSON.parse(response);
 
-                    setTimeout(function() {
+                        console.log(responseData);
                         document.getElementById('spinner').style.display = 'none';
+
                         alertify.alert(responseData.res_type, responseData.res_msg, function() {
                             sessionStorage.setItem('System_Setting', 'block');
                             sessionStorage.setItem('Controller_Setting', 'none');
-                            history.go(0); 
+                            history.go(0);
                         });
 
-                        setTimeout(function() {
-                            alertify.closeAll(); 
+                        setTimeout(function () {
+                            alertify.closeAll();
                         }, 3000);
-                    }, 1000);
+                    } catch (e) {
+                        document.getElementById('spinner').style.display = 'none';
+                        alertify.alert("Error", "Invalid server response.");
+                        console.error("JSON parse error:", e, response);
+                    }
                 },
                 error: function(xhr, status, error) {
                     alertify.alert('Error', 'An error occurred while updating the password.');
@@ -901,7 +976,9 @@ function Export_SystemConfig(argument) {
   font-size: 18px;
   white-space: nowrap;
   display: inline-block;
-  min-width: 260px; /* 固定最小寬度，防止跳動 */
-  letter-spacing: 1px;
+  width: 260px;               /* 固定寬度 */
+  text-align: center;
+  box-sizing: border-box;     /* 保證寬度不超出 */
+  padding: 0 10px;            /* 可選：增加內距讓數字更穩定 */
 }
 </style>

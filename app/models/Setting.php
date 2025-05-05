@@ -108,38 +108,13 @@ class Setting{
 
     public function Edit_Login_Password($conset){
 
-        $conset['device_id'] = intval($conset['device_id']);
-
-        /*$sql = "UPDATE `device` 
-                SET device_password = :device_password
-                WHERE device_id = :device_id";
-    
-        $statement = $this->db_iDas_device->prepare($sql);
-        
-        $statement->bindValue(':device_password', $conset['new_password']);
-        $statement->bindValue(':device_id', $conset['device_id']);
-        $results = $statement->execute();*/
-
-        $sql_1 = "UPDATE `operator` 
-        SET operator_adminpwd = :operator_adminpwd
-        WHERE operator_loginflag = :operator_loginflag";
-
-        $statement1 = $this->db_iDas_login->prepare($sql_1);
-        $statement1->bindValue(':operator_adminpwd', $conset['new_password']);
-        $statement1->bindValue(':operator_loginflag', '1');
-        $results1  = $statement1->execute();
-
-
         $sql_2 = "UPDATE `operator` 
-        SET operator_adminpwd = :operator_adminpwd
-        WHERE operator_loginflag = :operator_loginflag";
-
+        SET operator_adminpwd = :operator_adminpwd";
         $statement2 = $this->db_iDas->prepare($sql_2);
         $statement2->bindValue(':operator_adminpwd', $conset['new_password']);
-        $statement2->bindValue(':operator_loginflag', '0');
         $results2  = $statement2->execute();
 
-        return $results1; 
+        return $results2; 
     }
     
     public function system_date_edit($conset){

@@ -1,33 +1,4 @@
 
-document.addEventListener('DOMContentLoaded', function() {
-    function updateTime() {
-        var currentTime = new Date();
-        var hours = currentTime.getHours();
-        var minutes = currentTime.getMinutes();
-        var seconds = currentTime.getSeconds();
-        var period = hours >= 12 ? 'PM' : 'AM';
-    
-        hours = hours % 12;
-        hours = hours ? hours : 12; // 0 should be 12
-        minutes = minutes < 10 ? '0'+minutes : minutes;
-        seconds = seconds < 10 ? '0'+seconds : seconds;
-    
-        var timeString = currentTime.getFullYear() + '-' + 
-                            ('0' + (currentTime.getMonth() + 1)).slice(-2) + '-' + 
-                            ('0' + currentTime.getDate()).slice(-2) + ' ' + 
-                            ('0' + hours).slice(-2) + ':' + 
-                            ('0' + minutes).slice(-2) + ':' + 
-                            ('0' + seconds).slice(-2) + ' ' + period;
-    
-        document.getElementById('currentSystemTime').innerText = timeString;
-    }
-    
-    updateTime();
-    // 每秒更新一次時間
-    setInterval(updateTime, 1000);
-    
-});
-
 function cc_save(){
 
 
@@ -107,83 +78,6 @@ function Firmware_Update() {
         document.getElementById("firmware-file-uploader").value = '';
     });
 }
-
-
-
-function OpenButton(ButtonMode){
-
-    if (ButtonMode == "Controller")
-    {
-        document.getElementById('Controller_Setting').style.display = "";
-        document.getElementById('System_Setting').style.display = "none";
-        document.getElementById('Barcode_Setting').style.display = "none";
-        document.getElementById('Connect_Setting').style.display = "none";
-        document.getElementById('iDas-Update_Setting').style.display = "none";
-        document.getElementById('bnt1').classList.add("active");
-        document.getElementById('bnt2').classList.remove("active");   
-        document.getElementById('bnt3').classList.remove("active");
-        document.getElementById('bnt4').classList.remove("active");
-        document.getElementById('bnt5').classList.remove("active");
-    }
-    else if (ButtonMode == "System")
-    {
-        document.getElementById('System_Setting').style.display = "";
-        document.getElementById('Controller_Setting').style.display = "none";
-        document.getElementById('Barcode_Setting').style.display = "none";
-        document.getElementById('Connect_Setting').style.display = "none";
-        document.getElementById('iDas-Update_Setting').style.display = "none";
-        document.getElementById('bnt2').classList.add("active");
-        document.getElementById('bnt1').classList.remove("active");
-        document.getElementById('bnt3').classList.remove("active");
-        document.getElementById('bnt4').classList.remove("active");
-        document.getElementById('bnt5').classList.remove("active");
-
-    }
-    else if (ButtonMode == "Barcode")
-    {
-        document.getElementById('Barcode_Setting').style.display = "";
-        document.getElementById('System_Setting').style.display = "none";
-        document.getElementById('Controller_Setting').style.display = "none";
-        document.getElementById('Connect_Setting').style.display = "none";
-        document.getElementById('iDas-Update_Setting').style.display = "none";
-        document.getElementById('bnt3').classList.add("active");
-        document.getElementById('bnt2').classList.remove("active");
-        document.getElementById('bnt1').classList.remove("active");
-        document.getElementById('bnt4').classList.remove("active");
-        document.getElementById('bnt5').classList.remove("active");
-    }
-    else if (ButtonMode == "Connect")
-    {
-        document.getElementById('Connect_Setting').style.display = "";
-        document.getElementById('Barcode_Setting').style.display = "none";
-        document.getElementById('System_Setting').style.display = "none";
-        document.getElementById('Controller_Setting').style.display = "none";
-        document.getElementById('iDas-Update_Setting').style.display = "none";
-        document.getElementById('bnt4').classList.add("active");
-        document.getElementById('bnt3').classList.remove("active");
-        document.getElementById('bnt2').classList.remove("active");
-        document.getElementById('bnt1').classList.remove("active");
-        document.getElementById('bnt5').classList.remove("active");
-    }
-    else if (ButtonMode == "Update")
-    {
-        document.getElementById('iDas-Update_Setting').style.display = "";
-        document.getElementById('Connect_Setting').style.display = "none";
-        document.getElementById('Barcode_Setting').style.display = "none";
-        document.getElementById('System_Setting').style.display = "none";
-        document.getElementById('Controller_Setting').style.display = "none";
-        document.getElementById('bnt5').classList.add("active");
-        document.getElementById('bnt4').classList.remove("active");
-        document.getElementById('bnt3').classList.remove("active");
-        document.getElementById('bnt2').classList.remove("active");
-        document.getElementById('bnt1').classList.remove("active");
-    }
-    else
-    {
-        //alert("Function ["+ ButtonMode +"] is under constructing ...");
-    }
-}
-
 
 
 function getCookie(name) 
