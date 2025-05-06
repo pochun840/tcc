@@ -227,7 +227,7 @@ function DB_sync_idas_load(argument) {
             });
         },
         function () {
-            alertify.error('已取消');
+            //alertify.error('已取消');
         }
     );
 
@@ -291,7 +291,7 @@ function DB_sync_idas(argument) {
     var language = getCookie('language');
 
     var titles = {
-        "zh-cn": { "D2C": '同步iDas的DB到控制器' },
+        "zh-cn": { "D2C": '同步 iDas的数据库到控制器' },
         "zh-tw": { "D2C": '同步iDas的DB到控制器' },
         "default": { "D2C": 'Sync iDas DB to controller' }
     };
@@ -299,9 +299,9 @@ function DB_sync_idas(argument) {
     var messages = {
         "zh-cn": { "D2C": '同步后目前控制器上的资料将被覆盖，确认是否同步' },
         "zh-tw": { "D2C": '同步後目前控制器上的資料將被覆蓋，確認是否同步' },
-        "default": { "D2C": 'After synchronization, the data on the controller will be overwritten' }
+        "default": { "D2C": "After synchronization, the controller's current data will be overwritten. Confirm sync" }
     };
-
+    
     var syncingTexts = {
         "zh-cn": "同步中，请稍候...",
         "zh-tw": "同步中，請稍候...",
@@ -309,9 +309,24 @@ function DB_sync_idas(argument) {
     };
 
     var errorMessages = {
-        "zh-cn": '同步失败，请稍后再试',
-        "zh-tw": '同步失敗，請稍後再試',
-        "default": 'Synchronization failed, please try again later'
+        "zh-cn": {
+            "login": "目前控制器有人登入，无法进行同步！",
+            "check": "无法确认控制器登入状态",
+            "syncFail": "同步失败，请稍后再试",
+            "json": "回传资料错误"
+        },
+        "zh-tw": {
+            "login": "目前控制器有人登入，無法進行同步！",
+            "check": "無法確認控制器登入狀態",
+            "syncFail": "同步失敗，請稍後再試",
+            "json": "回傳資料錯誤"
+        },
+        "default": {
+            "login": "Someone is logged in on the controller. Sync cannot proceed.",
+            "check": "Unable to verify controller login status",
+            "syncFail": "Synchronization failed. Please try again later.",
+            "json": "Invalid response from server"
+        }
     };
 
     var title = titles[language]?.[argument] || titles["default"][argument];
@@ -321,76 +336,85 @@ function DB_sync_idas(argument) {
 
     alertify.confirm(title, message,
         function () {
-            var totalSeconds = 8;
-            addOverlay();
-            createProgressDialog(syncingText);
+            // 新增：登入檢查
+            $.ajax({
+                url: "?url=Settings/get_controller_login",
+                method: "POST",
+                success: function (response) {
+                    var loginStatus = parseInt(response);
+                    if (loginStatus !== 0) {
+                        showAlertAutoClose('Error', errorText.login);
+                        return;
+                    }
 
-            var progress = 0;
-            var intervalTime = (totalSeconds * 1000) / 100;
+                    // 通過登入檢查後開始同步流程
+                    var totalSeconds = 8;
+                    var progress = 0;
+                    var intervalTime = (totalSeconds * 1000) / 100;
 
-            var interval = setInterval(function () {
-                progress += 1;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
+                    addOverlay();
+                    createProgressDialog(syncingText);
 
-                    // ✅ 關閉自訂進度視窗（進度條完成立即關閉）
-                    removeProgressDialog();
+                    var interval = setInterval(function () {
+                        progress += 1;
+                        if (progress >= 100) {
+                            progress = 100;
+                            clearInterval(interval);
+                            removeProgressDialog();
 
-                    // 🔁 開始送出 AJAX 請求
-                    $.ajax({
-                        url: "?url=Settings/Sync_check_db",
-                        method: "POST",
-                        data: { argument: argument },
-                        success: function (response) {
-                            var responseData = JSON.parse(response);
-
-                            if (responseData.res_type === "Success") {
-                                var successDialog = alertify.alert(responseData.res_type, responseData.res_msg);
-                                successDialog.set('onshow', function () {
-                                    setTimeout(function () {
-                                        alertify.dismissAll();
-                                        removeOverlay();
-                                        history.go(0);
-                                    }, 3000);
-                                });
-                            } else {
-                                var failDialog = alertify.alert(responseData.res_type, responseData.res_msg);
-                                failDialog.set('onshow', function () {
-                                    setTimeout(function () {
-                                        alertify.dismissAll();
-                                        removeOverlay();
-                                    }, 3000);
-                                });
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("AJAX request failed:", status, error);
-                            var failDialog = alertify.alert('Error', errorText);
-                            failDialog.set('onshow', function () {
-                                setTimeout(function () {
-                                    alertify.dismissAll();
-                                    removeOverlay();
-                                }, 3000);
+                            $.ajax({
+                                url: "?url=Settings/Sync_check_db",
+                                method: "POST",
+                                data: { argument: argument },
+                                success: function (response) {
+                                    try {
+                                        var responseData = JSON.parse(response);
+                                        showAlertAutoClose(responseData.res_type, responseData.res_msg);
+                                        setTimeout(function () {
+                                            removeOverlay();
+                                            if (responseData.res_type === "Success") history.go(0);
+                                        }, 3000);
+                                    } catch (e) {
+                                        console.error("Response JSON parse error:", e, response);
+                                        showAlertAutoClose('Error', errorText.json);
+                                        setTimeout(removeOverlay, 3000);
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error("AJAX request failed:", status, error);
+                                    showAlertAutoClose('Error', errorText.syncFail);
+                                    setTimeout(removeOverlay, 3000);
+                                }
                             });
                         }
-                    });
+
+                        var progressBar = document.getElementById('syncProgress');
+                        if (progressBar) progressBar.value = progress;
+
+                        var syncText = document.getElementById('syncText');
+                        if (syncText) syncText.innerHTML = syncingText + ' ' + progress + '%';
+                    }, intervalTime);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX login check failed:", status, error);
+                    showAlertAutoClose('Error', errorText.check);
                 }
-
-                // 更新進度條與文字
-                var progressBar = document.getElementById('syncProgress');
-                if (progressBar) progressBar.value = progress;
-
-                var syncText = document.getElementById('syncText');
-                if (syncText) syncText.innerHTML = syncingText + ' ' + progress + '%';
-            }, intervalTime);
+            });
         },
         function () {
-            alertify.error('已取消');
+            //alertify.error('已取消');
         }
     );
 
-    // 遮罩控制
+    function showAlertAutoClose(title, message, delay = 3000) {
+        const dialog = alertify.alert(title, message);
+        dialog.set('onshow', function () {
+            setTimeout(() => {
+                alertify.dismissAll();
+            }, delay);
+        });
+    }
+
     function addOverlay() {
         var overlay = document.createElement('div');
         overlay.id = 'overlayMask';
@@ -409,7 +433,6 @@ function DB_sync_idas(argument) {
         if (overlay) overlay.remove();
     }
 
-    // 自訂進度對話框
     function createProgressDialog(syncingText) {
         var dialog = document.createElement("div");
         dialog.id = "customProgressDialog";
@@ -433,6 +456,7 @@ function DB_sync_idas(argument) {
         if (dialog) dialog.remove();
     }
 }
+
 
 
 

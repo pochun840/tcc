@@ -737,8 +737,8 @@ function create_step() {
 
     // 設定預設值
     document.getElementById('rpm').value = 100;
-    document.getElementById('th_tor').value = 0;
-    document.getElementById('ds_tor').value = 0;
+    document.getElementById('th_tor').value = (0.0).toFixed(1);  
+    document.getElementById('ds_tor').value = (0.0).toFixed(1);
     document.getElementById('ds_speed').value = 100;
     document.getElementById("direction_CW").checked = true;
     document.getElementById('ang_hi').value= 9999;

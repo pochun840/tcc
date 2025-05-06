@@ -3,8 +3,8 @@ function create_step() {
 
     document.getElementById('newstep').style.display = 'block';
     document.getElementById('rpm').value = 100;
-    document.getElementById('th_tor').value = 0;
-    document.getElementById('ds_tor').value = 0;
+    document.getElementById('th_tor').value = (0.0).toFixed(1);
+    document.getElementById('ds_tor').value = (0.0).toFixed(1);
     document.getElementById('ds_speed').value = 100;
     
     document.getElementById('ang_hi').value= 9999;
@@ -164,8 +164,8 @@ function toggleVisibility(targetValue) {
         enableElementById('ang_hi','0');
         enableElementById('ang_lo','0');
         enableElementById('rpm','200');
-        enableElementById('th_tor','0');
-        enableElementById('ds_tor','0');
+        enableElementById('th_tor','0.0');
+        enableElementById('ds_tor','0.0');
         enableElementById('ds_speed','100');
         enableElementById('direction_CW','');
         enableElementById('direction_CCW','');
@@ -183,8 +183,8 @@ function toggleVisibility(targetValue) {
         enableElementById('ang_lo', ''); 
         enableElementById('direction_CW','');
         enableElementById('direction_CCW','');
-        disableElementById('th_tor','0');
-        disableElementById('ds_tor','0');
+        disableElementById('th_tor','0.0');
+        disableElementById('ds_tor','0.0');
         disableElementById('ds_speed','100');
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
@@ -203,8 +203,8 @@ function toggleVisibility(targetValue) {
         disableElementById('ang_hi','0');
         disableElementById('ang_lo','0');
         disableElementById('rpm','200');
-        disableElementById('th_tor','0');
-        disableElementById('ds_tor','0');
+        disableElementById('th_tor','0.0');
+        disableElementById('ds_tor','0.0');
         disableElementById('ds_speed','100');
         disableElementById('direction_CW','');
         disableElementById('direction_CCW','');

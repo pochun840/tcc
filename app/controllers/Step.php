@@ -165,25 +165,19 @@ class Step extends Controller
             $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 50;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
             $th_mode = isset($_POST['th_mode'])? intval($_POST['th_mode']) : 0;
-            $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0.3; 
+            $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0.0; 
             $ds_speed = isset($_POST['ds_speed'])? intval($_POST['ds_speed']) : 100;
-            $th_tor = isset($_POST['th_tor'])? floatval($_POST['th_tor']) : 0;
+            $th_tor = isset($_POST['th_tor'])? floatval($_POST['th_tor']) : 0.0;
             $record_ang = isset($_POST['record_ang'])? intval($_POST['record_ang']) : 0;
             $tor_unit = isset($_POST['tor_unit'])? intval($_POST['tor_unit']) : 1;
 
 
 
-
-
-            #同一個step 只能有一個Target Torque
-            //$check = $this->stepModel->check_step_target($jobid,$seqid);
-            //$check = intval($check[0]['count_records']);
-
-
-        
-
             if($target_opt  == 0 ){
-                if ($ds_tor > $target_tor) {
+
+                $ds_tor = 0.0;
+                $th_tor = 0.0;
+                /*if ($ds_tor > $target_tor) {
 
                     $res_type = 'Error';
                     $res_msg  =  $error_message['downshift_torque_error'];
@@ -205,7 +199,7 @@ class Step extends Controller
                     );
                     echo json_encode($result);
                     exit();
-                }
+                }*/
 
             }
 

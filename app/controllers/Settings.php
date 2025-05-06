@@ -371,8 +371,9 @@ class Settings extends Controller
         // code...
     }
 
-    public function export_sysytem_config(){
-
+    
+    public function export_sysytem_config()
+    {
         if( PHP_OS_FAMILY == 'Linux'){
             require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
             $modbus = new ModbusMaster("127.0.0.1", "TCP");
@@ -407,8 +408,8 @@ class Settings extends Controller
         }else{//windows
             // echo json_encode(array('error' => ''));
                 header("Content-type: text/html; charset=utf-8");
-                $file="../tcccon.db"; // 實際檔案的路徑+檔名
-                $filename="tcccon.cfg"; // 下載的檔名
+                $file="../tcscon.db"; // 實際檔案的路徑+檔名
+                $filename="tcscon.cfg"; // 下載的檔名
                 //指定類型
                 header("Content-type: ".filetype("$file"));
                 //指定下載時的檔名
@@ -418,6 +419,8 @@ class Settings extends Controller
             exit();
         }
     }
+
+    
 
 
     public function system_storage()
