@@ -1,7 +1,7 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tool.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tool.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 
 
 

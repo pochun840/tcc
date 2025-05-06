@@ -1,8 +1,8 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_agent.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_agent.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css" type="text/css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_agent.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_agent.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 
 
 <div class="container">

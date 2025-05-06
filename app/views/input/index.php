@@ -17,7 +17,7 @@
 }
 
 </style>    
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_input.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_input.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">

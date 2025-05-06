@@ -1,5 +1,5 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_operation_m.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_operation_m.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 
 <style type="text/css">
     @font-face

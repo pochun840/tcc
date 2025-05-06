@@ -1,5 +1,5 @@
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_output.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_output.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 <style>
 .overlay-active {
     position: relative;

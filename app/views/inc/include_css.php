@@ -7,31 +7,32 @@ function includecss_file($part, $cssFileName) {
     $firstPart = $parts[0];
     $extension = pathinfo($cssFileName, PATHINFO_EXTENSION);
 
-    if($firstPart == $part){
-        if($extension == 'css'){ ?>
-            <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>">
-        <?php }elseif($extension == 'js'){ ?>
-            <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>"></script>
+    if ($firstPart == $part) {
+        if ($extension == 'css') { ?>
+            <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>css/<?php echo $cssFileName; ?>?v=<?php echo ASSET_VERSION; ?>">
+        <?php } elseif ($extension == 'js') { ?>
+            <script src="<?php echo URLROOT; ?>js/<?php echo $cssFileName; ?>?v=<?php echo ASSET_VERSION; ?>"></script>
         <?php }
     }
 }
+
 ?>
     <script src="<?php echo URLROOT; ?>js/jquery-3.7.1.min.js"></script>
  
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/jquery_data_Tables.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/jquery_data_Tables.css?v=<?php echo ASSET_VERSION; ?>">
 
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/datatables.min.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/datatables.min.css?v=<?php echo ASSET_VERSION; ?>">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css?v=<?php echo ASSET_VERSION; ?>">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/font-awesome.min.css?v=<?php echo ASSET_VERSION; ?>">
 
-    <script src="<?php echo URLROOT; ?>js/all.js"></script>
-    <script src="<?php echo URLROOT; ?>js/echarts_min.js"></script>
-    <script src="<?php echo URLROOT; ?>js/jquery_data_Tables.js"></script>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/flatpickr.min.css" type="text/css">
+    <script src="<?php echo URLROOT; ?>js/all.js?v=<?php echo ASSET_VERSION; ?>"></script>
+    <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=<?php echo ASSET_VERSION; ?>"></script>
+    <script src="<?php echo URLROOT; ?>js/jquery_data_Tables.js?v=<?php echo ASSET_VERSION; ?>"></script>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/flatpickr.min.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/alertify_min.css"/>
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/default_min.css"/>
-    <script src="<?php echo URLROOT; ?>js/alertify_min.js"></script>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/alertify_min.css?v=<?php echo ASSET_VERSION; ?>"/>
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/default_min.css?v=<?php echo ASSET_VERSION; ?>"/>
+    <script src="<?php echo URLROOT; ?>js/alertify_min.js?v=<?php echo ASSET_VERSION; ?>"></script>
 
     <?php 
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
@@ -72,8 +73,8 @@ function includecss_file($part, $cssFileName) {
 
     ?>
 
-    <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=202406131200"></script>
-    <script src="<?php echo URLROOT; ?>js/tcc_data.js?v=202406131200"></script>
-    <script src="<?php echo URLROOT; ?>js/flatpickr.js"></script>
-    <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js"></script>
-    <script src="<?php echo URLROOT; ?>js/jszip.js?v=202406241500"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=<?php echo ASSET_VERSION; ?>"></script>
+    <script src="<?php echo URLROOT; ?>js/tcc_data.js?v=<?php echo ASSET_VERSION; ?>"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr.js?v=<?php echo ASSET_VERSION; ?>"></script>
+    <script src="<?php echo URLROOT; ?>js/flatpickr_zh-tw.js?v=<?php echo ASSET_VERSION; ?>"></script>
+    <script src="<?php echo URLROOT; ?>js/jszip.js?v=<?php echo ASSET_VERSION; ?>"></script>

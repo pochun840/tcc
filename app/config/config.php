@@ -20,6 +20,10 @@ $language = array(
 );
 define('LANGUAGE',$language);
 
+// 每次刷新都取最新時間，避免快取
+define('ASSET_VERSION', date('YmdHi')); 
+
+
 
 // 抓取APP的檔案名稱，判斷是哪一個品牌
 //$brand_code = get_brand_code();

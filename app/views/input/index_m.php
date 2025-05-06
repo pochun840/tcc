@@ -1,5 +1,5 @@
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_input_m.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_input_m.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 <style>
 .overlay-active 
 {

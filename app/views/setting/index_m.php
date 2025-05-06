@@ -1,5 +1,5 @@
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_setting_m.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_setting_m.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 <style>
     .form-control{
         width: auto!important;

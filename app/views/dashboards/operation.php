@@ -1,5 +1,5 @@
 <?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_operation.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_operation.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 
 <body>
 <div class="container-ms">

@@ -1,5 +1,5 @@
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_data.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_data.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 
 <?php
 // 語系設定

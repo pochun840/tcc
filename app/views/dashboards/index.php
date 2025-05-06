@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_main.css" type="text/css">
+<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_main.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 
 <div class="container-ms">
     <div class="main-content">
