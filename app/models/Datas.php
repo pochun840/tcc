@@ -60,7 +60,7 @@ class Datas{
         $sql = "SELECT * FROM data 
                 WHERE data_time BETWEEN :start_date AND :end_date
                 ORDER BY data_time DESC 
-                LIMIT 10000";
+                LIMIT 10000 ";
 
         try {
             $statement = $this->db_data->prepare($sql);

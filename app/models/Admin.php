@@ -79,6 +79,17 @@ class Admin{
         return $results;
     }
 
+
+    public function Set_idas_version($match_tcc_version){
+
+        $sql = "UPDATE `config` SET config_value = :devdb_version WHERE config_name = 'idas_version' ";
+        $statement = $this->db_iDas_login->prepare($sql);
+        $statement->bindValue(':devdb_version', $match_tcc_version);
+        $results = $statement->execute();
+
+        return $results;
+    }
+
     
     public function Set_TCC_DB_Version($devdb_version){
 

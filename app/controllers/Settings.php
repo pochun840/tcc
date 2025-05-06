@@ -920,7 +920,7 @@ class Settings extends Controller
       
     }
 
-    #IDAS上傳 
+    #IDAS上傳 20250506 修改
     public function iDas_Update(){
         
         $file = $this->MiscellaneousModel->lang_load();
@@ -966,9 +966,6 @@ class Settings extends Controller
             
             // 設定解壓路徑
             $extract_path = $file_location . 'extracted/';
-
-            //echo $extract_path;die();
-            //echo "Extract path: " . $extract_path . "<br>"; 
             if (!is_dir($extract_path)) {
                 mkdir($extract_path, 0777, true); 
             }
@@ -985,8 +982,6 @@ class Settings extends Controller
              
             // 解壓檔案
             if ($zip->extractTo($extract_path)) {
-
-                //echo "wwer";die();
                 $zip->close();
 
                 // 取得解壓縮後的目錄結構
@@ -1009,7 +1004,9 @@ class Settings extends Controller
 
                 $match_tcc_version = $verify_data['Match_TCC_Version'] ?? '';
 
-            
+                if ($match_tcc_version && $match_tcc_version !== $iDas_Vesion) {
+                    $this->AdminModel->Set_idas_version($match_tcc_version);
+                }
 
                 if ($match_tcc_version == $iDas_Vesion) {
                 
@@ -1066,25 +1063,31 @@ class Settings extends Controller
     // 複製資料夾及其內容的遞迴函數
     public function copyDirectory($source, $destination) {
         if (!is_dir($destination)) {
-            mkdir($destination, 0777, true); // 如果目標資料夾不存在，就創建它
+            mkdir($destination, 0777, true); // 建立目標資料夾（如果不存在）
         }
-
-        $files = scandir($source); // 列出源資料夾中的檔案
-
+    
+        $files = scandir($source); // 取得來源資料夾的所有項目
+    
         foreach ($files as $file) {
             if ($file != '.' && $file != '..') {
                 $source_file = $source . '/' . $file;
                 $target_file = $destination . '/' . $file;
-
+    
                 if (is_dir($source_file)) {
-                    $this->copyDirectory($source_file, $target_file); // 如果是資料夾，則遞迴複製
+                    // 如果是資料夾則遞迴處理
+                    $this->copyDirectory($source_file, $target_file);
                 } else {
-                    copy($source_file, $target_file); // 如果是檔案，則複製檔案
+                    // 如果目標檔案已存在，先刪除
+                    if (file_exists($target_file)) {
+                        unlink($target_file);
+                    }
+                    // 執行檔案複製
+                    copy($source_file, $target_file);
                 }
             }
         }
     }
-
+    
 
 
 
