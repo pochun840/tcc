@@ -1,4 +1,3 @@
-
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -42,7 +41,6 @@
                                     <td class="seq-name"><?php echo $val['seq_name'];?></td>
                                     <td><?php echo $val['seq_tr'];?></td>
                                     <td>
-                                        <input type="hidden" id="current_job_id" value="<?php echo $data['job_id']; ?>">
                                         <?php if($val['seq_en']== 1){?>
                                             <input class="seq_enable" style="zoom:1.5; vertical-align: middle"  data-sequence-id="<?php echo $val['seq_id'];?>" id="seq_en"   value="1"  type="checkbox" onclick="updateValue(this)"  checked>
                                         <?php }else{?>
@@ -436,6 +434,36 @@ window.onclick = function(event) {
 }
 
 
+function cound_job(argument){
+    var table = document.getElementById('seq_table');
+    var selectedRow = table.querySelector('.selected');  
+    var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
+    var selectedRowData_name = selectedRow ? selectedRow.cells[1].innerText : null;
+    seqid = selectedRowData;
+    seqname = selectedRowData_name;
+    
+    if(argument == 'del' && seqid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
+        delete_seqid(seqid);
+    }
+
+    if(argument =="edit" && seqid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
+        edit_seq(seqid);
+    }
+
+    if(argument =="new"){
+        document.querySelector(".main-content").classList.add("overlay-active");
+        create_seq();
+    }
+
+    if(argument =="copy" && seqid != null){
+        document.querySelector(".main-content").classList.add("overlay-active");
+        copy_seq(seqid);
+    }
+
+
+}
 
 var rowInfoArray = [];
 <?php foreach($data['sequences'] as $key =>$val) {?>
@@ -739,6 +767,33 @@ function edit_seq_save(){
 
 
 }
+
+
+function updateValue(element){
+    var jobid = '<?php echo $data['job_id']?>';
+    var seq_en = element.checked ? 1 : 0;
+    var seqid = element.getAttribute('data-sequence-id');
+    
+    if(seqid){
+        $.ajax({
+            url: "?url=Sequences/check_seq_enable", 
+            method: "POST",
+            data: { 
+                jobid: jobid,
+                seqid: seqid,
+                seq_en: seq_en
+            },
+            success: function(response) {
+                console.log(response);
+                history.go(0);
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX 错误:', status, error); 
+            }
+        });    
+    } 
+}
+
 </script>
 <script>
     
@@ -780,7 +835,6 @@ function sendRowInfoArray() {
         }
     });
 }
-
 
 function input_check_saveseq() {
 
@@ -871,6 +925,65 @@ function input_check_editseq() {
     });
 
     return isFormValid;
+}
+
+
+function delete_seqid(seqid){
+
+    var language = getCookie('language');
+    if(language == "zh-cn"){
+        var text_info ='你确定吗？';
+        var title = 'Copy Job';
+    }else if(language == "zh-tw"){
+        var text_info ='你確定嗎 ?';
+        var title = 'Copy Job';
+    }else{
+        var text_info ='Are you sure ?';
+        var title = 'Copy Job';
+    }
+
+
+    var jobid = '<?php echo $data['job_id']?>';
+    if (jobid) {
+        $.ajax({
+            url: "?url=Sequences/delete_seq",
+            method: "POST",
+            data:{ 
+                jobid: jobid,
+                seqid: seqid
+            },
+            success: function(response) {
+                alertify.confirm(text_info, function (result) {
+
+                    document.getElementById('spinner').style.display = 'block';
+
+                    
+                    var responseData = JSON.parse(response);
+                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                    setTimeout(function() {
+                        // 隱藏加載動畫
+                        document.getElementById('spinner').style.display = 'none';
+
+                        // 顯示 alertify 彈跳視窗
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            // 刷新頁面
+                            history.go(0);  
+                        });
+
+                        // 在 3 秒後自動關閉 alertify 彈跳視窗
+                        setTimeout(function() {
+                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                            history.go(0); 
+                        }, 3000); 
+                    }, 1000); // 延遲 1000 毫秒
+                });
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+    }
+
 }
 
 

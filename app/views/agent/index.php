@@ -1,10 +1,3 @@
-<?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_agent.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
-
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/w3.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_agent.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
-
-
 <div class="container">
     <div class="header">
         <div id="day" class="w3-right-align" style="font-size: 14px; margin-top: auto; margin: 10px">Date: 2023/16/10</div>

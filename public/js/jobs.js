@@ -224,42 +224,127 @@ function edit_job(jobid) {
 
 function validateInput(element, pattern, min, max) {
     const value = element.value.trim();
-    const feedback = element.nextElementSibling;
-    const lang = getCookie('language') || 'en-us';
-
-    const messages = {
-        empty: {
-            "zh-tw": "此欄位不可空白",
-            "zh-cn": "此字段不能为空",
-            "en-us": "This field is required"
-        },
-        format: {
-            "zh-tw": "格式錯誤",
-            "zh-cn": "格式错误",
-            "en-us": "Invalid format"
-        },
-        range: {
-            "zh-tw": `範圍：${min} ~ ${max}`,
-            "zh-cn": `范围：${min} ~ ${max}`,
-            "en-us": `Range: ${min} ~ ${max}`
-        }
-    };
-
+    const numericValue = parseFloat(value);
     let isValid = true;
 
-    if (value === "") {
+    // 清除先前錯誤樣式
+    element.classList.remove("is-invalid");
+
+    // 空值檢查
+    if (!value) {
         isValid = false;
-        if (feedback) feedback.innerHTML = messages.empty[lang];
-    } else if (!pattern.test(value)) {
+    }
+    // 格式檢查
+    else if (pattern && !pattern.test(value)) {
         isValid = false;
-        if (feedback) feedback.innerHTML = messages.format[lang];
-    } else if (min !== null && parseFloat(value) < min || max !== null && parseFloat(value) > max) {
-        isValid = false;
-        if (feedback) feedback.innerHTML = messages.range[lang];
+    }
+    // 範圍檢查（只檢查數值欄位）
+    else if (!isNaN(numericValue)) {
+        if (min !== null && !isNaN(min) && numericValue < parseFloat(min)) {
+            isValid = false;
+        }
+        if (max !== null && !isNaN(max) && numericValue > parseFloat(max)) {
+            isValid = false;
+        }
     }
 
-    element.classList.toggle("is-invalid", !isValid);
+    // 套用錯誤樣式
+    if (!isValid) {
+        element.classList.add("is-invalid");
+    }
+
     return isValid;
 }
 
 
+function copy_data(jobid){
+    var new_jobid = document.getElementById("to_job_id").value;
+    var new_jobname = document.getElementById("to_job_name").value;
+
+    document.getElementById("from_job_id").value = old_jobid;
+    document.getElementById("from_job_name").value = oldjobname;
+    document.getElementById("to_job_id").value = new_jobid;
+
+}
+
+
+function copy_job_by_id(jobid){
+
+    var new_jobid = document.getElementById("to_job_id").value;
+    var new_jobname = document.getElementById("to_job_name").value;
+
+    document.getElementById("from_job_id").value = old_jobid;
+    document.getElementById("from_job_name").value = oldjobname;
+    document.getElementById("to_job_id").value = new_jobid;
+
+    var language = getCookie('language');
+    if(language == "zh-cn"){
+        var text_info ='你确定吗？';
+    }else if(language == "zh-tw"){
+        var text_info ='你確定嗎 ?';
+    }else{
+        var text_info ='Are you sure ?';
+    }
+
+
+    if(new_jobid){
+
+
+        $.ajax({
+            url: "?url=Jobs/check_job_type",
+            method: "POST",
+            data:{ 
+                new_jobid: new_jobid,
+
+            },
+            success: function(response) {
+                alertify.confirm(text_info , function (result) {
+                if (result) {
+                    document.getElementById('spinner').style.display = 'block';
+                    $.ajax({
+                        url: "?url=Jobs/copy_job_data",
+                        method: "POST",
+                        data:{ 
+                            old_jobid: old_jobid,
+                            old_jobname: oldjobname,
+                            new_jobid: new_jobid,
+                            new_jobname: new_jobname
+
+                        },
+                        success: function(response) {
+                            var responseData = JSON.parse(response);
+                            // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                            setTimeout(function() {
+                                // 隱藏 'copyjob' 和 'spinner' 加載動畫
+                                document.getElementById('copyjob').style.display = 'none';
+                                document.getElementById('spinner').style.display = 'none';  
+
+                                // 顯示 alertify 彈跳視窗
+                                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                    // 刷新頁面
+                                    history.go(0);  
+                                });
+
+                                // 在 3 秒後自動關閉 alertify 彈跳視窗
+                                setTimeout(function() {
+                                    alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                                    history.go(0); 
+                                }, 3000); 
+                            }, 1000); // 延遲 1000 毫秒
+                        },
+                        error: function(xhr, status, error) {
+                            
+                        }
+                    });
+                } else {
+                    alertify.error('Cancelled');
+                }
+                });
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+        
+    }
+}

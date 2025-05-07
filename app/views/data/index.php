@@ -1,6 +1,3 @@
-
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_data.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
-
 <?php
 // 語系設定
 switch ($_SESSION['language'] ?? '') {
@@ -158,19 +155,29 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
 
 <script>
 
-    // Button Home
-    const moonLanding = new Date();
-    let yy = moonLanding.getFullYear();
-    flatpickr("#start_date,#end_date", {
-        enableTime:false,
-        static: true,
-        inline:true,
-        dateFormat: "Y-m-d H:i:s",
-        locale: "<?php echo $calendar_lang; ?>",
-        disableMobile: "true",
-        // minDate: String(yy),
-        maxDate: String(yy)+'-12-31',
-        // maxDate: new Date().fp_incr(0) // 14 days from now
+    document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+
+        const startStr = `${yyyy}-${mm}-${dd} 00:00:00`;
+        const endStr   = `${yyyy}-${mm}-${dd} 23:59:59`;
+
+        document.getElementById('start_date').value = startStr;
+        document.getElementById('end_date').value = endStr;
+
+        flatpickr("#start_date,#end_date", {
+            enableTime: true,
+            enableSeconds: true,           // ✅ 顯示秒數
+            time_24hr: true,               // ✅ 24 小時制，避免 AM/PM
+            static: true,
+            inline: true,
+            dateFormat: "Y-m-d H:i:S",
+            locale: "<?php echo $calendar_lang; ?>",
+            disableMobile: true,
+            maxDate: `${yyyy}-12-31`
+        });
     });
 
 

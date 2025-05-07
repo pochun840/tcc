@@ -249,7 +249,7 @@
                 <div class="row t2">
                     <div class="col-3 t1">Agent IP:</div>
                     <div class="col t3">
-                            <input type="text" name="agent_server_ip" id="agent_server_ip" size="15"  value= '<?php echo $data['agent_server_ip'];?>' required class="t3 w3-submit w3-border w3-round">&nbsp;
+                            <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" value ='<?php echo $data['agent_server_ip'];?>' required class="t3 w3-submit w3-border w3-round">&nbsp;
                             <input type="button" onclick="agent_ip_save()" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                     </div>
                 </div>
@@ -258,15 +258,15 @@
                     <div class="col t3">
                         <form id="agent_type_form" method="post">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0" <?php echo $data['agent_type'] == 0 ? 'checked="checked"' : ''; ?> >
+                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0" <?php if($data['agent_type'] == 0){ echo 'checked';}?> >
                                 <label class="form-check-label" for="agent_type_0">None</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_1" value="1" <?php echo $data['agent_type'] == 1 ? 'checked="checked"' : ''; ?>  >
+                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_1" value="1" <?php if($data['agent_type'] == 1){ echo 'checked';}?>>
                                 <label class="form-check-label" for="agent_type_1">Client</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_2" value="2" required  <?php echo $data['agent_type'] == 2 ? 'checked="checked"' : ''; ?> >
+                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_2" value="2" <?php if($data['agent_type'] == 2){ echo 'checked';}?> required>
                                 <label class="form-check-label" for="agent_type_2">Server</label>
                             </div>
 
