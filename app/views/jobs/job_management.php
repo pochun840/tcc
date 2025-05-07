@@ -1,28 +1,3 @@
-
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_jobs.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
-<style>
-.form-control{
-    width: auto!important;
-    display: initial!important;
-}
-
-.form-control.is-invalid{
-    padding-right:inherit!important;
-}
-.is-invalid~.invalid-feedback{
-    display: inline!important;
-}
-
-
-.main-content.overlay-active {
-  filter: grayscale(100%); /* 完全灰化 */
-  pointer-events: none; /* 禁止點擊 */
-  opacity: 0.3; /* 降低不透明度 */
-}
-
-</style>
-
-
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -594,37 +569,7 @@ function copy_data(jobid){
 
 }
 
-function validateInput(element, pattern, min, max) {
-    let value = element.value.trim();
-    let isValid = true;
 
-    // 验证空值
-    if (value === "") {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 验证正则
-    else if (!pattern.test(value)) {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 验证最小值
-    else if (min !== null && parseFloat(value) < min) {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 验证最大值
-    else if (max !== null && parseFloat(value) > max) {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 通过验证
-    else {
-        element.classList.remove("is-invalid");
-    }
-
-    return isValid;
-}
 
 function input_check_savejob() {
 

@@ -220,3 +220,46 @@ function edit_job(jobid) {
         });
     }   
 }
+
+
+function validateInput(element, pattern, min, max) {
+    const value = element.value.trim();
+    const feedback = element.nextElementSibling;
+    const lang = getCookie('language') || 'en-us';
+
+    const messages = {
+        empty: {
+            "zh-tw": "此欄位不可空白",
+            "zh-cn": "此字段不能为空",
+            "en-us": "This field is required"
+        },
+        format: {
+            "zh-tw": "格式錯誤",
+            "zh-cn": "格式错误",
+            "en-us": "Invalid format"
+        },
+        range: {
+            "zh-tw": `範圍：${min} ~ ${max}`,
+            "zh-cn": `范围：${min} ~ ${max}`,
+            "en-us": `Range: ${min} ~ ${max}`
+        }
+    };
+
+    let isValid = true;
+
+    if (value === "") {
+        isValid = false;
+        if (feedback) feedback.innerHTML = messages.empty[lang];
+    } else if (!pattern.test(value)) {
+        isValid = false;
+        if (feedback) feedback.innerHTML = messages.format[lang];
+    } else if (min !== null && parseFloat(value) < min || max !== null && parseFloat(value) > max) {
+        isValid = false;
+        if (feedback) feedback.innerHTML = messages.range[lang];
+    }
+
+    element.classList.toggle("is-invalid", !isValid);
+    return isValid;
+}
+
+

@@ -1,26 +1,4 @@
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_step.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
-<style>
-.form-control{
-    width: auto!important;
-    display: initial!important;
-}
-
-.form-control.is-invalid{
-    padding-right:inherit!important;
-}
-.is-invalid~.invalid-feedback{
-    display: inline!important;
-}
-
-.main-content.overlay-active {
-  filter: grayscale(100%);
-  pointer-events: none; 
-  opacity: 0.3; 
-}
-
-</style>
-
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">

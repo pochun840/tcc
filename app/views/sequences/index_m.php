@@ -1,25 +1,4 @@
 
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_seq_m.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
-<style>
-.form-control{
-    width: 100px;
-    display: initial!important;
-}
-
-.form-control.is-invalid{
-    padding-right:inherit!important;
-}
-.is-invalid~.invalid-feedback{
-    display: inline!important;
-}
-
-.main-content.overlay-active {
-  filter: grayscale(100%); /* 完全灰化 */
-  pointer-events: none; /* 禁止點擊 */
-  opacity: 0.3; /* 降低不透明度 */
-}
-</style>
-
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <div class="w3-text-white w3-center">
@@ -63,6 +42,7 @@
                                         <td class="seq-name"><?php echo $val['seq_name'];?></td>
                                         <td><?php echo $val['seq_tr'];?></td>
                                         <td>
+                                            <input type="hidden" id="current_job_id" value="<?php echo $data['job_id']; ?>">
                                             <?php if($val['seq_en']== 1){?>
                                                 <input class="seq_enable" style="zoom:1.5; vertical-align: middle" data-sequence-id="<?php echo $val['seq_id'];?>" id="seq_en"   value="1"  type="checkbox" onclick="updateValue(this)"  checked>
                                             <?php }else{?>
@@ -443,37 +423,8 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
-function cound_job(argument){
-    var table = document.getElementById('seq_table');
-    var selectedRow = table.querySelector('.selected');  
-    var selectedRowData = selectedRow ? selectedRow.cells[0].innerText : null;
-    var selectedRowData_name = selectedRow ? selectedRow.cells[1].innerText : null;
-    seqid = selectedRowData;
-    seqname = selectedRowData_name;
-    
-    
-    if(argument == 'del' && seqid != null){
-        document.querySelector(".main-content").classList.add("overlay-active");
-        delete_seqid(seqid);
-    }
-
-    if(argument =="edit" && seqid != null){
-        document.querySelector(".main-content").classList.add("overlay-active");
-        edit_seq(seqid);
-    }
-
-    if(argument =="new"){
-        document.querySelector(".main-content").classList.add("overlay-active");
-        create_seq();
-    }
-
-    if(argument =="copy" && seqid != null){
-        document.querySelector(".main-content").classList.add("overlay-active");
-        copy_seq(seqid);
-    }
 
 
-}
 
 var rowInfoArray = [];
 <?php foreach($data['sequences'] as $key =>$val) {?>
@@ -588,73 +539,6 @@ function copy_seq_by_id(){
     }
 
 }
-
-function copy_seq(seqid){
-    
-    document.getElementById('copyseq').style.display = 'block';   
-    document.getElementById('from_seq_id').value =seqid;
-    document.getElementById('from_seq_name').value =seqname;
-    //copy_seq_by_id(seqid);
-}
-
-
-
-function delete_seqid(seqid){
-    var jobid = '<?php echo $data['job_id']?>';
-
-    var language = getCookie('language');
-    if(language == "zh-cn"){
-        var text_info ='你确定吗？';
-        var title = 'Copy Job';
-    }else if(language == "zh-tw"){
-        var text_info ='你確定嗎 ?';
-        var title = 'Copy Job';
-    }else{
-        var text_info ='Are you sure ?';
-        var title = 'Copy Job';
-    }
-
-    if (jobid) {
-        $.ajax({
-            url: "?url=Sequences/delete_seq",
-            method: "POST",
-            data:{ 
-                jobid: jobid,
-                seqid: seqid
-            },
-            success: function(response) {
-                alertify.confirm(text_info, function (result) {
-
-                    document.getElementById('spinner').style.display = 'block';
-
-                    var responseData = JSON.parse(response);
-                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
-                    setTimeout(function() {
-                        // 隱藏加載動畫
-                        document.getElementById('spinner').style.display = 'none';
-
-                        // 顯示 alertify 彈跳視窗
-                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                            // 刷新頁面
-                            history.go(0);  
-                        });
-
-                        // 在 3 秒後自動關閉 alertify 彈跳視窗
-                        setTimeout(function() {
-                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                            history.go(0); 
-                        }, 3000); 
-                    }, 1000); // 延遲 1000 毫秒
-                });
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-    }
-
-}
-
 
 function saveseq(){
 
@@ -846,41 +730,6 @@ function edit_seq_save(){
     }
 
 }
-
-
-
-function getSelectedValue(name, defaultValue = null) {
-    var selectedOption = document.querySelector(`input[name="${name}"]:checked`);
-    return selectedOption ? selectedOption.value : defaultValue;
-}
-
-
-function updateValue(element){
-    var jobid = '<?php echo $data['job_id']?>';
-    var seq_en = element.checked ? 1 : 0;
-    var seqid = element.getAttribute('data-sequence-id');
-
-    if(seqid){
-        $.ajax({
-            url: "?url=Sequences/check_seq_enable", 
-            method: "POST",
-            data: { 
-                jobid: jobid,
-                seqid: seqid,
-                seq_en: seq_en
-            },
-            success: function(response) {
-                console.log(response);
-                history.go(0);
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX 错误:', status, error); 
-            }
-        });    
-    }
-
-
-}
 </script>
 <script>
     
@@ -921,63 +770,6 @@ function sendRowInfoArray() {
             console.error('Error sending data:', error);
         }
     });
-}
-
-function goBackAndReload() {
-    // 记录当前页面的 URL
-    const currentUrl = window.location.href;
-    // 用 replaceState 记录当前页面的状态
-    window.history.replaceState({}, '', currentUrl);
-    // 返回上一页
-    window.history.back();
-    // 设置标志来强制上一页刷新
-    setTimeout(() => {
-        // 刷新当前页，也就是上一页
-        window.location.href = document.referrer + (document.referrer.includes('?') ? '&' : '?') + 'refresh=' + new Date().getTime();
-    }, 100);
-}
-
-
-function setRadioButton_value(radioButtons, value) {
-    radioButtons.forEach(function(button) {
-        if (button.value === value.toString()) {
-            button.checked = true;
-        } else {
-            button.checked = false;
-        }
-    });
-}  
-
-function validateInput(element, pattern, min, max) {
-    let value = element.value.trim();
-    let isValid = true;
-
-    // 验证空值
-    if (value === "") {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 验证正则
-    else if (!pattern.test(value)) {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 验证最小值
-    else if (min !== null && parseFloat(value) < min) {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 验证最大值
-    else if (max !== null && parseFloat(value) > max) {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 通过验证
-    else {
-        element.classList.remove("is-invalid");
-    }
-
-    return isValid;
 }
 
 function input_check_saveseq() {

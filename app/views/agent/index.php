@@ -164,7 +164,7 @@
                   const table = document.getElementById("data-table").getElementsByTagName('tbody')[0];
                   const row = table.insertRow();
 
-                  //row.insertCell(0).textContent = ipToTableRow.size+1;
+                  row.insertCell(0).textContent = ipToTableRow.size+1;
                   row.insertCell(1).textContent = device_type[data.device_type].status;
                   row.insertCell(2).textContent = data.device_name;
                   row.insertCell(3).textContent = data.client_ip;

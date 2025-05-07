@@ -1,26 +1,5 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_setting_m.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
-<style>
-    .form-control{
-        width: auto!important;
-        display: initial!important;
-    }
-
-    .form-control.is-invalid{
-        padding-right:inherit!important;
-    }
-    .is-invalid~.invalid-feedback{
-        display: inline!important;
-    }
-
-
-    .main-content.overlay-active {
-    filter: grayscale(100%); /* 完全灰化 */
-    pointer-events: none; /* 禁止點擊 */
-    opacity: 0.3; /* 降低不透明度 */
-    }
-
-</style>
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
