@@ -134,12 +134,12 @@
 										</div>
 										
 										<div class="col-sm-2 t2 form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_3" value="3" onclick="toggleOnputTime('pin<?php echo $i; ?>_3', this.checked,'3')">
+											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_3" value="3" onclick="toggleOnputTime('pin<?php echo $i; ?>_3', this.checked,'2')">
 											<label class="form-check-label" for="pin<?php echo $i; ?>_3"><img src="./img/trigger.png"></label>
 										</div>
 
                                         <div class="col-sm-2 t2 form-check form-check-inline">
-											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_2" value="2"  onclick="toggleOnputTime('pin<?php echo $i; ?>_2', this.checked,'2')">
+											<input class="form-check-input" type="radio" name="pin_option" id="pin<?php echo $i; ?>_2" value="2"  onclick="toggleOnputTime('pin<?php echo $i; ?>_2', this.checked,'3')">
 											<label class="form-check-label" for="pin<?php echo $i; ?>_2"><img src="./img/signal02.png"></label>
 										</div>
 
@@ -276,7 +276,11 @@
     </div>
 
     <!-- 加载動畫 OP -->
-        <?php require_once '../app/views/inc/include_spinner.php';?>
+    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>--
     <!-- 加载動畫 ED -->
 
 

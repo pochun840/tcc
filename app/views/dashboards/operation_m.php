@@ -1,6 +1,3 @@
-<?php require APPROOT . 'views/inc/header.php'; ?>
-<link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_operation_m.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
-
 <style type="text/css">
     @font-face
     {
@@ -100,7 +97,7 @@ input:disabled
 
 </style>
 
-<body>
+
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
