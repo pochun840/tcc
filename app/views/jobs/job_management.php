@@ -565,6 +565,37 @@ function copy_data(jobid){
 
 }
 
+function validateInput(element, pattern, min, max) {
+    let value = element.value.trim();
+    let isValid = true;
+
+    // 验证空值
+    if (value === "") {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证正则
+    else if (!pattern.test(value)) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最小值
+    else if (min !== null && parseFloat(value) < min) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最大值
+    else if (max !== null && parseFloat(value) > max) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 通过验证
+    else {
+        element.classList.remove("is-invalid");
+    }
+
+    return isValid;
+}
 
 function input_check_savejob() {
 

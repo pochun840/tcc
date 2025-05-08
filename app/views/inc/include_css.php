@@ -24,7 +24,6 @@ function include_asset($part, $fileName) {
     }
 }
 
-
 function include_css() {
     $queryString = $_SERVER['QUERY_STRING'] ?? '';
     $routeParts = explode('/', str_replace('url=', '', $queryString));
@@ -37,6 +36,7 @@ function include_css() {
     $cssMap = [
         'Jobs'      => ['pc' => 'tcc_jobs.css',    'mobile' => 'tcc_jobs_m.css'],
         'Sequences' => ['pc' => 'tcc_seq.css',     'mobile' => 'tcc_seq_m.css'],
+        'Step'      => ['pc' => 'tcc_step.css',    'mobile' => 'tcc_step_m.css'],
         'Step'      => ['pc' => 'tcc_step.css',    'mobile' => 'tcc_step_m.css'],
         'Tools'     => ['pc' => 'tcc_tools.css'],
         'Data'      => ['pc' => 'tcc_data.css'],
@@ -84,10 +84,22 @@ function include_css() {
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/flatpickr.min.css?v=<?php echo ASSET_VERSION; ?>">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/alertify_min.css?v=<?php echo ASSET_VERSION; ?>">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/default_min.css?v=<?php echo ASSET_VERSION; ?>">
-    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_share.css?v=<?php echo ASSET_VERSION; ?>">
+    <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_footer.css?v=<?php echo ASSET_VERSION; ?>">
 
+    <?php
+        $queryString = $_SERVER['QUERY_STRING'] ?? '';
+        $route = explode('/', str_replace('url=', '', $queryString))[0] ?? '';
+
+        // 不在 Input 或 Output 時才載入 tcc_share.css
+        if (!in_array($route, ['Inputs', 'Outputs'])) {
+            echo '<link rel="stylesheet" href="' . URLROOT . 'css/tcc_share.css?v=' . ASSET_VERSION . '">' . "\n";
+        }
+    ?>
+
+    
     <!-- ================== 模組 CSS 動態載入 ================== -->
     <?php echo include_css();?>
+
 
     <!-- ================== 共用 JS ================== -->
     <script src="<?php echo URLROOT; ?>js/all.js?v=<?php echo ASSET_VERSION; ?>"></script>

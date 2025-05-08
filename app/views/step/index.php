@@ -1,4 +1,3 @@
-
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -496,6 +495,7 @@
     <!-- 加载動畫 OP -->
         <?php require_once '../app/views/inc/include_spinner.php';?>
     <!-- 加载動畫 ED -->
+
 </div>
 
 <script>

@@ -382,9 +382,9 @@
         </div>
     </div>
 
-   <!-- 加载動畫 OP -->
+    <!-- 加载動畫 OP -->
         <?php require_once '../app/views/inc/include_spinner.php';?>
-   <!-- 加载動畫 ED -->
+    <!-- 加载動畫 ED -->
 
 </div>
 

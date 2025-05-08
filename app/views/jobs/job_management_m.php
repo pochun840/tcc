@@ -323,9 +323,10 @@
         </div>
     </div>
 
-   <!-- 加载動畫 OP -->
+    <!-- 加载動畫 OP -->
         <?php require_once '../app/views/inc/include_spinner.php';?>
-   <!-- 加载動畫 ED -->
+    <!-- 加载動畫 ED -->
+
 
 
 </div>
@@ -548,7 +549,37 @@ function savejob() {
     }
 }
 
+function validateInput(element, pattern, min, max) {
+    let value = element.value.trim();
+    let isValid = true;
 
+    // 验证空值
+    if (value === "") {
+        element.classList.add("is-invalid"); 
+        isValid = false;
+    }
+    // 验证正则
+    else if (!pattern.test(value)) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最小值
+    else if (min !== null && parseFloat(value) < min) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最大值
+    else if (max !== null && parseFloat(value) > max) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 通过验证
+    else {
+        element.classList.remove("is-invalid");
+    }
+
+    return isValid;
+}
 
 function input_check_savejob() {
 
@@ -604,6 +635,10 @@ function input_check_editjob() {
                 nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
             } else {
                 console.error(`Element with id '${input.id}' does not have a next sibling.`); // 錯誤處理，例如輸出到控制台
+                // 或者你可以選擇創建一個新的元素，並將它插入到 element 之後
+                // const newSibling = document.createElement('span');
+                // element.parentNode.insertBefore(newSibling, element.nextSibling);
+                // newSibling.innerHTML = `${input.min} ~ ${input.max}`;
             }
         }
 
