@@ -24,47 +24,53 @@ function include_asset($part, $fileName) {
     }
 }
 
+
 function include_css() {
     $queryString = $_SERVER['QUERY_STRING'] ?? '';
-    $queryString = str_replace('url=', '', $queryString);
-    $route = explode('/', $queryString)[0] ?? '';
+    $routeParts = explode('/', str_replace('url=', '', $queryString));
+    $controller = $routeParts[0] ?? '';
+    $action = $routeParts[1] ?? '';
 
-    if ($route === 'Jobs') {
-        $isMobile = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Mobile|Android|iPhone|iPad|iPod/i', $_SERVER['HTTP_USER_AGENT']);
-        $cssFile = $isMobile ? 'tcc_jobs_m.css' : 'tcc_jobs.css';
-        echo '<link rel="stylesheet" href="' . URLROOT . 'css/' . $cssFile . '?v=' . ASSET_VERSION . '" type="text/css">' . "\n";
+    $isMobile = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Mobile|Android|iPhone|iPad|iPod/i', $_SERVER['HTTP_USER_AGENT']);
+
+    // 一般模組對應（controller 為主）
+    $cssMap = [
+        'Jobs'      => ['pc' => 'tcc_jobs.css',    'mobile' => 'tcc_jobs_m.css'],
+        'Sequences' => ['pc' => 'tcc_seq.css',     'mobile' => 'tcc_seq_m.css'],
+        'Step'      => ['pc' => 'tcc_step.css',    'mobile' => 'tcc_step_m.css'],
+        'Tools'     => ['pc' => 'tcc_tools.css'],
+        'Data'      => ['pc' => 'tcc_data.css'],
+        'Agents'    => ['pc' => 'tcc_agent.css'],
+    ];
+
+    // 特殊處理 Dashboards 模組中的不同 action
+    if ($controller === 'Dashboards') {
+        if ($action === 'index') {
+            $cssFile = 'tcc_main.css';
+        } elseif ($action === 'operation') {
+            $cssFile = $isMobile ? 'tcc_operation_m.css' : 'tcc_operation.css';
+        } else {
+            $cssFile = $isMobile ? 'tcc_operation.css' : 'tcc_operation.css'; // 預設 fallback
+        }
+    }else if($controller === 'In'){
+        $cssFile = 'tcc_main.css';
+    }
+     elseif (isset($cssMap[$controller])) {
+        $cssFile = $isMobile && isset($cssMap[$controller]['mobile']) 
+            ? $cssMap[$controller]['mobile'] 
+            : $cssMap[$controller]['pc'];
+    } else {
+        $cssFile = null; // 無對應
     }
 
-    if ($route === 'Sequences') {
-        $isMobile = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Mobile|Android|iPhone|iPad|iPod/i', $_SERVER['HTTP_USER_AGENT']);
-        $cssFile = $isMobile ? 'tcc_seq_m.css' : 'tcc_seq.css';
+    // 輸出 <link>
+    if ($cssFile) {
         echo '<link rel="stylesheet" href="' . URLROOT . 'css/' . $cssFile . '?v=' . ASSET_VERSION . '" type="text/css">' . "\n";
     }
-
-
-    if ($route === 'Step') {
-        $isMobile = isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Mobile|Android|iPhone|iPad|iPod/i', $_SERVER['HTTP_USER_AGENT']);
-        $cssFile = $isMobile ? 'tcc_step_m.css' : 'tcc_step.css';
-        echo '<link rel="stylesheet" href="' . URLROOT . 'css/' . $cssFile . '?v=' . ASSET_VERSION . '" type="text/css">' . "\n";
-    }
-
-    if ($route === 'Tools') { 
-        $cssFile = 'tcc_tools.css';
-        echo '<link rel="stylesheet" href="' . URLROOT . 'css/' . $cssFile . '?v=' . ASSET_VERSION . '" type="text/css">' . "\n";
-    }
-
-    if ($route === 'Data') { 
-        $cssFile = 'tcc_data.css';
-        echo '<link rel="stylesheet" href="' . URLROOT . 'css/' . $cssFile . '?v=' . ASSET_VERSION . '" type="text/css">' . "\n";
-    }
-
-    
-    if ($route === 'Agents') { 
-        $cssFile = 'tcc_agent.css';
-        echo '<link rel="stylesheet" href="' . URLROOT . 'css/' . $cssFile . '?v=' . ASSET_VERSION . '" type="text/css">' . "\n";
-    }
-
 }
+
+
+
 ?>
 
     <!-- ================== 基礎 JS ================== -->
@@ -80,6 +86,9 @@ function include_css() {
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/default_min.css?v=<?php echo ASSET_VERSION; ?>">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_share.css?v=<?php echo ASSET_VERSION; ?>">
 
+    <!-- ================== 模組 CSS 動態載入 ================== -->
+    <?php echo include_css();?>
+
     <!-- ================== 共用 JS ================== -->
     <script src="<?php echo URLROOT; ?>js/all.js?v=<?php echo ASSET_VERSION; ?>"></script>
     <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=<?php echo ASSET_VERSION; ?>"></script>
@@ -87,17 +96,12 @@ function include_css() {
     <script src="<?php echo URLROOT; ?>js/alertify_min.js?v=<?php echo ASSET_VERSION; ?>"></script>
 
 
-    <!-- ================== 模組 CSS 動態載入 ================== -->
-    <?php echo include_css();?>
-
     <!-- ================== 模組 JS 動態載入 ================== -->
     <?php 
     $modules = ['Inputs', 'Outputs', 'Jobs', 'Data', 'Sequences', 'Step', 'Settings'];
     foreach ($modules as $mod) {
         include_asset($mod, strtolower($mod) . '.js');
     }
-
-    
     ?>
 
     <!-- ================== 其他工具 JS ================== -->

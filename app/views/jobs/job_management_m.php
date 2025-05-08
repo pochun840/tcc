@@ -1,4 +1,3 @@
-
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -324,14 +323,9 @@
         </div>
     </div>
 
-    <!-- 加载動畫 OP -->
-    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only"></span>
-        </div>
-    </div>
-    <!-- 加载動畫 ED -->
-
+   <!-- 加载動畫 OP -->
+        <?php require_once '../app/views/inc/include_spinner.php';?>
+   <!-- 加载動畫 ED -->
 
 
 </div>
@@ -399,7 +393,97 @@ for (var i = 0; i < rows.length; i++) {
     })(rows[i]);
 }
 
+function copy_data(jobid){
+    var new_jobid = document.getElementById("to_job_id").value;
+    var new_jobname = document.getElementById("to_job_name").value;
 
+    document.getElementById("from_job_id").value = old_jobid;
+    document.getElementById("from_job_name").value = oldjobname;
+    document.getElementById("to_job_id").value = new_jobid;
+
+}
+
+
+function copy_job_by_id(jobid){
+
+    var new_jobid = document.getElementById("to_job_id").value;
+    var new_jobname = document.getElementById("to_job_name").value;
+
+    document.getElementById("from_job_id").value = old_jobid;
+    document.getElementById("from_job_name").value = oldjobname;
+    document.getElementById("to_job_id").value = new_jobid;
+
+    var language = getCookie('language');
+    if(language == "zh-cn"){
+        var text_info ='你确定吗？';
+    }else if(language == "zh-tw"){
+        var text_info ='你確定嗎 ?';
+    }else{
+        var text_info ='Are you sure ?';
+    }
+
+
+    if(new_jobid){
+
+
+        $.ajax({
+            url: "?url=Jobs/check_job_type",
+            method: "POST",
+            data:{ 
+                new_jobid: new_jobid,
+
+            },
+            success: function(response) {
+                alertify.confirm(text_info , function (result) {
+                if (result) {
+                    document.getElementById('spinner').style.display = 'block';
+                    $.ajax({
+                        url: "?url=Jobs/copy_job_data",
+                        method: "POST",
+                        data:{ 
+                            old_jobid: old_jobid,
+                            old_jobname: oldjobname,
+                            new_jobid: new_jobid,
+                            new_jobname: new_jobname
+
+                        },
+                        success: function(response) {
+                            var responseData = JSON.parse(response);
+                            // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                            setTimeout(function() {
+                                // 隱藏 'copyjob' 和 'spinner' 加載動畫
+                                document.getElementById('copyjob').style.display = 'none';
+                                document.getElementById('spinner').style.display = 'none';  
+
+                                // 顯示 alertify 彈跳視窗
+                                alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                                    // 刷新頁面
+                                    history.go(0);  
+                                });
+
+                                // 在 3 秒後自動關閉 alertify 彈跳視窗
+                                setTimeout(function() {
+                                    alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                                    history.go(0); 
+                                }, 3000); 
+                            }, 1000); // 延遲 1000 毫秒
+                        },
+                        error: function(xhr, status, error) {
+                            
+                        }
+                    });
+                } else {
+                    alertify.error('Cancelled');
+                }
+                });
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+        
+    }
+}
 
 function savejob() {
 
@@ -464,6 +548,8 @@ function savejob() {
     }
 }
 
+
+
 function input_check_savejob() {
 
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
@@ -518,10 +604,6 @@ function input_check_editjob() {
                 nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
             } else {
                 console.error(`Element with id '${input.id}' does not have a next sibling.`); // 錯誤處理，例如輸出到控制台
-                // 或者你可以選擇創建一個新的元素，並將它插入到 element 之後
-                // const newSibling = document.createElement('span');
-                // element.parentNode.insertBefore(newSibling, element.nextSibling);
-                // newSibling.innerHTML = `${input.min} ~ ${input.max}`;
             }
         }
 

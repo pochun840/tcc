@@ -1,5 +1,25 @@
 
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_setting.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
+<style>
+    .form-control{
+        width: auto!important; 
+        display: initial!important;
+    }
+
+    .form-control.is-invalid{
+        padding-right:inherit!important;
+    }
+    .is-invalid~.invalid-feedback{
+        display: inline!important;
+    }
+
+    .main-content.overlay-active {
+    filter: grayscale(100%); /* 完全灰化 */
+    pointer-events: none; /* 禁止點擊 */
+    opacity: 0.3; /* 降低不透明度 */
+    }
+</style>
+
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -249,7 +269,7 @@
                 <div class="row t2">
                     <div class="col-3 t1">Agent IP:</div>
                     <div class="col t3">
-                            <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" value ='<?php echo $data['agent_server_ip'];?>' required class="t3 w3-submit w3-border w3-round">&nbsp;
+                            <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" required class="t3 w3-submit w3-border w3-round">&nbsp;
                             <input type="button" onclick="agent_ip_save()" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                     </div>
                 </div>
@@ -258,15 +278,15 @@
                     <div class="col t3">
                         <form id="agent_type_form" method="post">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0" <?php if($data['agent_type'] == 0){ echo 'checked';}?> >
+                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0">
                                 <label class="form-check-label" for="agent_type_0">None</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_1" value="1" <?php if($data['agent_type'] == 1){ echo 'checked';}?>>
+                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_1" value="1">
                                 <label class="form-check-label" for="agent_type_1">Client</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_2" value="2" <?php if($data['agent_type'] == 2){ echo 'checked';}?> required>
+                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_2" value="2" required>
                                 <label class="form-check-label" for="agent_type_2">Server</label>
                             </div>
 
@@ -319,13 +339,8 @@
     </div>  
     
     <!-- 加载動畫 OP -->
-    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only"></span>
-        </div>
-    </div>
+        <?php require_once '../app/views/inc/include_spinner.php';?>
     <!-- 加载動畫 ED -->
-
 </div>
 
 

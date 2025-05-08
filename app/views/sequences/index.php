@@ -394,13 +394,8 @@
     </div>
 
     <!-- 加载動畫 OP -->
-    <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only"></span>
-        </div>
-    </div>
+        <?php require_once '../app/views/inc/include_spinner.php';?>
     <!-- 加载動畫 ED -->
-
 
 </div>
 
@@ -578,6 +573,75 @@ function copy_seq_by_id(){
     }
 
 }
+function copy_seq(seqid){
+    
+    document.getElementById('copyseq').style.display = 'block';   
+    document.getElementById('from_seq_id').value =seqid;
+    document.getElementById('from_seq_name').value =seqname;
+    //copy_seq_by_id(seqid);
+}
+
+
+function delete_seqid(seqid){
+
+    var language = getCookie('language');
+    if(language == "zh-cn"){
+        var text_info ='你确定吗？';
+        var title = 'Copy Job';
+    }else if(language == "zh-tw"){
+        var text_info ='你確定嗎 ?';
+        var title = 'Copy Job';
+    }else{
+        var text_info ='Are you sure ?';
+        var title = 'Copy Job';
+    }
+
+ 
+    var jobid = '<?php echo $data['job_id']?>';
+    if (jobid) {
+        
+        $.ajax({
+            url: "?url=Sequences/delete_seq",
+            method: "POST",
+            data:{ 
+                jobid: jobid,
+                seqid: seqid
+            },
+            success: function(response) {
+                alertify.confirm(text_info, function (result) {
+
+                    document.getElementById('spinner').style.display = 'block';
+
+                    
+                    var responseData = JSON.parse(response);
+                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+                    setTimeout(function() {
+                        // 隱藏加載動畫
+                        document.getElementById('spinner').style.display = 'none';
+
+                        // 顯示 alertify 彈跳視窗
+                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
+                            // 刷新頁面
+                            history.go(0);  
+                        });
+
+                        // 在 3 秒後自動關閉 alertify 彈跳視窗
+                        setTimeout(function() {
+                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                            history.go(0); 
+                        }, 3000); 
+                    }, 1000); // 延遲 1000 毫秒
+                });
+            },
+            error: function(xhr, status, error) {
+                
+            }
+        });
+    }
+
+}
+
+
 
 function saveseq(){
 
@@ -768,6 +832,10 @@ function edit_seq_save(){
 
 }
 
+function getSelectedValue(name, defaultValue = 0) {
+    const selectedOption = document.querySelector(`input[name="${name}"]:checked`);
+    return selectedOption ? selectedOption.value : defaultValue;
+}
 
 function updateValue(element){
     var jobid = '<?php echo $data['job_id']?>';
@@ -834,6 +902,49 @@ function sendRowInfoArray() {
             console.error('Error sending data:', error);
         }
     });
+}
+
+
+function setRadioButton_value(radioButtons, value) {
+    radioButtons.forEach(function(button) {
+        if (button.value === value.toString()) {
+            button.checked = true;
+        } else {
+            button.checked = false;
+        }
+    });
+}
+
+function validateInput(element, pattern, min, max) {
+    let value = element.value.trim();
+    let isValid = true;
+
+    // 验证空值
+    if (value === "") {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证正则
+    else if (!pattern.test(value)) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最小值
+    else if (min !== null && parseFloat(value) < min) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 验证最大值
+    else if (max !== null && parseFloat(value) > max) {
+        element.classList.add("is-invalid");
+        isValid = false;
+    }
+    // 通过验证
+    else {
+        element.classList.remove("is-invalid");
+    }
+
+    return isValid;
 }
 
 function input_check_saveseq() {
@@ -925,65 +1036,6 @@ function input_check_editseq() {
     });
 
     return isFormValid;
-}
-
-
-function delete_seqid(seqid){
-
-    var language = getCookie('language');
-    if(language == "zh-cn"){
-        var text_info ='你确定吗？';
-        var title = 'Copy Job';
-    }else if(language == "zh-tw"){
-        var text_info ='你確定嗎 ?';
-        var title = 'Copy Job';
-    }else{
-        var text_info ='Are you sure ?';
-        var title = 'Copy Job';
-    }
-
-
-    var jobid = '<?php echo $data['job_id']?>';
-    if (jobid) {
-        $.ajax({
-            url: "?url=Sequences/delete_seq",
-            method: "POST",
-            data:{ 
-                jobid: jobid,
-                seqid: seqid
-            },
-            success: function(response) {
-                alertify.confirm(text_info, function (result) {
-
-                    document.getElementById('spinner').style.display = 'block';
-
-                    
-                    var responseData = JSON.parse(response);
-                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
-                    setTimeout(function() {
-                        // 隱藏加載動畫
-                        document.getElementById('spinner').style.display = 'none';
-
-                        // 顯示 alertify 彈跳視窗
-                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                            // 刷新頁面
-                            history.go(0);  
-                        });
-
-                        // 在 3 秒後自動關閉 alertify 彈跳視窗
-                        setTimeout(function() {
-                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                            history.go(0); 
-                        }, 3000); 
-                    }, 1000); // 延遲 1000 毫秒
-                });
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-    }
-
 }
 
 
