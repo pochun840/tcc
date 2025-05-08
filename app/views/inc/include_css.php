@@ -37,7 +37,7 @@ function include_css() {
         'Jobs'      => ['pc' => 'tcc_jobs.css',    'mobile' => 'tcc_jobs_m.css'],
         'Sequences' => ['pc' => 'tcc_seq.css',     'mobile' => 'tcc_seq_m.css'],
         'Step'      => ['pc' => 'tcc_step.css',    'mobile' => 'tcc_step_m.css'],
-        'Step'      => ['pc' => 'tcc_step.css',    'mobile' => 'tcc_step_m.css'],
+        'Inputs'    => ['pc' => 'tcc_input.css',   'mobile' => 'tcc_input_m.css'],
         'Tools'     => ['pc' => 'tcc_tools.css'],
         'Data'      => ['pc' => 'tcc_data.css'],
         'Agents'    => ['pc' => 'tcc_agent.css'],

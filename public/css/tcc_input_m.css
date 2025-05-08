@@ -421,3 +421,11 @@ select
 .input-pin img{ height: 25px; width: 40px}
 .zoom{zoom:1.2; vertical-align: middle}
 .selected { background-color: #9AC0CD !important;}
+
+
+
+input[type="button"]:disabled {
+    color: white !important;
+    background-color: gray; /* 可選：設定背景 */
+    opacity: 1;             /* 移除預設透明效果 */
+}
