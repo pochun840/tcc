@@ -131,7 +131,7 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
                             <div class="col-4 t1"><?php echo $text['Export Format'];?>:</div>
                             <div class="col t2">
                                 <div class="form-check form-check-inline">
-                                    <input class="t2 form-check-input" type="radio" name="export-option" id="export-csv" value="0" style="zoom:1.2; vertical-align: middle">
+                                    <input class="t2 form-check-input" type="radio" name="export-option" id="export-csv" value="0" style="zoom:1.2; vertical-align: middle" checked>
                                     <label class="t2 form-check-label" for="export-csv" style="font-weight: normal">CSV</label>
                                 </div>
                                 <div class="form-check form-check-inline">
@@ -155,20 +155,47 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
 
 <script>
 
-    // Button Home
-    const moonLanding = new Date();
-    let yy = moonLanding.getFullYear();
-    flatpickr("#start_date,#end_date", {
-        enableTime:false,
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+
+       
+        // 預設值
+        const startStr = `${yyyy}-${mm}-${dd} 00:00:00`;
+        const endStr   = `${yyyy}-${mm}-${dd} 23:59:59`;
+
+        document.getElementById("start_date").value = startStr;
+
+        // 初始化 flatpickr
+        flatpickr("#start_date", {
+            enableTime: true,
+            static: true,
+            inline: true,
+            dateFormat: "Y-m-d H:i:S",
+            defaultDate: startStr,
+            locale: "<?php echo $calendar_lang; ?>",
+            disableMobile: "true",
+            maxDate: `${yyyy}-12-31`
+        });
+
+        flatpickr("#end_date", {
+        enableTime: true,
         static: true,
-        inline:true,
+        inline: true,
         dateFormat: "Y-m-d H:i:s",
+        defaultDate: endStr,
         locale: "<?php echo $calendar_lang; ?>",
         disableMobile: "true",
-        // minDate: String(yy),
-        maxDate: String(yy)+'-12-31',
-        // maxDate: new Date().fp_incr(0) // 14 days from now
+        maxDate: `${yyyy}-12-31`
     });
+
+
+    });
+
+
+
 
 
     function DataMode() {
