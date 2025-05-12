@@ -55,6 +55,7 @@ function cound_step(argument){
         var step_count = countrows();
         if(step_count  < 4){
             create_step();
+            prepareAddStepId(); 
         }
     }
 
@@ -415,4 +416,11 @@ function cleanNumber(value) {
         return parseInt(num).toString(); 
     }
     return value; // 其他正常小數（例如 12.3）直接回傳
+}
+
+
+function prepareAddStepId() {
+    const stepRows = document.querySelectorAll('#step_table tbody tr');
+    const nextStepId = stepRows.length + 1;
+    document.getElementById("add_step_id").value = nextStepId;
 }
