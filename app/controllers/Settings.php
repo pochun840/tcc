@@ -920,7 +920,7 @@ class Settings extends Controller
       
     }
 
-    #IDAS上傳 20250506 修改
+    #IDAS上傳 20250512 修改
     public function iDas_Update(){
         
         $file = $this->MiscellaneousModel->lang_load();
