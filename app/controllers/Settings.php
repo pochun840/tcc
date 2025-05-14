@@ -1210,7 +1210,7 @@ class Settings extends Controller
         // 檢查操作系統並處理檔案上傳
         if (PHP_OS_FAMILY === 'Linux') {
 
-            $destination = "/mnt/ramdisk/tcccon.cfg";
+            $destination = "/mnt/ramdisk/ftp/iDas.cfg";
             //將檔案移到指定位置
             $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
 
@@ -1235,6 +1235,8 @@ class Settings extends Controller
                     $res_msg  = 'DB import successful';
                     $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
 
+                    $modbus->writeMultipleRegister(0, 462, array(1), $dataTypes);
+
                     exit();
 
                 } catch (Exception $e) {
@@ -1248,9 +1250,10 @@ class Settings extends Controller
                     exit();
                 }
             } else {
-                $this->logMessage('copy db error');
-                $this->logMessage('Import config end');
-                echo json_encode(array('error' => 'copy db error','diff' => $diff));
+
+                $res_type = 'error';
+                $res_msg  = 'DB import error';
+                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
                 exit();
             }
 
