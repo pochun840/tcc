@@ -435,8 +435,8 @@ input:disabled
         if (!data) return;
 
         document.getElementById('system_sn').value = data.system_sn || '--';
-        document.getElementById('job_name').value = data.job_id + "/" + data.job_name;
-        document.getElementById('seq_name').value = data.seq_id + "/" + data.seq_name;
+        document.getElementById('job_name').value = data.job_id + "/" + data.jobs_count;
+        document.getElementById('seq_name').value = data.seq_id + "/" + data.seqs_count;
 
 
         document.getElementById('max_screw_count').value = data.last_screw_count +"/" + data.max_screw_count;

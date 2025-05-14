@@ -5,6 +5,7 @@ class Jobs extends Controller
     private $DashboardModel;
     private $ToolModel;
     private $SettingModel;
+    private $MiscellaneousModel;
 
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()

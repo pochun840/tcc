@@ -7,6 +7,8 @@ class Dashboards extends Controller
     private $SettingModel;
     private $MiscellaneousModel;
     private $DataModel;
+    private $jobModel;
+    private $sequenceModel;
 
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
@@ -16,6 +18,8 @@ class Dashboards extends Controller
         $this->MiscellaneousModel = $this->model('Miscellaneous');
         $this->DataModel = $this->model('Datas');
         $this->SettingModel = $this->model('Setting');
+        $this->jobModel = $this->model('Job');
+        $this->sequenceModel = $this->model('Sequence');
 
     }
 
@@ -186,7 +190,8 @@ class Dashboards extends Controller
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
         
-        //
+    
+   
     
         // 根據 system_sn 取得最新資料
         $first_data = $this->DataModel->get_new_info($system_sn); 
@@ -208,7 +213,6 @@ class Dashboards extends Controller
                     break;
             }
     
-            // 整理扭力單位說明
 
             //控制器的扭力單位
             $res_device = $this->SettingModel->GetControllerInfo();
@@ -218,20 +222,49 @@ class Dashboards extends Controller
 
             $step_tor_unit_tmp = (int)$first_data['step_tor_unit'];
             
-            if($step_tor_unit_tmp == $step_torque_unit){
-                $first_data['status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
+            if($step_tor_unit_tmp == $first_data['fasten_status']){
+                $flag = "Y";
+                $first_data['fasten_status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
             }else{
-                $first_data['status_unit_explain'] = $unit_arr[$step_torque_unit];
+                $flag = "N";
+                $first_data['fasten_status_unit_explain'] = $unit_arr[$step_torque_unit];
+
+                //扭力單位換算
+                $fasten_torque_tmp = $this->MiscellaneousModel->unitarr_change($first_data['fasten_torque'],$first_data['step_tor_unit'],$step_torque_unit);
+                $first_data['fasten_torque']=(string)$fasten_torque_tmp[0];
+           
             }
 
             $first_data['error_massage_explanation'] = $error_message['ERR_'.$first_data['error_message']];
+
+            //取得目前的job數量 
+            $jobs_count  = $this->jobModel->countjob();
+            if(!empty($jobs_count)){
+                 $first_data['jobs_count'] = $jobs_count;
+            }
+            //透過job_id 去找出對應的seq數量
+            $seqs_count = $this->sequenceModel->countseq($first_data['job_id']);
+            if(!empty($seqs_count)){
+                $first_data['seqs_count'] = $seqs_count;
+            }
+
         }
 
 
         #即時曲線圖
         if(!empty($first_data)){
-         
+           
             $chart_data = $this->live_line_chart($chart_mode);
+
+            if($chart_data['y_title'] =="Torque" && $flag == "N"){
+            echo "<pre>";
+            print_r($chart_data['y_val']);
+            echo "</pre>";
+            die();
+
+            }
+
+
             $first_data['chart_data'] = $chart_data;
         }
         
