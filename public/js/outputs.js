@@ -50,7 +50,7 @@ function toggleOnputTime(inputId, checked, option) {
 
    // 根據選擇的 option 來控制對應的時間輸入欄位是否可編輯
    // 若不是 option 2（即 signal01 或 trigger），就禁用對應的時間欄位
-   if (option != '2') {
+   if (option != '3') {
        // 將 pin ID 轉換為對應的時間輸入欄位 ID（例如 pin3_1 => time3）
        var newId = inputId.replace(/^pin(\d+)_\d+$/, 'time$1');
        var element = document.getElementById(newId);
@@ -93,7 +93,7 @@ function toggleOnputTime_edit(inputId, checked, option) {
    var element = document.getElementById(newId);
 
    if (element) {
-       if (option !== '2') {
+       if (option !== '3') {
            // 非 option 2，代表要禁用時間欄位
 
            // 如果還沒儲存過原始值，則先儲存進 data-original-value

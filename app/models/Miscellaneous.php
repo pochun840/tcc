@@ -41,6 +41,18 @@ class Miscellaneous{
             );
         }
 
+        if($mode == "torque_unit_name"){
+            $array = array(
+                0 => 'kgf.m',
+                1 => 'N.m',
+                2 => 'kgf.cm',
+                3 => 'Lbf.in',
+                4 => 'cN.m'
+                
+            );
+        }
+
+        
         if($mode == "target_option" ){
             $array = array(
                 0 => 'Torque',

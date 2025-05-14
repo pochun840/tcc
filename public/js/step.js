@@ -278,9 +278,9 @@ function handleTargetOptChange(target_opt) {
         disableElementById('edit_ds_tor',ds_tor);
         disableElementById('edit_ds_speed',ds_speed);
         disableElementById('edit_th_tor',th_tor);
-        disableElementById('edit_rpm',rpm);
         disableElementsByName("edit_th_mode");
         enableElementByName("edit_direction");
+        enableElementById('edit_rpm',rpm);
 
         document.getElementById("downshift_OFF").checked = true;
   

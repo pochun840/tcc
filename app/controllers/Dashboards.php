@@ -167,6 +167,8 @@ class Dashboards extends Controller
 
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
+        
+        //
     
         // 根據 system_sn 取得最新資料
         $first_data = $this->DataModel->get_new_info($system_sn); 

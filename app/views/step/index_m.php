@@ -117,7 +117,7 @@
 
                         <div id='target_tor_item' style="display:block;">
                             <div class="row">
-                                <div  class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div  class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="target_tor" maxlength="" >
                                     <div class="invalid-feedback"></div>
@@ -148,7 +148,7 @@
 
                         <div id="tor_hi_item">                   
                             <div class="row">
-                                <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="tor_hi" maxlength="" >
                                     <div class="invalid-feedback"></div>
@@ -158,7 +158,7 @@
 
                          <div id="tor_lo_item">
                             <div class="row">
-                                <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="tor_lo" maxlength="" >
                                     <div class="invalid-feedback"></div>
@@ -329,7 +329,7 @@
 
                         <div id="edit_tor_hi_item">                
                             <div class="row">
-                                <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_tor_hi" maxlength="" >
                                     <div class="invalid-feedback"></div>
@@ -339,7 +339,7 @@
                         
                         <div id="edit_tor_lo_item"> 
                             <div class="row">
-                                <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
+                                <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_tor_lo" maxlength="" >
                                     <div class="invalid-feedback"></div>
@@ -411,7 +411,7 @@
                         
                         <div id="edit_th_tor_item">
                             <div class="row">
-                                <div class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
                                     <input type="text" class="form-control input-ms" id="edit_th_tor" maxlength="" >
                                     <div class="invalid-feedback"></div>
@@ -420,7 +420,7 @@
                         </div>
                         <div id="edit_ds_tor_item">
                             <div class="row">
-                                <div class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']];?>):</div>
+                                <div class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2" id="edit_downshift_torque_item">
                                     <input type="text" class="form-control input-ms" id="edit_ds_tor" maxlength="" >
                                     <div class="invalid-feedback"></div>
@@ -912,13 +912,14 @@
         var ang_hi = document.getElementById('edit_ang_hi').value;
         var ang_lo = document.getElementById('edit_ang_lo').value;
         var rpm = document.getElementById('edit_rpm').value;
-        var direction = document.querySelector('input[name="direction_option"]:checked')?.value || 0;
+        var direction = document.querySelector('input[name="edit_direction"]:checked')?.value || 0;
         var th_mode = document.querySelector('input[name="edit_th_mode"]:checked').value;
         var th_tor = document.getElementById('edit_th_tor').value;
         var ds_tor = document.getElementById('edit_ds_tor').value;
         var ds_speed = document.getElementById('edit_ds_speed').value;
         var record_ang = 0; //紀錄 累計角度
-        var tor_unit = 3; //預設
+        var tor_unit = '<?php echo $data['step_torque_unit'];?>'; 
+
 
 
         //驗證
@@ -935,6 +936,7 @@
                     seqid: seqid,
                     stepid: stepid,
                     target_opt: target_opt,
+                    target_tor: target_tor,
                     target_ang: target_ang,
                     target_delay: target_delay,
                     tor_hi: tor_hi,

@@ -92,11 +92,17 @@ function include_css() {
         $queryString = $_SERVER['QUERY_STRING'] ?? '';
         $route = explode('/', str_replace('url=', '', $queryString))[0] ?? '';
 
-        // 不在 Input 或 Output 時才載入 tcc_share.css
+        // 檢查是否為行動裝置
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $isMobile = preg_match('/Mobile|Android|iPhone|iPad|iPod/i', $userAgent);
+
+        // 不在 Inputs 或 Outputs 頁面時，根據裝置載入對應的 CSS
         if (!in_array($route, ['Inputs', 'Outputs'])) {
-            echo '<link rel="stylesheet" href="' . URLROOT . 'css/tcc_share.css?v=' . ASSET_VERSION . '">' . "\n";
+            $cssFile = $isMobile ? 'tcc_share_m.css' : 'tcc_share.css';
+            echo '<link rel="stylesheet" href="' . URLROOT . 'css/' . $cssFile . '?v=' . ASSET_VERSION . '">' . "\n";
         }
     ?>
+
 
     
     <!-- ================== 模組 CSS 動態載入 ================== -->

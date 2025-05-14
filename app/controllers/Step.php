@@ -56,7 +56,9 @@ class Step extends Controller
 
         $res_device = $this->SettingModel->GetControllerInfo();
         if(!empty($res_device)){
-            $step_torque_unit = $res_device['device_torque_unit'];
+            $step_torque_unit = (int)$res_device['device_torque_unit'];
+
+
             $unit_name = $torque_unit[$step_torque_unit];
   
         }
@@ -171,38 +173,6 @@ class Step extends Controller
             $record_ang = isset($_POST['record_ang'])? intval($_POST['record_ang']) : 0;
             $tor_unit = isset($_POST['tor_unit'])? intval($_POST['tor_unit']) : 1;
 
-
-
-            if($target_opt  == 0 ){
-
-                $ds_tor = 0.0;
-                $th_tor = 0.0;
-                /*if ($ds_tor > $target_tor) {
-
-                    $res_type = 'Error';
-                    $res_msg  =  $error_message['downshift_torque_error'];
-                    $result = array(
-                        'res_type' => $res_type,
-                        'res_msg'  => $res_msg 
-                    );
-                    echo json_encode($result);
-                    exit();
-                }
-
-                if ($th_tor > $target_tor) {
-
-                    $res_type = 'Error';
-                    $res_msg  =  $error_message['threshold_torque_error'];
-                    $result = array(
-                        'res_type' => $res_type,
-                        'res_msg'  => $res_msg 
-                    );
-                    echo json_encode($result);
-                    exit();
-                }*/
-
-            }
-
             if($target_opt  == 1){
 
                 if($tor_lo  > $tor_hi){
@@ -263,7 +233,7 @@ class Step extends Controller
                 'th_tor'           => $th_tor,
                 'ds_tor'           => $ds_tor,
                 'ds_speed'         => $ds_speed,
-                'record_ang'      => $record_ang,
+                'record_ang'       => $record_ang,
                 'tor_unit'         => $tor_unit
                 
             );
@@ -294,7 +264,7 @@ class Step extends Controller
         #取得扭力單位
         $res_device = $this->SettingModel->GetControllerInfo();
         if(!empty($res_device)){
-            $step_torque_unit = $res_device['torque_unit'];
+            $step_torque_unit = $res_device['device_torque_unit'];
             if (isset($torque_unit) && is_array($torque_unit) && isset($torque_unit[$step_torque_unit])) {
                 $unit_name = $torque_unit[$step_torque_unit];
             } else {
