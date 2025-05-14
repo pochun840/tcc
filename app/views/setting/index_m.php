@@ -276,7 +276,7 @@
                         <div class="col t1">Agent IP:</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
-                                    <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" required class="t3 w3-submit w3-border w3-round"><br>
+                                    <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" value='<?php echo $data['agent_server_ip'];?>' required class="t3 w3-submit w3-border w3-round"><br>
                                     <input type="button" value="Save" onclick="agent_ip_save()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                             </div>
                         </div>
@@ -286,7 +286,7 @@
                             <div class="col t2">
                                 <form id="agent_type_form"  method="post" style="margin: 3px 0px; margin-left: 5%">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0">
+                                        <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0" <?php if($data[''])?>>
                                         <label class="form-check-label" for="agent_type_0">None</label>
                                     </div>
                                     <div class="form-check form-check-inline">

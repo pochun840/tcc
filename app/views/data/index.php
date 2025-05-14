@@ -112,17 +112,17 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
                             <div class="col-sm-6">
                                 <div style="max-width: 450px;margin: auto;text-align: center;">
                                     <label for="start" style="font-size:20px;">📅 <?php echo $text['start_date'];?> :</label>
-                                    <!--<div class="mb-3">
+                                    <div class="mb-3">
                                         <input type="text" id="start_date" placeholder="Select datetime" class="form-control" style="background-color: #fff;display:none;">
-                                    </div>-->
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div style="max-width: 450px;margin: auto;text-align: center;">
                                     <label for="start" style="font-size:20px;">📅 <?php echo $text['end_date'];?> :</label>
-                                    <!--<div class="mb-3">
+                                    <div class="mb-3">
                                         <input type="text" id="end_date" placeholder="Select datetime" class="form-control" style="background-color: #fff;display: none;">
-                                    </div>-->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -161,12 +161,14 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
         const mm = String(today.getMonth() + 1).padStart(2, '0');
         const dd = String(today.getDate()).padStart(2, '0');
 
+
        
         // 預設值
         const startStr = `${yyyy}-${mm}-${dd} 00:00:00`;
         const endStr   = `${yyyy}-${mm}-${dd} 23:59:59`;
 
         document.getElementById("start_date").value = startStr;
+        document.getElementById("end_date").value = endStr;
 
         // 初始化 flatpickr
         flatpickr("#start_date", {
@@ -177,18 +179,21 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
             defaultDate: startStr,
             locale: "<?php echo $calendar_lang; ?>",
             disableMobile: "true",
-            maxDate: `${yyyy}-12-31`
+            maxDate: `${yyyy}-12-31`,
+            time_24hr: true
         });
 
         flatpickr("#end_date", {
-        enableTime: true,
-        static: true,
-        inline: true,
-        dateFormat: "Y-m-d H:i:s",
-        defaultDate: endStr,
-        locale: "<?php echo $calendar_lang; ?>",
-        disableMobile: "true",
-        maxDate: `${yyyy}-12-31`
+            enableTime: true,
+            enableSeconds: true,
+            static: true,
+            inline: true,
+            dateFormat: "Y-m-d H:i:S",
+            defaultDate: endStr,
+            locale: "<?php echo $calendar_lang; ?>",
+            disableMobile: "true",
+            maxDate: `${yyyy}-12-31`,
+            time_24hr: true
     });
 
 

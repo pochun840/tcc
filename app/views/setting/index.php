@@ -249,7 +249,7 @@
                 <div class="row t2">
                     <div class="col-3 t1">Agent IP:</div>
                     <div class="col t3">
-                            <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" required class="t3 w3-submit w3-border w3-round">&nbsp;
+                            <input type="text" name="agent_server_ip" id="agent_server_ip" size="15"  value='<?php echo $data['agent_server_ip'];?>' required class="t3 w3-submit w3-border w3-round">&nbsp;
                             <input type="button" onclick="agent_ip_save()" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                     </div>
                 </div>
