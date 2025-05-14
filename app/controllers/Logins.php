@@ -101,21 +101,9 @@ class Logins extends Controller
         $pwd2 = $this->LoginModel->GetiDasPwd(); //idas密碼
         $input = $authToken;
         $output = hash('sha256', $pwd['operator_adminpwd']);
-        $output2 = hash('sha256', $pwd2['password']);
+        //$output2 = hash('sha256', $pwd2['password']);
 
-        if($input == $output2){//先判斷guest，如guest與admin密碼相同 則先進入guest
-            //登入成功寫入 active_sessions 資料庫
-
-            $reslut = $this->active_sessions('guest');
-            if($reslut){
-                $_SESSION['privilege'] = 'guest';
-                return true;
-            }else{
-                return false;
-            }
-
-            return true;
-        }else if($input == $output){
+         if($input == $output){
             //登入成功寫入 active_sessions 資料庫
             $reslut = $this->active_sessions('admin');
 

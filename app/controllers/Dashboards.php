@@ -4,6 +4,10 @@ class Dashboards extends Controller
 {
     private $DashboardModel;
     private $AdminModel;
+    private $SettingModel;
+    private $MiscellaneousModel;
+    private $DataModel;
+
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
@@ -11,6 +15,8 @@ class Dashboards extends Controller
         $this->AdminModel = $this->model('Admin');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
         $this->DataModel = $this->model('Datas');
+        $this->SettingModel = $this->model('Setting');
+
     }
 
     // 取得所有Jobs
@@ -50,7 +56,12 @@ class Dashboards extends Controller
         //$data_info  = $this->DashboardModel->get_Data();
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
-        
+
+        //控制器的扭力單位
+        $res_device = $this->SettingModel->GetControllerInfo();
+        if(!empty($res_device)){
+            $step_torque_unit = (int)$res_device['device_torque_unit'];  
+        }
         #當前的鎖附記錄最新一筆的資料
         $first_data = $this->get_current_data();
         
@@ -72,8 +83,15 @@ class Dashboards extends Controller
             }   
 
             #整理扭力單位
-            $first_data['status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
-
+            $step_tor_unit_tmp = (int)$first_data['step_tor_unit'];
+            
+            if($step_tor_unit_tmp == $step_torque_unit){
+                $first_data['status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
+            }else{
+                $first_data['status_unit_explain'] = $unit_arr[$step_torque_unit];
+            }
+            
+    
         }
       
 
@@ -191,7 +209,20 @@ class Dashboards extends Controller
             }
     
             // 整理扭力單位說明
-            $first_data['fasten_status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']] ?? '';
+
+            //控制器的扭力單位
+            $res_device = $this->SettingModel->GetControllerInfo();
+            if(!empty($res_device)){
+                $step_torque_unit = (int)$res_device['device_torque_unit'];  
+            }
+
+            $step_tor_unit_tmp = (int)$first_data['step_tor_unit'];
+            
+            if($step_tor_unit_tmp == $step_torque_unit){
+                $first_data['status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
+            }else{
+                $first_data['status_unit_explain'] = $unit_arr[$step_torque_unit];
+            }
 
             $first_data['error_massage_explanation'] = $error_message['ERR_'.$first_data['error_message']];
         }

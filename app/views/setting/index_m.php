@@ -170,6 +170,7 @@
                                             <th><?php echo $text['job_name'];?></th>
                                             <th><?php echo $text['system_barcode'];?></th>
                                             <th><?php echo $text['system_barcode_from'];?></th>
+                                            <th><?php echo $text['system_barcode_mode'];?></th>
                                             <th>Count</th>
                                         </tr>
                                     </thead>
@@ -185,6 +186,7 @@
                                                 <td><?php echo $v_b['barcode'];?></td>
                                                 <td><?php echo $v_b['barcode_mask_from'];?></td>
                                                 <td><?php echo $v_b['barcode_mask_count'];?></td>
+                                                <th><?php echo $data['barcode_mode'][$v_b['barcode_enable']];?></th>
                                             </tr>
                                         <?php } ?>
                                     </tbody>

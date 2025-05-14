@@ -781,6 +781,7 @@ class Settings extends Controller
         $isMobile = $this->isMobileCheck();
         $barcode_list = '';
         $barcodes = $this->SettingModel->GetAllBarcodes();
+        $barcode_mode = $this->MiscellaneousModel->details('barcode_mode');
         if(!empty($barcodes)){
             
             if(!$isMobile){
@@ -793,6 +794,7 @@ class Settings extends Controller
                     $barcode_list .= '<td>'.$vv['barcode'].'</td>';
                     $barcode_list .= '<td>'.$vv['barcode_mask_from'].'</td>';
                     $barcode_list .= '<td>'.$vv['barcode_mask_count'].'</td>';
+                    $barcode_list .= '<td>'.$vv['barcode_enable'].'</td>';
                     $barcode_list .= '<tr>';
     
                     echo $barcode_list;
@@ -807,6 +809,7 @@ class Settings extends Controller
                     $barcode_list .= '<td>'.$vv['barcode'].'</td>';
                     $barcode_list .= '<td>'.$vv['barcode_mask_from'].'</td>';
                     $barcode_list .= '<td>'.$vv['barcode_mask_count'].'</td>';
+                    $barcode_list .= '<td>'.$barcode_mode[$vv['barcode_enable']].'</td>';
                     $barcode_list .= '<tr>';
     
                     echo $barcode_list;
