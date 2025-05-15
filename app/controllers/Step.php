@@ -97,6 +97,47 @@ class Step extends Controller
 
             $tools['tool_mintorque'] = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_mintorque'],1, $step_torque_unit)[0];
             $tools['tool_mintorque_diff'] = floor($tools['tool_maxtorque_diff'] / 10 * 10) / 10;
+
+
+           //取得控制器的扭力
+            $res_device = $this->SettingModel->GetControllerInfo();
+            if(!empty($res_device)){
+                $step_torque_unit_temp = (int)$res_device['device_torque_unit'];  
+
+                if($step_torque_unit_temp == 0){
+                    $tools['tool_high_torque'] = 5.61; //kgf·m
+                    $tools['tool_low_torque'] = 0.1020; //kgf·m
+                }
+                if($step_torque_unit_temp == 1){
+                    $tools['tool_high_torque'] = 55; //N.m
+                    $tools['tool_low_torque'] = 1; //N.m
+                }
+
+                 if($step_torque_unit_temp == 2){
+                    $tools['tool_high_torque'] = 561; //KGF-cm 
+                    $tools['tool_low_torque'] = 10.20; //KGF-cm 
+                }
+
+                 if($step_torque_unit_temp == 3){
+                    $tools['tool_high_torque'] = 486.97; //Lbf
+                    $tools['tool_low_torque'] = 8.85; //Lbf
+                }
+
+                if($step_torque_unit_temp == 4){
+                    $tools['tool_high_torque'] = 5500;  //cN·m
+                    $tools['tool_low_torque'] = 100;  //cN·m
+                }
+            }
+
+
+            
+            $tools['tool_maxtorque']  = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_maxtorque'],1, $step_torque_unit)[0];
+            $tools['tool_maxtorque_diff'] = $tools['tool_maxtorque']* 1.1; 
+
+            $tools['tool_mintorque'] = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_mintorque'],1, $step_torque_unit)[0];
+            $tools['tool_mintorque_diff'] = floor($tools['tool_maxtorque_diff'] / 10 * 10) / 10;
+            
+
         }
 
 

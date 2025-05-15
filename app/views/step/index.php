@@ -69,7 +69,7 @@
         </div>
     </div>
 
-    <div style="display:none;">
+    <div style="display:block;">
         <input id="tool_max_tor" value="<?php echo $data['tools']['tool_maxtorque']; ?>">
         <input id="tool_min_tor" value="<?php echo $data['tools']['tool_mintorque']; ?>">
         <input id="tool_max_rpm" value="<?php echo $data['tools']['tool_maxrpm']; ?>">
@@ -77,6 +77,9 @@
         <input id="tool_max_tor_diff" value="<?php echo $data['tools']['tool_maxtorque_diff']; ?>">
         <input id="tool_min_tor_diff" value="<?php echo $data['tools']['tool_mintorque_diff']; ?>">
         <input id="step_torque_unit" value="<?php echo  $data['step_torque_unit']?>">
+        <input id="high_torque" value="<?php echo  $data['tools']['tool_high_torque']?>">
+        <input id="low_torque" value="<?php echo  $data['tools']['tool_low_torque']?>">
+
     </div>
 
     <!-- Add New Step -->
@@ -1159,6 +1162,9 @@ function input_check_core(prefix) {
     let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor')?.value || 0);
     let Tool_Max_RPM = parseFloat(document.getElementById('tool_max_rpm')?.value || 0);
     let Tool_Min_RPM = parseFloat(document.getElementById('tool_min_rpm')?.value || 0);
+    let high_torque= parseFloat(document.getElementById('high_torque')?.value || 0);
+    let low_torque= parseFloat(document.getElementById('low_torque')?.value || 0);
+    //high_torque
 
     // 特殊邏輯：Step 1 限制轉速下限為 50
     if (step_id === "1") {
@@ -1175,7 +1181,7 @@ function input_check_core(prefix) {
 
         conditions.push(
             { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: 1, max: 55, compareGreaterThanId: prefix + 'target_tor' },
+            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: low_torque, max: high_torque, compareGreaterThanId: prefix + 'target_tor' },
             { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: 3, compareLessThanId: prefix + 'target_tor' },
             { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
             { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: 9999, compareLessThanId: prefix + 'target_ang' },
@@ -1194,7 +1200,7 @@ function input_check_core(prefix) {
     if (target_opt === "1") { // Angle 控制
         conditions.push(
             { id: prefix + 'target_ang', pattern: /^\d{0,5}$/, min: 1, max: 9999 },
-            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: 1, max: 55, compareGreaterThanId: prefix + 'target_tor' },
+            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: low_torque, max: high_torque, compareGreaterThanId: prefix + 'target_tor' },
             { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: 3, compareLessThanId: prefix + 'target_tor' },
             { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
             { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: 9999, compareLessThanId: prefix + 'target_ang' },
