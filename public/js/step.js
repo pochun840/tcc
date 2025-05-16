@@ -1,83 +1,4 @@
 
-
- // 核心表單檢查邏輯
-function input_check_core(prefix) {
-    // 取得選擇目標類型 (Torque / Angle / Delay)
-    const target_opt = document.getElementById(prefix + "target_opt")?.value;
-    let step_id = "";
-    if (prefix === "edit_") {
-        step_id = document.getElementById("new_edit_step_id")?.value?.trim() || "";
-    } else {
-        step_id = document.getElementById("add_step_id")?.value?.trim() || "";
-    }
-
-    // 工具參數設定
-    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor')?.value || 0);
-    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor')?.value || 0);
-    let Tool_Max_RPM = parseFloat(document.getElementById('tool_max_rpm')?.value || 0);
-    let Tool_Min_RPM = parseFloat(document.getElementById('tool_min_rpm')?.value || 0);
-
-    // 特殊邏輯：Step 1 限制轉速下限為 50
-    if (step_id === "1") {
-        Tool_Min_RPM = 50;
-        console.log(`[Step ID ${step_id}] 強制 Tool_Min_RPM = 50`);
-    }
-
-    const isDownshiftOff = document.getElementById(prefix + "downshift_OFF")?.checked || false;
-    let conditions = [];
-
-    // 根據目標類型設定驗證規則
-    if (target_opt === "0") { // Torque 控制
-        const target_torque = parseFloat(document.getElementById(prefix + 'target_tor')?.value || 0);
-
-        conditions.push(
-            { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: 1, max: 55, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: 3, compareLessThanId: prefix + 'target_tor' },
-            { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-            { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: 9999, compareLessThanId: prefix + 'target_ang' },
-            { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
-        );
-
-        if (!isDownshiftOff) {
-            conditions.push(
-                { id: prefix + 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: target_torque },
-                { id: prefix + 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: target_torque },
-                { id: prefix + 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
-            );
-        }
-    }
-
-    if (target_opt === "1") { // Angle 控制
-        conditions.push(
-            { id: prefix + 'target_ang', pattern: /^\d{0,5}$/, min: 1, max: 9999 },
-            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: 1, max: 55, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: low_torque, compareLessThanId: prefix + 'target_tor' },
-            { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-            { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: 9999, compareLessThanId: prefix + 'target_ang' },
-            { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
-        );
-    }
-
-    if (target_opt === "2") { // Delay 控制
-        conditions.push(
-            { id: prefix + 'target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
-        );
-    }
-
-    // 驗證欄位
-    let isFormValid = true;
-    conditions.forEach(input => {
-        const element = document.getElementById(input.id);
-        if (element && !validateInput(element, input.pattern, input.min, input.max, input.compareGreaterThanId, input.compareLessThanId)) {
-            isFormValid = false;
-        }
-    });
-
-    return isFormValid;
-}
-
-
 function create_step() {
 
     document.getElementById('newstep').style.display = 'block';
@@ -401,65 +322,67 @@ function setRadioButton_value(radioButtons, value) {
 }
 
 
-function del_stepid(step_id){
-
-    if(step_id) {
-
-        var language = getCookie('language');
-        if(language == "zh-cn"){
-            var text_info ='你确定吗？';
-            var title = 'Copy Job';
-        }else if(language == "zh-tw"){
-            var text_info ='你確定嗎 ?';
-            var title = 'Copy Job';
-        }else{
-            var text_info ='Are you sure ?';
-            var title = 'Copy Job';
-        }
-
- 
-        $.ajax({
-            url: "?url=Step/delete_step",
-            method: "POST",
-            data:{ 
-                stepid:step_id,
-                jobid:jobid,
-                seqid:seqid
-            },
-            success: function(response) {
-                alertify.confirm(text_info, function (result) {
-
-                    document.getElementById('spinner').style.display = 'block';
-                    
-                    var responseData = JSON.parse(response);
-                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
-                    setTimeout(function() {
-                        // 隱藏加載動畫
-                        document.getElementById('spinner').style.display = 'none';
-
-                        // 顯示 alertify 彈跳視窗
-                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                            // 刷新頁面
-                            history.go(0);  
-                        });
-
-                        // 在 3 秒後自動關閉 alertify 彈跳視窗
-                        setTimeout(function() {
-                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                            history.go(0); 
-                        }, 3000); 
-                    }, 1000); // 延遲 1000 毫秒
-
-                });
-            },
-            error: function(xhr, status, error) {
-                
-            }
-        });
-
+function del_stepid(step_id) {
+    if (!step_id) {
+        isProcessing = false;
+        return;
     }
 
+    var language = getCookie('language');
+    var text_info, title;
+
+    if (language === "zh-cn") {
+        text_info = '你确定吗？';
+        title = '删除步骤';
+    } else if (language === "zh-tw") {
+        text_info = '你確定嗎 ?';
+        title = '刪除步驟';
+    } else {
+        text_info = 'Are you sure ?';
+        title = 'Delete Step';
+    }
+
+    alertify.confirm(title, text_info, function (confirmed) {
+        if (confirmed) {
+            document.getElementById('spinner').style.display = 'block';
+
+            $.ajax({
+                url: "?url=Step/delete_step",
+                method: "POST",
+                data: {
+                    stepid: step_id,
+                    jobid: jobid,
+                    seqid: seqid
+                },
+                success: function (response) {
+                    var responseData = JSON.parse(response);
+
+                    setTimeout(function () {
+                        document.getElementById('spinner').style.display = 'none';
+
+                        alertify.alert(responseData.res_type, responseData.res_msg, function () {
+                            history.go(0);
+                        });
+
+                        setTimeout(function () {
+                            alertify.closeAll();
+                            history.go(0);
+                        }, 3000);
+                    }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    document.getElementById('spinner').style.display = 'none';
+                    alertify.alert("Error", "Delete failed.");
+                }
+            });
+        }
+    }, function () {
+        // 取消 callback 可選寫在這裡（目前略過）
+        //document.querySelector(".main-content").classList.remove("overlay-active");
+
+    });
 }
+
 
 
 
