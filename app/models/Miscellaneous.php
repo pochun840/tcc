@@ -403,6 +403,16 @@ class Miscellaneous{
     }
 
 
+    public function get_unit_name_by_index($index) {
+        $unit_map = [
+            0 => "kgf.m",
+            1 => "N.m",
+            2 => "kgf.cm",
+            3 => "lbf.in",
+            4 => "cN.m"
+        ];
+        return isset($unit_map[$index]) ? $unit_map[$index] : null;
+    }
 
 
 
