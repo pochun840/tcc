@@ -3,6 +3,11 @@ class Step extends Controller
 {
    
     // 在建構子中將 Post 物件（Model）實例化
+    private $MiscellaneousModel;
+    private $sequenceModel;
+    private $stepModel;
+    private $ToolModel;
+    private $SettingModel;
     public function __construct()
     {
         $this->ToolModel = $this->model('Tool');
@@ -89,53 +94,33 @@ class Step extends Controller
             $seq_opt = (int)$seq_data[0]['seq_opt'];
         }
 
-        #扭力單位換算 
-        if(!empty($tools)){
+        // ✅ 扭力單位換算處理
+        if (!empty($tools)) {
+            $tool_min_torque = floatval($tools['tool_mintorque']);
+            $tool_max_torque = floatval($tools['tool_maxtorque']);
 
-            $tool_mintorque_tmp = $tools['tool_mintorque'];
-
-            /*$tools['tool_maxtorque']  = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_maxtorque'],1, $step_torque_unit)[0];
-            $tools['tool_maxtorque_diff'] = $tools['tool_maxtorque']* 1.1; 
-
-            $tools['tool_mintorque'] = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_mintorque'],1, $step_torque_unit)[0];
-            $tools['tool_mintorque_diff'] = floor($tools['tool_maxtorque_diff'] / 10 * 10) / 10;*/
-
-
-           //取得控制器的扭力
+            // 從控制器取得扭力單位設定
             $res_device = $this->SettingModel->GetControllerInfo();
-            if(!empty($res_device)){
-                $step_torque_unit_temp = (int)$res_device['device_torque_unit'];  
+            if (!empty($res_device)) {
+                $step_torque_unit = (int)$res_device['device_torque_unit']; // ex: 0~4
 
-                $tools['tool_maxtorque_diff'] = $tools['tool_maxtorque']* 1.1; 
-                $tools['tool_mintorque_diff'] = floor($tools['tool_maxtorque_diff'] / 10 * 10) / 10;
+                // 最大扭力上限 +10%，並往下取至最接近 .0
+                $tools['tool_maxtorque_diff'] = round($tool_max_torque * 1.1, 3);
+                $tools['tool_mintorque_diff'] = floor($tools['tool_maxtorque_diff'] * 10) / 10;
 
-                $low_values_arr  = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'] , 1);
-                $high_values_arr = $this->MiscellaneousModel->convert_all_torque_units(55, 1);
-                if(!empty($low_values_arr)){
-                    $tools['tool_low_torque'] = $low_values_arr[$unit_name];
+                // 換算低/高扭力（從 N.m 轉換成控制器設定單位）
+                $unit_name       = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit); // 你可能需要這函式
+                $low_torque_arr  = $this->MiscellaneousModel->convert_all_torque_units($tool_min_torque, 1); // 1 = N.m
+                $high_torque_arr = $this->MiscellaneousModel->convert_all_torque_units(55, 1); // 假設高扭力為 55 N.m
+
+                if (!empty($low_torque_arr[$unit_name])) {
+                    $tools['tool_low_torque'] = $low_torque_arr[$unit_name];
                 }
 
-                if(!empty($high_values_arr)){
-                    $tools['tool_high_torque'] = $high_values_arr[$unit_name];
+                if (!empty($high_torque_arr[$unit_name])) {
+                    $tools['tool_high_torque'] = $high_torque_arr[$unit_name];
                 }
-
-                var_dump($tools['tool_mintorque_diff']);die();
-
-               // $tools['tool_low_torque']  = $this->MiscellaneousModel->show_all_units($tools['tool_mintorque'] , $res_device['device_torque_unit']);
-                //$tools['tool_high_torque'] = $this->MiscellaneousModel->show_all_units($tools['tool_maxtorque'] , $res_device['device_torque_unit']);
-                
-           
             }
-
-
-            
-            //$tools['tool_maxtorque']  = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_maxtorque'],1, $step_torque_unit)[0];
-            //$tools['tool_maxtorque_diff'] = $tools['tool_maxtorque']* 1.1; 
-
-            //$tools['tool_mintorque'] = $this->MiscellaneousModel->unitarr_change((float)$tools['tool_mintorque'],1, $step_torque_unit)[0];
-            //$tools['tool_mintorque_diff'] = floor($tools['tool_maxtorque_diff'] / 10 * 10) / 10;
-            
-
         }
 
 
