@@ -26,6 +26,29 @@ class Steptcc{
         return $result['count'];
     }
 
+    #透過 job_id 及 seq_id 取得當前有幾個step && 第一個step的 target_opt 是不是扭力
+    public function check_step_targe_topt($jobid, $seqid) {
+
+        $sql = "SELECT target_opt FROM step WHERE job_id = ? AND seq_id = ? ORDER BY step_id ASC";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid, $seqid]);
+        $rows = $statement->fetchAll();
+
+        $step_count = count($rows);
+        $first_target_opt = 'N'; // 預設不是 0
+
+        if ($step_count > 0 && $rows[0]['target_opt'] == 0) {
+            $first_target_opt = 'Y';
+        }
+
+        return [
+            'count' => $step_count,
+            'first_target_opt' => $first_target_opt
+        ];
+    }
+
+
+
     #透過job_id 及 seq_id 取得對應的step
     public function getStep($job_id, $seq_id) {
 

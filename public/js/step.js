@@ -1,30 +1,244 @@
-
 function create_step() {
-
     document.getElementById('newstep').style.display = 'block';
+
+    // 預設值
     document.getElementById('rpm').value = 100;
     document.getElementById('th_tor').value = (0.0).toFixed(1);
     document.getElementById('ds_tor').value = (0.0).toFixed(1);
     document.getElementById('ds_speed').value = 100;
-    
-    document.getElementById('ang_hi').value= 9999;
-    document.getElementById('ang_lo').value= 0;
-    document.getElementById('tor_hi').value= 55;
-    document.getElementById('tor_lo').value= 0;
-    
+    document.getElementById("direction_CW").checked = true;
+    document.getElementById('ang_hi').value = 9999;
+    document.getElementById('ang_lo').value = 0;
+    document.getElementById('tor_hi').value = 55;
+    document.getElementById('tor_lo').value = 0;
+    document.getElementById('target_tor').value = parseFloat(document.getElementById('tool_min_tor').value);
+    document.getElementById('target_ang').value = 1800;
 
+    // 預設 downshift_OFF 被選中
+    document.getElementById("downshift_OFF").checked = true;
+    toggleDisabledFields(); // 控制 th_tor, ds_tor, ds_speed 狀態
 
+    // 監聽 downshift 切換
+    document.getElementById("downshift_ON").addEventListener('change', toggleDisabledFields);
+    document.getElementById("downshift_OFF").addEventListener('change', toggleDisabledFields);
 
+    // 處理 target_opt 預設選項
     var targetoptionselect = document.getElementById('target_opt');
-    targetoptionselect.addEventListener('change', function() {
+    var firstOptionValue = targetoptionselect.options[0].value;
 
-    var target_opt_Value = targetoptionselect.value;
+    if (firstOptionValue == 1) {
+        document.getElementById("downshift_OFF").checked = true;
+        document.getElementById("downshift_OFF").disabled = true;
+        document.getElementById("downshift_ON").disabled = true;
+        document.getElementById('th_tor').disabled = true;
+        document.getElementById('ds_tor').disabled = true;
+        document.getElementById('ds_speed').disabled = true;
+
+        document.getElementById('target_tor_item').style.display = 'none';
+        document.getElementById('target_ang_item').style.display = 'block';
+        document.getElementById('target_delay_item').style.display = 'none';
+    }
+
+    if (firstOptionValue == 2) {
+        document.getElementById("downshift_OFF").checked = true;
+        document.getElementById("downshift_OFF").disabled = true;
+        document.getElementById("downshift_ON").disabled = true;
+        document.getElementById('th_tor').disabled = true;
+        document.getElementById('ds_tor').disabled = true;
+        document.getElementById('ds_speed').disabled = true;
+        document.getElementById('rpm').disabled = true;
+        document.getElementById('tor_hi').disabled = true;
+        document.getElementById('tor_lo').disabled = true;
+        document.getElementById('ang_hi').disabled = true;
+        document.getElementById('ang_lo').disabled = true;
+
+        document.getElementById('target_tor_item').style.display = 'none';
+        document.getElementById('target_ang_item').style.display = 'none';
+        document.getElementById('target_delay_item').style.display = 'block';
+        document.getElementById('target_delay').value = 1.0;
+    }
+
+    targetoptionselect.addEventListener('change', function () {
+        var target_opt_Value = targetoptionselect.value;
         localStorage.setItem('target_option', target_opt_Value);
         toggleVisibility(target_opt_Value);
     });
 
+    // ✅ 加入檢查：如果目前是第 4 個 step，禁用 downshift radio
+    $.post("?url=Step/check_step_limit", {
+        jobid: jobid,
+        seqid: seqid
+    }, function (res) {
+        let result;
+        try {
+            result = JSON.parse(res);
+        } catch (e) {
+            alertify.alert('錯誤', '回傳格式錯誤');
+            return;
+        }
 
+        if (result.count === 3) {
+            const downshiftOff = document.getElementById('downshift_OFF');
+            const downshiftOn = document.getElementById('downshift_ON');
+            if (downshiftOff) downshiftOff.disabled = true;
+            if (downshiftOn) downshiftOn.disabled = true;
+        }
+    });
 }
+
+
+// 用來根據 downshift 的選項來控制其他欄位的 disabled 狀態
+function toggleDisabledFields() {
+    if (document.getElementById("downshift_ON").checked) {
+        // 當 downshift_ON 被選中時，解除 disabled
+        document.getElementById('th_tor').disabled = false;
+        document.getElementById('ds_tor').disabled = false;
+        document.getElementById('ds_speed').disabled = false;
+    } else {
+        // 當 downshift_OFF 被選中時，設置 disabled
+        document.getElementById('th_tor').disabled = true;
+        document.getElementById('ds_tor').disabled = true;
+        document.getElementById('ds_speed').disabled = true;
+    }
+}
+
+
+function edit_step(stepid) {
+    if (!jobid) return;
+
+    $.ajax({
+        url: "?url=Step/search_stepinfo",
+        method: "POST",
+        data: {
+            job_id: jobid,
+            seq_id: seqid,
+            step_id: stepid
+        },
+        success: function (response) {
+            const responseJSON = JSON.stringify(response);
+            let cleanString = responseJSON.replace(/Array|\\n/g, '');
+            cleanString = cleanString.substring(2, cleanString.length - 2);
+
+            const [, target_opt] = cleanString.match(/\[target_opt\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, target_tor] = cleanString.match(/\[target_tor\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, target_ang] = cleanString.match(/\[target_ang\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, target_delay] = cleanString.match(/\[target_delay\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, tor_hi] = cleanString.match(/\[tor_hi\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, tor_lo] = cleanString.match(/\[tor_lo\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, ang_hi] = cleanString.match(/\[ang_hi\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, ang_lo] = cleanString.match(/\[ang_lo\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, rpm] = cleanString.match(/\[rpm\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, direction] = cleanString.match(/\[direction\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, th_mode] = cleanString.match(/\[th_mode\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, ds_tor] = cleanString.match(/\[ds_tor\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, ds_speed] = cleanString.match(/\[ds_speed\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, th_tor] = cleanString.match(/\[th_tor\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, step_id] = cleanString.match(/\[step_id\]\s*=>\s*([^ ]+)/) || [, null];
+
+            document.getElementById('editstep').style.display = 'block';
+            document.querySelector("select[name='edit_target_opt']").value = target_opt;
+
+            if (target_opt == 0) {
+                const inputs = document.querySelectorAll("input[type='text'], input[type='radio'], select");
+                inputs.forEach(input => input.disabled = false);
+
+                document.getElementById("edit_target_tor").value = target_tor;
+                document.getElementById("edit_target_ang_item").style.display = 'none';
+                document.getElementById("edit_target_delay_item").style.display = 'none';
+                document.getElementById("edit_target_tor_item").style.display = 'block';
+
+                // ✅ 檢查是否為第 4 個 step，禁用 downshift
+                $.post("?url=Step/check_step_limit", {
+                    jobid: jobid,
+                    seqid: seqid
+                }, function (res) {
+                    let result;
+                    try {
+                        result = JSON.parse(res);
+                    } catch (e) {
+                        alertify.alert('錯誤', '回傳格式錯誤');
+                        return;
+                    }
+
+                    if (result.count === 4) {
+                        const downshiftOff = document.getElementById('edit_downshift_OFF');
+                        const downshiftOn = document.getElementById('edit_downshift_ON');
+                        if (downshiftOff) downshiftOff.disabled = true;
+                        if (downshiftOn) downshiftOn.disabled = true;
+                    }
+                });
+            }
+
+            if (target_opt == 1) {
+                const inputs = document.querySelectorAll("input[type='text'], input[type='radio'], select");
+                inputs.forEach(function (input) {
+                    if (input.type === 'radio' && input.name === 'edit_direction') {
+                        input.disabled = false;
+                    } else if (input.type !== 'radio') {
+                        input.disabled = false;
+                    }
+                });
+
+                document.getElementById("edit_target_ang").value = target_ang;
+                document.getElementById("edit_target_tor_item").style.display = 'none';
+                document.getElementById("edit_target_delay_item").style.display = 'none';
+                document.getElementById("edit_target_ang_item").style.display = 'block';
+
+                disableElementsByName("edit_th_mode");
+                disableElementById('edit_ds_tor');
+                disableElementById('edit_ds_speed');
+                disableElementById('edit_th_tor');
+                enableElementById('edit_rpm');
+                enableElementById('edit_tor_hi');
+                enableElementById('edit_tor_lo');
+                enableElementById('edit_ang_hi');
+                enableElementById('edit_ang_lo');
+            }
+
+            if (target_opt == 2) {
+                document.getElementById("edit_target_delay").value = target_delay;
+                document.getElementById("edit_target_tor_item").style.display = 'none';
+                document.getElementById("edit_target_ang_item").style.display = 'none';
+                document.getElementById("edit_target_delay_item").style.display = 'block';
+
+                disableElementById('edit_rpm');
+                disableElementById('edit_ds_tor');
+                disableElementById('edit_ds_speed');
+                disableElementById('edit_th_tor');
+                disableElementById('edit_tor_hi');
+                disableElementById('edit_tor_lo');
+                disableElementById('edit_ang_hi');
+                disableElementById('edit_ang_lo');
+                disableElementsByName("edit_th_mode");
+                disableElementsByName("edit_direction");
+            }
+
+            document.getElementById("edit_rpm").value = rpm;
+            document.getElementById("edit_ds_speed").value = ds_speed;
+            document.getElementById("edit_ds_tor").value = ds_tor;
+            document.getElementById("edit_th_tor").value = th_tor;
+            document.getElementById("edit_tor_hi").value = cleanNumber(tor_hi);
+            document.getElementById("edit_tor_lo").value = cleanNumber(tor_lo);
+            document.getElementById("edit_ang_hi").value = ang_hi;
+            document.getElementById("edit_ang_lo").value = ang_lo;
+            document.getElementById('edit_step_id').value = step_id;
+
+            const radioButtons_th_mode = document.getElementsByName("edit_th_mode");
+            setRadioButton_value(radioButtons_th_mode, th_mode);
+
+            const radioButtons_direction = document.getElementsByName("edit_direction");
+            setRadioButton_value(radioButtons_direction, direction);
+
+            toggleThTorDisabled();
+        },
+        error: function (xhr, status, error) {
+            alertify.alert('錯誤', '取得步驟資料失敗');
+        }
+    });
+}
+
+
+
   
 function countrows() {
     var tbody = document.querySelector('#step_table tbody');
@@ -398,6 +612,8 @@ function toggleThTorDisabled() {
     edit_th_tor.disabled = isDownshiftOffChecked;
     edit_ds_tor.disabled = isDownshiftOffChecked;
     edit_ds_speed.disabled = isDownshiftOffChecked;
+
+
 }
 
 
@@ -425,4 +641,44 @@ function prepareAddStepId() {
     const stepRows = document.querySelectorAll('#step_table tbody tr');
     const nextStepId = stepRows.length + 1;
     document.getElementById("add_step_id").value = nextStepId;
+}
+
+
+
+function prepareAddStep(jobid, seqid) {
+    $.post("?url=Step/check_step_limit", {
+        jobid: jobid,
+        seqid: seqid
+    }, function (res) {
+        let result;
+        try {
+            result = JSON.parse(res);
+        } catch (e) {
+            alertify.alert('錯誤', '回傳格式錯誤');
+            return;
+        }
+
+        // ✅ 如果是準備建立第 4 個 step，禁用 downshift radio
+        if (result.count === 3) {
+            const downshiftOff = document.getElementById('downshift_OFF');
+            const downshiftOn = document.getElementById('downshift_ON');
+
+            if (downshiftOff) downshiftOff.disabled = true;
+            if (downshiftOn) downshiftOn.disabled = true;
+        } else {
+            // 不是第 4 個 step，就啟用選項
+            const downshiftOff = document.getElementById('downshift_OFF');
+            const downshiftOn = document.getElementById('downshift_ON');
+
+            if (downshiftOff) downshiftOff.disabled = false;
+            if (downshiftOn) downshiftOn.disabled = false;
+        }
+
+        // ❌ 後端回傳禁止新增
+        if (!result.allow) {
+            alertify.alert('警告', result.msg);
+            return;
+        }
+
+    });
 }

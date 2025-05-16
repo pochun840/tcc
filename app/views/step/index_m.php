@@ -550,258 +550,6 @@
     }
 
 
-
-    function edit_step(stepid){
-
-        if(jobid){
-            $.ajax({
-                url: "?url=Step/search_stepinfo",
-                method: "POST",
-                data:{ 
-                    job_id: jobid,
-                    seq_id: seqid,
-                    step_id:stepid
-
-                },
-                success: function(response) {
-
-                    var responseJSON = JSON.stringify(response);
-                    var cleanString = responseJSON.replace(/Array|\\n/g, '');
-                    var cleanString = cleanString.substring(2, cleanString.length - 2);
-
-                    var [, job_id] = cleanString.match(/\[job_id]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, seq_id] = cleanString.match(/\[seq_id]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, step_id] = cleanString.match(/\[step_id]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, target_opt] = cleanString.match(/\[target_opt]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, target_tor] = cleanString.match(/\[target_tor]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, target_ang] = cleanString.match(/\[target_ang]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, target_delay] = cleanString.match(/\[target_delay]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, tor_hi] = cleanString.match(/\[tor_hi]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, tor_lo] = cleanString.match(/\[tor_lo]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, ang_hi] = cleanString.match(/\[ang_hi]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, ang_lo] = cleanString.match(/\[ang_lo]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, rpm] = cleanString.match(/\[rpm]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, direction] = cleanString.match(/\[direction]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, th_mode] = cleanString.match(/\[th_mode]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, ds_tor] = cleanString.match(/\[ds_tor]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, ds_speed] = cleanString.match(/\[ds_speed]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, th_tor] = cleanString.match(/\[th_tor]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, record_ang] = cleanString.match(/\[record_ang]\s*=>\s*([^ ]+)/) || [, null];
-                    var [, tor_unit] = cleanString.match(/\[tor_unit]\s*=>\s*([^ ]+)/) || [, null];
-
-                    document.getElementById('editstep').style.display = 'block';
-
-
-                    document.querySelector("select[name='edit_target_opt']").value = target_opt;
-
-
-                    if(target_opt == 0){
-                        
-
-                        var inputs = document.querySelectorAll("input[type='text'], input[type='radio'], select");
-                        inputs.forEach(function(input) {
-                            input.disabled = false; 
-                        });
-
-                        document.getElementById("edit_target_tor").value = target_tor;
-                        document.getElementById("edit_target_ang_item").style.display='none';
-                        document.getElementById("edit_target_delay_item").style.display='none';
-                        document.getElementById("edit_target_tor_item").style.display='block';
-
-                    
-
-                    }
-
-                    if(target_opt == 1){
-
-                        var inputs = document.querySelectorAll("input[type='text'], input[type='radio'], select");
-                        inputs.forEach(function(input) {
-                        
-                            if (input.type === 'radio' && input.name === 'edit_direction') {
-                                input.disabled = false;  
-                            } else if (input.type !== 'radio') {
-                                input.disabled = false;  
-                            }
-                        });
-
-                        document.getElementById("edit_target_ang").value = target_ang;
-                        document.getElementById("edit_target_tor_item").style.display='none';
-                        document.getElementById("edit_target_delay_item").style.display='none';
-                        document.getElementById("edit_target_ang_item").style.display='block';
-                        disableElementsByName("edit_th_mode");
-      
-
-                        disableElementById('edit_ds_tor');
-                        disableElementById('edit_ds_speed');
-                        disableElementById('edit_th_tor');
-                        enableElementById('edit_rpm');
-                        enableElementById('edit_tor_hi');
-                        enableElementById('edit_tor_lo');
-                        enableElementById('edit_ang_hi');
-                        enableElementById('edit_ang_lo');
-                        
-                    }
-
-                    if(target_opt == 2){
-                        document.getElementById("edit_target_delay").value = target_delay;
-                        document.getElementById("edit_target_tor_item").style.display='none';
-                        document.getElementById("edit_target_ang_item").style.display='none';
-                        document.getElementById("edit_target_delay_item").style.display='block';
-                        disableElementById('edit_rpm');
-                        disableElementById('edit_ds_tor');
-                        disableElementById('edit_ds_speed');
-                        disableElementById('edit_th_tor');
-                        disableElementById('edit_tor_hi');
-                        disableElementById('edit_tor_lo');
-                        disableElementById('edit_ang_hi');
-                        disableElementById('edit_ang_lo');
-                        disableElementsByName("edit_th_mode");
-                        disableElementsByName("edit_direction");
-
-
-
-                        
-                    }
-
-
-                    document.getElementById("edit_rpm").value = rpm;
-                    document.getElementById("edit_ds_speed").value = ds_speed;
-                    document.getElementById("edit_ds_tor").value = ds_tor;
-                    document.getElementById("edit_th_tor").value = th_tor;
-                    document.getElementById("edit_tor_hi").value = cleanNumber(tor_hi);
-                    document.getElementById("edit_tor_lo").value = cleanNumber(tor_lo);
-                    document.getElementById("edit_ang_hi").value = ang_hi;
-                    document.getElementById("edit_ang_lo").value = ang_lo;
-                    document.getElementById('edit_step_id').value =step_id;
-
-
-                    var radioButtons_th_mode = document.getElementsByName("edit_th_mode");
-                    setRadioButton_value(radioButtons_th_mode, th_mode);
-
-                    var radioButtons_direction = document.getElementsByName("edit_direction");
-                    setRadioButton_value(radioButtons_direction, direction);
-
-
-                    toggleThTorDisabled();
-
-
-
-                },
-                error: function(xhr, status, error) {
-                
-                }
-            });
-        }
-    }
-
-
-    function create_step() {
-        // 顯示新步驟
-        document.getElementById('newstep').style.display = 'block';
-
-        // 設定預設值
-        //document.getElementById('rpm').value = 50;
-        document.getElementById('th_tor').value = 0;
-        document.getElementById('ds_tor').value = 0.3;
-        document.getElementById('ds_speed').value = 100;
-
-        document.getElementById('rpm').value = 100;
-        document.getElementById('th_tor').value = 0;
-        document.getElementById('ds_tor').value = 0;
-        //document.getElementById('ds_speed').value = 100;
-        document.getElementById("direction_CW").checked = true;
-        document.getElementById('ang_hi').value= 9999;
-        document.getElementById('ang_lo').value= 0;
-        document.getElementById('tor_hi').value= 55;
-        document.getElementById('tor_lo').value= 0;
-        document.getElementById('target_tor').value = parseFloat(document.getElementById('tool_min_tor').value);
-        document.getElementById('target_ang').value= 1800;
-        
-
-        // 預設 downshift_ON 需要被選中
-        document.getElementById("downshift_ON").checked = true;
-        toggleDisabledFields();  // 根據 downshift 的選項來控制其他欄位的狀態
-
-        // downshift 變更
-        document.getElementById("downshift_ON").addEventListener('change', toggleDisabledFields);
-        document.getElementById("downshift_OFF").addEventListener('change', toggleDisabledFields);
-
-        // target_opt 變更
-        var targetoptionselect = document.getElementById('target_opt');
-        var firstOptionValue = targetoptionselect.options[0].value;
-        if(firstOptionValue == 1){
-            document.getElementById("downshift_OFF").checked = true;
-            document.getElementById("downshift_OFF").disabled = true;
-            document.getElementById("downshift_ON").disabled = true;
-            document.getElementById('th_tor').disabled = true;
-            document.getElementById('ds_tor').disabled = true;
-            document.getElementById('ds_speed').disabled = true;
-            document.getElementById('rpm').disabled = true;
-
-            document.getElementById('target_tor_item').style.display='none';
-            document.getElementById('target_ang_item').style.display='block';
-            document.getElementById('target_delay_item').style.display='none';
-
-            document.getElementById('ang_hi').value= 9999;
-            document.getElementById('ang_lo').value= 0;
-            document.getElementById('tor_hi').value= 55;
-            document.getElementById('target_ang').value = 1800;
-            
-  
-
-        }
-
-        if(firstOptionValue == 2){
-            document.getElementById("downshift_OFF").checked = true;
-            document.getElementById("downshift_OFF").disabled = true;
-            document.getElementById("downshift_ON").disabled = true;
-            document.getElementById('th_tor').disabled = true;
-            document.getElementById('ds_tor').disabled = true;
-            document.getElementById('ds_speed').disabled = true;
-            document.getElementById('rpm').disabled = true;
-            document.getElementById('tor_hi').disabled = true;
-            document.getElementById('tor_lo').disabled = true;
-            document.getElementById('ang_hi').disabled = true;
-            document.getElementById('ang_lo').disabled = true;
-
-            document.getElementById('target_tor_item').style.display='none';
-            document.getElementById('target_ang_item').style.display='none';
-            document.getElementById('target_delay_item').style.display='block';
-
-            document.getElementById('ang_hi').value= 9999;
-            document.getElementById('ang_lo').value= 0;
-            document.getElementById('tor_hi').value= 55;
-            document.getElementById('target_ang').value = 1800;
-            
-  
-
-        }
-
-
-        targetoptionselect.addEventListener('change', function() {
-            var target_opt_Value = targetoptionselect.value;
-            localStorage.setItem('target_option', target_opt_Value);
-            toggleVisibility(target_opt_Value);
-        });
-
-  
-    }
-
-    // 用來根據 downshift 的選項來控制其他欄位的 disabled 狀態
-    function toggleDisabledFields() {
-        if (document.getElementById("downshift_ON").checked) {
-            // 當 downshift_ON 被選中時，解除 disabled
-            document.getElementById('th_tor').disabled = false;
-            document.getElementById('ds_tor').disabled = false;
-            document.getElementById('ds_speed').disabled = false;
-        } else {
-            // 當 downshift_OFF 被選中時，設置 disabled
-            document.getElementById('th_tor').disabled = true;
-            document.getElementById('ds_tor').disabled = true;
-            document.getElementById('ds_speed').disabled = true;
-        }
-    }
-
   
     function add_step() {
         
@@ -1391,6 +1139,49 @@
         }
         return value; // 其他正常小數（例如 12.3）直接回傳
     }
+
+
+    function checkStepAndHandleDownshift(jobid, seqid, onSuccessCallback) {
+        $.ajax({
+            url: "?url=Step/check_step_limit",
+            method: "POST",
+            data: {
+                jobid: jobid,
+                seqid: seqid
+            },
+            dataType: "json",
+            success: function(result) {
+                // ✅ 第4個 step，禁用 downshift radio
+                const downshiftOff = document.getElementById('downshift_OFF');
+                const downshiftOn = document.getElementById('downshift_ON');
+
+                if (result.count === 3) {
+                    if (downshiftOff) downshiftOff.disabled = true;
+                    if (downshiftOn) downshiftOn.disabled = true;
+                } else {
+                    if (downshiftOff) downshiftOff.disabled = false;
+                    if (downshiftOn) downshiftOn.disabled = false;
+                }
+
+                // ❌ 不允許新增 Step
+                if (!result.allow) {
+                    alertify.alert('警告', result.msg);
+                    isProcessing = false;
+                    return;
+                }
+
+                // ✅ 通過限制，執行後續動作（例如新增 Step）
+                if (typeof onSuccessCallback === 'function') {
+                    onSuccessCallback();
+                }
+            },
+            error: function(xhr, status, error) {
+                alertify.alert("錯誤", "無法取得步驟資料，請稍後再試！");
+                isProcessing = false;
+            }
+        });
+    }
+
 
 
 </script>

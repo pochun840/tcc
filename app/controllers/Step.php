@@ -134,6 +134,7 @@ class Step extends Controller
         }
 
 
+
         $data = array(
             'isMobile' => $isMobile,
             'step' => $step,
@@ -561,5 +562,29 @@ class Step extends Controller
         }
         
     }
+
+
+    public function check_step_limit() {
+        $jobid = $_POST['jobid'] ?? 0;
+        $seqid = $_POST['seqid'] ?? 0;
+
+        $result = $this->stepModel->check_step_targe_topt($jobid, $seqid);
+        $count = $result['count'];
+        $firstIsZero = $result['first_target_opt'] === 'Y';
+
+        if ($count >= 4) {
+            echo json_encode(['allow' => false, 'msg' => '最多只能新增 4 個步驟', 'count' => $count]);
+            return;
+        }
+
+        if (!$firstIsZero) {
+            echo json_encode(['allow' => false, 'msg' => '第一個步驟的 target_opt 必須為 0', 'count' => $count]);
+            return;
+        }
+
+        echo json_encode(['allow' => true, 'count' => $count]);
+    }
+
+
 
 }
