@@ -16,3 +16,17 @@
   pointer-events: none; /* 禁止點擊 */
   opacity: 0.3; /* 降低不透明度 */
 }
+
+
+.status-ok {
+ background-color: green !important;
+}
+
+.status-warn {
+ background-color: yellow !important;
+}
+
+.status-ng {
+ background-color: red !important;
+}
+
