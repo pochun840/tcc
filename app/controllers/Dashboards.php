@@ -257,10 +257,10 @@ class Dashboards extends Controller
             $chart_data = $this->live_line_chart($chart_mode);
 
             if($chart_data['y_title'] =="Torque" && $flag == "N"){
-            echo "<pre>";
+            /*echo "<pre>";
             print_r($chart_data['y_val']);
             echo "</pre>";
-            die();
+            die();*/
 
             }
 
@@ -342,8 +342,6 @@ class Dashboards extends Controller
         if(($chat_mode == "1" || $chat_mode == "3" || $chat_mode == "4")){
             
             $chart_info['y_val'] = json_encode($csvdata_arr);
-
-            //var_dump($csvdata_arr);die();
 
             $temp_val = json_decode($chart_info['y_val']); 
 

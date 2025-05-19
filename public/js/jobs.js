@@ -1,54 +1,57 @@
 
 function delete_jobid(jobid) {
-    if (jobid) {
+    if (!jobid) return;
 
-        var language = getCookie('language');
-        if(language == "zh-cn"){
-            var text_info ='你确定吗？';
-            var title = 'Copy Job';
-        }else if(language == "zh-tw"){
-            var text_info ='你確定嗎 ?';
-            var title = 'Copy Job';
-        }else{
-            var text_info ='Are you sure ?';
-            var title = 'Copy Job';
-        }
+    const language = getCookie('language');
+    let text_info, title;
 
-        
-        $.ajax({
-            url: "?url=Jobs/delete_jobid",
-            method: "POST",
-            data: { jobid: jobid },
-            success: function(response) {
-                alertify.confirm(text_info, function (result) {
-                    document.getElementById('spinner').style.display = 'block';
-                    var responseData = JSON.parse(response);
-                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
+    if (language === "zh-cn") {
+        text_info = '你确定吗？';
+        title = '删除工作';
+    } else if (language === "zh-tw") {
+        text_info = '你確定嗎？';
+        title = '刪除工作';
+    } else {
+        text_info = 'Are you sure?';
+        title = 'Delete Job';
+    }
+
+    // ✅ 先詢問再送出 AJAX
+    alertify.confirm(title, text_info, function (confirmed) {
+        if (confirmed) {
+            document.getElementById('spinner').style.display = 'block';
+
+            $.ajax({
+                url: "?url=Jobs/delete_jobid",
+                method: "POST",
+                data: { jobid: jobid },
+                success: function(response) {
+                    const responseData = JSON.parse(response);
                     setTimeout(function() {
-                        // 隱藏加載動畫
                         document.getElementById('spinner').style.display = 'none';
 
-                        // 顯示 alertify 彈跳視窗
-                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                            // 刷新頁面
-                            history.go(0);  
+                        alertify.alert(responseData.res_type, responseData.res_msg, function () {
+                            history.go(0); // 手動刷新
                         });
 
-                        // 在 3 秒後自動關閉 alertify 彈跳視窗
-                        setTimeout(function() {
-                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                            history.go(0); 
-                        }, 3000); 
-                    }, 1000); // 延遲 1000 毫秒
-
-                });
-            },
-            error: function(xhr, status, error) {
-                // 這裡可以處理 AJAX 請求失敗的情況
-            }
-        });
-    }
+                        setTimeout(() => {
+                            alertify.closeAll();
+                            history.go(0);
+                        }, 3000);
+                    }, 1000);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Delete failed:", error);
+                    document.getElementById('spinner').style.display = 'none';
+                }
+            });
+        }
+    }, function () {
+        // 使用者按「取消」的時候什麼都不做
+        document.querySelector(".main-content").classList.remove("overlay-active");
+    });
 }
+
 
 
 var oldjobname ='';
@@ -71,7 +74,6 @@ function cound_job(argument){
     }
 
     if(argument =="new"){
-        //alert('111111111');
         document.querySelector(".main-content").classList.add("overlay-active");
         create_job();
     }

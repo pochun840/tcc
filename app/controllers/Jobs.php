@@ -269,7 +269,7 @@ class Jobs extends Controller
                             $new_temp_step[$key_step]['tor_hi'] = $val_step['tor_hi'];
                             $new_temp_step[$key_step]['tor_lo'] = $val_step['tor_lo'];
                             $new_temp_step[$key_step]['ang_hi'] = $val_step['ang_hi'];
-                            $new_temp_step[$key_step]['ang_hi'] = $val_step['ang_lo'];
+                            $new_temp_step[$key_step]['ang_lo'] = $val_step['ang_lo'];
                             $new_temp_step[$key_step]['rpm'] = $val_step['rpm'];
                             $new_temp_step[$key_step]['direction'] = $val_step['direction'];
                             $new_temp_step[$key_step]['th_mode'] = $val_step['th_mode'];
