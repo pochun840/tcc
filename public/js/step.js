@@ -682,3 +682,303 @@ function prepareAddStep(jobid, seqid) {
 
     });
 }
+
+function checkStepAndHandleDownshift(jobid, seqid, onSuccessCallback) {
+    $.ajax({
+        url: "?url=Step/check_step_limit",
+        method: "POST",
+        data: {
+            jobid: jobid,
+            seqid: seqid
+        },
+        dataType: "json",
+        success: function(result) {
+            // ✅ 第4個 step，禁用 downshift radio
+            const downshiftOff = document.getElementById('downshift_OFF');
+            const downshiftOn = document.getElementById('downshift_ON');
+
+            if (result.count === 3) {
+                if (downshiftOff) downshiftOff.disabled = true;
+                if (downshiftOn) downshiftOn.disabled = true;
+            } else {
+                if (downshiftOff) downshiftOff.disabled = false;
+                if (downshiftOn) downshiftOn.disabled = false;
+            }
+
+            // ❌ 不允許新增 Step
+            if (!result.allow) {
+                //alertify.alert('警告', result.msg);
+                isProcessing = false;
+                return;
+
+            }
+
+            // ✅ 通過限制，執行後續動作（例如新增 Step）
+            if (typeof onSuccessCallback === 'function') {
+                onSuccessCallback();
+            }
+        },
+        error: function(xhr, status, error) {
+            alertify.alert("錯誤", "無法取得步驟資料，請稍後再試！");
+            isProcessing = false;
+        }
+    });
+}
+
+// 核心表單檢查邏輯
+function input_check_core(prefix) {
+    // 取得選擇目標類型 (Torque / Angle / Delay)
+    const target_opt = document.getElementById(prefix + "target_opt")?.value;
+    let step_id = "";
+    if (prefix === "edit_") {
+        step_id = document.getElementById("new_edit_step_id")?.value?.trim() || "";
+    } else {
+        step_id = document.getElementById("add_step_id")?.value?.trim() || "";
+    }
+
+    // 工具參數設定
+    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor')?.value || 0);
+    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor')?.value || 0);
+    let Tool_Max_RPM = parseFloat(document.getElementById('tool_max_rpm')?.value || 0);
+    let Tool_Min_RPM = parseFloat(document.getElementById('tool_min_rpm')?.value || 0);
+
+    // 特殊邏輯：Step 1 限制轉速下限為 50
+    if (step_id === "1") {
+        Tool_Min_RPM = 50;
+        console.log(`[Step ID ${step_id}] 強制 Tool_Min_RPM = 50`);
+    }
+
+    const isDownshiftOff = document.getElementById(prefix + "downshift_OFF")?.checked || false;
+    let conditions = [];
+
+    // 根據目標類型設定驗證規則
+    if (target_opt === "0") { // Torque 控制
+        const target_torque = parseFloat(document.getElementById(prefix + 'target_tor')?.value || 0);
+
+        conditions.push(
+            { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: 1, max: 55, compareGreaterThanId: prefix + 'target_tor' },
+            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: 3, compareLessThanId: prefix + 'target_tor' },
+            { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
+            { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: 9999, compareLessThanId: prefix + 'target_ang' },
+            { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
+        );
+
+        if (!isDownshiftOff) {
+            conditions.push(
+                { id: prefix + 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: target_torque },
+                { id: prefix + 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: target_torque },
+                { id: prefix + 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
+            );
+        }
+    }
+
+    if (target_opt === "1") { // Angle 控制
+        conditions.push(
+            { id: prefix + 'target_ang', pattern: /^\d{0,5}$/, min: 1, max: 9999 },
+            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: 1, max: 55, compareGreaterThanId: prefix + 'target_tor' },
+            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: 3, compareLessThanId: prefix + 'target_tor' },
+            { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
+            { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: 9999, compareLessThanId: prefix + 'target_ang' },
+            { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
+        );
+    }
+
+    if (target_opt === "2") { // Delay 控制
+        conditions.push(
+            { id: prefix + 'target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
+        );
+    }
+
+    // 驗證欄位
+    let isFormValid = true;
+    conditions.forEach(input => {
+        const element = document.getElementById(input.id);
+        if (element && !validateInput(element, input.pattern, input.min, input.max, input.compareGreaterThanId, input.compareLessThanId)) {
+            isFormValid = false;
+        }
+    });
+
+    return isFormValid;
+}
+
+
+
+
+
+function validateInput(element, pattern, min, max, compareGreaterThanId = null, compareLessThanId = null) {
+    let value = element.value.trim();
+    let isValid = true;
+    let customMessage = "";
+
+    // 語系處理
+    let language = getCookie('language') || 'default';
+    const errorText = {
+        "zh-cn": {
+            empty: "不可为空。",
+            pattern: "格式错误。",
+            range: (min, max) => `输入值必须在 ${min} ~ ${max} 之间。`,
+            gt: (label, val) => `必须大于 ${label}（目前值: ${val}）`,
+            lt: (label, val) => `必须小于 ${label}（目前值: ${val}）`
+        },
+        "zh-tw": {
+            empty: "不可空白。",
+            pattern: "格式錯誤。",
+            range: (min, max) => `輸入值必須在 ${min} ~ ${max} 之間。`,
+            gt: (label, val) => `必須大於 ${label}（目前值: ${val}）`,
+            lt: (label, val) => `必須小於 ${label}（目前值: ${val}）`
+        },
+        "default": {
+            empty: "This field is required.",
+            pattern: "Invalid format.",
+            range: (min, max) => `Value must be between ${min} and ${max}.`,
+            gt: (label, val) => `Must be greater than ${label} (current: ${val})`,
+            lt: (label, val) => `Must be less than ${label} (current: ${val})`
+        }
+    };
+    const msg = errorText[language] || errorText["default"];
+
+    // 驗證空值
+    if (value === "") {
+        isValid = false;
+        customMessage = msg.empty;
+    }
+    // 驗證格式
+    else if (!pattern.test(value)) {
+        isValid = false;
+        customMessage = msg.pattern;
+    }
+    // 驗證範圍（min ~ max）
+    else if ((min !== null && min !== undefined && parseFloat(value) < min) ||
+             (max !== null && max !== undefined && parseFloat(value) > max)) {
+        isValid = false;
+        customMessage = msg.range(min, max);
+
+    }
+    // 驗證必須大於指定欄位
+    else if (compareGreaterThanId) {
+        const compareElement = document.getElementById(compareGreaterThanId);
+        if (compareElement && parseFloat(value) <= parseFloat(compareElement.value)) {
+            let labelText = compareElement.previousElementSibling ? compareElement.previousElementSibling.innerText.replace(':', '') : "";
+            customMessage = msg.gt(labelText, compareElement.value);
+            isValid = false;
+        }
+    }
+    // 驗證必須小於指定欄位
+    else if (compareLessThanId) {
+        const compareElement = document.getElementById(compareLessThanId);
+        if (compareElement && parseFloat(value) >= parseFloat(compareElement.value)) {
+            let labelText = compareElement.previousElementSibling ? compareElement.previousElementSibling.innerText.replace(':', '') : "";
+            customMessage = msg.lt(labelText, compareElement.value);
+            isValid = false;
+        }
+    }
+
+    // 顯示或移除錯誤訊息
+    if (!isValid) {
+        element.classList.add("is-invalid");
+        if (element.nextElementSibling) {
+            element.nextElementSibling.innerHTML = customMessage;
+        }
+    } else {
+        element.classList.remove("is-invalid");
+        if (element.nextElementSibling) {
+            element.nextElementSibling.innerHTML = "";
+        }
+    }
+
+    return isValid;
+}
+
+
+let backupOptions = [];  // 用來存儲備份的選項
+
+// 根據 target_option_only_tor 更新 select options
+function updateTargetOption() {
+    try {
+        // 假設 target_option_only_tor 是從 PHP 傳過來的 JSON 資料
+        let target_option_only_tor = JSON.parse('<?php echo $data["target_option_only_tor_json"]; ?>');
+
+        // 檢查 target_option_only_tor 是否是有效的陣列
+        if (!Array.isArray(target_option_only_tor)) {
+            return; // 如果不是陣列，則終止函數
+        }
+
+        // 取得 select 元素
+        const selectElement = document.getElementById("target_opt");
+
+        // 檢查 select 元素是否存在
+        if (!selectElement) {
+            //console.error('未能找到 id="target_opt" 的元素');
+            return; 
+        }
+
+        // 備份目前的選項
+        backupOptions = Array.from(selectElement.options).map(option => ({
+            value: option.value,
+            text: option.text
+        }));
+
+        // 清空現有的選項
+        while (selectElement.options.length > 0) {
+            selectElement.remove(0);  // 移除第一個選項
+        }
+
+        console.log('target_option_only_tor:', target_option_only_tor);
+
+        // 遍歷 target_option_only_tor 並創建新的 option 元素
+        target_option_only_tor.forEach((option) => {
+            // 確保每個選項有有效的 value 和 text
+            if (option.value !== undefined && option.text !== undefined) {
+                const optionElement = document.createElement("option");
+                optionElement.value = option.value;  // 設定選項的 value 屬性
+                optionElement.textContent = option.text;  // 設定選項的顯示文字
+                selectElement.appendChild(optionElement);  // 將選項加入到 select 中
+            } else {
+                //console.warn('無效的選項:', option);  // 如果選項格式不正確，輸出警告
+            }
+        });
+
+    } catch (error) {
+        //console.error('解析 JSON 發生錯誤:', error);
+    }
+}
+
+// 恢復原本的選項
+function restoreBackupOptions() {
+    const selectElement = document.getElementById("target_opt");
+
+    // 清空現有的選項
+    while (selectElement.options.length > 0) {
+        selectElement.remove(0);
+    }
+
+    // 恢復備份的選項
+    backupOptions.forEach((option) => {
+        const optionElement = document.createElement("option");
+        optionElement.value = option.value;
+        optionElement.textContent = option.text;
+        selectElement.appendChild(optionElement);
+    });
+
+}
+
+function cleanNumber(value) {
+    if (value === "" || value === null || value === undefined) {
+        return value;
+    }
+    let num = parseFloat(value);
+    if (isNaN(num)) {
+        return value;  // 不是數字的話，直接回傳原本的
+    }
+    if (Number.isInteger(num)) {
+        return num.toString();
+    }
+    // 如果是小數，檢查是不是 .0 結尾
+    if (num % 1 === 0) {
+        return parseInt(num).toString(); 
+    }
+    return value; // 其他正常小數（例如 12.3）直接回傳
+}
+
+
