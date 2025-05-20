@@ -366,7 +366,13 @@ class Dashboards extends Controller
             $chart_info['max'] = max($temp_val);
             $chart_info['min'] = min($temp_val);
 
-        }else if($chat_mode == "5"){
+        }else{
+            $chart_info['y_val'] = json_encode($csvdata_arr);
+            $chart_info['max'] = max($csvdata_arr);
+            $chart_info['min'] = min($csvdata_arr);
+        }
+        
+        /*else if($chat_mode == "5"){
             
             #$chat_mode==5
             /*$chart_info['y_val_torque'] = json_encode($csvdata_arr['torque']);
@@ -378,11 +384,11 @@ class Dashboards extends Controller
             $chart_info['min_rpm'] = min($csvdata_arr['rpm']);
             $chart_info['y_val'] = "[]";*/
             
-        }else{
+        /*}else{
             $chart_info['y_val'] = json_encode($csvdata_arr);
             $chart_info['max'] = max($csvdata_arr);
             $chart_info['min'] = min($csvdata_arr);
-        }
+        }*/
         
 
         // 去除 .0 的部分
