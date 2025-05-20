@@ -109,7 +109,7 @@ class Step extends Controller
                 $tools['tool_mintorque_diff'] = floor($tools['tool_maxtorque_diff'] * 10) / 10;
 
                 // 換算低/高扭力（從 N.m 轉換成控制器設定單位）
-                $unit_name       = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit); // 你可能需要這函式
+                $unit_name       = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit); //取得扭力單位的中文名稱
                 $low_torque_arr  = $this->MiscellaneousModel->convert_all_torque_units($tool_min_torque, 1); // 1 = N.m
                 $high_torque_arr = $this->MiscellaneousModel->convert_all_torque_units(55, 1); // 假設高扭力為 55 N.m
 
@@ -138,14 +138,9 @@ class Step extends Controller
             }
         }
 
-
-
-
-
         $check_torque = $this->stepModel->chek_step_target_torque($job_id,$seq_id);
         if(!empty($check_torque)){
             $counts_torque = intval($check_torque[0]['counts']);
-            //counts
         }
 
 

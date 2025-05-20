@@ -592,7 +592,7 @@ function del_stepid(step_id) {
         }
     }, function () {
         // 取消 callback 可選寫在這裡（目前略過）
-        //document.querySelector(".main-content").classList.remove("overlay-active");
+        document.querySelector(".main-content").classList.remove("overlay-active");
 
     });
 }
