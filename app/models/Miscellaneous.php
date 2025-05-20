@@ -414,6 +414,22 @@ class Miscellaneous{
         return isset($unit_map[$index]) ? $unit_map[$index] : null;
     }
 
+    public function batch_convert_grouped_by_unit_chart(array $values, int $inputType) {
+        $unit_keys = ["kgf.m", "N.m", "kgf.cm", "lbf.in", "cN.m"];
+        $result = array_fill_keys($unit_keys, []); // 預設空陣列
+
+        foreach ($values as $val) {
+            if (!is_numeric($val)) continue;
+
+            $converted = $this->convert_all_torque_units($val, $inputType);
+            foreach ($converted as $unit => $convertedValue) {
+                $result[$unit][] = $convertedValue;
+            }
+        }
+
+        return $result;
+    }
+
 
 
 

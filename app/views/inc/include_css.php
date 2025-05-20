@@ -87,7 +87,6 @@ function include_css() {
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/alertify_min.css?v=<?php echo ASSET_VERSION; ?>">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/default_min.css?v=<?php echo ASSET_VERSION; ?>">
     <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_footer.css?v=<?php echo ASSET_VERSION; ?>">
-
     <?php
         $queryString = $_SERVER['QUERY_STRING'] ?? '';
         $route = explode('/', str_replace('url=', '', $queryString))[0] ?? '';
@@ -114,6 +113,7 @@ function include_css() {
     <script src="<?php echo URLROOT; ?>js/echarts_min.js?v=<?php echo ASSET_VERSION; ?>"></script>
     <script src="<?php echo URLROOT; ?>js/jquery_data_Tables.js?v=<?php echo ASSET_VERSION; ?>"></script>
     <script src="<?php echo URLROOT; ?>js/alertify_min.js?v=<?php echo ASSET_VERSION; ?>"></script>
+
 
 
     <!-- ================== 模組 JS 動態載入 ================== -->

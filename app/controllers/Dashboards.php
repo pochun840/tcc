@@ -123,6 +123,21 @@ class Dashboards extends Controller
         $echart_name = explode("/",$chart_mode_arr[$chart_mode]);
 
         $csvdata_arr = $this->DashboardModel->get_info($chart_mode);
+
+        //
+        if(!empty($csvdata_arr)){
+
+            $res_device = $this->SettingModel->GetControllerInfo();
+            $step_torque_unit = (int)$res_device['device_torque_unit']; // ex: 0~4
+            $unit_name       = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit); //取得扭力單位的中文名稱
+
+            $chart_temp = $this->MiscellaneousModel->batch_convert_grouped_by_unit_chart($csvdata_arr, 1); 
+            $csvdata_arr = $chart_temp[$unit_name];
+         
+
+        }
+
+
         
         // 預設值，避免未定義錯誤
         $temp_chart = [];
@@ -143,6 +158,7 @@ class Dashboards extends Controller
             $temp_chart = [];
         }
 
+        
    
         $data = [
             'isMobile'    => $isMobile,
@@ -230,9 +246,12 @@ class Dashboards extends Controller
                 $first_data['fasten_status_unit_explain'] = $unit_arr[$step_torque_unit];
 
                 //扭力單位換算
-                $fasten_torque_tmp = $this->MiscellaneousModel->unitarr_change($first_data['fasten_torque'],$first_data['step_tor_unit'],$step_torque_unit);
-                $first_data['fasten_torque']=(string)$fasten_torque_tmp[0];
-           
+                $res_device = $this->SettingModel->GetControllerInfo();
+                $step_torque_unit = (int)$res_device['device_torque_unit']; // ex: 0~4
+                $unit_name       = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit); //取得扭力單位的中文名稱
+                $temp_tor  = $this->MiscellaneousModel->convert_all_torque_units($first_data['fasten_torque'], 1); // 1 = N.m
+                $first_data['fasten_torque'] = $temp_tor[$unit_name]; 
+                           
             }
 
             $first_data['error_massage_explanation'] = $error_message['ERR_'.$first_data['error_message']];
@@ -256,6 +275,7 @@ class Dashboards extends Controller
            
             $chart_data = $this->live_line_chart($chart_mode);
 
+
             if($chart_data['y_title'] =="Torque" && $flag == "N"){
             /*echo "<pre>";
             print_r($chart_data['y_val']);
@@ -263,7 +283,6 @@ class Dashboards extends Controller
             die();*/
 
             }
-
 
             $first_data['chart_data'] = $chart_data;
         }
@@ -277,8 +296,7 @@ class Dashboards extends Controller
     public function live_line_chart($chart_mode) {
 
         //預設 
-        //$chart_mode = isset($_GET['chart']) ? (int)$_GET['chart'] : 1;
-
+        $chart_mode = isset($_GET['chart']) ? (int)$_GET['chart'] : 1;
         $x_val = $this->DashboardModel->get_csv_first_column($chart_mode);
         if (!empty($x_val)) {
             $x_val = array_slice($x_val, 1);
@@ -288,6 +306,14 @@ class Dashboards extends Controller
         $echart_name = explode("/", $chart_mode_arr[$chart_mode]);
     
         $csvdata_arr = $this->DashboardModel->get_info($chart_mode);
+
+        //
+
+        $res_device = $this->SettingModel->GetControllerInfo();
+        $step_torque_unit = (int)$res_device['device_torque_unit']; // ex: 0~4
+        $unit_name       = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit); //取得扭力單位的中文名稱
+        $temp_tor  = $this->MiscellaneousModel->batch_convert_grouped_by_unit_chart($csvdata_arr, 1); // 1 = N.m
+        $csvdata_arr = $temp_tor[$unit_name]; 
     
         if (!empty($csvdata_arr)) {
             if ($chart_mode != 5) {
@@ -297,6 +323,7 @@ class Dashboards extends Controller
                 array_shift($csvdata_arr['rpm']);
             }
         }
+
     
         // 返回曲線圖數據
         return [
@@ -361,7 +388,6 @@ class Dashboards extends Controller
             $chart_info['y_val'] = "[]";*/
             
         }else{
-
             $chart_info['y_val'] = json_encode($csvdata_arr);
             $chart_info['max'] = max($csvdata_arr);
             $chart_info['min'] = min($csvdata_arr);
