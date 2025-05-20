@@ -274,16 +274,6 @@ class Dashboards extends Controller
         if(!empty($first_data)){
            
             $chart_data = $this->live_line_chart($chart_mode);
-
-
-            if($chart_data['y_title'] =="Torque" && $flag == "N"){
-            /*echo "<pre>";
-            print_r($chart_data['y_val']);
-            echo "</pre>";
-            die();*/
-
-            }
-
             $first_data['chart_data'] = $chart_data;
         }
         
@@ -295,8 +285,6 @@ class Dashboards extends Controller
 
     public function live_line_chart($chart_mode) {
 
-        //預設 
-        $chart_mode = isset($_GET['chart']) ? (int)$_GET['chart'] : 1;
         $x_val = $this->DashboardModel->get_csv_first_column($chart_mode);
         if (!empty($x_val)) {
             $x_val = array_slice($x_val, 1);
@@ -307,13 +295,14 @@ class Dashboards extends Controller
     
         $csvdata_arr = $this->DashboardModel->get_info($chart_mode);
 
-        //
+        if($chart_mode != 2 && $chart_mode != 3) {
+            $res_device = $this->SettingModel->GetControllerInfo();
+            $step_torque_unit = (int)$res_device['device_torque_unit']; // 0~4
+            $unit_name = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit); // ex: N.m
+            $temp_tor = $this->MiscellaneousModel->batch_convert_grouped_by_unit_chart($csvdata_arr, 1); // N.m to all
+            $csvdata_arr = $temp_tor[$unit_name];
+        }
 
-        $res_device = $this->SettingModel->GetControllerInfo();
-        $step_torque_unit = (int)$res_device['device_torque_unit']; // ex: 0~4
-        $unit_name       = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit); //取得扭力單位的中文名稱
-        $temp_tor  = $this->MiscellaneousModel->batch_convert_grouped_by_unit_chart($csvdata_arr, 1); // 1 = N.m
-        $csvdata_arr = $temp_tor[$unit_name]; 
     
         if (!empty($csvdata_arr)) {
             if ($chart_mode != 5) {
@@ -324,7 +313,9 @@ class Dashboards extends Controller
             }
         }
 
-    
+        //去除重複
+        $x_val  = array_unique($x_val);
+        
         // 返回曲線圖數據
         return [
             'x_val' => $x_val ?? [],
@@ -398,6 +389,8 @@ class Dashboards extends Controller
         $x_val = array_map(function($value) {
             return ($value == (int)$value) ? (int)$value : $value;
         }, $x_val);
+
+        $x_val = array_unique($x_val);
 
         $chart_info['x_val'] = json_encode($x_val);
 
