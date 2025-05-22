@@ -77,6 +77,7 @@
             <input id="tool_max_tor_diff" value="<?php echo $data['tools']['tool_maxtorque_diff']; ?>">
             <input id="tool_min_tor_diff" value="<?php echo $data['tools']['tool_mintorque_diff']; ?>">
             <input id="step_torque_unit" value="<?php echo  $data['step_torque_unit']?>">
+            <input id="tool_maxtorque_unified" value="<?php echo  $data['tools']['tool_maxtorque_unified'];?>">
         </div>
 
 

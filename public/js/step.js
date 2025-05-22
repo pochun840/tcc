@@ -1,6 +1,7 @@
 function create_step() {
     document.getElementById('newstep').style.display = 'block';
-
+    const tor_hi_unified = document.getElementById('tool_maxtorque_unified').value;
+    
     // 預設值
     document.getElementById('rpm').value = 100;
     document.getElementById('th_tor').value = (0.0).toFixed(1);
@@ -9,9 +10,9 @@ function create_step() {
     document.getElementById("direction_CW").checked = true;
     document.getElementById('ang_hi').value = 9999;
     document.getElementById('ang_lo').value = 0;
-    document.getElementById('tor_hi').value = 55;
+    document.getElementById('tor_hi').value =  tor_hi_unified;
     document.getElementById('tor_lo').value = 0;
-    document.getElementById('target_tor').value = parseFloat(document.getElementById('tool_min_tor').value);
+    document.getElementById('target_tor').value = document.getElementById('tool_min_tor').value;
     document.getElementById('target_ang').value = 1800;
 
     // 預設 downshift_OFF 被選中
@@ -360,6 +361,7 @@ function toggleVisibility(targetValue) {
     const targetTorItem = document.getElementById('target_tor_item');
     const targetAngItem = document.getElementById('target_ang_item');
     const targetDelayItem = document.getElementById('target_delay_item');
+    const tor_hi_unified = document.getElementById('tool_maxtorque_unified').value;
     
     targetTorItem.style.display = 'none';
     targetAngItem.style.display = 'none';
@@ -368,7 +370,7 @@ function toggleVisibility(targetValue) {
         
     document.getElementById('ang_hi').value = 9999;
     document.getElementById('ang_lo').value = 0;
-    document.getElementById('tor_hi').value = 55;
+    document.getElementById('tor_hi').value = tor_hi_unified;
     document.getElementById('tor_lo').value = 0;
 
 
@@ -741,6 +743,11 @@ function input_check_core(prefix) {
     let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor')?.value || 0);
     let Tool_Max_RPM = parseFloat(document.getElementById('tool_max_rpm')?.value || 0);
     let Tool_Min_RPM = parseFloat(document.getElementById('tool_min_rpm')?.value || 0);
+    let tor_hi_unified = document.getElementById('tool_maxtorque_unified').value; //統一
+
+    let target_tor = document.getElementById('target_tor').value;
+    let target_ang = document.getElementById('target_ang').value;
+
 
     // 特殊邏輯：Step 1 限制轉速下限為 50
     if (step_id === "1") {
@@ -757,17 +764,17 @@ function input_check_core(prefix) {
 
         conditions.push(
             { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: 1, max: 55, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: 3, compareLessThanId: prefix + 'target_tor' },
-            { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-            { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: 9999, compareLessThanId: prefix + 'target_ang' },
+            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_tor, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
+            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_tor, compareLessThanId: prefix + 'target_tor' },
+            { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: target_ang + 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
+            { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: target_ang - 1, compareLessThanId: prefix + 'target_ang' },
             { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
         );
 
         if (!isDownshiftOff) {
             conditions.push(
-                { id: prefix + 'th_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: target_torque },
-                { id: prefix + 'ds_tor', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: target_torque },
+                { id: prefix + 'th_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_torque },
+                { id: prefix + 'ds_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_torque },
                 { id: prefix + 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
             );
         }
@@ -776,10 +783,10 @@ function input_check_core(prefix) {
     if (target_opt === "1") { // Angle 控制
         conditions.push(
             { id: prefix + 'target_ang', pattern: /^\d{0,5}$/, min: 1, max: 9999 },
-            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1})?$/, min: 1, max: 55, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0, max: 3, compareLessThanId: prefix + 'target_tor' },
-            { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-            { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: 9999, compareLessThanId: prefix + 'target_ang' },
+            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_tor, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
+            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_tor, max: target_tor, compareLessThanId: prefix + 'target_tor' },
+            { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: target_ang + 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
+            { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: target_ang -1, compareLessThanId: prefix + 'target_ang' },
             { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
         );
     }

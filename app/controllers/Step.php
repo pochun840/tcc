@@ -121,6 +121,7 @@ class Step extends Controller
                     $tools['tool_high_torque'] = $high_torque_arr[$unit_name];
                 }
 
+
               
                 
                 $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1); // from N.m
@@ -132,6 +133,12 @@ class Step extends Controller
 
                 if (is_array($tmp_torque_2) && isset($tmp_torque_2[$unit_name])) {
                     $tools['tool_maxtorque'] = $tmp_torque_2[$unit_name];
+                }
+
+
+                $tmp_torque_unified = $this->MiscellaneousModel->convert_all_torque_units(55, 1); 
+                if (is_array( $tmp_torque_unified) && isset( $tmp_torque_unified[$unit_name])) {
+                    $tools['tool_maxtorque_unified'] =  $tmp_torque_unified[$unit_name];
                 }
 
 
