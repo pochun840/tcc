@@ -1,4 +1,5 @@
 <?php
+
 class Jobs extends Controller
 {
     private $jobModel;

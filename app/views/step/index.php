@@ -892,13 +892,15 @@ function countrows() {
 }
 
 function input_check_editstep() {
-    return input_check_core("edit_"); // 編輯時 prefix 是 edit_
+    const step_id = document.getElementById("edit_step_id")?.value?.trim() || "";
+    console.log(typeof step_id); 
+    return input_check_core("edit_", step_id);
 }
 
 
-
 function input_check_savestep() {
-    return input_check_core(""); // 新增時 prefix 是 ""
+    const step_id = document.getElementById("add_step_id")?.value?.trim() || "";
+    return input_check_core("", step_id);  // 新增時 prefix 是 ""
 }
 
 
