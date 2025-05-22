@@ -264,63 +264,71 @@ function delete_barcode() {
 // ================================
 
 function idas_update() {
-    var import_file = document.getElementById("file-uploader").files[0];
-    var form = new FormData();
+    const fileInput = document.getElementById("file-uploader");
+    const import_file = fileInput?.files[0];
+    const url = '?url=Settings/iDas_Update';
+    const form = new FormData();
     form.append("file", import_file);
-    var url = '?url=Settings/iDas_Update';
 
     // 語言設定
-    var language = getCookie('language') || 'en-us';
-    var title, confirm_text, empty_file_text;
+    const language = getCookie('language') || 'en-us';
+    const i18n = {
+        "zh-tw": {
+            title: "IDAS 更新",
+            confirm: "您確定要導入 IDAS 更新包嗎？",
+            empty: "請先選擇要上傳的更新檔。",
+            error: "檔案上傳失敗，請稍後再試。"
+        },
+        "zh-cn": {
+            title: "IDAS 更新",
+            confirm: "您確定要導入 IDAS 更新包嗎？",
+            empty: "請先選擇要上傳的更新檔。",
+            error: "文件上传失败，请稍后再试。"
+        },
+        "en-us": {
+            title: "IDAS UPDATE",
+            confirm: "Are you sure you want to import the IDAS update package?",
+            empty: "Please select a file to upload.",
+            error: "File upload failed. Please try again later."
+        }
+    };
+    const t = i18n[language.toLowerCase()] || i18n["en-us"];
 
-    if (language === "zh-cn" || language === "zh-tw") {
-        title = 'IDAS 更新';
-        confirm_text = '您確定要導入 IDAS 更新包嗎？';
-        empty_file_text = '請先選擇要上傳的更新檔。';
-    } else {
-        title = 'IDAS UPDATE';
-        confirm_text = 'Are you sure you want to import the IDAS update package?';
-        empty_file_text = 'Please select a file to upload.';
-    }
-
-    // 未選擇檔案
+    // 檔案不存在
     if (!import_file) {
-        alertify.alert(title, empty_file_text);
+        alertify.alert(t.title, t.empty);
         return;
     }
 
-    alertify.confirm(confirm_text, function (result) {
+    alertify.confirm(t.title, t.confirm, function (result) {
         if (result) {
-            document.getElementById('spinner').style.display = 'block'; // 顯示加載動畫
+            document.getElementById('spinner').style.display = 'block';
 
             $.ajax({
-                url: url,
+                url,
                 method: "POST",
                 data: form,
                 processData: false,
                 contentType: false,
-                dataType: 'json', // ✅ jQuery 自動解析為物件
+                dataType: 'json',
                 success: function (responseData) {
-                    // ✅ responseData 已是物件，無需 JSON.parse()
-                    setTimeout(function () {
+                    setTimeout(() => {
                         document.getElementById('spinner').style.display = 'none';
-                        alertify.alert(responseData.res_type, responseData.res_msg, function () {
-                            history.go(0); // 重新整理頁面
+                        alertify.alert(responseData.res_type, responseData.res_msg, () => {
+                            history.go(0);
                         });
-
-                        setTimeout(function () {
-                            alertify.closeAll();
-                        }, 3000);
+                        setTimeout(() => alertify.closeAll(), 3000);
                     }, 1000);
                 },
                 error: function (xhr, status, error) {
-                    document.getElementById('spinner').style.display = 'none';
-                    alertify.alert('Error', 'An error occurred while uploading the file.');
                     console.error("上傳錯誤：", status, error);
+                    document.getElementById('spinner').style.display = 'none';
+                    alertify.alert('Error', t.error);
                 }
             });
         }
     });
 }
+
 
 

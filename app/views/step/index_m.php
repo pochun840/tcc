@@ -100,6 +100,8 @@
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col t2">
                                 <input type="text" id='step_id' name='step_id' value='<?php echo $data['count_records'];?>' style="display: none;">
+                                <input type="hidden" id="add_step_id" name="add_step_id">
+
                                 <select id="target_opt" name="target_opt" class="custom-file">
                                     <?php if($data['check'] == 1 || $data['counts_torque'] == 1 ){?>
                                         <?php foreach($data['target_option_change'] as $key => $val){?>

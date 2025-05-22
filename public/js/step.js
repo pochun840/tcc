@@ -1,11 +1,16 @@
 function create_step() {
     document.getElementById('newstep').style.display = 'block';
-    const tor_hi_unified = document.getElementById('tool_maxtorque_unified').value;
 
     // 套用 tool_min_tor 的小數格式
+    //const tool_min_tor_raw = document.getElementById('tool_min_tor').value || "0";
+    //const decimalPlaces = (tool_min_tor_raw.split('.')[1] || "").length; // 判斷幾位小數
+    //const tool_min_tor = parseFloat(tool_min_tor_raw).toFixed(decimalPlaces);
+
     const tool_min_tor_raw = document.getElementById('tool_min_tor').value || "0";
-    const decimalPlaces = (tool_min_tor_raw.split('.')[1] || "").length; // 判斷幾位小數
-    const tool_min_tor = parseFloat(tool_min_tor_raw).toFixed(decimalPlaces);
+    const tool_min_tor = parseFloat(tool_min_tor_raw); // ✅ 自動去掉多餘的 0
+
+    const tor_hi_unified_raw = document.getElementById('tool_maxtorque_unified').value || "0";
+    const tor_hi_unified = parseFloat(tor_hi_unified_raw); // ✅ 自動去尾 0
 
         
     // 預設值
@@ -17,7 +22,7 @@ function create_step() {
     document.getElementById('ang_hi').value = 9999;
     document.getElementById('ang_lo').value = 0;
     document.getElementById('tor_hi').value =  tor_hi_unified;
-    document.getElementById('tor_lo').value = (0).toFixed(decimalPlaces);
+    document.getElementById('tor_lo').value = 0;
     document.getElementById('target_tor').value = tool_min_tor;
     document.getElementById('target_ang').value = 1800;
 
@@ -648,7 +653,13 @@ function cleanNumber(value) {
 function prepareAddStepId() {
     const stepRows = document.querySelectorAll('#step_table tbody tr');
     const nextStepId = stepRows.length + 1;
-    document.getElementById("add_step_id").value = nextStepId;
+
+    const addStepInput = document.getElementById("add_step_id");
+    if (addStepInput) {
+        addStepInput.value = nextStepId;
+    } else {
+        console.warn("[prepareAddStepId] ⚠️ 無法找到 #add_step_id 元素，請確認該欄位已正確插入頁面。");
+    }
 }
 
 

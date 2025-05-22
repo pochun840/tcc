@@ -923,195 +923,111 @@ class Settings extends Controller
       
     }
 
-    #IDAS上傳 20250512 修改
-    public function iDas_Update(){
-        
+    #IDAS上傳 20250522 修改
+    public function iDas_Update() {
         $file = $this->MiscellaneousModel->lang_load();
-        if (!empty($file)) {
-            include $file;
-        }
+        if (!empty($file)) include $file;
 
         $iDas_Vesion = $this->AdminModel->Get_Das_Config('idas_version');
+        $file_location = (PHP_OS_FAMILY === 'Linux') ? '/var/www/html/' : $_SERVER['DOCUMENT_ROOT'] . '/';
+        $extract_path = $file_location . 'extracted/';
+        $main_folder = ''; // 定義變數預留
 
-        $uploaded_filename = $_FILES['file']['name'];
-
-        $file_extension = pathinfo($uploaded_filename, PATHINFO_EXTENSION);
-        if (strtolower($file_extension) !== 'pack') {
-
-            $res_type = 'Error';
-            $res_msg  = 'The uploaded file must be in .pack format. You uploaded a file: ' . $uploaded_filename;
-            $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
-            exit();
-        }
-        
-        $file_location = (PHP_OS_FAMILY == 'Linux') ? '/var/www/html/' : $_SERVER['DOCUMENT_ROOT'] . '/';
-
-        // 檢查是否有上傳檔案
-        if (empty($_FILES) || !isset($_FILES['file'])) {
-            $res_type = 'Error';
-            $res_msg  = 'No file uploaded.';
-            $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
-            exit();
-        }
-
-        // 檢查上傳文件是否有錯誤
-        if ($_FILES['file']['error'] !== 0) {
-            $res_type = 'Error';
-            $res_msg  = 'File upload error:'.$_FILES['file']['error'];
-            $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
-            exit();
-        }
-
-        // 解壓縮上傳的檔案 (.pack)
-        $zip = new ZipArchive();
-
-        if ($zip->open($_FILES['file']['tmp_name']) === TRUE) {
-            
-            // 設定解壓路徑
-            $extract_path = $file_location . 'extracted/';
-            if (!is_dir($extract_path)) {
-                mkdir($extract_path, 0777, true); 
+        try {
+            // 驗證檔案
+            if (empty($_FILES['file']) || $_FILES['file']['error'] !== 0) {
+                $msg = empty($_FILES['file']) ? 'No file uploaded.' : 'File upload error: ' . $_FILES['file']['error'];
+                return $this->sendResponse('Error', $msg);
             }
 
-            if (!is_dir($extract_path)) {
-                //echo "Trying to create directory: " . $extract_path . "<br>";
-                if (mkdir($extract_path, 0777, true)) {
-                    echo "Directory created successfully!";
-                } else {
-                    echo "Failed to create directory!";
-                }
+            $uploaded_filename = $_FILES['file']['name'];
+            if (strtolower(pathinfo($uploaded_filename, PATHINFO_EXTENSION)) !== 'pack') {
+                return $this->sendResponse('Error', 'The uploaded file must be in .pack format. You uploaded: ' . $uploaded_filename);
             }
 
-             
-            // 解壓檔案
-            if ($zip->extractTo($extract_path)) {
+            $zip = new ZipArchive();
+            if ($zip->open($_FILES['file']['tmp_name']) !== TRUE) {
+                return $this->sendResponse('Error', 'Failed to open the uploaded .pack file.');
+            }
+
+            if (!is_dir($extract_path)) mkdir($extract_path, 0777, true);
+            if (!$zip->extractTo($extract_path)) {
                 $zip->close();
+                return $this->sendResponse('Error', 'Failed to extract the .pack file.');
+            }
+            $zip->close();
 
-                // 取得解壓縮後的目錄結構
-                $extracted_folders = [];
-                $scanned_files = scandir($extract_path);
-
-                // 過濾出資料夾名稱 (排除 '.' 和 '..' 這兩個特殊目錄)
-                foreach ($scanned_files as $file) {
-                    // 檢查是否為資料夾
-                    if (is_dir($extract_path . $file) && $file != '.' && $file != '..') {
-                        $extracted_folders[] = $file; 
-                    }
-                }
-
-                $info_json_url = $extract_path.$extracted_folders[0]."/info.json";
-
-                if (file_exists($info_json_url)) {
-                    $verify_data = json_decode(@file_get_contents($info_json_url), true) ?? [];
-                }
-
-                $match_tcc_version = $verify_data['Match_TCC_Version'] ?? '';
-
-                if ($match_tcc_version && $match_tcc_version !== $iDas_Vesion) {
-                    $this->AdminModel->Set_idas_version($match_tcc_version);
-                }
-
-                if ($match_tcc_version == $iDas_Vesion) {
-                
-                    // 目標資料夾 tccidas 的路徑
-                    $target_directory = $_SERVER['DOCUMENT_ROOT'] . '/tccidas/';
-             
-                
-                    // 確保 tccidas 目錄存在，如果不存在則創建它
-                    if (!is_dir($target_directory)) {
-                        mkdir($target_directory, 0777, true); // 創建目標目錄
-                    }
-                
-                    // 檢查 $extracted_folders 是否有資料
-                    if (!empty($extracted_folders)) {
-                        $source_directory = $extract_path . $extracted_folders[0];
-                    
-                        // 直接把該資料夾裡面的內容搬到 /tccidas 根目錄
-                        $this->copyDirectory($source_directory, $target_directory);
-                    
-                        // 搬完後刪除原始解壓的資料夾
-                        $this->deleteDirectory($source_directory);
-                    } else {
-
-                        $res_type = 'Error';
-                        $res_msg = 'No extracted folder found.';
-                        $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
-                        exit();
-                    }
-                    $this->deleteDirectory($extract_path);  
-                    // 確認移動完成
-                    $res_type = 'Success';
-                    $res_msg  = 'Files successfully moved to the "tccidas" directory.';
-                    $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
-
-                    $this->setting_logout();
-                }
-            } else {
-
-                $res_type = 'Error';
-                $res_msg  = 'Failed to extract the .pack file.';
-                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
-                exit();
+            $folders = array_filter(scandir($extract_path), fn($f) => is_dir($extract_path.$f) && !in_array($f, ['.', '..']));
+            if (empty($folders)) {
+                return $this->sendResponse('Error', 'No extracted folder found.');
             }
 
-        } else {
-            $res_type = 'Error';
-            $res_msg  = 'Failed to open the uploaded .pack file.';
-            $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
-            exit();
-        }
+            $main_folder = $extract_path . reset($folders);
+            $info_json_url = $main_folder . "/info.json";
 
+            $verify_data = file_exists($info_json_url) ? json_decode(@file_get_contents($info_json_url), true) : [];
+            $match_tcc_version = $verify_data['Match_TCC_Version'] ?? '';
+
+            if ($match_tcc_version && $match_tcc_version !== $iDas_Vesion) {
+                $this->AdminModel->Set_idas_version($match_tcc_version);
+            }
+
+            if ($match_tcc_version !== $iDas_Vesion) {
+                return $this->sendResponse('Error', 'Version mismatch. Update aborted.');
+            }
+
+            $target_directory = $_SERVER['DOCUMENT_ROOT'] . '/tccidas/';
+            if (!is_dir($target_directory)) mkdir($target_directory, 0777, true);
+            $this->copyDirectory($main_folder, $target_directory);
+
+            $this->setting_logout();
+            return $this->sendResponse('Success', 'Files successfully moved to the "tccidas" directory.');
+
+        } finally {
+            // ✅ 確保刪除 regardless of success
+            if (!empty($main_folder) && is_dir($main_folder)) {
+                $this->deleteDirectory($main_folder);
+            }
+            if (is_dir($extract_path)) {
+                $this->deleteDirectory($extract_path);
+            }
+        }
     }
 
-    // 複製資料夾及其內容的遞迴函數
-    public function copyDirectory($source, $destination) {
-        if (!is_dir($destination)) {
-            mkdir($destination, 0777, true); // 建立目標資料夾（如果不存在）
-        }
-    
-        $files = scandir($source); // 取得來源資料夾的所有項目
-    
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $source_file = $source . '/' . $file;
-                $target_file = $destination . '/' . $file;
-    
-                if (is_dir($source_file)) {
-                    // 如果是資料夾則遞迴處理
-                    $this->copyDirectory($source_file, $target_file);
+
+
+    private function sendResponse($type, $msg) {
+        $this->MiscellaneousModel->generateErrorResponse($type, $msg);
+        exit();
+    }
+
+    private function copyDirectory($source, $destination) {
+        if (!is_dir($destination)) mkdir($destination, 0777, true);
+        foreach (scandir($source) as $file) {
+            if (!in_array($file, ['.', '..'])) {
+                $src = $source . '/' . $file;
+                $dst = $destination . '/' . $file;
+                if (is_dir($src)) {
+                    $this->copyDirectory($src, $dst);
                 } else {
-                    // 如果目標檔案已存在，先刪除
-                    if (file_exists($target_file)) {
-                        unlink($target_file);
-                    }
-                    // 執行檔案複製
-                    copy($source_file, $target_file);
+                    if (file_exists($dst)) unlink($dst);
+                    copy($src, $dst);
                 }
             }
         }
     }
-    
 
-
-
-    // 刪除資料夾及其內容的函數
-    public function deleteDirectory($dir) {
-        if (is_dir($dir)) {
-            $files = scandir($dir); // 列出資料夾中的檔案
-
-            foreach ($files as $file) {
-                if ($file != '.' && $file != '..') {
-                    $file_path = $dir . '/' . $file;
-                    if (is_dir($file_path)) {
-                        $this->deleteDirectory($file_path); // 如果是資料夾，遞迴刪除
-                    } else {
-                        unlink($file_path); // 如果是檔案，則刪除檔案
-                    }
-                }
+    private function deleteDirectory($dir) {
+        if (!is_dir($dir)) return;
+        foreach (scandir($dir) as $file) {
+            if (!in_array($file, ['.', '..'])) {
+                $path = $dir . '/' . $file;
+                is_dir($path) ? $this->deleteDirectory($path) : unlink($path);
             }
-            rmdir($dir); // 刪除空的資料夾
         }
+        rmdir($dir);
     }
+
 
     public function Extract_File($file_location,$filename){
 
