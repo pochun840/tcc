@@ -19,6 +19,7 @@ class Step extends Controller
         
     }
 
+
     public function index($job_id,$seq_id){
         if( isset($job_id) && !empty($job_id)  && isset($seq_id) && !empty($seq_id)){
 
@@ -205,7 +206,7 @@ class Step extends Controller
             $tor_hi = isset($_POST['tor_hi'])? floatval($_POST['tor_hi']) : 0; 
             $tor_lo = isset($_POST['tor_lo'])? floatval($_POST['tor_lo']) : 0; 
             $ang_hi  = isset($_POST['ang_hi'])? intval($_POST['ang_hi']) : 0; 
-            $ang_lo  = isset($_POST['lo_angle'])? intval($_POST['ang_lo']) : 0; 
+            $ang_lo  = isset($_POST['ang_lo'])? intval($_POST['ang_lo']) : 0; 
             $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 50;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
             $th_mode = isset($_POST['th_mode'])? intval($_POST['th_mode']) : 0;
@@ -509,7 +510,7 @@ class Step extends Controller
                         'th_tor'           => $old_res[0]['th_tor'],
                         'ds_tor'           => $old_res[0]['ds_tor'],
                         'ds_speed'         => $old_res[0]['ds_speed'],
-                        'record_ang'      => $old_res[0]['record_ang'],
+                        'record_ang'       => $old_res[0]['record_ang'],
                         'tor_unit'         => $old_res[0]['tor_unit']
                     ); 
 
@@ -554,7 +555,6 @@ class Step extends Controller
             $input_check = false; 
         }
 
-
         if(!empty($_POST['step_id']) && isset($_POST['step_id'])){
             $stepid  = $_POST['step_id'];
         }else{
@@ -566,7 +566,7 @@ class Step extends Controller
             $res = $this->stepModel->getStepNo($jobid, $seqid, $stepid);
             print_r($res[0]);
         }
-
+        
     }
         
     #排序step

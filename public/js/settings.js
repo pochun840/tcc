@@ -120,9 +120,9 @@ function update_barcode(){
     var barcode_content    = document.getElementById("barcode_content").value;
     var barcode_mask_from  = document.getElementById("barcode_mask_from").value;
     var barcode_mask_count = document.getElementById("barcode_mask_count").value;
-    var barcode_selected_job  = document.querySelector("select[name='barcode_selected_job']").value;
+    var barcode_selected_job  = document.querySelector("select[name='barcode_job']").value;
     var barcode_enable  = document.querySelector("select[name='barcode_enable']").value;
-    var barcode_selected_seq = '';
+    var barcode_selected_seq =  document.querySelector("select[name='barcode_seq']").value;
 
     // 驗證輸入
     let check = input_check_savebarcode();
@@ -264,71 +264,62 @@ function delete_barcode() {
 // ================================
 
 function idas_update() {
-    const fileInput = document.getElementById("file-uploader");
-    const import_file = fileInput?.files[0];
-    const url = '?url=Settings/iDas_Update';
-    const form = new FormData();
+    var import_file = document.getElementById("file-uploader").files[0];
+    var form = new FormData();
     form.append("file", import_file);
+    var url = '?url=Settings/iDas_Update';
 
     // 語言設定
-    const language = getCookie('language') || 'en-us';
-    const i18n = {
-        "zh-tw": {
-            title: "IDAS 更新",
-            confirm: "您確定要導入 IDAS 更新包嗎？",
-            empty: "請先選擇要上傳的更新檔。",
-            error: "檔案上傳失敗，請稍後再試。"
-        },
-        "zh-cn": {
-            title: "IDAS 更新",
-            confirm: "您確定要導入 IDAS 更新包嗎？",
-            empty: "請先選擇要上傳的更新檔。",
-            error: "文件上传失败，请稍后再试。"
-        },
-        "en-us": {
-            title: "IDAS UPDATE",
-            confirm: "Are you sure you want to import the IDAS update package?",
-            empty: "Please select a file to upload.",
-            error: "File upload failed. Please try again later."
-        }
-    };
-    const t = i18n[language.toLowerCase()] || i18n["en-us"];
+    var language = getCookie('language') || 'en-us';
+    var title, confirm_text, empty_file_text;
 
-    // 檔案不存在
+    if (language === "zh-cn" || language === "zh-tw") {
+        title = 'IDAS 更新';
+        confirm_text = '您確定要導入 IDAS 更新包嗎？';
+        empty_file_text = '請先選擇要上傳的更新檔。';
+    } else {
+        title = 'IDAS UPDATE';
+        confirm_text = 'Are you sure you want to import the IDAS update package?';
+        empty_file_text = 'Please select a file to upload.';
+    }
+
+    // 未選擇檔案
     if (!import_file) {
-        alertify.alert(t.title, t.empty);
+        alertify.alert(title, empty_file_text);
         return;
     }
 
-    alertify.confirm(t.title, t.confirm, function (result) {
+    alertify.confirm(confirm_text, function (result) {
         if (result) {
-            document.getElementById('spinner').style.display = 'block';
+            document.getElementById('spinner').style.display = 'block'; // 顯示加載動畫
 
             $.ajax({
-                url,
+                url: url,
                 method: "POST",
                 data: form,
                 processData: false,
                 contentType: false,
-                dataType: 'json',
+                dataType: 'json', // ✅ jQuery 自動解析為物件
                 success: function (responseData) {
-                    setTimeout(() => {
+                    // ✅ responseData 已是物件，無需 JSON.parse()
+                    setTimeout(function () {
                         document.getElementById('spinner').style.display = 'none';
-                        alertify.alert(responseData.res_type, responseData.res_msg, () => {
-                            history.go(0);
+                        alertify.alert(responseData.res_type, responseData.res_msg, function () {
+                            history.go(0); // 重新整理頁面
                         });
-                        setTimeout(() => alertify.closeAll(), 3000);
+
+                        setTimeout(function () {
+                            alertify.closeAll();
+                        }, 3000);
                     }, 1000);
                 },
                 error: function (xhr, status, error) {
-                    console.error("上傳錯誤：", status, error);
                     document.getElementById('spinner').style.display = 'none';
-                    alertify.alert('Error', t.error);
+                    alertify.alert('Error', 'An error occurred while uploading the file.');
+                    console.error("上傳錯誤：", status, error);
                 }
             });
         }
     });
 }
-
-
 

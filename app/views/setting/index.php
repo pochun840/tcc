@@ -22,19 +22,19 @@
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_id'];?>:</div>
                     <div class="col-3 t1">
-                        <input id="control_id" name="control_id" type="number" max=250 min=1 maxlength="3" value="<?php echo $data['controller_info']['device_id'];?>" class="t3 form-control"  required>
+                        <input id="control_id" name="control_id" type="number" max=250 min=1 maxlength="3" value="<?php echo $data['controller_info']['device_id'];?>" class="form-control input-ms"  required>
                     </div>
                 </div>    
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_name'];?>:</div>
                     <div class="col-3 t1">
-                        <input id="control_name" name="control_name" maxlength="12" type="text" value="<?php echo $data['controller_info']['device_name'];?>" class="t3 form-control"  required>
+                        <input id="control_name" name="control_name" maxlength="12" type="text" value="<?php echo $data['controller_info']['device_name'];?>" class="form-control input-ms"  required>
                     </div>
                 </div>    
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_language'];?>:</div>
-                    <div class="col-3 t1">
-                        <select class="form-select" id="select_language" name="select_language" style="height: 35px;">
+                    <div class="col t1">
+                        <select id="select_language" name="select_language">
                             <?php 
                             foreach($data['lang_arr'] as $k_lang =>$v_lang) { 
                                 $selected = ($data['controller_info']['device_language'] ==$k_lang) ? 'selected' : '';
@@ -50,8 +50,8 @@
                 
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['torque_unit'];?>:</div>
-                    <div class="col-3 t1">
-                        <select class="form-select" id="select_torque_unit" name="select_torque_unit" style="height: 35px;">
+                    <div class="col t1">
+                        <select id="select_torque_unit" name="select_torque_unit">
                             <?php 
                             foreach($data['unit_arr'] as $k_unit => $v_unit) { 
                                 $selected = ($data['controller_info']['device_torque_unit'] == $k_unit) ? 'selected' : '';
@@ -68,7 +68,7 @@
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_batch'];?>:</div>
                     <div class="col t1">
-      			      	<div class="col-2 form-check form-check-inline">
+      			      	<div class="col-1 form-check form-check-inline">
         				    <input class="form-check-input" type="radio" name="batch-mode-option" id="dec" value="0"  <?php echo $data['controller_info']['device_batch_mode'] == 0 ? 'checked="checked"' : ''; ?>>
             				<label class="form-check-label" for="dec"><?php echo $text['system_dec'];?></label>
             			</div>
@@ -82,7 +82,7 @@
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_buzzer'];?>:</div>
                     <div class="col t1">
-      			      	<div class="col-2 form-check form-check-inline">
+      			      	<div class="col-1 form-check form-check-inline">
            				    <input class="form-check-input" type="radio" name="buzzer-option" id="buzzer-off" value="0"  <?php echo $data['controller_info']['device_buzzer_mode'] == 0 ? 'checked="checked"' : ''; ?>>
                				<label class="form-check-label" for="buzzer-off"><?php echo $text['switch_off'];?></label>
                			</div>
@@ -209,24 +209,10 @@
                 </div>
 
                 <div class="row t2">
-                    <div class="col-3 t1"><?php echo $text['select_job'];?>:</div>
-                    <div class="col-3 t2">
-                        <select class="form-select" id="barcode_selected_job" name="barcode_selected_job">
-                            <option value="-1"><?php echo $text['system_barcode_select_job_m'];?></option>
-                                <?php
-                                foreach ($data['job_list'] as $key => $value) {?>
-                                    <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
-                                <?php }?>
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-
-                <div class="row t2">
                     
                     <div class="col-3 t1"><?php echo  $text['system_barcode_mode'];?>:</div>
-                    <div class="col-3 t2">
-                        <select class="form-select" id="barcode_enable" name="barcode_enable">
+                    <div class="col t2">
+                        <select id="barcode_enable" name="barcode_enable"  onchange="toggleBarcodeSeq()" >
                             <option value="-1"><?php echo $text['system_barcode_select'];?></option>
                                 <?php
                                 foreach ($data['barcode_mode'] as $key_barcode => $value_barcode) {?>
@@ -237,20 +223,45 @@
                     </div>
                 </div>
 
-                <div style="text-align: center;margin-top: 30px;">
+                <div class="row t2">
+                    <div class="col-3 t1"><?php echo $text['system_barcode_select_job'];?>:</div>
+                    <div class="col t2">
+                        <select id="barcode_job" name="barcode_job" onchange="fetchSeqList()" >
+                            <option value="-1"><?php echo $text['system_barcode_select_job_m'];?></option>
+                                <?php
+                                foreach ($data['job_list'] as $key => $value) {?>
+                                    <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
+                                <?php }?>
+                                
+                        </select>
+                    </div>
+                </div>
+
+                <div id="barcode_select_seq" style="display:none;">
+                    <div class="row t2">
+                        <div class="col-3 t1"><?php echo $text['system_barcode_select_seq'];?>:</div>
+                        <div class="col t2">
+                            <select id="barcode_seq" name="barcode_seq">
+                                <option value="-1"><?php echo $text['system_barcode_select_seq_m'];?></option>   
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div style="text-align: center;margin-top: 20px;">
                     <button class="all-btn w3-button w3-border w3-round-large" onclick="update_barcode()" ><?php echo $text['save'];?></button>&nbsp;&nbsp;
                     <button class="all-btn w3-button w3-border w3-round-large" onclick="delete_barcode()" ><?php echo $text['delete_text'];?></button>
                 </div>               
             </div>
 
-            <div id="Connect_Setting" class="divMode hidden" >
-               
-                         
-                <div class="row t2">
+            <div id="Connect_Setting" class="divMode hidden" >         
+                <div class="row t2" style="padding-top: 2%">
                     <div class="col-3 t1">Agent IP:</div>
                     <div class="col t3">
                             <input type="text" name="agent_server_ip" id="agent_server_ip" size="15"  value='<?php echo $data['agent_server_ip'];?>' required class="t3 w3-submit w3-border w3-round">&nbsp;
-                            <input type="button" onclick="agent_ip_save()" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                            <input type="button" onclick="agent_ip_save()" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large">
                     </div>
                 </div>
                 <div class="row t2">
@@ -258,19 +269,19 @@
                     <div class="col t3">
                         <form id="agent_type_form" method="post">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0">
+                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0" <?php if($data['agent_type'] == 0){ echo "checked";} ?> >
                                 <label class="form-check-label" for="agent_type_0">None</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_1" value="1">
+                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_1" value="1" <?php if($data['agent_type'] == 1){ echo "checked";} ?> >
                                 <label class="form-check-label" for="agent_type_1">Client</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_2" value="2" required>
+                                <input class="form-check-input" type="radio" name="agent_type" id="agent_type_2" value="2" <?php if($data['agent_type'] == 2){ echo "checked";} ?>  required>
                                 <label class="form-check-label" for="agent_type_2">Server</label>
                             </div>
 
-                            <input type="button" onclick="agent_type_save()" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
+                            <input type="button" onclick="agent_type_save()" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large">
                         </form>
                     </div>
                     <div class="row">
@@ -867,6 +878,89 @@ function Export_SystemConfig(argument) {
 
     xhr.open("GET", "?url=Settings/export_sysytem_config", true);
     xhr.send();
+}
+
+function toggleBarcodeSeq() {
+    const barcodeMode = document.getElementById('barcode_enable');  // ✅ 修正為正確 ID
+    const barcodeSeq = document.getElementById('barcode_seq');
+    const seqContainer = document.getElementById("barcode_select_seq");
+
+    // 防呆：元素不存在時直接返回，避免錯誤
+    if (!barcodeMode || !barcodeSeq || !seqContainer) {
+        console.warn("One or more elements not found: barcode_enable, barcode_seq, barcode_select_seq");
+        return;
+    }
+
+    if (barcodeMode.value === '0' || barcodeMode.value === '1') {
+        barcodeSeq.disabled = true;
+        seqContainer.style.display = 'none';
+    } else if (barcodeMode.value === '2') {
+        barcodeSeq.disabled = false;
+        seqContainer.style.display = 'block';
+
+        // 若已選擇 Job，則自動載入對應的 SEQ
+        const jobId = document.getElementById('barcode_job')?.value || '-1';
+        if (jobId !== '-1') {
+            fetchSeqList();
+        } else {
+            // 未選 Job，清空 SEQ 並加預設提示
+            barcodeSeq.innerHTML = '';
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "-1";
+            defaultOption.textContent = "<?php echo $text['system_barcode_select_seq_m'];?>";
+            barcodeSeq.appendChild(defaultOption);
+        }
+    } else {
+        barcodeSeq.disabled = false;
+        seqContainer.style.display = 'block';
+    }
+}
+
+
+
+//透過JOBID 取得對應的SEQ
+function fetchSeqList() {
+    const jobId = document.getElementById('barcode_job').value;
+    const barcodeSeq = document.getElementById('barcode_seq');
+
+    // Reset list
+    barcodeSeq.innerHTML = '';
+
+    // 預設項目
+    const defaultOption = document.createElement('option');
+    defaultOption.value = "-1";
+    defaultOption.textContent = "Please Select Seq";
+    barcodeSeq.appendChild(defaultOption);
+
+    if (jobId === '-1') return;
+
+    $.ajax({
+        url: '?url=Settings/GetJobSeq',
+        type: 'POST',
+        data: { job_id: jobId },
+        success: function(response) {
+            try {
+                const seqList = JSON.parse(response);
+
+                // ✅ 使用正確的屬性名稱：seq_id、seq_name
+                if (Array.isArray(seqList)) {
+                    seqList.forEach(seq => {
+                        const option = document.createElement('option');
+                        option.value = seq.seq_id; // 注意這裡用小寫
+                        option.textContent = `${seq.seq_id} ${seq.seq_name}`;
+                        barcodeSeq.appendChild(option);
+                    });
+                } else {
+                    console.error("Response is not an array:", seqList);
+                }
+            } catch (e) {
+                console.error("JSON parse error:", e, "Raw response:", response);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error occurred:', error);
+        }
+    });
 }
 
 

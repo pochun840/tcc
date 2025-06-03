@@ -852,8 +852,8 @@ class Settings extends Controller
         $input_check = true;
         $error_message = '';
         
-        if( !empty($_GET['job_id']) && isset($_GET['job_id'])  ){
-            $job_id = $_GET['job_id'];
+        if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
+            $job_id = $_POST['job_id'];
         }else{ 
             $input_check = false;
             $error_message .= "job_id,";
@@ -925,13 +925,20 @@ class Settings extends Controller
 
     #IDAS上傳 20250522 修改
     public function iDas_Update() {
+        // 記錄目前上傳限制
+        $maxUpload = ini_get('upload_max_filesize');
+        $postMax = ini_get('post_max_size');
+        error_log("目前 upload_max_filesize: $maxUpload");
+        error_log("目前 post_max_size: $postMax");
+
+        // 載入語系
         $file = $this->MiscellaneousModel->lang_load();
         if (!empty($file)) include $file;
 
         $iDas_Vesion = $this->AdminModel->Get_Das_Config('idas_version');
         $file_location = (PHP_OS_FAMILY === 'Linux') ? '/var/www/html/' : $_SERVER['DOCUMENT_ROOT'] . '/';
         $extract_path = $file_location . 'extracted/';
-        $main_folder = ''; // 定義變數預留
+        $main_folder = '';
 
         try {
             // 驗證檔案
@@ -940,51 +947,59 @@ class Settings extends Controller
                 return $this->sendResponse('Error', $msg);
             }
 
+            // 額外大小限制檢查（可依據實際限制調整）
+            if ($_FILES['file']['size'] > 30 * 1024 * 1024) {
+                return $this->sendResponse('Error', '檔案大小超過限制：30MB');
+            }
+
             $uploaded_filename = $_FILES['file']['name'];
             if (strtolower(pathinfo($uploaded_filename, PATHINFO_EXTENSION)) !== 'pack') {
-                return $this->sendResponse('Error', 'The uploaded file must be in .pack format. You uploaded: ' . $uploaded_filename);
+                return $this->sendResponse('Error', '上傳檔案必須為 .pack 格式，目前為：' . $uploaded_filename);
             }
 
             $zip = new ZipArchive();
             if ($zip->open($_FILES['file']['tmp_name']) !== TRUE) {
-                return $this->sendResponse('Error', 'Failed to open the uploaded .pack file.');
+                return $this->sendResponse('Error', '無法開啟 .pack 更新檔案');
             }
 
             if (!is_dir($extract_path)) mkdir($extract_path, 0777, true);
             if (!$zip->extractTo($extract_path)) {
                 $zip->close();
-                return $this->sendResponse('Error', 'Failed to extract the .pack file.');
+                return $this->sendResponse('Error', '解壓縮失敗');
             }
             $zip->close();
 
             $folders = array_filter(scandir($extract_path), fn($f) => is_dir($extract_path.$f) && !in_array($f, ['.', '..']));
             if (empty($folders)) {
-                return $this->sendResponse('Error', 'No extracted folder found.');
+                return $this->sendResponse('Error', '未找到解壓縮資料夾');
             }
 
             $main_folder = $extract_path . reset($folders);
             $info_json_url = $main_folder . "/info.json";
 
-            $verify_data = file_exists($info_json_url) ? json_decode(@file_get_contents($info_json_url), true) : [];
-            $match_tcc_version = $verify_data['Match_TCC_Version'] ?? '';
-
-            if ($match_tcc_version && $match_tcc_version !== $iDas_Vesion) {
-                $this->AdminModel->Set_idas_version($match_tcc_version);
+            if (!file_exists($info_json_url)) {
+                return $this->sendResponse('Error', '缺少 info.json，無法驗證更新檔');
             }
 
+            $verify_data = json_decode(@file_get_contents($info_json_url), true);
+            if (!$verify_data || !isset($verify_data['Match_TCC_Version'])) {
+                return $this->sendResponse('Error', 'info.json 格式錯誤或缺少 Match_TCC_Version');
+            }
+
+            $match_tcc_version = $verify_data['Match_TCC_Version'];
+
             if ($match_tcc_version !== $iDas_Vesion) {
-                return $this->sendResponse('Error', 'Version mismatch. Update aborted.');
+                return $this->sendResponse('Error', "版本不符：目前為 $iDas_Vesion，更新檔為 $match_tcc_version，無法繼續更新。");
             }
 
             $target_directory = $_SERVER['DOCUMENT_ROOT'] . '/tccidas/';
             if (!is_dir($target_directory)) mkdir($target_directory, 0777, true);
-            $this->copyDirectory($main_folder, $target_directory);
 
+            $this->copyDirectory($main_folder, $target_directory);
             $this->setting_logout();
-            return $this->sendResponse('Success', 'Files successfully moved to the "tccidas" directory.');
+            return $this->sendResponse('Success', '更新成功，已將檔案移動至 tccidas 目錄');
 
         } finally {
-            // ✅ 確保刪除 regardless of success
             if (!empty($main_folder) && is_dir($main_folder)) {
                 $this->deleteDirectory($main_folder);
             }
@@ -993,8 +1008,6 @@ class Settings extends Controller
             }
         }
     }
-
-
 
     private function sendResponse($type, $msg) {
         $this->MiscellaneousModel->generateErrorResponse($type, $msg);
@@ -1027,6 +1040,8 @@ class Settings extends Controller
         }
         rmdir($dir);
     }
+
+
 
 
     public function Extract_File($file_location,$filename){

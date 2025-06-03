@@ -64,6 +64,10 @@ class Jobs extends Controller
 
         if(isset($_POST['jobidnew'])){
 
+            $rev_option = isset($_POST['rev_option']) ? intval($_POST['rev_option']) : null;
+            $threshold_tor = isset($_POST['threshold_tor']) ? floatval($_POST['threshold_tor']) : 0.0;
+            $threshold_ang = isset($_POST['threshold_ang']) ? intval($_POST['threshold_ang']) : 0;
+
             $jobdata = array(
                 'job_id' => $_POST['jobidnew'],
                 'job_name' => $_POST['jobname_val'],
@@ -71,8 +75,12 @@ class Jobs extends Controller
                 'rev_speed' => $_POST['rev_speed_val'],
                 'rev_direction' => $_POST['direction_val'],
                 'job_ok' => $_POST['job_ok_val'],
-                'job_ok_stop' => $_POST['job_ok_stop_val']
+                'job_ok_stop' => $_POST['job_ok_stop_val'],
+                'rev_option' => $rev_option,
+                'threshold_tor' => $threshold_tor,
+                'threshold_ang' => $threshold_ang
             );
+
 
             if ($jobdata) {
 
@@ -106,6 +114,10 @@ class Jobs extends Controller
         $jobdata  = array();
         if(isset($_POST['jobid'])){
 
+            $rev_option = isset($_POST['rev_option']) ? intval($_POST['rev_option']) : null;
+            $threshold_tor = isset($_POST['threshold_tor']) ? floatval($_POST['threshold_tor']) : 0.0;
+            $threshold_ang = isset($_POST['threshold_ang']) ? intval($_POST['threshold_ang']) : 0;
+
             $jobdata = array(
                 'job_id' => $_POST['jobid'],
                 'job_name' => $_POST['jobname'],
@@ -113,7 +125,10 @@ class Jobs extends Controller
                 'rev_speed' => $_POST['speedvalue'],
                 'rev_direction' => $_POST['directionValue'],
                 'job_ok' => $_POST['jobokValue'],
-                'job_ok_stop' => $_POST['stopjobValue']
+                'job_ok_stop' => $_POST['stopjobValue'],
+                'rev_option' => $rev_option,
+                'threshold_tor' => $threshold_tor,
+                'threshold_ang' => $threshold_ang
 
             );
 
@@ -227,7 +242,10 @@ class Jobs extends Controller
                         'rev_speed' => $old_res['rev_speed'],  
                         'rev_force' => $old_res['rev_force'],  
                         'job_ok' =>$old_res['job_ok'],
-                        'job_ok_stop' => $old_res['job_ok_stop']
+                        'job_ok_stop' => $old_res['job_ok_stop'],
+                        'rev_option' => $old_res['rev_option'],
+                        'threshold_tor' => $old_res['threshold_tor'],
+                        'threshold_ang' => $old_res['threshold_ang']
 
                     );
                     $res = $this->jobModel->create_job($jobdata);
@@ -250,6 +268,9 @@ class Jobs extends Controller
                             $new_temp_seq[$key]['seq_opt'] = $val['seq_opt']; 
                             $new_temp_seq[$key]['seq_k_val'] = $val['seq_k_val']; 
                             $new_temp_seq[$key]['seq_ofs'] = $val['seq_ofs'];
+                            $new_temp_seq[$key]['time_limit'] = $val['time_limit'];
+                            $new_temp_seq[$key]['dt_time'] = $val['dt_time'];
+                            $new_temp_seq[$key]['tt_time'] = $val['tt_time'];
                         }
 
                         $insertedrecords = $this->jobModel->copy_sequence_by_job_id($new_temp_seq);                

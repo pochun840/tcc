@@ -86,7 +86,7 @@
 .divMode 
 {
     font-size: 2vmin;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 160px);
     margin: 4px 0px;
     background-color: #FCFCFC;
     box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.2);
@@ -102,28 +102,16 @@
     display: none; /* Ẩn thanh cuộn trên Chrome, Safari */
 }
 
-.divMode {
+.divMode 
+{
     -ms-overflow-style: none;  /* Ẩn thanh cuộn trên IE, Edge */
     scrollbar-width: none;  /* Ẩn thanh cuộn trên Firefox */
 }
 
-/*
-.divMode
-{
-    border-radius: 10px;
-    font-size: 2vmin;
-    height: calc(100vh - 200px);
-    margin: 4px 0px;
-    background-color: #FCFCFC;
-    box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.2);    
-}
-*/
-
 select
 {
-    height: 30px;
-    width: 152px;
-    font-size: 18px;
+    height: 35px;
+    width: 226px;
     border: 1px solid #CCCCCC;
     cursor: pointer;
     border-radius: 5px;
@@ -232,9 +220,9 @@ th, td
     background: linear-gradient(left, #8391A6, #536175);
 }
 
-.t1{font-size: 2vmin; margin: 5px 0px; display: flex; align-items: center;}
-.t2{font-size: 2vmin; margin: 5px 0px; margin-left: 5%}         /* title  */
-.t3{font-size: 2vmin; margin: 5px 0px;}
+.t1{font-size: 17px; margin: 3px 0px; display: flex; align-items: center;}
+.t2{font-size: 17px; margin: 3px 0px; margin-left: 5%}         /* title  */
+.t3{font-size: 17px; margin: 3px 0px;}
 .t4{height: 28px;text-align: center;}   
 .selected { background-color: #9AC0CD !important;}
 .input-pin img{ height: 25px; width: 40px}

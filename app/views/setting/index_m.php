@@ -223,32 +223,9 @@
                         </div>
 
                         <div class="row t2">
-                            <div class="col-5 t1"><?php echo $text['select_job'];?>:</div>
-                            <div class="col t2">
-                                <select class="form-select" id="barcode_selected_job" name="barcode_selected_job">
-                                    <option value="-1"><?php echo $text['system_barcode_select_job_m'];?></option>
-                                    
-                                    <?php if (!empty($data['job_list']) && is_array($data['job_list'])) { ?>
-                                        <?php foreach ($data['job_list'] as $key => $value) { ?>
-                                            <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
-                                        <?php } ?>
-                                    <?php } ?>
-                                    
-                                    <!--
-                                        <?php
-                                        foreach ($data['job_list'] as $key => $value) {?>
-                                            <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
-                                        <?php }?>
-                                    -->    
-                                </select>
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-
-                        <div class="row t2">
                             <div class="col-5 t1"><?php echo $text['system_barcode_mode']?>:</div>
                                 <div class="col t2">
-                                <select class="form-select" id="barcode_enable" name="barcode_enable">
+                                <select class="form-select" id="barcode_enable" name="barcode_enable" onchange="toggleBarcodeSeq()">
                                         <option value="-1"><?php echo $text['system_barcode_select'];?></option>
                                         <?php
                                         foreach ($data['barcode_mode'] as $key_barcode => $value_barcode) {?>
@@ -258,6 +235,37 @@
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
+
+
+                        <div class="row t2">
+                            <div class="col-5 t1"><?php echo $text['select_job'];?>:</div>
+                            <div class="col t2">
+                                <select class="form-select" id="barcode_job" name="barcode_job" onchange="fetchSeqList()"  >
+                                    <option value="-1"><?php echo $text['system_barcode_select_job_m'];?></option>
+                                    
+                                    <?php if (!empty($data['job_list']) && is_array($data['job_list'])) { ?>
+                                        <?php foreach ($data['job_list'] as $key => $value) { ?>
+                                            <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
+                                        <?php } ?>
+                                    <?php } ?>
+                                    
+                                </select>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                         <div id="barcode_select_seq" style="display:none;">
+                            <div class="row t2">
+                                <div class="col-5 t1"><?php echo $text['system_barcode_select_seq'];?>:</div>
+                                <div class="col t2">
+                                    <select class="form-select" id="barcode_seq" name="barcode_seq">
+                                        <option value="-1"><?php echo $text['system_barcode_select_seq_m'];?></option>   
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                     
                     </div>
                 </div>    
                         
@@ -286,15 +294,15 @@
                             <div class="col t2">
                                 <form id="agent_type_form"  method="post" style="margin: 3px 0px; margin-left: 5%">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0" <?php if($data[''])?>>
+                                        <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0" <?php if($data['agent_type'] == 0){ echo "checked";} ?>  >
                                         <label class="form-check-label" for="agent_type_0">None</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="agent_type" id="agent_type_1" value="1">
+                                        <input class="form-check-input" type="radio" name="agent_type" id="agent_type_1" value="1" <?php if($data['agent_type'] == 1){ echo "checked";} ?>>
                                         <label class="form-check-label" for="agent_type_1">Client</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="agent_type" id="agent_type_2" value="2" required>
+                                        <input class="form-check-input" type="radio" name="agent_type" id="agent_type_2" value="2" <?php if($data['agent_type'] == 2){ echo "checked";} ?> required>
                                         <label class="form-check-label" for="agent_type_2">Server</label>
                                     </div>
                                     <input type="button" value="Save" onclick="set_agent_type()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
@@ -960,6 +968,90 @@ document.addEventListener("DOMContentLoaded", () => {
     showPage("job_table", 0);
     showPage("connection-table", 0);
 });
+
+
+function toggleBarcodeSeq() {
+    const barcodeMode = document.getElementById('barcode_enable');  // ✅ 修正為正確 ID
+    const barcodeSeq = document.getElementById('barcode_seq');
+    const seqContainer = document.getElementById("barcode_select_seq");
+
+    // 防呆：元素不存在時直接返回，避免錯誤
+    if (!barcodeMode || !barcodeSeq || !seqContainer) {
+        console.warn("One or more elements not found: barcode_enable, barcode_seq, barcode_select_seq");
+        return;
+    }
+
+    if (barcodeMode.value === '0' || barcodeMode.value === '1') {
+        barcodeSeq.disabled = true;
+        seqContainer.style.display = 'none';
+    } else if (barcodeMode.value === '2') {
+        barcodeSeq.disabled = false;
+        seqContainer.style.display = 'block';
+
+        // 若已選擇 Job，則自動載入對應的 SEQ
+        const jobId = document.getElementById('barcode_job')?.value || '-1';
+        if (jobId !== '-1') {
+            fetchSeqList();
+        } else {
+            // 未選 Job，清空 SEQ 並加預設提示
+            barcodeSeq.innerHTML = '';
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "-1";
+            defaultOption.textContent = "<?php echo $text['system_barcode_select_seq_m'];?>";
+            barcodeSeq.appendChild(defaultOption);
+        }
+    } else {
+        barcodeSeq.disabled = false;
+        seqContainer.style.display = 'block';
+    }
+}
+
+
+
+//透過JOBID 取得對應的SEQ
+function fetchSeqList() {
+    const jobId = document.getElementById('barcode_job').value;
+    const barcodeSeq = document.getElementById('barcode_seq');
+
+    // Reset list
+    barcodeSeq.innerHTML = '';
+
+    // 預設項目
+    const defaultOption = document.createElement('option');
+    defaultOption.value = "-1";
+    defaultOption.textContent = "Please Select Seq";
+    barcodeSeq.appendChild(defaultOption);
+
+    if (jobId === '-1') return;
+
+    $.ajax({
+        url: '?url=Settings/GetJobSeq',
+        type: 'POST',
+        data: { job_id: jobId },
+        success: function(response) {
+            try {
+                const seqList = JSON.parse(response);
+
+                // ✅ 使用正確的屬性名稱：seq_id、seq_name
+                if (Array.isArray(seqList)) {
+                    seqList.forEach(seq => {
+                        const option = document.createElement('option');
+                        option.value = seq.seq_id; // 注意這裡用小寫
+                        option.textContent = `${seq.seq_id} ${seq.seq_name}`;
+                        barcodeSeq.appendChild(option);
+                    });
+                } else {
+                    console.error("Response is not an array:", seqList);
+                }
+            } catch (e) {
+                console.error("JSON parse error:", e, "Raw response:", response);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error occurred:', error);
+        }
+    });
+}
 
 </script>    
 

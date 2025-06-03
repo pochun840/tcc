@@ -1,4 +1,16 @@
- <div class="container-ms">
+<style>
+    .overlay-active::before {
+    content: '';
+    position: fixed; /* phủ toàn bộ màn hình */
+    top: 0;
+    left: 0;
+    width: 100vw; /* chiều rộng toàn bộ khung nhìn */
+    height: 100vh; /* chiều cao toàn bộ khung nhìn */
+    background-color: rgba(0, 0, 0, 0.3); /* nền mờ */
+    z-index: 1000; /* đảm bảo nằm trên cùng */
+}
+</style>
+<div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
             <tr id="header">

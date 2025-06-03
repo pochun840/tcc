@@ -173,6 +173,7 @@ class Miscellaneous{
             $array = array(
                 0 => 'BS',
                 1 => 'BS (free)',
+                2 => 'Switch Job / Seq',
             );    
             
         }

@@ -67,13 +67,22 @@
         </div>
     </div>
 
+    <style>
+        .job-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%; /* hoặc chiều rộng cụ thể như 300px */
+        }
+    </style>
+
     <!-- Add New Job -->
     <div id="newjob" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 70%">
+            <div class="modal-content w3-animate-zoom" style="width: 75%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('newjob');"
-                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 1px;">&times;</span>
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_job'];?></h3>
                 </header>
 
@@ -88,7 +97,7 @@
                         <div class="row">
                             <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_name" value ='<?php echo "JOB"."-".$data['next_job_id'];?>' >
+                                <input type="text" class="job-name form-control input-ms" id="job_name" value ='<?php echo "JOB"."-".$data['next_job_id'];?>' >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -111,7 +120,7 @@
 
                         <div class="row">
                             <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok_stop'];?> :</div>
-                            <div class="col t2" >
+                            <div class="col t2">
 
                                 <div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_off" value="0" >
@@ -162,6 +171,34 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div for="reverse-option" class="col-6 t1">Reverse Count :</div>
+                            <div class="col-4 t2">
+                                <select id="rev_option" name="rev_opt" class="custom-file" style="width:225px">
+                                    <option value="0">OFF</option>
+                                    <option value="1">Threshold Tor.</option>
+                                    <option value="2">Threshold Ang.</option>
+                                    <option value="3">All(Torque & Angle)</option>
+                                    <option value="4">All(Torque First)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="Threshold_Tor" class="col-6 t1">Threshold Tor :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="threshold_tor" maxlength="" >
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="Threshold_Ang" class="col-6 t1">Threshold Ang :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="threshold_ang" maxlength="" >
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
@@ -177,10 +214,10 @@
     <!-- edit Job -->
     <div id="editjob" class="modal" >
     <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 70%">
+            <div class="modal-content w3-animate-zoom" style="width: 75%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('editjob');"
-                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 1px;">&times;</span>
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['edit_job'];?></h3>
                 </header>
 
@@ -267,6 +304,36 @@
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div for="reverse-option" class="col-6 t1">Reverse Count :</div>
+                            <div class="col-4 t2">
+                                <select id="edit_rev_option" name="edit_rev_opt" class="custom-file" style="width:225px">
+                                    <option value="0">OFF</option>
+                                    <option value="1">Threshold Tor.</option>
+                                    <option value="2">Threshold Ang.</option>
+                                    <option value="3">All(Torque & Angle)</option>
+                                    <option value="4">All(Torque First)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="Threshold_Tor" class="col-6 t1">Threshold Tor :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="edit_threshold_tor" maxlength="" >
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="Threshold_Ang" class="col-6 t1">Threshold Ang :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="edit_threshold_ang" maxlength="" >
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        
 
                     </form>
                 </div>
@@ -406,7 +473,12 @@ function savejob() {
     var jobname_val       = document.getElementById("job_name").value;
     var rev_speed_val     = document.getElementById("rev_speed").value;
     var rev_force_val     = document.getElementById("rev_force").value;
-    
+
+    // 05/29 Lana add new function
+    var rev_option     = document.getElementById("rev_option").value;
+    var threshold_tor     = document.getElementById("threshold_tor").value;
+    var threshold_ang     = document.getElementById("threshold_ang").value;
+
     var directionElement = document.querySelector('input[name="direction"]:checked');
     var direction_val = directionElement ? directionElement.value : null;
 
@@ -431,6 +503,9 @@ function savejob() {
                 jobname_val: jobname_val,
                 rev_speed_val: rev_speed_val,
                 rev_force_val: rev_force_val,
+                rev_option: rev_option,
+                threshold_tor: threshold_tor,
+                threshold_ang: threshold_ang,
                 direction_val: direction_val, //起子方向
                 job_ok_val: job_ok_val,
                 job_ok_stop_val:job_ok_stop_val
@@ -600,7 +675,6 @@ function validateInput(element, pattern, min, max) {
 function input_check_savejob() {
 
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
-
     let max_rpm = "<?php echo $data['tools']['tool_maxrpm']?>";
     let min_rpm = "<?php echo $data['tools']['tool_minrpm']?>";
 
@@ -608,7 +682,39 @@ function input_check_savejob() {
         { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
         { id: 'rev_speed', pattern: /^[0-9]+$/, min: min_rpm, max: max_rpm },
         { id: 'rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
+
     ];
+
+    // ✅ Kiểm tra thêm theo chế độ rev_option
+    if (rev_option === "1") { // Threshold Tor.
+        conditions.push({
+            id: prefix + 'threshold_tor',
+            pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
+        });
+    }
+    if (rev_option === "2") { // Threshold Ang.
+        conditions.push({
+            id: prefix + 'threshold_ang',
+            pattern: /^\d{1,5}$/,
+            min: 1,
+            max: 9999 // hoặc giới hạn theo máy nếu có
+        });
+    }
+    else if (rev_option === "3" || rev_option === "4") { // All
+        conditions.push(
+            {
+                id: prefix + 'threshold_tor',
+                pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
+            },
+            {
+                id: prefix + 'threshold_ang',
+                pattern: /^\d{1,5}$/,
+                min: 1,
+                max: 9999
+            }
+        );
+    }
+
 
     let isFormValid = true;
 
@@ -627,11 +733,16 @@ function input_check_savejob() {
 }
 
 function input_check_editjob() {
-
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
-    
-    let max_rpm = "<?php echo $data['tools']['tool_maxrpm']?>";
-    let min_rpm = "<?php echo $data['tools']['tool_minrpm']?>";
+
+    let max_rpm = parseInt("<?php echo $data['tools']['tool_maxrpm']?>");
+    let min_rpm = parseInt("<?php echo $data['tools']['tool_minrpm']?>");
+
+    // Lấy giá trị rev_option từ select
+    let rev_option = document.getElementById('edit_rev_option').value;
+
+    // Nếu dùng prefix cho id (nếu không có thì bỏ dòng này và xài id trực tiếp)
+    let prefix = 'edit_';
 
     let conditions = [
         { id: 'edit_jobname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
@@ -639,12 +750,49 @@ function input_check_editjob() {
         { id: 'edit_rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 
+    // Thêm điều kiện theo rev_option
+    if (rev_option === "1") { // Threshold Tor.
+        conditions.push({
+            id: prefix + 'threshold_tor',
+            id: prefix + 'threshold_tor',
+            pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
+        });
+    } else if (rev_option === "2") { // Threshold Ang.
+        conditions.push({
+            id: prefix + 'threshold_ang',
+            pattern: /^\d{1,5}$/,
+            min: 1,
+            max: 9999
+        });
+    } else if (rev_option === "3" || rev_option === "4") { // Both
+        conditions.push(
+            {
+                id: prefix + 'threshold_tor',
+                pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
+            },
+            {
+                id: prefix + 'threshold_ang',
+                pattern: /^\d{1,5}$/,
+                min: 1,
+                max: 9999
+            }
+        );
+    }
+
     let isFormValid = true;
 
     conditions.forEach(function(input) {
         var element = document.getElementById(input.id);
+        if (!element) {
+            console.warn('Element not found:', input.id);
+            return;
+        }
+
         if (input.id !== 'edit_jobname') {
-            element.nextElementSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
+            // Hiển thị thông báo phạm vi sai số kế bên input
+            if (element.nextElementSibling) {
+                element.nextElementSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
+            }
         }
 
         if (!validateInput(element, input.pattern, input.min, input.max)) {
@@ -654,4 +802,6 @@ function input_check_editjob() {
 
     return isFormValid;
 }
+
+
 </script>

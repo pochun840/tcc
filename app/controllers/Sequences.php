@@ -78,6 +78,11 @@ class Sequences extends Controller
             $seq_ns = isset($_POST['seq_ns']) ? intval($_POST['seq_ns']) : 0;
             $seq_ofs = isset($_POST['seq_ofs']) ? intval($_POST['seq_ofs']) : 0;  
 
+            $time_limit = isset($_POST['time_limit']) ? intval($_POST['time_limit']) : null;
+            $dt_time = isset($_POST['dt_time']) ? floatval($_POST['dt_time']) : 0;
+            $tt_time = isset($_POST['tt_time']) ? floatval($_POST['tt_time']) : 0;
+
+
             $seq_name = $_POST['seq_name'];
         
             #驗證seq_name 
@@ -118,6 +123,10 @@ class Sequences extends Controller
                 'seq_opt' => $seq_opt,
                 'seq_k_val' => $seq_k_val,
                 'seq_ofs' => $seq_ofs,
+                'time_limit' => $time_limit,
+                'dt_time' => $dt_time,
+                'tt_time' => $tt_time,
+
             );
 
 
@@ -204,6 +213,11 @@ class Sequences extends Controller
             $seq_k_val = isset($_POST['seq_k_val']) ? floatval($_POST['seq_k_val']) : 100;
             $seq_ofs = isset($_POST['seq_ofs']) ? intval($_POST['seq_ofs']) : 0;  
 
+            $time_limit = isset($_POST['time_limit']) ? intval($_POST['time_limit']) : null;
+            $dt_time = isset($_POST['dt_time']) ? floatval($_POST['dt_time']) : 0;
+            $tt_time = isset($_POST['tt_time']) ? floatval($_POST['tt_time']) : 0;
+
+
             #驗證seq_name 
             if(!$this->MiscellaneousModel->seq_validate($seq_name, 'name')) {
                 $this->MiscellaneousModel->generateErrorResponse('Error', $text['error_seq_name']);
@@ -246,6 +260,10 @@ class Sequences extends Controller
                 'seq_opt' => $seq_opt,
                 'seq_k_val' => $seq_k_val,
                 'seq_ofs' => $seq_ofs,
+                'time_limit' => $time_limit,
+                'dt_time' => $dt_time,
+                'tt_time' => $tt_time,
+
             );
 
             $res = $this->sequenceModel->update_seq_by_id($jobdata);
@@ -344,6 +362,9 @@ class Sequences extends Controller
                 $new_temp_seq[$kk]['seq_opt'] = $vv['seq_opt']; 
                 $new_temp_seq[$kk]['seq_k_val'] = $vv['seq_k_val']; 
                 $new_temp_seq[$kk]['seq_ofs'] = $vv['seq_ofs'];
+                $new_temp_seq[$kk]['time_limit'] = $vv['time_limit'];
+                $new_temp_seq[$kk]['dt_time'] = $vv['dt_time'];
+                $new_temp_seq[$kk]['tt_time'] = $vv['tt_time'];
 
             }  
 

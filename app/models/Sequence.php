@@ -37,8 +37,8 @@ class Sequence{
     #新增sequence
     public function create_seq($mode, $jobdata) {
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs, time_limit, dt_time, tt_time)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs, :time_limit, :dt_time, :tt_time);";
    
         $statement = $this->db_iDas->prepare($sql);
     
@@ -63,6 +63,10 @@ class Sequence{
         $statement->bindValue(':seq_k_val', $jobdata['seq_k_val']);
         $statement->bindValue(':seq_ofs', $jobdata['seq_ofs']);
 
+        $statement->bindValue(':time_limit', $jobdata['time_limit']);
+        $statement->bindValue(':dt_time', $jobdata['dt_time']);
+        $statement->bindValue(':tt_time', $jobdata['tt_time']);
+
 
     
         $results = $statement->execute();
@@ -75,8 +79,8 @@ class Sequence{
 
     public function copy_seq_by_seq_id($new_temp_seq){
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs, time_limit, dt_time, tt_time)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs, :time_limit, :dt_time, :tt_time);";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -158,7 +162,10 @@ class Sequence{
                                   seq_ok_stop =:seq_ok_stop,
                                   seq_opt = :seq_opt,
                                   seq_k_val = :seq_k_val,
-                                  seq_ofs = :seq_ofs
+                                  seq_ofs = :seq_ofs,
+                                  time_limit = :time_limit,
+                                  dt_time = :dt_time,
+                                  tt_time = :tt_time
         WHERE job_id = :job_id  AND   seq_id = :seq_id ";
 
 
@@ -173,6 +180,10 @@ class Sequence{
         $statement->bindValue(':seq_ofs', $jobdata['seq_ofs']);
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $statement->bindValue(':seq_id', $jobdata['seq_id']);
+
+        $statement->bindValue(':time_limit', $jobdata['time_limit']);
+        $statement->bindValue(':dt_time', $jobdata['dt_time']);
+        $statement->bindValue(':tt_time', $jobdata['tt_time']);
         $results = $statement->execute();
 
         return $results;

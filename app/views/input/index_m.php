@@ -1,3 +1,15 @@
+<style>
+    .overlay-active::before {
+    content: '';
+    position: fixed; /* phủ toàn bộ màn hình */
+    top: 0;
+    left: 0;
+    width: 100vw; /* chiều rộng toàn bộ khung nhìn */
+    height: 100vh; /* chiều cao toàn bộ khung nhìn */
+    background-color: rgba(0, 0, 0, 0.3); /* nền mờ */
+    z-index: 1000; /* đảm bảo nằm trên cùng */
+}
+</style>    
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -87,7 +99,7 @@
                 </div>
 
                 <!-- Table Data Information -->
-                <div id="TableDataInput" style="display: none" class="table-container">
+                <div id="TableDataInput" style="display: none">
                     <div id="Event_List" style="margin-top: 10px;background-color: #F2F2D9;">
                         <div class="w3-border-bottom" style="font-size: 20px;">Event List</div>
                         <table class="table w3-table-all w3-hoverable" style="font-size: 2vmin">

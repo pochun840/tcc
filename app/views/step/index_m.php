@@ -22,7 +22,7 @@
 
             <div class="table-container">
                 <table id="step_table" class="table w3-table">
-                    <thead id="header-table" style="3vmin">
+                    <thead id="header-table" style="font-size: 2.6vmin">
                         <tr class="w3-dark-grey">
                             <th><?php echo $text['step_id'];?></th>
                             <th><?php echo $text['step_target_type'];?></th>
@@ -32,7 +32,7 @@
                         </tr>
                     </thead>
 
-                    <tbody style="font-size: 3vmin;text-align: center;">
+                    <tbody style="font-size: 2.6vmin;text-align: center;">
                         <?php foreach($data['step'] as $key =>$val){?>
                             <tr>
                                 <td><?php echo $val['step_id'];?></td>
@@ -95,7 +95,7 @@
                 <div class="scrollbar-newstep" id="style-newstep">
                 <div class="newseq-force-overflow">
                 <div class="modal-body">
-                    <form id="new_step_form" style="padding-left: 5%">
+                    <form id="new_step_form" style="padding-left: 0%">
                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col t2">
@@ -286,7 +286,7 @@
                 <div class="scrollbar-newstep" id="style-newstep">
                 <div class="newseq-force-overflow">
                 <div class="modal-body">
-                    <form id="new_step_form" style="padding-left: 5%">
+                    <form id="new_step_form" style="padding-left: 0%">
                          <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
                             <div class="col t2">

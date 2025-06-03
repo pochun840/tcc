@@ -315,13 +315,13 @@ function delete_input_id(job_id,input_event){
                        document.getElementById('spinner').style.display = 'none';
                    }
                });
-           },
-           function() {
-               //使用者選擇「否」時不做任何事
-               //alertify.message('已取消刪除');
-           }
-       ).set('labels', {ok:'YES', cancel:'NO'}); // 修改按鈕文字
-   }
+            },
+            function() {
+                // 取消 callback 可選寫在這裡（目前略過）
+                document.querySelector(".main-content").classList.remove("overlay-active");
+            }
+        ).set('labels', {ok:'YES', cancel:'NO'}); // 修改按鈕文字
+    }
 }
 
 

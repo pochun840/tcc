@@ -15,7 +15,7 @@
                     <div class="force-overflow">
                         <table id="job_table" class="table w3-table">
                             <thead id="header-table">
-                                <tr class="w3-dark-grey" style="font-size: 2.5vmin">
+                                <tr class="w3-dark-grey" style="font-size: 2.6vmin">
                                     <th><?php echo $text['job_id'];?></th>
                                     <th><?php echo $text['job_name'];?></th>
                                     <th><?php echo $text['rev_direction'];?></th>
@@ -26,7 +26,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 2.5vmin; text-align: center;">
+                            <tbody style="font-size: 2.6vmin; text-align: center;">
                                 <?php foreach($data['jobs'] as $key =>$val){?>
 										<tr >
 											<td id='job_id' ><?php echo $val['job_id'];?></td>
@@ -78,91 +78,124 @@
                     <h3 id='modal_title'><?php echo $text['new_job'];?></h3>
                 </header>
 
-                <div class="modal-body">
-                    <form id="new_job_form" style="padding-left: 5%">
-                        <div class="row">
-                            <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?>:</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_id" maxlength="" value='<?php echo $data['next_job_id'];?>' disabled>
-                            </div>
+                <div class="scrollbar-newjob" id="style-newjob">
+                    <div class="newjob-force-overflow">
+                        <div class="modal-body">
+                            <form id="new_job_form" style="padding-left: 0%">
+                                <div class="row">
+                                    <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?>:</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="job_id" maxlength="" value='<?php echo $data['next_job_id'];?>' disabled>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?>:</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="job_name" maxlength="" value ='<?php echo "JOB"."-".$data['next_job_id'];?>'>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok'];?> :</div>
+                                    <div class="col t2" >
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="job_ok" id="job_off" value="0" >
+                                        <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="job_ok" id="job_ok" value="1">
+                                        <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>  
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok_stop'];?> :</div>
+                                    <div class="col t2" >
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_off" value="0" >
+                                        <label class="form-check-label" for="job_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_ok" value="1">
+                                        <label class="form-check-label" for="job_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="reverse-Direction" class="col-6 t1"><?php echo $text['rev_direction'];?>:</div>
+                                    <div class="col t2" >
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="direction" id="rev_direction_CW" value="0">
+                                        <label class="form-check-label" for="rev_direction_CW"><?php echo $text['CW']; ?></label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="direction" id="rev_direction_CCW" value="1">
+                                        <label class="form-check-label" for="rev_direction_CCW"><?php echo $text['CCW']; ?></label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="direction" id="rev_direction_disable" value="2">
+                                        <label class="form-check-label" for="rev_direction_disable"> <?php  echo $text['Disable']; ?></label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div for="reverse-RPM" class="col-6 t1"><?php echo $text['rev_speed'];?>(Max:1100):</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="rev_speed" maxlength=""  >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div for="reverse-power" class="col-6 t1"><?php echo $text['rev_force'];?>(%):</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="rev_force" maxlength="">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="reverse-option" class="col-6 t1">Reverse Count :</div>
+                                    <div class="col t2">
+                                        <select id="rev_opt" name="rev_opt" class="custom-file" style="width: 160px;">
+                                            <option value="">OFF</option>
+                                            <option value="">Threshold Tor.</option>
+                                            <option value="">Threshold Ang.</option>
+                                            <option value="">All(Tor & Ang)</option>
+                                            <option value="">All(Tor First)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="Threshold_Tor" class="col-6 t1">Threshold Tor :</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="threshold_tor" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="Threshold_Ang" class="col-6 t1">Threshold Ang :</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="threshold_ang" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+
+                            </form>
                         </div>
-                        <div class="row">
-                            <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?>:</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="job_name" maxlength="" value ='<?php echo "JOB"."-".$data['next_job_id'];?>'>
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok'];?> :</div>
-                            <div class="col t2" >
-
-                                <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="job_ok" id="job_off" value="0" >
-            					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
-            					</div>
-
-            			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="job_ok" id="job_ok" value="1">
-            					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>  
-            					</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok_stop'];?> :</div>
-                            <div class="col t2" >
-
-                                <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_off" value="0" >
-            					  <label class="form-check-label" for="job_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
-            					</div>
-
-            			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_ok" value="1">
-            					  <label class="form-check-label" for="job_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
-            					</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div for="reverse-Direction" class="col-6 t1"><?php echo $text['rev_direction'];?>:</div>
-                            <div class="col t2" >
-            			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction" id="rev_direction_CW" value="0">
-            					  <label class="form-check-label" for="rev_direction_CW"><?php echo $text['CW']; ?></label>
-            					</div>
-
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction" id="rev_direction_CCW" value="1">
-            					  <label class="form-check-label" for="rev_direction_CCW"><?php echo $text['CCW']; ?></label>
-            					</div>
-
-                                <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="direction" id="rev_direction_disable" value="2">
-            					  <label class="form-check-label" for="rev_direction_disable"> <?php  echo $text['Disable']; ?></label>
-            					</div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['rev_speed'];?>(Max:1100):</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="rev_speed" maxlength=""  >
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="reverse-power" class="col-6 t1"><?php echo $text['rev_force'];?>(%):</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="rev_force" maxlength="">
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-
                 <div class="modal-footer justify-content-center">
                     <button id="" class="button-modal" onclick="savejob()"><?php echo $text['save'];?></button>
                     <button id="" class="button-modal" onclick="closebutton('newjob')" class="closebtn"><?php echo $text['close'];?></button>
@@ -181,87 +214,120 @@
                     <h3 id='modal_title'><?php echo $text['edit_job'];?></h3>
                 </header>
 
-                <div class="modal-body">
-                    <form id="new_job_form" style="padding-left: 5%">
-                        <div class="row">
-                            <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?>:</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_jobid" maxlength="" value='<?php echo $data['jobint'];?>'disabled >
-                            </div>
+                <div class="scrollbar-newjob" id="style-newjob">
+                    <div class="newjob-force-overflow">
+                        <div class="modal-body">
+                            <form id="new_job_form" style="padding-left: 0%">
+                                <div class="row">
+                                    <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?>:</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="edit_jobid" maxlength="" value='<?php echo $data['jobint'];?>'disabled >
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?>:</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="edit_jobname" maxlength="">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok'];?> :</div>
+                                    <div class="col t2" >
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_job_ok" id="step_job_off" value="0" >
+                                        <label class="form-check-label" for="step_job_off"> <?php  echo $text['OFF_text']; ?></label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_job_ok" id="step_job_ok" value="1">
+                                        <label class="form-check-label" for="step_job_ok"><?php  echo $text['ON_text']; ?></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok_stop'];?> :</div>
+                                    <div class="col t2" >
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="step_job_ok_stop_off" value="0" >
+                                        <label class="form-check-label" for="step_job_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="step_job_ok_stop_ok" value="1">
+                                        <label class="form-check-label" for="step_job_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['rev_direction'];?>:</div>
+                                    <div class="col t2" >
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_direction" id="step_direction_CW" value="0">
+                                        <label class="form-check-label" for="step_direction_CW"><?php echo $text['CW'];?></label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_direction" id="step_direction__CCW" value="1">
+                                        <label class="form-check-label" for="step_direction_CCW"><?php echo $text['CCW'];?></label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="edit_direction" id="step_direction_disable" value="2">
+                                        <label class="form-check-label" for="step_direction_disable"> <?php  echo $text['Disable']; ?></label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div for="reverse-RPM" class="col-6 t1"><?php echo $text['rev_speed'];?>(Max:1100):</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="edit_rev_speed" maxlength="" required >
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div for="reverse-power" class="col-6 t1"><?php echo $text['rev_force'];?>(%):</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="edit_rev_force" maxlength=""  >
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="reverse-option" class="col-6 t1">Reverse Count :</div>
+                                    <div class="col-4 t2">
+                                        <select id="edit_rev_opt" name="edit_rev_opt" class="custom-file" style="width: 160px;">
+                                            <option value="">OFF</option>
+                                            <option value="">Threshold Tor.</option>
+                                            <option value="">Threshold Ang.</option>
+                                            <option value="">All(Torque & Angle)</option>
+                                            <option value="">All(Torque First)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="Threshold_Tor" class="col-6 t1">Threshold Tor :</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="edit_threshold_tor" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="Threshold_Ang" class="col-6 t1">Threshold Ang :</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="edit_threshold_ang" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+
+                            </form>
                         </div>
-                        <div class="row">
-                            <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?>:</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_jobname" maxlength="">
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok'];?> :</div>
-                            <div class="col t2" >
-
-                                <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_job_ok" id="step_job_off" value="0" >
-            					  <label class="form-check-label" for="step_job_off"> <?php  echo $text['OFF_text']; ?></label>
-            					</div>
-
-            			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_job_ok" id="step_job_ok" value="1">
-            					  <label class="form-check-label" for="step_job_ok"><?php  echo $text['ON_text']; ?></label>
-            					</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok_stop'];?> :</div>
-                            <div class="col t2" >
-
-                                <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="step_job_ok_stop_off" value="0" >
-            					  <label class="form-check-label" for="step_job_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
-            					</div>
-
-            			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_job_ok_stop" id="step_job_ok_stop_ok" value="1">
-            					  <label class="form-check-label" for="step_job_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
-            					</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['rev_direction'];?>:</div>
-                            <div class="col t2" >
-            			      	<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="step_direction_CW" value="0">
-            					  <label class="form-check-label" for="step_direction_CW"><?php echo $text['CW'];?></label>
-            					</div>
-
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="step_direction__CCW" value="1">
-            					  <label class="form-check-label" for="step_direction_CCW"><?php echo $text['CCW'];?></label>
-            					</div>
-
-                                <div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="edit_direction" id="step_direction_disable" value="2">
-            					  <label class="form-check-label" for="step_direction_disable"> <?php  echo $text['Disable']; ?></label>
-            					</div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="reverse-RPM" class="col-6 t1"><?php echo $text['rev_speed'];?>(Max:1100):</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_rev_speed" maxlength="" required >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div for="reverse-power" class="col-6 t1"><?php echo $text['rev_force'];?>(%):</div>
-                            <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_rev_force" maxlength=""  >
-                            </div>
-                        </div>
-
-                    </form>
+                    </div>
                 </div>
 
                 <div class="modal-footer justify-content-center">
@@ -276,7 +342,7 @@
     <!-- Copy Job -->
     <div id="copyjob" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 80%">
+            <div class="modal-content w3-animate-zoom" style="width: 75%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('copyjob')"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 45px; margin: 1px; font-size: 20px">&times;</span>
@@ -287,29 +353,29 @@
                     <form id="new_job_form">
         	            <div for="from_job_id" class="col" style="font-weight: bold"><?php echo $text['copy_from'];?></div>
         		        <div class="row" style="padding-left: 10%;">
-        				    <div for="from_job_id" class="t1 col-6"><?php echo $text['job_id'];?> :</div>
+        				    <div for="from_job_id" class="col-6 t1"><?php echo $text['job_id'];?> :</div>
         				    <div class="col-4 t2 ">
-        				        <input type="number" class="form-control" id="from_job_id" disabled>
+        				        <input type="number" class="form-control input-ms" id="from_job_id" disabled>
         				    </div>
         				</div>
         				<div class="row" style="padding-left: 10%;">
-        				    <div for="from_job_name" class="t1 col-6"><?php echo $text['job_name'];?> :</div>
-        				    <div class="t2 col-4">
-        				        <input type="text" class="form-control" id="from_job_name" disabled>
+        				    <div for="from_job_name" class="col-6 t1"><?php echo $text['job_name'];?> :</div>
+        				    <div class="col-4 t2">
+        				        <input type="text" class="form-control input-ms" id="from_job_name" disabled>
         				    </div>
         				</div>
 
         			    <div for="from_job_id" class="col" style="font-weight: bold"><?php echo $text['copy_to'];?></div>
         				<div class="row" style="padding-left: 10%;">
-        				    <div for="to_job_id" class="t1 col-6"><?php echo $text['job_id'];?> :</div>
-        				    <div class="t2 col-4" >
-        				        <input type="number" class="form-control" id="to_job_id" value ='<?php echo $data['next_job_id'];?>' disabled style="background-color: #fff; color: #000; border: 1px solid #ccc;">
+        				    <div for="to_job_id" class="col-6 t1"><?php echo $text['job_id'];?> :</div>
+        				    <div class="col-4 t2" >
+        				        <input type="number" class="form-control input-ms" id="to_job_id" value ='<?php echo $data['next_job_id'];?>' disabled style="background-color: #fff; color: #000; border: 1px solid #ccc;">
         				    </div>
         				</div>
-        				<div class="row" style="padding-left: 10%;">
-        				    <div for="to_job_name" class="t1 col-6 col-form-label"><?php echo $text['job_name'];?> :</div>
-        				    <div class="t2 col-4">
-        				        <input type="text" class="form-control" id="to_job_name" value ='<?php echo "JOB-".$data['next_job_id'];?>'>
+        				<div class="row" style="padding-left: 10%">
+        				    <div for="to_job_name" class="col-6 t1t1"><?php echo $text['job_name'];?> :</div>
+        				    <div class="col-4 t2">
+        				        <input type="text" class="form-control input-ms" id="to_job_name" value ='<?php echo "JOB-".$data['next_job_id'];?>'>
         				    </div>
         				</div>
         			</form>

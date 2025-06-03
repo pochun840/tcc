@@ -44,7 +44,7 @@ $text['rev_direction'] = 'Reverse direction'; //
 $text['rev_speed'] = 'Reverse RPM';
 $text['rev_force'] = 'Reverse Force';
 
-$text['enable'] = 'Enable';
+$text['enable'] = 'Ena';
 $text['disable'] = 'Disable';
 $text['max_torque'] = 'Max';
 $text['max_rpm'] = 'Max';
@@ -64,7 +64,7 @@ $text['rev_tor_threshold'] = 'Rev. Threshold Tor.';
 //$text['advanced_seq_management'] = 'Advanced Job - Sequence Management';
 $text['seq_management'] = 'Sequence Management';
 $text['seq_id'] = 'Seq ID';
-$text['seq_name'] = 'Sequence Name';
+$text['seq_name'] = 'Seq Name';
 $text['target_type'] = 'Target Type';
 $text['tr'] = 'TR';
 
@@ -79,8 +79,8 @@ $text['edit_seq'] = 'Edit Sequence';
 $text['del_seq'] = 'Delete Sequence';
 $text['ns'] = 'NG Stop';
 $text['Choose_option'] = 'Option';
-$text['OK_Sequence'] = 'OK Sequence';
-$text['OK_Sequence_Stop'] = 'OK Sequence Stop';
+$text['OK_Sequence'] = 'OK Seq';
+$text['OK_Sequence_Stop'] = 'OK Seq Stop';
 $text['Timeout'] = 'Timeout';
 $text['total_step'] = 'Total step';
 $text['add_step'] = 'Add step';
@@ -120,7 +120,7 @@ $text['delay_time'] = 'Delay time';
 $text['Delay Time'] = 'Delay Time';
 $text['Tool_Max_Torque'] = 'Tool Max Torque';
 $text['Target_Torque'] = 'Target Torque';
-$text['Target_Angle'] = 'Target Angle ( &#870 )';
+$text['Target_Angle'] = 'Target Angle (º)';
 $text['Target Delay Time'] = 'Target Delay Time';
 
 $text['Run_Down_Speed'] = 'Run Down Speed';
@@ -130,8 +130,8 @@ $text['Downshift_Torque'] = 'Downshift Torque';
 $text['Downshift_Speed'] = 'Downshift Speed';
 $text['Monitor_Angle'] = 'Monitor Angle';
 $text['Over_Angle_Stop'] = 'Over Angle Stop';
-$text['High_Angle'] = 'High Angle ( &#870 )'; //High Angle( &#870 )
-$text['Low_Angle'] = 'Low Angle ( &#870 )';
+$text['High_Angle'] = 'High Angle (º)'; //High Angle( &#870 )
+$text['Low_Angle'] = 'Low Angle (º)';
 $text['Pre_Run'] = 'Pre Run';
 $text['Pre_Run_RPM'] = 'Pre Run RPM';
 $text['Pre_Run_Angle'] = 'Pre Run Angle';
@@ -287,9 +287,9 @@ $text['column_status'] = 'Status';
 $text['device_type'] = 'Device Type';
 $text['device_name'] = 'Device Name';
 
-$text['kgf.m'] = 'Kgf-m';
-$text['N.m'] = 'N-m';
-$text['kgf.cm'] = 'Kgf-cm';
+$text['kgf.m'] = 'Kgf.m';
+$text['N.m'] = 'N.m';
+$text['kgf.cm'] = 'Kgf.cm';
 $text['lbf.in'] = 'Lbf.in';
 
 

@@ -85,6 +85,7 @@
     transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
+
 /* Modal Content/Box */
 .modal-content
 {
@@ -322,51 +323,6 @@ th, td
     z-index: 1;
 }
 
-/* scrollbar style */
-.scrollbar
-{
-    height: calc(100vh - 370px);
-    width: 100%;
-    overflow-y: scroll;
-}
-
-.force-overflow
-{
-    min-height: 40vh;
-}
-
-#wrapper
-{
-    text-align: center;
-    margin: auto;
-}
-
-/*  STYLE Table detail*/
-#style-tableinput::-webkit-scrollbar
-{
-    display: none;
-    width: 12px;
-    background-color: #F5F5F5;
-}
-
-#style-tableinput::-webkit-scrollbar-thumb
-{
-    border-radius: 10px;
-    background: linear-gradient(left, #96A6BF, #63738C);
-    box-shadow: inset 0 0 1px 1px #5C6670;
-}
-
-#style-tableinput::-webkit-scrollbar-track
-{
-    border-radius: 10px;
-    background: #eee;
-    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
-}
-
-#style-tableinput::-webkit-scrollbar-thumb:hover
-{
-    background: linear-gradient(left, #8391A6, #536175);
-}
 
 .center
 {

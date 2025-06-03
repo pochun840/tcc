@@ -22,7 +22,7 @@
                     <div class="force-overflow">
                         <table id="seq_table" class="table w3-table">
                             <thead id="header-table">
-                                <tr class="w3-dark-grey" style="font-size: 3vmin">
+                                <tr class="w3-dark-grey" style="font-size: 2.6vmin">
                                     <th><?php echo $text['seq_id'];?></th>
                                     <th><?php echo $text['seq_name'];?></th>
                                     <th><?php echo $text['tr'];?></th>
@@ -34,7 +34,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="font-size: 3vmin;text-align: center;">
+                            <tbody style="font-size: 2.6vmin;text-align: center;">
                                 <?php foreach($data['sequences'] as $key =>$val) {?>
                                     <tr>
                                         <td class="seq-id"> <?php echo $val['seq_id'];?></td>
@@ -93,7 +93,7 @@
                 <div class="scrollbar-newseq" id="style-newseq">
                     <div class="newseq-force-overflow">
                         <div class="modal-body" style="font-size: 14px">
-                            <form id="new_seq_form" style="padding-left: 5%">
+                            <form id="new_seq_form" style="padding-left: 0%">
                                 <div class="row">
                                     <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?>:</div>
                                     <div class="col-4 t2">
@@ -169,7 +169,7 @@
                               
                                 <div class="row">
                                     <div for="NG-stop" class="col-6 t1"><?php echo $text['ns'];?>:</div>
-                                    <div class="t2">
+                                    <div class="col-4 t2">
                                         <select id="seq_ns" class="custom-file">
                                             <?php for($i=0;$i<=9;$i++) {?>
                                                 <option value="<?php echo $i;?>"><?php echo $i;?></option>
@@ -192,6 +192,35 @@
                     					</div>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <div for="time_limit" class="col-6 t1">Time limit notification :</div>
+                                    <div class="col-4 t2">
+                                        <select id="time_limit" name="time_limit" class="custom-file" style="width:160px">
+                                            <option value="">OFF</option>
+                                            <option value="">DT Time</option>
+                                            <option value="">TT Time</option>
+                                            <option value="">All</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="DT_time" class="col-6 t1">DT Time (sec) :</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="DT_time" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="TT_time" class="col-6 t1">TT Time (sec) :</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="TT_time" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+
                             </form>
                         </div>
                     </div>
@@ -218,7 +247,7 @@
                 <div class="scrollbar-newseq" id="style-newseq">
                     <div class="newseq-force-overflow">
                         <div class="modal-body" style="font-size: 14px">
-                            <form id="new_seq_form" style="padding-left: 5%">
+                            <form id="new_seq_form" style="padding-left: 0%">
                                 <div class="row">
                                     <div for="job-id" class="col-6 t1"><?php echo $text['job_id'];?></div>
                                     <div class="col-4 t2">
@@ -320,6 +349,35 @@
                     					</div>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <div for="time_limit" class="col-6 t1">Time limit notification :</div>
+                                    <div class="col-4 t2">
+                                        <select id="time_limit" name="edit_time_limit" class="custom-file" style="width:160px">
+                                            <option value="">OFF</option>
+                                            <option value="">DT Time</option>
+                                            <option value="">TT Time</option>
+                                            <option value="">All</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="DT_time" class="col-6 t1">DT Time (sec) :</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="edit_DT_time" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div for="TT_time" class="col-6 t1">TT Time (sec) :</div>
+                                    <div class="col-4 t2">
+                                        <input type="text" class="form-control input-ms" id="edit_TT_time" maxlength="" >
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+
                             </form>
                         </div>
                     </div>
@@ -335,7 +393,7 @@
     <!-- Copy Sequence -->
     <div id="copyseq" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: auto">
+            <div class="modal-content w3-animate-zoom" style="width: 75%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('copyseq');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; height: 45px; margin: 1px; font-size: 20px">&times;</span>
@@ -348,13 +406,13 @@
         		        <div class="row" style="padding-left: 10%">
         				    <div for="from_seq_id" class="t1 col-6"><?php echo $text['seq_id'];?> :</div>
         				    <div class="col-4 t2 ">
-        				        <input type="text" class="form-control" id="from_seq_id" disabled>
+        				        <input type="text" class="form-control input-ms" id="from_seq_id" disabled>
         				    </div>
         				</div>
         				<div class="row" style="padding-left: 10%">
             				<div for="from_seq_name" class="t1 col-6"><?php echo $text['seq_name'];?> :</div>
             				<div class="t2 col-4">
-            				    <input type="text" class="form-control" id="from_seq_name" disabled>
+            				    <input type="text" class="form-control input-ms" id="from_seq_name" disabled>
             				</div>
         				</div>
  
@@ -362,13 +420,13 @@
         				<div class="row" style="padding-left: 10%">
             				<div for="to_seq_id" class="t1 col-6"><?php echo $text['seq_id'];?> :</div>
         				    <div class="t2 col-4">
-        				        <input type="number" class="form-control" id="to_seq_id" value= '<?php echo $data['next_seq_id'];?>' disabled style="background-color: #fff; color: #000; border: 1px solid #ccc;">
+        				        <input type="number" class="form-control input-ms" id="to_seq_id" value= '<?php echo $data['next_seq_id'];?>' disabled style="background-color: #fff; color: #000; border: 1px solid #ccc;">
         				    </div>
         				</div>
         				<div class="row" style="padding-left: 10%">
             				<div for="to_seq_name" class="t1 col-6"><?php echo $text['seq_name'];?> :</div>
         				    <div class="t2 col-4">
-        				        <input type="text" class="form-control" id="to_seq_name" value ='<?php echo "SEQ"."-".$data['next_seq_id'];?>'>
+        				        <input type="text" class="form-control input-ms" id="to_seq_name" value ='<?php echo "SEQ"."-".$data['next_seq_id'];?>'>
         				    </div>
         				</div>
         			</form>

@@ -260,8 +260,8 @@ select
     transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
-.t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}
-.t2{font-size: 17px; margin: 5px 0px;}
+.t1{font-size: 17px; margin: 3px 0px; display: flex; align-items: center;}
+.t2{font-size: 17px; margin: 3px 0px;}
 .t3{font-size: 17px; margin: 3px 0px;}
 .t4{height: 28px;text-align: center;}   
 .selected { background-color: #9AC0CD !important;}
@@ -275,14 +275,21 @@ select
 .scrollbar-newstep
 {
     float: left;
-    height: calc(50vh - 80px);
+    height: calc(50vh - 30px);
     width: 100%;
     overflow-y: scroll;
 }
 
+@media screen and (orientation: landscape) {
+    .scrollbar {
+        height: 38vh !important; /* Tăng chiều cao khi quay ngang */
+    }
+}
+
+
 .newstep-force-overflow
 {
-    min-height: 30vh;
+    min-height: 40vh;
 }
 
 #wrapper

@@ -242,12 +242,12 @@ select
 {
     height: 35px;
     width: 128px;
-    font-size: 18px;
-    border: 1px solid #CCCCCC;
-    cursor: pointer;
-    border-radius: 5px;
-    color: #000;
-    transition: color 0.s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
+    border-color: #CCCCCC; 
+    border-radius: 4px; 
+    height: 35px;
+    padding: 5px;
+    text-align: left;
+    direction: 1tr;
 }
 
 .t1{font-size: 17px; margin: 5px 0px; display: flex; align-items: center;}

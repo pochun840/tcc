@@ -86,7 +86,7 @@
     <!-- Add New Sequence -->
     <div id="newseq" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 70%">
+            <div class="modal-content w3-animate-zoom" style="width: 75%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('newseq');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
@@ -181,11 +181,9 @@
                             <div class="col t2">
                                 <select id="seq_ns" class="custom-file">
                                     <?php for($i=0;$i<=9;$i++) {?>
-                                                <option value="<?php echo $i;?>"><?php echo $i;?></option>
+                                        <option value="<?php echo $i;?>"><?php echo $i;?></option>
                                     <?php } ?> 
                                 </select>
-
-
                             </div>
                         </div>
 
@@ -202,7 +200,34 @@
             					</div>
                             </div>
                         </div>
-                        
+
+                        <div class="row">
+                            <div for="time_limit" class="col-6 t1">Time limit notification :</div>
+                            <div class="col-4 t2">
+                                <select id="time_limit" name="time_limit" class="custom-file" style="width:225px">
+                                    <option value="0">OFF</option>
+                                    <option value="1">DT Time</option>
+                                    <option value="2">TT Time</option>
+                                    <option value="3">All</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="DT_time" class="col-6 t1">DT Time (sec) :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="DT_time" maxlength="" >
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="TT_time" class="col-6 t1">TT Time (sec) :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="TT_time" maxlength="" >
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
                        
                     </form>
                 </div>
@@ -219,7 +244,7 @@
     <!-- edit Sequence -->
     <div id="editseq" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 70%">
+            <div class="modal-content w3-animate-zoom" style="width: 75%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('editseq');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
@@ -326,6 +351,48 @@
             					  <input class="form-check-input" type="radio" name="edit_opt_option" id="edit_OPT_ON" value="1">
             					  <label class="form-check-label" for="edit_OPT_ON"><?php echo $text['switch_on'];?></label>
             					</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="OPT" class="col-6 t1"><?php  echo $text['opt'];?> :</div>
+                            <div class="col t2" >
+            			      	<div class="col-4 form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_OFF" value="0">
+            					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
+            					</div>
+            					<div class="form-check form-check-inline">
+            					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1">
+            					  <label class="form-check-label" for="OPT_ON"><?php echo $text['switch_on'];?></label>
+            					</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="time_limit" class="col-6 t1">Time limit notification :</div>
+                            <div class="col-4 t2">
+                                <select id="edit_time_limit" name="edit_time_limit" class="custom-file" style="width:225px">
+                                    <option value="0">OFF</option>
+                                    <option value="1">DT Time</option>
+                                    <option value="2">TT Time</option>
+                                    <option value="3">All</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="DT_time" class="col-6 t1">DT Time (sec) :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="edit_DT_time" maxlength="" >
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div for="TT_time" class="col-6 t1">TT Time (sec) :</div>
+                            <div class="col-4 t2">
+                                <input type="text" class="form-control input-ms" id="edit_TT_time" maxlength="" >
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                     </form>
@@ -663,6 +730,11 @@ function saveseq(){
     var seq_k_val = document.getElementById("seq_k_val").value;
     var seq_ofs = document.getElementById("seq_ofs").value;
 
+    // 06/03 Lana add new function
+    var time_limit = document.getElementById('time_limit').value;
+    var dt_time = document.getElementById('DT_time').value;
+    var tt_time = document.getElementById('TT_time').value;
+    
     //驗證
     let check = input_check_saveseq();
     if(check){
@@ -682,7 +754,10 @@ function saveseq(){
                 seq_ok_stop:seq_ok_stop,
                 seq_opt: seq_opt,
                 seq_k_val: seq_k_val,
-                seq_ofs: seq_ofs
+                seq_ofs: seq_ofs,
+                time_limit: time_limit,
+                dt_time: dt_time,
+                tt_time: tt_time
 
             },
             success: function(response) {
@@ -742,6 +817,10 @@ function edit_seq(seqid) {
                 var [, seq_ok] = cleanString.match(/\[seq_ok]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ok_stop] = cleanString.match(/\[seq_ok_stop]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_opt] = cleanString.match(/\[seq_opt]\s*=>\s*([^ ]+)/) || [, null];
+
+                var [, time_limit] = cleanString.match(/\[time_limit]\s*=>\s*([^ ]+)/) || [, null];
+                var [, dt_time] = cleanString.match(/\[dt_time]\s*=>\s*([^ ]+)/) || [, null];
+                var [, tt_time] = cleanString.match(/\[tt_time]\s*=>\s*([^ ]+)/) || [, null];
                
    
         
@@ -763,6 +842,18 @@ function edit_seq(seqid) {
 
                 var radioButtons_2 = document.getElementsByName("edit_opt_option");
                 setRadioButton_value(radioButtons_2, seq_opt);
+
+                document.getElementById("edit_time_limit").value = time_limit;
+                document.getElementById("edit_DT_time").value = dt_time;
+                document.getElementById("edit_TT_time").value = tt_time;
+
+                //✅ Gọi lại update hiển thị DT & TT sau khi gán dữ liệu
+                updateThresholdInputs(
+                    document.getElementById("edit_time_limit"),
+                    document.getElementById("edit_DT_time"),
+                    document.getElementById("edit_TT_time")
+                );
+                
   
             },
             error: function(xhr, status, error) {
@@ -784,6 +875,11 @@ function edit_seq_save(){
     var seq_ns = document.getElementById('edit_seq_ns').value;
     var seq_opt = document.querySelector('input[name="edit_opt_option"]:checked').value;
 
+    var time_limit = document.getElementById('edit_time_limit').value;
+    var dt_time = document.getElementById('edit_DT_time').value;
+    var tt_time = document.getElementById('edit_TT_time').value;
+
+
     //驗證
     let check = input_check_editseq();
     
@@ -801,7 +897,10 @@ function edit_seq_save(){
                 seq_k_val: seq_k_val,
                 seq_ofs: seq_ofs,
                 seq_ns: seq_ns,
-                seq_opt: seq_opt
+                seq_opt: seq_opt,
+                time_limit: time_limit,
+                dt_time: dt_time,
+                tt_time: tt_time
 
             },
             success: function(response) {
@@ -950,6 +1049,11 @@ function validateInput(element, pattern, min, max) {
 
 function input_check_saveseq() {
 
+    // Check time limit options
+    var time_limit = document.getElementById('time_limit').value;
+    var dt_time_element = document.getElementById('DT_time');
+    var tt_time_element = document.getElementById('TT_time');
+
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 
     let conditions = [
@@ -958,6 +1062,36 @@ function input_check_saveseq() {
         { id: 'seq_k_val', pattern: /^[0-9]+$/, min: 40, max: 300 },
         { id: 'seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
+
+    if (time_limit === "1") {
+        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
+            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+            isFormValid = false;
+        } else {
+            dt_time_element.nextElementSibling.innerHTML = "";
+        }
+    } else if (time_limit === "2") {
+        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
+            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+            isFormValid = false;
+        } else {
+            tt_time_element.nextElementSibling.innerHTML = "";
+        }
+    } else if (time_limit === "3") {
+        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
+            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+            isFormValid = false;
+        } else {
+            dt_time_element.nextElementSibling.innerHTML = "";
+        }
+
+        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
+            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+            isFormValid = false;
+        } else {
+            tt_time_element.nextElementSibling.innerHTML = "";
+        }
+    }
 
     let isFormValid = true;
 
@@ -996,6 +1130,11 @@ function input_check_saveseq() {
 
 function input_check_editseq() {
 
+    // Kiểm tra thời gian theo time_limit
+    var time_limit = document.getElementById('time_limit').value;
+    var dt_time_element = document.getElementById('DT_time');
+    var tt_time_element = document.getElementById('TT_time');
+
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 
     let conditions = [
@@ -1004,6 +1143,38 @@ function input_check_editseq() {
         { id: 'edit_seq_k_val', pattern: /^[0-9]+$/, min: 40, max: 300 },
         { id: 'edit_seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
+
+
+    if (time_limit === "1") {
+        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
+            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+            isFormValid = false;
+        } else {
+            dt_time_element.nextElementSibling.innerHTML = "";
+        }
+    } else if (time_limit === "2") {
+        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
+            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+            isFormValid = false;
+        } else {
+            tt_time_element.nextElementSibling.innerHTML = "";
+        }
+    } else if (time_limit === "3") {
+        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
+            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+            isFormValid = false;
+        } else {
+            dt_time_element.nextElementSibling.innerHTML = "";
+        }
+
+        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
+            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+            isFormValid = false;
+        } else {
+            tt_time_element.nextElementSibling.innerHTML = "";
+        }
+    }
+
 
     let isFormValid = true;
 

@@ -1,9 +1,20 @@
 
 <style>
-input:disabled 
-{
-    opacity: 1; 
-    color: #000; 
+    input:disabled 
+    {
+        opacity: 1; 
+        color: #000; 
+    }
+
+    .overlay-active::before {
+    content: '';
+    position: fixed; /* phủ toàn bộ màn hình */
+    top: 0;
+    left: 0;
+    width: 100vw; /* chiều rộng toàn bộ khung nhìn */
+    height: 100vh; /* chiều cao toàn bộ khung nhìn */
+    background-color: rgba(0, 0, 0, 0.3); /* nền mờ */
+    z-index: 1000; /* đảm bảo nằm trên cùng */
 }
 
 </style>   

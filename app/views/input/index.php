@@ -1,19 +1,13 @@
 <style>
-.overlay-active {
-    position: relative;
-    min-height: 150vh;
-}
-
 .overlay-active::before {
     content: '';
-    position: absolute;
+    position: fixed; /* phủ toàn bộ màn hình */
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    height: 120%;
-    background-color: rgba(0, 0, 0, 0.3); /* semi-transparent black background */
-    z-index: 999; /* Ensure it overlays on top */
+    width: 100vw; /* chiều rộng toàn bộ khung nhìn */
+    height: 100vh; /* chiều cao toàn bộ khung nhìn */
+    background-color: rgba(0, 0, 0, 0.3); /* nền mờ */
+    z-index: 1000; /* đảm bảo nằm trên cùng */
 }
 
 </style>    
@@ -68,7 +62,7 @@
                 <div id="TableInputSetting">
                     <div class="table-input">
                         <div class="scrollbar" id="style-inputtable">
-                            <div class="scrollbar-force-overflow">
+                            <div class="force-overflow">
                                 <table id="input_table" class="table w3-table">
                                     <thead class="header-table">
                                         <tr class="w3-dark-grey">
@@ -108,8 +102,8 @@
                 <!-- Table Data Information -->
                 <div id="TableDataInput" style="display: none">
                     
-                    <div id="Event_List" align="center" style="margin-top: 10px;background-color: #F2F2D9">
-                        <div class="w3-border-bottom" style="font-size: 20px;">Event List</div>
+                    <div id="Event_List" style="margin-top: 10px;background-color: #F2F2D9">
+                        <div class="w3-border-bottom w3-center" style="font-size: 20px;">Event List</div>
                         <table class="w3-table-all">
                             <tr>
                                 <td class="w3-left-align">1-50 SW Job ID</td>

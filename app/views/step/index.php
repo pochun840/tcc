@@ -83,7 +83,7 @@
     <!-- Add New Step -->
     <div id="newstep" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 90%">
+            <div class="modal-content w3-animate-zoom" style="width: 75%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('newstep');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
@@ -114,8 +114,6 @@
                                     <?php 
                                     
                                     ?>
-                                   
-                                    
                                 </select>
                             </div>
                         </div>
@@ -276,7 +274,7 @@
     <!-- edit Step -->
     <div id="editstep" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content w3-animate-zoom" style="width: 80%">
+            <div class="modal-content w3-animate-zoom" style="width: 75%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('editstep');"
                         class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>

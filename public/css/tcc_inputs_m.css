@@ -222,7 +222,7 @@ th, td
 .scrollbar-inputtable
 {
     float: left;
-    height: calc(100vh - 230px);
+    height: calc(100vh - 530px);
     width: 100%;
     overflow-y: scroll;
 }
@@ -325,56 +325,6 @@ th, td
     margin:0;
     z-index: 1;
     vertical-align: middle;
-}
-
-/*  STYLE detail Table */
-/* scrollbar style */
-.scrollbar-detail
-{
-    height: calc(50vh - 150px);
-    width: 100vw;
-    float: left;
-    overflow-y: scroll;
-    overflow-x: scroll;
-}
-
-.force-overflow-detail
-{
-    min-height: 40vh;
-}
-
-.tabledetail-container
-{
-    width:100vw;
-    float: left;
-    overflow-y: auto;
-}
-
-#style-inputdetail::-webkit-scrollbar
-{
-    display: none;
-    width: 12px;
-    height: 12px;
-    background-color: #F5F5F5;
-}
-
-#style-inputdetail::-webkit-scrollbar-thumb
-{
-    border-radius: 10px;
-    background: linear-gradient(left, #96A6BF, #63738C);
-    box-shadow: inset 0 0 1px 1px #5C6670;
-}
-
-#style-inputdetail::-webkit-scrollbar-track
-{
-    border-radius: 10px;
-    background: #eee;
-    box-shadow: 0 0 1px 1px #bbb, inset 0 0 7px rgba(0,0,0,0.3)
-}
-
-#style-inputdetail::-webkit-scrollbar-thumb:hover
-{
-    background: linear-gradient(left, #8391A6, #536175);
 }
 
 .center
