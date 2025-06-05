@@ -135,19 +135,25 @@ body
     align-items: center;
 }
 
-.button-chart 
-{
+.button-chart {
     display: flex;
-    flex-direction: row; 
-    gap: 10px;
+    flex-direction: row;
+    flex-wrap: wrap; /* Cho phép xuống hàng nếu chật */
+    justify-content: center;
+    gap: 5px;
 }
 
-.btn-chart 
-{
-    padding: 10px 20px; 
-    margin: 5px; 
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
+.btn-chart {
+    height: 32px;
+    padding: 0 5px;
+    margin: 3px; /* khoảng cách đều bốn phía */
+    background-color: #6E8085;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    font-size: 2.5vmin;
+    text-align: center;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -170,17 +176,4 @@ body
     background-color: #fff; 
 }
 
-.btn-chart
-{
-    height: 32px;
-    margin: 5px 0;
-    padding: 0 3px;
-    background-color: #6E8085;
-    border-radius: 5px;
-    color: #fff;
-    border: 0px solid #6E8085;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    font-size: 2vmin;
-    text-align: center;
-}
 

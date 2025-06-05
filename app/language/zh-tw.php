@@ -47,6 +47,15 @@ $text['rev_direction'] = '拆螺絲方向';
 $text['rev_speed'] = '拆螺絲轉速';
 $text['rev_force'] = '拆螺絲力道';
 
+// 06/03 Lana Add 
+$text['rev_option'] = '拆螺絲計數';
+$text['off'] = '關';
+$text['threshold_tor'] = '拆螺絲門檻點扭力';
+$text['threshold_ang'] = '拆螺絲門檻點角度';
+$text['all_torque_angle'] = '全開(門檻扭力和角度)';
+$text['all_torque_first'] = '全開(門檻扭力優先)';
+
+
 $text['enable'] = '啟用';
 $text['disable'] = '禁用';
 $text['max_torque'] = '最大扭力';
@@ -89,14 +98,14 @@ $text['Timeout'] = '超時鎖附';
 $text['total_step'] = '總步驟數';
 $text['add_step'] = '新增步驟';
 
-$text['switch_on'] = 'ON';
-$text['switch_off'] = 'OFF';
+$text['switch_on'] = '開';
+$text['switch_off'] = '關';
 
 $text['success'] = '成功';
 $text['fail'] = '失敗';
 
-$text['CW'] = 'CW';
-$text['CCW'] = 'CCW';
+$text['CW'] = '順時針';
+$text['CCW'] = '逆時針';
 $text['option_no'] = 'No';
 $text['Second'] = '秒';
 
@@ -105,6 +114,14 @@ $text['Copy_Sequence'] = '複製工序';
 $text['OK_All_Stop'] = 'OK All 禁止起子啟動';
 $text['ok_all_alarm_time'] = 'OK All 持續時間';
 $text['tr'] = '鎖附顆數';
+
+
+// 06/04 Lana Add 
+$text['time_limit'] = '工作時間提示模式';
+$text['dt_time'] = '顆數間隔時間';
+$text['tt_time'] = '工序完成時間';
+$text['all_dt_tt'] = '全開';
+
 
 //normalstep
 

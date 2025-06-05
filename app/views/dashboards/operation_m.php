@@ -163,33 +163,33 @@ input:disabled
                     <?php }?>
                 </div>
                 <div id="graph" class="display-chart">
-                <?php if(!empty($data['other_data'])){?>
-                    <table class="chart-table">
-                            <thead>
-                                <tr>
-                                    <th><?php echo $text['step']; ?></th>
-                                    <?php for ($i = 1; $i <= 4; $i++){?>
-                                        <th><?php echo $i; ?></th>
-                                    <?php }?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $rows = array(
-                                    $text['Torque'] => $data['other_data']['torque'],
-                                    $text['Angle'] => $data['other_data']['angle']
-                                );
-                                foreach ($rows as $label => $values){?>
+                    <?php if(!empty($data['other_data'])){?>
+                        <table class="chart-table">
+                                <thead>
                                     <tr>
-                                        <td><?php echo $label; ?></td>
+                                        <th><?php echo $text['step']; ?></th>
                                         <?php for ($i = 1; $i <= 4; $i++){?>
-                                            <td><?php echo isset($values[$i]) ? $values[$i] : 'N/A'; ?></td>
-                                        <?php } ?>
+                                            <th><?php echo $i; ?></th>
+                                        <?php }?>
                                     </tr>
-                                <?php }?>
-                            </tbody>
-                    </table>
-                <?php } ?>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $rows = array(
+                                        $text['Torque'] => $data['other_data']['torque'],
+                                        $text['Angle'] => $data['other_data']['angle']
+                                    );
+                                    foreach ($rows as $label => $values){?>
+                                        <tr>
+                                            <td><?php echo $label; ?></td>
+                                            <?php for ($i = 1; $i <= 4; $i++){?>
+                                                <td><?php echo isset($values[$i]) ? $values[$i] : 'N/A'; ?></td>
+                                            <?php } ?>
+                                        </tr>
+                                    <?php }?>
+                                </tbody>
+                        </table>
+                    <?php } ?>
                     <div id="chart" align='center' style="max-width: 100%; height: 290px;"></div>
                 </div>                         
             </div>
@@ -210,20 +210,21 @@ input:disabled
         button.classList.add('active');
     }
 
-    function chart_type(argument) {
-        var currentUrl = window.location.href;
 
-        // 處理按鈕的class
+    function chart_type(argument) {
+        // Bỏ active khỏi tất cả nút
         var buttons = document.getElementsByClassName("btn-chart");
         for (var i = 0; i < buttons.length; i++) {
             buttons[i].classList.remove("active");
         }
+
+        // Thêm active cho nút đang chọn
         var activeButton = document.getElementById(argument);
         activeButton.classList.add("active");
 
+        // Lấy loại chart
         var chartIndex = currentUrl.indexOf('chart=');
         var chart;
-
         // 根據選擇的圖表類型設定圖表編號
         if(argument == "torque_time"){
             chart = 1;
@@ -240,7 +241,6 @@ input:disabled
         if(argument == "torque_angle"){
             chart = 4;
         }
-        
         var nextinfo_url;
 
         // 如果 URL 已經包含 chart 參數，更新該參數
@@ -265,9 +265,9 @@ input:disabled
 
     var language = getCookie('language');
 
-    // 宣告 myChart 為全域變數
+    // 宣告 myChart 為全域變數 - Khai báo myChart là một biến toàn cục
     var myChart;
-
+ 
     function initializeChart() {
         // 取得 x 和 y 的數值
         var x_data_val = <?= isset($data['chart_info']['x_val']) ? json_encode($data['chart_info']['x_val']) : 'null' ?>;
@@ -275,6 +275,7 @@ input:disabled
 
         var x_title = '<?php echo isset($data['echart_name'][1]) ? addslashes($data['echart_name'][1]) : ''; ?>';
         var y_title = '<?php echo isset($data['echart_name'][0]) ? addslashes($data['echart_name'][0]) : ''; ?>';
+
 
         // 檢查 x 和 y 的數值是否為空或 null，如果是則停止執行
         if (!x_data_val || !y_data_val || x_data_val.length === 0 || y_data_val.length === 0) {
@@ -301,7 +302,7 @@ input:disabled
             if (y_title == "RPM") y_title = "转速";
         }
 
-        // 初始化圖表
+        // 初始化圖表 - Khởi tạo biểu đồ
         myChart = echarts.init(document.getElementById('chart'));
 
         var option = {
@@ -323,9 +324,7 @@ input:disabled
                 type: 'category',
                 boundaryGap: false,
                 name: x_title,
-                data: x_data_val,
-                nameLocation: 'middle',  // 讓標題在中間
-                nameGap: 30,  // 調整標題與x軸的距離
+                data: x_data_val
             },
             yAxis: {
                 type: 'value',
@@ -386,6 +385,21 @@ input:disabled
             }
         ];
     }
+
+    // 旋轉或調整螢幕大小時 → 圖表會自動調整 - Khi xoay hoặc resize màn hình → biểu đồ tự điều chỉnh lại
+    window.addEventListener("resize", function() {
+        if (typeof myChart !== 'undefined' && myChart.resize) {
+            myChart.resize();
+        }
+    });
+
+    window.addEventListener("orientationchange", function() {
+        setTimeout(function() {
+            if (typeof myChart !== 'undefined' && myChart.resize) {
+                myChart.resize();
+            }
+        }, 300);
+    });
 
     // 在頁面加載後調用 initializeChart 函數
     initializeChart();
@@ -455,7 +469,7 @@ input:disabled
         }
     }
 
-    // 更新圖表
+    // 更新圖表 - Gēngxīn túbiǎo
     function updateChart(chartData) {
         if (!chartData) return;
 

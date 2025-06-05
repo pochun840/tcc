@@ -44,6 +44,13 @@ $text['rev_direction'] = 'Reverse direction'; //
 $text['rev_speed'] = 'Reverse RPM';
 $text['rev_force'] = 'Reverse Force';
 
+// 06/03 Lana Add 
+$text['rev_option'] = 'Reverse Count';
+$text['threshold_tor'] = 'Threshold Tor';
+$text['threshold_ang'] = 'Threshold Ang';
+$text['all_torque_angle'] = 'All(Torque & Angle)';
+$text['all_torque_first'] = 'All(Torque & First';
+
 $text['enable'] = 'Ena';
 $text['disable'] = 'Disable';
 $text['max_torque'] = 'Max';
@@ -107,6 +114,13 @@ $text['hard'] = 'Hard';
 $text['ok_all_alarm_time'] = 'OK All Alarm Time';
 $text['tr'] = 'Tighten Repeat';
 $text['ok_time'] = "OK Time";
+
+
+// 06/04 Lana Add 
+$text['time_limit'] = 'Time limit notification';
+$text['dt_time'] = 'DT Time';
+$text['tt_time'] = 'TT Time';
+$text['all_dt_tt'] = 'All';
 
 //normal step
 $text['normal_step'] = 'Normal Step';

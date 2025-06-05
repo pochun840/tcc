@@ -296,6 +296,11 @@ th, td
 .disabled_input{ color: #999; pointer-events: none;}
 .zoom{zoom:1.2; vertical-align: middle}
 
+
+input:disabled { /* Reverse Count style */
+    background-color: #e9ecef;
+}
+
 select 
 {
     width: 226px; 

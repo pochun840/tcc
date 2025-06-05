@@ -44,6 +44,15 @@ $text['rev_direction'] = '拆螺丝设定';
 $text['rev_speed'] = '拆螺丝转速';
 $text['rev_force'] = '拆螺丝扭力';
 
+// 06/03 Lana Add 
+$text['rev_option'] = '拆螺丝计数';
+$text['off'] = '关';
+$text['threshold_tor'] = '拆螺丝门槛点扭力';
+$text['threshold_ang'] = '拆螺丝门槛点角度';
+$text['all_torque_angle'] = '全开(门槛扭力和角度)';
+$text['all_torque_first'] = '全开(门槛扭力优先)';
+
+
 $text['enable'] = '启用';
 $text['disable'] = '禁用';
 $text['max_torque'] = '最大扭力';
@@ -108,6 +117,14 @@ $text['hard'] = '硬';
 $text['ok_all_alarm_time'] = 'OK All 持续时间';
 $text['tr'] = '锁附颗数';
 $text['ok_time'] = "OK one持续时间";
+
+
+// 06/04 Lana Add 
+$text['time_limit'] = '工作时效监测模式';
+$text['dt_time'] = '螺丝间隔时间';
+$text['tt_time'] = '工序完成时间';
+$text['all_dt_tt'] = '全开';
+
 //normalstep
 $text['normal_step'] = '快速工序目标';
 $text['torque'] = '扭力';

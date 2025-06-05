@@ -114,7 +114,7 @@
 
                                 <div class="row">
                                     <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok_stop'];?> :</div>
-                                    <div class="col t2" >
+                                    <div class="col t2">
 
                                         <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_off" value="0" >
@@ -164,20 +164,20 @@
                                 </div>
 
                                 <div class="row">
-                                    <div for="reverse-option" class="col-6 t1">Reverse Count :</div>
-                                    <div class="col t2">
-                                        <select id="rev_opt" name="rev_opt" class="custom-file" style="width: 160px;">
-                                            <option value="">OFF</option>
-                                            <option value="">Threshold Tor.</option>
-                                            <option value="">Threshold Ang.</option>
-                                            <option value="">All(Tor & Ang)</option>
-                                            <option value="">All(Tor First)</option>
+                                    <div class="col-6 t1"><?php echo $text['rev_option']; ?> :</div>
+                                    <div class="col-4 t2">
+                                        <select id="rev_option" name="rev_opt" class="custom-file" style="width:160px">
+                                            <option value="0"><?php echo $text['OFF_text']; ?></option>
+                                            <option value="1"><?php echo $text['threshold_tor']; ?></option>
+                                            <option value="2"><?php echo $text['threshold_ang']; ?></option>
+                                            <option value="3"><?php echo $text['all_torque_angle']; ?></option>
+                                            <option value="4"><?php echo $text['all_torque_first']; ?></option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div for="Threshold_Tor" class="col-6 t1">Threshold Tor :</div>
+                                    <div for="Threshold_Tor" class="col-6 t1"><?php echo $text['threshold_tor']; ?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>) :</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="threshold_tor" maxlength="" >
                                         <div class="invalid-feedback"></div>
@@ -185,7 +185,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div for="Threshold_Ang" class="col-6 t1">Threshold Ang :</div>
+                                    <div for="Threshold_Ang" class="col-6 t1"><?php echo $text['threshold_ang']; ?> :</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="threshold_ang" maxlength="" >
                                         <div class="invalid-feedback"></div>
@@ -297,20 +297,20 @@
                                 </div>
 
                                 <div class="row">
-                                    <div for="reverse-option" class="col-6 t1">Reverse Count :</div>
+                                    <div class="col-6 t1"><?php echo $text['rev_option']; ?> :</div>
                                     <div class="col-4 t2">
-                                        <select id="edit_rev_opt" name="edit_rev_opt" class="custom-file" style="width: 160px;">
-                                            <option value="">OFF</option>
-                                            <option value="">Threshold Tor.</option>
-                                            <option value="">Threshold Ang.</option>
-                                            <option value="">All(Torque & Angle)</option>
-                                            <option value="">All(Torque First)</option>
+                                        <select id="edit_rev_option" name="edit_rev_opt" class="custom-file" style="width:160px">
+                                            <option value="0"><?php echo $text['OFF_text']; ?></option>
+                                            <option value="1"><?php echo $text['threshold_tor']; ?></option>
+                                            <option value="2"><?php echo $text['threshold_ang']; ?></option>
+                                            <option value="3"><?php echo $text['all_torque_angle']; ?></option>
+                                            <option value="4"><?php echo $text['all_torque_first']; ?></option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div for="Threshold_Tor" class="col-6 t1">Threshold Tor :</div>
+                                    <div class="col-6 t1"><?php echo $text['threshold_tor']; ?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>) :</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_threshold_tor" maxlength="" >
                                         <div class="invalid-feedback"></div>
@@ -318,12 +318,13 @@
                                 </div>
 
                                 <div class="row">
-                                    <div for="Threshold_Ang" class="col-6 t1">Threshold Ang :</div>
+                                    <div class="col-6 t1"><?php echo $text['threshold_ang']; ?> :</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_threshold_ang" maxlength="" >
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
+                                
 
                             </form>
                         </div>
@@ -559,6 +560,12 @@ function savejob() {
     var rev_speed_val  = document.getElementById("rev_speed").value;
     var rev_force_val = document.getElementById("rev_force").value;
 
+    // 06/03 Lana add new function
+    var rev_option     = document.getElementById("rev_option").value;
+    var threshold_tor     = document.getElementById("threshold_tor").value;
+    var threshold_ang     = document.getElementById("threshold_ang").value;
+
+
     var directionElement = document.querySelector('input[name="direction"]:checked');
     var direction_val = directionElement ? directionElement.value : null;
 
@@ -583,7 +590,10 @@ function savejob() {
                 jobname_val: jobname_val,
                 rev_speed_val: rev_speed_val,
                 rev_force_val: rev_force_val,
-                direction_val: direction_val, //起子方向
+                rev_option: rev_option,
+                threshold_tor: threshold_tor,
+                threshold_ang: threshold_ang,
+                 direction_val: direction_val, //起子方向
                 job_ok_val: job_ok_val,
                 job_ok_stop_val:job_ok_stop_val
             },
@@ -661,6 +671,33 @@ function input_check_savejob() {
         { id: 'rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 
+        // ✅ Kiểm tra thêm theo chế độ rev_option
+    if (rev_option === "1") { // Threshold Tor.
+        conditions.push({
+            id: prefix + 'threshold_tor',
+            pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
+        });
+    }
+    if (rev_option === "2") { // Threshold Ang.
+        conditions.push({
+            id: prefix + 'threshold_ang',
+            pattern: /^\d{1,4}$/ // chỉ kiểm tra là số có tối đa 4 chữ số
+        });
+    }
+    else if (rev_option === "3" || rev_option === "4") { // All
+        conditions.push(
+            {
+                id: prefix + 'threshold_tor',
+                pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
+            },
+            {
+                id: prefix + 'threshold_ang',
+                pattern: /^\d{1,4}$/ // chỉ kiểm tra là số có tối đa 4 chữ số
+            }
+        );
+    }
+
+
     let isFormValid = true;
 
     conditions.forEach(function(input) {
@@ -678,11 +715,16 @@ function input_check_savejob() {
 }
 
 function input_check_editjob() {
-
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 
-    let max_rpm = "<?php echo $data['tools']['tool_maxrpm']?>";
-    let min_rpm = "<?php echo $data['tools']['tool_minrpm']?>";
+    let max_rpm = parseInt("<?php echo $data['tools']['tool_maxrpm']?>");
+    let min_rpm = parseInt("<?php echo $data['tools']['tool_minrpm']?>");
+
+    // Lấy giá trị rev_option từ select
+    let rev_option = document.getElementById('edit_rev_option').value;
+
+    // Nếu dùng prefix cho id (nếu không có thì bỏ dòng này và xài id trực tiếp)
+    let prefix = 'edit_';
 
     let conditions = [
         { id: 'edit_jobname', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
@@ -690,24 +732,46 @@ function input_check_editjob() {
         { id: 'edit_rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 
+    // Thêm điều kiện theo rev_option
+    if (rev_option === "1") { // Threshold Tor.
+        conditions.push({
+            id: prefix + 'threshold_tor',
+            id: prefix + 'threshold_tor',
+            pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
+        });
+    } else if (rev_option === "2") { // Threshold Ang.
+        conditions.push({
+            id: prefix + 'threshold_ang',
+            pattern: /^\d{1,4}$/ // chỉ kiểm tra là số có tối đa 4 chữ số
+        });
+    } else if (rev_option === "3" || rev_option === "4") { // Both
+        conditions.push(
+            {
+                id: prefix + 'threshold_tor',
+                pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
+            },
+            {
+                id: prefix + 'threshold_ang',
+                pattern: /^\d{1,4}$/ // chỉ kiểm tra là số có tối đa 4 chữ số
+            }
+        );
+    }
+
     let isFormValid = true;
+
     conditions.forEach(function(input) {
         var element = document.getElementById(input.id);
-     
-
-        if (input.id !== 'edit_jobname') {
-            const nextSibling = element.nextElementSibling; // 先存起來，避免重複呼叫
-            if (nextSibling) { // 檢查 nextSibling 是否不為 null
-                nextSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
-            } else {
-                console.error(`Element with id '${input.id}' does not have a next sibling.`); // 錯誤處理，例如輸出到控制台
-                // 或者你可以選擇創建一個新的元素，並將它插入到 element 之後
-                // const newSibling = document.createElement('span');
-                // element.parentNode.insertBefore(newSibling, element.nextSibling);
-                // newSibling.innerHTML = `${input.min} ~ ${input.max}`;
-            }
+        if (!element) {
+            console.warn('Element not found:', input.id);
+            return;
         }
 
+        if (input.id !== 'edit_jobname') {
+            // Hiển thị thông báo phạm vi sai số kế bên input
+            if (element.nextElementSibling) {
+                element.nextElementSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
+            }
+        }
 
         if (!validateInput(element, input.pattern, input.min, input.max)) {
             isFormValid = false;

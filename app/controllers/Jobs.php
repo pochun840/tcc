@@ -15,6 +15,7 @@ class Jobs extends Controller
         $this->DashboardModel = $this->model('Dashboard');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
         $this->ToolModel = $this->model('Tool');
+        $this->SettingModel = $this->model('Setting');
 
     }
 
@@ -26,6 +27,9 @@ class Jobs extends Controller
         $jobs      = $this->jobModel->getJobs();
         $direction = $this->MiscellaneousModel->details('rev_direction');
         $tools     = $this->ToolModel->GetToolInfo();
+        
+        // Lấy Unit từ Model => Miscellaneous
+        $torque_unit   = $this->MiscellaneousModel->details("torque_unit");
 
         $next_job_id_arr = $this->jobModel->get_head_job_id();
         $next_job_id = (int)$next_job_id_arr['missing_id'];
@@ -37,12 +41,23 @@ class Jobs extends Controller
             $jobIdInt = 1;
         }
 
+        // inc Unit Tor tại Setting
+        $res_device = $this->SettingModel->GetControllerInfo();
+        if(!empty($res_device)){
+            $step_torque_unit = (int)$res_device['device_torque_unit'];
+
+
+            $unit_name = $torque_unit[$step_torque_unit];
+  
+        }
+
         $data = array(
             'jobint' => $jobIdInt,
             'next_job_id' => $next_job_id,
             'jobs' => $jobs,
             'direction' => $direction,
-            'tools' => $tools
+            'tools' => $tools,
+            'unit_name' => $unit_name
         );
         
         if($isMobile){

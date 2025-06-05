@@ -291,6 +291,22 @@
         ];
     }
 
+    // 2. Khi xoay hoặc resize màn hình → biểu đồ tự điều chỉnh lại
+    window.addEventListener("resize", function() {
+        if (typeof myChart !== 'undefined' && myChart.resize) {
+            myChart.resize();
+        }
+    });
+
+    window.addEventListener("orientationchange", function() {
+        setTimeout(function() {
+            if (typeof myChart !== 'undefined' && myChart.resize) {
+                myChart.resize();
+            }
+        }, 300);
+    });
+
+
     // 在頁面加載後調用 initializeChart 函數
     initializeChart();
 

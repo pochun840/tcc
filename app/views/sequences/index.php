@@ -202,19 +202,19 @@
                         </div>
 
                         <div class="row">
-                            <div for="time_limit" class="col-6 t1">Time limit notification :</div>
+                            <div class="col-6 t1"><?php echo $text['time_limit'];?> :</div>
                             <div class="col-4 t2">
                                 <select id="time_limit" name="time_limit" class="custom-file" style="width:225px">
-                                    <option value="0">OFF</option>
-                                    <option value="1">DT Time</option>
-                                    <option value="2">TT Time</option>
-                                    <option value="3">All</option>
+                                    <option value="0"><?php echo $text['OFF_text'];?></option>
+                                    <option value="1"><?php echo $text['dt_time'];?></option>
+                                    <option value="2"><?php echo $text['tt_time'];?></option>
+                                    <option value="3"><?php echo $text['all_dt_tt'];?></option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div for="DT_time" class="col-6 t1">DT Time (sec) :</div>
+                            <div for="DT_time" class="col-6 t1"><?php echo $text['dt_time'];?>(<?php echo $text['Second'];?>) :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="DT_time" maxlength="" >
                                 <div class="invalid-feedback"></div>
@@ -222,7 +222,7 @@
                         </div>
 
                         <div class="row">
-                            <div for="TT_time" class="col-6 t1">TT Time (sec) :</div>
+                            <div for="TT_time" class="col-6 t1"><?php echo $text['tt_time'];?>(<?php echo $text['Second'];?>) :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="TT_time" maxlength="" >
                                 <div class="invalid-feedback"></div>
@@ -369,19 +369,19 @@
                         </div>
 
                         <div class="row">
-                            <div for="time_limit" class="col-6 t1">Time limit notification :</div>
+                            <div for="time_limit" class="col-6 t1"><?php echo $text['time_limit'];?> :</div>
                             <div class="col-4 t2">
                                 <select id="edit_time_limit" name="edit_time_limit" class="custom-file" style="width:225px">
-                                    <option value="0">OFF</option>
-                                    <option value="1">DT Time</option>
-                                    <option value="2">TT Time</option>
-                                    <option value="3">All</option>
+                                    <option value="0"><?php echo $text['OFF_text'];?></option>
+                                    <option value="1"><?php echo $text['dt_time'];?></option>
+                                    <option value="2"><?php echo $text['tt_time'];?></option>
+                                    <option value="3"><?php echo $text['all_dt_tt'];?></option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div for="DT_time" class="col-6 t1">DT Time (sec) :</div>
+                            <div for="DT_time" class="col-6 t1"><?php echo $text['dt_time'];?>(<?php echo $text['Second'];?>) :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_DT_time" maxlength="" >
                                 <div class="invalid-feedback"></div>
@@ -389,7 +389,7 @@
                         </div>
 
                         <div class="row">
-                            <div for="TT_time" class="col-6 t1">TT Time (sec) :</div>
+                            <div for="TT_time" class="col-6 t1"><?php echo $text['tt_time'];?>(<?php echo $text['Second'];?>) :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_TT_time" maxlength="" >
                                 <div class="invalid-feedback"></div>
@@ -664,7 +664,48 @@ function delete_seqid(seqid){
         var title = 'Copy Job';
     }
 
- 
+    var jobid = '<?php echo $data['job_id']?>';
+    if (jobid) {
+        alertify.confirm(title, text_info, function (confirmed) {
+            if (confirmed) {
+                document.getElementById('spinner').style.display = 'block';
+
+                $.ajax({
+                    url: "?url=Sequences/delete_seq",
+                    method: "POST",
+                    data: {
+                        jobid: jobid,
+                        seqid: seqid
+                    },
+                    success: function (response) {
+                        var responseData = JSON.parse(response);
+
+                        setTimeout(function () {
+                            document.getElementById('spinner').style.display = 'none';
+
+                            alertify.alert(responseData.res_type, responseData.res_msg, function () {
+                                history.go(0);
+                            });
+
+                            setTimeout(function () {
+                                alertify.closeAll();
+                                history.go(0);
+                            }, 3000);
+                        }, 1000);
+                    },
+                    error: function (xhr, status, error) {
+                        document.getElementById('spinner').style.display = 'none';
+                        alertify.alert("Error", "Delete failed.");
+                    }
+                });
+            }
+        }, function () {
+            // 取消 callback 可選寫在這裡（目前略過）
+            document.querySelector(".main-content").classList.remove("overlay-active");
+
+        });
+
+    }
     var jobid = '<?php echo $data['job_id']?>';
     if (jobid) {
         
@@ -1131,9 +1172,10 @@ function input_check_saveseq() {
 function input_check_editseq() {
 
     // Kiểm tra thời gian theo time_limit
-    var time_limit = document.getElementById('time_limit').value;
-    var dt_time_element = document.getElementById('DT_time');
-    var tt_time_element = document.getElementById('TT_time');
+    var time_limit = document.getElementById('edit_time_limit').value;
+    var dt_time_element = document.getElementById('edit_DT_time');
+    var tt_time_element = document.getElementById('edit_TT_time');
+
 
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 

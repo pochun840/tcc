@@ -98,11 +98,11 @@
                     <form id="new_step_form" style="padding-left: 0%">
                         <div class="row">
                             <div for="target-option" class="col-6 t1"><?php echo $text['step_target_type'];?> :</div>
-                            <div class="col t2">
+                            <div class="col-4 t2">
                                 <input type="text" id='step_id' name='step_id' value='<?php echo $data['count_records'];?>' style="display: none;">
                                 <input type="hidden" id="add_step_id" name="add_step_id">
 
-                                <select id="target_opt" name="target_opt" class="custom-file">
+                                <select id="target_opt" name="target_opt" class="custom-file" style="width:140px">
                                     <?php if($data['check'] == 1 || $data['counts_torque'] == 1 ){?>
                                         <?php foreach($data['target_option_change'] as $key => $val){?>
                                              <option value="<?php echo $key;?>"><?php echo $text[$val];?></option>
@@ -203,14 +203,14 @@
                         <div id="direction_item">
                             <div class="row">
                                 <div for="direction" class="col-6 t1"><?php echo $text['direction'];?>:</div>
-                                <div class="col t2" >
-                                    <div class="col-4 form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="direction_option" id="direction_CW" value="0">
-                                    <label class="form-check-label" for="direction_CW"><?php echo $text['CW'];?></label>
+                                <div class="col t2">
+                                    <div class="col form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="direction_option" id="direction_CW" value="0">
+                                        <label class="form-check-label" for="direction_CW" style="font-size: 15px"><?php echo $text['CW'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">
-                                    <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
+                                        <input class="form-check-input" type="radio" name="direction_option" id="direction_CCW" value="1" checked="checked">
+                                        <label class="form-check-label" for="direction_CCW"><?php echo $text['CCW'];?></label>
                                     </div>
                                 </div>
                             </div>
@@ -219,14 +219,14 @@
                         <div id="th_mode_item">
                             <div class="row">
                                 <div for="downshift" class="col-6 t1"><?php echo $text['Downshift'];?>:</div>
-                                <div class="col t2" >
-                                    <div class="col-4 form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="th_mode" id="downshift_OFF" value="0" checked="checked">
-                                    <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
+                                <div class="col t2">
+                                    <div class="col form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="th_mode" id="downshift_OFF" value="0" checked="checked">
+                                        <label class="form-check-label" for="downshift_OFF"><?php echo $text['switch_off'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="th_mode" id="downshift_ON" value="1" >
-                                    <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
+                                        <input class="form-check-input" type="radio" name="th_mode" id="downshift_ON" value="1" >
+                                        <label class="form-check-label" for="downshift_ON"><?php echo $text['switch_on'];?></label>
                                     </div>
                                 </div>
                             </div>

@@ -194,19 +194,19 @@
                                 </div>
 
                                 <div class="row">
-                                    <div for="time_limit" class="col-6 t1">Time limit notification :</div>
+                                    <div class="col-6 t1"><?php echo $text['time_limit'];?> :</div>
                                     <div class="col-4 t2">
                                         <select id="time_limit" name="time_limit" class="custom-file" style="width:160px">
-                                            <option value="">OFF</option>
-                                            <option value="">DT Time</option>
-                                            <option value="">TT Time</option>
-                                            <option value="">All</option>
+                                            <option value="0"><?php echo $text['OFF_text'];?></option>
+                                            <option value="1"><?php echo $text['dt_time'];?></option>
+                                            <option value="2"><?php echo $text['tt_time'];?></option>
+                                            <option value="3"><?php echo $text['all_dt_tt'];?></option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div for="DT_time" class="col-6 t1">DT Time (sec) :</div>
+                                    <div for="DT_time" class="col-6 t1"><?php echo $text['dt_time'];?>(<?php echo $text['Second'];?>) :</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="DT_time" maxlength="" >
                                         <div class="invalid-feedback"></div>
@@ -214,7 +214,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div for="TT_time" class="col-6 t1">TT Time (sec) :</div>
+                                    <div for="TT_time" class="col-6 t1"><?php echo $text['tt_time'];?>(<?php echo $text['Second'];?>) :</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="TT_time" maxlength="" >
                                         <div class="invalid-feedback"></div>
@@ -351,19 +351,19 @@
                                 </div>
 
                                 <div class="row">
-                                    <div for="time_limit" class="col-6 t1">Time limit notification :</div>
+                                    <div for="time_limit" class="col-6 t1"><?php echo $text['time_limit'];?> :</div>
                                     <div class="col-4 t2">
-                                        <select id="time_limit" name="edit_time_limit" class="custom-file" style="width:160px">
-                                            <option value="">OFF</option>
-                                            <option value="">DT Time</option>
-                                            <option value="">TT Time</option>
-                                            <option value="">All</option>
+                                        <select id="edit_time_limit" name="edit_time_limit" class="custom-file" style="width:160px">
+                                            <option value="0"><?php echo $text['OFF_text'];?></option>
+                                            <option value="1"><?php echo $text['dt_time'];?></option>
+                                            <option value="2"><?php echo $text['tt_time'];?></option>
+                                            <option value="3"><?php echo $text['all_dt_tt'];?></option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div for="DT_time" class="col-6 t1">DT Time (sec) :</div>
+                                    <div for="DT_time" class="col-6 t1"><?php echo $text['dt_time'];?>(<?php echo $text['Second'];?>) :</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_DT_time" maxlength="" >
                                         <div class="invalid-feedback"></div>
@@ -371,7 +371,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div for="TT_time" class="col-6 t1">TT Time (sec) :</div>
+                                    <div for="TT_time" class="col-6 t1"><?php echo $text['tt_time'];?>(<?php echo $text['Second'];?>) :</div>
                                     <div class="col-4 t2">
                                         <input type="text" class="form-control input-ms" id="edit_TT_time" maxlength="" >
                                         <div class="invalid-feedback"></div>
@@ -632,7 +632,6 @@ function copy_seq(seqid){
 
 
 function delete_seqid(seqid){
-    var jobid = '<?php echo $data['job_id']?>';
 
     var language = getCookie('language');
     if(language == "zh-cn"){
@@ -646,43 +645,47 @@ function delete_seqid(seqid){
         var title = 'Copy Job';
     }
 
+    var jobid = '<?php echo $data['job_id']?>';
     if (jobid) {
-        $.ajax({
-            url: "?url=Sequences/delete_seq",
-            method: "POST",
-            data:{ 
-                jobid: jobid,
-                seqid: seqid
-            },
-            success: function(response) {
-                alertify.confirm(text_info, function (result) {
+        alertify.confirm(title, text_info, function (confirmed) {
+            if (confirmed) {
+                document.getElementById('spinner').style.display = 'block';
 
-                    document.getElementById('spinner').style.display = 'block';
+                $.ajax({
+                    url: "?url=Sequences/delete_seq",
+                    method: "POST",
+                    data: {
+                        jobid: jobid,
+                        seqid: seqid
+                    },
+                    success: function (response) {
+                        var responseData = JSON.parse(response);
 
-                    var responseData = JSON.parse(response);
-                    // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
-                    setTimeout(function() {
-                        // 隱藏加載動畫
+                        setTimeout(function () {
+                            document.getElementById('spinner').style.display = 'none';
+
+                            alertify.alert(responseData.res_type, responseData.res_msg, function () {
+                                history.go(0);
+                            });
+
+                            setTimeout(function () {
+                                alertify.closeAll();
+                                history.go(0);
+                            }, 3000);
+                        }, 1000);
+                    },
+                    error: function (xhr, status, error) {
                         document.getElementById('spinner').style.display = 'none';
-
-                        // 顯示 alertify 彈跳視窗
-                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                            // 刷新頁面
-                            history.go(0);  
-                        });
-
-                        // 在 3 秒後自動關閉 alertify 彈跳視窗
-                        setTimeout(function() {
-                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
-                            history.go(0); 
-                        }, 3000); 
-                    }, 1000); // 延遲 1000 毫秒
+                        alertify.alert("Error", "Delete failed.");
+                    }
                 });
-            },
-            error: function(xhr, status, error) {
-                
             }
+        }, function () {
+            // 取消 callback 可選寫在這裡（目前略過）
+            document.querySelector(".main-content").classList.remove("overlay-active");
+
         });
+
     }
 
 }
@@ -707,6 +710,12 @@ function saveseq(){
     var seq_k_val = document.getElementById("seq_k_val").value;
     var seq_ofs = document.getElementById("seq_ofs").value;
 
+    // 06/03 Lana add new function
+    var time_limit = document.getElementById('time_limit').value;
+    var dt_time = document.getElementById('DT_time').value;
+    var tt_time = document.getElementById('TT_time').value;
+
+
     //驗證
     let check = input_check_saveseq();
     if(check){
@@ -724,7 +733,10 @@ function saveseq(){
                 seq_ok_stop:seq_ok_stop,
                 opt_val: opt_val,
                 seq_k_val: seq_k_val,
-                seq_ofs: seq_ofs
+                seq_ofs: seq_ofs,
+                time_limit: time_limit,
+                dt_time: dt_time,
+                tt_time: tt_time
 
             },
             success: function(response) {
@@ -786,6 +798,11 @@ function edit_seq(seqid) {
                 var [, seq_ok] = cleanString.match(/\[seq_ok]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_ok_stop] = cleanString.match(/\[seq_ok_stop]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_opt] = cleanString.match(/\[seq_opt]\s*=>\s*([^ ]+)/) || [, null];
+
+                var [, time_limit] = cleanString.match(/\[time_limit]\s*=>\s*([^ ]+)/) || [, null];
+                var [, dt_time] = cleanString.match(/\[dt_time]\s*=>\s*([^ ]+)/) || [, null];
+                var [, tt_time] = cleanString.match(/\[tt_time]\s*=>\s*([^ ]+)/) || [, null];
+
                
         
                 document.getElementById('editseq').style.display = 'block';
@@ -806,6 +823,18 @@ function edit_seq(seqid) {
 
                 var radioButtons_2 = document.getElementsByName("edit_opt_option");
                 setRadioButton_value(radioButtons_2, seq_opt);
+
+                document.getElementById("edit_time_limit").value = time_limit;
+                document.getElementById("edit_DT_time").value = dt_time;
+                document.getElementById("edit_TT_time").value = tt_time;
+
+                //✅ Gọi lại update hiển thị DT & TT sau khi gán dữ liệu
+                updateThresholdInputs(
+                    document.getElementById("edit_time_limit"),
+                    document.getElementById("edit_DT_time"),
+                    document.getElementById("edit_TT_time")
+                );
+
   
             },
             error: function(xhr, status, error) {
@@ -828,6 +857,11 @@ function edit_seq_save(){
     var seq_ns = document.getElementById('edit_seq_ns').value;
     var opt_val = document.querySelector('input[name="edit_opt_option"]:checked').value;
 
+    var time_limit = document.getElementById('edit_time_limit').value;
+    var dt_time = document.getElementById('edit_DT_time').value;
+    var tt_time = document.getElementById('edit_TT_time').value;
+
+
     //驗證
     let check = input_check_editseq();
     
@@ -848,7 +882,10 @@ function edit_seq_save(){
                 seq_k_vale: seq_k_val,
                 seq_ofs: seq_ofs,
                 seq_ns: seq_ns,
-                opt_val: opt_val
+                opt_val: opt_val,
+                time_limit: time_limit,
+                dt_time: dt_time,
+                tt_time: tt_time
 
             },
             success: function(response) {
@@ -1014,6 +1051,11 @@ function validateInput(element, pattern, min, max) {
 
 function input_check_saveseq() {
 
+    // Check time limit options
+    var time_limit = document.getElementById('time_limit').value;
+    var dt_time_element = document.getElementById('DT_time');
+    var tt_time_element = document.getElementById('TT_time');
+
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 
     let conditions = [
@@ -1022,6 +1064,36 @@ function input_check_saveseq() {
         { id: 'seq_k_val', pattern: /^[0-9]+$/, min: 40, max: 300 },
         { id: 'seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
+
+    if (time_limit === "1") {
+        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
+            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+            isFormValid = false;
+        } else {
+            dt_time_element.nextElementSibling.innerHTML = "";
+        }
+    } else if (time_limit === "2") {
+        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
+            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+            isFormValid = false;
+        } else {
+            tt_time_element.nextElementSibling.innerHTML = "";
+        }
+    } else if (time_limit === "3") {
+        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
+            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+            isFormValid = false;
+        } else {
+            dt_time_element.nextElementSibling.innerHTML = "";
+        }
+
+        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
+            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+            isFormValid = false;
+        } else {
+            tt_time_element.nextElementSibling.innerHTML = "";
+        }
+    }
 
     let isFormValid = true;
 
@@ -1059,6 +1131,12 @@ function input_check_saveseq() {
 
 function input_check_editseq() {
 
+    // Kiểm tra thời gian theo time_limit
+    var time_limit = document.getElementById('edit_time_limit').value;
+    var dt_time_element = document.getElementById('edit_DT_time');
+    var tt_time_element = document.getElementById('edit_TT_time');
+
+
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 
     let conditions = [
@@ -1067,6 +1145,37 @@ function input_check_editseq() {
         { id: 'edit_seq_k_val', pattern: /^[0-9]+$/, min: 40, max: 300 },
         { id: 'edit_seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
+
+    if (time_limit === "1") {
+        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
+            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+            isFormValid = false;
+        } else {
+            dt_time_element.nextElementSibling.innerHTML = "";
+        }
+    } else if (time_limit === "2") {
+        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
+            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+            isFormValid = false;
+        } else {
+            tt_time_element.nextElementSibling.innerHTML = "";
+        }
+    } else if (time_limit === "3") {
+        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
+            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+            isFormValid = false;
+        } else {
+            dt_time_element.nextElementSibling.innerHTML = "";
+        }
+
+        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
+            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+            isFormValid = false;
+        } else {
+            tt_time_element.nextElementSibling.innerHTML = "";
+        }
+    }
+
 
     let isFormValid = true;
 

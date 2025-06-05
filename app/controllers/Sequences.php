@@ -79,8 +79,8 @@ class Sequences extends Controller
             $seq_ofs = isset($_POST['seq_ofs']) ? intval($_POST['seq_ofs']) : 0;  
 
             $time_limit = isset($_POST['time_limit']) ? intval($_POST['time_limit']) : null;
-            $dt_time = isset($_POST['dt_time']) ? floatval($_POST['dt_time']) : 0;
-            $tt_time = isset($_POST['tt_time']) ? floatval($_POST['tt_time']) : 0;
+            $dt_time = isset($_POST['dt_time']) ? intval($_POST['dt_time']) : 0;
+            $tt_time = isset($_POST['tt_time']) ? intval($_POST['tt_time']) : 0;
 
 
             $seq_name = $_POST['seq_name'];
@@ -214,8 +214,8 @@ class Sequences extends Controller
             $seq_ofs = isset($_POST['seq_ofs']) ? intval($_POST['seq_ofs']) : 0;  
 
             $time_limit = isset($_POST['time_limit']) ? intval($_POST['time_limit']) : null;
-            $dt_time = isset($_POST['dt_time']) ? floatval($_POST['dt_time']) : 0;
-            $tt_time = isset($_POST['tt_time']) ? floatval($_POST['tt_time']) : 0;
+            $dt_time = isset($_POST['dt_time']) ? intval($_POST['dt_time']) : 0;
+            $tt_time = isset($_POST['tt_time']) ? intval($_POST['tt_time']) : 0;
 
 
             #驗證seq_name 
