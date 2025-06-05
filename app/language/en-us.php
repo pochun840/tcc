@@ -305,6 +305,7 @@ $text['kgf.m'] = 'Kgf.m';
 $text['N.m'] = 'N.m';
 $text['kgf.cm'] = 'Kgf.cm';
 $text['lbf.in'] = 'Lbf.in';
+$text['cN.m'] = "cN.m";
 
 
 

@@ -345,7 +345,7 @@ class Miscellaneous{
                 }
             }
         }
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
         return $is_single ? (string)$convertedValues[0] : $convertedValues;
     }
 
@@ -402,6 +402,9 @@ class Miscellaneous{
 
         return $result;
     }
+
+
+   
 
 
     public function get_unit_name_by_index($index) {

@@ -561,10 +561,39 @@ class Step extends Controller
             $input_check = false; 
         }
 
+
+        //取得控制器的扭力單位 
+        $device = $this->Device_Info();
+        $device_torque_unit = (int)$device['device_torque_unit'];
+
+        $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
+        $unit_name = $unit_arr[$device_torque_unit];
+
         if($input_check){
 
             $res = $this->stepModel->getStepNo($jobid, $seqid, $stepid);
+            
+            //這邊強制
+            //target_tor
+
+            $target_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['target_tor'],1); 
+            $tor_hi_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_hi'],1); 
+            $tor_lo_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_lo'],1); 
+
+            if(!empty($target_tor_tmp[$unit_name])){
+                $res[0]['target_tor'] = $target_tor_tmp[$unit_name];
+            }
+
+            if(!empty($tor_hi_tmp[$unit_name])){
+                $res[0]['tor_hi'] = $tor_hi_tmp[$unit_name];
+            }
+
+            if(!empty($tor_lo_tmp[$unit_name])){
+                $res[0]['tor_lo'] = $tor_lo_tmp[$unit_name];
+            }
+
             print_r($res[0]);
+            
         }
         
     }

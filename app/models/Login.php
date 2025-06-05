@@ -123,14 +123,17 @@ class Login{
 
     // 检查同时登录用户数是否达到限制
     public function get_max_user() {
-
-        // 查询当前活动会话的数量
         $result = $this->db_iDas_login->query("SELECT * FROM config WHERE config_name = 'max_concurrent_users' ");
+        
+        // 若查無資料或查詢失敗就直接結束
+        if (!$result) return;
+        
         $row = $result->fetch(PDO::FETCH_ASSOC);
-        $max_user = $row['config_value'];
+        if (!$row) return;
 
-        return (int)$max_user;
+        return (int)$row['config_value'];
     }
+
 
 
 
