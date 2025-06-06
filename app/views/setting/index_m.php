@@ -422,8 +422,6 @@ function change_datetime() {
         }
     };
 
-    alert(newTime);
-
     var msg = messages[language] || messages['default'];
 
     if (!newTime) {

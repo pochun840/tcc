@@ -20,10 +20,9 @@ class Step extends Controller
     }
 
 
-    public function index($job_id,$seq_id){
-        if( isset($job_id) && !empty($job_id)  && isset($seq_id) && !empty($seq_id)){
+    public function index($job_id, $seq_id, $tools = null) {
 
-        }else{
+        if (empty($job_id) || empty($seq_id)) {
             $job_id = 1;
             $seq_id = 1;
         }
@@ -33,159 +32,118 @@ class Step extends Controller
         $target_option = $this->MiscellaneousModel->details("target_option");
         $torque_unit   = $this->MiscellaneousModel->details("torque_unit");
         $target_option_change = $this->MiscellaneousModel->details("target_option_change");
-
         $target_option_only_tor = $this->MiscellaneousModel->details("target_option_only_tor");
+
         $formatted_array = [];
-        foreach ( $target_option_only_tor as $index => $item) {
-            $formatted_array[] = array(
-                'value' => $index, 
-                'text' => $item   
-            );
+        foreach ($target_option_only_tor as $index => $item) {
+            $formatted_array[] = ['value' => $index, 'text' => $item];
         }
         $json = json_encode($formatted_array);
 
         $direction = $this->MiscellaneousModel->details('rev_direction');
         $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
-        $seqinfo   = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
-  
-        $tools     = $this->ToolModel->GetToolInfo();
+        $seqinfo   = $this->sequenceModel->search_seqinfo($job_id, $seq_id);
 
-        $step_count = $this->stepModel->countstep($job_id, $seq_id);
-        $step_count = intval($step_count);
-        $step_id = intval($step_count);
-        if($step_count == 0){
-            $step_count = 1;
-            $step_id = 1;
+        $tools_from_outside = is_array($tools) && isset($tools['__from_outside']) && $tools['__from_outside'] === true;
+        if (!$tools_from_outside) {
+            $tools = $this->ToolModel->GetToolInfo();
         }
 
-        $check = $this->stepModel->check_step_target($job_id,$seq_id,$step_id);
+        $step_count = intval($this->stepModel->countstep($job_id, $seq_id));
+        $step_id = ($step_count === 0) ? 1 : $step_count;
 
+        $check = $this->stepModel->check_step_target($job_id, $seq_id, $step_id);
         $res_device = $this->SettingModel->GetControllerInfo();
-        if(!empty($res_device)){
+
+        if (!empty($res_device)) {
             $step_torque_unit = (int)$res_device['device_torque_unit'];
-
-
-            $unit_name = $torque_unit[$step_torque_unit];
-  
-        }
-        
-        if(empty($step)){
-            $stepid_new = 1;
-        }else{
-            $stepid_new = count($step) + 1 ;
+            $unit_name = $torque_unit[$step_torque_unit] ?? '';
         }
 
-        if(!empty($check[0]['count_records'])){
-            $count_records = (int)$check[0]['count_records'];
-            $check_step_torque = 1;
-        }else{
-            $check_step_torque = '';   
-            $count_records = ''; 
-        }
+        $stepid_new = empty($step) ? 1 : count($step) + 1;
 
-        #取得tools的型號
-        $tools = $this->ToolModel->GetToolInfo();
-        if(!empty($tools)){
-            $tools_id = (int)$tools['SID5'];
-        }
+        $count_records = !empty($check[0]['count_records']) ? (int)$check[0]['count_records'] : '';
+        $check_step_torque = !empty($check[0]['count_records']) ? 1 : '';
 
-        #用job_id && seq_id查詢是否有使用最佳化 
-        $seq_data = $this->sequenceModel->search_seqinfo($job_id,$seq_id);
-        if(!empty($seq_data)){
-            $seq_opt = (int)$seq_data[0]['seq_opt'];
-        }
+        $tools_id = !empty($tools['SID5']) ? (int)$tools['SID5'] : null;
 
-        // ✅ 扭力單位換算處理
-        if (!empty($tools)) {
+        $seq_data = $this->sequenceModel->search_seqinfo($job_id, $seq_id);
+        $seq_opt = !empty($seq_data) ? (int)$seq_data[0]['seq_opt'] : null;
+
+        // ✅ 只有在不是外部傳入的情況下才進行 torque 換算處理
+        if (!$tools_from_outside && !empty($tools)) {
             $tool_min_torque = floatval($tools['tool_mintorque']);
             $tool_max_torque = floatval($tools['tool_maxtorque']);
 
-            // 從控制器取得扭力單位設定
-            $res_device = $this->SettingModel->GetControllerInfo();
             if (!empty($res_device)) {
-                $step_torque_unit = (int)$res_device['device_torque_unit']; // ex: 0~4
+                $step_torque_unit = (int)$res_device['device_torque_unit'];
+                $unit_name = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit);
 
-                // 最大扭力上限 +10%，並往下取至最接近 .0
                 $tools['tool_maxtorque_diff'] = round($tool_max_torque * 1.1, 3);
                 $tools['tool_mintorque_diff'] = floor($tools['tool_maxtorque_diff'] * 10) / 10;
 
-                // 換算低/高扭力（從 N.m 轉換成控制器設定單位）
-                $unit_name       = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit); //取得扭力單位的中文名稱
-                $low_torque_arr  = $this->MiscellaneousModel->convert_all_torque_units($tool_min_torque, 1); // 1 = N.m
-                $high_torque_arr = $this->MiscellaneousModel->convert_all_torque_units(55, 1); // 假設高扭力為 55 N.m
+                $low_torque_arr = $this->MiscellaneousModel->convert_all_torque_units($tool_min_torque, 1);
+                $high_torque_arr = $this->MiscellaneousModel->convert_all_torque_units(55, 1); // test value
 
-                if (!empty($low_torque_arr[$unit_name])) {
+                if (isset($low_torque_arr[$unit_name])) {
                     $tools['tool_low_torque'] = $low_torque_arr[$unit_name];
                 }
 
-                if (!empty($high_torque_arr[$unit_name])) {
+                if (isset($high_torque_arr[$unit_name])) {
                     $tools['tool_high_torque'] = $high_torque_arr[$unit_name];
                 }
 
-
-              
-                
-                $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1); // from N.m
+                $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1);
                 $tmp_torque_2 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_maxtorque'], 1);
 
-                if (is_array($tmp_torque_1) && isset($tmp_torque_1[$unit_name])) {
+                if (isset($tmp_torque_1[$unit_name])) {
                     $tools['tool_mintorque'] = $tmp_torque_1[$unit_name];
                 }
 
-                if (is_array($tmp_torque_2) && isset($tmp_torque_2[$unit_name])) {
+                if (isset($tmp_torque_2[$unit_name])) {
                     $tools['tool_maxtorque'] = $tmp_torque_2[$unit_name];
                 }
 
-
-                $tmp_torque_unified = $this->MiscellaneousModel->convert_all_torque_units(55, 1); 
-                if (is_array( $tmp_torque_unified) && isset( $tmp_torque_unified[$unit_name])) {
-                    $tools['tool_maxtorque_unified'] =  $tmp_torque_unified[$unit_name];
+                $tmp_torque_unified = $this->MiscellaneousModel->convert_all_torque_units(55, 1);
+                if (isset($tmp_torque_unified[$unit_name])) {
+                    $tools['tool_maxtorque_unified'] = $tmp_torque_unified[$unit_name];
                 }
-
-
             }
         }
 
-        $check_torque = $this->stepModel->chek_step_target_torque($job_id,$seq_id);
-        if(!empty($check_torque)){
-            $counts_torque = intval($check_torque[0]['counts']);
-        }
+        $check_torque = $this->stepModel->chek_step_target_torque($job_id, $seq_id);
+        $counts_torque = !empty($check_torque) ? (int)$check_torque[0]['counts'] : 0;
 
-
-
-        $data = array(
+        $data = [
             'isMobile' => $isMobile,
             'step' => $step,
             'target_option' => $target_option,
-            'target_option_change' =>$target_option_change,
+            'target_option_change' => $target_option_change,
             'target_option_only_tor_json' => $json,
             'direction' => $direction,
             'job_id' => $job_id,
             'seq_id' => $seq_id,
             'step_id' => $stepid_new,
             'unit_arr' => $unit_arr,
-            'step_torque_unit' => $step_torque_unit,
+            'step_torque_unit' => $step_torque_unit ?? '',
             'check' => $check,
-            'seq_id' => $seq_id,
-            'unit_name' => $unit_name,
+            'unit_name' => $unit_name ?? '',
             'check_step_torque' => $check_step_torque,
-            'check' => $check,
             'step_count' => $step_count,
             'tools' => $tools,
             'count_records' => $count_records,
             'tools_id' => $tools_id,
-            'seq_opt'  => $seq_opt,
+            'seq_opt' => $seq_opt,
             'counts_torque' => $counts_torque
+        ];
 
-        );
-        
-        if($isMobile){
+        if ($isMobile) {
             $this->view('step/index_m', $data);
-        }else{
+        } else {
             $this->view('step/index', $data);
         }
-        
     }
+
 
     public function create_step(){
 
@@ -572,27 +530,55 @@ class Step extends Controller
         if($input_check){
 
             $res = $this->stepModel->getStepNo($jobid, $seqid, $stepid);
+
+            $step_tor_unit = (int)$res[0]['tor_unit'];
+
+            if($device_torque_unit != $step_tor_unit ){
+
+                $target_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['target_tor'],1); 
+                $tor_hi_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_hi'],1); 
+                $tor_lo_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_lo'],1); 
+
+                //取得起子的資訊 重新調整 上下限
+                $tools = $this->ToolModel->GetToolInfo();
+
+                $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1); // from N.m
+                $tmp_torque_2 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_maxtorque'], 1);
+
+                if (is_array($tmp_torque_1) && isset($tmp_torque_1[$unit_name])) {
+                    $tools['tool_mintorque'] = $tmp_torque_1[$unit_name];
+                }
+
+                if (is_array($tmp_torque_2) && isset($tmp_torque_2[$unit_name])) {
+                    $tools['tool_maxtorque'] = $tmp_torque_2[$unit_name];
+                }
+
+
+
+                if(!empty($target_tor_tmp[$unit_name])){
+                    $res[0]['target_tor'] = rtrim(rtrim((string)$target_tor_tmp[$unit_name], '0'), '.');
+                }
+
+                if(!empty($tor_hi_tmp[$unit_name])){
+                    $res[0]['tor_hi'] = rtrim(rtrim((string)$tor_hi_tmp[$unit_name], '0'), '.');
+                }
+
+                if(!empty($tor_lo_tmp[$unit_name])){
+                    $res[0]['tor_lo'] = rtrim(rtrim((string)$tor_lo_tmp[$unit_name], '0'), '.');
+                }
+
+
             
-            //這邊強制
-            //target_tor
 
-            $target_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['target_tor'],1); 
-            $tor_hi_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_hi'],1); 
-            $tor_lo_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_lo'],1); 
-
-            if(!empty($target_tor_tmp[$unit_name])){
-                $res[0]['target_tor'] = $target_tor_tmp[$unit_name];
             }
 
-            if(!empty($tor_hi_tmp[$unit_name])){
-                $res[0]['tor_hi'] = $tor_hi_tmp[$unit_name];
-            }
+            $tools['__from_outside'] = true;
+            //$this->index($jobid,$seqid,$tools);
 
-            if(!empty($tor_lo_tmp[$unit_name])){
-                $res[0]['tor_lo'] = $tor_lo_tmp[$unit_name];
-            }
+            $merged_info = array_merge($res[0], $tools);
+            print_r($merged_info);
 
-            print_r($res[0]);
+            //print_r($res[0]);
             
         }
         

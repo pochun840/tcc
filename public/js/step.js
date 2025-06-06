@@ -131,6 +131,9 @@ function edit_step(stepid) {
             let cleanString = responseJSON.replace(/Array|\\n/g, '');
             cleanString = cleanString.substring(2, cleanString.length - 2);
 
+            console.log(cleanString);
+            
+
             const [, target_opt] = cleanString.match(/\[target_opt\]\s*=>\s*([^ ]+)/) || [, null];
             const [, target_tor] = cleanString.match(/\[target_tor\]\s*=>\s*([^ ]+)/) || [, null];
             const [, target_ang] = cleanString.match(/\[target_ang\]\s*=>\s*([^ ]+)/) || [, null];
@@ -146,9 +149,16 @@ function edit_step(stepid) {
             const [, ds_speed] = cleanString.match(/\[ds_speed\]\s*=>\s*([^ ]+)/) || [, null];
             const [, th_tor] = cleanString.match(/\[th_tor\]\s*=>\s*([^ ]+)/) || [, null];
             const [, step_id] = cleanString.match(/\[step_id\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, tool_maxtorque] = cleanString.match(/\[tool_maxtorque\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, tool_mintorque] = cleanString.match(/\[tool_mintorque\]\s*=>\s*([^ ]+)/) || [, null];
+
+
 
             document.getElementById('editstep').style.display = 'block';
             document.querySelector("select[name='edit_target_opt']").value = target_opt;
+            document.getElementById("tool_max_tor").value = tool_maxtorque;
+            document.getElementById("tool_min_tor").value = tool_mintorque;
+
 
             if (target_opt == 0) {
                 const inputs = document.querySelectorAll("input[type='text'], input[type='radio'], select");

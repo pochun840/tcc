@@ -266,7 +266,7 @@ class Miscellaneous{
             "kgf.m"  => 0,
             "N.m"    => 1,
             "kgf.cm" => 2,
-            "lbf.in" => 3,
+            "Lbf.in" => 3,
             "cN.m"   => 4
         ];
 
@@ -355,7 +355,7 @@ class Miscellaneous{
             0 => "kgf.m",
             1 => "N.m",
             2 => "kgf.cm",
-            3 => "lbf.in",
+            3 => "Lbf.in",
             4 => "cN.m"
         ];
 
@@ -363,7 +363,7 @@ class Miscellaneous{
             0 => 4, // kgf.m
             1 => 3, // N.m
             2 => 2, // kgf.cm
-            3 => 2, // lbf.in
+            3 => 2, // Lbf.in
             4 => 1  // cN.m
         ];
 
