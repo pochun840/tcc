@@ -113,7 +113,7 @@ class Job{
     #修改JOB
     public function update_job_by_id($jobdata){
         
-        $sql = "UPDATE `job` SET  z
+        $sql = "UPDATE `job` SET  
                 job_name = :job_name, 
                 rev_direction = :rev_direction, 
                 rev_speed = :rev_speed, 

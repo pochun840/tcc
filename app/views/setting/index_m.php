@@ -170,7 +170,7 @@
                             <div  class="col t3">
                                 <?php 
                                     if (!empty($data['history_year_arr'])) {
-                                        foreach ($data['history_year_arr']['year'] as $key => $val) { ?>
+                                        foreach ($data['history_year_arr'] as $key => $val) { ?>
                                             <input type="checkbox"
                                                 name="year[]"
                                                 value="<?php echo htmlspecialchars($val); ?>"

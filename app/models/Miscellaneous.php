@@ -375,11 +375,11 @@ class Miscellaneous{
 
         // Step 1: 先轉換為 N.m
         switch ($inputType) {
-            case 0: $Nm = $value * 9.80392156; break; // kgf.m → N.m
-            case 1: $Nm = $value; break;              // N.m
-            case 2: $Nm = $value * 0.0980392156; break; // kgf.cm → N.m
-            case 3: $Nm = $value * 0.1129411763712; break; // lbf.in → N.m
-            case 4: $Nm = $value * 0.001; break; // cN.m → N.m
+            case 0: $Nm = $value * 9.80665; break;             // kgf.m → N.m
+            case 1: $Nm = $value; break;                      // N.m
+            case 2: $Nm = $value * 0.0980665; break;          // kgf.cm → N.m
+            case 3: $Nm = $value * 0.112984829333; break;     // lbf.in → N.m
+            case 4: $Nm = $value * 0.01; break;               // cN.m → N.m
             default: return "Invalid unit index.";
         }
 
@@ -388,11 +388,11 @@ class Miscellaneous{
         // Step 2: 從 N.m 轉換為所有單位
         foreach ($unit_names as $targetType => $unitName) {
             switch ($targetType) {
-                case 0: $converted = $Nm * 0.102; break; // N.m → kgf.m
-                case 1: $converted = $Nm; break;
-                case 2: $converted = $Nm * 10.2; break;
-                case 3: $converted = $Nm * 10.2 * 0.86805; break;
-                case 4: $converted = $Nm * 100; break; // N.m → cN.m
+                case 0: $converted = $Nm / 9.80665; break;             // N.m → kgf.m
+                case 1: $converted = $Nm; break;                       // N.m
+                case 2: $converted = $Nm / 0.0980665; break;           // N.m → kgf.cm
+                case 3: $converted = $Nm / 0.112984829333; break;      // N.m → lbf.in
+                case 4: $converted = $Nm * 100; break;                 // N.m → cN.m
             }
 
             // 四捨五入，保留固定小數位（不去尾）

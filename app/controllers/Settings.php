@@ -39,7 +39,10 @@ class Settings extends Controller
 
 
         $disk_usage_percent = $this->SettingModel->system_storage();
-        $history_year_arr = $this->DataModel->get_data_for_year();
+        //$history_year_arr = $this->DataModel->get_data_for_year();
+        $history_year_arr = $this->get_history_year();
+
+
 
 
      
@@ -568,8 +571,8 @@ class Settings extends Controller
         echo json_encode(array_values($fileList));
     }
 
-    public function delete_files()
-    {
+    public function delete_files(){
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $data = json_decode(file_get_contents("php://input"), true);
             $filesToDelete = $data["files"];
@@ -1507,12 +1510,58 @@ class Settings extends Controller
 
     public function get_controller_login(){
 
-        //判斷控制器是否有登出
         $Controller_Info = $this->ToolModel->GetControllerInfo();
-        if(!empty($Controller_Info)){
-            $user_logIn = $Controller_Info['user_logIn'];
-            $user_logIn = (int)$user_logIn;
-            echo $user_logIn;
+
+        if (empty($Controller_Info) || (int)$Controller_Info['user_logIn'] !== 1) {
+            echo (int)2; // 控制器尚未登入
+            return;
+        }
+
+
+        //檢查欄位 -device_cfg_ver 的value 是否一樣
+        $db1_path = '/var/www/html/database/tcccon.db';
+        $db2_path = '/var/www/html/database/idas_data.db';
+        try {
+            $db1 = new PDO("sqlite:$db1_path");
+            $db2 = new PDO("sqlite:$db2_path");
+
+            $ver1 = $db1->query("SELECT device_cfg_ver FROM device LIMIT 1")->fetchColumn();
+            $ver2 = $db2->query("SELECT device_cfg_ver FROM device LIMIT 1")->fetchColumn();
+
+            if ($ver1 === false || $ver2 === false || $ver1 !== $ver2) {
+                echo (int)1; // 不一致或查不到
+            } else {
+                echo (int)0; // 一致
+            }
+
+        } catch (PDOException $e) {
+            echo (int)1; // DB 錯誤視為不一致
         }
     }
+
+
+    public function get_history_year() {
+        $dir = '/var/www/html/database/';
+        $files = scandir($dir);
+        $years = [];
+
+        foreach ($files as $file) {
+            // 比對格式：data{year}.db 且年份在 1911~9999
+            if (preg_match('/^data(\d{4})\.db$/', $file, $matches)) {
+                $year = (int)$matches[1];
+                if ($year >= 1911 && $year <= 9999) {
+                    $years[] = $year;
+                }
+            }
+        }
+
+        // 大到小排序
+        rsort($years, SORT_NUMERIC);
+
+        // 輸出 JSON 或 array 視需求
+        return $years;
+    }
+
+    
+
 }

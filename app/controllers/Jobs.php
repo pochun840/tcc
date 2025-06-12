@@ -175,7 +175,6 @@ class Jobs extends Controller
                 'rev_direction' => $_POST['directionValue'],
                 'job_ok' => $_POST['jobokValue'],
                 'job_ok_stop' => $_POST['stopjobValue'],
-                'job_ok_stop' => $_POST['job_ok_stop_val'],
                 'rev_cnt_mode' => $rev_cnt_mode,
                 'rev_th_tor' => $rev_th_tor,
                 'rev_th_ang' => $rev_th_ang,
@@ -236,69 +235,31 @@ class Jobs extends Controller
         $jobid = $_POST['jobid'] ?? null;
         if(!empty($jobid)){
             $res  = $this->jobModel->search_jobinfo($jobid);
+            
             $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
-            $unit_name =  $unit_arr[$res['rev_tor_unit']];
-            $res['tor_unit'] = $unit_name;
+        
+            $res_device = $this->SettingModel->GetControllerInfo();
 
-            $rev_th_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res['rev_th_tor'],1); 
-            if(!empty($rev_th_tor_tmp)){
-                $res['rev_th_tor'] = $rev_th_tor_tmp[$unit_name];
+            if (!empty($res_device)) {
+                $step_torque_unit = (int)$res_device['device_torque_unit'];
+                $unit_name_temp =  $unit_arr[$step_torque_unit] ?? '';
             }
 
+            if($res['rev_tor_unit'] != (int)$res_device['device_torque_unit']){
+
+                $res['tor_unit'] = $unit_name_temp;
+
+                $rev_th_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res['rev_th_tor'],1); 
+                if(!empty($rev_th_tor_tmp)){
+                    $res['rev_th_tor'] = $rev_th_tor_tmp[$unit_name_temp];
+                }
+            }else{
+
+                $unit_name =  $unit_arr[$res['rev_tor_unit']];
+                $res['tor_unit'] = $unit_name;
+            }
             print_r($res);
-        }
-
-
-        
-
-        //取得控制器的扭力單位 - Qǔdé kòngzhì qì de niǔlì dānwèi
-        //$device = $this->Device_Info();
-        //$device_torque_unit = (int)$device['device_torque_unit'];
-
-        
-        
-        //$unit_arr  = $this->MiscellaneousModel->details('torque_unit');
-        //$unit_name = $unit_arr[$device_torque_unit];
-
-
-
-        //if($input_check){
-
-            /*$res = $this->jobModel->getJobs($jobid);
-            $rev_tor_unit = (int)$res[0]['rev_tor_unit'];*/
-            
-            //這邊強制 - Điều này là bắt buộc
-            //threshold_tor
-
-            /*if($device_torque_unit != $rev_tor_unit ){
-
-                $rev_th_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['rev_th_tor'],1); 
-            
-                //取得起子的資訊 重新調整 上下限 - Qǔdé qǐzǐ de zīxùn chóngxīn tiáozhěng shàng xiàxiàn
-                $tools = $this->ToolModel->GetToolInfo();
-
-                $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1); // from N.m
-                $tmp_torque_2 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_maxtorque'], 1);
-
-                if (is_array($tmp_torque_1) && isset($tmp_torque_1[$unit_name])) {
-                    $tools['tool_mintorque'] = $tmp_torque_1[$unit_name];
-                }
-
-                if (is_array($tmp_torque_2) && isset($tmp_torque_2[$unit_name])) {
-                    $tools['tool_maxtorque'] = $tmp_torque_2[$unit_name];
-                }
-
-            }
-
-            $tools['__from_outside'] = true;*/
-            //$this->index($jobid,$seqid,$tools);
-
-            //$merged_info = array_merge($res[0], $tools);
-            //print_r($merged_info);
-
-            //print_r($res[0]);
-            
-            
+        }       
     
     }
 
