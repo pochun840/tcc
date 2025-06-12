@@ -76,13 +76,23 @@
         }
     </style>
 
+ 
+    <div style="display:block;">
+        <input id="tool_max_tor" value="<?php echo $data['tools']['tool_maxtorque']; ?>">
+        <input id="tool_min_tor" value="<?php echo $data['tools']['tool_mintorque']; ?>">
+        <input id="tool_max_rpm" value="<?php echo $data['tools']['tool_maxrpm']; ?>">
+        <input id="tool_min_rpm" value="<?php echo $data['tools']['tool_minrpm']; ?>">
+        <input id="rev_tor_unit" value="<?php echo  $data['rev_tor_unit']?>">
+    </div>
+
+
     <!-- Add New Job -->
     <div id="newjob" class="modal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content w3-animate-zoom" style="width: 75%">
                 <header class="w3-container modal-header">
                     <span onclick="closebutton('newjob');"
-                        class="w3-button w3-red w3-display-topright" style="width: 50px; margin: 3px;">&times;</span>
+                        class="w3-button w3-red w3-display-topright" style="width: 50px; height: 42px; margin: 3px; font-size: 18px;">&times;</span>
                     <h3 id='modal_title'><?php echo $text['new_job'];?></h3>
                 </header>
 
@@ -97,21 +107,21 @@
                         <div class="row">
                             <div for="job-name" class="col-6 t1"><?php echo $text['job_name'];?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="job-name form-control input-ms" id="job_name" value ='<?php echo "JOB"."-".$data['next_job_id'];?>' >
+                                <input type="text" class="form-control input-ms" id="job_name" value ='<?php echo "JOB"."-".$data['next_job_id'];?>' >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok'];?> :</div>
-                            <div class="col t2" >
+                            <div class="col t2">
 
-                                <div class="form-check form-check-inline">
+                                <div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="job_ok" id="job_off" value="0" >
             					  <label class="form-check-label" for="job_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
 
-            			      	<div class="form-check form-check-inline">
+            			      	<div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="job_ok" id="job_ok" value="1">
             					  <label class="form-check-label" for="job_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
@@ -122,12 +132,12 @@
                             <div for="Unscrew-Direction" class="col-6 t1"><?php echo $text['job_ok_stop'];?> :</div>
                             <div class="col t2">
 
-                                <div class="form-check form-check-inline">
+                                <div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_off" value="0" >
             					  <label class="form-check-label" for="job_ok_stop_off"> <?php  echo $text['OFF_text']; ?></label>
             					</div>
 
-            			      	<div class="form-check form-check-inline">
+            			      	<div class="form-check form-check-inline col-md-3">
             					  <input class="form-check-input" type="radio" name="job_ok_stop" id="job_ok_stop_ok" value="1">
             					  <label class="form-check-label" for="job_ok_stop_ok"><?php  echo $text['ON_text']; ?></label>
             					</div>
@@ -174,7 +184,7 @@
                         <div class="row">
                             <div class="col-6 t1"><?php echo $text['rev_option']; ?> :</div>
                             <div class="col-4 t2">
-                                <select id="rev_option" name="rev_opt" class="custom-file" style="width:225px">
+                                <select id="rev_cnt_mode" name="rev_cnt_mode" class="custom-file" style="width:225px">
                                     <option value="0"><?php echo $text['OFF_text']; ?></option>
                                     <option value="1"><?php echo $text['threshold_tor']; ?></option>
                                     <option value="2"><?php echo $text['threshold_ang']; ?></option>
@@ -185,17 +195,18 @@
                         </div>
 
                         <div class="row">
-                            <div for="Threshold_Tor" class="col-6 t1"><?php echo $text['threshold_tor']; ?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>) :</div>
+                            <div class="col-6 t1"><?php echo $text['threshold_tor']; ?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="threshold_tor" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="rev_th_tor" name="rev_th_tor">
+                                <input type="hidden" id="rev_tor_unit" value="<?php echo  $data['rev_tor_unit']?>">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div for="Threshold_Ang" class="col-6 t1"><?php echo $text['threshold_ang']; ?> :</div>
+                            <div class="col-6 t1"><?php echo $text['threshold_ang']; ?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="threshold_ang" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="rev_th_ang" name="rev_th_ang">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -308,7 +319,7 @@
                         <div class="row">
                             <div class="col-6 t1"><?php echo $text['rev_option']; ?> :</div>
                             <div class="col-4 t2">
-                                <select id="edit_rev_option" name="edit_rev_opt" class="custom-file" style="width:225px">
+                                <select id="edit_rev_cnt_mode" name="edit_rev_cnt_mode" class="custom-file" style="width:225px">
                                     <option value="0"><?php echo $text['OFF_text']; ?></option>
                                     <option value="1"><?php echo $text['threshold_tor']; ?></option>
                                     <option value="2"><?php echo $text['threshold_ang']; ?></option>
@@ -319,9 +330,10 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-6 t1"><?php echo $text['threshold_tor']; ?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>) :</div>
+                            <div class="col-6 t1"><?php echo $text['threshold_tor']; ?>(<span id='threshold_tor_label'></span>) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_threshold_tor" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_rev_th_tor" name="edit_rev_th_tor">
+                                <input type="hidden" id="rev_tor_unit" value="<?php echo  $data['rev_tor_unit']?>">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -329,7 +341,7 @@
                         <div class="row">
                             <div class="col-6 t1"><?php echo $text['threshold_ang']; ?> :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_threshold_ang" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_rev_th_ang" name="edit_rev_th_ang">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -438,6 +450,8 @@ window.onclick = function(event) {
 window.max_rpm_diff = "<?php echo $data['tools']['tool_maxrpm']?>";
 window.max_rpm_diff = "<?php echo $data['tools']['tool_minrpm']?>";
 
+let rev_tor_unit = '<?php echo $data['rev_tor_unit']?>';
+
 var jobid ='';
 var old_jobname = '';
 var rows = document.getElementsByTagName("tr");
@@ -475,9 +489,11 @@ function savejob() {
     var rev_force_val     = document.getElementById("rev_force").value;
 
     // 05/29 Lana add new function
-    var rev_option     = document.getElementById("rev_option").value;
-    var threshold_tor     = document.getElementById("threshold_tor").value;
-    var threshold_ang     = document.getElementById("threshold_ang").value;
+    var rev_cnt_mode     = document.getElementById("rev_cnt_mode").value;
+    var rev_th_tor     = document.getElementById("rev_th_tor").value;
+    var rev_th_ang     = document.getElementById("rev_th_ang").value;
+
+    var rev_tor_unit = <?php echo  $data['rev_tor_unit'] ?>
 
     var directionElement = document.querySelector('input[name="direction"]:checked');
     var direction_val = directionElement ? directionElement.value : null;
@@ -503,9 +519,10 @@ function savejob() {
                 jobname_val: jobname_val,
                 rev_speed_val: rev_speed_val,
                 rev_force_val: rev_force_val,
-                rev_option: rev_option,
-                threshold_tor: threshold_tor,
-                threshold_ang: threshold_ang,
+                rev_cnt_mode: rev_cnt_mode,
+                rev_th_tor: rev_th_tor,
+                rev_th_ang: rev_th_ang,
+                rev_tor_unit: rev_tor_unit,
                 direction_val: direction_val, //起子方向
                 job_ok_val: job_ok_val,
                 job_ok_stop_val:job_ok_stop_val
@@ -677,35 +694,39 @@ function input_check_savejob() {
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
     let max_rpm = "<?php echo $data['tools']['tool_maxrpm']?>";
     let min_rpm = "<?php echo $data['tools']['tool_minrpm']?>";
+    
+    let rev_cnt_mode = document.getElementById('edit_rev_cnt_mode').value;
+
+
 
     let conditions = [
         { id: 'job_name', pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]+$/, min: null, max: null },
-        { id: 'rev_speed', pattern: /^[0-9]+$/, min: min_rpm, max: max_rpm },
+        { id: 'rev_speed', pattern: /^[0-9]+$/, min: min_rpm, max: 1100 },
         { id: 'rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
 
     ];
 
-    // ✅ Kiểm tra thêm theo chế độ rev_option
-    if (rev_option === "1") { // Threshold Tor.
+    // ✅ Kiểm tra thêm theo chế độ rev_count
+    if (rev_cnt_mode === "1") { // Threshold Tor.
         conditions.push({
-            id: prefix + 'threshold_tor',
+            id: prefix + 'rev_th_tor',
             pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
         });
     }
-    if (rev_option === "2") { // Threshold Ang.
+    if (rev_cnt_mode === "2") { // Threshold Ang.
         conditions.push({
-            id: prefix + 'threshold_ang',
+            id: prefix + 'rev_th_ang',
             pattern: /^\d{1,4}$/ // chỉ kiểm tra là số có tối đa 4 chữ số
         });
     }
-    else if (rev_option === "3" || rev_option === "4") { // All
+    else if (rev_cnt_mode === "3" || rev_cnt_mode === "4") { // All
         conditions.push(
             {
-                id: prefix + 'threshold_tor',
+                id: prefix + 'rev_th_tor',
                 pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
             },
             {
-                id: prefix + 'threshold_ang',
+                id: prefix + 'rev_th_ang',
                 pattern: /^\d{1,4}$/ // chỉ kiểm tra là số có tối đa 4 chữ số
             }
         );
@@ -734,8 +755,8 @@ function input_check_editjob() {
     let max_rpm = parseInt("<?php echo $data['tools']['tool_maxrpm']?>");
     let min_rpm = parseInt("<?php echo $data['tools']['tool_minrpm']?>");
 
-    // Lấy giá trị rev_option từ select
-    let rev_option = document.getElementById('edit_rev_option').value;
+    // Lấy giá trị rev_count từ select
+    let rev_cnt_mode = document.getElementById('edit_rev_cnt_mode').value;
 
     // Nếu dùng prefix cho id (nếu không có thì bỏ dòng này và xài id trực tiếp)
     let prefix = 'edit_';
@@ -746,25 +767,25 @@ function input_check_editjob() {
         { id: 'edit_rev_force', pattern: /^[0-9]+$/, min: 10, max: 110 },
     ];
 
-    // Thêm điều kiện theo rev_option
-    if (rev_option === "1") { // Threshold Tor.
+    // Thêm điều kiện theo rev_count
+    if (rev_cnt_mode === "1") { // Threshold Tor.
         conditions.push({
-            id: prefix + 'threshold_tor',
+            id: prefix + 'rev_th_tor',
             pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
         });
-    } else if (rev_option === "2") { // Threshold Ang.
+    } else if (rev_cnt_mode === "2") { // Threshold Ang.
         conditions.push({
-            id: prefix + 'threshold_ang',
+            id: prefix + 'rev_th_ang',
             pattern: /^\d{1,4}$/ // chỉ kiểm tra là số có tối đa 4 chữ số
         });
-    } else if (rev_option === "3" || rev_option === "4") { // Both
+    } else if (rev_cnt_mode === "3" || rev_cnt_mode === "4") { // Both
         conditions.push(
             {
-                id: prefix + 'threshold_tor',
+                id: prefix + 'rev_th_tor',
                 pattern: /^\d{1,4}(\.\d{1,2})?$/ // chỉ kiểm tra định dạng số, không giới hạn min/max
             },
             {
-                id: prefix + 'threshold_ang',
+                id: prefix + 'rev_th_ang',
                pattern: /^\d{1,4}$/ // chỉ kiểm tra là số có tối đa 4 chữ số
             }
         );

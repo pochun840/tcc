@@ -158,41 +158,54 @@ input:disabled
             </div>
             <div class="chart-setting">
                 <div class="button-chart">
-                    <?php foreach($data['chart_menu_arr'] as $k_menu =>$v_menu){?>
-                            <button type="button" <?php if($data['chart_mode'] == $k_menu){ echo $class ='class="btn-chart active"';}else { echo $class ='class="btn-chart"'; }?>   id= '<?php echo $v_menu['id'];?>' onclick="chart_type('<?php echo $v_menu['id'];?>')" ><?php echo $text[$v_menu['name']];?></button>
-                    <?php }?>
+                    <?php foreach($data['chart_menu_arr'] as $k_menu => $v_menu): ?>
+                        <?php
+                            $isActive = ($data['chart_mode'] == $k_menu) ? 'active' : '';
+                            $id = $v_menu['id'];
+                        ?>
+                        <button
+                            type="button"
+                            class="btn-chart <?php echo $isActive; ?>"
+                            id="<?php echo $id; ?>"
+                            onclick="chart_type('<?php echo $id; ?>')">
+                            <?php echo $text[$v_menu['name']]; ?>
+                        </button>
+                    <?php endforeach; ?>
                 </div>
+
                 <div id="graph" class="display-chart">
-                    <?php if(!empty($data['other_data'])){?>
+                    <?php if (!empty($data['other_data'])): ?>
                         <table class="chart-table">
-                                <thead>
+                            <thead>
+                                <tr>
+                                    <th><?php echo $text['step']; ?></th>
+                                    <?php for ($i = 1; $i <= 4; $i++): ?>
+                                        <th><?php echo $i; ?></th>
+                                    <?php endfor; ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $rows = [
+                                    $text['Torque'] => $data['other_data']['torque'],
+                                    $text['Angle']  => $data['other_data']['angle']
+                                ];
+                                foreach ($rows as $label => $values): ?>
                                     <tr>
-                                        <th><?php echo $text['step']; ?></th>
-                                        <?php for ($i = 1; $i <= 4; $i++){?>
-                                            <th><?php echo $i; ?></th>
-                                        <?php }?>
+                                        <td><?php echo $label; ?></td>
+                                        <?php for ($i = 1; $i <= 4; $i++): ?>
+                                            <td><?php echo isset($values[$i]) ? $values[$i] : 'N/A'; ?></td>
+                                        <?php endfor; ?>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $rows = array(
-                                        $text['Torque'] => $data['other_data']['torque'],
-                                        $text['Angle'] => $data['other_data']['angle']
-                                    );
-                                    foreach ($rows as $label => $values){?>
-                                        <tr>
-                                            <td><?php echo $label; ?></td>
-                                            <?php for ($i = 1; $i <= 4; $i++){?>
-                                                <td><?php echo isset($values[$i]) ? $values[$i] : 'N/A'; ?></td>
-                                            <?php } ?>
-                                        </tr>
-                                    <?php }?>
-                                </tbody>
+                                <?php endforeach; ?>
+                            </tbody>
                         </table>
-                    <?php } ?>
-                    <div id="chart" align='center' style="max-width: 100%; height: 290px;"></div>
-                </div>                         
+                    <?php endif; ?>
+
+                    <div id="chart" align="center" style="max-width: 100%; height: 290px;"></div>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -212,56 +225,53 @@ input:disabled
 
 
     function chart_type(argument) {
-        // Bỏ active khỏi tất cả nút
-        var buttons = document.getElementsByClassName("btn-chart");
-        for (var i = 0; i < buttons.length; i++) {
-            buttons[i].classList.remove("active");
-        }
+        // Cập nhật nút active
+        document.querySelectorAll('.btn-chart').forEach(btn => {
+            btn.classList.toggle('active', btn.id === argument);
+        });
 
-        // Thêm active cho nút đang chọn
-        var activeButton = document.getElementById(argument);
-        activeButton.classList.add("active");
+        // Định nghĩa loại biểu đồ
+        let chart = 1;
+        if (argument === "angle_time") chart = 2;
+        if (argument === "rpm_time") chart = 3;
+        if (argument === "torque_angle") chart = 4;
 
-        // Lấy loại chart
-        var chartIndex = currentUrl.indexOf('chart=');
-        var chart;
-        // 根據選擇的圖表類型設定圖表編號
-        if(argument == "torque_time"){
-            chart = 1;
-        }
-        
-        if(argument == "angle_time"){
-            chart = 2;
-        }
+        // Gọi lại hàm vẽ biểu đồ
+        drawChart(chart);
 
-        if(argument == "rpm_time"){
-            chart = 3;
-        }
-
-        if(argument == "torque_angle"){
-            chart = 4;
-        }
-        var nextinfo_url;
-
-        // 如果 URL 已經包含 chart 參數，更新該參數
-        if (chartIndex !== -1) {
-            var nextChartValue = 'chart=' + chart;
-            nextinfo_url = currentUrl.substring(0, chartIndex) + nextChartValue;
-        } else {
-            var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
-            nextinfo_url = currentUrl + separator + 'chart=' + chart;
-        }
-
-        // 發送請求並跳轉到新的 URL
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                window.location.assign(nextinfo_url);
-            }
-        };
-        xhttp.open("GET", nextinfo_url, true);
-        xhttp.send();
+        // Cập nhật URL, nhưng đảm bảo không có #chart
+        const url = new URL(window.location);
+        url.searchParams.set("chart", chart);
+        url.hash = ''; // xoá phần hash nếu có
+        window.history.replaceState({}, '', url);
     }
+
+
+    function drawChart(chartType) {
+        // Gửi chartType đến server để lấy dữ liệu mới (nếu cần)
+        const url = '?url=Dashboards/get_new_data';
+        const system_sn = document.getElementById('system_sn').value || '--';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ system_sn: system_sn, chart_mode: chartType })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.chart_data) {
+                updateChart(data.chart_data); // Cập nhật biểu đồ
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi khi vẽ chart:', error);
+        });
+    }
+
+
+
 
     var language = getCookie('language');
 
@@ -496,6 +506,14 @@ input:disabled
 
     // 開始即時 API 調用，每 3 秒更新一次數據
     startApiPolling();
+
+    window.onload = function() {
+        // Sau khi load lại trang, cuộn về vị trí top của main content
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            mainContent.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+    };
 </script>
 </body>
 
@@ -518,4 +536,6 @@ input:disabled
     .chart-table th {
         background-color: #f0f0f0; /* Light gray header */
     }
+
+    
 </style> 

@@ -458,4 +458,19 @@ select
 .t1{font-size: 17px; margin: 3px 0px; display: flex; align-items: center;padding-left: 5%}
 .t2{font-size: 17px; margin: 3px 0px;}
 .t3{font-size: 17px; height: 30px; margin-bottom:2px}
+.selected { background-color: #9AC0CD !important;}
+.zoom{zoom:1.2; vertical-align: middle}
+
+
+
+.progress.custom-bg {
+    background-color: #8393A0; 
+    height: 25px;
+}
+
+.progress-bar.custom-bar 
+{
+    background-color: #34C7AC;
+    color: #fff;
+}
 

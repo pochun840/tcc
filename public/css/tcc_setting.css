@@ -229,3 +229,14 @@ th, td
 .output-pin img{ height: 25px; width: 45px}
 .disabled_input{ color: #999; pointer-events: none;}
 .zoom{zoom:1.2; vertical-align: middle}
+
+.progress.custom-bg {
+    background-color: #8393A0; 
+    height: 25px;
+}
+
+.progress-bar.custom-bar 
+{
+    background-color: #34C7AC;
+    color: #fff;
+}

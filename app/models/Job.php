@@ -86,8 +86,8 @@ class Job{
     
     public function create_job($jobdata){
     
-        $sql = "INSERT INTO `job` (job_id, job_name, job_ok,job_ok_stop,rev_direction,rev_force,rev_speed,rev_option,threshold_tor,threshold_ang)";
-        $sql .= " VALUES (:job_id, :job_name, :job_ok,:job_ok_stop,:rev_direction,:rev_force,:rev_speed,:rev_option,:threshold_tor,:threshold_ang);";
+        $sql = "INSERT INTO `job` (job_id, job_name, job_ok,job_ok_stop,rev_direction,rev_force,rev_speed,rev_cnt_mode,rev_th_tor,rev_th_ang,rev_tor_unit)";
+        $sql .= " VALUES (:job_id, :job_name, :job_ok,:job_ok_stop,:rev_direction,:rev_force,:rev_speed,:rev_cnt_mode,:rev_th_tor,:rev_th_ang,:rev_tor_unit);";
     
         $jobdata['job_id'] = intval($jobdata['job_id']);
     
@@ -102,9 +102,10 @@ class Job{
         $statement->bindValue(':rev_speed', $jobdata['rev_speed']);
 
         // Lana add new function
-        $statement->bindValue(':rev_option', $jobdata['rev_option']);
-        $statement->bindValue(':threshold_tor', $jobdata['threshold_tor']);
-        $statement->bindValue(':threshold_ang', $jobdata['threshold_ang']);
+        $statement->bindValue(':rev_cnt_mode', $jobdata['rev_cnt_mode']);
+        $statement->bindValue(':rev_th_tor', $jobdata['rev_th_tor']);
+        $statement->bindValue(':rev_th_ang', $jobdata['rev_th_ang']);
+        $statement->bindValue(':rev_tor_unit', $jobdata['rev_tor_unit']);
         $results = $statement->execute();    
         return $results;
     }
@@ -112,26 +113,29 @@ class Job{
     #修改JOB
     public function update_job_by_id($jobdata){
         
-        $sql = "UPDATE `job` SET  
+        $sql = "UPDATE `job` SET  z
                 job_name = :job_name, 
                 rev_direction = :rev_direction, 
                 rev_speed = :rev_speed, 
                 rev_force = :rev_force,
-                rev_option = :rev_option,
-                threshold_tor = :threshold_tor,
-                threshold_ang = :threshold_ang,
+                rev_cnt_mode = :rev_cnt_mode,
+                rev_th_tor = :rev_th_tor,
+                rev_th_ang = :rev_th_ang,
+                rev_tor_unit = :rev_tor_unit,
                 job_ok = :job_ok,
                 job_ok_stop =:job_ok_stop
                 WHERE job_id = :job_id ";
+
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':job_name', $jobdata['job_name']);
         $statement->bindValue(':rev_force', $jobdata['rev_force']);
         $statement->bindValue(':rev_speed', $jobdata['rev_speed']);
         
         // Lana add new function
-        $statement->bindValue(':rev_option', $jobdata['rev_option']);
-        $statement->bindValue(':threshold_tor', $jobdata['threshold_tor']);
-        $statement->bindValue(':threshold_ang', $jobdata['threshold_ang']);
+        $statement->bindValue(':rev_cnt_mode', $jobdata['rev_cnt_mode']);
+        $statement->bindValue(':rev_th_tor', $jobdata['rev_th_tor']);
+        $statement->bindValue(':rev_th_ang', $jobdata['rev_th_ang']);
+        $statement->bindValue(':rev_tor_unit', $jobdata['rev_tor_unit']);
         
         $statement->bindValue(':rev_direction', $jobdata['rev_direction']);
         $statement->bindValue(':job_ok', $jobdata['job_ok']);
@@ -209,8 +213,8 @@ class Job{
 
     public function copy_sequence_by_job_id($new_temp_seq) {
       
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs, time_limit, dt_time, tt_time)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs, :time_limit, :dt_time, :tt_time);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs, seq_work_limit, seq_dt, seq_tt)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs, :seq_work_limit, :seq_dt, :seq_tt);";
         
         
         $statement = $this->db_iDas->prepare($sql);

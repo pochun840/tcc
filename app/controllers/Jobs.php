@@ -26,11 +26,15 @@ class Jobs extends Controller
         $isMobile  = $this->isMobileCheck();
         $jobs      = $this->jobModel->getJobs();
         $direction = $this->MiscellaneousModel->details('rev_direction');
-        $tools     = $this->ToolModel->GetToolInfo();
         
         // Lấy Unit từ Model => Miscellaneous
         $torque_unit   = $this->MiscellaneousModel->details("torque_unit");
+        $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
 
+        //取得起子的資訊
+        $tools_temp = $this->ToolModel->GetToolInfo();
+
+ 
         $next_job_id_arr = $this->jobModel->get_head_job_id();
         $next_job_id = (int)$next_job_id_arr['missing_id'];
         if(!empty($jobs)){
@@ -44,22 +48,49 @@ class Jobs extends Controller
         // inc Unit Tor tại Setting
         $res_device = $this->SettingModel->GetControllerInfo();
         if(!empty($res_device)){
-            $step_torque_unit = (int)$res_device['device_torque_unit'];
+            $rev_tor_unit = (int)$res_device['device_torque_unit'];
 
-
-            $unit_name = $torque_unit[$step_torque_unit];
-  
+            $unit_name = $torque_unit[$rev_tor_unit];
         }
 
+        // ✅ 只有在不是外部傳入的情況下才進行 torque 換算處理 - Zhǐyǒu zài bùshì wàibù chuán rù de qíngkuàng xià cái jìnxíng torque huànsuàn chǔlǐ
+        if (!empty( $tools_temp)) {
+
+            $tool_min_torque = floatval($tools_temp['tool_mintorque']);
+            $tool_max_torque = floatval($tools_temp['tool_maxtorque']);
+
+            if (!empty($res_device)) {
+                $device_torque_unit = (int)$res_device['device_torque_unit'];
+                $unit_name = $this->MiscellaneousModel->get_unit_name_by_index($rev_tor_unit);
+
+                $tools_temp['tool_maxtorque_diff'] = round($tool_max_torque * 1.1, 3);
+                $tools_temp['tool_mintorque_diff'] = floor($tools_temp['tool_maxtorque_diff'] * 10) / 10;
+
+                $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools_temp['tool_mintorque'], 1);
+                $tmp_torque_2 = $this->MiscellaneousModel->convert_all_torque_units($tools_temp['tool_maxtorque'], 1);
+
+                if (isset($tmp_torque_1[$unit_name])) {
+                    $tools_temp['tool_mintorque'] = $tmp_torque_1[$unit_name];
+                }
+
+                if (isset($tmp_torque_2[$unit_name])) {
+                    $tools_temp['tool_maxtorque'] = $tmp_torque_2[$unit_name];
+                }
+            }
+        }
+
+        
         $data = array(
             'jobint' => $jobIdInt,
             'next_job_id' => $next_job_id,
             'jobs' => $jobs,
             'direction' => $direction,
-            'tools' => $tools,
+            'tools' => $tools_temp,
+            'unit_arr' => $unit_arr,
+            'rev_tor_unit' => $rev_tor_unit ?? '',
             'unit_name' => $unit_name
         );
-        
+
         if($isMobile){
             $this->view('jobs/job_management_m',$data);
         }else{
@@ -79,9 +110,10 @@ class Jobs extends Controller
 
         if(isset($_POST['jobidnew'])){
 
-            $rev_option = isset($_POST['rev_option']) ? intval($_POST['rev_option']) : null;
-            $threshold_tor = isset($_POST['threshold_tor']) ? floatval($_POST['threshold_tor']) : 0.0;
-            $threshold_ang = isset($_POST['threshold_ang']) ? intval($_POST['threshold_ang']) : 0;
+            $rev_cnt_mode = isset($_POST['rev_cnt_mode']) ? intval($_POST['rev_cnt_mode']) : null;
+            $rev_th_tor = isset($_POST['rev_th_tor']) ? floatval($_POST['rev_th_tor']) : 0.0;
+            $rev_th_ang = isset($_POST['rev_th_ang']) ? intval($_POST['rev_th_ang']) : 0;
+            $rev_tor_unit = isset($_POST['rev_tor_unit'])? intval($_POST['rev_tor_unit']) : 1;
 
             $jobdata = array(
                 'job_id' => $_POST['jobidnew'],
@@ -91,9 +123,10 @@ class Jobs extends Controller
                 'rev_direction' => $_POST['direction_val'],
                 'job_ok' => $_POST['job_ok_val'],
                 'job_ok_stop' => $_POST['job_ok_stop_val'],
-                'rev_option' => $rev_option,
-                'threshold_tor' => $threshold_tor,
-                'threshold_ang' => $threshold_ang
+                'rev_cnt_mode' => $rev_cnt_mode,
+                'rev_th_tor' => $rev_th_tor,
+                'rev_th_ang' => $rev_th_ang,
+                'rev_tor_unit' => $rev_tor_unit
             );
 
 
@@ -129,9 +162,10 @@ class Jobs extends Controller
         $jobdata  = array();
         if(isset($_POST['jobid'])){
 
-            $rev_option = isset($_POST['rev_option']) ? intval($_POST['rev_option']) : null;
-            $threshold_tor = isset($_POST['threshold_tor']) ? floatval($_POST['threshold_tor']) : 0.0;
-            $threshold_ang = isset($_POST['threshold_ang']) ? intval($_POST['threshold_ang']) : 0;
+            $rev_cnt_mode = isset($_POST['rev_cnt_mode']) ? intval($_POST['rev_cnt_mode']) : null;
+            $rev_th_tor = isset($_POST['rev_th_tor']) ? floatval($_POST['rev_th_tor']) : 0.0;
+            $rev_th_ang = isset($_POST['rev_th_ang']) ? intval($_POST['rev_th_ang']) : 0;
+            $rev_tor_unit = isset($_POST['rev_tor_unit'])? intval($_POST['rev_tor_unit']) : 1;
 
             $jobdata = array(
                 'job_id' => $_POST['jobid'],
@@ -141,9 +175,11 @@ class Jobs extends Controller
                 'rev_direction' => $_POST['directionValue'],
                 'job_ok' => $_POST['jobokValue'],
                 'job_ok_stop' => $_POST['stopjobValue'],
-                'rev_option' => $rev_option,
-                'threshold_tor' => $threshold_tor,
-                'threshold_ang' => $threshold_ang
+                'job_ok_stop' => $_POST['job_ok_stop_val'],
+                'rev_cnt_mode' => $rev_cnt_mode,
+                'rev_th_tor' => $rev_th_tor,
+                'rev_th_ang' => $rev_th_ang,
+                'rev_tor_unit' => $rev_tor_unit
 
             );
 
@@ -196,11 +232,74 @@ class Jobs extends Controller
     }
 
     public function search_job($jobid){
+        
         $jobid = $_POST['jobid'] ?? null;
         if(!empty($jobid)){
             $res  = $this->jobModel->search_jobinfo($jobid);
+            $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
+            $unit_name =  $unit_arr[$res['rev_tor_unit']];
+            $res['tor_unit'] = $unit_name;
+
+            $rev_th_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res['rev_th_tor'],1); 
+            if(!empty($rev_th_tor_tmp)){
+                $res['rev_th_tor'] = $rev_th_tor_tmp[$unit_name];
+            }
+
             print_r($res);
         }
+
+
+        
+
+        //取得控制器的扭力單位 - Qǔdé kòngzhì qì de niǔlì dānwèi
+        //$device = $this->Device_Info();
+        //$device_torque_unit = (int)$device['device_torque_unit'];
+
+        
+        
+        //$unit_arr  = $this->MiscellaneousModel->details('torque_unit');
+        //$unit_name = $unit_arr[$device_torque_unit];
+
+
+
+        //if($input_check){
+
+            /*$res = $this->jobModel->getJobs($jobid);
+            $rev_tor_unit = (int)$res[0]['rev_tor_unit'];*/
+            
+            //這邊強制 - Điều này là bắt buộc
+            //threshold_tor
+
+            /*if($device_torque_unit != $rev_tor_unit ){
+
+                $rev_th_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['rev_th_tor'],1); 
+            
+                //取得起子的資訊 重新調整 上下限 - Qǔdé qǐzǐ de zīxùn chóngxīn tiáozhěng shàng xiàxiàn
+                $tools = $this->ToolModel->GetToolInfo();
+
+                $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1); // from N.m
+                $tmp_torque_2 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_maxtorque'], 1);
+
+                if (is_array($tmp_torque_1) && isset($tmp_torque_1[$unit_name])) {
+                    $tools['tool_mintorque'] = $tmp_torque_1[$unit_name];
+                }
+
+                if (is_array($tmp_torque_2) && isset($tmp_torque_2[$unit_name])) {
+                    $tools['tool_maxtorque'] = $tmp_torque_2[$unit_name];
+                }
+
+            }
+
+            $tools['__from_outside'] = true;*/
+            //$this->index($jobid,$seqid,$tools);
+
+            //$merged_info = array_merge($res[0], $tools);
+            //print_r($merged_info);
+
+            //print_r($res[0]);
+            
+            
+    
     }
 
     public function check_job_type(){
@@ -258,9 +357,10 @@ class Jobs extends Controller
                         'rev_force' => $old_res['rev_force'],  
                         'job_ok' =>$old_res['job_ok'],
                         'job_ok_stop' => $old_res['job_ok_stop'],
-                        'rev_option' => $old_res['rev_option'],
-                        'threshold_tor' => $old_res['threshold_tor'],
-                        'threshold_ang' => $old_res['threshold_ang']
+                        'rev_cnt_mode' => $old_res['rev_cnt_mode'],
+                        'rev_th_tor' => $old_res['rev_th_tor'],
+                        'rev_th_ang' => $old_res['rev_th_ang'],
+                        'rev_tor_unit' => $old_res['rev_tor_unit']
 
                     );
                     $res = $this->jobModel->create_job($jobdata);
@@ -283,9 +383,9 @@ class Jobs extends Controller
                             $new_temp_seq[$key]['seq_opt'] = $val['seq_opt']; 
                             $new_temp_seq[$key]['seq_k_val'] = $val['seq_k_val']; 
                             $new_temp_seq[$key]['seq_ofs'] = $val['seq_ofs'];
-                            $new_temp_seq[$key]['time_limit'] = $val['time_limit'];
-                            $new_temp_seq[$key]['dt_time'] = $val['dt_time'];
-                            $new_temp_seq[$key]['tt_time'] = $val['tt_time'];
+                            $new_temp_seq[$key]['seq_work_limit'] = $val['seq_work_limit'];
+                            $new_temp_seq[$key]['seq_dt'] = $val['seq_dt'];
+                            $new_temp_seq[$key]['seq_tt'] = $val['seq_tt'];
                         }
 
                         $insertedrecords = $this->jobModel->copy_sequence_by_job_id($new_temp_seq);                

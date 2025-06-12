@@ -7,6 +7,8 @@ class Settings extends Controller
     private $ToolModel;
     private $MiscellaneousModel;
     private $LoginModel;
+    private $DataModel;
+
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
@@ -15,6 +17,7 @@ class Settings extends Controller
         $this->ToolModel = $this->model('Tool');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
         $this->LoginModel = $this->model('Login');
+        $this->DataModel = $this->model('Datas');
     }
 
     // 取得所有info
@@ -34,6 +37,11 @@ class Settings extends Controller
         $unit_arr = $this->MiscellaneousModel->details('torque_unit');
         $barcode_mode = $this->MiscellaneousModel->details('barcode_mode');
 
+
+        $disk_usage_percent = $this->SettingModel->system_storage();
+        $history_year_arr = $this->DataModel->get_data_for_year();
+
+
      
         $data = array(
             'lang_arr'        => $lang,
@@ -46,7 +54,10 @@ class Settings extends Controller
             'job_list'        => $job_list,
             'barcodes'        => $barcodes,
             'unit_arr'        => $unit_arr,
-            'barcode_mode'   => $barcode_mode
+            'barcode_mode'   => $barcode_mode,
+            'disk_usage_percent' => $disk_usage_percent,
+            'history_year_arr' => $history_year_arr 
+
 
         );
         if($isMobile){
@@ -56,6 +67,15 @@ class Settings extends Controller
         }
        
 
+    }
+
+    // Job Threshold Torque Lưu đơn vị mới khi chọn từ Setting
+    public function update_unit_ajax() {
+        $new_unit = $_POST['unit']; // index: 0, 1, 2, 3, 4
+
+        $_SESSION['selected_unit'] = $new_unit; // hoặc ghi vào DB nếu muốn lưu cho từng user
+
+        echo json_encode(['success' => true]);
     }
 
     public function job_tree(){   
@@ -255,6 +275,7 @@ class Settings extends Controller
         return $decimalValue;
     }
 
+    /*
     public function control_setting(){
 
         $file = $this->MiscellaneousModel->lang_load();
@@ -302,9 +323,18 @@ class Settings extends Controller
         }else{
             $input_check = false; 
         }
-
-
-
+        if( isset($_POST['blackout_recovery_option']) && $_POST['blackout_recovery_option']>=0 && $_POST['blackout_recovery_option'] <=1 ){
+            $con_setting['blackout_recovery_option'] = $_POST['blackout_recovery_option'];
+        }else{ 
+            $input_check = false; 
+            $error_message .= "blackout_recovery_option,";
+        }
+        if( isset($_POST['Diskfull_Warning']) && $_POST['Diskfull_Warning']>=0 && $_POST['Diskfull_Warning'] <=99  ){
+            $con_setting['Diskfull_Warning'] = $_POST['Diskfull_Warning'];
+        }else{ 
+            $input_check = false; 
+            $error_message .= "Diskfull_Warning,";
+        }
 
 
         if(!empty($_POST)){
@@ -330,6 +360,74 @@ class Settings extends Controller
                 
           }
 
+        }
+    }
+    */
+
+    public function control_setting() {
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if (!empty($file)) {
+            include $file;
+        }
+
+        $con_setting = [];
+        $input_check = true;
+
+        $get = function($key, $default = null) {
+            return isset($_POST[$key]) && $_POST[$key] !== '' ? $_POST[$key] : $default;
+        };
+
+        // 必填欄位驗證 - Xác thực trường bắt buộc
+        //$required_fields = ['control_id', 'control_name', 'storage_warning', 'torque_filter'];
+        $required_fields = ['control_id', 'control_name', 'lang_val', 'batch_val','buzzer_val','torque_unit'];
+        foreach ($required_fields as $field) {
+            $val = $get($field);
+            if ($val === null) {
+                $input_check = false;
+            } else {
+                $con_setting[$field] = $val;
+            }
+        }
+
+        // 可選欄位（含預設值）- Kě xuǎn lán wèi (hán yù shè zhí)
+        $con_setting['lang_val'] = (int)$get('lang_val', 0);
+        $con_setting['unit_val'] = (int)$get('unit_val', 0);
+
+        $optional_fields = [
+            'counting_method',
+            'circular_archive',
+            'blackout_recovery',
+            'buzzer_mode',
+            'global_downshift_torque',
+            'global_downshift_speed'
+        ];
+
+        foreach ($optional_fields as $field) {
+            $con_setting[$field] = $get($field, ''); // 空字串作為預設值
+        }
+
+        // 若前面驗證通過 - Ruò qiánmiàn yànzhèng tōngguò
+        if ($input_check) {
+            $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
+
+            if ($res['count'] === "1") {
+                $result = $this->SettingModel->Controller_Setting($con_setting);
+
+                if ($result) {
+                    $res_msg = $text['success'] ?? 'Success';
+                    $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg);
+                } else {
+                    $res_msg = $text['fail'] ?? 'Fail';
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                }
+            } else {
+                $res_msg = $text['not_found'] ?? 'Controller not found';
+                $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+            }
+        } else {
+            $res_msg = $text['form_invalid'] ?? 'Invalid input';
+            $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
         }
     }
 
@@ -420,12 +518,8 @@ class Settings extends Controller
         }
     }
 
-    
-
-
-    public function system_storage()
-    {
-        $EMMC_BASE = "/home/kls/tcc/resource/db_emmc/"; //目標目錄路徑
+    public function system_storage(){
+        $EMMC_BASE = "/var/www/html/database/"; //目標目錄路徑
         if( PHP_OS_FAMILY == 'Linux'){
             $size = 0;
             foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($EMMC_BASE)) as $file) {
@@ -433,10 +527,10 @@ class Settings extends Controller
                     $size += $file->getSize();
                 }
             }
-
+    
             $gigatmp = $size / 1024 / 1024 / 1024;
             $device_diskfull_percent = ceil(($gigatmp / 1.1) * 100);
-
+    
             echo "{$device_diskfull_percent}";
         }else{
             echo "X";
@@ -448,12 +542,12 @@ class Settings extends Controller
         $year = date("Y");
 
         if( PHP_OS_FAMILY == 'Linux'){
-            $folderPath = "/home/kls/tcc/resource/db_emmc/"; // 修改為你的資料夾路徑
+            $folderPath = "/var/www/html/database/"; // 修改為你的資料夾路徑
         }else{
             $folderPath = "../"; // 修改為你的資料夾路徑
         }
 
-        $excludeFiles = ["data.db", "tcsdev.db"]; // 要排除的檔案名稱 ,"data{$year}.db"
+        $excludeFiles = ["tcscon.db", "tcsdev.db"]; // 要排除的檔案名稱 ,"data{$year}.db"
         $allowedExtensions = ["db"]; // 允許的附檔名
 
 
@@ -481,7 +575,7 @@ class Settings extends Controller
             $filesToDelete = $data["files"];
 
             if( PHP_OS_FAMILY == 'Linux'){
-                $folderPath = "/home/kls/tcc/resource/db_emmc"; // 修改為你的資料夾路徑
+                $folderPath = "/var/www/html/database"; // 修改為你的資料夾路徑
             }else{
                 $folderPath = "../"; // 修改為你的資料夾路徑
             }
@@ -514,7 +608,6 @@ class Settings extends Controller
     {
         // code...
     }
-
 
 
     //DB匯入提醒判斷

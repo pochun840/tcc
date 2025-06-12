@@ -122,7 +122,9 @@
           try {
               const data = JSON.parse(jsonMessage);
 
-              //console.log(data);
+
+              console.log('eeee');
+              console.log(data);
 
               // 检查IP是否在映射中
               if (ipToTableRow.has(data.client_ip)) {

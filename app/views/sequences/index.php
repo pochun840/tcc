@@ -204,7 +204,7 @@
                         <div class="row">
                             <div class="col-6 t1"><?php echo $text['time_limit'];?> :</div>
                             <div class="col-4 t2">
-                                <select id="time_limit" name="time_limit" class="custom-file" style="width:225px">
+                                <select id="seq_work_limit" name="seq_work_limit" class="custom-file" style="width:225px">
                                     <option value="0"><?php echo $text['OFF_text'];?></option>
                                     <option value="1"><?php echo $text['dt_time'];?></option>
                                     <option value="2"><?php echo $text['tt_time'];?></option>
@@ -214,17 +214,17 @@
                         </div>
 
                         <div class="row">
-                            <div for="DT_time" class="col-6 t1"><?php echo $text['dt_time'];?>(<?php echo $text['Second'];?>) :</div>
+                            <div class="col-6 t1"><?php echo $text['dt_time'];?>(<?php echo $text['Second'];?>) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="DT_time" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="seq_dt" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div for="TT_time" class="col-6 t1"><?php echo $text['tt_time'];?>(<?php echo $text['Second'];?>) :</div>
+                            <div class="col-6 t1"><?php echo $text['tt_time'];?>(<?php echo $text['Second'];?>) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="TT_time" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="seq_tt" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -371,7 +371,7 @@
                         <div class="row">
                             <div for="time_limit" class="col-6 t1"><?php echo $text['time_limit'];?> :</div>
                             <div class="col-4 t2">
-                                <select id="edit_time_limit" name="edit_time_limit" class="custom-file" style="width:225px">
+                                <select id="edit_seq_work_limit" name="edit_seq_work_limit" class="custom-file" style="width:225px">
                                     <option value="0"><?php echo $text['OFF_text'];?></option>
                                     <option value="1"><?php echo $text['dt_time'];?></option>
                                     <option value="2"><?php echo $text['tt_time'];?></option>
@@ -381,17 +381,17 @@
                         </div>
 
                         <div class="row">
-                            <div for="DT_time" class="col-6 t1"><?php echo $text['dt_time'];?>(<?php echo $text['Second'];?>) :</div>
+                            <div class="col-6 t1"><?php echo $text['dt_time'];?>(<?php echo $text['Second'];?>) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_DT_time" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_seq_dt" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div for="TT_time" class="col-6 t1"><?php echo $text['tt_time'];?>(<?php echo $text['Second'];?>) :</div>
+                            <div class="col-6 t1"><?php echo $text['tt_time'];?>(<?php echo $text['Second'];?>) :</div>
                             <div class="col-4 t2">
-                                <input type="text" class="form-control input-ms" id="edit_TT_time" maxlength="" >
+                                <input type="text" class="form-control input-ms" id="edit_seq_tt" maxlength="" >
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -772,9 +772,9 @@ function saveseq(){
     var seq_ofs = document.getElementById("seq_ofs").value;
 
     // 06/03 Lana add new function
-    var time_limit = document.getElementById('time_limit').value;
-    var dt_time = document.getElementById('DT_time').value;
-    var tt_time = document.getElementById('TT_time').value;
+    var seq_work_limit = document.getElementById('seq_work_limit').value;
+    var seq_dt = document.getElementById('seq_dt').value;
+    var seq_tt = document.getElementById('seq_tt').value;
     
     //驗證
     let check = input_check_saveseq();
@@ -796,9 +796,9 @@ function saveseq(){
                 seq_opt: seq_opt,
                 seq_k_val: seq_k_val,
                 seq_ofs: seq_ofs,
-                time_limit: time_limit,
-                dt_time: dt_time,
-                tt_time: tt_time
+                seq_work_limit: seq_work_limit,
+                seq_dt: seq_dt,
+                seq_tt: seq_tt
 
             },
             success: function(response) {
@@ -859,9 +859,9 @@ function edit_seq(seqid) {
                 var [, seq_ok_stop] = cleanString.match(/\[seq_ok_stop]\s*=>\s*([^ ]+)/) || [, null];
                 var [, seq_opt] = cleanString.match(/\[seq_opt]\s*=>\s*([^ ]+)/) || [, null];
 
-                var [, time_limit] = cleanString.match(/\[time_limit]\s*=>\s*([^ ]+)/) || [, null];
-                var [, dt_time] = cleanString.match(/\[dt_time]\s*=>\s*([^ ]+)/) || [, null];
-                var [, tt_time] = cleanString.match(/\[tt_time]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seq_work_limit] = cleanString.match(/\[seq_work_limit]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seq_dt] = cleanString.match(/\[seq_dt]\s*=>\s*([^ ]+)/) || [, null];
+                var [, seq_tt] = cleanString.match(/\[seq_tt]\s*=>\s*([^ ]+)/) || [, null];
                
    
         
@@ -884,15 +884,15 @@ function edit_seq(seqid) {
                 var radioButtons_2 = document.getElementsByName("edit_opt_option");
                 setRadioButton_value(radioButtons_2, seq_opt);
 
-                document.getElementById("edit_time_limit").value = time_limit;
-                document.getElementById("edit_DT_time").value = dt_time;
-                document.getElementById("edit_TT_time").value = tt_time;
+                document.getElementById("edit_seq_work_limit").value = time_limit;
+                document.getElementById("edit_seq_dt").value = dt_time;
+                document.getElementById("edit_seq_tt").value = tt_time;
 
                 //✅ Gọi lại update hiển thị DT & TT sau khi gán dữ liệu
                 updateThresholdInputs(
-                    document.getElementById("edit_time_limit"),
-                    document.getElementById("edit_DT_time"),
-                    document.getElementById("edit_TT_time")
+                    document.getElementById("edit_seq_work_limit"),
+                    document.getElementById("edit_seq_dt"),
+                    document.getElementById("edit_seq_tt")
                 );
                 
   
@@ -916,9 +916,9 @@ function edit_seq_save(){
     var seq_ns = document.getElementById('edit_seq_ns').value;
     var seq_opt = document.querySelector('input[name="edit_opt_option"]:checked').value;
 
-    var time_limit = document.getElementById('edit_time_limit').value;
-    var dt_time = document.getElementById('edit_DT_time').value;
-    var tt_time = document.getElementById('edit_TT_time').value;
+    var seq_work_limit = document.getElementById('edit_seq_work_limit').value;
+    var seq_dt = document.getElementById('edit_seq_dt').value;
+    var seq_tt = document.getElementById('edit_seq_tt').value;
 
 
     //驗證
@@ -939,9 +939,9 @@ function edit_seq_save(){
                 seq_ofs: seq_ofs,
                 seq_ns: seq_ns,
                 seq_opt: seq_opt,
-                time_limit: time_limit,
-                dt_time: dt_time,
-                tt_time: tt_time
+                seq_work_limit: seq_work_limit,
+                seq_dt: seq_dt,
+                seq_tt: seq_tt
 
             },
             success: function(response) {
@@ -1091,9 +1091,9 @@ function validateInput(element, pattern, min, max) {
 function input_check_saveseq() {
 
     // Check time limit options
-    var time_limit = document.getElementById('time_limit').value;
-    var dt_time_element = document.getElementById('DT_time');
-    var tt_time_element = document.getElementById('TT_time');
+    var seq_work_limit = document.getElementById('seq_work_limit').value;
+    var seq_dt_element = document.getElementById('seq_dt');
+    var seq_tt_element = document.getElementById('seq_tttt');
 
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 
@@ -1104,33 +1104,33 @@ function input_check_saveseq() {
         { id: 'seq_ofs', pattern: /^-?(25[0-4]|2[0-4][0-9]|[01]?[0-9]{1,2})$/, min: -254, max: 254 }, 
     ];
 
-    if (time_limit === "1") {
-        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
-            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+    if (seq_work_limit === "1") {
+        if (!validateInput(seq_dt_element, /^[0-9]+$/, 1, 99)) {
+            seq_dt_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
             isFormValid = false;
         } else {
-            dt_time_element.nextElementSibling.innerHTML = "";
+            seq_dt_element.nextElementSibling.innerHTML = "";
         }
-    } else if (time_limit === "2") {
-        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
-            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+    } else if (seq_work_limit === "2") {
+        if (!validateInput(seq_tt_element, /^[0-9]+$/, 1, 6000)) {
+            seq_tt_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
             isFormValid = false;
         } else {
-            tt_time_element.nextElementSibling.innerHTML = "";
+            seq_tt_element.nextElementSibling.innerHTML = "";
         }
-    } else if (time_limit === "3") {
-        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
-            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+    } else if (seq_work_limit === "3") {
+        if (!validateInput(seq_dt_element, /^[0-9]+$/, 1, 99)) {
+            seq_dt_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
             isFormValid = false;
         } else {
-            dt_time_element.nextElementSibling.innerHTML = "";
+            seq_dt_element.nextElementSibling.innerHTML = "";
         }
 
-        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
-            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+        if (!validateInput(seq_tt_element, /^[0-9]+$/, 1, 6000)) {
+            seq_tt_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
             isFormValid = false;
         } else {
-            tt_time_element.nextElementSibling.innerHTML = "";
+            seq_tt_element.nextElementSibling.innerHTML = "";
         }
     }
 
@@ -1171,10 +1171,10 @@ function input_check_saveseq() {
 
 function input_check_editseq() {
 
-    // Kiểm tra thời gian theo time_limit
-    var time_limit = document.getElementById('edit_time_limit').value;
-    var dt_time_element = document.getElementById('edit_DT_time');
-    var tt_time_element = document.getElementById('edit_TT_time');
+    // Kiểm tra thời gian theo seq_work_limit
+    var seq_work_limit = document.getElementById('edit_seq_work_limit').value;
+    var seq_dt_element = document.getElementById('edit_seq_dt');
+    var seq_tt_element = document.getElementById('edit_seq_tt');
 
 
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
@@ -1187,33 +1187,33 @@ function input_check_editseq() {
     ];
 
 
-    if (time_limit === "1") {
-        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
-            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+    if (seq_work_limit === "1") {
+        if (!validateInput(seq_dt_element, /^[0-9]+$/, 1, 99)) {
+            seq_dt_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
             isFormValid = false;
         } else {
-            dt_time_element.nextElementSibling.innerHTML = "";
+            seq_dt_element.nextElementSibling.innerHTML = "";
         }
-    } else if (time_limit === "2") {
-        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
-            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+    } else if (seq_work_limit === "2") {
+        if (!validateInput(seq_tt_element, /^[0-9]+$/, 1, 6000)) {
+            seq_tt_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
             isFormValid = false;
         } else {
-            tt_time_element.nextElementSibling.innerHTML = "";
+            seq_tt_element.nextElementSibling.innerHTML = "";
         }
-    } else if (time_limit === "3") {
-        if (!validateInput(dt_time_element, /^[0-9]+$/, 1, 99)) {
-            dt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
+    } else if (seq_work_limit === "3") {
+        if (!validateInput(seq_dt_element, /^[0-9]+$/, 1, 99)) {
+            seq_dt_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 99`;
             isFormValid = false;
         } else {
-            dt_time_element.nextElementSibling.innerHTML = "";
+            seq_dt_element.nextElementSibling.innerHTML = "";
         }
 
-        if (!validateInput(tt_time_element, /^[0-9]+$/, 1, 6000)) {
-            tt_time_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
+        if (!validateInput(seq_tt_element, /^[0-9]+$/, 1, 6000)) {
+            seq_tt_element.nextElementSibling.innerHTML = `${rangeLabel} 1 ~ 6000`;
             isFormValid = false;
         } else {
-            tt_time_element.nextElementSibling.innerHTML = "";
+            seq_tt_element.nextElementSibling.innerHTML = "";
         }
     }
 

@@ -37,8 +37,8 @@ class Sequence{
     #新增sequence
     public function create_seq($mode, $jobdata) {
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs, time_limit, dt_time, tt_time)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs, :time_limit, :dt_time, :tt_time);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs, seq_work_limit, seq_dt, seq_tt)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs, :seq_work_limit, :seq_dt, :seq_tt);";
    
         $statement = $this->db_iDas->prepare($sql);
     
@@ -63,9 +63,9 @@ class Sequence{
         $statement->bindValue(':seq_k_val', $jobdata['seq_k_val']);
         $statement->bindValue(':seq_ofs', $jobdata['seq_ofs']);
 
-        $statement->bindValue(':time_limit', $jobdata['time_limit']);
-        $statement->bindValue(':dt_time', $jobdata['dt_time']);
-        $statement->bindValue(':tt_time', $jobdata['tt_time']);
+        $statement->bindValue(':seq_work_limit', $jobdata['seq_work_limit']);
+        $statement->bindValue(':seq_dt', $jobdata['seq_dt']);
+        $statement->bindValue(':seq_tt', $jobdata['seq_tt']);
 
 
     
@@ -79,8 +79,8 @@ class Sequence{
 
     public function copy_seq_by_seq_id($new_temp_seq){
 
-        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs, time_limit, dt_time, tt_time)";
-        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs, :time_limit, :dt_time, :tt_time);";
+        $sql = "INSERT INTO `sequence` (job_id, seq_id, seq_name, seq_en, seq_tr, seq_ns, seq_ok, seq_ok_stop, seq_opt, seq_k_val, seq_ofs, seq_work_limit, seq_dt, seq_tt)";
+        $sql .= " VALUES (:job_id, :seq_id, :seq_name, :seq_en, :seq_tr, :seq_ns, :seq_ok, :seq_ok_stop, :seq_opt, :seq_k_val, :seq_ofs, :seq_work_limit, :seq_dt, :seq_tt);";
 
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 
@@ -95,7 +95,7 @@ class Sequence{
 
     public function copy_step_by_seq_id($new_temp_step){
 
-        $sql = "INSERT INTO `step` (job_id, seq_id, step_id,target_opt, target_tor, target_ang, target_delay, tor_hi, tor_lo, ang_hi, ang_lo, rpm, direction, th_mode, ds_tor, ds_speed, th_tor, record_ang, tor_unit  )";
+        $sql = "INSERT INTO `step` (job_id, seq_id, step_id,target_opt, target_tor, target_ang, target_delay, tor_hi, tor_lo, ang_hi, ang_lo, rpm, direction, th_mode, ds_tor, ds_speed, th_tor, record_ang, tor_unit )";
         $sql .= " VALUES (:job_id,:seq_id,:step_id,:target_opt,:target_tor,:target_ang,:target_delay,:tor_hi,:tor_lo,:ang_hi,:ang_lo,:rpm,:direction,:th_mode,:ds_tor,:ds_speed,:th_tor,:record_ang,:tor_unit)";
         
         $statement = $this->db_iDas->prepare($sql);
@@ -163,9 +163,9 @@ class Sequence{
                                   seq_opt = :seq_opt,
                                   seq_k_val = :seq_k_val,
                                   seq_ofs = :seq_ofs,
-                                  time_limit = :time_limit,
-                                  dt_time = :dt_time,
-                                  tt_time = :tt_time
+                                  seq_work_limit = :seq_work_limit,
+                                  seq_dt = :seq_dt,
+                                  seq_tt = :seq_tt
         WHERE job_id = :job_id  AND   seq_id = :seq_id ";
 
 
@@ -181,9 +181,9 @@ class Sequence{
         $statement->bindValue(':job_id', $jobdata['job_id']);
         $statement->bindValue(':seq_id', $jobdata['seq_id']);
 
-        $statement->bindValue(':time_limit', $jobdata['time_limit']);
-        $statement->bindValue(':dt_time', $jobdata['dt_time']);
-        $statement->bindValue(':tt_time', $jobdata['tt_time']);
+        $statement->bindValue(':seq_work_limit', $jobdata['seq_work_limit']);
+        $statement->bindValue(':seq_dt', $jobdata['seq_dt']);
+        $statement->bindValue(':seq_tt', $jobdata['seq_tt']);
         $results = $statement->execute();
 
         return $results;

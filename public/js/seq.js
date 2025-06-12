@@ -12,11 +12,11 @@ function create_seq() {
     document.getElementById('seq_ofs').value = 0;
     document.getElementById('seq_ns').selectedIndex = 0;
 
-    // Đặt select time_limit về 0
-    document.getElementById('time_limit').selectedIndex = 0;
+    // Đặt select seq_work_limit về 0
+    document.getElementById('seq_work_limit').selectedIndex = 0;
 
-    document.getElementById('DT_time').value = 0;
-    document.getElementById('TT_time').value = 0;
+    document.getElementById('seq_dt').value = 0;
+    document.getElementById('seq_tt').value = 0;
 
 }
 
@@ -50,13 +50,13 @@ function updateThresholdInputs(revOptionEl, torInputEl, angInputEl) {
 
 // Gán sự kiện khi DOM đã load
 document.addEventListener("DOMContentLoaded", function () {
-    const revOption = document.getElementById("time_limit");
-    const torInput = document.getElementById("DT_time");
-    const angInput = document.getElementById("TT_time");
+    const revOption = document.getElementById("seq_work_limit");
+    const torInput = document.getElementById("seq_dt");
+    const angInput = document.getElementById("seq_tt");
 
-    const editRevOption = document.getElementById("edit_time_limit");
-    const editTorInput = document.getElementById("edit_DT_time");
-    const editAngInput = document.getElementById("edit_TT_time");
+    const editRevOption = document.getElementById("edit_seq_work_limit");
+    const editTorInput = document.getElementById("edit_seq_dt");
+    const editAngInput = document.getElementById("edit_seq_tt");
 
     // Gán sự kiện cho newseq
     revOption.addEventListener("change", function () {

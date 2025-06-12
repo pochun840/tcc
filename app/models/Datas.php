@@ -127,4 +127,28 @@ class Datas{
             return null; // 發生錯誤也回傳 null
         }
     }
+
+    public function get_data_for_year(){
+
+        $sql = "SELECT strftime('%Y', data_time) AS year, COUNT(*) AS total FROM tcc_data GROUP BY year ORDER BY year ASC";
+        $statement = $this->db_data->prepare($sql);
+        if($statement != false){
+            $statement->execute();
+            $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            $result = [
+                'year' => [],
+                'total' => []
+            ];
+
+            foreach ($rows as $row) {
+                $result['year'][] = $row['year'];
+                $result['total'][] = $row['total'];
+            }
+
+            return $result;
+        } else {
+            return ['year' => [], 'total' => []];
+        }
+    }
 }

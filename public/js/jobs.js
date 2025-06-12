@@ -99,21 +99,13 @@ function create_job() {
     document.getElementById('rev_force').value = 50;
 
     // Đặt select rev_option về 0
-    document.getElementById('rev_option').selectedIndex = 0;
+    document.getElementById('rev_cnt_mode').selectedIndex = 0;
 
     // Set giá trị threshold trước khi trigger change
-    document.getElementById('threshold_tor').value = 0.0;  
-    document.getElementById('threshold_ang').value = 0;
+    document.getElementById('rev_th_tor').value = 0.0;  
+    document.getElementById('rev_th_ang').value = 0;
 
-    /*
-    // Gọi trực tiếp hàm
-    updateThresholdInputs(
-        document.getElementById("rev_option"),
-        document.getElementById("threshold_tor"),
-        document.getElementById("threshold_ang")
-    );
-    */
-
+ 
     // Thiết lập các radio/checkbox
     document.getElementById('rev_direction_CCW').checked = true;
     document.getElementById('job_ok').checked = true;
@@ -133,13 +125,13 @@ function updatejob() {
     var forcevalue = document.getElementById("edit_rev_force").value;
 
     // Các giá trị mới được thêm
-    var rev_option     = document.getElementById("edit_rev_option").value;
-    var threshold_tor  = document.getElementById("edit_threshold_tor").value;
-    var threshold_ang  = document.getElementById("edit_threshold_ang").value;
+    var rev_cnt_mode     = document.getElementById("edit_rev_cnt_mode").value;
+    var rev_th_tor  = document.getElementById("edit_rev_th_tor").value;
+    var rev_th_ang  = document.getElementById("edit_rev_th_ang").value;
 
     // Đảm bảo định dạng số
-    threshold_tor  = parseFloat(threshold_tor) || 0.0;
-    threshold_ang  = parseInt(threshold_ang) || 0;
+    rev_th_tor  = parseFloat(rev_th_tor) || 0.0;
+    rev_th_ang  = parseInt(rev_th_ang) || 0;
 
     var directionValue = document.querySelector('input[name="edit_direction"]:checked').value;
     var jobokValue     = document.querySelector('input[name="edit_job_ok"]:checked').value;
@@ -162,9 +154,9 @@ function updatejob() {
                 directionValue: directionValue,
                 jobokValue: jobokValue,
                 stopjobValue: stopjobValue,
-                rev_option: rev_option,
-                threshold_tor: threshold_tor,
-                threshold_ang: threshold_ang
+                rev_cnt_mode: rev_cnt_mode,
+                rev_th_tor: rev_th_tor,
+                rev_th_ang: rev_th_ang
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
@@ -182,9 +174,9 @@ function updatejob() {
                     localStorage.setItem('direction', directionValue);
 
                     // Lưu thêm 3 giá trị mới
-                    localStorage.setItem('rev_option', rev_option);
-                    localStorage.setItem('threshold_tor', threshold_tor);
-                    localStorage.setItem('threshold_ang', threshold_ang);
+                    localStorage.setItem('rev_cnt_mode', rev_cnt_mode);
+                    localStorage.setItem('rev_th_tor', rev_th_tor);
+                    localStorage.setItem('rev_th_ang', rev_th_ang);
 
                     setTimeout(function () {
                         alertify.closeAll();
@@ -220,11 +212,17 @@ function edit_job(jobid) {
                 var [, job_ok] = cleanString.match(/\[job_ok]\s*=>\s*([^ ]+)/) || [, null];
                 var [, job_ok_stop] = cleanString.match(/\[job_ok_stop]\s*=>\s*([^ ]+)/) || [, null];
 
-                var [, rev_option] = cleanString.match(/\[rev_option]\s*=>\s*([^ ]+)/) || [, null];
-                var [, threshold_tor] = cleanString.match(/\[threshold_tor]\s*=>\s*([^ ]+)/) || [, null];
-                var [, threshold_ang] = cleanString.match(/\[threshold_ang]\s*=>\s*([^ ]+)/) || [, null];
+                var [, rev_cnt_mode] = cleanString.match(/\[rev_cnt_mode]\s*=>\s*([^ ]+)/) || [, null];
+                var [, rev_th_tor] = cleanString.match(/\[rev_th_tor]\s*=>\s*([^ ]+)/) || [, null];
+                var [, rev_th_ang] = cleanString.match(/\[rev_th_ang]\s*=>\s*([^ ]+)/) || [, null];
+                var [,tor_unit] = cleanString.match(/\[tor_unit]\s*=>\s*([^ ]+)/) || [, null];
           
                 document.getElementById('editjob').style.display = 'block';
+
+
+                document.querySelector('#threshold_tor_label').innerText = tor_unit;
+
+
 
 
                 document.getElementById("edit_jobid").value = jobid;
@@ -233,9 +231,9 @@ function edit_job(jobid) {
                 document.getElementById("edit_rev_speed").value = rev_speed;
                 document.getElementById("edit_rev_force").value = rev_force;
 
-                document.getElementById("edit_rev_option").value = rev_option;
-                document.getElementById("edit_threshold_tor").value = threshold_tor;
-                document.getElementById("edit_threshold_ang").value = threshold_ang;
+                document.getElementById("edit_rev_cnt_mode").value = rev_cnt_mode;
+                document.getElementById("edit_rev_th_tor").value = rev_th_tor;
+                document.getElementById("edit_rev_th_ang").value = rev_th_ang;
 
                 var radioButtons = document.getElementsByName("edit_direction");
                 setRadioButtonValue(radioButtons, rev_direction);
@@ -249,9 +247,9 @@ function edit_job(jobid) {
                 
                 // ✅ Gọi lại update hiển thị threshold sau khi gán dữ liệu
                 updateThresholdInputs(
-                    document.getElementById("edit_rev_option"),
-                    document.getElementById("edit_threshold_tor"),
-                    document.getElementById("edit_threshold_ang")
+                    document.getElementById("edit_rev_cnt_mode"),
+                    document.getElementById("edit_rev_th_tor"),
+                    document.getElementById("edit_rev_th_ang")
                 );
                 
               
@@ -327,13 +325,13 @@ function updateThresholdInputs(revOptionEl, torInputEl, angInputEl) {
 
 // Gán sự kiện khi DOM đã load
 document.addEventListener("DOMContentLoaded", function () {
-    const revOption = document.getElementById("rev_option");
-    const torInput = document.getElementById("threshold_tor");
-    const angInput = document.getElementById("threshold_ang");
+    const revOption = document.getElementById("rev_cnt_mode");
+    const torInput = document.getElementById("rev_th_tor");
+    const angInput = document.getElementById("rev_th_ang");
 
-    const editRevOption = document.getElementById("edit_rev_option");
-    const editTorInput = document.getElementById("edit_threshold_tor");
-    const editAngInput = document.getElementById("edit_threshold_ang");
+    const editRevOption = document.getElementById("edit_rev_cnt_mode");
+    const editTorInput = document.getElementById("edit_rev_th_tor");
+    const editAngInput = document.getElementById("edit_rev_th_ang");
 
     // Gán sự kiện cho newjob
     revOption.addEventListener("change", function () {

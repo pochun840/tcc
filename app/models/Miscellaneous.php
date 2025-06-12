@@ -403,9 +403,7 @@ class Miscellaneous{
         return $result;
     }
 
-
    
-
 
     public function get_unit_name_by_index($index) {
         $unit_map = [
