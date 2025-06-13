@@ -3,6 +3,8 @@
 class Admins extends Controller
 {
     // 在建構子中將 Post 物件（Model）實例化
+    private $AdminModel;
+    private $MiscellaneousModel;
     public function __construct()
     {
         $this->AdminModel = $this->model('Admin');

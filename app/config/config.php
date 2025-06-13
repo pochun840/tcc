@@ -1,145 +1,111 @@
 <?php
-// App 根目錄，這是引入 app 資料夾裡的資源用的
-define('APPROOT', dirname(dirname(__FILE__)) . '/');
+// ────────────── 路徑設定 ──────────────
+define('APPROOT', dirname(dirname(__FILE__)) . '/');           // App 根目錄
+define('URLROOT', '../public/');                               // public 網址根目錄（local 用）
+define('SITENAME', 'iDAS DEVICE');                             // 網站名稱
 
-// URL 根目錄，這是引入 public 資料夾裡的資源，或是頁面跳轉時用的
-define('URLROOT', '../public/'); //local用
+// ────────────── 系統模式設定 ──────────────
+define('IDASMODE', '1');                                       // 0: 單機版, 1: 連線版
 
-// 網站名稱
-define('SITENAME', 'iDAS DEVICE');
+// ────────────── 語言設定 ──────────────
+define('LANGUAGE', [
+    0 => ['简中', 'zh-cn'],
+    1 => ['繁中', 'zh-tw'],
+    2 => ['English', 'en-us'],
+]);
 
-// iDAS連線模式 0:單機版 1:連線版
-define('IDASMODE', '1');
+// ────────────── 避免快取 ──────────────
+define('ASSET_VERSION', date('YmdHi'));                        // 每次重新刷新 asset 版本
 
-
-// 設定語言狀態
-$language = array(
-	0=>array('简中','zh-cn'),
-	1=>array('繁中','zh-tw'),
-	2=>array('English','en-us'),
-);
-define('LANGUAGE',$language);
-
-// 每次刷新都取最新時間，避免快取
-define('ASSET_VERSION', date('YmdHi')); 
-
-
-
-// 抓取APP的檔案名稱，判斷是哪一個品牌
-//$brand_code = get_brand_code();
-$brand = '0';//預設值帶kilews
-
-/*if($brand_code == false || $brand_code == 'BF01'){ //Kilews or Windows
-	$brand = '0';
-}else if($brand_code == 'BF02'){ //上海
-	$brand = '2';
-}else if($brand_code == 'BF04'){ //MyTorq
-	$brand = '4';
-}else if($brand_code == 'BF05'){ //SUMAKE
-	$brand = '5';
-}else if($brand_code == 'BF06'){ //DELTA
-	$brand = '6';
-}else if($brand_code == 'BF07'){ //白牌
-	$brand = '7';
-}*/
-
-// iDAS出貨版本 0:Kilews 2:上海 shanhai 4:MyTorque 5:晶元SUMAKE 6:DELTA 7:白牌 6:
+// ────────────── 品牌定義（可切換不同品牌風格） ──────────────
+// $brand = get_brand_code(); // 自動偵測品牌（未啟用）
+$brand = '0'; // 預設為 KILEWS
 define('ICONMODE', $brand);
 
-switch ( ICONMODE ) {
-	case '0': // Kilews
-		define('ICON_NORMAL',       URLROOT.'img/192.png'); // normal icon
-		define('ICON_NORMAL_APPLE', URLROOT.'img/60.png');  // apple icon
-		define('ICON_AGENT',        URLROOT.'img/192.png'); // normal icon
-		define('ICON_AGENT_APPLE',  URLROOT.'img/60.png');  // apple icon
-		define('TITLE_INDEX',       'KILEWS');              // 首頁title
-		define('SUBTITLE_INDEX',    'iDAS for KL-TCC-M7');     // 首頁subtitle
-		define('TITLE_AGENT',       'KILEWS IoT Agent');    // Agent頁title
-		define('DEVICE_TYPE_10',    'KL-TCC');    // Agent頁title
-		break;
-	case '4': // MyTorque
-		define('ICON_NORMAL',       URLROOT.'img/MY-icon/yellow-192x192.png');
-		define('ICON_NORMAL_APPLE', URLROOT.'img/MY-icon/yellow-60x60.png');
-		define('ICON_AGENT',        URLROOT.'img/MY-icon/blue-192x192.png');
-		define('ICON_AGENT_APPLE',  URLROOT.'img/MY-icon/blue-60x60.png');
-		define('TITLE_INDEX',       'MYTORQ');
-		define('SUBTITLE_INDEX',    'iDAS FOR MY-SIRIUS');
-		define('TITLE_AGENT',       'MYTORQ IoT Agent');
-		define('DEVICE_TYPE_10',     'MY-SIRIUS');    // Agent頁title
-		break;
-	case '2': // 上海 shanhai
-		define('ICON_NORMAL',       URLROOT.'img/192.png'); // normal icon
-		define('ICON_NORMAL_APPLE', URLROOT.'img/60.png');  // apple icon
-		define('ICON_AGENT',        URLROOT.'img/192.png'); // normal icon
-		define('ICON_AGENT_APPLE',  URLROOT.'img/60.png');  // apple icon
-		define('TITLE_INDEX',       'KILEWS');              // 首頁title
-		define('SUBTITLE_INDEX',    'iDAS FOR KILEWS');     // 首頁subtitle
-		define('TITLE_AGENT',       'KILEWS IoT Agent');    // Agent頁title
-		define('DEVICE_TYPE_10',     'KL-EPIC');    // Agent頁title
-		break;
-	case '5': // 晶元SUMAKE
-		define('ICON_NORMAL',       URLROOT.'img/192.png'); // normal icon
-		define('ICON_NORMAL_APPLE', URLROOT.'img/60.png');  // apple icon
-		define('ICON_AGENT',        URLROOT.'img/192.png'); // normal icon
-		define('ICON_AGENT_APPLE',  URLROOT.'img/60.png');  // apple icon
-		define('TITLE_INDEX',       'SUMAKE');              // 首頁title
-		define('SUBTITLE_INDEX',    'iDAS FOR SMT-C2');     // 首頁subtitle
-		define('TITLE_AGENT',       'SUMAKE IoT Agent');    // Agent頁title
-		define('DEVICE_TYPE_10',     'SMT-C2');    // Agent頁title
-		break;
-	case '6': // DELTA
-		define('ICON_NORMAL',       URLROOT.'img/192.png'); // normal icon
-		define('ICON_NORMAL_APPLE', URLROOT.'img/60.png');  // apple icon
-		define('ICON_AGENT',        URLROOT.'img/192.png'); // normal icon
-		define('ICON_AGENT_APPLE',  URLROOT.'img/60.png');  // apple icon
-		define('TITLE_INDEX',       'DELTA');              // 首頁title
-		define('SUBTITLE_INDEX',    'iDAS FOR XTCA1');     // 首頁subtitle
-		define('TITLE_AGENT',       'DELTA IoT Agent');    // Agent頁title
-		define('DEVICE_TYPE_10',     'XTCA1');    // Agent頁title
-		break;
-	case '7': // 白牌
-		define('ICON_NORMAL',       URLROOT.'img/192.png'); // normal icon
-		define('ICON_NORMAL_APPLE', URLROOT.'img/60.png');  // apple icon
-		define('ICON_AGENT',        URLROOT.'img/192.png'); // normal icon
-		define('ICON_AGENT_APPLE',  URLROOT.'img/60.png');  // apple icon
-		define('TITLE_INDEX',       '');              // 首頁title
-		define('SUBTITLE_INDEX',    'iDAS FOR OPT-GK TRS1');     // 首頁subtitle
-		define('TITLE_AGENT',       'IoT Agent');    // Agent頁title
-		define('DEVICE_TYPE_10',     'OPT-GK TRS1');    // Agent頁title
-		break;
-	
-	default:
-		define('ICON_NORMAL',       URLROOT.'img/192.png');
-		define('ICON_NORMAL_APPLE', URLROOT.'img/60.png');
-		define('ICON_AGENT',        URLROOT.'img/192.png');
-		define('ICON_AGENT_APPLE',  URLROOT.'img/60.png');
-		define('TITLE_INDEX',       'KILEWS');
-		define('SUBTITLE_INDEX',    'iDAS for TCC-M7');
-		define('TITLE_AGENT',       'KILEWS IoT Agent');
-		define('DEVICE_TYPE_10',    'KL-TCC');    // Agent頁title
-		break;
+// ────────────── ICON & Title 設定表 ──────────────
+$brandConfigs = [
+    '0' => [ // KILEWS
+        'TITLE_INDEX'      => 'KILEWS',
+        'SUBTITLE_INDEX'   => 'iDAS for KL-TCC-M7',
+        'TITLE_AGENT'      => 'KILEWS IoT Agent',
+        'DEVICE_TYPE_10'   => 'KL-TCC',
+        'ICON_NORMAL'      => 'img/192.png',
+        'ICON_NORMAL_APPLE'=> 'img/60.png',
+        'ICON_AGENT'       => 'img/192.png',
+        'ICON_AGENT_APPLE' => 'img/60.png',
+    ],
+    '2' => [ // 上海
+        'TITLE_INDEX'      => 'KILEWS',
+        'SUBTITLE_INDEX'   => 'iDAS FOR KILEWS',
+        'TITLE_AGENT'      => 'KILEWS IoT Agent',
+        'DEVICE_TYPE_10'   => 'KL-EPIC',
+        'ICON_NORMAL'      => 'img/192.png',
+        'ICON_NORMAL_APPLE'=> 'img/60.png',
+        'ICON_AGENT'       => 'img/192.png',
+        'ICON_AGENT_APPLE' => 'img/60.png',
+    ],
+    '4' => [ // MyTorque
+        'TITLE_INDEX'      => 'MYTORQ',
+        'SUBTITLE_INDEX'   => 'iDAS FOR MY-SIRIUS',
+        'TITLE_AGENT'      => 'MYTORQ IoT Agent',
+        'DEVICE_TYPE_10'   => 'MY-SIRIUS',
+        'ICON_NORMAL'      => 'img/MY-icon/yellow-192x192.png',
+        'ICON_NORMAL_APPLE'=> 'img/MY-icon/yellow-60x60.png',
+        'ICON_AGENT'       => 'img/MY-icon/blue-192x192.png',
+        'ICON_AGENT_APPLE' => 'img/MY-icon/blue-60x60.png',
+    ],
+    '5' => [ // SUMAKE
+        'TITLE_INDEX'      => 'SUMAKE',
+        'SUBTITLE_INDEX'   => 'iDAS FOR SMT-C2',
+        'TITLE_AGENT'      => 'SUMAKE IoT Agent',
+        'DEVICE_TYPE_10'   => 'SMT-C2',
+        'ICON_NORMAL'      => 'img/192.png',
+        'ICON_NORMAL_APPLE'=> 'img/60.png',
+        'ICON_AGENT'       => 'img/192.png',
+        'ICON_AGENT_APPLE' => 'img/60.png',
+    ],
+    '6' => [ // DELTA
+        'TITLE_INDEX'      => 'DELTA',
+        'SUBTITLE_INDEX'   => 'iDAS FOR XTCA1',
+        'TITLE_AGENT'      => 'DELTA IoT Agent',
+        'DEVICE_TYPE_10'   => 'XTCA1',
+        'ICON_NORMAL'      => 'img/192.png',
+        'ICON_NORMAL_APPLE'=> 'img/60.png',
+        'ICON_AGENT'       => 'img/192.png',
+        'ICON_AGENT_APPLE' => 'img/60.png',
+    ],
+    '7' => [ // 白牌
+        'TITLE_INDEX'      => '',
+        'SUBTITLE_INDEX'   => 'iDAS FOR OPT-GK TRS1',
+        'TITLE_AGENT'      => 'IoT Agent',
+        'DEVICE_TYPE_10'   => 'OPT-GK TRS1',
+        'ICON_NORMAL'      => 'img/192.png',
+        'ICON_NORMAL_APPLE'=> 'img/60.png',
+        'ICON_AGENT'       => 'img/192.png',
+        'ICON_AGENT_APPLE' => 'img/60.png',
+    ]
+];
+
+// ────────────── 實際註冊常數 ──────────────
+$conf = $brandConfigs[ICONMODE] ?? $brandConfigs['0']; // fallback to 0
+foreach ($conf as $key => $val) {
+    define($key, URLROOT . $val);
 }
 
-
-
-/*function get_brand_code()
+// ────────────── 品牌碼讀取邏輯（備用） ──────────────
+/*
+function get_brand_code()
 {
-	if( PHP_OS_FAMILY == 'Linux'){
-		$directory = '/home/kls/project/system/ltver'; // 指定目錄路徑
-
-		// 取得目錄中的檔案和子目錄列表
-		$fileList = scandir($directory);
-
-		// 移除 "." 和 ".." 兩個特殊條目
-		$fileList = array_diff($fileList, array('.', '..'));
-
-		// 輸出檔案和子目錄列表
-		$explode_result = explode("-",$fileList[2]);
-
-		$brand_code = $explode_result[0];
-
-		return $brand_code;
-	}else{
-		return false;
-	}
-}*/
+    if (PHP_OS_FAMILY === 'Linux') {
+        $directory = '/home/kls/project/system/ltver';
+        if (is_dir($directory)) {
+            $fileList = array_values(array_diff(scandir($directory), ['.', '..']));
+            if (isset($fileList[0])) {
+                $explode = explode('-', $fileList[0]);
+                return $explode[0] ?? false;
+            }
+        }
+    }
+    return false;
+}
+*/
