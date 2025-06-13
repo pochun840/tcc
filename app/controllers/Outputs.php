@@ -3,6 +3,10 @@
 class Outputs extends Controller
 {
     // 在建構子中將 Post 物件（Model）實例化
+    private $OutputModel;
+    private $InputModel;
+    private $MiscellaneousModel;
+    private $jobModel;
     public function __construct()
     {
         $this->OutputModel = $this->model('Output');

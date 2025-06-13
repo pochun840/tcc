@@ -3,6 +3,9 @@
 class Inputs extends Controller
 {
     // 在建構子中將 Post 物件（Model）實例化
+    private $InputModel;
+    private $MiscellaneousModel;
+    private $jobModel;
     public function __construct()
     {
         $this->InputModel = $this->model('Input');

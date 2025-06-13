@@ -39,13 +39,8 @@ class Settings extends Controller
 
 
         $disk_usage_percent = $this->SettingModel->system_storage();
-        //$history_year_arr = $this->DataModel->get_data_for_year();
         $history_year_arr = $this->get_history_year();
 
-
-
-
-     
         $data = array(
             'lang_arr'        => $lang,
             'controller_info' => $controller_info,
@@ -278,94 +273,6 @@ class Settings extends Controller
         return $decimalValue;
     }
 
-    /*
-    public function control_setting(){
-
-        $file = $this->MiscellaneousModel->lang_load();
-        if(!empty($file)){
-            include $file;
-        }
-
-        $input_check = true;
-
-        if( !empty($_POST['control_id']) && isset($_POST['control_id'])  ){
-            $con_setting['control_id'] = $_POST['control_id'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( !empty($_POST['control_name']) && isset($_POST['control_name'])){
-            $con_setting['control_name'] = $_POST['control_name'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( !empty($_POST['lang_val']) && isset($_POST['lang_val'])){
-            $lang_val =  $_POST['lang_val'];
-            intval($lang_val);
-        }else{ 
-            $lang_val = 0;
-        }
-
-        $con_setting['lang_val']  = $lang_val;
-
-        if( !empty($_POST['batch_val']) && isset($_POST['batch_val'])  ){
-            $con_setting['batch_val'] = $_POST['batch_val'];
-        }else{ 
-            $input_check = false; 
-        }
-
-        if( !empty($_POST['buzzer_val']) && isset($_POST['buzzer_val'])  ){
-            $con_setting['buzzer_val'] = $_POST['buzzer_val'];
-        }else{ 
-            $input_check = false;    
-        }
-        //torque_unit
-        if(!empty($_POST['torque_unit']) && isset($_POST['torque_unit']) ){
-            $con_setting['torque_unit'] = $_POST['torque_unit'];
-        }else{
-            $input_check = false; 
-        }
-        if( isset($_POST['blackout_recovery_option']) && $_POST['blackout_recovery_option']>=0 && $_POST['blackout_recovery_option'] <=1 ){
-            $con_setting['blackout_recovery_option'] = $_POST['blackout_recovery_option'];
-        }else{ 
-            $input_check = false; 
-            $error_message .= "blackout_recovery_option,";
-        }
-        if( isset($_POST['Diskfull_Warning']) && $_POST['Diskfull_Warning']>=0 && $_POST['Diskfull_Warning'] <=99  ){
-            $con_setting['Diskfull_Warning'] = $_POST['Diskfull_Warning'];
-        }else{ 
-            $input_check = false; 
-            $error_message .= "Diskfull_Warning,";
-        }
-
-
-        if(!empty($_POST)){
-            $con_setting = $_POST;
-        }
-
-        if($con_setting){
-        
-          $res = $this->SettingModel->GetControllerInfo_count($con_setting['control_id']);
-          if($res['count'] =="1"){
-               
-                $res = $this->SettingModel->Controller_Setting($con_setting);
-                $result = array();
-                if($res){
-                    $res_type = 'Succes';
-                    $res_msg = $text['Edit']." : ". $con_setting['control_id']."  ".$text['success'];
-                    $this->MiscellaneousModel->generateErrorResponse('Succes', $res_msg );
-                }else{
-                    $res_type = 'Error';
-                    $res_msg = $text['Edit']." : ". $con_setting['control_id']."  ".$text['fail'];
-                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
-                }
-                
-          }
-
-        }
-    }
-    */
 
     public function control_setting() {
 
@@ -461,9 +368,14 @@ class Settings extends Controller
     }
     
     public function get_system_time() {
+
         header("Content-Type: text/plain; charset=utf-8");
-        $output = shell_exec("date '+%Y-%m-%d %H:%M:%S'");
-    
+        if (PHP_OS_FAMILY === 'Linux') {
+            $output = shell_exec("date '+%Y-%m-%d %H:%M:%S'");
+        } else {
+            $output = date("Y-m-d H:i:s");
+        }
+
         echo trim($output);
     }
 
@@ -863,11 +775,8 @@ class Settings extends Controller
     }
     
 
-        
-
     //get barcode
     public function GetBarcodes(){
-
         $barcodes = $this->SettingModel->GetAllBarcodes();
         return $barcodes;
     }
@@ -1161,8 +1070,6 @@ class Settings extends Controller
     }
 
 
-
-
     public function Extract_File($file_location,$filename){
 
         // $filename = 'update_package.pack';
@@ -1278,8 +1185,6 @@ class Settings extends Controller
                     $this->logMessage('modbus write 506 ,array = '.implode("','", $data));
                     $this->logMessage('modbus status:'.$modbus->status);
                     $this->logMessage('Import config end');
-                    //echo json_encode(array('error' => '231005','diff' => $diff));
-
 
                     $res_type = 'Success';
                     $res_msg  = 'DB import successful';
@@ -1373,9 +1278,7 @@ class Settings extends Controller
                     exit();
 
                 } catch (Exception $e) {
-                    // Print error information if any
-                    // echo $modbus;
-                    // echo $e;
+      
                     $this->logMessage('modbus write 480 fail');
                     $this->logMessage('modbus status:'.$modbus->status);
                     $this->logMessage('firmware update end');

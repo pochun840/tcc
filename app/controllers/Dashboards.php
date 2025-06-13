@@ -116,7 +116,6 @@ class Dashboards extends Controller
         //取得Step1-4的 torque及 angle
         //$other_data = $this->DashboardModel->get_csv_selected_columns($id);
 
-
         #取得目前的曲線圖模式 制定曲線圖的座標名稱
         $chart_menu_arr = $this->MiscellaneousModel->details('chart_menu');
         $chart_mode_arr = $this->MiscellaneousModel->details('chart_mode');

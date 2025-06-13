@@ -4,8 +4,7 @@ class Tools extends Controller
 {
     private $ToolModel;
     // 在建構子中將 Post 物件（Model）實例化
-    public function __construct()
-    {
+    public function __construct(){
         $this->ToolModel = $this->model('Tool');
     }
 

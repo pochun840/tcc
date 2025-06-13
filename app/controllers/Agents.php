@@ -3,6 +3,8 @@
 class Agents extends Controller
 {
     private $AdminModel;
+    private $MiscellaneousModl;
+    
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
@@ -15,8 +17,7 @@ class Agents extends Controller
 
         $isMobile = $this->isMobileCheck();
         $device_info = $this->Device_Info();
-        $agent_server_ip = $this->AdminModel->Get_Das_Config('agent_server_ip');
-        // $Controller_Info = $this->ToolModel->GetControllerInfo();        
+        $agent_server_ip = $this->AdminModel->Get_Das_Config('agent_server_ip'); 
 
         $data = [
             'isMobile' => $isMobile,

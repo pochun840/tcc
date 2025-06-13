@@ -1,113 +1,104 @@
 <?php
 
-class Database
-{
-    // 定義一些操作 Database 的變數，例如：
-    private $dbh;
-    private $stmt;
-    private $error;
+class Database{
 
-    //private $db_con;// db con
-    //private $db_dev;// db dev
-    private $db_data;// db dev
-    private $db_iDas;//iDas db
+    private $db_data;
+    private $db_iDas;
     private $db_iDas_login;
     private $db_tools;
-    public function __construct()
-    {
-        // 透過 PDO 建立資料庫連線
-  
 
-        // 透過 PHP_OS_FAMILY 判斷，目前執行的系統，決定要採用的DB路徑
-        
-        $Year = date("Y");// data db 用西元年命名
-        $data_db_name = "data".$Year.".db";
-        if( PHP_OS_FAMILY == 'Linux'){
-            if(file_exists('sqlite:/var/www/html/database/tcccon.db') ){
-                $source = '/var/www/html/database/tcccon.db';
-                $destination = '/var/www/html/database/idas_data.db';
-                copy($source, $destination);
-                $this->db_iDas = new PDO('sqlite:' . $destination);
+    public function __construct(){
+
+        //  Linux 下若存在 extracted 資料夾則遞迴刪除
+        if (PHP_OS_FAMILY === 'Linux') {
+            $extractedPath = '/var/www/html/extracted';
+            if (is_dir($extractedPath)) {
+                $this->deleteDirectory($extractedPath);
             }
-
-            $this->db_iDas_login = new PDO('sqlite:/var/www/html/database/itccdev.db'); 
-            $this->db_tools = new PDO('sqlite:/var/www/html/database/tccdev.db');
-
-            if( file_exists('/var/www/html/database/'.$data_db_name) ){
-                $this->db_data = new PDO('sqlite:/var/www/html/database/'.$data_db_name); 
-            }else{
-                $this->db_data = new PDO('sqlite:/var/www/html/tccidas/default_data.db'); //local
-            }
-
-            if (!file_exists('/var/www/html/database/idas_data.db')) {
-                $source = '/var/www/html/database/tcccon.db';
-                $destination = '/var/www/html/database/idas_data.db';
-                copy($source, $destination);
-                $this->db_iDas = new PDO('sqlite:' . $destination);
-            } else {
-                $this->db_iDas = new PDO('sqlite:/var/www/html/database/idas_data.db');
-            }
-
-            
-        }else{
-            //$this->db_con = new PDO('sqlite:../idas_data.db'); 
-            if(file_exists('../'.$data_db_name)){
-                $this->db_data = new PDO('sqlite:../'.$data_db_name); 
-            }
-
-            if (!file_exists('../idas_data.db')) {
-                $source = '../tcccon.db';
-                $destination = '../idas_data.db';
-                copy($source, $destination);
-                $this->db_iDas = new PDO('sqlite:' . $destination);
-            } else {
-                $this->db_iDas = new PDO('sqlite:../idas_data.db');
-            }
-
-            $this->db_iDas_login = new PDO('sqlite:../itccdev.db'); 
-            $this->db_tools = new PDO('sqlite:../tccdev.db'); 
-
         }
 
-        $this->db_iDas->exec('set names utf-8'); 
-        $this->db_iDas_login->exec('set names utf-8'); 
-        $this->db_tools->exec('set names utf-8'); 
+        // 根據目前年份產生資料 DB 的檔名（例如：data2025.db）
+        $year = date("Y");
+        $data_db_name = "data{$year}.db";
 
+        // 根據作業系統決定資料庫路徑
+        $isLinux = PHP_OS_FAMILY === 'Linux';
+        $basePath = $isLinux ? '/var/www/html/database/' : '../';
+        $defaultDataPath = $isLinux ? '/var/www/html/tccidas/default_data.db' : '../default_data.db';
+
+        // 初始化 data 資料庫，如果找不到就使用預設資料庫
+        $this->db_data = $this->initPDO(
+            $basePath . $data_db_name,
+            $defaultDataPath
+        );
+
+        // 初始化 iDas 登入資料庫與工具資料庫
+        $this->db_iDas_login = $this->initPDO($basePath . 'itccdev.db');
+        $this->db_tools = $this->initPDO($basePath . 'tccdev.db');
+
+        // 初始化主 iDas 設定資料庫（若不存在會從 tcccon.db 複製一份）
+        $this->db_iDas = $this->initIpasDb($basePath);
+
+        // 設定 SQLite 使用 UTF-8 編碼（僅影響內部 PRAGMA 設定）
+        $this->execUTF8($this->db_iDas, $this->db_iDas_login, $this->db_tools);
     }
 
-    // Prepare statement with query
-    
-
-    /*public function getDb_dev() {
-        if ($this->db_dev instanceof PDO) {
-            return $this->db_dev;
+    /**
+     * 遞迴刪除整個資料夾
+     */
+    private function deleteDirectory($dir) {
+        if (!file_exists($dir)) return;
+        foreach (scandir($dir) as $item) {
+            if ($item === '.' || $item === '..') continue;
+            $path = $dir . DIRECTORY_SEPARATOR . $item;
+            if (is_dir($path)) {
+                $this->deleteDirectory($path);
+            } else {
+                unlink($path);
+            }
         }
-    }*/
+        rmdir($dir);
+    }
+
+    private function initPDO($path, $fallback = null){
+        if (file_exists($path)) {
+            return new PDO('sqlite:' . $path);
+        } elseif ($fallback && file_exists($fallback)) {
+            return new PDO('sqlite:' . $fallback);
+        }
+        return null;
+    }
+
+    private function initIpasDb($basePath){
+        $idasPath = $basePath . 'idas_data.db';
+        $tccconPath = $basePath . 'tcccon.db';
+        if (!file_exists($idasPath) && file_exists($tccconPath)) {
+            copy($tccconPath, $idasPath);
+        }
+        return new PDO('sqlite:' . $idasPath);
+    }
+
+    private function execUTF8(...$connections){
+        foreach ($connections as $conn) {
+            if ($conn instanceof PDO) {
+                $conn->exec('PRAGMA encoding = "UTF-8"');
+            }
+        }
+    }
 
     public function getDb_data() {
-        if ($this->db_data instanceof PDO) {
-            return $this->db_data;
-        }
+        return $this->db_data;
     }
 
     public function getDb_das() {
-        if ($this->db_iDas instanceof PDO) {
-            return $this->db_iDas;
-        }
+        return $this->db_iDas;
     }
 
     public function getDb_das_login() {
-        if ($this->db_iDas_login instanceof PDO) {
-            return $this->db_iDas_login;
-        }
+        return $this->db_iDas_login;
     }
 
     public function getDb_tools() {
-        if ($this->db_tools instanceof PDO) {
-            return $this->db_tools;
-        }
+        return $this->db_tools;
     }
-
-
-
 }
