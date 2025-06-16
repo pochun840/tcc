@@ -437,15 +437,15 @@ class Miscellaneous{
 
 
 
-    public function lang_load(){
-
+    public function lang_load() {
         $language = $_COOKIE['language'] ?? 'en-us';
-        $language = preg_replace('/[^a-zA-Z0-9_-]/', '', $language); 
-    
+        $language = preg_replace('/[^a-zA-Z0-9_-]/', '', $language);
+
         $language_file = '../app/language/' . $language . '.php';
-        return  $language_file;
-     
+
+        return file_exists($language_file) ? $language_file : null;
     }
+
 
     public function generateErrorResponse($errorType, $errorMessage) {
         $response = array(

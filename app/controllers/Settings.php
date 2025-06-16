@@ -692,6 +692,8 @@ class Settings extends Controller
             }
         }
     }
+
+  
     
 
     public function Sync_check_db_load() {
@@ -876,6 +878,36 @@ class Settings extends Controller
             echo json_encode($data);
             exit();
         }
+    }
+
+
+    
+    public function GetJobSeq_for_modbus(){
+
+        $input_check = true;
+        $error_message = '';
+        
+        if( !empty($_GET['job_id']) && isset($_GET['job_id'])  ){
+            $job_id = $_GET['job_id'];
+        }else{ 
+            $input_check = false;
+            $error_message .= "job_id,";
+        }
+
+        if($input_check){
+            $result = $this->SettingModel->get_seq_list_for_modbus($job_id);
+            echo json_encode($result);
+            exit();
+        }else{
+            $data = [
+                'result' => 'fail',
+                'error_message' => $error_message
+            ];
+            echo json_encode($data);
+            exit();
+        }
+
+
     }
 
     public function GetJobBarcode(){
@@ -1436,7 +1468,16 @@ class Settings extends Controller
 
     public function get_controller_login(){
 
+        //判斷控制器是否有登出
         $Controller_Info = $this->ToolModel->GetControllerInfo();
+        if(!empty($Controller_Info)){
+            $user_logIn = $Controller_Info['user_logIn'];
+            $user_logIn = (int)$user_logIn;
+            echo $user_logIn;
+        }
+
+
+        /*$Controller_Info = $this->ToolModel->GetControllerInfo();
 
         if (empty($Controller_Info) || (int)$Controller_Info['user_logIn'] !== 1) {
             echo (int)2; // 控制器尚未登入
@@ -1462,11 +1503,16 @@ class Settings extends Controller
 
         } catch (PDOException $e) {
             echo (int)1; // DB 錯誤視為不一致
-        }
+        }*/
     }
 
 
     public function get_history_year() {
+        // 僅在 Linux 環境下執行
+        if (PHP_OS_FAMILY !== 'Linux') {
+            return [];
+        }
+
         $dir = '/var/www/html/database/';
         $files = scandir($dir);
         $years = [];
@@ -1484,9 +1530,9 @@ class Settings extends Controller
         // 大到小排序
         rsort($years, SORT_NUMERIC);
 
-        // 輸出 JSON 或 array 視需求
         return $years;
     }
+
 
     
 

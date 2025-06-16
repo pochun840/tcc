@@ -354,6 +354,13 @@ $text['network_ip'] = 'Netword IP';
 $text['Mac'] = 'Mac';
 $text['refresh'] = 'Refresh';
 
+//commmand
+$text['command'] = 'Command';
+$text['switch_job'] = 'Switch Job';
+$text['get_job'] = 'Get Job';
+
+
+
 //Setting
 $text['controller_setting'] = 'Controller Setting';
 $text['system_setting'] = 'System Setting';
@@ -461,6 +468,9 @@ $text['img_save'] = '../public/img/home_save_en.png';
 $text['img_save_hover'] = '../public/img/home_save_m_en.png';
 $text['img_agent'] = '../public/img/home_agent_en.png';
 $text['img_agent_hover'] = '../public/img/home_m_agent_en.png';
+$text['img_remote'] = '../public/img/home_command_en.png';
+$text['img_remote_hover'] = '../public/img/home_m_command_en.png';
+
 $text['unfasten_force'] = 'Out of range 1 - 1100';
 $text['error_job_name'] = 'JOB name input error';
 $text['error_seq_name'] = 'SEQ name input error';

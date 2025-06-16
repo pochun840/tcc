@@ -21,8 +21,8 @@ class Setting{
 
     }
 
-    public function GetControllerInfo()
-    {
+    public function GetControllerInfo(){
+
         $sql = "SELECT * FROM device ";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute();
@@ -31,6 +31,20 @@ class Setting{
 
         return $row;
     }
+
+
+    //get all job seq
+    public function get_seq_list_for_modbus($job_id){
+
+        $sql = "SELECT job_id,seq_id,seq_name FROM sequence WHERE job_id = :job_id AND seq_en = 1 order by seq_id";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->bindValue(':job_id', $job_id);
+        $results = $statement->execute();
+        $rows = $statement->fetchall(PDO::FETCH_ASSOC);
+
+        return $rows;
+    }
+
 
 
     public function GetControllerInfo_count($control_id){

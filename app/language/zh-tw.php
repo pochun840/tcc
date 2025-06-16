@@ -342,6 +342,12 @@ $text['network_ip'] = '網路 IP';
 $text['Mac'] = 'MAC位址';
 $text['refresh'] = '刷新';
 
+//commmand
+$text['command'] = '命令';
+$text['switch_job'] = '切換工作';
+$text['get_job'] = '讀取工作';
+
+
 //Setting
 $text['controller_setting'] = '控制器設定';
 $text['system_setting'] = '系統設定';
@@ -448,6 +454,9 @@ $text['img_save'] = '../public/img/home_save_tw.png';
 $text['img_save_hover'] = '../public/img/home_save_m_tw.png';
 $text['img_agent'] = '../public/img/home_agent_tw.png';
 $text['img_agent_hover'] = '../public/img/home_m_agent_tw.png';
+$text['img_remote'] = '../public/img/home_command_tw.png';
+$text['img_remote_hover'] = '../public/img/home_m_command_tw.png';
+
 
 $text['unfasten_force'] = '超出範圍 1 - 1100';
 $text['error_job_name'] = 'JOB名稱輸入有誤';
