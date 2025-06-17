@@ -205,8 +205,16 @@
             success: function(response) {
                 $('#overlay').addClass('hidden');
                 // 處理服務器返回的響應
-                console.log(response)
-               // history.go(0);
+                //console.log(response);
+                
+                // 隱藏 SwitchJob 區塊
+                document.getElementById("SwitchJob").style.display = "none";
+
+                // 將 job_id 和 seq_id 寫入指定 input 欄位
+                document.getElementById("current_job_id").value = job_id;
+                document.getElementById("current_seq_id").value = seq_id;
+                
+                // history.go(0);
                 
             },
             complete: function(XHR, TS) {
