@@ -1035,28 +1035,33 @@ class Settings extends Controller
                 return $this->sendResponse('Error', 'info.json 格式錯誤或缺少 Match_TCC_Version');
             }
 
-            //  15. 比對版本：僅當更新檔版本高於目前版本才允許更新
+            //  15. 比對版本：如果更新檔比目前版本還舊，就不更新
             $match_tcc_version = $verify_data['Match_TCC_Version'];
-
-            if (version_compare($match_tcc_version, $iDas_Vesion, '<=')) {
-                return $this->sendResponse('Error', "版本不符或過舊：目前為 $iDas_Vesion，更新檔為 $match_tcc_version，無法繼續更新。");
+            if (version_compare($match_tcc_version, $iDas_Vesion, '<')) {
+                return $this->sendResponse('Error', "更新檔版本低於目前版本，無法更新（目前版本：$iDas_Vesion，更新版本：$match_tcc_version）");
             }
 
-            //  16. 指定最終目標目錄（部署到 /tccidas/ 下）
+
+            // 16. 將 $verify_data['Match_TCC_Version'] 寫入到資料庫
+            $this->AdminModel->Set_idas_version($verify_data['Match_TCC_Version']);
+
+
+            //  17. 指定最終目標目錄（部署到 /tccidas/ 下）
             $target_directory = $_SERVER['DOCUMENT_ROOT'] . '/tccidas/';
             if (!is_dir($target_directory)) mkdir($target_directory, 0777, true);
 
-            //  17. 複製解壓出來的檔案到正式目錄
+            //  18. 複製解壓出來的檔案到正式目錄
             $this->copyDirectory($main_folder, $target_directory);
 
-            //  18. 強制登出控制器使用者（安全性與更新重啟）
+            //  19. 強制登出控制器使用者（安全性與更新重啟）
             $this->setting_logout();
 
-            //  19. 成功更新回應
+        
+            //  20. 成功更新回應
             return $this->sendResponse('Success', '更新成功，已將檔案移動至 tccidas 目錄');
 
         } finally {
-            //  20. 無論成功或失敗，清除主資料夾與解壓縮目錄
+            //  21. 無論成功或失敗，清除主資料夾與解壓縮目錄
             if (!empty($main_folder) && is_dir($main_folder)) {
                 $this->deleteDirectory($main_folder);
             }

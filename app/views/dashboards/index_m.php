@@ -34,6 +34,9 @@
                 <button class="menu-item PaleGreen" id="setting" onclick="window.location.href='?url=Settings/index'"><span style="visibility: hidden;">Setting</span></button>
                 
                 <?php if($_SESSION['privilege'] == 'admin'){ ?>
+
+                        <button class="menu-item lime" id="remote" style="font-size: 24px" onclick="window.location.href='?url=Remotes'"><span style="visibility: hidden;">Remotes</span></button>
+                        
                     <?php if($data['agent_type'] == '2'){ ?>
                             <button class="menu-item lime" id="agent" style="font-size: 24px" onclick="window.location.href='?url=Agents'"><span style="visibility: hidden;">Agent</span></button>
                     <?php } ?>
@@ -533,6 +536,15 @@ function DB_sync_idas(argument) {
     #agent:hover {
         background: url("<?php echo $text['img_agent_hover']; ?>") no-repeat;
     }
+
+    #remote {
+        background: url("<?php echo $text['img_remote']; ?>") no-repeat;
+    }
+    
+    #remote:hover {
+        background: url("<?php echo $text['img_remote_hover']; ?>") no-repeat;
+    }
+
 
     @media only screen and (max-width: 768px) {
         .bottom-right {
