@@ -108,6 +108,7 @@ class Step extends Controller
                 if (isset($tmp_torque_unified[$unit_name])) {
                     $tools['tool_maxtorque_unified'] = $tmp_torque_unified[$unit_name];
                 }
+
             }
         }
 
@@ -134,7 +135,8 @@ class Step extends Controller
             'count_records' => $count_records,
             'tools_id' => $tools_id,
             'seq_opt' => $seq_opt,
-            'counts_torque' => $counts_torque
+            'counts_torque' => $counts_torque,
+            'target_tor_value' => $low_torque_arr[$unit_name]
         ];
 
         if ($isMobile) {
@@ -542,7 +544,7 @@ class Step extends Controller
                 //取得起子的資訊 重新調整 上下限
                 $tools = $this->ToolModel->GetToolInfo();
 
-                $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1); // from N.m
+                $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1); 
                 $tmp_torque_2 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_maxtorque'], 1);
 
                 if (is_array($tmp_torque_1) && isset($tmp_torque_1[$unit_name])) {
@@ -565,21 +567,16 @@ class Step extends Controller
 
                 if(!empty($tor_lo_tmp[$unit_name])){
                     $res[0]['tor_lo'] = rtrim(rtrim((string)$tor_lo_tmp[$unit_name], '0'), '.');
+
                 }
-
-
-            
 
             }
 
+            
             $tools['__from_outside'] = true;
-            //$this->index($jobid,$seqid,$tools);
 
             $merged_info = array_merge($res[0], $tools);
-            print_r($merged_info);
-
-            //print_r($res[0]);
-            
+            print_r($merged_info);            
         }
         
     }

@@ -78,6 +78,7 @@
         <input id="tool_min_tor_diff" value="<?php echo $data['tools']['tool_mintorque_diff']; ?>">
         <input id="step_torque_unit" value="<?php echo  $data['step_torque_unit']?>">
         <input id="tool_maxtorque_unified" value="<?php echo  $data['tools']['tool_maxtorque_unified'];?>">
+        <input id ="target_tor_value" value="<?php echo $data['target_tor_value']?>">
     </div>
 
     <!-- Add New Step -->
@@ -122,7 +123,7 @@
                             <div class="row">
                                 <div  class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
-                                    <input type="text" class="form-control input-ms" id="target_tor" maxlength="">
+                                    <input type="number" step="0.00001" min="0"  class="form-control input-ms" id="target_tor" maxlength="">
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -142,7 +143,7 @@
                             <div class="row">
                                     <div for="target-torque" class="col-6 t1"><?php echo $text['Target Delay Time'];?> :</div>
                                     <div class="col-4 t2">
-                                        <input type="text" class="form-control input-ms" id="target_delay" maxlength="" >
+                                        <input type="text" step="0.00001" min="0" class="form-control input-ms" id="target_delay" maxlength="" >
                                         <div class="invalid-feedback"></div>
                                     </div>
                             </div>
@@ -152,7 +153,7 @@
                             <div class="row">
                                 <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
-                                    <input type="text" class="form-control input-ms" id="tor_hi" maxlength="" >
+                                    <input type="text" step="0.00001" min="0" class="form-control input-ms" id="tor_hi" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -162,7 +163,7 @@
                             <div class="row">
                                 <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
-                                    <input type="text" class="form-control input-ms" id="tor_lo" maxlength="" >
+                                    <input type="text" step="0.00001" min="0" class="form-control input-ms" id="tor_lo" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -234,7 +235,7 @@
                             <div class="row">
                                 <div id="downshift_threshold_title" for="th_tor" class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2" id="downshift_threshold_item"> 
-                                    <input type="text" class="form-control input-ms" id="th_tor" >
+                                    <input type="text" class="form-control input-ms" id="th_tor" step="0.00001" min="0"   >
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -244,7 +245,7 @@
                             <div class="row" >
                                 <div id="downshift_torque_title" for="ds_tor" class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2" id="downshift_torque_item">
-                                    <input type="text" class="form-control input-ms" id="ds_tor" maxlength="" >
+                                    <input type="text" class="form-control input-ms" id="ds_tor" maxlength=""  step="0.00001" min="0"  >
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>

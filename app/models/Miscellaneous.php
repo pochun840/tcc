@@ -350,7 +350,8 @@ class Miscellaneous{
     }
 
 
-    public function convert_all_torque_units($value, $inputType) {
+    public function convert_all_torque_units($value, $inputType, $useExcelMode = true) {
+
         $unit_names = [
             0 => "kgf.m",
             1 => "N.m",
@@ -373,35 +374,53 @@ class Miscellaneous{
 
         $value = floatval($value);
 
-        // Step 1: 先轉換為 N.m
+        // Step 1: 輸入值轉為 N.m（統一中介單位）
         switch ($inputType) {
             case 0: $Nm = $value * 9.80665; break;             // kgf.m → N.m
-            case 1: $Nm = $value; break;                      // N.m
-            case 2: $Nm = $value * 0.0980665; break;          // kgf.cm → N.m
-            case 3: $Nm = $value * 0.112984829333; break;     // lbf.in → N.m
-            case 4: $Nm = $value * 0.01; break;               // cN.m → N.m
+            case 1: $Nm = $value; break;                       // N.m
+            case 2: $Nm = $value * 0.0980665; break;           // kgf.cm → N.m
+            case 3: $Nm = $value * 0.112984829333; break;      // Lbf.in → N.m
+            case 4: $Nm = $value * 0.01; break;                // cN.m → N.m
             default: return "Invalid unit index.";
         }
 
         $result = [];
 
-        // Step 2: 從 N.m 轉換為所有單位
+        // Step 2: N.m → 其他單位（用 Excel 模擬倍率）
         foreach ($unit_names as $targetType => $unitName) {
-            switch ($targetType) {
-                case 0: $converted = $Nm / 9.80665; break;             // N.m → kgf.m
-                case 1: $converted = $Nm; break;                       // N.m
-                case 2: $converted = $Nm / 0.0980665; break;           // N.m → kgf.cm
-                case 3: $converted = $Nm / 0.112984829333; break;      // N.m → lbf.in
-                case 4: $converted = $Nm * 100; break;                 // N.m → cN.m
+            if ($useExcelMode) {
+                switch ($targetType) {
+                    case 0: $converted = $Nm * 0.10197; break;        // N.m → kgf.m (Excel)
+                    case 1: $converted = $Nm; break;                  // N.m
+                    case 2: $converted = $Nm * 10.2; break;           // N.m → kgf.cm (Excel)
+                    case 3: $converted = $Nm * 8.85411; break;        // N.m → Lbf.in (Excel)
+                    case 4: $converted = $Nm * 100; break;            // N.m → cN.m
+                }
+            } else {
+                switch ($targetType) {
+                    case 0: $converted = $Nm / 9.80665; break;        // N.m → kgf.m
+                    case 1: $converted = $Nm; break;                  // N.m
+                    case 2: $converted = $Nm / 0.0980665; break;      // N.m → kgf.cm
+                    case 3: $converted = $Nm / 0.112984829333; break; // N.m → Lbf.in
+                    case 4: $converted = $Nm * 100; break;            // N.m → cN.m
+                }
             }
 
-            // 四捨五入，保留固定小數位（不去尾）
+            // 四捨五入 & 去除尾端多餘 0
             $rounded = round($converted, $decimals[$targetType]);
-            $result[$unitName] = number_format($rounded, $decimals[$targetType], '.', '');
+            // ✅ 如果是整數，直接轉 int；否則去除多餘 0
+            if (fmod($rounded, 1) == 0.0) {
+                $result[$unitName] = (string)(int)$rounded;
+            } else {
+                $result[$unitName] = rtrim(rtrim((string)$rounded, '0'), '.');
+            }
+
         }
 
         return $result;
     }
+
+
 
    
 
@@ -410,7 +429,7 @@ class Miscellaneous{
             0 => "kgf.m",
             1 => "N.m",
             2 => "kgf.cm",
-            3 => "lbf.in",
+            3 => "Lbf.in",
             4 => "cN.m"
         ];
         return isset($unit_map[$index]) ? $unit_map[$index] : null;

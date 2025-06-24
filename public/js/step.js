@@ -6,11 +6,14 @@ function create_step() {
     //const decimalPlaces = (tool_min_tor_raw.split('.')[1] || "").length; // 判斷幾位小數
     //const tool_min_tor = parseFloat(tool_min_tor_raw).toFixed(decimalPlaces);
 
-    const tool_min_tor_raw = document.getElementById('tool_min_tor').value || "0";
+    const tool_min_tor_raw = document.getElementById('target_tor_value').value || "0";
     const tool_min_tor = parseFloat(tool_min_tor_raw); // ✅ 自動去掉多餘的 0
 
     const tor_hi_unified_raw = document.getElementById('tool_maxtorque_unified').value || "0";
     const tor_hi_unified = parseFloat(tor_hi_unified_raw); // ✅ 自動去尾 0
+
+
+
 
         
     // 預設值
@@ -771,6 +774,10 @@ function input_check_core(prefix, step_id = '') {
     let Tool_Min_RPM    = parseFloat(document.getElementById('tool_min_rpm')?.value || 0);
     let tor_hi_unified  = parseFloat(document.getElementById('tool_maxtorque_unified')?.value || 0);
 
+
+    alert(Tool_Min_Torque);
+    
+
     // 特殊邏輯：Step 1 限制轉速下限為 50
     if (step_id === "1") {
         Tool_Min_RPM = 50;
@@ -790,7 +797,7 @@ function input_check_core(prefix, step_id = '') {
         conditions.push(
             { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
             { id: prefix + 'tor_hi',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_torque, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified -1, compareLessThanId: prefix + 'target_tor' },
+            { id: prefix + 'tor_lo',     pattern: /^(0|[1-9]\d{0,4})(\.\d{1,5})?$/, min: 0, max: tor_hi_unified -1, compareLessThanId: prefix + 'target_tor' },
             { id: prefix + 'rpm',        pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
         );
 
@@ -803,8 +810,8 @@ function input_check_core(prefix, step_id = '') {
 
         if (!isDownshiftOff) {
             conditions.push(
-                { id: prefix + 'th_tor',   pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_torque },
-                { id: prefix + 'ds_tor',   pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_torque },
+                { id: prefix + 'th_tor',   pattern: /^(0|[1-9]\d{0,4})(\.\d{1,5})?$/, min: 0, max: target_torque },
+                { id: prefix + 'ds_tor',   pattern: /^(0|[1-9]\d{0,4})(\.\d{1,5})?$/, min: 0, max: target_torque },
                 { id: prefix + 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
             );
         }
@@ -815,7 +822,7 @@ function input_check_core(prefix, step_id = '') {
         conditions.push(
             { id: prefix + 'target_ang', pattern: /^\d{0,5}$/, min: 1, max: 9999 },
             { id: prefix + 'tor_hi',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_torque, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified -1, compareLessThanId: prefix + 'target_tor' },
+            { id: prefix + 'tor_lo',     pattern: /^(0|[1-9]\d{0,4})(\.\d{1,5})?$/, min: 0, max: tor_hi_unified -1, compareLessThanId: prefix + 'target_tor' },
             { id: prefix + 'rpm',        pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
         );
 
@@ -847,109 +854,7 @@ function input_check_core(prefix, step_id = '') {
 }
 
 
-/*
-function input_check_core(prefix, step_id = '') {
-    // 取得選擇目標類型 (Torque / Angle / Delay)
-    const target_opt = document.getElementById(prefix + "target_opt")?.value;
-    //let step_id = "";
-    if (prefix === "edit_") {
-        step_id = document.getElementById("edit_step_id")?.value?.trim() || "";
-    } else {
-        step_id = document.getElementById("add_step_id")?.value?.trim() || "";
-    }
 
-    // 工具參數設定
-    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor')?.value || 0);
-    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor')?.value || 0);
-    let Tool_Max_RPM = parseFloat(document.getElementById('tool_max_rpm')?.value || 0);
-    let Tool_Min_RPM = parseFloat(document.getElementById('tool_min_rpm')?.value || 0);
-    let tor_hi_unified = document.getElementById('tool_maxtorque_unified').value; //統一
-
-    let target_tor = parseFloat(document.getElementById(prefix + 'target_tor').value || 0);
-    let target_ang = parseInt(document.getElementById(prefix + 'target_ang')?.value || 0); 
-
-    // 特殊邏輯：Step 1 限制轉速下限為 50
-    if (step_id === "1") {
-        Tool_Min_RPM = 50;
-        console.log(`[Step ID ${step_id}] 強制 Tool_Min_RPM = 50`);
-    }
-
-    const isDownshiftOff = document.getElementById(prefix + "downshift_OFF")?.checked || false;
-    let conditions = [];
-
-    // 根據目標類型設定驗證規則
-    if (target_opt === "0") { // Torque 控制
-        const target_torque = parseFloat(document.getElementById(prefix + 'target_tor')?.value || 0);
-        const target_angle  = parseInt(document.getElementById(prefix + 'target_ang')?.value || 0);
-
-        conditions.push(
-            { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_tor, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified -1, compareLessThanId: prefix + 'target_tor' },
-            //{ id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: target_ang + 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-            //{ id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: target_ang - 1, compareLessThanId: prefix + 'target_ang' },
-            { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
-        );
-
-         // ✅ 只有 target_ang >= 1 才驗證 ang_hi / ang_lo
-        if (target_ang >= 1) {   // 05/26 Lana Edit (target_ang >= 1)
-            conditions.push(
-                { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: target_angle + 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-                { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: target_angle - 1, compareLessThanId: prefix + 'target_ang' }
-            );
-        }
-
-        if (!isDownshiftOff) {
-            conditions.push(
-                { id: prefix + 'th_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_torque },
-                { id: prefix + 'ds_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_torque },
-                { id: prefix + 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
-            );
-        }
-    }
-
-    if (target_opt === "1") { // Angle 控制
-
-        const target_torque = parseFloat(document.getElementById(prefix + 'target_tor')?.value || 0);
-        const target_angle  = parseInt(document.getElementById(prefix + 'target_ang')?.value || 0);
-
-        conditions.push(
-            { id: prefix + 'target_ang', pattern: /^\d{0,5}$/, min: 1, max: 9999 },
-            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_tor, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified -1, compareLessThanId: prefix + 'target_tor' },
-            //{ id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: target_ang + 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-            //{ id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: target_ang -1, compareLessThanId: prefix + 'target_ang' },
-            { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
-        );
-
-          // ✅ 只有 target_ang >= 1 才驗證 ang_hi / ang_lo
-        if (target_ang >= 1) {   // 05/26 Lana Edit (target_ang >= 1)
-            conditions.push(
-                { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: target_angle + 1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-                { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: target_angle - 1, compareLessThanId: prefix + 'target_ang' }
-            );
-        }
-
-    }
-
-    if (target_opt === "2") { // Delay 控制
-        conditions.push(
-            { id: prefix + 'target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
-        );
-    }
-
-    // 驗證欄位
-    let isFormValid = true;
-    conditions.forEach(input => {
-        const element = document.getElementById(input.id);
-        if (element && !validateInput(element, input.pattern, input.min, input.max, input.compareGreaterThanId, input.compareLessThanId)) {
-            isFormValid = false;
-        }
-    });
-
-    return isFormValid;
-}
-*/
 
 function validateInput(element, pattern, min, max, compareGreaterThanId, compareLessThanId) {
     const value = element.value.trim();
