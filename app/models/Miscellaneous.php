@@ -408,12 +408,13 @@ class Miscellaneous{
 
             // 四捨五入 & 去除尾端多餘 0
             $rounded = round($converted, $decimals[$targetType]);
+            $result[$unitName] = number_format($rounded, $decimals[$targetType], '.', '');
             // ✅ 如果是整數，直接轉 int；否則去除多餘 0
-            if (fmod($rounded, 1) == 0.0) {
+            /*if (fmod($rounded, 1) == 0.0) {
                 $result[$unitName] = (string)(int)$rounded;
             } else {
                 $result[$unitName] = rtrim(rtrim((string)$rounded, '0'), '.');
-            }
+            }*/
 
         }
 

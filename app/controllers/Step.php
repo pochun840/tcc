@@ -527,7 +527,6 @@ class Step extends Controller
         $device_torque_unit = (int)$device['device_torque_unit'];
 
         $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
-        $unit_name = $unit_arr[$device_torque_unit];
 
         if($input_check){
 
@@ -535,51 +534,69 @@ class Step extends Controller
 
             $step_tor_unit = (int)$res[0]['tor_unit'];
 
-            if($device_torque_unit != $step_tor_unit ){
+            //如果 $step_tor_unit 跟 $device_torque_unit 不一樣 
+            //以 $step_tor_unit  為主 
+            /*if($step_tor_unit != $device_torque_unit){
+                // 依照 控制器為主
+                //echo "112";
+                $unit_name = $unit_arr[$device_torque_unit];
+                $flag = true;
+                $no_unit = $device_torque_unit;
+            }else{
+                // 依照step為主
+                //echo "1123";
+                $unit_name = $unit_arr[$res[0]['tor_unit']];
+                $flag = false;
+                $no_unit = $step_tor_unit;
+            
+            }*/
 
-                $target_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['target_tor'],1); 
-                $tor_hi_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_hi'],1); 
-                $tor_lo_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_lo'],1); 
+            $unit_name = $unit_arr[$res[0]['tor_unit']];
+            $flag = false;
+            $no_unit = $step_tor_unit;
+          
+            $target_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['target_tor'],$no_unit); 
+            $tor_hi_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_hi'],$no_unit); 
+            $tor_lo_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_lo'],$no_unit); 
+            $ds_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['ds_tor'],$no_unit); 
+            $th_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_lo'],$no_unit); 
 
-                //取得起子的資訊 重新調整 上下限
-                $tools = $this->ToolModel->GetToolInfo();
 
-                $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1); 
-                $tmp_torque_2 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_maxtorque'], 1);
 
-                if (is_array($tmp_torque_1) && isset($tmp_torque_1[$unit_name])) {
-                    $tools['tool_mintorque'] = $tmp_torque_1[$unit_name];
+            if(!empty($target_tor_tmp)){
+                //這邊判斷 
+                if($step_tor_unit != $device_torque_unit){
+                     $unit_name = $unit_arr[$device_torque_unit];
                 }
-
-                if (is_array($tmp_torque_2) && isset($tmp_torque_2[$unit_name])) {
-                    $tools['tool_maxtorque'] = $tmp_torque_2[$unit_name];
-                }
-
-
-
-                if(!empty($target_tor_tmp[$unit_name])){
-                    $res[0]['target_tor'] = rtrim(rtrim((string)$target_tor_tmp[$unit_name], '0'), '.');
-                }
-
-                if(!empty($tor_hi_tmp[$unit_name])){
-                    $res[0]['tor_hi'] = rtrim(rtrim((string)$tor_hi_tmp[$unit_name], '0'), '.');
-                }
-
-                if(!empty($tor_lo_tmp[$unit_name])){
-                    $res[0]['tor_lo'] = rtrim(rtrim((string)$tor_lo_tmp[$unit_name], '0'), '.');
-
-                }
+                $res[0]['target_tor'] = $target_tor_tmp[$unit_name];
+                $res[0]['tor_hi'] = $tor_hi_tmp[$unit_name];
+                $res[0]['th_tor'] = $th_tor_tmp[$unit_name];
+                $res[0]['ds_tor'] = $ds_tor_tmp[$unit_name];
 
             }
 
+
+            //取得起子的資訊 重新調整 上下限
+            $tools = $this->ToolModel->GetToolInfo();
+
+            $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1); 
+            $tmp_torque_2 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_maxtorque'], 1);
+
+            if (is_array($tmp_torque_1) && isset($tmp_torque_1[$unit_name])) {
+                $tools['tool_mintorque'] = $tmp_torque_1[$unit_name];
+            }
+
+            if (is_array($tmp_torque_2) && isset($tmp_torque_2[$unit_name])) {
+                $tools['tool_maxtorque'] = $tmp_torque_2[$unit_name];
+            }
             
             $tools['__from_outside'] = true;
-
             $merged_info = array_merge($res[0], $tools);
             print_r($merged_info);            
         }
         
     }
+
         
     #排序step
     public function adjustment_order(){

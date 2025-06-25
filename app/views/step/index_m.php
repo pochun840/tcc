@@ -306,7 +306,7 @@
                             <div class="row">
                                 <div  class="col-6 t1"><?php echo $text['Target_Torque'];?> (<?php echo $text[$data['unit_name']];?>):</div>
                                 <div class="col-4 t2">
-                                    <input type="text" class="form-control input-ms" id="edit_target_tor" maxlength="" >
+                                    <input type="number" step="0.00001" min="0"    class="form-control input-ms" id="edit_target_tor" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -326,7 +326,7 @@
                             <div class="row">
                                     <div for="target-torque" class="col-6 t1"><?php echo $text['Target Delay Time'];?> :</div>
                                     <div class="col-4 t2">
-                                        <input type="text" class="form-control input-ms" id="edit_target_delay" maxlength="">
+                                        <input type="number" step="0.00001" min="0"    class="form-control input-ms" id="edit_target_delay" maxlength="">
                                         <div class="invalid-feedback"></div>
                                     </div>
                             </div>
@@ -336,7 +336,7 @@
                             <div class="row">
                                 <div for="hi-torque" class="col-6 t1"><?php echo $text['High_Torque'];?> (<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
-                                    <input type="text" class="form-control input-ms" id="edit_tor_hi" maxlength="" >
+                                    <input type="number" step="0.00001" min="0" class="form-control input-ms" id="edit_tor_hi" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -346,7 +346,7 @@
                             <div class="row">
                                 <div for="lo-torque" class="col-6 t1"><?php echo $text['Low_Torque'];?> (<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
-                                    <input type="text" class="form-control input-ms" id="edit_tor_lo" maxlength="" >
+                                    <input type="number" step="0.00001" min="0" class="form-control input-ms" id="edit_tor_lo" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -418,7 +418,7 @@
                             <div class="row">
                                 <div class="col-6 t1"><?php echo $text['Threshold_Torque'];?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2">
-                                    <input type="text" class="form-control input-ms" id="edit_th_tor" maxlength="" >
+                                    <input type="number" step="0.00001" min="0"    class="form-control input-ms" id="edit_th_tor" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -427,7 +427,7 @@
                             <div class="row">
                                 <div class="col-6 t1"><?php echo $text['Downshift_Torque'];?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>):</div>
                                 <div class="col-4 t2" id="edit_downshift_torque_item">
-                                    <input type="text" class="form-control input-ms" id="edit_ds_tor" maxlength="" >
+                                    <input type="number" step="0.00001" min="0"    class="form-control input-ms" id="edit_ds_tor" maxlength="" >
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>

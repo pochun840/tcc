@@ -6,14 +6,12 @@ function create_step() {
     //const decimalPlaces = (tool_min_tor_raw.split('.')[1] || "").length; // 判斷幾位小數
     //const tool_min_tor = parseFloat(tool_min_tor_raw).toFixed(decimalPlaces);
 
-    const tool_min_tor_raw = document.getElementById('target_tor_value').value || "0";
-    const tool_min_tor = parseFloat(tool_min_tor_raw); // ✅ 自動去掉多餘的 0
-
+    const tool_min_tor_raw = document.getElementById('tool_min_tor').value || "0";
+    //const tool_min_tor = parseFloat(tool_min_tor_raw); // ✅ 自動去掉多餘的 0
+    const tool_min_tor  = tool_min_tor_raw;
     const tor_hi_unified_raw = document.getElementById('tool_maxtorque_unified').value || "0";
-    const tor_hi_unified = parseFloat(tor_hi_unified_raw); // ✅ 自動去尾 0
-
-
-
+    //const tor_hi_unified = parseFloat(tor_hi_unified_raw); // ✅ 自動去尾 0
+    const tor_hi_unified =tor_hi_unified_raw;
 
         
     // 預設值
@@ -155,12 +153,11 @@ function edit_step(stepid) {
             const [, tool_maxtorque] = cleanString.match(/\[tool_maxtorque\]\s*=>\s*([^ ]+)/) || [, null];
             const [, tool_mintorque] = cleanString.match(/\[tool_mintorque\]\s*=>\s*([^ ]+)/) || [, null];
 
-
-
             document.getElementById('editstep').style.display = 'block';
             document.querySelector("select[name='edit_target_opt']").value = target_opt;
             document.getElementById("tool_max_tor").value = tool_maxtorque;
             document.getElementById("tool_min_tor").value = tool_mintorque;
+
 
 
             if (target_opt == 0) {
@@ -242,8 +239,8 @@ function edit_step(stepid) {
             document.getElementById("edit_ds_speed").value = ds_speed;
             document.getElementById("edit_ds_tor").value = ds_tor;
             document.getElementById("edit_th_tor").value = th_tor;
-            document.getElementById("edit_tor_hi").value = cleanNumber(tor_hi);
-            document.getElementById("edit_tor_lo").value = cleanNumber(tor_lo);
+            document.getElementById("edit_tor_hi").value = tor_hi;
+            document.getElementById("edit_tor_lo").value = tor_lo;
             document.getElementById("edit_ang_hi").value = ang_hi;
             document.getElementById("edit_ang_lo").value = ang_lo;
             document.getElementById('edit_step_id').value = step_id;
@@ -768,15 +765,22 @@ function input_check_core(prefix, step_id = '') {
         : document.getElementById("add_step_id")?.value?.trim() || "";
 
     // 工具參數設定
-    let Tool_Max_Torque = parseFloat(document.getElementById('tool_max_tor')?.value || 0);
-    let Tool_Min_Torque = parseFloat(document.getElementById('tool_min_tor')?.value || 0);
+    const maxTorque = parseTorqueValue('tool_max_tor');
+    const minTorque = parseTorqueValue('tool_min_tor');
+
+
     let Tool_Max_RPM    = parseFloat(document.getElementById('tool_max_rpm')?.value || 0);
     let Tool_Min_RPM    = parseFloat(document.getElementById('tool_min_rpm')?.value || 0);
     let tor_hi_unified  = parseFloat(document.getElementById('tool_maxtorque_unified')?.value || 0);
 
+    let Tool_Max_Torque = maxTorque.str;
+    let Tool_Min_Torque = minTorque.display;
 
-    alert(Tool_Min_Torque);
-    
+    console.log(Tool_Max_Torque);
+    console.log(Tool_Min_Torque);
+    console.log(maxTorque);
+
+
 
     // 特殊邏輯：Step 1 限制轉速下限為 50
     if (step_id === "1") {
@@ -795,9 +799,9 @@ function input_check_core(prefix, step_id = '') {
     // === TORQUE 模式 ===
     if (target_opt === "0") {
         conditions.push(
-            { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: prefix + 'tor_hi',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_torque, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo',     pattern: /^(0|[1-9]\d{0,4})(\.\d{1,5})?$/, min: 0, max: tor_hi_unified -1, compareLessThanId: prefix + 'target_tor' },
+            { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max:  Tool_Max_Torque },
+            { id: prefix + 'tor_hi',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
+            { id: prefix + 'tor_lo',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified > 0 ? tor_hi_unified - 1 : 0 , compareLessThanId: prefix + 'target_tor' },
             { id: prefix + 'rpm',        pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
         );
 
@@ -810,8 +814,8 @@ function input_check_core(prefix, step_id = '') {
 
         if (!isDownshiftOff) {
             conditions.push(
-                { id: prefix + 'th_tor',   pattern: /^(0|[1-9]\d{0,4})(\.\d{1,5})?$/, min: 0, max: target_torque },
-                { id: prefix + 'ds_tor',   pattern: /^(0|[1-9]\d{0,4})(\.\d{1,5})?$/, min: 0, max: target_torque },
+                { id: prefix + 'th_tor',   pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_torque },
+                { id: prefix + 'ds_tor',   pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_torque },
                 { id: prefix + 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
             );
         }
@@ -822,7 +826,7 @@ function input_check_core(prefix, step_id = '') {
         conditions.push(
             { id: prefix + 'target_ang', pattern: /^\d{0,5}$/, min: 1, max: 9999 },
             { id: prefix + 'tor_hi',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_torque, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo',     pattern: /^(0|[1-9]\d{0,4})(\.\d{1,5})?$/, min: 0, max: tor_hi_unified -1, compareLessThanId: prefix + 'target_tor' },
+            { id: prefix + 'tor_lo',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified > 0 ? tor_hi_unified - 1 : 0, compareLessThanId: prefix + 'target_tor' },
             { id: prefix + 'rpm',        pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
         );
 
@@ -853,6 +857,22 @@ function input_check_core(prefix, step_id = '') {
     return isFormValid;
 }
 
+function getLabelText(element) {
+    let id = element.id || "";
+
+    // 如果 id 是 edit_xxx 開頭，就去掉 edit_
+    if (id.startsWith("edit_")) {
+        id = id.replace("edit_", "");
+    }
+
+    // 優先 label/data-label/相鄰元素，最後 fallback 回 id
+    return (
+        document.querySelector(`label[for="${element.id}"]`)?.innerText?.replace(':', '') ||
+        element.getAttribute("data-label") ||
+        element.previousElementSibling?.innerText?.replace(':', '') ||
+        id
+    );
+}
 
 
 
@@ -867,26 +887,25 @@ function validateInput(element, pattern, min, max, compareGreaterThanId, compare
         "zh-cn": {
             empty: "不可为空。",
             pattern: "格式错误。",
-            range: (min, max) => `输入值必须在 ${min} ~ ${max} 之间。`,
+            range: (min, max) => `输入值必须在 ${min} ~ ${max} 之间`,
             gt: (label, val) => `必须大于 ${label}（目前值: ${val}）`,
             lt: (label, val) => `必须小于 ${label}（目前值: ${val}）`
         },
         "zh-tw": {
             empty: "不可空白。",
             pattern: "格式錯誤。",
-            range: (min, max) => `輸入值必須在 ${min} ~ ${max} 之間。`,
+            range: (min, max) => `輸入值必須在 ${min} ~ ${max} 之間`,
             gt: (label, val) => `必須大於 ${label}（目前值: ${val}）`,
             lt: (label, val) => `必須小於 ${label}（目前值: ${val}）`
         },
         "default": {
             empty: "This field is required.",
             pattern: "Invalid format.",
-            range: (min, max) => `Value must be between ${min} and ${max}.`,
+            range: (min, max) => `Value must be between ${min} and ${max}`,
             gt: (label, val) => `Must be greater than ${label} (current: ${val})`,
             lt: (label, val) => `Must be less than ${label} (current: ${val})`
         }
     };
-
 
     const msg = errorText[language] || errorText["default"];
 
@@ -902,33 +921,41 @@ function validateInput(element, pattern, min, max, compareGreaterThanId, compare
     }
     // 驗證範圍（min ~ max）
     else if ((min !== null && min !== undefined && parseFloat(value) < min) ||
-             (max !== null && max !== undefined && parseFloat(value) > max)) {
+            (max !== null && max !== undefined && parseFloat(value) > max)) {
+        const minDisplay = (typeof min === 'number') ? String(min) : min;
+        const maxDisplay = (typeof max === 'number') ? String(max) : max;
         isValid = false;
-        customMessage = msg.range(min, max);
-
+        customMessage = msg.range(minDisplay, maxDisplay);
     }
 
-    // 05/26 Lana Edit
-    // 驗證必須大於指定欄位 - Yànzhèng bìxū dàyú zhǐdìng lán wèi
+    // 驗證必須大於某欄位
     if (compareGreaterThanId) {
         const compareElement = document.getElementById(compareGreaterThanId);
         if (compareElement && parseFloat(value) <= parseFloat(compareElement.value)) {
-            let labelText = compareElement.previousElementSibling ? compareElement.previousElementSibling.innerText.replace(':', '') : "";
+            const labelText = getLabelText(compareElement) || "此欄位";
             customMessage = msg.gt(labelText, compareElement.value);
             isValid = false;
         }
-    } 
+    }
 
-    // 驗證必須小於指定欄位 - Yànzhèng bìxū xiǎoyú zhǐdìng lán wèi
+    // 驗證必須小於某欄位
     if (compareLessThanId) {
         const compareElement = document.getElementById(compareLessThanId);
-        if (compareElement && parseFloat(value) >= parseFloat(compareElement.value)) {
-            let labelText = compareElement.previousElementSibling ? compareElement.previousElementSibling.innerText.replace(':', '') : "";
+        const compareValue = parseFloat(compareElement?.value);
+        const thisValue = parseFloat(value);
+
+        if (
+            compareElement &&
+            !compareElement.classList.contains("is-invalid") &&
+            !isNaN(thisValue) &&
+            !isNaN(compareValue) &&
+            thisValue >= compareValue
+        ) {
+            const labelText = getLabelText(compareElement) || "此欄位";
             customMessage = msg.lt(labelText, compareElement.value);
             isValid = false;
         }
     }
-
 
     // 顯示或移除錯誤訊息
     if (!isValid) {
@@ -945,6 +972,8 @@ function validateInput(element, pattern, min, max, compareGreaterThanId, compare
 
     return isValid;
 }
+
+
 
 
 let backupOptions = [];  // 用來存儲備份的選項
@@ -1038,3 +1067,9 @@ function cleanNumber(value) {
 }
 
 
+function parseTorqueValue(id) {
+    const str = document.getElementById(id)?.value || "0";
+    const num = +str;
+    const display = (num % 1 === 0) ? num.toFixed(1) : str;
+    return { str, num, display };
+}
