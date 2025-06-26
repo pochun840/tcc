@@ -82,12 +82,12 @@ class Inputs extends Controller
                     if (!empty($vv['input_event'])) {
                         $event_value = $vv['input_event'];
                         //Disable & Enable 不能同時存在event_option
-                        if ($event_value == 101 && !in_array(102, $tempA)) {
-                            $tempA[] = 102;
+                        if ($event_value == 202 && !in_array(203, $tempA)) {
+                            $tempA[] = 203;
                         }
                
-                        if ($event_value == 102 && !in_array(101, $tempA)) {
-                            $tempA[] = 101;
+                        if ($event_value == 203 && !in_array(202, $tempA)) {
+                            $tempA[] = 202;
                         }
                     
                         $tempA[] = $event_value;

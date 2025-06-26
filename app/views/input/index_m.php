@@ -105,13 +105,13 @@
                         <table class="table w3-table-all w3-hoverable" style="font-size: 2vmin">
                             <tr>
                                 <td class="w3-left-align">1-50 SW Job ID</td>
-                                <td class="w3-left-align">101 <?php echo $text['disable'];?></td>
-                                <td class="w3-left-align">102 <?php echo $text['enable'];?></td>
+                                <td class="w3-left-align">200 <?php echo $text['Start-IN(Remote)'];?></td>
+                                <td class="w3-left-align">201 <?php echo $text['Unscrew(Remote)'];?></td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">103 <?php echo $text['Clear'];?></td>
-                                <td class="w3-left-align">104 <?php echo $text['Confirm'];?></td>                             
-                                <td class="w3-left-align">105 <?php echo $text['Start-IN(Remote)'];?></td>
+                                <td class="w3-left-align">202 <?php echo $text['Clear'];?></td>
+                                <td class="w3-left-align">203 <?php echo $text['Confirm'];?></td>                             
+                                <td class="w3-left-align">204 <?php echo $text['Start-IN(Remote)'];?></td>
                             </tr>
                             <tr>
                                 <td class="w3-left-align">106 <?php echo $text['Unscrew(Remote)'];?></td>
@@ -124,9 +124,7 @@
                                 <td class="w3-left-align">111 <?php echo $text['UDEFINE'];?>2</td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">112 <?php echo $text['UDEFINE'];?>3</td>
-                                <td class="w3-left-align">113 <?php echo $text['UDEFINE'];?>4</td>
-                                <td class="w3-left-align">114 <?php echo $text['UDEFINE'];?>5</td>
+                     
                             </tr>
                         </table>                            
                     </div>

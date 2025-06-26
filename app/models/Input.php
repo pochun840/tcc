@@ -41,7 +41,7 @@ class Input{
     //get all job
     public function get_job_list()
     {
-        $sql = " SELECT  * FROM job  ORDER BY job_id ASC ";
+        $sql = " SELECT  * FROM job  GROUP BY job_id ORDER BY job_id ASC ";
         $statement = $this->db_iDas->prepare($sql);
         $statement->execute();
         $result = $statement->fetchAll();

@@ -107,21 +107,21 @@
                         <table class="w3-table-all">
                             <tr>
                                 <td class="w3-left-align">1-50 SW Job ID</td>
-                                <td class="w3-left-align">101 <?php echo $text['Disable'];?></td>
-                                <td class="w3-left-align">102 <?php echo $text['Enable'];?></td>
-                                <td class="w3-left-align">103 <?php echo $text['Clear'];?></td>
-                                <td class="w3-left-align">104 <?php echo $text['Confirm'];?></td>
+                                <td class="w3-left-align">200 <?php echo $text['Start-IN(Remote)'];?></td>
+                                <td class="w3-left-align">201 <?php echo $text['Reverse(Remote)'];?></td>
+                                <td class="w3-left-align">202 <?php echo $text['Disable'];?></td>
+                                <td class="w3-left-align">203 <?php echo $text['Enable'];?></td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">105 <?php echo $text['Start-IN(Remote)'];?></td>
-                                <td class="w3-left-align">106 <?php echo $text['Reverse(Remote)'];?></td>
-                                <td class="w3-left-align">107 <?php echo $text['Sequence Clear'];?></td>
-                                <td class="w3-left-align">108 <?php echo $text['Reboot'];?></td>
-                                <td class="w3-left-align">109 <?php echo $text['Gate Once'];?></td>
+                                <td class="w3-left-align">204 <?php echo $text['Confirm'];?></td>
+                                <td class="w3-left-align">205 <?php echo $text['Reverse(Remote)'];?></td>
+                                <td class="w3-left-align">206 <?php echo $text['Sequence Clear'];?></td>
+                                <td class="w3-left-align">207 <?php echo $text['Reboot'];?></td>
+                                <td class="w3-left-align">208 <?php echo $text['UDEFINE'];?>1</td>
                             </tr>
                             <tr>
-                                <td class="w3-left-align">110 <?php echo $text['UDEFINE'];?>1</td>
-                                <td class="w3-left-align">111 <?php echo $text['UDEFINE'];?>2</td>
+                                <td class="w3-left-align">209 <?php echo $text['UDEFINE'];?>2</td>
+                                <td class="w3-left-align">210 <?php echo $text['Gate Once'];?></td>
                             </tr>
                         </table>
                     </div>

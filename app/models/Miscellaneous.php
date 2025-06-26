@@ -78,20 +78,18 @@ class Miscellaneous{
 
         if($mode =="io_input"){
             $array = array(
-                101 => 'Disable',
-                102 => 'Enable',
-                103 => 'Clear',
-                104 => 'Confirm',
-                105 => 'Start-IN(Remote)',
-                106 => 'Reverse(Remote)',
-                107 => 'Sequence Clear',
-                108 => 'Reboot',
-                109 => 'Gate Once',
-                110 => 'UserDefine1',
-                111 => 'UserDefine2',
-                //112 => 'UserDefine3',
-                //113 => 'UserDefine4',
-                //114 => 'UserDefine5',
+
+                200 => 'Start-IN(Remote)',
+                201 => 'Reverse(Remote)',
+                202 => 'Disable',
+                203 => 'Enable',
+                204 => 'Confirm',
+                205 => 'Clear',
+                206 => 'Sequence Clear',
+                207 => 'Reboot',
+                208 => 'UserDefine1',
+                209 => 'UserDefine2',
+                210 => 'Gate Once',
             );
         }
 
