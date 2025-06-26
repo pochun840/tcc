@@ -108,8 +108,8 @@ class Miscellaneous{
                 11  => 'Barcode',
                 12  => 'UserDefine1',
                 13  => 'UserDefine2',
-                //14  => 'UserDefine3',
-                //15  => 'UserDefine4',
+                14  => 'Turning CW',
+                15  => 'Turning CCW',
                 //16  => 'UserDefine5',
             );
         }

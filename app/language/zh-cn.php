@@ -262,6 +262,9 @@ $text['UDEFINE2'] = '自定义2';
 $text['SYS_READY'] = '系統就緒';
 $text['BS'] = 'BS';
 $text['system_barcode'] = '条码';
+$text['Turning CW']  = '顺时针转动';
+$text['Turning CCW'] = '逆时针转动';
+
 
 
 $text['output_replace_notice'] = '若设定已存在，将会取代原有设定';

@@ -332,7 +332,10 @@ function translatePage(language) {
        "10": "BS",
        "11": "条码",
        "12": "自定义1",
-       "13": "自定义2"
+       "13": "自定义2",
+       "14":"顺时针转动",
+       "15":"逆时针转动",
+
      },
      "zh-tw": {
        "1": "OK",
@@ -347,7 +350,9 @@ function translatePage(language) {
        "10": "BS",
        "11": "條碼",
        "12": "自定義1",
-       "13": "自定義2"
+       "13": "自定義2",
+       "14":"順時針轉動",
+       "15":"逆時針轉動",
      }
    };
  
@@ -797,9 +802,8 @@ function get_output_by_job_id(job_id){
                document.getElementById('11') && (document.getElementById('11').textContent = '条码');
                document.getElementById('12') && (document.getElementById('12').textContent = '自定义1');
                document.getElementById('13') && (document.getElementById('13').textContent = '自定义2');
-               document.getElementById('14') && (document.getElementById('14').textContent = '自定义3');
-               document.getElementById('15') && (document.getElementById('15').textContent = '自定义4');
-               document.getElementById('16') && (document.getElementById('16').textContent = '自定义5');
+               document.getElementById('14') && (document.getElementById('14').textContent = '顺时针转动');
+               document.getElementById('15') && (document.getElementById('15').textContent = '逆时针转动');
 
            } 
            else if(language == "zh-tw"){
@@ -816,9 +820,8 @@ function get_output_by_job_id(job_id){
                document.getElementById('11') && (document.getElementById('11').textContent = '條碼');
                document.getElementById('12') && (document.getElementById('12').textContent = '自定義1');
                document.getElementById('13') && (document.getElementById('13').textContent = '自定義2');
-               document.getElementById('14') && (document.getElementById('14').textContent = '自定義3');
-               document.getElementById('15') && (document.getElementById('15').textContent = '自定義4');
-               document.getElementById('16') && (document.getElementById('16').textContent = '自定義5');
+               document.getElementById('14') && (document.getElementById('14').textContent = '順時針轉動');
+               document.getElementById('15') && (document.getElementById('15').textContent = '逆時針轉動');
            }
            
        },
@@ -934,9 +937,8 @@ function job_confirm(){
                    document.getElementById('11') && (document.getElementById('11').textContent = '条码');
                    document.getElementById('12') && (document.getElementById('12').textContent = '自定义1');
                    document.getElementById('13') && (document.getElementById('13').textContent = '自定义2');
-                   document.getElementById('14') && (document.getElementById('14').textContent = '自定义3');
-                   document.getElementById('15') && (document.getElementById('15').textContent = '自定义4');
-                   document.getElementById('16') && (document.getElementById('16').textContent = '自定义5');
+                   document.getElementById('14') && (document.getElementById('14').textContent = '顺时针转动');
+                   document.getElementById('15') && (document.getElementById('15').textContent = '逆时针转动');
 
                } 
                else if(language == "zh-tw"){
@@ -953,9 +955,8 @@ function job_confirm(){
                    document.getElementById('11') && (document.getElementById('11').textContent = '條碼');
                    document.getElementById('12') && (document.getElementById('12').textContent = '自定義1');
                    document.getElementById('13') && (document.getElementById('13').textContent = '自定義2');
-                   document.getElementById('14') && (document.getElementById('14').textContent = '自定義3');
-                   document.getElementById('15') && (document.getElementById('15').textContent = '自定義4');
-                   document.getElementById('16') && (document.getElementById('16').textContent = '自定義5');
+                   document.getElementById('14') && (document.getElementById('14').textContent = '順時針轉動');
+                   document.getElementById('15') && (document.getElementById('15').textContent = '逆時針轉動');
                }
 
            },

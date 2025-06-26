@@ -253,6 +253,11 @@ $text['UDEFINE2'] = 'UserDefine2';
 $text['SYS_READY'] = 'System Ready';
 $text['BS'] = 'BS';//BS
 $text['Barcode'] = 'Barcode';
+$text['Turning CW']  = 'Turning CW';
+$text['Turning CCW'] = 'Turning CCW';
+    //CW_RUN     = ["turning CW", "順時針轉動", "顺时针转动"]
+    //CCW_RUN    = ["turning CCW", "逆時針轉動", "逆时针转动"]
+
 
 $text['output_replace_notice'] = 'If the job output already exists, it will replace the original setting';
 $text['input_replace_notice'] = 'If the job input already exists, it will replace the original setting';
