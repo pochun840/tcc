@@ -623,3 +623,16 @@ $error_message['ERR_27'] = '工作完成按确认';
 $error_message['ERR_28'] = '工件复归按确认';
 $error_message['ERR_29'] = '目标扭力为必填栏位';
 $error_message['ERR_30'] = '控制器尚未登出';
+
+
+
+$text['over_size_text'] = '檔案大小超過限制：30M';
+$text['invalid_file_extension'] = '上传文件必须为 .pack 格式，目前为：';
+$text['cannot_open_pack'] = '无法打开 .pack 更新文件';
+$text['extract_failed'] = '解压缩失败';
+$text['no_extracted_folder'] = '未找到解压缩文件夹';
+$text['missing_info_json'] = '缺少 info.json，无法验证更新文件';
+$text['info_json_invalid'] = 'info.json 格式错误或缺少 Match_TCC_Version';
+$text['version_too_low'] = '更新文件版本低于当前版本，无法更新，当前版本：';
+$text['update_success'] = '更新成功，已将文件移动至 tccidas 目录';
+

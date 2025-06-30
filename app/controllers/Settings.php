@@ -989,19 +989,19 @@ class Settings extends Controller
 
             //  6. 檢查檔案大小（限制為 30MB 以內）
             if ($_FILES['file']['size'] > 30 * 1024 * 1024) {
-                return $this->sendResponse('Error', '檔案大小超過限制：30MB');
+                return $this->sendResponse('Error', $text['over_size_text']);
             }
 
             //  7. 驗證副檔名必須為 .pack
             $uploaded_filename = $_FILES['file']['name'];
             if (strtolower(pathinfo($uploaded_filename, PATHINFO_EXTENSION)) !== 'pack') {
-                return $this->sendResponse('Error', '上傳檔案必須為 .pack 格式，目前為：' . $uploaded_filename);
+                return $this->sendResponse('Error', $text['invalid_file_extension']. $uploaded_filename);
             }
 
             //  8. 使用 ZipArchive 解壓縮 .pack 檔案
             $zip = new ZipArchive();
             if ($zip->open($_FILES['file']['tmp_name']) !== TRUE) {
-                return $this->sendResponse('Error', '無法開啟 .pack 更新檔案');
+                return $this->sendResponse('Error', $text['cannot_open_pack']);
             }
 
             //  9. 若解壓縮目錄不存在就先建立
@@ -1010,14 +1010,14 @@ class Settings extends Controller
             //  10. 解壓縮至指定目錄
             if (!$zip->extractTo($extract_path)) {
                 $zip->close();
-                return $this->sendResponse('Error', '解壓縮失敗');
+                return $this->sendResponse('Error', $text['extract_failed'] );
             }
             $zip->close();
 
             //  11. 找出解壓縮後的主資料夾
             $folders = array_filter(scandir($extract_path), fn($f) => is_dir($extract_path . $f) && !in_array($f, ['.', '..']));
             if (empty($folders)) {
-                return $this->sendResponse('Error', '未找到解壓縮資料夾');
+                return $this->sendResponse('Error', $text['no_extracted_folder'] );
             }
 
             //  12. 指定主資料夾與 info.json 路徑
@@ -1026,19 +1026,19 @@ class Settings extends Controller
 
             //  13. 檢查 info.json 是否存在
             if (!file_exists($info_json_url)) {
-                return $this->sendResponse('Error', '缺少 info.json，無法驗證更新檔');
+                return $this->sendResponse('Error', $text['missing_info_json'] );
             }
 
             //  14. 解析 info.json，取得更新檔版本資訊
             $verify_data = json_decode(@file_get_contents($info_json_url), true);
             if (!$verify_data || !isset($verify_data['Match_TCC_Version'])) {
-                return $this->sendResponse('Error', 'info.json 格式錯誤或缺少 Match_TCC_Version');
+                return $this->sendResponse('Error', $text['info_json_invalid']);
             }
 
             //  15. 比對版本：如果更新檔比目前版本還舊，就不更新
             $match_tcc_version = $verify_data['Match_TCC_Version'];
             if (version_compare($match_tcc_version, $iDas_Vesion, '<')) {
-                return $this->sendResponse('Error', "更新檔版本低於目前版本，無法更新（目前版本：$iDas_Vesion，更新版本：$match_tcc_version）");
+                return $this->sendResponse('Error',  $text['version_too_low'] . $iDas_Vesion . '，更新版本：' . $match_tcc_version);
             }
 
 
@@ -1058,7 +1058,7 @@ class Settings extends Controller
 
         
             //  20. 成功更新回應
-            return $this->sendResponse('Success', '更新成功，已將檔案移動至 tccidas 目錄');
+            return $this->sendResponse('Success',$text['update_success'] . '<script>window.location.href="?url=In";</script>');
 
         } finally {
             //  21. 無論成功或失敗，清除主資料夾與解壓縮目錄
