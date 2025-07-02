@@ -130,6 +130,10 @@ function create_output_id() {
    // 取得選取的事件選項值
    var output_event = document.getElementById("Event_Option").value;
 
+   
+   const skipEvents = [7, 8, 9, 10, 11,14, 15];
+
+
    // 收集使用者所勾選的輸出腳位（radio input），回傳包含 id 與 value 的陣列
    var pinval = collectPinValues('input[name="pin_option"]');
 
@@ -161,7 +165,7 @@ function create_output_id() {
        }
 
        // 當模式為 3（trigger 時），才檢查 wave_on 是否在合理範圍內
-       if (wave == 3) {
+       if (wave == 3 && !skipEvents.includes(Number(output_event))) {
            if (wave_on < 100 || wave_on > 10000) {
                alertify.alert(messages[language]); // 顯示語系對應的錯誤訊息
                setTimeout(function () {
@@ -405,46 +409,76 @@ function disableNextPin(filteredArray) {
    });
 }
 
+
 function toggleElementsInRange(start, end, suffix, filtered_array = []) {
-   let selectedOptionId = eventOption.options[eventOption.selectedIndex].value;
-   const disableOptions = [7, 8, 9, 12, 13, 14, 15, 16]; 
-   let disableAll = disableOptions.includes(parseInt(selectedOptionId));
+    let selectedOptionId = parseInt(eventOption.options[eventOption.selectedIndex].value);
+    const disableOptions = [7, 8, 9, 12, 13, 14, 15, 16];
+    let disableAll = disableOptions.includes(selectedOptionId);
 
-   for (let i = start; i <= end; i++) {
-       for (let j = 1; j <= suffix; j++) {
-           let id = 'pin' + i + '_' + j;
-           let element = document.getElementById(id);
+    const isAlwaysEnable = [10, 11].includes(selectedOptionId);
 
-           if (element) {
-               // 原本的禁用邏輯
-               element.disabled = disableAll && (j === 1 || j === 2);
-           }
-       }
+    // 新增：記錄哪些 pin?_3 被勾選
+    const pins3Checked = [];
 
-       let timeId = 'time' + i;
-       let timeElement = document.getElementById(timeId);
-       if (timeElement) {
-           timeElement.disabled = disableAll;
-       }
-   }
+    // 掃所有 pin?_3 看誰被勾
+    for (let i = start; i <= end; i++) {
+        let pin3Id = `pin${i}_3`;
+        let pin3Element = document.getElementById(pin3Id);
 
-   const pinDisableMap = {};
+        if (pin3Element && pin3Element.checked) {
+            pins3Checked.push(i);
+        }
+    }
 
-   for(let i = 1; i <= 9; i++) {
-       pinDisableMap[`pin${i}_1`] = `pin${i}_3`;
-       pinDisableMap[`pin${i}_2`] = `pin${i}_3`;
-   }
+    for (let i = start; i <= end; i++) {
+        for (let j = 1; j <= suffix; j++) {
+            let id = 'pin' + i + '_' + j;
+            let element = document.getElementById(id);
 
-   Object.entries(pinDisableMap).forEach(([triggerPin, targetPin]) => {
-       if (filtered_array.includes(triggerPin)) {
-           const targetElement = document.getElementById(targetPin);
-           if (targetElement) {
-               targetElement.disabled = true;
-               //console.log(`${targetPin} 已被禁用 (因為 filtered_array 包含 ${triggerPin})`);
-           }
-       }
-   });
+            if (element) {
+                if (isAlwaysEnable) {
+                    element.disabled = false;
+                } else {
+                    element.disabled = disableAll && (j === 1 || j === 2);
+                }
+            }
+        }
+
+        let timeId = 'time' + i;
+        let timeElement = document.getElementById(timeId);
+        if (timeElement) {
+            if (isAlwaysEnable) {
+                timeElement.disabled = false;
+            } else if (pins3Checked.includes(i)) {
+                // ✅ 新增邏輯：
+                // 若 pin?_3 被勾選 → timeX 一定要 enabled
+                timeElement.disabled = false;
+            } else {
+                timeElement.disabled = disableAll;
+            }
+        }
+    }
+
+    const pinDisableMap = {};
+    for (let i = 1; i <= 9; i++) {
+        pinDisableMap[`pin${i}_1`] = `pin${i}_3`;
+        pinDisableMap[`pin${i}_2`] = `pin${i}_3`;
+    }
+
+    Object.entries(pinDisableMap).forEach(([triggerPin, targetPin]) => {
+        const targetElement = document.getElementById(targetPin);
+        if (targetElement) {
+            if (isAlwaysEnable) {
+                targetElement.disabled = false;
+            } else if (filtered_array.includes(triggerPin)) {
+                targetElement.disabled = true;
+            }
+        }
+    });
 }
+
+
+
 
 
 // ================================

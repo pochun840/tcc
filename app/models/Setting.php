@@ -212,15 +212,33 @@ class Setting{
         return $row['device_version'];
     }
 
-    public function GetAllBarcodes()
-    {
-        $sql = "SELECT barcode.*,job.job_name FROM barcode left join `job` on barcode_selected_job = job_id order by barcode_selected_job";
+    public function GetAllBarcodes(){
+
+        $sql = "
+            SELECT
+                barcode.barcode_selected_job,
+                MIN(barcode.barcode) AS barcode,
+                MIN(barcode.barcode_mask_from) AS barcode_mask_from,
+                MIN(barcode.barcode_mask_count) AS barcode_mask_count,
+                barcode.barcode_enable,
+                MIN(job.job_name) AS job_name
+            FROM barcode
+            LEFT JOIN job
+                ON barcode_selected_job = job_id
+            GROUP BY barcode.barcode_selected_job
+            ORDER BY barcode.barcode_selected_job
+        ";
+
         $statement = $this->db_iDas->prepare($sql);
-        $results = $statement->execute();
-        $rows = $statement->fetchall(PDO::FETCH_ASSOC);
+        if (!$statement) {
+            die("SQL prepare failed: " . implode(", ", $this->db_iDas->errorInfo()));
+        }
+        $statement->execute();
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $rows;
     }
+
 
     public function Update_Barcode($barcode)
     {
@@ -281,7 +299,7 @@ class Setting{
     //get all job
     public function get_job_list(){
 
-        $sql = "SELECT * FROM job ORDER BY job_id";
+       $sql = "SELECT job_id, MIN(job_name) as job_name FROM job GROUP BY job_id ORDER BY job_id";
         $statement = $this->db_iDas->prepare($sql);
         $results = $statement->execute();
         $rows = $statement->fetchall(PDO::FETCH_ASSOC);

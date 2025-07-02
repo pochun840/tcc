@@ -503,100 +503,108 @@ class Step extends Controller
     public function search_stepinfo(){
 
         $input_check = true;
-        if(!empty($_POST['job_id']) && isset($_POST['job_id'])){
-            $jobid = $_POST['job_id'];
-        }else{
-            $input_check = false; 
+
+        $jobid  = !empty($_POST['job_id'])  ? $_POST['job_id']  : ($input_check = false);
+        $seqid  = !empty($_POST['seq_id'])  ? $_POST['seq_id']  : ($input_check = false);
+        $stepid = !empty($_POST['step_id']) ? $_POST['step_id'] : ($input_check = false);
+
+        if (!$input_check) {
+            echo "Missing required parameters.";
+            return;
         }
 
-        if(!empty($_POST['seq_id']) && isset($_POST['seq_id'])){
-            $seqid = $_POST['seq_id'];
-        }else{
-            $input_check = false; 
-        }
-
-        if(!empty($_POST['step_id']) && isset($_POST['step_id'])){
-            $stepid  = $_POST['step_id'];
-        }else{
-            $input_check = false; 
-        }
-
-
-        //取得控制器的扭力單位 
+        // 取得控制器扭力單位
         $device = $this->Device_Info();
-        $device_torque_unit = (int)$device['device_torque_unit'];
+        $device_torque_unit = (int)($device['device_torque_unit'] ?? 1);
 
-        $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
+        $unit_arr = $this->MiscellaneousModel->details('torque_unit');
+        $unit_names = [
+            0 => "kgf.m",
+            1 => "N.m",
+            2 => "kgf.cm",
+            3 => "Lbf.in",
+            4 => "cN.m"
+        ];
+        $decimals = [
+            0 => 4,
+            1 => 3,
+            2 => 2,
+            3 => 2,
+            4 => 1
+        ];
 
-        if($input_check){
+        $res = $this->stepModel->getStepNo($jobid, $seqid, $stepid);
 
-            $res = $this->stepModel->getStepNo($jobid, $seqid, $stepid);
+        if (empty($res[0])) {
+            echo "Step data not found.";
+            return;
+        }
 
-            $step_tor_unit = (int)$res[0]['tor_unit'];
+        $step_data = $res[0];
+        $step_tor_unit = (int)($step_data['tor_unit'] ?? 1);
+        $no_unit = $step_tor_unit;
 
-            //如果 $step_tor_unit 跟 $device_torque_unit 不一樣 
-            //以 $step_tor_unit  為主 
-            /*if($step_tor_unit != $device_torque_unit){
-                // 依照 控制器為主
-                //echo "112";
-                $unit_name = $unit_arr[$device_torque_unit];
-                $flag = true;
-                $no_unit = $device_torque_unit;
-            }else{
-                // 依照step為主
-                //echo "1123";
-                $unit_name = $unit_arr[$res[0]['tor_unit']];
-                $flag = false;
-                $no_unit = $step_tor_unit;
-            
-            }*/
+        $unit_name = $unit_arr[$step_tor_unit] ?? "N.m";
 
-            $unit_name = $unit_arr[$res[0]['tor_unit']];
-            $flag = false;
-            $no_unit = $step_tor_unit;
-          
-            $target_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['target_tor'],$no_unit); 
-            $tor_hi_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_hi'],$no_unit); 
-            $tor_lo_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_lo'],$no_unit); 
-            $ds_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['ds_tor'],$no_unit); 
-            $th_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res[0]['tor_lo'],$no_unit); 
+        if ($step_tor_unit != $device_torque_unit) {
+            // 轉成控制器單位
+            $unit_name = $unit_arr[$device_torque_unit] ?? "N.m";
+        }
 
+        // 先轉換所有 torque 值
+        $target_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($step_data['target_tor'], $no_unit);
+        $tor_hi_tmp     = $this->MiscellaneousModel->convert_all_torque_units($step_data['tor_hi'],     $no_unit);
+        $tor_lo_tmp     = $this->MiscellaneousModel->convert_all_torque_units($step_data['tor_lo'],     $no_unit);
+        $ds_tor_tmp     = $this->MiscellaneousModel->convert_all_torque_units($step_data['ds_tor'],     $no_unit);
+        $th_tor_tmp     = $this->MiscellaneousModel->convert_all_torque_units($step_data['tor_lo'],     $no_unit);
 
+        // 使用控制器單位或 step 單位填值
+        if (!empty($target_tor_tmp)) {
 
-            if(!empty($target_tor_tmp)){
-                //這邊判斷 
-                if($step_tor_unit != $device_torque_unit){
-                     $unit_name = $unit_arr[$device_torque_unit];
-                }
-                $res[0]['target_tor'] = $target_tor_tmp[$unit_name];
-                $res[0]['tor_hi'] = $tor_hi_tmp[$unit_name];
-                $res[0]['th_tor'] = $th_tor_tmp[$unit_name];
-                $res[0]['ds_tor'] = $ds_tor_tmp[$unit_name];
+            if ($step_tor_unit != $device_torque_unit) {
+                // 不同單位 → 取轉換後值
+                $step_data['target_tor'] = $target_tor_tmp[$unit_name];
+                $step_data['tor_hi']     = $tor_hi_tmp[$unit_name];
+                $step_data['th_tor']     = $th_tor_tmp[$unit_name];
+                $step_data['ds_tor']     = $ds_tor_tmp[$unit_name];
 
+            } else {
+                // 相同單位 → 保留原值，但補小數位數
+                $decimal = $decimals[$step_tor_unit] ?? 3;
+
+                $step_data['target_tor'] = $this->formatTorque($step_data['target_tor'], $decimal);
+                $step_data['tor_hi']     = $this->formatTorque($step_data['tor_hi'],     $decimal);
+                $step_data['th_tor']     = $this->formatTorque($step_data['th_tor'],     $decimal);
+                $step_data['ds_tor']     = $this->formatTorque($step_data['ds_tor'],     $decimal);
             }
+        }
 
+        // 取得工具資訊 → 全部轉成 unit_name 單位
+        $tools = $this->ToolModel->GetToolInfo();
 
-            //取得起子的資訊 重新調整 上下限
-            $tools = $this->ToolModel->GetToolInfo();
-
-            $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1); 
+        if (!empty($tools)) {
+            $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_mintorque'], 1);
             $tmp_torque_2 = $this->MiscellaneousModel->convert_all_torque_units($tools['tool_maxtorque'], 1);
 
             if (is_array($tmp_torque_1) && isset($tmp_torque_1[$unit_name])) {
                 $tools['tool_mintorque'] = $tmp_torque_1[$unit_name];
             }
-
             if (is_array($tmp_torque_2) && isset($tmp_torque_2[$unit_name])) {
                 $tools['tool_maxtorque'] = $tmp_torque_2[$unit_name];
             }
-            
-            $tools['__from_outside'] = true;
-            $merged_info = array_merge($res[0], $tools);
-            print_r($merged_info);            
         }
-        
+
+        $tools['__from_outside'] = true;
+
+        $merged_info = array_merge($step_data, $tools);
+
+        print_r($merged_info);
     }
 
+    private function formatTorque($value, $decimal){
+        if (!is_numeric($value)) return $value;
+        return number_format((float)$value, $decimal, '.', '');
+    }
         
     #排序step
     public function adjustment_order(){

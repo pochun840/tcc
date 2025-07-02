@@ -924,7 +924,7 @@ function input_check_savebarcode() {
     let rangeLabel = "<?php echo $error_message['OOR']; ?>"; 
 
     let conditions = [
-        { id: 'barcode_content',  pattern: /^[a-zA-Z0-9\u4E00-\u9FA5\-]{1,100}$/, min: null, max: null },
+        { id: 'barcode_content',  pattern: /.*/, min: 1, max: 100, isString: true },
         { id: 'barcode_mask_from', pattern: /^[0-9]+$/, min: 1, max: 54 },
         { id: 'barcode_mask_count', pattern: /^[0-9]+$/, min: 1, max: 100 },
 
@@ -938,45 +938,58 @@ function input_check_savebarcode() {
             element.nextElementSibling.innerHTML = `${rangeLabel} ${input.min} ~ ${input.max}`;
         }
 
-        if (!validateInput(element, input.pattern, input.min, input.max)) {
+        if (!validateInput(element, input.pattern, input.min, input.max, input.isString)) {
             isFormValid = false;
         }
     });
 
+
     return isFormValid;
 }
 
-function validateInput(element, pattern, min, max) {
+
+function validateInput(element, pattern, min, max, isString) {
     let value = element.value.trim();
     let isValid = true;
 
-    // 验证空值
     if (value === "") {
         element.classList.add("is-invalid");
         isValid = false;
     }
-    // 验证正则
     else if (!pattern.test(value)) {
         element.classList.add("is-invalid");
         isValid = false;
     }
-    // 验证最小值
-    else if (min !== null && parseFloat(value) < min) {
-        element.classList.add("is-invalid");
-        isValid = false;
+    else if (isString) {
+        // 檢查字串長度
+        if (min !== null && value.length < min) {
+            element.classList.add("is-invalid");
+            isValid = false;
+        }
+        else if (max !== null && value.length > max) {
+            element.classList.add("is-invalid");
+            isValid = false;
+        } else {
+            element.classList.remove("is-invalid");
+        }
     }
-    // 验证最大值
-    else if (max !== null && parseFloat(value) > max) {
-        element.classList.add("is-invalid");
-        isValid = false;
-    }
-    // 通过验证
     else {
-        element.classList.remove("is-invalid");
+        // 檢查數字大小
+        if (min !== null && parseFloat(value) < min) {
+            element.classList.add("is-invalid");
+            isValid = false;
+        }
+        else if (max !== null && parseFloat(value) > max) {
+            element.classList.add("is-invalid");
+            isValid = false;
+        } else {
+            element.classList.remove("is-invalid");
+        }
     }
 
     return isValid;
 }
+
 
 function Export_SystemConfig(argument) {
 

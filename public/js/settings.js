@@ -323,3 +323,10 @@ function idas_update() {
     });
 }
 
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('barcode_content').addEventListener('input', function() {
+        var length = this.value.length;
+        document.getElementById('barcode_mask_count').value = length;
+    });
+});
