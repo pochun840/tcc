@@ -838,8 +838,7 @@ class Settings extends Controller
         $barcode['barcode_mask_count']    = $_POST['barcode_mask_count'] ?? null;
         $barcode['barcode_selected_job']  = $_POST['barcode_selected_job'] ?? null;
         $barcode['barcode_enable']        = $_POST['barcode_enable'] ?? null;
-        $barcode['barcode_selected_seq']  = '';
-        
+        $barcode['barcode_selected_seq']  = $_POST['barcode_selected_seq'] ?? null;
         if(!empty($barcode)){
             $barcode_result = $this->SettingModel->Update_Barcode($barcode);
             if($barcode_result){
