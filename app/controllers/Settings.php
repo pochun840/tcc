@@ -403,8 +403,8 @@ class Settings extends Controller
                 // exit();
 
                 header("Content-type: text/html; charset=utf-8");
-                $file="/mnt/ramdisk/tcccon.db"; // 實際檔案的路徑+檔名
-                $filename="tcccon.cfg"; // 下載的檔名
+                $file="/mnt/ramdisk/ftp/None"; // 實際檔案的路徑+檔名
+                $filename="tcccon"; // 下載的檔名
                 //指定類型
                 header("Content-type: ".filetype("$file"));
                 //指定下載時的檔名
@@ -421,8 +421,8 @@ class Settings extends Controller
         }else{//windows
             // echo json_encode(array('error' => ''));
                 header("Content-type: text/html; charset=utf-8");
-                $file="../tcscon.db"; // 實際檔案的路徑+檔名
-                $filename="tcscon.cfg"; // 下載的檔名
+                $file="../tcccon.db"; // 實際檔案的路徑+檔名
+                $filename="tcccon.cfg"; // 下載的檔名
                 //指定類型
                 header("Content-type: ".filetype("$file"));
                 //指定下載時的檔名
@@ -1176,6 +1176,8 @@ class Settings extends Controller
             include $file;
         }
 
+       
+
         // 初始化
         $result = '';
         
@@ -1228,7 +1230,7 @@ class Settings extends Controller
 
                     $modbus->writeMultipleRegister(0, 462, array(1), $dataTypes);
 
-                    exit();
+                    //exit();
 
                 } catch (Exception $e) {
                     // Print error information if any
@@ -1247,31 +1249,79 @@ class Settings extends Controller
                 $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
                 exit();
             }
-
-
-        } else {
-
-            // 指定目標文件名
-            $new_file_name = 'idas_data.db';  // 新檔案名稱，不管原檔案名稱如何
-
-            // 在非 Linux 系統中，將上傳的檔案移動到指定路徑
-            $destination = "../" . $new_file_name; // 需要替換的檔案位置
-    
-            // 嘗試將上傳的檔案移動到新的位置並重命名
-            $result = move_uploaded_file($_FILES['file']['tmp_name'], $destination);
-    
-            // 檢查檔案是否成功上傳
-            if ($result) {
-                $res_type = 'Success';
-                $res_msg = 'File uploaded and renamed successfully to ' . $new_file_name . '.';
-                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);  // 假設有這個成功的回應方法
-            } else {
-                $res_type = 'Error';
-                $res_msg = 'Failed to move the uploaded file.';
-                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
-            }
         }
     }
+
+
+    /*public function Import_Config_aaa()
+    {
+        $file_location = '';
+        $result = '';
+
+        if(empty($_FILES)){
+            echo json_encode(["Error" => 'no file']);
+            exit();
+        }
+
+
+        if( PHP_OS_FAMILY == 'Linux'){
+            $this->logMessage('Import config start');
+
+            $destination = "/mnt/ramdisk/FTP/iDas.cfg";
+            //將檔案移到指定位置
+            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
+            $diff = $this->CheckImportLanguageDiff($destination);
+
+            if ($result) {
+                require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+                $modbus = new ModbusMaster("127.0.0.1", "TCP");
+                try {
+                    $modbus->port = 502;
+                    $modbus->timeout_sec = 10;
+                    $data = array(1, 26948, 24947);
+                    $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+
+                    // FC 16
+                    $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
+                    $this->logMessage('modbus write 506 ,array = '.implode("','", $data));
+                    $this->logMessage('modbus status:'.$modbus->status);
+                    $this->logMessage('Import config end');
+                    echo json_encode(array('error' => '','diff' => $diff));
+                    exit();
+
+                } catch (Exception $e) {
+                    // Print error information if any
+                    // echo $modbus;
+                    // echo $e;
+                    $this->logMessage('modbus write 506 fail');
+                    $this->logMessage('modbus status:'.$modbus->status);
+                    $this->logMessage('Import config end');
+                    echo json_encode(array('error' => 'modbus error','diff' => $diff));
+                    exit();
+                }
+            } else {
+                $this->logMessage('copy db error');
+                $this->logMessage('Import config end');
+                echo json_encode(array('error' => 'copy db error','diff' => $diff));
+                exit();
+            }
+
+        }else{//windows暫不考慮升級，可能整包升級
+            // $this->logMessage('Import config start');
+            $destination = "../tcscon-test.db";
+            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
+
+            if($result){
+                echo json_encode(["error" => '']);
+                exit();
+            }else{
+                echo json_encode(["error" => 'fail']);
+                exit();
+            }            
+        }
+
+        echo json_encode(["message" => $result]);
+    }*/
 
 
     public function FirmwareUpdate(){

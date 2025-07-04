@@ -163,7 +163,7 @@ $text['Threshold_Angle'] = '門檻點角度';
 $text['torque_unit'] = '扭力單位';
 
 $text['join'] ='結合';
-$text['opt'] = '最佳化';
+$text['opt'] = '優化';
 $text['soft'] = '軟';
 $text['hard'] = '硬';
 $text['ok_time'] = "OK one持續時間";

@@ -131,7 +131,7 @@ function create_output_id() {
    var output_event = document.getElementById("Event_Option").value;
 
    
-   const skipEvents = [7, 8, 9, 10, 11,14, 15];
+   const skipEvents = [7,8,9,10,11,12,13,14,15];
 
 
    // 收集使用者所勾選的輸出腳位（radio input），回傳包含 id 與 value 的陣列
