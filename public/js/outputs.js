@@ -127,104 +127,110 @@ function toggleOnputTime_edit(inputId, checked, option) {
 // ================================
 
 function create_output_id() {
-   // 取得選取的事件選項值
-   var output_event = document.getElementById("Event_Option").value;
+    // 取得選取的事件選項值
+    var output_event = document.getElementById("Event_Option").value;
 
-   
-   const skipEvents = [7,8,9,10,11,12,13,14,15];
+    const skipEvents = [7,8,9,10,11,12,13,14,15];
 
+    // 收集使用者所勾選的輸出腳位（radio input），回傳包含 id 與 value 的陣列
+    var pinval = collectPinValues('input[name="pin_option"]');
 
-   // 收集使用者所勾選的輸出腳位（radio input），回傳包含 id 與 value 的陣列
-   var pinval = collectPinValues('input[name="pin_option"]');
+    // 檢查是否有勾選腳位
+    if (pinval.length > 0) {
+        var pin_old = pinval[0]['id'];   // 例如：pin3_1
+        var wave = pinval[0]['value'];  // 取得腳位模式（如 1、2、3）
 
-   // 檢查是否有勾選腳位
-   if (pinval.length > 0) {
-       var pin_old = pinval[0]['id'];   // 例如：pin3_1
-       var wave = pinval[0]['value'];  // 取得腳位模式（如 1、2、3）
+        // 從 ID 中提取數字（腳位號），例如從 pin3_1 中取得 3
+        var match = pin_old.match(/\d+/);
+        var output_pin = match ? parseInt(match[0]) : null;
 
-       // 從 ID 中提取數字（腳位號），例如從 pin3_1 中取得 3
-       var match = pin_old.match(/\d+/); 
-       var output_pin = match ? parseInt(match[0]) : null;
+        // 組合對應的時間輸入欄位 ID，例如：time3
+        var time_ms = 'time' + output_pin;
+        var wave_on = document.getElementById(time_ms).value;
 
-       // 組合對應的時間輸入欄位 ID，例如：time3
-       var time_ms = 'time' + output_pin;
-       var wave_on = document.getElementById(time_ms).value;
+        // 取得語言設定（cookie）
+        var language = getCookie('language');
 
-       // 取得語言設定（cookie）
-       var language = getCookie('language');
+        // 定義各語系下的錯誤訊息
+        var messages = {
+            'en-us': "Please enter a wave value between 100 and 10000.",
+            'zh-tw': "範圍介於100和10000之間。",
+            'zh-cn': "范围介于100和10000之间。"
+        };
 
-       // 定義各語系下的錯誤訊息
-       var messages = {
-           'en-us': "Please enter a wave value between 100 and 10000.",
-           'zh-tw': "範圍介於100和10000之間。",
-           'zh-cn': "范围介于100和10000之间。"
-       };
+        if (!language) {
+            language = 'en-us'; // 預設語言
+        }
 
-       if (!language) {
-           language = 'en-us'; // 預設語言
-       }
+        // 當模式為 3（trigger 時），才檢查 wave_on 是否在合理範圍內
+        if (wave == 3 && !skipEvents.includes(Number(output_event))) {
+            if (wave_on < 100 || wave_on > 10000) {
+                alertify.alert(messages[language]); // 顯示語系對應的錯誤訊息
+                setTimeout(function () {
+                    alertify.closeAll();
+                }, 3000);
+                return; // 中止送出
+            }
+        }
 
-       // 當模式為 3（trigger 時），才檢查 wave_on 是否在合理範圍內
-       if (wave == 3 && !skipEvents.includes(Number(output_event))) {
-           if (wave_on < 100 || wave_on > 10000) {
-               alertify.alert(messages[language]); // 顯示語系對應的錯誤訊息
-               setTimeout(function () {
-                   alertify.closeAll();
-               }, 3000);
-               return; // 中止送出
-           }
-       }
+        // 檢查 job_id 是否已定義
+        if (typeof job_id !== "undefined" && job_id) {
+            // 顯示 loading spinner
+            document.getElementById('spinner').style.display = 'block';
 
-       // 檢查 job_id 是否已定義
-       if (job_id) {
-           // 顯示 loading spinner
-           document.getElementById('spinner').style.display = 'block';
+            // 發送 AJAX 請求儲存輸出事件設定
+            $.ajax({
+                url: "?url=Outputs/create_output_event",
+                method: "POST",
+                data: {
+                    job_id: job_id,
+                    output_pin: output_pin,
+                    output_event: output_event,
+                    wave: wave,
+                    wave_on: wave_on
+                },
 
-           // 發送 AJAX 請求儲存輸出事件設定
-           $.ajax({
-               url: "?url=Outputs/create_output_event",
-               method: "POST",
-               data: {
-                   job_id: job_id,
-                   output_pin: output_pin,
-                   output_event: output_event,
-                   wave: wave,
-                   wave_on: wave_on
-               },
+                success: function (response) {
+                    // 成功後隱藏新增面板
+                    document.getElementById('new_output').style.display = 'none';
 
-               success: function (response) {
-                   // 成功後隱藏新增面板
-                   document.getElementById('new_output').style.display = 'none';
+                    // 將回傳的 JSON 字串解析成物件
+                    var responseData = JSON.parse(response);
 
-                   // 將回傳的 JSON 字串解析成物件
-                   var responseData = JSON.parse(response);
+                    // 顯示回傳訊息
+                    alertify.alert(responseData.res_type, responseData.res_msg);
 
-                   // 顯示回傳訊息
-                   alertify.alert(responseData.res_type, responseData.res_msg);
+                    // 延遲關閉彈窗與 Spinner，並更新畫面資料
+                    setTimeout(function () {
+                        alertify.closeAll();
+                        document.getElementById('spinner').style.display = 'none';
+                        document.querySelector(".main-content").classList.remove("overlay-active");
+                        get_output_by_job_id(job_id); // 重新載入 job 對應的輸出資料
+                    }, 1000);
 
-                   // 延遲關閉彈窗與 Spinner，並更新畫面資料
-                   setTimeout(function () {
-                       alertify.closeAll();
-                       document.getElementById('spinner').style.display = 'none';
-                       document.querySelector(".main-content").classList.remove("overlay-active");
-                       get_output_by_job_id(job_id); // 重新載入 job 對應的輸出資料
-                   }, 1000);
+                    // 重置事件選單選項為 -1（預設值）
+                    if (document.getElementById("Event_Option").value !== "-1") {
+                        document.getElementById("Event_Option").value = "-1";
+                    }
+                },
 
-                   // 重置事件選單選項為 -1（預設值）
-                   if (document.getElementById("Event_Option").value !== "-1") {
-                       document.getElementById("Event_Option").value = "-1";
-                   }
-               },
+                error: function (xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                }
+            });
+        }
+    } else {
+        // ✅ 新增提示
+        alertify.alert("請先選擇輸出腳位！");
+        setTimeout(function () {
+            alertify.closeAll();
+        }, 3000);
 
-               error: function (xhr, status, error) {
-                   console.error("AJAX request failed:", status, error);
-               }
-           });
-       }
-   } else {
-       console.error("No pinval found or pinval[0] is undefined.");
-   }
+        console.error("No pinval found or pinval[0] is undefined.");
+        return;
+    }
 }
+
 
 
 
@@ -415,7 +421,7 @@ function toggleElementsInRange(start, end, suffix, filtered_array = []) {
     const disableOptions = [7, 8, 9, 12, 13, 14, 15, 16];
     let disableAll = disableOptions.includes(selectedOptionId);
 
-    const isAlwaysEnable = [10, 11].includes(selectedOptionId);
+    const isAlwaysEnable = [10, 11,12,13].includes(selectedOptionId);
 
     // 新增：記錄哪些 pin?_3 被勾選
     const pins3Checked = [];

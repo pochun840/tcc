@@ -110,7 +110,6 @@ class Miscellaneous{
                 13  => 'Barcode',
                 14  => 'Turning CW',
                 15  => 'Turning CCW',
-                //16  => 'UserDefine5',
             );
         }
 

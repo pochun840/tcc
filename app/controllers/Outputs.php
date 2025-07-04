@@ -23,6 +23,8 @@ class Outputs extends Controller
         $isMobile     = $this->isMobileCheck();
         $joblist      = $this->InputModel->get_job_list();
         $event_output = $this->MiscellaneousModel->details('io_output');
+
+
         $device_data  = $this->InputModel->get_input_alljob();
 
         if(!empty($joblist)){
