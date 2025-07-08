@@ -341,7 +341,7 @@
                         </div>
                        
                         <div class="row">
-                            <div for="OPT" class="col-6 t1"><?php  echo $text['opt'];?> :</div>
+                            <div class="col-6 t1"><?php  echo $text['opt'];?> :</div>
                             <div class="col t2" >
             			      	<div class="col-4 form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_opt_option" id="edit_OPT_OFF" value="0">
@@ -350,20 +350,6 @@
             					<div class="form-check form-check-inline">
             					  <input class="form-check-input" type="radio" name="edit_opt_option" id="edit_OPT_ON" value="1">
             					  <label class="form-check-label" for="edit_OPT_ON"><?php echo $text['switch_on'];?></label>
-            					</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div for="OPT" class="col-6 t1"><?php  echo $text['opt'];?> :</div>
-                            <div class="col t2" >
-            			      	<div class="col-4 form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_OFF" value="0">
-            					  <label class="form-check-label" for="OPT_OFF"><?php echo $text['switch_off'];?></label>
-            					</div>
-            					<div class="form-check form-check-inline">
-            					  <input class="form-check-input" type="radio" name="opt_option" id="OPT_ON" value="1">
-            					  <label class="form-check-label" for="OPT_ON"><?php echo $text['switch_on'];?></label>
             					</div>
                             </div>
                         </div>

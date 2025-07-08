@@ -403,7 +403,7 @@ class Settings extends Controller
                 // exit();
 
                 header("Content-type: text/html; charset=utf-8");
-                $file="/mnt/ramdisk/ftp/None"; // 實際檔案的路徑+檔名
+                $file="/mnt/ramdisk/ftp/tcccon.cfg"; // 實際檔案的路徑+檔名
                 $filename="tcccon"; // 下載的檔名
                 //指定類型
                 header("Content-type: ".filetype("$file"));

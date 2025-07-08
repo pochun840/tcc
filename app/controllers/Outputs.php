@@ -82,9 +82,6 @@ class Outputs extends Controller
                         $tempA[] = $vv['output_event'];
                     }
 
-                    var_dump($vv['output_event']);die();
-
-
                     $isMobile = $this->isMobileCheck();
                     if($isMobile){
 
