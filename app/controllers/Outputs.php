@@ -55,6 +55,8 @@ class Outputs extends Controller
 
         $event_output = $this->MiscellaneousModel->details('io_output');
 
+        //var_dump($event_output);die();
+
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
             $job_id = $_POST['job_id'];
@@ -80,6 +82,9 @@ class Outputs extends Controller
                         $tempA[] = $vv['output_event'];
                     }
 
+                    var_dump($vv['output_event']);die();
+
+
                     $isMobile = $this->isMobileCheck();
                     if($isMobile){
 
@@ -90,6 +95,7 @@ class Outputs extends Controller
                         }else{
                             $img = '<img src="./img/trigger.png" style="max-width: 50px;">';
                         }   
+
 
                         $job_outputlist .= "<tr data-event ='".$vv['output_event']."'>";
                         $job_outputlist .= "<td id='".$vv['output_event']."'>".$event_output[$vv['output_event']]."</td>";
