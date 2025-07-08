@@ -129,6 +129,12 @@ function update_barcode(){
 
     if(check){ 
         //document.querySelector(".main-content").classList.add("overlay-active");
+
+        //新增判斷 Job
+        if (barcode_selected_job === "-1") {
+            return;
+        }
+
         document.getElementById('spinner').style.display = 'block';
 
         $.ajax({
