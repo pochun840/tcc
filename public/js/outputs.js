@@ -979,42 +979,58 @@ function job_confirm(){
                    });
                });
 
-               var language = getCookie('language');
-               if(language == "zh-cn"){
-                   document.getElementById('1') && (document.getElementById('1').textContent = 'OK');
-                   document.getElementById('2') && (document.getElementById('2').textContent = 'NG');
-                   document.getElementById('3') && (document.getElementById('3').textContent = '超出上限');
-                   document.getElementById('4') && (document.getElementById('4').textContent = '低于下限');
-                   document.getElementById('5') && (document.getElementById('5').textContent = '工序完成信号');
-                   document.getElementById('6') && (document.getElementById('6').textContent = '工作任务完成信号');
-                   document.getElementById('7') && (document.getElementById('7').textContent = '马达信号');
-                   document.getElementById('8') && (document.getElementById('8').textContent = '启动信号');
-                   document.getElementById('9') && (document.getElementById('9').textContent = '拆螺丝');
-                   document.getElementById('10') && (document.getElementById('10').textContent = 'BS');
-                   document.getElementById('11') && (document.getElementById('11').textContent = '条码');
-                   document.getElementById('12') && (document.getElementById('12').textContent = '自定义1');
-                   document.getElementById('13') && (document.getElementById('13').textContent = '自定义2');
-                   document.getElementById('14') && (document.getElementById('14').textContent = '顺时针转动');
-                   document.getElementById('15') && (document.getElementById('15').textContent = '逆时针转动');
+                    var language = getCookie('language');
+                    if(language == "zh-cn"){
+                    document.getElementById('1') && (document.getElementById('1').textContent = 'OK');
+                    document.getElementById('2') && (document.getElementById('2').textContent = 'NG');
+                    document.getElementById('3') && (document.getElementById('3').textContent = '超出上限');
+                    document.getElementById('4') && (document.getElementById('4').textContent = '低于下限');
+                    document.getElementById('5') && (document.getElementById('5').textContent = '工序完成信号');
+                    document.getElementById('6') && (document.getElementById('6').textContent = '工作任务完成信号');
+                    document.getElementById('7') && (document.getElementById('7').textContent = '马达信号');
+                    document.getElementById('8') && (document.getElementById('8').textContent = '启动信号');
+                    document.getElementById('9') && (document.getElementById('9').textContent = '拆螺丝');
+                    document.getElementById('10') && (document.getElementById('10').textContent = '自定义1');
+                    document.getElementById('11') && (document.getElementById('11').textContent = '自定义2');
+                    document.getElementById('12') && (document.getElementById('12').textContent = 'BS');
+                    document.getElementById('13') && (document.getElementById('13').textContent = '条码');
+                    document.getElementById('14') && (document.getElementById('14').textContent = '顺时针转动');
+                    document.getElementById('15') && (document.getElementById('15').textContent = '逆时针转动');
 
-               } 
-               else if(language == "zh-tw"){
-                   document.getElementById('1') && (document.getElementById('1').textContent = 'OK');
-                   document.getElementById('2') && (document.getElementById('2').textContent = 'NG');
-                   document.getElementById('3') && (document.getElementById('3').textContent = '超出上限');
-                   document.getElementById('4') && (document.getElementById('4').textContent = '低於下限');
-                   document.getElementById('5') && (document.getElementById('5').textContent = '工序完成信號');
-                   document.getElementById('6') && (document.getElementById('6').textContent = '完工信號');
-                   document.getElementById('7') && (document.getElementById('7').textContent = '馬達信號');
-                   document.getElementById('8') && (document.getElementById('8').textContent = '啟動信號');
-                   document.getElementById('9') && (document.getElementById('9').textContent = '拆螺絲');
-                   document.getElementById('10') && (document.getElementById('10').textContent = 'BS');
-                   document.getElementById('11') && (document.getElementById('11').textContent = '條碼');
-                   document.getElementById('12') && (document.getElementById('12').textContent = '自定義1');
-                   document.getElementById('13') && (document.getElementById('13').textContent = '自定義2');
-                   document.getElementById('14') && (document.getElementById('14').textContent = '順時針轉動');
-                   document.getElementById('15') && (document.getElementById('15').textContent = '逆時針轉動');
-               }
+                }else if(language == "zh-tw"){
+                    document.getElementById('1') && (document.getElementById('1').textContent = 'OK');
+                    document.getElementById('2') && (document.getElementById('2').textContent = 'NG');
+                    document.getElementById('3') && (document.getElementById('3').textContent = '超出上限');
+                    document.getElementById('4') && (document.getElementById('4').textContent = '低於下限');
+                    document.getElementById('5') && (document.getElementById('5').textContent = '工序完成信號');
+                    document.getElementById('6') && (document.getElementById('6').textContent = '完工信號');
+                    document.getElementById('7') && (document.getElementById('7').textContent = '馬達信號');
+                    document.getElementById('8') && (document.getElementById('8').textContent = '啟動信號');
+                    document.getElementById('9') && (document.getElementById('9').textContent = '拆螺絲');
+                    document.getElementById('10') && (document.getElementById('10').textContent = '自定義1');
+                    document.getElementById('11') && (document.getElementById('11').textContent = '自定義2');
+                    document.getElementById('12') && (document.getElementById('12').textContent = 'BS');
+                    document.getElementById('13') && (document.getElementById('13').textContent = '條碼');
+                    document.getElementById('14') && (document.getElementById('14').textContent = '順時針轉動');
+                    document.getElementById('15') && (document.getElementById('15').textContent = '逆時針轉動');
+                }else{
+
+                    document.getElementById('1') && (document.getElementById('1').textContent = 'OK');
+                    document.getElementById('2') && (document.getElementById('2').textContent = 'NG');
+                    document.getElementById('3') && (document.getElementById('3').textContent = 'NG-High');
+                    document.getElementById('4') && (document.getElementById('4').textContent = 'NG-Low');
+                    document.getElementById('5') && (document.getElementById('5').textContent = 'OK-Sequence');
+                    document.getElementById('6') && (document.getElementById('6').textContent = 'OK-Job');
+                    document.getElementById('7') && (document.getElementById('7').textContent = 'Tool Runing');
+                    document.getElementById('8') && (document.getElementById('8').textContent = 'Tool Trigger');
+                    document.getElementById('9') && (document.getElementById('9').textContent = 'Reverse');
+                    document.getElementById('10') && (document.getElementById('10').textContent = 'UserDefine1');
+                    document.getElementById('11') && (document.getElementById('11').textContent = 'UserDefine2');
+                    document.getElementById('12') && (document.getElementById('12').textContent = 'BS');
+                    document.getElementById('13') && (document.getElementById('13').textContent = 'Barcode');
+                    document.getElementById('14') && (document.getElementById('14').textContent = 'Turning CW');
+                    document.getElementById('15') && (document.getElementById('15').textContent = 'Turning CCW');
+                }
 
            },
            error: function(xhr, status, error) {

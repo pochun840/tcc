@@ -55,8 +55,6 @@ class Outputs extends Controller
 
         $event_output = $this->MiscellaneousModel->details('io_output');
 
-        //var_dump($event_output);die();
-
         $input_check = true;
         if( !empty($_POST['job_id']) && isset($_POST['job_id'])  ){
             $job_id = $_POST['job_id'];
@@ -71,6 +69,8 @@ class Outputs extends Controller
             $job_outputlist = ''; 
         
             if (!empty($job_outputs)) {
+
+                //var_dump($job_outputs);die();
                 foreach ($job_outputs as $kk => $vv) {
                     if (!empty($vv['output_pin'])) {
                         $pin_number = $vv['output_pin'];
@@ -101,6 +101,8 @@ class Outputs extends Controller
                         $job_outputlist .= '<td>'.$vv['wave_on'].'</td>';
                         $job_outputlist .= '</tr>';
                     }else{
+
+                        //var_dump($vv['output_event']);die();
                         $job_outputlist .= "<tr data-event ='".$vv['output_event']."'>";
                         $job_outputlist .= "<td id='".$vv['output_event']."'>".$event_output[$vv['output_event']]."</td>";
                         $job_outputlist .= $this->OutputModel->generateTableCell($vv['output_pin'],$vv['wave']);
