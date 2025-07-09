@@ -862,6 +862,23 @@ function get_output_by_job_id(job_id){
                document.getElementById('13') && (document.getElementById('13').textContent = '條碼');
                document.getElementById('14') && (document.getElementById('14').textContent = '順時針轉動');
                document.getElementById('15') && (document.getElementById('15').textContent = '逆時針轉動');
+           }else{
+
+               document.getElementById('1') && (document.getElementById('1').textContent = 'OK');
+               document.getElementById('2') && (document.getElementById('2').textContent = 'NG');
+               document.getElementById('3') && (document.getElementById('3').textContent = 'NG-High');
+               document.getElementById('4') && (document.getElementById('4').textContent = 'NG-Low');
+               document.getElementById('5') && (document.getElementById('5').textContent = 'OK-Sequence');
+               document.getElementById('6') && (document.getElementById('6').textContent = 'OK-Job');
+               document.getElementById('7') && (document.getElementById('7').textContent = 'Tool Runing');
+               document.getElementById('8') && (document.getElementById('8').textContent = 'Tool Trigger');
+               document.getElementById('9') && (document.getElementById('9').textContent = 'Reverse');
+               document.getElementById('10') && (document.getElementById('10').textContent = 'UserDefine1');
+               document.getElementById('11') && (document.getElementById('11').textContent = 'UserDefine2');
+               document.getElementById('12') && (document.getElementById('12').textContent = 'BS');
+               document.getElementById('13') && (document.getElementById('13').textContent = 'Barcode');
+               document.getElementById('14') && (document.getElementById('14').textContent = 'Turning CW');
+               document.getElementById('15') && (document.getElementById('15').textContent = 'Turning CCW');
            }
            
        },
