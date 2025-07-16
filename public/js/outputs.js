@@ -501,7 +501,7 @@ function resetalignsubmit(job_id) {
            url: "?url=Outputs/output_alljob",
            method: "POST",
            data: {
-               job_id_new: job_id_new
+               job_id: job_id
            },
            success: function (response) {
                get_output_by_job_id(job_id);
@@ -777,9 +777,18 @@ function delete_output_id(job_id,del_output_val){
                        setTimeout(function() {
                            alertify.closeAll(); // 關閉所有 alertify 彈窗
                            updateEventSelectAndPins(responseData.old_input_pin); // 更新 pins
+
+                            var options = document.querySelectorAll('#Event_Option option');
+                            options.forEach(function(option) {
+                                option.disabled = false;
+                                option.classList.remove('disabled_input');
+                            });
+
                            get_output_by_job_id(job_id); 
+                           
                            document.getElementById('spinner').style.display = 'none'; 
                            document.querySelector(".main-content").classList.remove("overlay-active");
+                           //location.reload();
                        }, 1000); 
                    },
                    error: function(xhr, status, error) {

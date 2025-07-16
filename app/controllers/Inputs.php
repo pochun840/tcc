@@ -60,6 +60,7 @@ class Inputs extends Controller
             $temp = array(); 
             $tempA = array();
             $temp_gateconfirm = array();
+            $jobDisabledOptions = array();
             $job_inputlist = ''; 
 
             if (!empty($job_inputs)) {
@@ -142,13 +143,20 @@ class Inputs extends Controller
             }else{
                
             }
+
+
+            if (!empty($tempA)) {
+                $jobDisabledOptions[$job_id] = $tempA;
+            }
         }
     
         $response = array(
             'job_inputlist' => $job_inputlist,
             'temp' => $temp,
             'tempA' => $tempA,
-            'temp_gateconfirm' => $temp_gateconfirm
+            'temp_gateconfirm' => $temp_gateconfirm,
+            'jobDisabledOptions' => $jobDisabledOptions
+
         );
     
         echo json_encode($response);
@@ -444,6 +452,7 @@ class Inputs extends Controller
         }else{
             $input_check = false; 
         }
+
         if($input_check){
             $res = $this->InputModel->set_input_alljob($input_jobid);
             if($res){

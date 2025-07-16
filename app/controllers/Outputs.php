@@ -66,11 +66,10 @@ class Outputs extends Controller
             $job_outputs = $this->OutputModel->get_output_by_job_id($job_id);
             $temp  = array(); 
             $tempA = array();
+            $jobDisabledOptions = array();
             $job_outputlist = ''; 
         
             if (!empty($job_outputs)) {
-
-                //var_dump($job_outputs);die();
                 foreach ($job_outputs as $kk => $vv) {
                     if (!empty($vv['output_pin'])) {
                         $pin_number = $vv['output_pin'];
@@ -102,7 +101,6 @@ class Outputs extends Controller
                         $job_outputlist .= '</tr>';
                     }else{
 
-                        //var_dump($vv['output_event']);die();
                         $job_outputlist .= "<tr data-event ='".$vv['output_event']."'>";
                         $job_outputlist .= "<td id='".$vv['output_event']."'>".$event_output[$vv['output_event']]."</td>";
                         $job_outputlist .= $this->OutputModel->generateTableCell($vv['output_pin'],$vv['wave']);
@@ -116,10 +114,17 @@ class Outputs extends Controller
             }
         }
 
+        
+        if (!empty($tempA)) {
+            $jobDisabledOptions[$job_id] = $tempA;
+        }
+
+
         $response = array(
             'job_outputlist' => $job_outputlist,
             'temp' => $temp,
             'tempA' => $tempA,
+            'jobDisabledOptions' => $jobDisabledOptions,
             'languange' => $_SESSION['language']
         );
         echo json_encode($response);
@@ -335,8 +340,11 @@ class Outputs extends Controller
         }
     }
 
-    public function output_alljob()
-    {
+    public function output_alljob(){
+
+
+        var_dump($_POST);die();
+
         $input_check = true;
         if( isset($_POST['job_id']) && $_POST['job_id'] >= 0 ){
             $output_jobid = $_POST['job_id'];

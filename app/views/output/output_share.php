@@ -5,6 +5,7 @@ var job_id, output_event, temp, tempA, output_job, all_job, del_output_val, outp
 var buttonDisabled = false;
 var backgroundColorYellow = false;
 var old_output_event;
+var jobDisabledOptions;
 
 // 初始載入
 $(document).ready(function () {

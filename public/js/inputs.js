@@ -161,82 +161,99 @@ window.onclick = function (event) {
 // ================================
 
 function job_confirm() {
-   var jobid = document.getElementById("JobNameSelect").value;
+    var jobid = document.getElementById("JobNameSelect").value;
 
-   // 儲存 job_id 至 localStorage，並設定為全域變數
-   localStorage.setItem("jobid", jobid);
-   job_id = jobid;
-   all_job = jobid;
+    localStorage.setItem("jobid", jobid);
+    job_id = jobid;
+    all_job = jobid;
 
-   if (jobid) {
-       $.ajax({
-           url: "?url=Inputs/get_input_by_job_id",
-           method: "POST",
-           data: { jobid: jobid },
-           success: function(response) {
-               var data = JSON.parse(response);
-               var job_inputlist = data.job_inputlist;
-               temp = data.temp;       // radio 相關控制
-               tempA = data.tempA;     // option 相關控制
+    if (jobid) {
+        $.ajax({
+            url: "?url=Inputs/get_input_by_job_id",
+            method: "POST",
+            data: { jobid: jobid },
+            success: function(response) {
+                var data = JSON.parse(response);
 
-               // 更新 input list 表格內容
-               document.getElementById("input_jobid_select").innerHTML = job_inputlist;
+                // ✅ 抓 jobDisabledOptions
+                var jobDisabledOptions = data.jobDisabledOptions || {};
 
-               // 隱藏 JobSelect 區塊，更新 job_id 輸入欄位
-               document.getElementById("JobSelect").style.display = 'none';
-               document.getElementById("job_id").value = jobid;
+                console.log("jobDisabledOptions:", jobDisabledOptions);
 
-               // 控制 Copy 按鈕是否可用（如果沒有 input list 則 disable）
-               var s3Button = document.getElementById('S3');
-               if (!job_inputlist.trim()) {
-                   s3Button.disabled = true;
-               } else {
-                   s3Button.disabled = false;
-               }
+                // 取得該 job_id 專屬的 tempA
+                var tempA = jobDisabledOptions[jobid] || [];
 
-               // 為每一列新增事件點擊時切換 input_event
-               var rows = document.querySelectorAll('#input_jobid_select tr');
-               rows.forEach(function(row) {
-                   row.addEventListener('click', function() {
-                       input_event = this.className;
-                       old_input_event = this.className;
-                   });
-               });
+                // 先還原所有 option
+                var options = document.querySelectorAll('#Event_Option option');
+                options.forEach(function(option) {
+                    option.disabled = false;
+                    option.classList.remove('disabled_input');
+                });
 
-               // 語系處理：根據語言設定更新事件名稱顯示
-               var language = getCookie('language');
+                // 再禁用該 job_id 專屬的 tempA
+                tempA.forEach(function(element) {
+                    var option = document.querySelector('#Event_Option option[value="' + element + '"]');
+                    if (option) {
+                        option.disabled = true;
+                        option.classList.add('disabled_input');
+                    }
+                });
 
-               const labels = {
+                var job_inputlist = data.job_inputlist;
+                temp = data.temp;
+                // tempA 不再用 data.tempA，而是改從 jobDisabledOptions
 
-                   '200': { 'zh-cn': '启用', 'zh-tw': '啟動' },
-                   '201': { 'zh-cn': '拆螺丝', 'zh-tw': '拆螺絲' },
-                   '202': { 'zh-cn': '禁用', 'zh-tw': '禁用' },
-                   '203': { 'zh-cn': '启用', 'zh-tw': '啟用' },
-                   '204': { 'zh-cn': '确认', 'zh-tw': '確認' },
-                   '205': { 'zh-cn': '清除', 'zh-tw': '清除' },
-                   '206': { 'zh-cn': '工序清除', 'zh-tw': '工序清除' },
-                   '207': { 'zh-cn': '重启', 'zh-tw': '重啟' },
-                   '208': { 'zh-cn': '自定义1', 'zh-tw': '自定義1' },
-                   '209': { 'zh-cn': '自定义2', 'zh-tw': '自定義2' },
-                   '210': { 'zh-cn': '一次感应', 'zh-tw': '一次感應' },
-                  
-               };
+                document.getElementById("input_jobid_select").innerHTML = job_inputlist;
 
-               // 根據語系更新 DOM 文字
-               Object.keys(labels).forEach(id => {
-                   var el = document.getElementById(id);
-                   if (el && labels[id][language]) {
-                       el.textContent = labels[id][language];
-                   }
-               });
-           },
-           error: function(xhr, status, error) {
-               // 錯誤處理可補充提示
-               console.error("Job confirm AJAX error:", error);
-           }
-       });
-   }
+                document.getElementById("JobSelect").style.display = 'none';
+                document.getElementById("job_id").value = jobid;
+
+                var s3Button = document.getElementById('S3');
+                if (!job_inputlist.trim()) {
+                    s3Button.disabled = true;
+                } else {
+                    s3Button.disabled = false;
+                }
+
+                var rows = document.querySelectorAll('#input_jobid_select tr');
+                rows.forEach(function(row) {
+                    row.addEventListener('click', function() {
+                        input_event = this.className;
+                        old_input_event = this.className;
+                    });
+                });
+
+                var language = getCookie('language');
+
+                const labels = {
+                    '200': { 'zh-cn': '启用', 'zh-tw': '啟動' },
+                    '201': { 'zh-cn': '拆螺丝', 'zh-tw': '拆螺絲' },
+                    '202': { 'zh-cn': '禁用', 'zh-tw': '禁用' },
+                    '203': { 'zh-cn': '启用', 'zh-tw': '啟用' },
+                    '204': { 'zh-cn': '确认', 'zh-tw': '確認' },
+                    '205': { 'zh-cn': '清除', 'zh-tw': '清除' },
+                    '206': { 'zh-cn': '工序清除', 'zh-tw': '工序清除' },
+                    '207': { 'zh-cn': '重启', 'zh-tw': '重啟' },
+                    '208': { 'zh-cn': '自定义1', 'zh-tw': '自定義1' },
+                    '209': { 'zh-cn': '自定义2', 'zh-tw': '自定義2' },
+                    '210': { 'zh-cn': '一次感应', 'zh-tw': '一次感應' }
+                };
+
+                Object.keys(labels).forEach(id => {
+                    var el = document.getElementById(id);
+                    if (el && labels[id][language]) {
+                        el.textContent = labels[id][language];
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Job confirm AJAX error:", error);
+            }
+        });
+    }
 }
+
+
 
 // ================================
 // 啟用 Job 選擇按鈕
@@ -300,11 +317,22 @@ function delete_input_id(job_id,input_event){
                        alertify.alert(responseData.res_type, responseData.res_msg);
 
                        setTimeout(function() {
-                           alertify.closeAll(); // 關閉所有 alertify 彈窗
-                           updateEventSelectAndPins(responseData.old_input_pin); // 更新 pins
-                           get_input_by_job_id(job_id); // 重新取得輸入資訊
+                            alertify.closeAll(); // 關閉所有 alertify 彈窗
+                            updateEventSelectAndPins(responseData.old_input_pin); // 更新 pins
+                            
+                            //全部還原
+                            var options = document.querySelectorAll('#Event_Option option');
+                            options.forEach(function(option) {
+                                option.disabled = false;
+                                option.classList.remove('disabled_input');
+                            });
+
+                            //根據最新 tempA 再禁用
+                            get_input_by_job_id(job_id);
+                           
                            document.getElementById('spinner').style.display = 'none'; 
                            document.querySelector(".main-content").classList.remove("overlay-active"); 
+                           //location.reload();
                        }, 1000); 
                    },
                    error: function(xhr, status, error) {
@@ -541,7 +569,7 @@ function resetalignsubmit(job_id) {
        url: "?url=Inputs/input_alljob",
        method: "POST",
        data: {
-           job_id_new: 0
+          job_id: job_id
        },
        success: function (response) {
            get_input_by_job_id(job_id);

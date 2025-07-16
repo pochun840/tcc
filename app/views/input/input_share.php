@@ -7,6 +7,7 @@ var input_event;
 var temp;              // 儲存需 disable 的 radio ID 陣列
 var tempA;             // 儲存需 disable 的 option value 陣列
 var tempB;
+var jobDisabledOptions;
 var selectedValue;     // 記錄被選取的值
 var old_input_event;
 var all_job;
@@ -144,6 +145,9 @@ function crud_job_event(argument) {
     }
 
     if (argument === 'unified' && job_id !== '') {
+
+        alert('eeeeeeeeeee');
+        
         enableButton();
         resetBackgroundColor();
 
