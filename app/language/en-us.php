@@ -296,6 +296,7 @@ $text['data_history_fail'] = 'Error';
 $text['start_date'] = 'Start date';
 $text['end_date'] = 'End date';
 $text['Export Format'] = 'Export Format';
+$text['download_chart'] = 'Download Chart';
 
 $text['column_no'] = 'No';
 $text['column_datetime'] = 'Date Time';
@@ -311,6 +312,133 @@ $text['N.m'] = 'N.m';
 $text['kgf.cm'] = 'Kgf.cm';
 $text['lbf.in'] = 'Lbf.in';
 $text['cN.m'] = "cN.m";
+
+//Customize 
+$text['customize'] = 'Customize';
+$text['id'] = 'System No';
+$text['system_sn'] = 'System No';
+$text['data_time'] = 'Fastening Time';
+$text['info_device_type'] = 'Fastening Controller Type';
+$text['device_id'] = 'Fastening Controller ID';
+$text['device_sn'] = 'Fastening Controller S/N';
+$text['info_tool_type'] = 'Screwdriver Model';
+$text['info_tool_sn'] = 'Screwdriver S/N';
+$text['info_tool_status'] = 'Screwdriver Status';
+$text['job_id'] = 'Job ID';
+$text['job_name'] = 'Job Name';
+$text['sequence_id'] = 'Sequence ID';
+$text['sequence_name'] = 'Sequence Name';
+$text['step_id'] = 'Step ID';
+$text['torque_unit'] = 'Torque Unit';
+$text['target_type'] = 'Target Type';
+$text['target_torque'] = 'Target Torque';
+$text['target_angle'] = 'Target Angle';
+$text['target_time'] = 'Target Time';
+$text['fasten_time'] = 'Total Fastening Time';
+$text['final_fasten_torque'] = 'Fastening Torque';
+$text['final_fasten_angle'] = 'Fastening Angle';
+$text['total_fasten_angle'] = 'Total Fastening Angle';
+$text['count_type'] = 'Screw Count Mode';
+$text['last_screw_count'] = 'Screw Count';
+$text['total_screw_count'] = 'Total Count';
+$text['fasten_status'] = 'Fastening Result';
+$text['error_message'] = 'Error Message';
+$text['info_fasten_direction'] = 'Screwdriver Direction';
+$text['rpm'] = 'Fastening Speed (RPM)';
+$text['hi_torque'] = 'Torque Upper Limit';
+$text['lo_torque'] = 'Torque Lower Limit';
+$text['hi_angle'] = 'Angle Upper Limit';
+$text['lo_angle'] = 'Angle Lower Limit';
+$text['delay_ttime'] = 'Delay Time';
+$text['threshold_torque'] = 'Threshold Torque';
+$text['threshold_angle'] = 'Threshold Angle';
+$text['downshift_torque'] = 'Downshift Point Torque';
+$text['downshift_angle'] = 'Downshift Point Angle';
+$text['downshift_speed'] = 'Downshift Speed';
+$text['final_tool_voltage'] = 'Tool Voltage';
+$text['final_tool_current'] = 'Tool Count';
+$text['barcode'] = 'Fastening Barcode';
+
+$text['step0_last_times']       = 'Step 0 Time';
+$text['step0_last_angle']       = 'Step 0 Angle';
+$text['step0_last_torque']      = 'Step 0 Torque';
+$text['step0_last_threadshold'] = 'Step 0 Threshold';
+
+$text['step1_last_times']       = 'Step 1 Time';
+$text['step1_last_angle']       = 'Step 1 Angle';
+$text['step1_last_torque']      = 'Step 1 Torque';
+$text['step1_last_threadshold'] = 'Step 1 Threshold';
+
+$text['step2_last_times']       = 'Step 2 Time';
+$text['step2_last_angle']       = 'Step 2 Angle';
+$text['step2_last_torque']      = 'Step 2 Torque';
+$text['step2_last_threadshold'] = 'Step 2 Threshold';
+
+$text['step3_last_times']       = 'Step 3 Time';
+$text['step3_last_angle']       = 'Step 3 Angle';
+$text['step3_last_torque']      = 'Step 3 Torque';
+$text['step3_last_threadshold'] = 'Step 3 Threshold';
+
+$text['step4_last_times']       = 'Step 4 Time';
+$text['step4_last_angle']       = 'Step 4 Angle';
+$text['step4_last_torque']      = 'Step 4 Torque';
+$text['step4_last_threadshold'] = 'Step 4 Threshold';
+
+$text['step5_last_times']       = 'Step 5 Time';
+$text['step5_last_angle']       = 'Step 5 Angle';
+$text['step5_last_torque']      = 'Step 5 Torque';
+$text['step5_last_threadshold'] = 'Step 5 Threshold';
+
+$text['step6_last_times']       = 'Step 6 Time';
+$text['step6_last_angle']       = 'Step 6 Angle';
+$text['step6_last_torque']      = 'Step 6 Torque';
+$text['step6_last_threadshold'] = 'Step 6 Threshold';
+
+$text['step7_last_times']       = 'Step 7 Time';
+$text['step7_last_angle']       = 'Step 7 Angle';
+$text['step7_last_torque']      = 'Step 7 Torque';
+$text['step7_last_threadshold'] = 'Step 7 Threshold';
+
+$text['step8_last_times']       = 'Step 8 Time';
+$text['step8_last_angle']       = 'Step 8 Angle';
+$text['step8_last_torque']      = 'Step 8 Torque';
+$text['step8_last_threadshold'] = 'Step 8 Threshold';
+
+$text['step9_last_times']       = 'Step 9 Time';
+$text['step9_last_angle']       = 'Step 9 Angle';
+$text['step9_last_torque']      = 'Step 9 Torque';
+$text['step9_last_threadshold'] = 'Step 9 Threshold';
+
+$text['step10_last_times']       = 'Step 10 Time';
+$text['step10_last_angle']       = 'Step 10 Angle';
+$text['step10_last_torque']      = 'Step 10 Torque';
+$text['step10_last_threadshold'] = 'Step 10 Threshold';
+
+$text['step11_last_times']       = 'Step 11 Time';
+$text['step11_last_angle']       = 'Step 11 Angle';
+$text['step11_last_torque']      = 'Step 11 Torque';
+$text['step11_last_threadshold'] = 'Step 11 Threshold';
+
+$text['step12_last_times']       = 'Step 12 Time';
+$text['step12_last_angle']       = 'Step 12 Angle';
+$text['step12_last_torque']      = 'Step 12 Torque';
+$text['step12_last_threadshold'] = 'Step 12 Threshold';
+
+$text['step13_last_times']       = 'Step 13 Time';
+$text['step13_last_angle']       = 'Step 13 Angle';
+$text['step13_last_torque']      = 'Step 13 Torque';
+$text['step13_last_threadshold'] = 'Step 13 Threshold';
+
+$text['step14_last_times']       = 'Step 14 Time';
+$text['step14_last_angle']       = 'Step 14 Angle';
+$text['step14_last_torque']      = 'Step 14 Torque';
+$text['step14_last_threadshold'] = 'Step 14 Threshold';
+
+$text['step15_last_times']       = 'Step 15 Time';
+$text['step15_last_angle']       = 'Step 15 Angle';
+$text['step15_last_torque']      = 'Step 15 Torque';
+$text['step15_last_threadshold'] = 'Step 15 Threshold';
+
 
 
 

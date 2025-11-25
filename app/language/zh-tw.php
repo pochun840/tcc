@@ -284,6 +284,7 @@ $text['data_history_fail'] = '鎖附失敗資料';
 $text['start_date'] = '開始日期';
 $text['end_date'] = '結束日期';
 $text['Export Format'] = '匯出格式';
+$text['download_chart'] = '曲線圖下載';
 
 $text['column_no'] = '編號';
 $text['column_datetime'] = '時間';
@@ -299,6 +300,133 @@ $text['N.m'] = '牛頓公尺';
 $text['kgf.cm'] = '公斤公分';
 $text['lbf.in'] = '英磅英吋';
 $text['cN.m'] = '厘牛頓米';
+
+//Customize 
+$text['customize'] = '自定義';
+$text['id'] = '系統流水號';
+$text['system_sn'] = '系統流水號';
+$text['data_time'] = '鎖附紀錄時間';
+$text['info_device_type'] = '鎖附控制器類型';
+$text['device_id'] = '鎖附控制器編號';
+$text['device_sn'] = '鎖附控制器序號';
+$text['info_tool_type'] = '鎖附起子型號';
+$text['info_tool_sn'] = '鎖附起子序號';
+$text['info_tool_status'] = '鎖附起子狀態';
+$text['job_id'] = '鎖附工作編號';
+$text['job_name'] = '鎖附工作名稱';
+$text['sequence_id'] = '鎖附工序編號';
+$text['sequence_name'] = '鎖附工序名稱';
+$text['step_id'] = '鎖附步驟編號';
+$text['torque_unit'] = '鎖附扭力單位';
+$text['target_type'] = '鎖附目標類型';
+$text['target_torque'] = '目標扭力';
+$text['target_angle'] = '目標角度';
+$text['target_time'] = '目標時間';
+$text['fasten_time'] = '總鎖附時間';
+$text['final_fasten_torque'] = '鎖附扭力';
+$text['final_fasten_angle'] = '鎖附角度';
+$text['total_fasten_angle'] = '鎖附總角度';
+$text['count_type'] = '鎖附顆數計數方式';
+$text['last_screw_count'] = '鎖附顆數';
+$text['total_screw_count'] = '總顆數';
+$text['fasten_status'] = '鎖附結果';
+$text['error_message'] = '錯誤訊息';
+$text['info_fasten_direction'] = '鎖附起子轉向';
+$text['rpm'] = '鎖附轉速';
+$text['hi_torque'] = '鎖附扭力上限';
+$text['lo_torque'] = '鎖附扭力下限';
+$text['hi_angle'] = '鎖附角度上限';
+$text['lo_angle'] = '鎖附角度下限';
+$text['delay_ttime'] = '延遲時間';
+$text['threshold_torque'] = '鎖附門檻點扭力';
+$text['threshold_angle'] = '鎖附門檻點角度';
+$text['downshift_torque'] = '鎖附降速點扭力';
+$text['downshift_angle'] = '鎖附降速點角度';
+$text['downshift_speed'] = '鎖附降速點轉速';
+$text['final_tool_voltage'] = '工具電壓';
+$text['final_tool_current'] = '工具顆數';
+$text['barcode'] = '鎖附條碼';
+
+$text['step0_last_times']       = '鎖附步驟0時間';
+$text['step0_last_angle']       = '鎖附步驟0角度';
+$text['step0_last_torque']      = '鎖附步驟0扭力';
+$text['step0_last_threadshold'] = '鎖附步驟0門檻';
+
+$text['step1_last_times']       = '鎖附步驟1時間';
+$text['step1_last_angle']       = '鎖附步驟1角度';
+$text['step1_last_torque']      = '鎖附步驟1扭力';
+$text['step1_last_threadshold'] = '鎖附步驟1門檻';
+
+$text['step2_last_times']       = '鎖附步驟2時間';
+$text['step2_last_angle']       = '鎖附步驟2角度';
+$text['step2_last_torque']      = '鎖附步驟2扭力';
+$text['step2_last_threadshold'] = '鎖附步驟2門檻';
+
+$text['step3_last_times']       = '鎖附步驟3時間';
+$text['step3_last_angle']       = '鎖附步驟3角度';
+$text['step3_last_torque']      = '鎖附步驟3扭力';
+$text['step3_last_threadshold'] = '鎖附步驟3門檻';
+
+$text['step4_last_times']       = '鎖附步驟4時間';
+$text['step4_last_angle']       = '鎖附步驟4角度';
+$text['step4_last_torque']      = '鎖附步驟4扭力';
+$text['step4_last_threadshold'] = '鎖附步驟4門檻';
+
+$text['step5_last_times']       = '鎖附步驟5時間';
+$text['step5_last_angle']       = '鎖附步驟5角度';
+$text['step5_last_torque']      = '鎖附步驟5扭力';
+$text['step5_last_threadshold'] = '鎖附步驟5門檻';
+
+$text['step6_last_times']       = '鎖附步驟6時間';
+$text['step6_last_angle']       = '鎖附步驟6角度';
+$text['step6_last_torque']      = '鎖附步驟6扭力';
+$text['step6_last_threadshold'] = '鎖附步驟6門檻';
+
+$text['step7_last_times']       = '鎖附步驟7時間';
+$text['step7_last_angle']       = '鎖附步驟7角度';
+$text['step7_last_torque']      = '鎖附步驟7扭力';
+$text['step7_last_threadshold'] = '鎖附步驟7門檻';
+
+$text['step8_last_times']       = '鎖附步驟8時間';
+$text['step8_last_angle']       = '鎖附步驟8角度';
+$text['step8_last_torque']      = '鎖附步驟8扭力';
+$text['step8_last_threadshold'] = '鎖附步驟8門檻';
+
+$text['step9_last_times']       = '鎖附步驟9時間';
+$text['step9_last_angle']       = '鎖附步驟9角度';
+$text['step9_last_torque']      = '鎖附步驟9扭力';
+$text['step9_last_threadshold'] = '鎖附步驟9門檻';
+
+$text['step10_last_times']       = '鎖附步驟10時間';
+$text['step10_last_angle']       = '鎖附步驟10角度';
+$text['step10_last_torque']      = '鎖附步驟10扭力';
+$text['step10_last_threadshold'] = '鎖附步驟10門檻';
+
+$text['step11_last_times']       = '鎖附步驟11時間';
+$text['step11_last_angle']       = '鎖附步驟11角度';
+$text['step11_last_torque']      = '鎖附步驟11扭力';
+$text['step11_last_threadshold'] = '鎖附步驟11門檻';
+
+$text['step12_last_times']       = '鎖附步驟12時間';
+$text['step12_last_angle']       = '鎖附步驟12角度';
+$text['step12_last_torque']      = '鎖附步驟12扭力';
+$text['step12_last_threadshold'] = '鎖附步驟12門檻';
+
+$text['step13_last_times']       = '鎖附步驟13時間';
+$text['step13_last_angle']       = '鎖附步驟13角度';
+$text['step13_last_torque']      = '鎖附步驟13扭力';
+$text['step13_last_threadshold'] = '鎖附步驟13門檻';
+
+$text['step14_last_times']       = '鎖附步驟14時間';
+$text['step14_last_angle']       = '鎖附步驟14角度';
+$text['step14_last_torque']      = '鎖附步驟14扭力';
+$text['step14_last_threadshold'] = '鎖附步驟14門檻';
+
+$text['step15_last_times']       = '鎖附步驟15時間';
+$text['step15_last_angle']       = '鎖附步驟15角度';
+$text['step15_last_torque']      = '鎖附步驟15扭力';
+$text['step15_last_threadshold'] = '鎖附步驟15門檻';
+
 
 //fasten_status
 $text['fasten_status_0'] = 'INIT';

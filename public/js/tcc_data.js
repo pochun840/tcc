@@ -34,12 +34,17 @@ function OpenButton(ButtonMode)
         document.getElementById('bnt1').classList.remove("active");
 
         document.getElementById('data_select').setAttribute("style", "display:none");
-    }
-    else
-    {
+    }else if(ButtonMode == "Export_Data_download"){
+        downloadCSVZip();
+    }else if(ButtonMode == "Customize"){
+        window.location.href = "?url=Customize";
+        return;
+    }else{
         alert("Function ["+ ButtonMode +"] is under constructing ...");
     }
 }
+
+
 
 /*
 function DataMode(select)
