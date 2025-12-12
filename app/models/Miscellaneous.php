@@ -178,57 +178,58 @@ class Miscellaneous{
           if($mode =="customize"){
             
             $array = array(
-                0 => "id",
-                //1  => "system_sn",
-                2  => "data_time",
-                3  => "info_device_type",
-                //4  => "device_id",
-                5  => "device_sn",
-                6  => "info_tool_type",
-                7  => "info_tool_sn",
-                8  => "info_tool_status",
-                9  => "job_id",
-                10 => "job_name",
-                11 => "sequence_id",
-                12 => "sequence_name",
-                13 => "step_id",
-                14 => "torque_unit",
-                15 => "target_type",
-                16 => "target_torque",
-                17 => "target_angle",
-                //18 => "target_time",
-                19 => "fasten_time",
-                20 => "final_fasten_torque",
-                21 => "final_fasten_angle",
-                22 => "total_fasten_angle",
-                23 => "count_type",
-                24 => "last_screw_count",
-                25 => "total_screw_count",
-                26 => "fasten_status",
-                27 => "error_message",
-                28 => "info_fasten_direction",
-                29 => "rpm",
-                30 => "hi_torque",
-                31 => "lo_torque",
-                32 => "hi_angle",
-                33 => "lo_angle",
+                0  => "system_sn",
+                1  => "data_time",
+                2  => "info_device_type",
+                3  => "device_id",
+                4  => "device_name",
+                5  => "info_tool_type",
+                6  => "info_tool_sn",
+                7  => "info_tool_status",
+                8  => "job_id",
+                9  => "job_name",
+                10 => "sequence_id",
+                11 => "sequence_name",
+                12 => "step_id",
+                13 => "step_tar_type",
+                14 => "step_tar_tor",
+                15 => "step_tar_ang",
+                16 => "step_tor_unit",
+                17 => "fasten_torque",
+                18 => "fasten_angle",
+                // //18 => "target_time",
+                // 19 => "fasten_time",
+                // 20 => "final_fasten_torque",
+                // 21 => "final_fasten_angle",
+                // 22 => "total_fasten_angle",
+                // 23 => "count_type",
+                // 24 => "last_screw_count",
+                // 25 => "total_screw_count",
+                // 26 => "fasten_status",
+                // 27 => "error_message",
+                // 28 => "info_fasten_direction",
+                // 29 => "rpm",
+                // 30 => "hi_torque",
+                // 31 => "lo_torque",
+                // 32 => "hi_angle",
+                // 33 => "lo_angle",
                 //34 => "delay_ttime",
-                35 => "threshold_torque",
+                //35 => "threshold_torque",
                 //36 => "threshold_angle",
-                37 => "downshift_torque",
+                //37 => "downshift_torque",
                 //38 => "downshift_angle",
-                39 => "downshift_speed",
+                //39 => "downshift_speed",
                 //40 => "final_tool_voltage",
                 //41 => "final_tool_current",
-                42 => "barcode",
+                //42 => "barcode",
             );
 
-            $lastIndex = empty($array) ? -1 : max(array_keys($array));
-            $idx = $lastIndex + 1;   // 這裡會是 43
-            for ($i = 1; $i <= 5; $i++) {
-                $array[$idx++] = "step{$i}_last_torque";
-                $array[$idx++] = "step{$i}_last_angle";
-            }
+            // $lastIndex = empty($array) ? -1 : max(array_keys($array));
+            // $idx = $lastIndex + 1;   // 這裡會是 43
+            // for ($i = 1; $i <= 5; $i++) {
+            //     $array[$idx++] = "step{$i}_last_torque";
+            //     $array[$idx++] = "step{$i}_last_angle";
+            // }
 
 
 

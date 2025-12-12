@@ -491,6 +491,18 @@ class Outputs extends Controller
 
 
     }
+
+    public function reset_unified(){
+        
+        unset($_SESSION['output_unified']);
+        unset($_SESSION['output_unified_job']);
+
+        echo json_encode([
+            'res_type' => 'Success',
+            'res_msg'  => 'Unified state cleared'
+        ]);
+    }
+
 }
 
 

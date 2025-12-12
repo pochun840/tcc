@@ -173,7 +173,7 @@ class Output{
         return $results;
     }
 
-    //set input_alljob
+    //set output_alljob
     public function set_output_alljob($output_jobid){
 
         $sql= "UPDATE device SET device_output_all_job = ? ";

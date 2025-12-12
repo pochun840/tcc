@@ -26,6 +26,7 @@ function create_step() {
     document.getElementById('tor_lo').value = 0;
     document.getElementById('target_tor').value = tool_min_tor;
     document.getElementById('target_ang').value = 1800;
+    document.getElementById("pnf_set_OFF").checked = true;
 
     // 預設 downshift_OFF 被選中
     document.getElementById("downshift_OFF").checked = true;
@@ -132,9 +133,6 @@ function edit_step(stepid) {
             let cleanString = responseJSON.replace(/Array|\\n/g, '');
             cleanString = cleanString.substring(2, cleanString.length - 2);
 
-            console.log(cleanString);
-            
-
             const [, target_opt] = cleanString.match(/\[target_opt\]\s*=>\s*([^ ]+)/) || [, null];
             const [, target_tor] = cleanString.match(/\[target_tor\]\s*=>\s*([^ ]+)/) || [, null];
             const [, target_ang] = cleanString.match(/\[target_ang\]\s*=>\s*([^ ]+)/) || [, null];
@@ -146,6 +144,7 @@ function edit_step(stepid) {
             const [, rpm] = cleanString.match(/\[rpm\]\s*=>\s*([^ ]+)/) || [, null];
             const [, direction] = cleanString.match(/\[direction\]\s*=>\s*([^ ]+)/) || [, null];
             const [, th_mode] = cleanString.match(/\[th_mode\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, pnf_set] = cleanString.match(/\[pnf_set\]\s*=>\s*([^ ]+)/) || [, null];
             const [, ds_tor] = cleanString.match(/\[ds_tor\]\s*=>\s*([^ ]+)/) || [, null];
             const [, ds_speed] = cleanString.match(/\[ds_speed\]\s*=>\s*([^ ]+)/) || [, null];
             const [, th_tor] = cleanString.match(/\[th_tor\]\s*=>\s*([^ ]+)/) || [, null];
@@ -250,6 +249,10 @@ function edit_step(stepid) {
 
             const radioButtons_direction = document.getElementsByName("edit_direction");
             setRadioButton_value(radioButtons_direction, direction);
+
+        
+            const radioButtons_pnf_set = document.getElementsByName("edit_pnf_set");
+            setRadioButton_value(radioButtons_pnf_set, pnf_set);
 
             toggleThTorDisabled();
         },

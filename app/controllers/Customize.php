@@ -25,8 +25,13 @@ class Customize extends Controller
         }
         
         $isMobile = $this->isMobileCheck();
-        $job_list = $this->SettingModel->get_job_list();
+        $job_list = $this->SettingModel->get_job_list_tcc();
         $data_button = $this->MiscellaneousModel->details('customize');
+
+        //echo "<pre>";
+        //print_r($data_button);
+        //echo "</pre>";
+        //die();
    
         //判斷 csv 是否存在
         $data_csv = $this->load_customize_csv_arrays();
@@ -245,6 +250,7 @@ class Customize extends Controller
                 if ($col && preg_match('/^\w+$/', $col)) {
                     try {
                         $lastRow = $this->DataModel->get_operation_info();  // 取最後一筆
+                        
                         if (is_array($lastRow) && array_key_exists($col, $lastRow)) {
                             $val = $lastRow[$col];
                             if (is_array($val))        $final = implode(',', array_map('strval', $val));
@@ -448,21 +454,47 @@ class Customize extends Controller
      */
     private static function ntcsColumns(): array {
         $columns = [
-            "id","system_sn","data_time","device_type","device_id","device_sn",
-            "tool_type","tool_sn","tool_status","job_id","job_name","sequence_id",
-            "sequence_name","step_id","torque_unit","target_type","target_torque",
-            "target_angle","target_time","fasten_time","final_fasten_torque",
-            "final_fasten_angle","total_fasten_angle","count_type","last_screw_count",
-            "total_screw_count","fasten_status","error_message","fasten_direction","rpm",
-            "hi_torque","lo_torque","hi_angle","lo_angle","delay_ttime","threshold_torque",
-            "threshold_angle","downshift_torque","downshift_angle","downshift_speed",
-            "final_tool_voltage","final_tool_current","barcode",
+            "system_sn",
+            "data_time",
+            "device_type",
+            "device_id",
+            "device_sn",
+            "tool_type",
+            "tool_sn",
+            "tool_status",
+            "job_id",
+            "job_name",
+            "seq_id",
+            "seq_name",
+            "step_id",
+            "step_tar_type",
+            "step_tar_tor",
+            "step_tar_ang",
+            "step_tor_unit",
+            "fasten_torque",
+            "fasten_angle",
+            // "step_tor_unit",
+            // "fasten_torque",
+            // "fasten_angle",
+            // "fasten_time",
+            // "fasten_status",
+            // "error_message",
+            // "count_dir",
+            // "last_screw_count",
+            // "max_screw_count",
+            // "step_rpm",
+            // "step_tool_dir",
+            // "step_hi_tor",
+            // "step_lo_tor",
+            // "step_hi_ang",
+            // "step_lo_ang",
+            // "step_th_mode",
+            // "step_th_tor",
+            // "step_ds_tor",
+            // "step_ds_speed",
+            // "barcode"
         ];
-        // ★ 與前端索引一致：43..52 = step1~step5 的 [torque, angle]
-        for ($i = 1; $i <= 5; $i++) {
-            $columns[] = "step{$i}_last_torque"; // 43,45,47,49,51
-            $columns[] = "step{$i}_last_angle";  // 44,46,48,50,52
-        }
+     
         return $columns;
     }
 
@@ -503,23 +535,21 @@ class Customize extends Controller
         require_once '../app/config/config.php';
         require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
 
-        // Modbus slave ID 合理範圍通常是  1~255
-        $unitId = $this->deviceId;
-        if ($unitId < 1 || $unitId > 255) {
-            $unitId = 1; 
-        }
+    
 
-        $ip = CONTROLLER_IP;
+        $ip = "192.168.0.123";
         $port = 502;
         $startAddress = $a;
-        $quantity = $b;  // 每個「暫存器」= 16-bit (= 2 bytes)
+        $quantity = $b;  // 每個「暫存器」= 16-bit (= 2 bytes)  
+        $unitId = 0;
 
+        
         try {
             $modbus = new ModbusMaster($ip, "TCP");
             $modbus->port = $port;
             $modbus->timeout_sec = 10;
 
-            $raw = $modbus->readMultipleRegisters($unitId, $startAddress, $quantity);
+            $raw = $modbus->readMultipleRegisters(0, $startAddress, $quantity);
 
             // --- 正規化成 16-bit words（大端）---
             $words = [];

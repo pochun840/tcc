@@ -4,6 +4,17 @@ class Agents extends Controller
 {
     private $AdminModel;
     private $MiscellaneousModl;
+
+    
+    /*
+        7  => GTCS 10
+        8  => NTCS 10
+        9  => TCC  
+        10 => MTCS 
+        11 => NTCS 7
+        
+    */
+        
     
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()

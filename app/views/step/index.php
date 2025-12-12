@@ -260,6 +260,23 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div id="th_mode_item">
+                            <div class="row">
+                                <div for="downshift" class="col-6 t1"><?php echo $text['Interrupt_Alarm'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="pnf_set" id="pnf_set_OFF" value="0">
+                                    <label class="form-check-label" for="pnf_set_OFF"><?php echo $text['switch_off'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="pnf_set" id="pnf_set_ON" value="1" >
+                                    <label class="form-check-label" for="pnf_set_ON"><?php echo $text['switch_on'];?></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </form>
                 </div>
 
@@ -439,6 +456,23 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div id="edit_direction_item">
+                            <div class="row">
+                                <div for="direction" class="col-6 t1"><?php echo $text['Interrupt_Alarm'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_pnf_set" id="edit_pnf_set_OFF" value="0">
+                                    <label class="form-check-label" for="edit_pnf_set_OFF"><?php echo $text['switch_off'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_pnf_set" id="edit_pnf_set_ON" value="1">
+                                    <label class="form-check-label" for="edit_pnf_set_ON"><?php echo $text['switch_on'];?></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
                     </form>
                 </div>

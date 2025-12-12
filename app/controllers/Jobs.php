@@ -7,6 +7,8 @@ class Jobs extends Controller
     private $ToolModel;
     private $SettingModel;
     private $MiscellaneousModel;
+    private $sequenceModel;
+    private $stepModel;
 
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
@@ -16,6 +18,9 @@ class Jobs extends Controller
         $this->MiscellaneousModel = $this->model('Miscellaneous');
         $this->ToolModel = $this->model('Tool');
         $this->SettingModel = $this->model('Setting');
+        $this->sequenceModel = $this->model('Sequence');
+        $this->stepModel = $this->model('Steptcc');
+        
 
     }
 
@@ -139,6 +144,64 @@ class Jobs extends Controller
                 }
     
                 $res = $this->jobModel->create_job($jobdata);
+
+                # ----------------------------------------------------
+                # ⭐ 自動建立預設 SEQ（SEQ_ID = 1）
+                # ----------------------------------------------------
+                if ($res) {
+
+                    $defaultSeq = array(
+                        'job_id'        => $jobdata['job_id'],
+                        'seq_id'        => 1,
+                        'seq_name'      => 'SEQ-1',
+                        'seq_en'        => 1,
+                        'seq_tr'        => 1,     # 預設顆數
+                        'seq_ns'        => 0,
+                        'seq_ok'        => 0,
+                        'seq_ok_stop'   => 0,
+                        'seq_opt'       => 0,
+                        'seq_k_val'     => 100,
+                        'seq_ofs'       => 0,
+                        'seq_work_limit'=> null,
+                        'seq_dt'        => 0,
+                        'seq_tt'        => 0,
+                    );
+
+                    # 呼叫原本 create_seq 的邏輯
+                    $this->sequenceModel->create_seq("create", $defaultSeq);
+
+                    // =======================================================
+                    // ★★ 預設 STEP-1
+                    // =======================================================
+                    $defaultStep = array(
+                        'job_id'       => $jobdata['job_id'],
+                        'seq_id'       => 1,
+                        'step_id'      => 1,
+                        'target_opt'   => 0,      // 預設：扭力模式
+                        'target_tor'   => 0,
+                        'target_ang'   => 0,
+                        'target_delay' => 0,
+                        'tor_hi'       => 0,
+                        'tor_lo'       => 0,
+                        'ang_hi'       => 0,
+                        'ang_lo'       => 0,
+                        'rpm'          => 50,
+                        'direction'    => 0,
+                        'th_mode'      => 0,
+                        'th_tor'       => 0,
+                        'ds_tor'       => 0,
+                        'ds_speed'     => 100,
+                        'record_ang'   => 0,
+                        'tor_unit'     => 1,
+                        'pnf_set'      => 0
+                    );
+
+                    $this->stepModel->create_step("create", $defaultStep);
+
+                }
+
+          
+                
                 $result = array();
                 if($res){
                     $res_msg  = $text['New']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['success'];
@@ -376,6 +439,7 @@ class Jobs extends Controller
                             $new_temp_step[$key_step]['th_tor'] = $val_step['th_tor'];
                             $new_temp_step[$key_step]['record_ang'] = $val_step['record_ang'];
                             $new_temp_step[$key_step]['tor_unit'] = $val_step['tor_unit'];
+                            $new_temp_step[$key_step]['pnf_set'] = $val_step['pnf_set'];
                         }
                       
                         $res = $this->jobModel->copy_step_by_job_id($new_temp_step);     

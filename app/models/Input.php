@@ -167,11 +167,12 @@ class Input{
 
     //set input_alljob
     public function set_input_alljob($input_jobid){
-        $sql = "UPDATE device SET device_input_all_job = ?";
-        $statement = $this->db_iDas_device->prepare($sql);
+        $sql = "UPDATE device SET  device_input_all_job = ?";
+        $statement = $this->db_iDas->prepare($sql);
         $results   = $statement->execute([$input_jobid]);
         return $results;
     }
+
 
     public function generateTableCell($input_data) {
         $tableCells = "";

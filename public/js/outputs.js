@@ -492,62 +492,68 @@ function toggleElementsInRange(start, end, suffix, filtered_array = []) {
 // 並重新載入目前選定的 job 資料
 // @param {string} job_id 
 // ================================
+function resetalignsubmit(jobId) {
 
-function resetalignsubmit(job_id) {
+    // 先把 UI 清掉
+    const btn = document.getElementById('Button_Select');
+    const jobInput = document.getElementById('job_id');
 
-   var job_id_new = 0;
-   if(job_id_new == 0){
-       $.ajax({
-           url: "?url=Outputs/output_alljob",
-           method: "POST",
-           data: {
-               job_id: job_id
-           },
-           success: function (response) {
-               get_output_by_job_id(job_id);
-           },
-           error: function (xhr, status, error) {
+    if (btn) btn.disabled = false;
+    if (jobInput) jobInput.style.backgroundColor = '';
 
-           }
-       });
+    buttonDisabled = false;
+    backgroundColorYellow = false;
 
-   }
-
+    // 通知後端解除 unified（你原本就是用 job_id_new 這招）
+    $.ajax({
+        url: "?url=Outputs/output_alljob",
+        method: "POST",
+        data: { job_id_new: 0 },
+        success: function (response) {
+            if (jobId && typeof get_output_by_job_id === 'function') {
+                get_output_by_job_id(jobId);
+            }
+        }
+    });
 }
+
+
 
 // ================================
 // 將 job_id 提交至 server 做全域對齊處理
 // 並控制按鈕可用狀態與背景色提示
 // @param {string} job_id 
 // ================================
+function alignsubmit(jobId) {
+    if (!jobId) return;
 
-function alignsubmit(job_id) {
-   if (job_id) {
-       $.ajax({
-           url: "?url=Outputs/output_alljob",
-           method: "POST",
-           data: {
-               job_id: job_id
-           },
-           success: function (response) {
-               get_output_by_job_id(job_id);
-           
-               buttonDisabled = !buttonDisabled;
-               document.getElementById('Button_Select').disabled = buttonDisabled;
-    
-               backgroundColorYellow = !backgroundColorYellow;
-               if (backgroundColorYellow) {
-                   document.getElementById('job_id').style.backgroundColor = 'yellow';
-               } else {
-                   document.getElementById('job_id').style.backgroundColor = '';
-               }
-           },
-           error: function (xhr, status, error) {
+    $.ajax({
+        url: "?url=Outputs/output_alljob",
+        method: "POST",
+        data: { job_id: jobId },
+        success: function (response) {
+            if (typeof get_output_by_job_id === 'function') {
+                get_output_by_job_id(jobId);
+            }
 
-           }
-       });
-   }
+            // 明確設定為「套用中」
+            const btn = document.getElementById('Button_Select');
+            const jobInput = document.getElementById('job_id');
+
+            if (btn) btn.disabled = true;
+            if (jobInput) {
+                jobInput.style.backgroundColor = 'yellow';
+                jobInput.value = jobId;
+            }
+
+            buttonDisabled = true;
+            backgroundColorYellow = true;
+        }
+    });
 }
+
+
+
 
 // ================================
 // 找出 job_id 對應的output 資料 

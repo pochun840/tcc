@@ -229,8 +229,8 @@ class Job{
     
 
     public function copy_step_by_job_id($new_temp_step){
-        $sql = "INSERT INTO `step` (job_id, seq_id, step_id,target_opt, target_tor, target_ang, target_delay, tor_hi, tor_lo, ang_hi, ang_lo, rpm, direction, th_mode, ds_tor, ds_speed, th_tor, record_ang, tor_unit  )";
-        $sql .= " VALUES (:job_id,:seq_id,:step_id,:target_opt,:target_tor,:target_ang,:target_delay,:tor_hi,:tor_lo,:ang_hi,:ang_lo,:rpm,:direction,:th_mode,:ds_tor,:ds_speed,:th_tor,:record_ang,:tor_unit)";
+        $sql = "INSERT INTO `step` (job_id, seq_id, step_id,target_opt, target_tor, target_ang, target_delay, tor_hi, tor_lo, ang_hi, ang_lo, rpm, direction, th_mode, ds_tor, ds_speed, th_tor, record_ang, tor_unit , pnf_set)";
+        $sql .= " VALUES (:job_id,:seq_id,:step_id,:target_opt,:target_tor,:target_ang,:target_delay,:tor_hi,:tor_lo,:ang_hi,:ang_lo,:rpm,:direction,:th_mode,:ds_tor,:ds_speed,:th_tor,:record_ang,:tor_unit,:pnf_set)";
         
         $statement = $this->db_iDas->prepare($sql);
         $insertedrecords = 0; 

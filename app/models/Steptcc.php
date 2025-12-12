@@ -129,8 +129,8 @@ class Steptcc{
             return false; 
         }
         
-        $sql = "INSERT INTO `step` (job_id, seq_id, step_id, target_opt, target_tor, target_ang, target_delay, tor_hi, tor_lo, ang_hi, ang_lo, rpm, direction, th_mode, ds_tor, ds_speed, th_tor,record_ang,tor_unit) ";
-        $sql .= "VALUES (:job_id, :seq_id, :step_id, :target_opt, :target_tor, :target_ang, :target_delay, :tor_hi, :tor_lo, :ang_hi, :ang_lo, :rpm, :direction, :th_mode, :ds_tor, :ds_speed, :th_tor,:record_ang,:tor_unit);";
+        $sql = "INSERT INTO `step` (job_id, seq_id, step_id, target_opt, target_tor, target_ang, target_delay, tor_hi, tor_lo, ang_hi, ang_lo, rpm, direction, th_mode, ds_tor, ds_speed, th_tor,record_ang,tor_unit,pnf_set) ";
+        $sql .= "VALUES (:job_id, :seq_id, :step_id, :target_opt, :target_tor, :target_ang, :target_delay, :tor_hi, :tor_lo, :ang_hi, :ang_lo, :rpm, :direction, :th_mode, :ds_tor, :ds_speed, :th_tor,:record_ang,:tor_unit,:pnf_set);";
     
         // 检查数据库连接
         if ($this->db_iDas === null) {
@@ -170,6 +170,7 @@ class Steptcc{
         $statement->bindValue(':th_tor', $jobdata['th_tor']);
         $statement->bindValue(':record_ang', $jobdata['record_ang']);
         $statement->bindValue(':tor_unit', $jobdata['tor_unit']);
+        $statement->bindValue(':pnf_set', $jobdata['pnf_set']);
     
         $results = $statement->execute();
         if (!$results) {
@@ -204,7 +205,8 @@ class Steptcc{
                     ds_tor = :ds_tor,
                     ds_speed = :ds_speed,
                     record_ang =:record_ang,
-                    tor_unit =:tor_unit
+                    tor_unit =:tor_unit,
+                    pnf_set =:pnf_set
         WHERE job_id = :job_id  AND   seq_id = :seq_id  AND step_id = :step_id ";
         $statement = $this->db_iDas->prepare($sql);
 
@@ -227,6 +229,7 @@ class Steptcc{
         $statement->bindValue(':th_tor', $jobdata['th_tor']);
         $statement->bindValue(':record_ang', $jobdata['record_ang']);
         $statement->bindValue(':tor_unit', $jobdata['tor_unit']);
+        $statement->bindValue(':pnf_set', $jobdata['pnf_set']);
         $results = $statement->execute();
 
 

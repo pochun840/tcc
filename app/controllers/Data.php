@@ -355,5 +355,57 @@ class Data extends Controller
     }
 
 
+
+    public function qa_check(){
+        $type = 'ALL';
+        $isMobile = $this->isMobileCheck(); // 判斷是否為手機裝置
+
+        // 取得目前年度資料庫路徑（Linux專用）
+        if (PHP_OS_FAMILY === 'Linux') {
+            $db_path = "/var/www/html/database/data" . date('Y') . ".db";
+            $db_exists = file_exists($db_path);
+
+            if ($db_exists) {
+                // 若資料庫存在則撈取資料
+                $res_data     = $this->DataModel->getData('ALL');
+                $res_data_ok  = $this->DataModel->getData('OK');
+                $res_data_nok = $this->DataModel->getData('NOK');
+            } else {
+                // 否則回傳空陣列
+                $res_data     = [];
+                $res_data_ok  = [];
+                $res_data_nok = [];
+            }
+        } else {
+            // 非 Linux 直接查詢（假設 DB 一定存在）
+            $res_data     = $this->DataModel->getData('ALL');
+            $res_data_ok  = $this->DataModel->getData('OK');
+            $res_data_nok = $this->DataModel->getData('NOK');
+            $db_exists = '';
+            $db_path = '';
+        }
+
+        // 查詢單位與狀態、裝置資訊
+        $unit_arr    = $this->MiscellaneousModel->details('torque_unit');
+        $status_arr  = $this->MiscellaneousModel->details('status');
+        $device_info = $this->Device_Info();
+
+        // 組合資料傳給 view
+        $data = array(
+            'isMobile'      => $isMobile,
+            'res_data'      => $res_data,
+            'res_data_ok'   => $res_data_ok,
+            'res_data_nok'  => $res_data_nok,
+            'device_info'   => $device_info,
+            'unit_arr'      => $unit_arr,
+            'status_arr'    => $status_arr,
+            'db_exists'     => $db_exists,
+            'db_path'       => $db_path
+        );
+
+        $this->view('data/qa_check', $data);
+    }
+
+
 }
 ?>

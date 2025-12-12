@@ -44,6 +44,8 @@ function include_css() {
         'Data'      => ['pc' => 'tcc_data.css'],
         'Agents'    => ['pc' => 'tcc_agent.css'],
         'Remotes'   => ['pc' => 'tcc_jobs.css'],
+        'Customize' => ['pc' => 'tcc_jobs.css'],
+
     ];
 
     // 特殊處理 Dashboards 模組中的不同 action

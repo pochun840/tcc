@@ -760,55 +760,59 @@ function forbidMsg(digit){
 
     const SPECIAL_MUTEX = [
         { dbIndex: '0', manualValues: ['4165','4166']  }, //id
-        { dbIndex: '2', manualValues: ['4096','4097','4098','4099','4100','4101'] }, //時間(Y-M-D H:I:S)
-        { dbIndex: '3', manualValues: ['4144']  }, //鎖附控制器類型
-        { dbIndex: '5', manualValues: ['4102','4103','4104','4105','4106','4107','4108','4109','4110','4111'] }, //鎖附控制器序號 
-        { dbIndex: '6', manualValues: ['4112','4113','4114','4115','4116','4117','4118','4119','4120','4121'] }, //鎖附起子型號 
-        { dbIndex: '7', manualValues: ['4122','4123','4124','4125','4126','4127','4128','4129','4130','4131'] }, //鎖附起子序號 
-        { dbIndex: '8', manualValues: ['4167'] },//鎖附起子狀態
-        { dbIndex: '9', manualValues: ['4148'] },//JOBID
-        { dbIndex: '10', manualValues: ['4132','4133','4134','4135','4136','4137'] },//JOBNANE
-        { dbIndex: '11', manualValues: ['4149'] },//SEQID
-        { dbIndex: '12', manualValues: ['4138','4139','4140','4141','4142','4143'] },//SEQNANE
-        { dbIndex: '13', manualValues: ['4151'] },//STEPID
-        { dbIndex: '14', manualValues: ['4157'] },//扭力單位
-        { dbIndex: '15', manualValues: ['4153'] },//鎖附目標類型
-        { dbIndex: '16', manualValues: ['4170','4171'] },//目標扭力
-        { dbIndex: '17', manualValues: ['4176','4177'] },//目標角度
-        { dbIndex: '19', manualValues: ['4158'] },//總鎖附時間(秒)
-        { dbIndex: '20', manualValues: ['4155','4156'] },//鎖附扭力
-        { dbIndex: '21', manualValues: ['4159','4160'] },//鎖附角度
-        { dbIndex: '22', manualValues: ['4190','4191'] },//鎖附總角度
-        { dbIndex: '23', manualValues: ['4161'] },//計數模式
-        { dbIndex: '24', manualValues: ['4162'] },//鎖附顆數 
-        { dbIndex: '25', manualValues: ['4163'] },//總顆數 
-        { dbIndex: '26', manualValues: ['4164'] },//狀態
-        { dbIndex: '27', manualValues: ['4168'] },//錯誤狀態
-        { dbIndex: '28', manualValues: ['4152'] },//鎖附起子轉向 
-        { dbIndex: '29', manualValues: ['4169'] },//鎖附轉速 
-        { dbIndex: '30', manualValues: ['4172','4173'] },//鎖附扭力上限
-        { dbIndex: '31', manualValues: ['4174','4175'] },//鎖附扭力下限
-        { dbIndex: '32', manualValues: ['4178','4179'] },//鎖附角度上限
-        { dbIndex: '33', manualValues: ['4180','4181'] },//鎖附角度下限
-        { dbIndex: '35', manualValues: ['4182','4183'] },//鎖附門檻點扭力
-        { dbIndex: '37', manualValues: ['4184','4185'] },//鎖附降速點扭力
-        { dbIndex: '39', manualValues: ['4186'] },//鎖附降速轉速
-        { dbIndex: '42', manualValues: RANGE(4192, 4241) }, //條碼
+        { dbIndex: '1', manualValues: ['4096','4097','4098','4099','4100','4101'] }, //時間(Y-M-D H:I:S)
+        { dbIndex: '2', manualValues: ['4144']  }, //鎖附控制器類型
+        { dbIndex: '3', manualValues: ['4102','4103','4104','4105','4106','4107','4108','4109','4110','4111'] }, //鎖附控制器序號 
+        { dbIndex: '4', manualValues: ['4112','4113','4114','4115','4116','4117','4118','4119','4120','4121'] }, //鎖附起子型號 
+        { dbIndex: '5', manualValues: ['4122','4123','4124','4125','4126','4127','4128','4129','4130','4131'] }, //鎖附起子序號 
+        { dbIndex: '7', manualValues: ['4167'] },//鎖附起子狀態
+        { dbIndex: '8', manualValues: ['4148'] },//JOBID
+        { dbIndex: '9', manualValues: ['4132','4133','4134','4135','4136','4137'] },//JOBNANE
+        { dbIndex: '10', manualValues: ['4149'] },//SEQID
+        { dbIndex: '11', manualValues: ['4138','4139','4140','4141','4142','4143'] },//SEQNANE
+        { dbIndex: '12', manualValues: ['4151'] },//STEPID
+        { dbIndex: '13', manualValues: ['4153'] },//鎖附目標類型
+        { dbIndex: '14', manualValues: ['4170','4171'] },//目標扭力
+        { dbIndex: '15', manualValues: ['4176','4177'] },//目標角度
+        { dbIndex: '16', manualValues: ['4157'] },//鎖附扭力單位 
+        { dbIndex: '17', manualValues: ['4155','4156'] },//鎖附扭力
+        { dbIndex: '18', manualValues: ['4159','4160'] },//鎖附角度
 
-        { dbIndex: '43', manualValues: ['4242', '4243'] }, // 步驟1扭力
-        { dbIndex: '44', manualValues: ['4244', '4245'] }, // 步驟1角度
+        //{ dbIndex: '17', manualValues: ['4176','4177'] },//目標角度
+        //{ dbIndex: '19', manualValues: ['4158'] },//總鎖附時間(秒)
+        //{ dbIndex: '20', manualValues: ['4155','4156'] },//鎖附扭力
+        //{ dbIndex: '21', manualValues: ['4159','4160'] },//鎖附角度
+        //{ dbIndex: '22', manualValues: ['4190','4191'] },//鎖附總角度
+        //{ dbIndex: '23', manualValues: ['4161'] },//計數模式
+        //{ dbIndex: '24', manualValues: ['4162'] },//鎖附顆數 
+        //{ dbIndex: '25', manualValues: ['4163'] },//總顆數 
+        //{ dbIndex: '26', manualValues: ['4164'] },//狀態
+        //{ dbIndex: '27', manualValues: ['4168'] },//錯誤狀態
+        //{ dbIndex: '28', manualValues: ['4152'] },//鎖附起子轉向 
+        //{ dbIndex: '29', manualValues: ['4169'] },//鎖附轉速 
+        //{ dbIndex: '30', manualValues: ['4172','4173'] },//鎖附扭力上限
+        //{ dbIndex: '31', manualValues: ['4174','4175'] },//鎖附扭力下限
+        //{ dbIndex: '32', manualValues: ['4178','4179'] },//鎖附角度上限
+        //{ dbIndex: '33', manualValues: ['4180','4181'] },//鎖附角度下限
+        //{ dbIndex: '35', manualValues: ['4182','4183'] },//鎖附門檻點扭力
+        //{ dbIndex: '37', manualValues: ['4184','4185'] },//鎖附降速點扭力
+        //{ dbIndex: '39', manualValues: ['4186'] },//鎖附降速轉速
+        //{ dbIndex: '42', manualValues: RANGE(4192, 4241) }, //條碼
 
-        { dbIndex: '45', manualValues: ['4246', '4247'] }, // 步驟2扭力
-        { dbIndex: '46',  manualValues:['4248', '4249'] }, // 步驟2角度
+        //{ dbIndex: '43', manualValues: ['4242', '4243'] }, // 步驟1扭力
+        //{ dbIndex: '44', manualValues: ['4244', '4245'] }, // 步驟1角度
 
-        { dbIndex: '47', manualValues: ['4250', '4251'] }, // 步驟3扭力
-        { dbIndex: '48', manualValues: ['4252', '4253'] }, // 步驟3角度
+        //{ dbIndex: '45', manualValues: ['4246', '4247'] }, // 步驟2扭力
+        //{ dbIndex: '46',  manualValues:['4248', '4249'] }, // 步驟2角度
 
-        { dbIndex: '49', manualValues: ['4254', '4255'] }, // 步驟4扭力
-        { dbIndex: '50', manualValues: ['4256', '4257'] }, // 步驟4角度
+        //{ dbIndex: '47', manualValues: ['4250', '4251'] }, // 步驟3扭力
+        //{ dbIndex: '48', manualValues: ['4252', '4253'] }, // 步驟3角度
 
-        { dbIndex: '51', manualValues: ['4258', '4259'] }, // 步驟5扭力
-        { dbIndex: '52', manualValues: ['4260', '4261'] }, // 步驟5角度
+        //{ dbIndex: '49', manualValues: ['4254', '4255'] }, // 步驟4扭力
+        //{ dbIndex: '50', manualValues: ['4256', '4257'] }, // 步驟4角度
+
+        //{ dbIndex: '51', manualValues: ['4258', '4259'] }, // 步驟5扭力
+        //{ dbIndex: '52', manualValues: ['4260', '4261'] }, // 步驟5角度
     
     ];
 

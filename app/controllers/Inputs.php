@@ -442,27 +442,50 @@ class Inputs extends Controller
         }     
     }
 
-    public function input_alljob()
-    {
+
+    
+    public function input_alljob(){
+
         $input_check = true;
-        if( isset($_POST['job_id']) && $_POST['job_id'] >= 0 ){
-            $input_jobid = $_POST['job_id'];
-        }else if(isset($_POST['job_id_new']) && $_POST['job_id_new'] >= 0){
+
+
+        // ===============================
+        // 1：套用 unified（job_id 有值）
+        // ===============================
+        if (isset($_POST['job_id']) && $_POST['job_id'] !== '') {
+
+            $input_jobid = $_POST['job_id'];  // 套用指定 job
+
+        }
+        // ===============================
+        // 2：解除 unified（job_id_new = 0）
+        // ===============================
+        else if (isset($_POST['job_id'])) {
+
+            // 明確代表「解除 unified」
             $input_jobid = '';
-        }else{
-            $input_check = false; 
+
+        }
+        else {
+            $input_check = false;
         }
 
-        if($input_check){
+
+        if ($input_check) {
+
             $res = $this->InputModel->set_input_alljob($input_jobid);
-            if($res){
-                $res_msg ='set inputall job:'.$input_jobid.' copyDB success';
-            }else{
-                $res_msg ='set inputall job:'.$input_jobid.' copyDB fail';
+
+            if ($res) {
+                $res_msg = 'set inputall job: ' . ($input_jobid === '' ? 'none (reset)' : $input_jobid) . ' success';
+            } else {
+                $res_msg = 'set inputall job: ' . ($input_jobid === '' ? 'none (reset)' : $input_jobid) . ' fail';
             }
-            echo $res_msg;   
+
+            echo $res_msg;
         }
-    }    
+    }
+
+
 }
 
 ?>

@@ -307,6 +307,24 @@ class Setting{
         return $rows;
     }
 
+    //get all job
+    public function get_job_list_tcc()
+    {
+        $sql = "SELECT * FROM job ORDER BY  job_id";
+        $statement = $this->db_iDas->prepare($sql);
+        $results = $statement->execute();
+        $rows = $statement->fetchall(PDO::FETCH_ASSOC);
+
+        $filtered_job_list = array_filter($rows, function($job) {
+            return $job['JOBID'] != 0 && $job['JOBID'] != 221;
+        });
+
+        
+        return array_values($filtered_job_list);
+
+
+    }
+
     //get all job seq
     public function get_seq_list($job_id){
 

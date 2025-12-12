@@ -208,12 +208,12 @@ function job_confirm() {
                 document.getElementById("JobSelect").style.display = 'none';
                 document.getElementById("job_id").value = jobid;
 
-                var s3Button = document.getElementById('S3');
+                /*var s3Button = document.getElementById('S3');
                 if (!job_inputlist.trim()) {
                     s3Button.disabled = true;
                 } else {
                     s3Button.disabled = false;
-                }
+                }*/
 
                 var rows = document.querySelectorAll('#input_jobid_select tr');
                 rows.forEach(function(row) {

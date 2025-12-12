@@ -175,6 +175,7 @@ class Step extends Controller
             $th_tor = isset($_POST['th_tor'])? floatval($_POST['th_tor']) : 0.0;
             $record_ang = isset($_POST['record_ang'])? intval($_POST['record_ang']) : 0;
             $tor_unit = isset($_POST['tor_unit'])? intval($_POST['tor_unit']) : 1;
+            $pnf_set = isset($_POST['pnf_set'])? intval($_POST['pnf_set']) : 0;
 
             if($target_opt  == 1){
 
@@ -237,7 +238,8 @@ class Step extends Controller
                 'ds_tor'           => $ds_tor,
                 'ds_speed'         => $ds_speed,
                 'record_ang'       => $record_ang,
-                'tor_unit'         => $tor_unit
+                'tor_unit'         => $tor_unit,
+                'pnf_set'          => $pnf_set
                 
             );
    
@@ -297,6 +299,7 @@ class Step extends Controller
             $th_tor = isset($_POST['th_tor'])? floatval($_POST['th_tor']) : 0;
             $record_ang = isset($_POST['record_ang'])? intval($_POST['record_ang']) : 0;
             $tor_unit = isset($_POST['tor_unit'])? intval($_POST['tor_unit']) : $step_torque_unit;
+            $pnf_set = isset($_POST['pnf_set'])? intval($_POST['pnf_set']) : 0;
 
 
             if($target_opt  == 0 ){
@@ -374,7 +377,8 @@ class Step extends Controller
                 'ds_tor'           => $ds_tor,
                 'ds_speed'         => $ds_speed,
                 'record_ang'      => $record_ang,
-                'tor_unit'         => $tor_unit
+                'tor_unit'         => $tor_unit,
+                'pnf_set'          => $pnf_set
                 
             );
 
@@ -471,7 +475,8 @@ class Step extends Controller
                         'ds_tor'           => $old_res[0]['ds_tor'],
                         'ds_speed'         => $old_res[0]['ds_speed'],
                         'record_ang'       => $old_res[0]['record_ang'],
-                        'tor_unit'         => $old_res[0]['tor_unit']
+                        'tor_unit'         => $old_res[0]['tor_unit'],
+                        'pnf_set'         => $old_res[0]['pnf_set']
                     ); 
 
                     $mode = "copy"; 

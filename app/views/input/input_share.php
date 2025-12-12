@@ -15,6 +15,46 @@ var buttonDisabled = false;
 var backgroundColorYellow = false;
 var input_job;
 
+class InputUnifiedManager {
+    constructor() {
+        this.keyStatus = 'input_unified';
+        this.keyJob = 'input_unified_job';
+    }
+
+    isEnabled() {
+        return localStorage.getItem(this.keyStatus) === '1';
+    }
+
+    getJob() {
+        return localStorage.getItem(this.keyJob);
+    }
+
+    enable(jobId) {
+        localStorage.setItem(this.keyStatus, '1');
+        localStorage.setItem(this.keyJob, jobId);
+    }
+
+    disable() {
+        localStorage.removeItem(this.keyStatus);
+        localStorage.removeItem(this.keyJob);
+    }
+}
+
+const inputUnifiedManager = new InputUnifiedManager();
+
+// === 頁面載入時，若 unified 已啟動 → 自動套用狀態顯示 ===
+if (inputUnifiedManager.isEnabled()) {
+    const unifiedJob = inputUnifiedManager.getJob();
+    if (unifiedJob) {
+        job_id = unifiedJob;
+        get_input_by_job_id(job_id);
+
+        document.getElementById("job_id").value = job_id;
+        document.getElementById("Button_Select").disabled = true;
+        document.getElementById("job_id").style.backgroundColor = 'yellow';
+    }
+}
+
 /**
  * DOM 載入完成時執行初始化
  */
@@ -146,17 +186,65 @@ function crud_job_event(argument) {
 
     if (argument === 'unified' && job_id !== '') {
 
-        alert('eeeeeeeeeee');
-        
-        enableButton();
-        resetBackgroundColor();
+        const unifiedOn = inputUnifiedManager.isEnabled();
+        const unifiedJob = inputUnifiedManager.getJob();
 
-        // 判斷是否同步 job_id，決定要 reset 還是 align
-        if (input_job !== job_id) {
-            alignsubmit(job_id);
-        } else {
-            resetalignsubmit(job_id);
+        // =====================
+        // ① unified 已啟動 → 嘗試解除
+        // =====================
+        if (unifiedOn) {
+
+            // ❗ 必須回到當初 unified 的 job 才能解除
+            if (job_id !== unifiedJob) {
+                alertify.alert("請切回 " + unifiedJob + " 才能解除 unified");
+                return;
+            }
+
+            inputUnifiedManager.disable();
+            resetalignsubmit(unifiedJob);
+
+            console.log("Unified OFF job:", unifiedJob);
+            return;
+        }
+
+        // =====================
+        // ② unified 關閉 → 套用到現在的 job
+        // =====================
+        inputUnifiedManager.enable(job_id);
+        alignsubmit(job_id);
+
+        console.log("Unified ON job:", job_id);
+        return;
+    }
+
+
+
+}
+
+
+
+$(document).ready(function () {
+
+    // === 統一模式 (Unified) UI 狀態恢復 ===
+    if (inputUnifiedManager.isEnabled()) {
+        const unifiedJob = inputUnifiedManager.getJob();
+
+        if (unifiedJob) {
+            job_id = unifiedJob;
+
+            // 套用 unified 外觀
+            $("#job_id").val(unifiedJob).css("background-color", "yellow");
+            $("#Button_Select").prop("disabled", true);
+
+            // 載入該 job 的 input list
+            get_input_by_job_id(unifiedJob);
+
+            console.log("Unified UI Restored for job:", unifiedJob);
         }
     }
-}
+
+    // === 原本的初始化 ===
+    highlight_row_input('input_table');
+});
+
 </script>
