@@ -262,6 +262,24 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div id="th_mode_item">
+                            <div class="row">
+                                <div for="downshift" class="col-6 t1"><?php echo $text['Interrupt_Alarm'];?>:</div>
+                                <div class="col t2">
+                                    <div class="col form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="pnf_set" id="pnf_set_OFF" value="0" >
+                                        <label class="form-check-label" for="pnf_set_OFF"><?php echo $text['switch_off'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="pnf_set" id="pnf_set_ON" value="1">
+                                        <label class="form-check-label" for="pnf_set_ON"><?php echo $text['switch_on'];?></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </form>
                 </div>
             </div>
@@ -442,6 +460,23 @@
                                 </div>
                             </div>
                         </div>
+
+                         <div  id="edit_pnf_set_item">
+                            <div class="row">
+                                <div for="direction" class="col-6 t1"><?php echo $text['Interrupt_Alarm'];?>:</div>
+                                <div class="col t2" >
+                                    <div class="col-4 form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" type="radio" name="edit_pnf_set" id="edit_pnf_set_OFF" value="0">
+                                    <label class="form-check-label" for="edit_pnf_set_OFF"><?php echo $text['switch_off'];?></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="edit_pnf_set" id="edit_pnf_set_ON" value="1">
+                                    <label class="form-check-label" for="edit_pnf_set_ON"><?php echo $text['switch_on'];?></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </form>
                 </div>
                 </div>
@@ -577,7 +612,8 @@
         var ds_tor = document.getElementById('ds_tor').value;
         var ds_speed = document.getElementById('ds_speed').value;
         var record_ang = 0; //紀錄 累計角度
-        var tor_unit = <?php echo  $data['step_torque_unit'] ?>
+        var tor_unit = '<?php echo  $data['step_torque_unit'] ?>';
+        var pnf_set  = document.querySelector('input[name="pnf_set"]:checked')?.value || 0;
 
         // 驗證
         let check = input_check_savestep();
@@ -607,7 +643,8 @@
                     ds_tor: ds_tor,
                     ds_speed: ds_speed,
                     record_ang: record_ang,
-                    tor_unit: tor_unit
+                    tor_unit: tor_unit,
+                    pnf_set: pnf_set
                 },
                 success: function(response) {
                     var responseData = JSON.parse(response);
@@ -672,6 +709,7 @@
         var ds_speed = document.getElementById('edit_ds_speed').value;
         var record_ang = 0; //紀錄 累計角度
         var tor_unit = '<?php echo $data['step_torque_unit'];?>'; 
+        var pnf_set  = document.querySelector('input[name="edit_pnf_set"]:checked')?.value || 0;
 
 
 
@@ -703,7 +741,8 @@
                     ds_tor: ds_tor,
                     ds_speed: ds_speed,
                     record_ang: record_ang,
-                    tor_unit: tor_unit
+                    tor_unit: tor_unit,
+                    pnf_set: pnf_set
                 },
                 success: function(response) {
                     var responseData = JSON.parse(response);

@@ -457,7 +457,7 @@
                             </div>
                         </div>
 
-                        <div id="edit_direction_item">
+                        <div id="edit_pnf_set_item">
                             <div class="row">
                                 <div for="direction" class="col-6 t1"><?php echo $text['Interrupt_Alarm'];?>:</div>
                                 <div class="col t2" >
@@ -622,7 +622,8 @@ function add_step() {
     var ds_tor = document.getElementById('ds_tor').value;
     var ds_speed = document.getElementById('ds_speed').value;
     var record_ang = 0; //紀錄 累計角度
-    var tor_unit = <?php echo  $data['step_torque_unit'] ?>
+    var tor_unit = '<?php echo  $data['step_torque_unit'] ?>';
+    var pnf_set  = document.querySelector('input[name="pnf_set"]:checked')?.value || 0;
 
     // 驗證
     let check = input_check_savestep();
@@ -652,7 +653,8 @@ function add_step() {
                 ds_tor: ds_tor,
                 ds_speed: ds_speed,
                 record_ang: record_ang,
-                tor_unit: tor_unit
+                tor_unit: tor_unit,
+                pnf_set: pnf_set 
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
@@ -717,6 +719,7 @@ function edit_step_save() {
     var ds_speed = document.getElementById('edit_ds_speed').value;
     var record_ang = 0; //紀錄 累計角度
     var tor_unit = '<?php echo $data['step_torque_unit'];?>'; 
+    var pnf_set  = document.querySelector('input[name="edit_pnf_set"]:checked')?.value || 0;
 
     //驗證
     let check = input_check_editstep();
@@ -746,7 +749,8 @@ function edit_step_save() {
                 ds_tor: ds_tor,
                 ds_speed: ds_speed,
                 record_ang: record_ang,
-                tor_unit: tor_unit
+                tor_unit: tor_unit,
+                pnf_set: pnf_set
             },
             success: function(response) {
                 var responseData = JSON.parse(response);

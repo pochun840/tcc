@@ -9,7 +9,8 @@
 define('APPROOT', dirname(dirname(__FILE__)) . '/');
 
 // URL 根目錄，這是引入 public 資料夾裡的資源，或是頁面跳轉時用的
-define('URLROOT', '../public/'); //local用
+//define('URLROOT', '../public/'); //local用
+define('URLROOT', '/idas/');
 
 // 網站名稱
 define('SITENAME', 'iDAS DEVICE');

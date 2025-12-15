@@ -564,28 +564,29 @@ $text['system_connect_timestamp'] = '最後連線時間';
 $text['csv_file_path'] = '檔案路徑';
 
 //main 主畫面image url
-$text['img_job'] = '../public/img/home_job_tw.png';
-$text['img_job_hover'] = '../public/img/home_job_m_tw.png';
-$text['img_io_input'] = '../public/img/home_input_tw.png';
-$text['img_io_input_hover'] = '../public/img/home_m_input_tw.png';
-$text['img_io_output'] = '../public/img/home_output_tw.png';
-$text['img_io_output_hover'] = '../public/img/home_m_output_tw.png';
-$text['img_operation'] = '../public/img/home_operation_tw.png';
-$text['img_operation_hover'] = '../public/img/home_m_operation_tw.png';
-$text['img_data'] = '../public/img/home_data_tw.png';
-$text['img_data_hover'] = '../public/img/home_m_data_tw.png';
-$text['img_tool'] = '../public/img/home_tool_cn.png';
-$text['img_tool_hover'] = '../public/img/home_m_tool_cn.png';
-$text['img_setting'] = '../public/img/home_setting_tw.png';
-$text['img_setting_hover'] = '../public/img/home_m_setting_tw.png';
-$text['img_load'] = '../public/img/home_load_tw.png';
-$text['img_load_hover'] = '../public/img/home_load_m_tw.png';
-$text['img_save'] = '../public/img/home_save_tw.png';
-$text['img_save_hover'] = '../public/img/home_save_m_tw.png';
-$text['img_agent'] = '../public/img/home_agent_tw.png';
-$text['img_agent_hover'] = '../public/img/home_m_agent_tw.png';
-$text['img_remote'] = '../public/img/home_command_tw.png';
-$text['img_remote_hover'] = '../public/img/home_m_command_tw.png';
+$text['img_job']             = URLROOT . 'img/home_job_tw.png';
+$text['img_job_hover']       = URLROOT . 'img/home_job_m_tw.png';
+$text['img_io_input']        = URLROOT . 'img/home_input_tw.png';
+$text['img_io_input_hover']  = URLROOT . 'img/home_m_input_tw.png';
+$text['img_io_output']       = URLROOT . 'img/home_output_tw.png';
+$text['img_io_output_hover'] = URLROOT . 'img/home_m_output_tw.png';
+$text['img_operation']       = URLROOT . 'img/home_operation_tw.png';
+$text['img_operation_hover'] = URLROOT . 'img/home_m_operation_tw.png';
+$text['img_data']            = URLROOT . 'img/home_data_tw.png';
+$text['img_data_hover']      = URLROOT . 'img/home_m_data_tw.png';
+$text['img_tool']            = URLROOT . 'img/home_tool_tw.png';
+$text['img_tool_hover']      = URLROOT . 'img/home_m_tool_tw.png';
+$text['img_setting']         = URLROOT . 'img/home_setting_tw.png';
+$text['img_setting_hover']   = URLROOT . 'img/home_m_setting_tw.png';
+$text['img_load']            = URLROOT . 'img/home_load_tw.png';
+$text['img_load_hover']      = URLROOT . 'img/home_load_m_tw.png';
+$text['img_save']            = URLROOT . 'img/home_save_tw.png';
+$text['img_save_hover']      = URLROOT . 'img/home_save_m_tw.png';
+$text['img_agent']           = URLROOT . 'img/home_agent_tw.png';
+$text['img_agent_hover']     = URLROOT . 'img/home_m_agent_tw.png';
+$text['img_remote']          = URLROOT . 'img/home_command_tw.png';
+$text['img_remote_hover']    = URLROOT . 'img/home_m_command_tw.png';
+
 
 
 $text['unfasten_force'] = '超出範圍 1 - 1100';

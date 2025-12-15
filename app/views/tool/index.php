@@ -6,7 +6,7 @@
                     <h3><?php echo $text['tool']; ?></h3>
                 </td>
                 <td>
-                    <button class="w3-btn w3-round-large" style="height:50px;padding: 0" onclick="window.location.href='./?url=Dashboards'"> <img src="../public/img/btn_home.png"></button>
+                    <button class="w3-btn w3-round-large" style="height:50px;padding: 0" onclick="window.location.href='./?url=Dashboards'"> <img src="<?php echo URLROOT; ?>img/btn_home.png" ></button>
                 </td>
             </tr>
         </table>
