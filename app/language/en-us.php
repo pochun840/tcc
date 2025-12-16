@@ -344,11 +344,11 @@ $text['total_screw_count'] = 'Total Count';
 $text['fasten_status'] = 'Fastening Result';
 $text['error_message'] = 'Error Message';
 $text['info_fasten_direction'] = 'Screwdriver Direction';
-$text['rpm'] = 'Fastening Speed (RPM)';
-$text['hi_torque'] = 'Torque Upper Limit';
-$text['lo_torque'] = 'Torque Lower Limit';
-$text['hi_angle'] = 'Angle Upper Limit';
-$text['lo_angle'] = 'Angle Lower Limit';
+$text['step_rpm'] = 'Fastening Speed (RPM)';
+$text['step_hi_tor'] = 'Torque Upper Limit';
+$text['step_lo_tor'] = 'Torque Lower Limit';
+$text['step_hi_ang'] = 'Angle Upper Limit';
+$text['step_lo_ang'] = 'Angle Lower Limit';
 $text['delay_ttime'] = 'Delay Time';
 $text['threshold_torque'] = 'Threshold Torque';
 $text['threshold_angle'] = 'Threshold Angle';
@@ -545,6 +545,16 @@ $text['system_sync_warning'] = 'The DB version of iDas is smaller than the contr
 $text['system_sync_warning_title'] = 'iDas update time is older than the controller, do you still need to synchronize';
 $text['system_sync_warning_login'] = 'Controller has logged in';
 $text['sync'] = 'SYNC';
+$text['system_agent_none'] = 'None';
+$text['system_agent_client'] = 'Client';
+$text['system_agent_server'] = 'Server';
+$text['system_agent_status'] = 'Status';
+$text['system_agent_check'] = 'Check';
+$text['system_agent_start'] = 'Start';
+$text['system_agent_stop'] = 'Stop';
+$text['system_client_status'] = 'Client Status';
+$text['system_server_status'] = 'Server Status';
+
 
 
 //barcode setting

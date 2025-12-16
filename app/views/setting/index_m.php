@@ -330,23 +330,23 @@
                                 <form id="agent_type_form"  method="post" style="margin: 3px 0px; margin-left: 5%">
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="agent_type" id="agent_type_0" value="0" <?php if($data['agent_type'] == 0){ echo "checked";} ?>  >
-                                        <label class="form-check-label" for="agent_type_0">None</label>
+                                        <label class="form-check-label" for="agent_type_0"><?php echo $text['system_agent_none'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="agent_type" id="agent_type_1" value="1" <?php if($data['agent_type'] == 1){ echo "checked";} ?>>
-                                        <label class="form-check-label" for="agent_type_1">Client</label>
+                                        <label class="form-check-label" for="agent_type_1"><?php echo $text['system_agent_client'];?></label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="agent_type" id="agent_type_2" value="2" <?php if($data['agent_type'] == 2){ echo "checked";} ?> required>
-                                        <label class="form-check-label" for="agent_type_2">Server</label>
+                                        <label class="form-check-label" for="agent_type_2"><?php echo $text['system_agent_server'];?></label>
                                     </div>
                                     <input type="button" value="Save" onclick="set_agent_type()" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                                 </form>    
                             </div>
                             <div class="row">
                                 <div class="col t2" style="margin: 3px 0px; margin-left: 5%">
-                                    <span>Client Status:<div id="c_status" style="display:inline-block;"></div></span>
-                                    <span>Server Status:<div id="s_status" style="display:inline-block;"></div></span>&nbsp;
+                                    <span><?php echo $text['system_agent_client'];?>:<div id="c_status" style="display:inline-block;"></div></span>
+                                    <span><?php echo $text['system_server_status'];?>:<div id="s_status" style="display:inline-block;"></div></span>&nbsp;
 
                                     <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck()"  >Check</button>
                                     <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px;" onclick="StatusCheck('start')">START</button>

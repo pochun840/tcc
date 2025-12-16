@@ -332,11 +332,11 @@ $text['total_screw_count'] = '總顆數';
 $text['fasten_status'] = '鎖附結果';
 $text['error_message'] = '錯誤訊息';
 $text['info_fasten_direction'] = '鎖附起子轉向';
-$text['rpm'] = '鎖附轉速';
-$text['hi_torque'] = '鎖附扭力上限';
-$text['lo_torque'] = '鎖附扭力下限';
-$text['hi_angle'] = '鎖附角度上限';
-$text['lo_angle'] = '鎖附角度下限';
+$text['step_rpm'] = '鎖附轉速';
+$text['step_hi_tor'] = '鎖附扭力上限';
+$text['step_lo_tor'] = '鎖附扭力下限';
+$text['step_hi_ang'] = '鎖附角度上限';
+$text['step_lo_ang'] = '鎖附角度下限';
 $text['delay_ttime'] = '延遲時間';
 $text['threshold_torque'] = '鎖附門檻點扭力';
 $text['threshold_angle'] = '鎖附門檻點角度';
@@ -530,6 +530,16 @@ $text['system_sync_warning'] = 'iDas的DB版本小於控制器';
 $text['system_sync_warning_title'] = 'iDas更新時間較控制器舊，是否仍要同步';
 $text['system_sync_warning_login'] = '控制器已登入';
 $text['sync'] = '同步';
+$text['system_agent_none'] = '無';
+$text['system_agent_client'] = '客戶端';
+$text['system_agent_server'] = '伺服器';
+$text['system_agent_status'] = '狀態';
+$text['system_agent_check'] = '檢查';
+$text['system_agent_start'] = '開始';
+$text['system_agent_stop'] = '停止';
+$text['system_client_status'] = '客戶端 狀態';
+$text['system_server_status'] = '伺服器 狀態';
+
 
 //barcode setting
 $text['system_barcode_setting'] = '條碼設定';

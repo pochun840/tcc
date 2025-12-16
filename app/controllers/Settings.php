@@ -483,7 +483,7 @@ class Settings extends Controller
         echo json_encode(array_values($fileList));
     }
 
-    public function delete_files(){
+    /*public function delete_files(){
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $data = json_decode(file_get_contents("php://input"), true);
@@ -517,7 +517,7 @@ class Settings extends Controller
             echo json_encode(["message" => "無效的請求方法"]);
         }
 
-    }
+    }*/
 
     public function firmware_update() //FTP 上傳檔案大小限制 : 500M
     {
@@ -1586,6 +1586,74 @@ class Settings extends Controller
 
         return $years;
     }
+
+    //取得年份後 用modbus 刪除
+    public function delete_files(){
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }
+
+
+        $del_year_id = $_POST['del_year_id'][0];
+        if(empty($del_year_id)){
+            echo json_encode([
+                'result' => false,
+                'res_type' => 'Error',
+                'res_msg' => 'Tool not disabled'
+            ]);
+            return;
+        }
+
+
+
+        $temp_del_year = $del_year_id[0]; // 只處理第一筆
+          $idas_result = $this->get_controller_login();
+
+        // 檢查是否可以刪除（Modbus 狀態檢查）
+        $device_id = 0;
+        $unitId = ($device_id >= 1 && $device_id <= 255) ? $device_id : 1;
+        $idas_result = $this->get_controller_login();
+
+        /*if ($idas_result['result'] != 1) {
+            echo json_encode([
+                'result' => false,
+                'res_type' => 'Error',
+                'res_msg' => 'Tool not disabled'
+            ]);
+            return;
+        }
+
+        // 執行 Modbus 寫入刪除年份
+        $controller_ip = CONTROLLER_IP;
+        $year = array($temp_del_year);
+
+        require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
+        $modbus = new ModbusMaster($controller_ip, "TCP");
+
+        try {
+            $modbus->port = 502;
+            $modbus->timeout_sec = 10;
+            $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
+
+            $modbus->writeMultipleRegister($device_id, 517, $year, $dataTypes);
+
+            echo json_encode([
+                'result' => true,
+                'res_type' => 'Success',
+                'res_msg' => $text['delete_text'].$text['success'] 
+            ]);
+        } catch (Exception $e) {
+            echo json_encode([
+                'result' => false,
+                'res_type' => 'Error',
+                'res_msg' => $text['delete_text'].$text['fail'] 
+            ]);
+        }*/
+    }
+
+
 
 
     
