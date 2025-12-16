@@ -488,7 +488,14 @@ function get_input_by_job_id(jobid) {
 
            updateEventLabelsByLanguage(getCookie('language'));
 
-           // ⭐ 等到 rows 真正出現再套 unified
+           // ⭐⭐⭐ 關鍵新增：依 DB 狀態同步 unified
+           if (data.unified_jobid && String(data.unified_jobid) === String(jobid)) {
+               inputUnifiedManager.enable(jobid);
+           } else {
+               inputUnifiedManager.disable();
+           }
+
+           // ⭐ 再等 DOM 出現後套 unified UI
            applyUnifiedWhenRowsReady(jobid);
        },
        error: function(xhr, status, error) {
@@ -496,6 +503,7 @@ function get_input_by_job_id(jobid) {
        }
    });
 }
+
 
 
 function applyUnifiedWhenReady(jobid) {
@@ -599,6 +607,30 @@ function alignsubmit(job_id) {
     });
 }
 
+function syncUnifiedFromServer(jobid) {
+    $.ajax({
+        url: "?url=Inputs/get_unified_state", // 你現有 or 新增一支
+        method: "POST",
+        data: { job_id: jobid },
+        success: function (res) {
+            try {
+                const data = JSON.parse(res);
+
+                if (data.unified === true) {
+                    inputUnifiedManager.enable(jobid);
+                } else {
+                    inputUnifiedManager.disable();
+                }
+
+                // ⭐ 再套 UI
+                applyUnifiedWhenRowsReady(jobid);
+
+            } catch (e) {
+                console.error('syncUnifiedFromServer parse error', e);
+            }
+        }
+    });
+}
 
 // ================================
 // 重置所有 job 對齊狀態（job_id_new = 0）
