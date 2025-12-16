@@ -178,16 +178,22 @@ window.onclick = function (event) {
 
 
 function applyUnifiedUI(jobid) {
-    const isUnified = inputUnifiedManager.isEnabled();
-    const unifiedJob = inputUnifiedManager.getJob();
+     console.log('[applyUnifiedUI] jobid=', jobid,
+        'rows=', document.querySelectorAll('#input_jobid_select tr').length);
 
-    if (isUnified && unifiedJob == jobid) {
-        document.getElementById("Button_Select").disabled = true;
-        document.getElementById("job_id").style.backgroundColor = "yellow";
-    } else {
-        document.getElementById("Button_Select").disabled = false;
-        document.getElementById("job_id").style.backgroundColor = "";
+    const rows = document.querySelectorAll('#input_jobid_select tr');
+
+    if (!rows.length) {
+        return false; // ⭐ DOM 還沒好
     }
+
+    // 原本你的 unified 套用邏輯
+    rows.forEach(row => {
+        row.classList.add('unified');
+        // disable input...
+    });
+
+    return true; // ⭐ 成功套用
 }
 
 // ================================
@@ -467,30 +473,75 @@ function get_input_by_job_id(jobid) {
        data: { jobid: jobid },
        success: function(response) {
            var data = JSON.parse(response);
-           var job_inputlist = data.job_inputlist;
            temp = data.temp;
            tempA = data.tempA;
 
-           // 更新輸入清單 HTML
-           document.getElementById("input_jobid_select").innerHTML = job_inputlist;
+           document.getElementById("input_jobid_select").innerHTML = data.job_inputlist;
            document.getElementById("JobSelect").style.display = 'none';
            document.getElementById("job_id").value = jobid;
 
-           // 為每一列綁定 click 事件，設定 input_event
            document.querySelectorAll('#input_jobid_select tr').forEach(function(row) {
                row.addEventListener('click', function () {
                    input_event = this.className;
                });
            });
 
-           // 多語系事件標籤更新
            updateEventLabelsByLanguage(getCookie('language'));
+
+           // ⭐ 等到 rows 真正出現再套 unified
+           applyUnifiedWhenRowsReady(jobid);
        },
        error: function(xhr, status, error) {
            console.error("AJAX request failed:", status, error);
        }
    });
 }
+
+
+function applyUnifiedWhenReady(jobid) {
+    const target = document.getElementById('input_jobid_select');
+    if (!target) return;
+
+    const observer = new MutationObserver(() => {
+        // 嘗試套用
+        const applied = applyUnifiedUI(jobid);
+
+        // ⭐ applyUnifiedUI 回傳 true 表示「真的套到了」
+        if (applied !== false) {
+            observer.disconnect();
+        }
+    });
+
+    observer.observe(target, {
+        childList: true,
+        subtree: true
+    });
+}
+
+
+function applyUnifiedWhenRowsReady(jobid, maxTry = 30) {
+    let count = 0;
+
+    function tryApply() {
+        const rows = document.querySelectorAll('#input_jobid_select tr').length;
+        console.log('[waitUnified] try', count, 'rows=', rows);
+
+        if (rows > 0) {
+            applyUnifiedUI(jobid);
+            return;
+        }
+
+        if (count++ < maxTry) {
+            requestAnimationFrame(tryApply);
+        } else {
+            console.warn('[waitUnified] timeout, rows still 0');
+        }
+    }
+
+    requestAnimationFrame(tryApply);
+}
+
+
 
 
 // ================================
@@ -536,12 +587,18 @@ function alignsubmit(job_id) {
         data: { job_id: job_id },
         success: function () {
 
+            // ① 先存 unified 狀態
             inputUnifiedManager.enable(job_id);
-            applyUnifiedUI(job_id);   // ← 直接套用 UI（不依賴 toggle）
+
+            // ② 先重畫整個 Job UI（AJAX）
             get_input_by_job_id(job_id);
+
+            // ③ 再套 unified UI（避免被洗掉）
+            applyUnifiedUI(job_id);
         },
     });
 }
+
 
 // ================================
 // 重置所有 job 對齊狀態（job_id_new = 0）
@@ -556,12 +613,18 @@ function resetalignsubmit(job_id) {
         data: { job_id: job_id },
         success: function () {
 
+            // ① 先清掉 unified 狀態
             inputUnifiedManager.disable();
-            applyUnifiedUI(job_id);  // 背景清掉
+
+            // ② 先重畫整個 Job UI
             get_input_by_job_id(job_id);
+
+            // ③ 再依狀態套 UI（這次會是「未 unified」）
+            applyUnifiedUI(job_id);
         }
     });
 }
+
 
 
 // ================================

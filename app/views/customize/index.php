@@ -7,7 +7,7 @@
         </td>
         <td>
           <button id="home" class="w3-btn w3-round-large" style="height:50px;padding:0" onclick="window.location.href='./?url=Dashboards'">
-            <img src="<?php echo URLROOT; ?>img/btn_home.png">
+            <img src="../public/img/btn_home.png">
           </button>
         </td>
       </tr>

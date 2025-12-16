@@ -1,9 +1,0 @@
-RewriteEngine On
-
-# 避免無限迴圈：如果已經是 /idas/public 就不再轉址
-RewriteCond %{REQUEST_URI} !^/idas/public/ [NC]
-
-# /tccidas/public/* → /idas/public/*
-# QSA：保留 query string（例如 ?url=Inputs/index）
-# R=302：測試用（確認 OK 後再改成 301）
-RewriteRule ^(.*)$ /idas/public/$1 [R=302,L,QSA]

@@ -537,7 +537,7 @@ class Customize extends Controller
 
     
 
-        $ip = CONTROLLER_IP;
+        $ip = "192.168.0.123";
         $port = 502;
         $startAddress = $a;
         $quantity = $b;  // 每個「暫存器」= 16-bit (= 2 bytes)  
