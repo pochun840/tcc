@@ -535,8 +535,6 @@ class Customize extends Controller
         require_once '../app/config/config.php';
         require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
 
-    
-
         $ip = CONTROLLER_IP;
         $port = 502;
         $startAddress = $a;
