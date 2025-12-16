@@ -7,7 +7,7 @@
         </td>
         <td>
           <button id="home" class="w3-btn w3-round-large" style="height:50px;padding:0" onclick="window.location.href='./?url=Dashboards'">
-            <img src="../public/img/btn_home.png">
+            <img src="./img/btn_home.png">
           </button>
         </td>
       </tr>
@@ -328,7 +328,7 @@
       <div class="tabs" id="customizeTabs">
         <div class="tabs-nav" role="tablist">
           <button class="tab-btn" data-tab-target="#tab-4-1">4-1</button>
-          <button class="tab-btn" data-tab-target="#tab-4-2">4-2</button>
+          <!--<button class="tab-btn" data-tab-target="#tab-4-2">4-2</button>-->
         </div>
 
         <!-- 4-1：不顯示 43~52 -->
@@ -2238,4 +2238,5 @@ function forbidMsg(digit){
   window.__fitTableVisibleRows = fitTableVisibleRows;
 })();
 </script>
+
 
