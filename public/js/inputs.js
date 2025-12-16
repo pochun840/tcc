@@ -177,30 +177,47 @@ window.onclick = function (event) {
 };
 
 
-function applyUnifiedUI(jobid) {
-     console.log('[applyUnifiedUI] jobid=', jobid,
-        'rows=', document.querySelectorAll('#input_jobid_select tr').length);
+
+function applyUnifiedUI(jobId) {
+    buttonDisabled = true;
+    backgroundColorYellow = true;
+
+    const btn = document.getElementById('Button_Select');
+    if (btn) btn.disabled = true;
+
+    // ✅ 統一在這裡變色
+    setJobIdUnifiedStyle(true, jobId);
 
     const rows = document.querySelectorAll('#input_jobid_select tr');
+    if (!rows.length) return false;
 
-    if (!rows.length) {
-        return false; // ⭐ DOM 還沒好
-    }
-
-    // 原本你的 unified 套用邏輯
-    rows.forEach(row => {
-        row.classList.add('unified');
-        // disable input...
+    rows.forEach(tr => {
+        tr.classList.add('selected', 'yellow-highlight');
     });
 
-    return true; // ⭐ 成功套用
+    return true;
 }
+
 
 // ================================
 // 選擇 Job 後的初始化函式
 // ================================
 
 function job_confirm() {
+    const jobid = document.getElementById("JobNameSelect").value;
+
+    if (!jobid) return;
+
+    localStorage.setItem("jobid", jobid);
+    job_id = jobid;
+    all_job = jobid;
+
+    // ❌ 不要在這裡 AJAX + innerHTML + applyUnified
+    // ✅ 全部統一走這支
+    get_input_by_job_id(jobid);
+}
+
+/*function job_confirm() {
     var jobid = document.getElementById("JobNameSelect").value;
 
     localStorage.setItem("jobid", jobid);
@@ -254,7 +271,7 @@ function job_confirm() {
             applyUnifiedUI(jobid);
         }
     });
-}
+}*/
 
 
 
@@ -282,6 +299,25 @@ function resetBackgroundColor() {
        jobInput.style.backgroundColor = '';
    }
 }
+
+
+function clearUnifiedUIOnly() {
+    // 1) job_id 顏色還原
+    setJobIdUnifiedStyle(false);
+
+    // 2) Button_Select 還原可按
+    const btn = document.getElementById('Button_Select');
+    if (btn) btn.disabled = false;
+
+    // 3) 表格列的標記清掉（如果你有用）
+    document.querySelectorAll('#input_jobid_select .yellow-highlight, #input_jobid_select .selected')
+        .forEach(el => el.classList.remove('yellow-highlight', 'selected', 'unified'));
+
+    // 4) 你的全域狀態也一起還原（如果你有用到）
+    buttonDisabled = false;
+    backgroundColorYellow = false;
+}
+
 
 // ================================
 // 刪除指定 job_id 與 input_event 的輸入項目
@@ -467,43 +503,74 @@ function tablesubmit(keyno) {
 // ================================
 
 function get_input_by_job_id(jobid) {
-   $.ajax({
-       url: "?url=Inputs/get_input_by_job_id",
-       method: "POST",
-       data: { jobid: jobid },
-       success: function(response) {
-           var data = JSON.parse(response);
-           temp = data.temp;
-           tempA = data.tempA;
+    $.ajax({
+        url: "?url=Inputs/get_input_by_job_id",
+        method: "POST",
+        data: { jobid },
+        success: function (response) {
 
-           document.getElementById("input_jobid_select").innerHTML = data.job_inputlist;
-           document.getElementById("JobSelect").style.display = 'none';
-           document.getElementById("job_id").value = jobid;
+            const data = JSON.parse(response);
+            temp  = data.temp;
+            tempA = data.tempA;
 
-           document.querySelectorAll('#input_jobid_select tr').forEach(function(row) {
-               row.addEventListener('click', function () {
-                   input_event = this.className;
-               });
-           });
+            /* ===============================
+             * ① 重建 Input Table（會洗掉 UI）
+             * =============================== */
+            const table = document.getElementById("input_jobid_select");
+            table.innerHTML = data.job_inputlist;
 
-           updateEventLabelsByLanguage(getCookie('language'));
+            document.getElementById("JobSelect").style.display = 'none';
+            document.getElementById("job_id").value = jobid;
 
-           // ⭐⭐⭐ 關鍵新增：依 DB 狀態同步 unified
-           if (data.unified_jobid && String(data.unified_jobid) === String(jobid)) {
-               inputUnifiedManager.enable(jobid);
-           } else {
-               inputUnifiedManager.disable();
-           }
+            /* ===============================
+             * ② 綁定 row click
+             * =============================== */
+            table.querySelectorAll('tr').forEach(row => {
+                row.addEventListener('click', function () {
+                    input_event = this.className;
+                    old_input_event = this.className;
+                });
+            });
 
-           // ⭐ 再等 DOM 出現後套 unified UI
-           applyUnifiedWhenRowsReady(jobid);
-       },
-       error: function(xhr, status, error) {
-           console.error("AJAX request failed:", status, error);
-       }
-   });
+            /* ===============================
+             * ③ 依 Job 套用事件 option 禁用
+             * =============================== */
+            const jobDisabledOptions = data.jobDisabledOptions || {};
+            const disabledList = jobDisabledOptions[jobid] || [];
+
+            document.querySelectorAll('#Event_Option option').forEach(opt => {
+                opt.disabled = false;
+                opt.classList.remove('disabled_input');
+            });
+
+            disabledList.forEach(val => {
+                const opt = document.querySelector(`#Event_Option option[value="${val}"]`);
+                if (opt) {
+                    opt.disabled = true;
+                    opt.classList.add('disabled_input');
+                }
+            });
+
+            /* ===============================
+             * ④ 語系
+             * =============================== */
+            updateEventLabelsByLanguage(getCookie('language'));
+
+            /* ===============================
+             * ⑤ ⭐ 唯一 unified 套用入口
+             * =============================== */
+            if (
+                inputUnifiedManager.isEnabled() &&
+                inputUnifiedManager.getJob() == jobid
+            ) {
+                applyUnifiedWhenRowsReady(jobid);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX request failed:", status, error);
+        }
+    });
 }
-
 
 
 function applyUnifiedWhenReady(jobid) {
@@ -527,22 +594,17 @@ function applyUnifiedWhenReady(jobid) {
 }
 
 
-function applyUnifiedWhenRowsReady(jobid, maxTry = 30) {
+function applyUnifiedWhenRowsReady(jobId, maxTry = 30) {
     let count = 0;
 
     function tryApply() {
-        const rows = document.querySelectorAll('#input_jobid_select tr').length;
-        console.log('[waitUnified] try', count, 'rows=', rows);
-
-        if (rows > 0) {
-            applyUnifiedUI(jobid);
-            return;
-        }
+        const ok = applyUnifiedUI(jobId);
+        if (ok) return;
 
         if (count++ < maxTry) {
             requestAnimationFrame(tryApply);
         } else {
-            console.warn('[waitUnified] timeout, rows still 0');
+            console.warn('[Unified] rows still not ready');
         }
     }
 
@@ -582,6 +644,18 @@ function updateEventLabelsByLanguage(language) {
 }
 
 
+function setJobIdUnifiedStyle(isOn, jobId = null) {
+    const jobInput = document.getElementById('job_id');
+    if (!jobInput) return;
+
+    jobInput.classList.toggle('is-unified', !!isOn);
+
+    if (jobId !== null) {
+        jobInput.value = jobId;
+    }
+}
+
+
 // ================================
 // 將 job_id 提交至 server 做全域對齊處理
 // 並控制按鈕可用狀態與背景色提示
@@ -595,67 +669,46 @@ function alignsubmit(job_id) {
         data: { job_id: job_id },
         success: function () {
 
-            // ① 先存 unified 狀態
+            // ① 記錄 unified 狀態
             inputUnifiedManager.enable(job_id);
 
-            // ② 先重畫整個 Job UI（AJAX）
+            // ② ⭐ 立刻讓 job_id 變色（不用等重整）
+            setJobIdUnifiedStyle(true, job_id);
+
+            // ③ 重新載入 Job（unified UI 會在 get_input_by_job_id 裡處理）
             get_input_by_job_id(job_id);
-
-            // ③ 再套 unified UI（避免被洗掉）
-            applyUnifiedUI(job_id);
-        },
-    });
-}
-
-function syncUnifiedFromServer(jobid) {
-    $.ajax({
-        url: "?url=Inputs/get_unified_state", // 你現有 or 新增一支
-        method: "POST",
-        data: { job_id: jobid },
-        success: function (res) {
-            try {
-                const data = JSON.parse(res);
-
-                if (data.unified === true) {
-                    inputUnifiedManager.enable(jobid);
-                } else {
-                    inputUnifiedManager.disable();
-                }
-
-                // ⭐ 再套 UI
-                applyUnifiedWhenRowsReady(jobid);
-
-            } catch (e) {
-                console.error('syncUnifiedFromServer parse error', e);
-            }
         }
     });
 }
+
 
 // ================================
 // 重置所有 job 對齊狀態（job_id_new = 0）
 // 並重新載入目前選定的 job 資料
 // @param {string} job_id 
 // ================================
-
 function resetalignsubmit(job_id) {
-    $.ajax({
-        url: "?url=Inputs/input_alljob",
-        method: "POST",
-        data: { job_id: job_id },
-        success: function () {
 
-            // ① 先清掉 unified 狀態
-            inputUnifiedManager.disable();
+    // 1) ✅ 解除 job_id 黃色（如果你用 class 控色）
+    const jobInput = document.getElementById('job_id');
+    if (jobInput) {
+        jobInput.classList.remove('is-unified');  // 用 CSS 控色時
+        jobInput.style.backgroundColor = '';      // 保險：如果有人寫死 inline 黃色
+    }
 
-            // ② 先重畫整個 Job UI
-            get_input_by_job_id(job_id);
+    // 2) ✅ 解除「選擇」按鈕 disabled
+    const btn = document.getElementById('Button_Select');
+    if (btn) btn.disabled = false;
 
-            // ③ 再依狀態套 UI（這次會是「未 unified」）
-            applyUnifiedUI(job_id);
-        }
-    });
+    // 3) （可選）清掉表格列的顯示標記
+    document.querySelectorAll('#input_jobid_select .yellow-highlight, #input_jobid_select .selected, #input_jobid_select .unified')
+        .forEach(el => el.classList.remove('yellow-highlight', 'selected', 'unified'));
+
+    // ❌ 不打後端
+    // ❌ 不 reload
+    // ❌ 不改 unified 狀態（你目前的解除定義是只清 UI）
 }
+
 
 
 

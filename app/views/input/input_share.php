@@ -248,3 +248,17 @@ $(document).ready(function () {
 });
 
 </script>
+
+<style>
+/* unified 啟用時 job_id 變色 */
+#job_id.is-unified {
+  background-color: yellow !important;
+  color: #000;
+}
+
+/* unified 關閉時還原 */
+#job_id:not(.is-unified) {
+  background-color: transparent;
+}
+
+</style>

@@ -63,10 +63,6 @@ class Inputs extends Controller
             $jobDisabledOptions = array();
             $job_inputlist = ''; 
 
-            // ⭐ 新增：讀取目前 unified job_id（'' 或 job_id）
-            $unified_jobid = $this->InputModel->get_input_alljob();
-
-
             if (!empty($job_inputs)) {
                 foreach ($job_inputs as $kk => $vv) {
                     // 遍歷 input_pin1 到 input_pin10 並檢查其是否為非零值
@@ -159,8 +155,7 @@ class Inputs extends Controller
             'temp' => $temp,
             'tempA' => $tempA,
             'temp_gateconfirm' => $temp_gateconfirm,
-            'jobDisabledOptions' => $jobDisabledOptions,
-            'unified_jobid' => $unified_jobid
+            'jobDisabledOptions' => $jobDisabledOptions
 
         );
     
@@ -451,56 +446,44 @@ class Inputs extends Controller
     
     public function input_alljob(){
 
-        try {
+        $input_check = true;
 
-            // ===============================
-            // 判斷 unified 狀態
-            // ===============================
-            if (isset($_POST['job_id']) && $_POST['job_id'] !== '') {
-                // 套用 unified
-                $input_jobid = $_POST['job_id'];
-            }
-            elseif (isset($_POST['job_id'])) {
-                // 解除 unified
-                $input_jobid = '';
-            }
-            else {
-                http_response_code(400);
-                echo 'job_id missing';
-                return;
-            }
 
-            // ===============================
-            // 寫入 DB
-            // ===============================
+        // ===============================
+        // 1：套用 unified（job_id 有值）
+        // ===============================
+        if (isset($_POST['job_id']) && $_POST['job_id'] !== '') {
+
+            $input_jobid = $_POST['job_id'];  // 套用指定 job
+
+        }
+        // ===============================
+        // 2：解除 unified（job_id_new = 0）
+        // ===============================
+        else if (isset($_POST['job_id'])) {
+
+            // 明確代表「解除 unified」
+            $input_jobid = '';
+
+        }
+        else {
+            $input_check = false;
+        }
+
+
+        if ($input_check) {
+
             $res = $this->InputModel->set_input_alljob($input_jobid);
 
-            if ($res === false) {
-                http_response_code(500);
-                echo 'set_input_alljob failed';
-                return;
+            if ($res) {
+                $res_msg = 'set inputall job: ' . ($input_jobid === '' ? 'none (reset)' : $input_jobid) . ' success';
+            } else {
+                $res_msg = 'set inputall job: ' . ($input_jobid === '' ? 'none (reset)' : $input_jobid) . ' fail';
             }
 
-            // ===============================
-            // 成功回應（前端一定吃得到）
-            // ===============================
-            echo json_encode([
-                'success' => true,
-                'job_id'  => $input_jobid
-            ], JSON_UNESCAPED_UNICODE);
-
-        }
-        catch (Throwable $e) {
-
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'error'   => $e->getMessage()
-            ], JSON_UNESCAPED_UNICODE);
+            echo $res_msg;
         }
     }
-
-
 
 
 }

@@ -55,6 +55,7 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
                 <td>{$row['fasten_angle']}</td>
                 <td>{$row['max_screw_count']}</td>
                 <td>{$row['last_screw_count']}</td>
+                <td>{$row['barcode']}</td>
                 <td class='{$class}'>{$status_arr[$status]}</td>
               </tr>";
     }
@@ -119,6 +120,7 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
                                             <th><?php echo $text['angle']; ?></th>
                                             <th><?php echo $text['column_total']; ?></th>
                                             <th><?php echo $text['column_count']; ?></th>
+                                            <th><?php echo $text['Barcode'];?></th>
                                             <th><?php echo $text['column_status']; ?></th>
                                         </tr>
                                     </thead>
@@ -321,6 +323,7 @@ function updateTable(mode, records, unit_arr, status_arr) {
                 <td>${row.fasten_angle}</td>
                 <td>${row.max_screw_count}</td>
                 <td>${row.last_screw_count}</td>
+                <td>${row.barcode}</td>
                 <td class="${className}">${status_arr[status]}</td>
             </tr>`;
         tbody.insertAdjacentHTML('beforeend', html);
