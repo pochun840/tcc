@@ -4,7 +4,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%"><h3><?php echo $text['operation_result'];?></h3></td>
-                <td><img src="./img/btn_home.png" style="margin-right: 10px" onclick="back()"></td>
+                <td><img src="./img/btn_home.png" style="margin-right: 10px"  onclick="location.href='?url=Dashboards'"></td>
             </tr>
         </table>
     </div>
@@ -106,6 +106,28 @@
 <script>
     // Button Home
 
+    // ============================
+    // 固定 Step 顏色設定
+    // ============================
+    const STEP_COLORS = [
+        '#e53935', // red
+        '#1e88e5', // blue
+        '#43a047', // green
+        '#fb8c00', // orange
+        '#8e24aa', // purple
+        '#00897b', // teal
+        '#6d4c41', // brown
+        '#546e7a'  // gray
+    ];
+
+// 依 step number 取得固定顏色
+function getStepColor(stepNo) {
+    const n = Number(stepNo) || 1;
+    return STEP_COLORS[(n - 1) % STEP_COLORS.length];
+}
+
+
+
     // 改變按鈕背景顏色
     function changeBackgroundColor(button) {
         var buttons = document.getElementsByClassName('btn-chart');
@@ -114,6 +136,31 @@
         }
         button.classList.add('active');
     }
+
+    function localizeAxisTitle(language, x_title, y_title) {
+
+        if (language === "zh-tw") {
+            if (x_title === "Time(MS)") x_title = "時間";
+            if (x_title === "Angle")    x_title = "角度";
+            if (x_title === "Torque")   x_title = "扭力";
+            if (y_title === "Angle")    y_title = "角度";
+            if (y_title === "Torque")   y_title = "扭力";
+            if (y_title === "RPM")      y_title = "轉速";
+        }
+
+        if (language === "zh-cn") {
+            if (x_title === "Time(MS)") x_title = "时间";
+            if (x_title === "Angle")    x_title = "角度";
+            if (x_title === "Torque")   x_title = "扭力";
+            if (y_title === "Angle")    y_title = "角度";
+            if (y_title === "Torque")   y_title = "扭力";
+            if (y_title === "RPM")      y_title = "转速";
+        }
+
+        return { x_title, y_title };
+    }
+
+
 
     function chart_type(argument) {
         var currentUrl = window.location.href;
@@ -173,123 +220,180 @@
     // 宣告 myChart 為全域變數
     var myChart;
 
+    // ============================
+    // 初始化曲線圖（chart_mode 1/2/3）
+    // ============================
     function initializeChart() {
-        // 取得 x 和 y 的數值
+
         var x_data_val = <?= isset($data['chart_info']['x_val']) ? json_encode($data['chart_info']['x_val']) : 'null' ?>;
         var y_data_val = <?= isset($data['chart_info']['y_val']) ? json_encode($data['chart_info']['y_val']) : 'null' ?>;
+
+        
+        // ✅ 修正：後端可能已經 json_encode 過（變字串），這裡要轉回陣列
+        try {
+            if (typeof x_data_val === "string") x_data_val = JSON.parse(x_data_val);
+            if (typeof y_data_val === "string") y_data_val = JSON.parse(y_data_val);
+        } catch (e) {
+            console.error("x/y JSON parse failed", e, x_data_val, y_data_val);
+            return;
+        }
 
         var x_title = '<?php echo isset($data['echart_name'][1]) ? addslashes($data['echart_name'][1]) : ''; ?>';
         var y_title = '<?php echo isset($data['echart_name'][0]) ? addslashes($data['echart_name'][0]) : ''; ?>';
 
-
-        // 檢查 x 和 y 的數值是否為空或 null，如果是則停止執行
         if (!x_data_val || !y_data_val || x_data_val.length === 0 || y_data_val.length === 0) {
-            console.log("x_val 或 y_val 为空，停止执行图表初始化。");
-            return;  // 停止後續執行
+            console.log("x_val 或 y_val 為空，略過曲線圖初始化");
+            return;
         }
 
-        // 根據語言來本地化圖表標題
-        if (language == "zh-tw") {
-            if (x_title == "Time(MS)") x_title = "時間";
-            if (x_title == "Angle") x_title = "角度";
-            if (x_title == "Torque") x_title = "扭力";
-            if (y_title == "Angle") y_title = "角度";
-            if (y_title == "Torque") y_title = "扭力";
-            if (y_title == "RPM") y_title = "轉速";
-        }
+        // 語系轉換
+        var t = localizeAxisTitle(language, x_title, y_title);
+        x_title = t.x_title;
+        y_title = t.y_title;
 
-        if (language == "zh-cn") {
-            if (x_title == "Time(MS)") x_title = "时间";
-            if (x_title == "Angle") x_title = "角度";
-            if (x_title == "Torque") x_title = "扭力";
-            if (y_title == "Angle") y_title = "角度";
-            if (y_title == "Torque") y_title = "扭力";
-            if (y_title == "RPM") y_title = "转速";
-        }
+        // ⭐ 關鍵：組成 [x, y]（Time-based chart 必須這樣）
+        var seriesData = x_data_val.map(function (x, i) {
+            return [ Number(x), Number(y_data_val[i]) ];
+        });
 
-        // 初始化圖表
         myChart = echarts.init(document.getElementById('chart'));
 
         var option = {
-            title: {
-                text: ''
-            },
             tooltip: {
-                trigger: 'axis',
-                position: function (pt) {
-                    return [pt[0], '10%'];
-                },
-                formatter: function (params) {
-                    var state = '<span style="color: red;">' + y_title + '</span>';
-                    var value = '<span style="color: red;">' + params[0].value + '</span>';
-                    return state + ': ' + value; 
-                },
+                trigger: 'axis'
             },
             xAxis: {
-                type: 'category',
-                boundaryGap: false,
+                type: 'value',        // ✅ 修正：數值軸
                 name: x_title,
-                data: x_data_val
+                boundaryGap: false
             },
             yAxis: {
                 type: 'value',
-                name: y_title,
-                boundaryGap: [0, '100%']
+                name: y_title
             },
             dataZoom: generateDataZoom(),
-            series: [
-                {
-                    name: '',
-                    type: 'line',
-                    symbol: 'none',
-                    sampling: 'average',
-                    itemStyle: {
-                        normal: {
-                            color: 'rgb(255,0,0)'
-                        }
-                    },
-                    areaStyle: {
-                        normal: {
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 0, [
-                                { offset: 0, color: 'rgb(255,255,255)' },
-                                { offset: 0, color: 'rgb(255,255,255)' }
-                            ])
-                        }
-                    },
-                    lineStyle: { width: 0.75 },
-                    data: y_data_val
-                }
-            ]
+            series: [{
+                type: 'line',
+                symbol: 'none',
+                lineStyle: { width: 0.75 },
+                data: seriesData
+            }]
         };
 
-        myChart.setOption(option);
+        myChart.setOption(option, true);
     }
 
-    // 生成 DataZoom 配置
+    // ============================
+    // 即時更新曲線（polling）
+    // ============================
+    function updateChart(chartData) {
+
+        // ✅ ① chart=4 完全不走 polling 畫線（CSV-only）
+        const chartMode = new URLSearchParams(location.search).get('chart') || "1";
+        if (chartMode === "4") return;
+
+        if (!chartData) return;
+
+        let x = chartData.x_val;
+        let y = chartData.y_val;
+
+        // ✅ ② 防呆：後端可能回傳的是 JSON 字串
+        try {
+            if (typeof x === "string") x = JSON.parse(x);
+            if (typeof y === "string") y = JSON.parse(y);
+        } catch (e) {
+            console.error("[updateChart] x/y parse failed", e, x, y);
+            return;
+        }
+
+        if (!Array.isArray(x) || !Array.isArray(y) || x.length === 0) return;
+
+        // 語系轉換
+        var t = localizeAxisTitle(language, chartData.x_title, chartData.y_title);
+        chartData.x_title = t.x_title;
+        chartData.y_title = t.y_title;
+
+        // ⭐ 關鍵：即時資料也要 [x, y]
+        var seriesData = x.map(function (vx, i) {
+            return [ Number(vx), Number(y[i]) ];
+        });
+
+        var option = {
+            xAxis: {
+                type: 'value',
+                name: chartData.x_title,
+                boundaryGap: false
+            },
+            yAxis: {
+                type: 'value',
+                name: chartData.y_title
+            },
+            series: [{
+                type: 'line',
+                symbol: 'none',
+                data: seriesData
+            }]
+        };
+
+        if (myChart) {
+            myChart.setOption(option, true);
+        }
+    }
+
+
+    // ============================
+    // DataZoom（原樣保留）
+    // ============================
     function generateDataZoom() {
         return [
-            {
-                type: 'inside',
-                start: 0,
-                end: 100
-            },
-            {
-                show: false,
-                type: 'slider',
-                start: 0,
-                end: 100,
-                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-                handleSize: '80%',
-                handleStyle: {
-                    color: '#fff',
-                    shadowBlur: 3,
-                    shadowColor: 'rgba(0, 0, 0, 0)',
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 0
-                }
-            }
+            { type: 'inside', start: 0, end: 100 },
+            { show: false, type: 'slider', start: 0, end: 100 }
         ];
     }
+
+
+    // ============================
+    // CSV parser（簡單、穩定版）
+    // ============================
+    function parseCSV(text) {
+        if (!text) return null;
+
+        const lines = text.trim().split(/\r?\n/);
+        if (lines.length <= 1) return null;
+
+        const delimiter = lines[0].includes('\t') ? '\t' : ',';
+        lines.shift(); // remove header
+
+        const angle = [];
+        const torque = [];
+        const step = [];   // 可能全空
+
+        lines.forEach(line => {
+            const cols = line.split(delimiter);
+
+            const tor = Number(cols[1]);
+            const ang = Number(cols[2]);
+
+            // step 可能不存在或是空字串
+            const stpRaw = cols[4];
+            const stp = (stpRaw !== undefined && String(stpRaw).trim() !== '')
+                ? Number(stpRaw)
+                : null;
+
+            if (isNaN(tor) || isNaN(ang)) return;
+            if (tor === 0 && ang === 0) return;
+
+            torque.push(tor);
+            angle.push(ang);
+            step.push(Number.isFinite(stp) ? stp : null);
+        });
+
+        return { angle, torque, step };
+    }
+
+
+
+
 
     // 2. Khi xoay hoặc resize màn hình → biểu đồ tự điều chỉnh lại
     window.addEventListener("resize", function() {
@@ -308,7 +412,18 @@
 
 
     // 在頁面加載後調用 initializeChart 函數
-    initializeChart();
+    (function startChart() {
+        const chartMode = new URLSearchParams(location.search).get('chart') || "1";
+
+        if (chartMode === "4") {
+            loadCSVAndRenderTorqueAngle();   // CSV-only
+        } else {
+            initializeChart();               // 原本 chart 1~3
+        }
+    })();
+
+
+
 
     let pollingActive = true;
     async function fetchData(url, system_sn, chart_mode) {
@@ -333,6 +448,156 @@
             console.error('API 調用錯誤:', error);
         }
     }
+
+    // ============================
+    // chart=4 Torque / Angle renderer
+    // ============================
+    function renderTorqueAngle(d) {
+        if (!d || !d.angle || !d.torque) return;
+
+        // 確保 myChart 存在
+        if (!myChart) {
+            const dom = document.getElementById('chart');
+            if (!dom) return;
+            myChart = echarts.init(dom);
+        }
+
+        // ============================
+        // chart=4：強制忽略 step（就算 CSV 有 step）
+        // ============================
+        const FORCE_NO_STEP = true;
+
+        const hasStep = !FORCE_NO_STEP &&
+            Array.isArray(d.step) &&
+            d.step.some(v => v !== null);
+
+        let series = [];
+
+        if (hasStep) {
+            // ========= 有 step：依 step 分組 =========
+            const seriesByStep = {};
+            d.step.forEach((s, i) => {
+                const stepNo = (s === null ? 1 : s);
+                if (!seriesByStep[stepNo]) seriesByStep[stepNo] = [];
+                seriesByStep[stepNo].push([Number(d.angle[i]), Number(d.torque[i])]);
+            });
+
+            series = Object.keys(seriesByStep).map(stepNo => ({
+                type: 'line',
+                showSymbol: false,
+                data: seriesByStep[stepNo],
+                lineStyle: { width: 1, color: getStepColor(stepNo) },
+                itemStyle: { color: getStepColor(stepNo) }
+            }));
+
+        } else {
+            
+            // ========= 沒 step：只取「Torque 單調上升段」 =========
+            const TORQUE_START = 0.01;   // 扭力啟動
+            const FALL_COUNT_LIMIT = 5;  // ⭐ 連續下降幾次視為結束（重點）
+
+            let started = false;
+            let fallCount = 0;
+            let lastTorque = null;
+
+            const mainSegment = [];
+
+            for (let i = 0; i < d.angle.length; i++) {
+                const ang = Number(d.angle[i]);
+                const tor = Number(d.torque[i]);
+
+                if (!Number.isFinite(ang) || !Number.isFinite(tor)) continue;
+
+                // 還沒開始鎖附
+                if (!started) {
+                    if (tor >= TORQUE_START) {
+                        started = true;
+                        mainSegment.push([ang, tor]);
+                        lastTorque = tor;
+                    }
+                    continue;
+                }
+
+                // 已進入鎖附段
+                if (tor >= lastTorque) {
+                    // 扭力仍在上升或持平
+                    mainSegment.push([ang, tor]);
+                    lastTorque = tor;
+                    fallCount = 0;
+                } else {
+                    // 扭力下降
+                    fallCount++;
+
+                    if (fallCount >= FALL_COUNT_LIMIT) {
+                        // ⭐ 視為主鎖附結束
+                        break;
+                    }
+
+                    // 下降初期仍允許少量點（避免雜訊）
+                    mainSegment.push([ang, tor]);
+                    lastTorque = tor;
+                }
+            }
+
+            series = [{
+                type: 'line',
+                showSymbol: false,
+                smooth: false,
+                lineStyle: { width: 1.8 },
+                data: mainSegment
+            }];
+
+        }
+
+        myChart.setOption({
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    if (!params || !params.length) return '';
+                    const p = params[0].value;
+                    return `Angle : ${p[0]}<br/>Torque : ${p[1]}`;
+                }
+            },
+            xAxis: { type: 'value', name: 'Angle' },
+            yAxis: { type: 'value', name: 'Torque' },
+            series
+        }, true);
+    }
+
+
+
+
+    async function loadCSVAndRenderTorqueAngle() {
+
+        const csvName = "<?= $data['latest_csv'] ?? '' ?>";
+        if (!csvName) {
+            console.warn('[chart=4] no latest_csv');
+            return;
+        }
+
+        const url = `${location.origin}/idas/public/ftp/${csvName}?t=${Date.now()}`;
+        const res = await fetch(url);
+        if (!res.ok) {
+            console.error('[chart=4] csv fetch failed');
+            return;
+        }
+
+        const text = await res.text();
+        if (!text || text.trim().length === 0) {
+            console.warn('[chart=4] empty csv');
+            return;
+        }
+
+        const parsed = parseCSV(text);
+        if (!parsed || !parsed.angle.length) {
+            console.warn('[chart=4] parsed csv empty');
+            return;
+        }
+
+        renderTorqueAngle(parsed);
+    }
+
+
 
     // 每隔 interval 毫秒調用一次 API
     function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 3000) {
@@ -374,31 +639,6 @@
         }
     }
 
-
-    // 更新圖表
-    function updateChart(chartData) {
-        if (!chartData) return;
-
-        var option = {
-            xAxis: {
-                name: chartData.x_title,
-                data: chartData.x_val
-            },
-            yAxis: {
-                name: chartData.y_title
-            },
-            series: [
-                {
-                    type: 'line',
-                    data: chartData.y_val
-                }
-            ]
-        };
-
-        if (myChart) {
-            myChart.setOption(option);  // 確保 ECharts 實例已經初始化
-        }
-    }
 
     // 開始即時 API 調用，每 3 秒更新一次數據
     startApiPolling();

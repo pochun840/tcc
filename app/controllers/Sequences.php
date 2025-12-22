@@ -24,8 +24,6 @@ class Sequences extends Controller
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
 
 
-    
-
         if(empty($sequences)){
             $seq_id = 1;
             $next_seq_id = 1;

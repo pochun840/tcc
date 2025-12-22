@@ -1045,8 +1045,8 @@ class Settings extends Controller
             $this->AdminModel->Set_idas_version($verify_data['Match_TCC_Version']);
 
 
-            //  17. 指定最終目標目錄（部署到 /tccidas/ 下）
-            $target_directory = $_SERVER['DOCUMENT_ROOT'] . '/tccidas/';
+            //  17. 指定最終目標目錄（部署到 /idas/ 下）
+            $target_directory = $_SERVER['DOCUMENT_ROOT'] . '/idas/';
             if (!is_dir($target_directory)) mkdir($target_directory, 0777, true);
 
             //  18. 複製解壓出來的檔案到正式目錄
@@ -1520,44 +1520,14 @@ class Settings extends Controller
     }
 
 
+    //判斷控制器是否有登出
     public function get_controller_login(){
-
-        //判斷控制器是否有登出
         $Controller_Info = $this->ToolModel->GetControllerInfo();
         if(!empty($Controller_Info)){
             $user_logIn = $Controller_Info['user_logIn'];
             $user_logIn = (int)$user_logIn;
             echo $user_logIn;
         }
-
-
-        /*$Controller_Info = $this->ToolModel->GetControllerInfo();
-
-        if (empty($Controller_Info) || (int)$Controller_Info['user_logIn'] !== 1) {
-            echo (int)2; // 控制器尚未登入
-            return;
-        }
-
-
-        //檢查欄位 -device_cfg_ver 的value 是否一樣
-        $db1_path = '/var/www/html/database/tcccon.db';
-        $db2_path = '/var/www/html/database/idas_data.db';
-        try {
-            $db1 = new PDO("sqlite:$db1_path");
-            $db2 = new PDO("sqlite:$db2_path");
-
-            $ver1 = $db1->query("SELECT device_cfg_ver FROM device LIMIT 1")->fetchColumn();
-            $ver2 = $db2->query("SELECT device_cfg_ver FROM device LIMIT 1")->fetchColumn();
-
-            if ($ver1 === false || $ver2 === false || $ver1 !== $ver2) {
-                echo (int)1; // 不一致或查不到
-            } else {
-                echo (int)0; // 一致
-            }
-
-        } catch (PDOException $e) {
-            echo (int)1; // DB 錯誤視為不一致
-        }*/
     }
 
 
@@ -1609,12 +1579,14 @@ class Settings extends Controller
 
 
         $temp_del_year = $del_year_id[0]; // 只處理第一筆
-          $idas_result = $this->get_controller_login();
+        #檢查控制器是否有登入登出
+        $idas_result = $this->get_controller_login();
 
         // 檢查是否可以刪除（Modbus 狀態檢查）
-        $device_id = 0;
-        $unitId = ($device_id >= 1 && $device_id <= 255) ? $device_id : 1;
-        $idas_result = $this->get_controller_login();
+        //$device_id = 0;
+        //$unitId = ($device_id >= 1 && $device_id <= 255) ? $device_id : 1;
+        //$idas_result = $this->get_controller_login();
+        
 
         /*if ($idas_result['result'] != 1) {
             echo json_encode([

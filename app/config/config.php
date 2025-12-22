@@ -1,15 +1,17 @@
 <?php
 
-//sudo chmod -R 777 /var/www/html/tccidas
+//sudo chmod -R 777 /var/www/html/idas
 //sudo chmod -R 777 /var/www/html/database
 //sudo rm -rf /var/www/html/tccidas
 //sudo chown -R www-data:www-data /var/www/html/tccidas/app/views/step
 //12345678rd
+
+//sudo chmod -R 777 /var/www/html/upload.php idas_update.php
 // App 根目錄，這是引入 app 資料夾裡的資源用的
 define('APPROOT', dirname(dirname(__FILE__)) . '/');
 
 // URL 根目錄，這是引入 public 資料夾裡的資源，或是頁面跳轉時用的
-define('URLROOT', '/tccidas/');
+define('URLROOT', '../public/');
 
 
 // 網站名稱

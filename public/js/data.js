@@ -94,7 +94,7 @@ function downloadCSVZip() {
 
   // 總開關：要看 console 設 true
   const DBG = true;
-  const dbg = (...args) => { if (DBG) console.log('[downloadCSVZip]', ...args); };
+  const dbg = (...args) => { if (DBG)  };
 
   // 跨 realm 也有效的 Blob 偵測（含兜底）
   const isBlobLike = (v) => {

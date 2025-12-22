@@ -12,7 +12,7 @@
         <table class="no-border">
             <tr id="header">
                 <td width="100%"><h3><?php echo $text['job_management'];?></h3></td>
-                <td><img src="./img/btn_home.png" style="margin-right: 10px" onclick="back()"></td>
+                <td><img src="./img/btn_home.png" style="margin-right: 10px"  onclick="location.href='?url=Dashboards'"></td>
             </tr>
         </table>
     </div>
@@ -175,7 +175,7 @@
                                 <div class="row">
                                     <div class="col-6 t1"><?php echo $text['rev_option']; ?> :</div>
                                     <div class="col-4 t2">
-                                        <select id="rev_cnt_mode" name="rev_cnt_mode" class="custom-file" style="width:225px">
+                                        <select id="rev_cnt_mode" name="rev_cnt_mode" class="custom-file" style="width:165px">
                                             <option value="0"><?php echo $text['OFF_text']; ?></option>
                                             <option value="1"><?php echo $text['threshold_tor']; ?></option>
                                             <option value="2"><?php echo $text['threshold_ang']; ?></option>
@@ -309,7 +309,7 @@
                                 <div class="row">
                                     <div class="col-6 t1"><?php echo $text['rev_option']; ?> :</div>
                                     <div class="col-4 t2">
-                                        <select id="edit_rev_cnt_mode" name="edit_rev_cnt_mode" class="custom-file" style="width:225px">
+                                        <select id="edit_rev_cnt_mode" name="edit_rev_cnt_mode" class="custom-file" style="width:165px">
                                             <option value="0"><?php echo $text['OFF_text']; ?></option>
                                             <option value="1"><?php echo $text['threshold_tor']; ?></option>
                                             <option value="2"><?php echo $text['threshold_ang']; ?></option>

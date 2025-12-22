@@ -24,7 +24,7 @@ class Database{
         // 根據作業系統決定資料庫路徑
         $isLinux = PHP_OS_FAMILY === 'Linux';
         $basePath = $isLinux ? '/var/www/html/database/' : '../';
-        $defaultDataPath = $isLinux ? '/var/www/html/tccidas/default_data.db' : '../default_data.db';
+        $defaultDataPath = $isLinux ? '/var/www/html/idas/default_data.db' : '../default_data.db';
 
         // 初始化 data 資料庫，如果找不到就使用預設資料庫
         $this->db_data = $this->initPDO(

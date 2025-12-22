@@ -216,7 +216,7 @@ function language_change(language) {
 
 
 function back() {
-    window.location.href = '?url=In';
+    window.location.href = '?url=Dashboards';
 }
 
 function deleteCookie(name) {

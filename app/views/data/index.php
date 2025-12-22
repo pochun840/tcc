@@ -1,3 +1,7 @@
+
+<script src="<?php echo URLROOT; ?>js/bootstrap.bundle.min.js"></script>
+
+
 <?php
 // 語系設定
 switch ($_SESSION['language'] ?? '') {
@@ -70,7 +74,7 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
         <table class="no-border">
             <tr id="header">
                 <td width="100%"><h3><?php echo $text['data'];?></h3></td>
-                <td><img src="./img/btn_home.png" style="margin-right: 10px" onclick="back()"></td>
+                <td><img src="./img/btn_home.png" style="margin-right: 10px" onclick="location.href='?url=Dashboards'" ></td>
             </tr>
         </table>
     </div>
@@ -274,7 +278,7 @@ function fetchRealTimeData(mode = currentMode) {
     const formData = new FormData();
     formData.append('mode', mode);
 
-    const baseURL = `${window.location.protocol}//${window.location.hostname}/tccidas/public/?url=Data/getreal_time_data`;
+    const baseURL = `${window.location.protocol}//${window.location.hostname}/tccidas/?url=Data/getreal_time_data`;
 
     fetch(baseURL, {
         method: 'POST',

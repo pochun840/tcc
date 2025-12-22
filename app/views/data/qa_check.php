@@ -61,7 +61,7 @@ function renderTableRows($records, $unit_arr, $status_arr, $text) {
         <table class="no-border">
             <tr id="header">
                 <td width="100%"><h3><?php echo $text['data'];?></h3></td>
-                <td><img src="./img/btn_home.png" style="margin-right: 10px" onclick="back()"></td>
+                <td><img src="./img/btn_home.png" style="margin-right: 10px"    onclick="location.href='?url=Dashboards'"></td>
             </tr>
         </table>
     </div>

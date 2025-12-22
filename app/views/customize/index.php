@@ -6,7 +6,7 @@
           <h3><?php echo $data['text']['customize']; ?></h3>
         </td>
         <td>
-          <button id="home" class="w3-btn w3-round-large" style="height:50px;padding:0" onclick="window.location.href='./?url=Dashboards'">
+          <button id="home" class="w3-btn w3-round-large" style="height:50px;padding:0"   style="margin-right: 10px; cursor: pointer;" onclick="location.href='?url=Dashboards'">
             <img src="./img/btn_home.png">
           </button>
         </td>
