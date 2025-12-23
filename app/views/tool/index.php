@@ -92,7 +92,7 @@
 
                         <div class="row border-bottom" style="display: flex; justify-content: center; align-items: center; height: 150px;">
                             <img 
-                                    src="img/qr_code.jpeg" 
+                                    src="img/qr_code_tcc.jpeg" 
                                     alt="QR Code" 
                                     style="width: 150px; height: 150px; cursor: pointer;" 
                                     onclick="window.open('https://www.kilews.com.tw/Upload/download/download_202406141109081.pdf', '_blank');"
