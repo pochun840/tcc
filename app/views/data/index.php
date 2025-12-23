@@ -278,7 +278,8 @@ function fetchRealTimeData(mode = currentMode) {
     const formData = new FormData();
     formData.append('mode', mode);
 
-    const baseURL = `${window.location.protocol}//${window.location.hostname}/tccidas/?url=Data/getreal_time_data`;
+    const baseURL = `${window.location.protocol}//${window.location.hostname}/idas/public/?url=Data/getreal_time_data`;
+    console.log()
 
     fetch(baseURL, {
         method: 'POST',

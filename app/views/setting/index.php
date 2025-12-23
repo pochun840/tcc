@@ -323,9 +323,9 @@
                             <span><?php echo $text['system_agent_client'];?>:<div id="c_status" style="display:inline-block;"></div></span>
                             <span><?php echo $text['system_server_status'];?>:<div id="s_status" style="display:inline-block;"></div></span>
 
-                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck()" >Check</button>
-                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px;" onclick="StatusCheck('start')" >START</button>
-                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck('stop')" >STOP</button>
+                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck()" ><?php echo $text['system_agent_check'];?></button>
+                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px;" onclick="StatusCheck('start')" ><?php echo $text['system_agent_start'];?></button>
+                            <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck('stop')" ><?php echo $text['system_agent_stop'];?></button>
                         </div>
                     </div>
                 </div>
@@ -1005,18 +1005,40 @@ function validateInput(element, pattern, min, max, isString) {
 }
 
 
-function Export_SystemConfig(argument) {
-
+function Export_SystemConfig() {
     var xhr = new XMLHttpRequest();
-    // 設置回應類型為二進位檔案
     xhr.responseType = "blob";
-    // 當下載完成時執行的函數
-    xhr.onload = function() {
+
+    xhr.onload = function () {
         if (xhr.status === 200) {
-            // 創建一個 <a> 元素來觸發下載
+            // 1) 從後端 Content-Disposition 抓 filename（Linux 產生的時間）
+            const cd = xhr.getResponseHeader("Content-Disposition") || "";
+            let filename = "";
+
+            // 支援：filename="xxx.zip" 或 filename=xxx.zip
+            const m = cd.match(/filename\*?=(?:UTF-8''|")?([^\";]+)"?/i);
+            if (m && m[1]) {
+                filename = decodeURIComponent(m[1].trim());
+            }
+
+            // 2) fallback：如果抓不到才用瀏覽器時間
+            if (!filename) {
+                const d = new Date();
+                const pad = (n) => String(n).padStart(2, '0');
+                const ts =
+                    d.getFullYear() +
+                    pad(d.getMonth() + 1) +
+                    pad(d.getDate()) +
+                    pad(d.getHours()) +
+                    pad(d.getMinutes()) +
+                    pad(d.getSeconds());
+                filename = `system_config_${ts}.zip`;
+            }
+
+            // 3) 觸發下載
             var a = document.createElement("a");
             a.href = window.URL.createObjectURL(xhr.response);
-            a.download = "tcccon.cfg"; // 下載時的檔案名稱
+            a.download = filename;   // ✅ 用 Linux 回傳的檔名（帶時間）
             a.style.display = "none";
             document.body.appendChild(a);
             a.click();
@@ -1027,6 +1049,7 @@ function Export_SystemConfig(argument) {
     xhr.open("GET", "?url=Settings/export_sysytem_config", true);
     xhr.send();
 }
+
 
 function toggleBarcodeSeq() {
     const barcodeMode = document.getElementById('barcode_enable');  // ✅ 修正為正確 ID

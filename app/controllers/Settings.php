@@ -384,54 +384,73 @@ class Settings extends Controller
         // code...
     }
 
-    
-    public function export_sysytem_config()
-    {
-        if( PHP_OS_FAMILY == 'Linux'){
-            require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-            $modbus = new ModbusMaster("127.0.0.1", "TCP");
-            try {
-                $modbus->port = 502;
-                $data = array(1);
-                $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
 
-                // FC 16
-                $modbus->writeMultipleRegister(0, 505, $data, $dataTypes);
-                $this->logMessage('modbus write 505 ,array = '.implode("','", $data));
-                $this->logMessage('modbus status:'.$modbus->status);
-                // echo json_encode(array('error' => ''));
-                // exit();
+    public function export_sysytem_config(){
 
-                header("Content-type: text/html; charset=utf-8");
-                $file="/mnt/ramdisk/ftp/tcccon.cfg"; // 實際檔案的路徑+檔名
-                $filename="tcccon"; // 下載的檔名
-                //指定類型
-                header("Content-type: ".filetype("$file"));
-                //指定下載時的檔名
-                header("Content-Disposition: attachment; filename=".$filename."");
-                //輸出下載的內容。
-                readfile($file);
+        // 4 個都打包
+        $files = [
+            '/var/log/syslog',
+            '/home/kls/project/system/oplog0.bin',
+            '/var/www/html/database/tcccon.db',
+            '/var/www/html/database/tccdev.db',
+        ];
 
-            } catch (Exception $e) {
-                $this->logMessage('modbus write 505 fail');
-                $this->logMessage('db_sync D2C end');
-                echo json_encode(array('error' => 'modbus error'));
-                exit();
-            }
-        }else{//windows
-            // echo json_encode(array('error' => ''));
-                header("Content-type: text/html; charset=utf-8");
-                $file="../tcccon.db"; // 實際檔案的路徑+檔名
-                $filename="tcccon.cfg"; // 下載的檔名
-                //指定類型
-                header("Content-type: ".filetype("$file"));
-                //指定下載時的檔名
-                header("Content-Disposition: attachment; filename=".$filename."");
-                //輸出下載的內容。
-                readfile($file);
-            exit();
+        // zip 存放目錄
+        $zipDir = '/mnt/ramdisk/tmp/';
+        if (!is_dir($zipDir)) {
+            @mkdir($zipDir, 0777, true);
         }
+
+        $zipFile = $zipDir . 'system_config_' . date('Ymd_His') . '.zip';
+
+        $zip = new ZipArchive();
+        if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Unable to create zip file']);
+            exit;
+        }
+
+        $added = [];
+        $missing = [];
+
+        foreach ($files as $file) {
+            if (file_exists($file) && is_readable($file)) {
+                // 用 basename 存入 zip（不帶完整路徑）
+                $zip->addFile($file, basename($file));
+                $added[] = $file;
+            } else {
+                $missing[] = $file;
+            }
+        }
+
+        // 寫入 manifest，方便你核對
+        //$manifest = "Export Time: " . date('Y-m-d H:i:s') . "\n\n";
+        //$manifest .= "[ADDED]\n" . (count($added) ? implode("\n", $added) : "(none)") . "\n\n";
+        //$manifest .= "[MISSING]\n" . (count($missing) ? implode("\n", $missing) : "(none)") . "\n";
+        //$zip->addFromString('manifest.txt', $manifest);
+
+        $zip->close();
+
+        if (!file_exists($zipFile)) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Zip file not found']);
+            exit;
+        }
+
+        // 提供前端下載
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="system_config_' . date('Ymd_His') . '.zip"');
+        header('Content-Length: ' . filesize($zipFile));
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        readfile($zipFile);
+        exit;
     }
+
+
+
+
 
     public function system_storage(){
         $EMMC_BASE = "/var/www/html/database/"; //目標目錄路徑
@@ -1169,159 +1188,110 @@ class Settings extends Controller
         }
     }
 
-    public function Import_Config() {
 
+    public function Import_Config(){
+
+        
         $file = $this->MiscellaneousModel->lang_load();
-        if(!empty($file)){
+        if (!empty($file)) {
             include $file;
         }
 
-       
-
-        // 初始化
-        $result = '';
-        
-        // 檢查是否有上傳檔案
-        if (empty($_FILES) || !isset($_FILES['file'])) {
-            $res_type = 'Error';
-            $res_msg = 'No file uploaded.';
-            $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+        // 1) 控制器登入狀態檢查（已登入不可匯入）
+        $idas_result = (int)$this->get_controller_login();
+        if ($idas_result === 1) {
+            $this->MiscellaneousModel->generateErrorResponse(
+                'Error',
+                'Controller is logged in. Please log out before importing config.'
+            );
             exit();
         }
-    
-        // 檢查檔案名稱
+
+        // 2) 檢查是否有上傳檔案
+        if (empty($_FILES) || !isset($_FILES['file'])) {
+            $this->MiscellaneousModel->generateErrorResponse(
+                'Error',
+                'No file uploaded.'
+            );
+            exit();
+        }
+
+        // 3) 副檔名必須是 .cfg
         $file_name = $_FILES['file']['name'];
         $file_info = pathinfo($file_name);
-    
-        // 檢查檔案的副檔名是否為 .cfg
-        if (!isset($file_info['extension']) || strtolower($file_info['extension']) !== 'cfg') {
-            $res_type = 'Error';
-            $res_msg = 'The uploaded file is not a .cfg file.';
-            $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+
+        if (
+            !isset($file_info['extension']) ||
+            strtolower($file_info['extension']) !== 'cfg'
+        ) {
+            $this->MiscellaneousModel->generateErrorResponse(
+                'Error',
+                'The uploaded file is not a .cfg file.'
+            );
             exit();
         }
-    
-    
-        // 檢查操作系統並處理檔案上傳
+
+        // 4) Linux：將 cfg 內容覆蓋寫入 tcccon.db，並複製成 idas_data.db
         if (PHP_OS_FAMILY === 'Linux') {
 
-            $destination = "/mnt/ramdisk/ftp/iDas.cfg";
-            //將檔案移到指定位置
-            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
+            $targetDir   = '/var/www/html/database/';
+            $mainDb      = $targetDir . 'tcccon.db';
+            $backupDb    = $targetDir . 'idas_data.db';
+
+            // 確保目錄存在
+            if (!is_dir($targetDir)) {
+                @mkdir($targetDir, 0777, true);
+            }
+
+            // 先寫入 tcccon.db
+            $result = move_uploaded_file($_FILES['file']['tmp_name'], $mainDb);
 
             if ($result) {
-                require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-                $modbus = new ModbusMaster("127.0.0.1", "TCP");
-                try {
-                    $modbus->port = 502;
-                    $modbus->timeout_sec = 10;
-                    $data = array(1, 26948, 24947);
-                    $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
 
-                    // FC 16
-                    $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
-                    $this->logMessage('modbus write 506 ,array = '.implode("','", $data));
-                    $this->logMessage('modbus status:'.$modbus->status);
-                    $this->logMessage('Import config end');
+                // 權限處理
+                @chmod($mainDb, 0666);
 
-                    $res_type = 'Success';
-                    $res_msg  = 'DB import successful';
-                    $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+                // 再複製一份成 idas_data.db
+                if (!@copy($mainDb, $backupDb)) {
+                    $this->logMessage('Import cfg success, but copy to idas_data.db failed');
 
-                    $modbus->writeMultipleRegister(0, 462, array(1), $dataTypes);
-
-                    //exit();
-
-                } catch (Exception $e) {
-                    // Print error information if any
-                    echo $modbus;
-                    echo $e;
-                    $this->logMessage('modbus write 506 fail');
-                    $this->logMessage('modbus status:'.$modbus->status);
-                    $this->logMessage('Import config end');
-                    echo json_encode(array('error' => 'modbus error','diff' => $diff));
+                    $this->MiscellaneousModel->generateErrorResponse(
+                        'Error',
+                        'Config imported, but failed to create idas_data.db.'
+                    );
                     exit();
                 }
-            } else {
 
-                $res_type = 'error';
-                $res_msg  = 'DB import error';
-                $this->MiscellaneousModel->generateErrorResponse($res_type, $res_msg);
+                @chmod($backupDb, 0666);
+
+                $this->logMessage('Import cfg -> tcccon.db & idas_data.db success');
+
+                $this->MiscellaneousModel->generateErrorResponse(
+                    'Success',
+                    'Config imported successfully.'
+                );
+                exit();
+
+            } else {
+                $this->MiscellaneousModel->generateErrorResponse(
+                    'Error',
+                    'Config import failed.'
+                );
                 exit();
             }
         }
+
+        // 非 Linux（保險）
+        $this->MiscellaneousModel->generateErrorResponse(
+            'Error',
+            'Unsupported operating system.'
+        );
+        exit();
     }
 
 
-    /*public function Import_Config_aaa()
-    {
-        $file_location = '';
-        $result = '';
-
-        if(empty($_FILES)){
-            echo json_encode(["Error" => 'no file']);
-            exit();
-        }
 
 
-        if( PHP_OS_FAMILY == 'Linux'){
-            $this->logMessage('Import config start');
-
-            $destination = "/mnt/ramdisk/FTP/iDas.cfg";
-            //將檔案移到指定位置
-            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
-            $diff = $this->CheckImportLanguageDiff($destination);
-
-            if ($result) {
-                require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-                $modbus = new ModbusMaster("127.0.0.1", "TCP");
-                try {
-                    $modbus->port = 502;
-                    $modbus->timeout_sec = 10;
-                    $data = array(1, 26948, 24947);
-                    $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
-
-                    // FC 16
-                    $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
-                    $this->logMessage('modbus write 506 ,array = '.implode("','", $data));
-                    $this->logMessage('modbus status:'.$modbus->status);
-                    $this->logMessage('Import config end');
-                    echo json_encode(array('error' => '','diff' => $diff));
-                    exit();
-
-                } catch (Exception $e) {
-                    // Print error information if any
-                    // echo $modbus;
-                    // echo $e;
-                    $this->logMessage('modbus write 506 fail');
-                    $this->logMessage('modbus status:'.$modbus->status);
-                    $this->logMessage('Import config end');
-                    echo json_encode(array('error' => 'modbus error','diff' => $diff));
-                    exit();
-                }
-            } else {
-                $this->logMessage('copy db error');
-                $this->logMessage('Import config end');
-                echo json_encode(array('error' => 'copy db error','diff' => $diff));
-                exit();
-            }
-
-        }else{//windows暫不考慮升級，可能整包升級
-            // $this->logMessage('Import config start');
-            $destination = "../tcscon-test.db";
-            $result =  move_uploaded_file($_FILES['file']['tmp_name'], $destination);
-
-            if($result){
-                echo json_encode(["error" => '']);
-                exit();
-            }else{
-                echo json_encode(["error" => 'fail']);
-                exit();
-            }            
-        }
-
-        echo json_encode(["message" => $result]);
-    }*/
 
 
     public function FirmwareUpdate(){
@@ -1523,11 +1493,12 @@ class Settings extends Controller
     //判斷控制器是否有登出
     public function get_controller_login(){
         $Controller_Info = $this->ToolModel->GetControllerInfo();
-        if(!empty($Controller_Info)){
-            $user_logIn = $Controller_Info['user_logIn'];
-            $user_logIn = (int)$user_logIn;
-            echo $user_logIn;
+        if (!empty($Controller_Info) && isset($Controller_Info['user_logIn'])) {
+            return (int)$Controller_Info['user_logIn'];
         }
+
+        // 預設值（查不到或沒資料）
+        return 0;
     }
 
 

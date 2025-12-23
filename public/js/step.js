@@ -20,7 +20,7 @@ function create_step() {
     document.getElementById('ds_tor').value = (0.0).toFixed(1);
     document.getElementById('ds_speed').value = 100;
     document.getElementById("direction_CW").checked = true;
-    document.getElementById('ang_hi').value = 9999;
+    document.getElementById('ang_hi').value = 30600;
     document.getElementById('ang_lo').value = 0;
     document.getElementById('tor_hi').value =  tor_hi_unified;
     document.getElementById('tor_lo').value = 0;
@@ -392,7 +392,7 @@ function toggleVisibility(targetValue) {
     targetDelayItem.style.display = 'none';
 
         
-    document.getElementById('ang_hi').value = 9999;
+    document.getElementById('ang_hi').value = 30600;
     document.getElementById('ang_lo').value = 0;
     document.getElementById('tor_hi').value = tor_hi_unified;
     document.getElementById('tor_lo').value = 0;
@@ -432,7 +432,7 @@ function toggleVisibility(targetValue) {
         document.getElementById("downshift_OFF").checked = true;
         document.getElementById('tor_hi').value = 55;
         document.getElementById('tor_lo').value = 0;
-        document.getElementById('ang_hi').value = 9999;
+        document.getElementById('ang_hi').value = 30600;
         document.getElementById('ang_lo').value = 0;
 
 
@@ -453,7 +453,7 @@ function toggleVisibility(targetValue) {
         disableElementById('downshift_OFF','');
         document.getElementById('tor_hi').value = 55;
         document.getElementById('tor_lo').value = 0;
-        document.getElementById('ang_hi').value = 9999;
+        document.getElementById('ang_hi').value = 30600;
         document.getElementById('ang_lo').value = 0;
         document.getElementById('target_delay').value = (1.0).toFixed(1);
 
@@ -759,106 +759,108 @@ function checkStepAndHandleDownshift(jobid, seqid, onSuccessCallback) {
 
 // 核心表單檢查邏輯
 function input_check_core(prefix, step_id = '') {
-    // 取得選擇目標類型 (Torque / Angle / Delay)
-    const target_opt = document.getElementById(prefix + "target_opt")?.value;
 
-    // 取得 Step ID
-    step_id = prefix === "edit_" 
-        ? document.getElementById("edit_step_id")?.value?.trim() || "" 
+    // 目標模式：0=Torque, 1=Angle, 2=Delay
+    const target_opt = document.getElementById(prefix + "target_opt")?.value;
+    const stepOption = document.getElementById(prefix + "StepOption")?.value;
+
+    // Step ID
+    step_id = prefix === "edit_"
+        ? document.getElementById("edit_step_id")?.value?.trim() || ""
         : document.getElementById("add_step_id")?.value?.trim() || "";
 
-    // 工具參數設定
+    // 工具參數
     const maxTorque = parseTorqueValue('tool_max_tor');
     const minTorque = parseTorqueValue('tool_min_tor');
 
-
-    let Tool_Max_RPM    = parseFloat(document.getElementById('tool_max_rpm')?.value || 0);
-    let Tool_Min_RPM    = parseFloat(document.getElementById('tool_min_rpm')?.value || 0);
-    let tor_hi_unified  = parseFloat(document.getElementById('tool_maxtorque_unified')?.value || 0);
+    let Tool_Max_RPM = parseFloat(document.getElementById('tool_max_rpm')?.value || 0);
+    let Tool_Min_RPM = parseFloat(document.getElementById('tool_min_rpm')?.value || 0);
+    let tor_hi_unified = parseFloat(document.getElementById('tool_maxtorque_unified')?.value || 0);
 
     let Tool_Max_Torque = maxTorque.str;
     let Tool_Min_Torque = minTorque.display;
 
-    console.log(Tool_Max_Torque);
-    console.log(Tool_Min_Torque);
-    console.log(maxTorque);
-
-
-
-    // 特殊邏輯：Step 1 限制轉速下限為 50
+    // Step 1 RPM 特例
     if (step_id === "1") {
         Tool_Min_RPM = 50;
-        console.log(`[Step ID ${step_id}] 強制 Tool_Min_RPM = 50`);
     }
 
     const isDownshiftOff = document.getElementById(prefix + "downshift_OFF")?.checked || false;
 
-    // 取得 Target 值 - Qǔdé Target zhí
     const target_torque = parseFloat(document.getElementById(prefix + 'target_tor')?.value || 0);
     const target_angle  = parseInt(document.getElementById(prefix + 'target_ang')?.value || 0);
+    const ang_lo_val    = parseInt(document.getElementById(prefix + 'ang_lo')?.value || 0);
 
     let conditions = [];
 
-    // === TORQUE 模式 ===
+    /* =======================
+       TORQUE MODE
+    ======================= */
     if (target_opt === "0") {
+
         conditions.push(
-            { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max:  Tool_Max_Torque },
-            { id: prefix + 'tor_hi',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified > 0 ? tor_hi_unified - 1 : 0 , compareLessThanId: prefix + 'target_tor' },
-            { id: prefix + 'rpm',        pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
+            { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
+            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max: tor_hi_unified },
+            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified > 0 ? tor_hi_unified - 1 : 0 },
+            { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
         );
-
-        if (target_angle >= 1) {
-            conditions.push(
-                { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: target_angle +1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-                { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: target_angle -1, compareLessThanId: prefix + 'target_ang' }
-            );
-        }
-
-        if (!isDownshiftOff) {
-            conditions.push(
-                { id: prefix + 'th_tor',   pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_torque },
-                { id: prefix + 'ds_tor',   pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: target_torque },
-                { id: prefix + 'ds_speed', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
-            );
-        }
     }
 
-    // === ANGLE 模式 ===
+    /* =======================
+       ANGLE MODE
+    ======================= */
     else if (target_opt === "1") {
-        conditions.push(
-            { id: prefix + 'target_ang', pattern: /^\d{0,5}$/, min: 1, max: 9999 },
-            { id: prefix + 'tor_hi',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_torque, max: tor_hi_unified, compareGreaterThanId: prefix + 'target_tor' },
-            { id: prefix + 'tor_lo',     pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified > 0 ? tor_hi_unified - 1 : 0, compareLessThanId: prefix + 'target_tor' },
-            { id: prefix + 'rpm',        pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
-        );
 
-        if (target_angle >= 1) {
-            conditions.push(
-                { id: prefix + 'ang_hi', pattern: /^\d{0,5}$/, min: target_angle +1, max: 9999, compareGreaterThanId: prefix + 'target_ang' },
-                { id: prefix + 'ang_lo', pattern: /^\d{0,5}$/, min: 0, max: target_angle -1, compareLessThanId: prefix + 'target_ang' }
-            );
-        }
+        conditions.push(
+            { id: prefix + 'target_ang', pattern: /^\d{1,5}$/, min: 1, max: 30600 },
+            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_torque, max: tor_hi_unified },
+            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified > 0 ? tor_hi_unified - 1 : 0 },
+            { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
+        );
     }
 
-    // === DELAY 模式 ===
-    else if (target_opt === "2") {
+    /* =======================
+       ANG_HI / ANG_LO（共用）
+    ======================= */
+    let angHiBase = null;
+
+    if (stepOption === "2") {            // Torque
+        angHiBase = target_angle;
+    } else if (stepOption === "1") {     // Angle
+        angHiBase = ang_lo_val;
+    }
+
+    if (angHiBase !== null) {
+        conditions.push(
+            { id: prefix + 'ang_lo', pattern: /^\d{1,5}$/, min: 0, max: 30600 },
+            { id: prefix + 'ang_hi', pattern: /^\d{1,5}$/, min: angHiBase + 1, max: 30600 }
+        );
+    }
+
+    /* =======================
+       DELAY MODE
+    ======================= */
+    if (target_opt === "2") {
         conditions.push(
             { id: prefix + 'target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
         );
     }
 
-    // === 驗證全部欄位 ===
+    /* =======================
+       VALIDATE
+    ======================= */
     let isFormValid = true;
-    conditions.forEach(input => {
-        const element = document.getElementById(input.id);
-        if (element && !validateInput(element, input.pattern, input.min, input.max, input.compareGreaterThanId, input.compareLessThanId)) {
+
+    conditions.forEach(cfg => {
+        const el = document.getElementById(cfg.id);
+        if (el && !validateInput(el, cfg.pattern, cfg.min, cfg.max)) {
             isFormValid = false;
         }
     });
 
     return isFormValid;
 }
+
 
 function getLabelText(element) {
     let id = element.id || "";

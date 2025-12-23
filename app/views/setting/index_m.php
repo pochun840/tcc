@@ -348,9 +348,9 @@
                                     <span><?php echo $text['system_agent_client'];?>:<div id="c_status" style="display:inline-block;"></div></span>
                                     <span><?php echo $text['system_server_status'];?>:<div id="s_status" style="display:inline-block;"></div></span>&nbsp;
 
-                                    <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck()"  >Check</button>
-                                    <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px;" onclick="StatusCheck('start')">START</button>
-                                    <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck('stop')" >STOP</button>
+                                    <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck()"  ><?php echo $text['system_agent_check'];?></button>
+                                    <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px;" onclick="StatusCheck('start')"><?php echo $text['system_agent_start'];?></button>
+                                    <button class="all-btn w3-button w3-border w3-round-large" style="margin: 5px"  onclick="StatusCheck('stop')" ><?php echo $text['system_agent_stop'];?></button>
                                 </div>
                             </div>
                         </div>
@@ -964,18 +964,28 @@ function validateInput(element, pattern, min, max, isString) {
 }
 
 
-function Export_SystemConfig(argument) {
-
+function Export_SystemConfig() {
     var xhr = new XMLHttpRequest();
-    // 設置回應類型為二進位檔案
     xhr.responseType = "blob";
-    // 當下載完成時執行的函數
-    xhr.onload = function() {
+
+    xhr.onload = function () {
         if (xhr.status === 200) {
-            // 創建一個 <a> 元素來觸發下載
+            // 產生 YYYYMMDD_HHMMSS
+            const d = new Date();
+            const pad = (n) => String(n).padStart(2, '0');
+            const ts =
+                d.getFullYear() +
+                pad(d.getMonth() + 1) +
+                pad(d.getDate()) + '_' +
+                pad(d.getHours()) +
+                pad(d.getMinutes()) +
+                pad(d.getSeconds());
+
+            const filename = `system_config_${ts}.zip`;
+
             var a = document.createElement("a");
             a.href = window.URL.createObjectURL(xhr.response);
-            a.download = "tcccon.cfg"; // 下載時的檔案名稱
+            a.download = filename; // ✅ 前端顯示名稱帶時間
             a.style.display = "none";
             document.body.appendChild(a);
             a.click();
@@ -986,6 +996,7 @@ function Export_SystemConfig(argument) {
     xhr.open("GET", "?url=Settings/export_sysytem_config", true);
     xhr.send();
 }
+
 
 function Import_SystemConfig() {
     var import_file = document.getElementById("import-file-uploader").files[0];
