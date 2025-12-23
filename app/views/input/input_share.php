@@ -126,7 +126,13 @@ function crud_job_event(argument) {
 
     if (argument === 'del' && job_id !== '' && input_event !== '') {
         document.querySelector(".main-content").classList.add("overlay-active");
-        delete_input_id(job_id, input_event); // 執行刪除操作
+        delete_input_id(job_id, input_event, function () {
+            // ✅ 刪除成功後，重置前端狀態
+            resetInputEventState();
+
+            // ✅ 重新撈 DB 狀態
+            get_input_by_job_id(job_id);
+        });
     }
 
     if (argument === 'edit' && job_id !== '' && input_event !== '') {
@@ -221,7 +227,37 @@ function crud_job_event(argument) {
 
 }
 
+function resetInputEventState() {
 
+    // ===============================
+    // 1️⃣ 清空前端暫存（保險寫法）
+    // ===============================
+    if (typeof temp !== 'undefined') temp.length = 0;
+    if (typeof tempA !== 'undefined') tempA.length = 0;
+    if (typeof temp_gateconfirm !== 'undefined') temp_gateconfirm.length = 0;
+    if (typeof jobDisabledOptions !== 'undefined') jobDisabledOptions = {};
+
+    // ===============================
+    // 2️⃣ 只解除 Input 區塊的控制項
+    // （避免誤傷其他頁面元素）
+    // ===============================
+    document
+        .querySelectorAll('#input_jobid_select input, #input_jobid_select select')
+        .forEach(el => {
+            el.disabled = false;
+            el.readOnly = false;
+            el.classList.remove('disabled_input');
+        });
+
+    // ===============================
+    // 3️⃣ 清除 Input 區塊的 radio / checkbox
+    // ===============================
+    document
+        .querySelectorAll('#input_jobid_select input[type=radio], #input_jobid_select input[type=checkbox]')
+        .forEach(el => el.checked = false);
+
+    console.log('[Input] front-end input state reset');
+}
 
 $(document).ready(function () {
 

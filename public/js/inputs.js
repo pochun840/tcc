@@ -323,74 +323,98 @@ function clearUnifiedUIOnly() {
 // 刪除指定 job_id 與 input_event 的輸入項目
 // ================================
 
-function delete_input_id(job_id,input_event){
+function delete_input_id(job_id, input_event) {
 
-   var language = getCookie('language');
-   var text_info, title;
+    const language = getCookie('language');
+    let text_info, title;
 
-   if (language === "zh-cn") {
-       text_info = '你确定吗？';
-       title = '刪除任務';
-   } else if (language === "zh-tw") {
-       text_info = '你確定嗎？';
-       title = '刪除任務';
-   } else {
-       text_info = 'Are you sure?';
-       title = 'Delete Job';
-   }
-   
-   if (job_id) {
-       alertify.confirm(
-           title, // 標題
-           text_info, // 提示文字
-           function() {
-               //使用者選擇「是」後執行刪除動作
-               document.getElementById('spinner').style.display = 'block';
-
-               $.ajax({
-                   url: "?url=Inputs/delete_input",
-                   method: "POST",
-                   data: { 
-                       job_id: job_id,
-                       input_event: input_event
-                   },
-                   success: function(response) {
-                       var responseData = JSON.parse(response);
-                       alertify.alert(responseData.res_type, responseData.res_msg);
-
-                       setTimeout(function() {
-                            alertify.closeAll(); // 關閉所有 alertify 彈窗
-                            updateEventSelectAndPins(responseData.old_input_pin); // 更新 pins
-                            
-                            //全部還原
-                            var options = document.querySelectorAll('#Event_Option option');
-                            options.forEach(function(option) {
-                                option.disabled = false;
-                                option.classList.remove('disabled_input');
-                            });
-
-                            //根據最新 tempA 再禁用
-                            get_input_by_job_id(job_id);
-                           
-                           document.getElementById('spinner').style.display = 'none'; 
-                           document.querySelector(".main-content").classList.remove("overlay-active"); 
-                           //location.reload();
-                       }, 1000); 
-                   },
-                   error: function(xhr, status, error) {
-                       //console.error("AJAX request failed:", status, error);
-                       alertify.error("刪除失敗，請稍後再試！");
-                       document.querySelector(".main-content").classList.remove("overlay-active"); 
-                       document.getElementById('spinner').style.display = 'none';
-                   }
-               });
-            },
-            function() {
-                // 取消 callback 可選寫在這裡（目前略過）
-                document.querySelector(".main-content").classList.remove("overlay-active");
-            }
-        ).set('labels', {ok:'YES', cancel:'NO'}); // 修改按鈕文字
+    if (language === "zh-cn") {
+        text_info = '你确定吗？';
+        title = '删除任务';
+    } else if (language === "zh-tw") {
+        text_info = '你確定嗎？';
+        title = '刪除任務';
+    } else {
+        text_info = 'Are you sure?';
+        title = 'Delete Job';
     }
+
+    if (!job_id) return;
+
+    alertify.confirm(
+        title,
+        text_info,
+        function () {
+
+            document.getElementById('spinner').style.display = 'block';
+            document.querySelector(".main-content").classList.add("overlay-active");
+
+            $.ajax({
+                url: "?url=Inputs/delete_input",
+                method: "POST",
+                data: {
+                    job_id: job_id,
+                    input_event: input_event
+                },
+                success: function (response) {
+
+                    let responseData;
+                    try {
+                        responseData = JSON.parse(response);
+                    } catch (e) {
+                        alertify.error('Invalid response');
+                        return;
+                    }
+
+                    alertify.alert(responseData.res_type, responseData.res_msg);
+
+                    setTimeout(function () {
+
+                        alertify.closeAll();
+
+                        // ===============================
+                        // 1️⃣ 還原被刪除的 pin（high / low）
+                        // ===============================
+                        if (responseData.old_input_pin) {
+                            updateEventSelectAndPins(responseData.old_input_pin);
+                        }
+
+                        // ===============================
+                        // 2️⃣ Event option 全部解鎖
+                        // ===============================
+                        document.querySelectorAll('#Event_Option option').forEach(opt => {
+                            opt.disabled = false;
+                            opt.classList.remove('disabled_input');
+                        });
+
+                        // ===============================
+                        // 3️⃣ 如果已經沒有任何事件 → 強制清前端狀態
+                        // ===============================
+                        if (Number(responseData.total_event_count) === 0) {
+                            resetInputEventState();
+                        }
+
+                        // ===============================
+                        // 4️⃣ 重新抓 DB 狀態（temp / tempA / gateconfirm）
+                        // ===============================
+                        get_input_by_job_id(job_id);
+
+                        document.getElementById('spinner').style.display = 'none';
+                        document.querySelector(".main-content").classList.remove("overlay-active");
+
+                    }, 300);
+                },
+                error: function () {
+                    alertify.error("刪除失敗，請稍後再試！");
+                    document.getElementById('spinner').style.display = 'none';
+                    document.querySelector(".main-content").classList.remove("overlay-active");
+                }
+            });
+        },
+        function () {
+            document.querySelector(".main-content").classList.remove("overlay-active");
+        }
+    ).set('labels', { ok: 'YES', cancel: 'NO' });
 }
 
 
@@ -510,8 +534,8 @@ function get_input_by_job_id(jobid) {
         success: function (response) {
 
             const data = JSON.parse(response);
-            temp  = data.temp;
-            tempA = data.tempA;
+            temp  = data.temp  || [];
+            tempA = data.tempA || [];
 
             /* ===============================
              * ① 重建 Input Table（會洗掉 UI）
@@ -527,8 +551,8 @@ function get_input_by_job_id(jobid) {
              * =============================== */
             table.querySelectorAll('tr').forEach(row => {
                 row.addEventListener('click', function () {
-                    input_event = this.className;
-                    old_input_event = this.className;
+                    input_event = this.getAttribute('data-event');
+                    old_input_event = input_event;
                 });
             });
 
@@ -552,12 +576,22 @@ function get_input_by_job_id(jobid) {
             });
 
             /* ===============================
-             * ④ 語系
+             * ④ ⭐ 語系（一定要在 DOM 穩定後）
              * =============================== */
-            updateEventLabelsByLanguage(getCookie('language'));
+            const lang = getCookie('language');
+
+            requestAnimationFrame(() => {
+                updateEventLabelsByLanguage(lang);
+
+                // 有些情況 unified / 其他 JS 會再動 DOM
+                // 再補一次，保證不被洗回英文
+                setTimeout(() => {
+                    updateEventLabelsByLanguage(lang);
+                }, 0);
+            });
 
             /* ===============================
-             * ⑤ ⭐ 唯一 unified 套用入口
+             * ⑤ ⭐ unified 套用（保持最後）
              * =============================== */
             if (
                 inputUnifiedManager.isEnabled() &&
@@ -571,6 +605,7 @@ function get_input_by_job_id(jobid) {
         }
     });
 }
+
 
 
 function applyUnifiedWhenReady(jobid) {
@@ -620,27 +655,41 @@ function applyUnifiedWhenRowsReady(jobId, maxTry = 30) {
 // ================================
 
 function updateEventLabelsByLanguage(language) {
-   var labels = {
-        '200': { 'zh-cn': '启用', 'zh-tw': '啟動' },
-        '201': { 'zh-cn': '拆螺丝', 'zh-tw': '拆螺絲' },
-        '202': { 'zh-cn': '禁用', 'zh-tw': '禁用' },
-        '203': { 'zh-cn': '启用', 'zh-tw': '啟用' },
-        '204': { 'zh-cn': '确认', 'zh-tw': '確認' },
-        '205': { 'zh-cn': '清除', 'zh-tw': '清除' },
-        '206': { 'zh-cn': '工序清除', 'zh-tw': '工序清除' },
-        '207': { 'zh-cn': '重启', 'zh-tw': '重啟' },
-        '208': { 'zh-cn': '自定义1', 'zh-tw': '自定義1' },
-        '209': { 'zh-cn': '自定义2', 'zh-tw': '自定義2' },
-        '210': { 'zh-cn': '一次感应', 'zh-tw': '一次感應' },
+    const labels = {
+        '200': { 'en-us': 'Start-IN (Remote)', 'zh-cn': '启动输入（远程）', 'zh-tw': '啟動輸入（遠端）' },
+        '201': { 'en-us': 'Reverse (Remote)',  'zh-cn': '反转（远程）',     'zh-tw': '拆螺絲（遠端）' },
+        '202': { 'en-us': 'Disable',           'zh-cn': '禁用',             'zh-tw': '禁用' },
+        '203': { 'en-us': 'Enable',            'zh-cn': '启用',             'zh-tw': '啟用' },
+        '204': { 'en-us': 'Confirm',           'zh-cn': '确认',             'zh-tw': '確認' },
+        '205': { 'en-us': 'Clear',             'zh-cn': '清除',             'zh-tw': '清除' },
+        '206': { 'en-us': 'Sequence Clear',    'zh-cn': '工序清除',         'zh-tw': '工序清除' },
+        '207': { 'en-us': 'Reboot',            'zh-cn': '重启',             'zh-tw': '重啟' },
+        '208': { 'en-us': 'User Define 1',     'zh-cn': '自定义1',          'zh-tw': '自定義1' },
+        '209': { 'en-us': 'User Define 2',     'zh-cn': '自定义2',          'zh-tw': '自定義2' },
+        '210': { 'en-us': 'One-time Sensing',  'zh-cn': '一次感应',         'zh-tw': '一次感應' },
+    };
 
-   };
+    // ✅ 強化 normalize：trim + 全轉小寫 + 統一格式
+    let lang = String(language || 'en-us').trim().toLowerCase();
+    if (lang === 'en') lang = 'en-us';
+    if (lang === 'zh_tw' || lang === 'zh-hant' || lang === 'zh-tw') lang = 'zh-tw';
+    if (lang === 'zh_cn' || lang === 'zh-hans' || lang === 'zh-cn') lang = 'zh-cn';
 
-   Object.keys(labels).forEach(function(id) {
-       var el = document.getElementById(id);
-       if (el && labels[id][language]) {
-           el.textContent = labels[id][language];
-       }
-   });
+    const fallback = 'en-us';
+
+    const rows = document.querySelectorAll('#input_jobid_select tr');
+    if (!rows.length) return;
+
+    rows.forEach(tr => {
+        const eventCode = String(tr.getAttribute('data-event') || '').trim();
+        const map = labels[eventCode];
+        if (!map) return;
+
+        const td = tr.querySelector('td'); // 第一欄事件名稱
+        if (!td) return;
+
+        td.textContent = map[lang] || map[fallback] || td.textContent;
+    });
 }
 
 

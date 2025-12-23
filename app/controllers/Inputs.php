@@ -45,126 +45,98 @@ class Inputs extends Controller
     }
 
     // get_input_by_job_id
-    public function get_input_by_job_id($job_id) {
-        $event = $this->MiscellaneousModel->details('io_input');
-    
-        $input_check = true;
-        if (!empty($_POST['jobid']) && isset($_POST['jobid'])) {
-            $job_id = $_POST['jobid'];
-        } else {
-            $input_check = false; 
+    public function get_input_by_job_id($job_id = null){
+
+        $file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
         }
-    
-        if ($input_check) {
-            $job_inputs = $this->InputModel->get_input_by_job_id($job_id);
-            $temp = array(); 
-            $tempA = array();
-            $temp_gateconfirm = array();
-            $jobDisabledOptions = array();
-            $job_inputlist = ''; 
 
-            if (!empty($job_inputs)) {
-                foreach ($job_inputs as $kk => $vv) {
-                    // 遍歷 input_pin1 到 input_pin10 並檢查其是否為非零值
-                    for ($i = 1; $i <= 10; $i++) {
-                        $pin_key = 'input_pin' . $i;
-                        if (isset($vv[$pin_key]) && $vv[$pin_key] != 0) {
-                            // 取得非零的 pin 編號
-                            $pin_number = $i; // 這是針對每個 pin 的編號
-                            $gateconfirm = "1";  // 假設 gateconfirm 固定為 1
-                            $temp[] = "pin" . $pin_number . "_high";
-                            $temp[] = "pin" . $pin_number . "_low";
-                            $temp[] = "edit_pin" . $pin_number . "_high";
-                            $temp[] = "edit_pin" . $pin_number . "_low";
-                            $temp[] = "check_" . $gateconfirm;
-                        }
-                    }
-    
-                    if (!empty($vv['input_event'])) {
-                        $event_value = $vv['input_event'];
-                        //Disable & Enable 不能同時存在event_option
-                        if ($event_value == 202 && !in_array(203, $tempA)) {
-                            $tempA[] = 203;
-                        }
-               
-                        if ($event_value == 203 && !in_array(202, $tempA)) {
-                            $tempA[] = 202;
-                        }
-                    
-                        $tempA[] = $event_value;
-                    }
-                    
-    
-                    if (!empty($vv['input_gateconfirm'])) {
-                        $temp_gateconfirm[] = $vv['input_gateconfirm'];
-                    }
-    
-                    $isMobile = $this->isMobileCheck();
-    
-                    if ($isMobile) {
-                        // 根據 input_pin1 到 input_pin10 檢查並顯示
-                        $pin_display = ''; // 初始化 pin 顯示
-                        for ($i = 1; $i <= 10; $i++) {
-                            $pin_key = 'input_pin' . $i;
-                            if (isset($vv[$pin_key]) && $vv[$pin_key] != 0) {
-                                $pin_display .= $pin_number . "<br>";
-                            }
-                        }
-    
-                        // 根據 input_wave 顯示不同的圖片 (這裡假設使用 input_wave 或其他欄位)
-                        $wave_img = '';
-                        for ($i = 1; $i <= 10; $i++) {
-                            $wave_key = 'input_pin' . $i;  // 假設你使用 input_wave1 到 input_wave10
-                            if ( $vv[$wave_key] == 1) {
-                                $wave_img = '<img src="./img/high.png" style="max-width: 50px;">';
-                            } else if( $vv[$wave_key] == 2){
-                                $wave_img = '<img src="./img/low.png" style="max-width: 50px;">';
-                            }
-                        }
-    
-                        // 將所有資料顯示為行 (行動版格式)
-                        $job_inputlist .= "<tr data-event = '" . $vv['input_event'] . "' >";
-                        $job_inputlist .= "<td id='" . $vv['input_event'] . "'>" . $event[$vv['input_event']] . "</td>";
-                        $job_inputlist .= "<td>" . $pin_display . "</td>"; // 顯示 pin 的資料
-                        $job_inputlist .= "<td>" . $wave_img . "</td>";  // 顯示 wave 的圖片
-                        $job_inputlist .= "</tr>";
-                    } else {
-                        // 桌面版格式
 
-                        $input_gateconfirm = $vv['input_gateconfirm'];
-                        if($input_gateconfirm == 0){$input_gateconfirm_text ="NO";}else{$input_gateconfirm_text ="YES";}
-                        $job_inputlist .= "<tr data-event = '" . $vv['input_event'] . "' >";
-                        $job_inputlist .= "<td id='" . $vv['input_event'] . "'>" . $event[$vv['input_event']] . "</td>";
-                        $job_inputlist .= $this->InputModel->generateTableCell($vv); // 呼叫 generateTableCell
-                        $job_inputlist .= '<td>' . $input_gateconfirm_text . '</td>';
-                        $job_inputlist .= '</tr>';
+        $event = $this->MiscellaneousModel->details('io_input');
+
+
+
+        $input_check = true;
+
+        // ✅ 優先使用 POST（AJAX 呼叫）
+        if (!empty($_POST['jobid'])) {
+            $job_id = $_POST['jobid'];
+        }
+
+        $job_id = trim((string)$job_id);
+
+        // ✅ Router 直接呼叫但沒帶參數時，不再 fatal
+        if ($job_id === '') {
+            echo json_encode([
+                'job_inputlist' => '',
+                'temp' => [],
+                'tempA' => [],
+                'temp_gateconfirm' => [],
+                'jobDisabledOptions' => []
+            ]);
+            return;
+        }
+
+        // ===== 原本邏輯開始 =====
+        $job_inputs = $this->InputModel->get_input_by_job_id($job_id);
+
+        $temp = [];
+        $tempA = [];
+        $temp_gateconfirm = [];
+        $jobDisabledOptions = [];
+        $job_inputlist = '';
+
+        if (!empty($job_inputs)) {
+            foreach ($job_inputs as $kk => $vv) {
+
+                for ($i = 1; $i <= 10; $i++) {
+                    $pin_key = 'input_pin' . $i;
+                    if (!empty($vv[$pin_key])) {
+                        $temp[] = "pin{$i}_high";
+                        $temp[] = "pin{$i}_low";
+                        $temp[] = "edit_pin{$i}_high";
+                        $temp[] = "edit_pin{$i}_low";
+                        $temp[] = "check_1";
                     }
                 }
-            }else{
-               
-            }
 
+                if (!empty($vv['input_event'])) {
+                    if ($vv['input_event'] == 202 && !in_array(203, $tempA)) $tempA[] = 203;
+                    if ($vv['input_event'] == 203 && !in_array(202, $tempA)) $tempA[] = 202;
+                    $tempA[] = $vv['input_event'];
+                }
 
-            if (!empty($tempA)) {
-                $jobDisabledOptions[$job_id] = $tempA;
+                if (!empty($vv['input_gateconfirm'])) {
+                    $temp_gateconfirm[] = $vv['input_gateconfirm'];
+                }
+
+                $isMobile = $this->isMobileCheck();
+
+                if ($isMobile) {
+                    $job_inputlist .= "<tr><td>{$event[$vv['input_event']]}</td></tr>";
+                } else {
+                    $gateText = ($vv['input_gateconfirm'] == 1) ? 'YES' : 'NO';
+                    $job_inputlist .= "<tr data-event='{$vv['input_event']}'>";
+                    $job_inputlist .= "<td>{$text[$event[$vv['input_event']]]}</td>";
+                    $job_inputlist .= $this->InputModel->generateTableCell($vv);
+                    $job_inputlist .= "<td>{$gateText}</td></tr>";
+                }
             }
         }
-    
-        $response = array(
+
+        if (!empty($tempA)) {
+            $jobDisabledOptions[$job_id] = $tempA;
+        }
+
+        echo json_encode([
             'job_inputlist' => $job_inputlist,
             'temp' => $temp,
             'tempA' => $tempA,
             'temp_gateconfirm' => $temp_gateconfirm,
             'jobDisabledOptions' => $jobDisabledOptions
-
-        );
-    
-        echo json_encode($response);
+        ]);
     }
-    
-    
-
-
 
     public function check_job_event_conflict($value=''){
 
