@@ -554,6 +554,10 @@ $text['system_agent_start'] = 'Start';
 $text['system_agent_stop'] = 'Stop';
 $text['system_client_status'] = 'Client Status';
 $text['system_server_status'] = 'Server Status';
+$text['system_agent_ip'] = 'Agent Server IP';
+$text['system_agent_type'] = 'Agent Mode';
+$text['system_idas_current_version'] = 'Current iDAS Version';
+$text['system_idas_upload_file'] = 'Upload file';
 
 
 

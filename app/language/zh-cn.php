@@ -545,6 +545,10 @@ $text['system_agent_start'] = '启动';
 $text['system_agent_stop'] = '停止';
 $text['system_client_status'] = '客户端 状态';
 $text['system_server_status'] = '服务器 状态';
+$text['system_agent_ip'] = '代理服务器IP';
+$text['system_agent_type'] = '代理模式';
+$text['system_idas_current_version'] = '当前 iDAS 版本';
+$text['system_idas_upload_file'] = '上传文件';
 
 //barcode setting
 $text['system_barcode_setting'] = '条码设定';

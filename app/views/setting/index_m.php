@@ -316,7 +316,7 @@
                 <div class="connect-scrollbar" id="style-connection">
                     <div class="connect-force-overflow">
             
-                        <div class="col t1">Agent IP:</div>
+                        <div class="col t1"><?php echo $text['system_agent_ip'];?>:</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
                                     <input type="text" name="agent_server_ip" id="agent_server_ip" size="15" value='<?php echo $data['agent_server_ip'];?>' required class="t3 w3-submit w3-border w3-round"><br>
@@ -324,7 +324,7 @@
                             </div>
                         </div>
 
-                        <div class="col t1">Agent Type:</div>
+                        <div class="col t1"><?php echo $text['system_agent_type'];?>:</div>
                         <div class="row t2">
                             <div class="col t2">
                                 <form id="agent_type_form"  method="post" style="margin: 3px 0px; margin-left: 5%">
@@ -363,21 +363,14 @@
 
             <!-- iDas Update Setting -->
             <div id="iDas-Update_Setting" class="divMode">
-                <div class="col t1" style="padding-top: 5%">Current iDAS Version:</div>
+                <div class="col t1" style="padding-top: 5%"><?php echo $text['system_idas_current_version'];?>:</div>
                 <div class="row t2">
                     <div class="col-6 t2" style="margin-left: 5%">
                         <input id="idas_software_version" name="idas_software_version" type="text" value="<?php echo $data['iDas_Vesion'];?>"  style="height: 32px" class="form-control" disabled>
                     </div>
                 </div>
 
-                <div class="col t1">Match Controller Version:</div>
-                <div class="row t2">
-                    <div class="col-6 t2" style="margin-left: 5%">
-                        <input id="match_control_version" name="match_control_version" type="text" value="" style="height: 32px" class="form-control" disabled>
-                    </div>
-                </div>
-
-                <div class="col t1">Upload file:</div>
+                <div class="col t1"><?php echo $text['system_idas_upload_file'];?>:</div>
                 <div class="row t2">
                     <div class="col-6 t2" style="margin-left: 5%">
                         <input type="file" id="file-uploader" data-target="file-uploader" accept=".pack" class="form-control" style="height: 32px;">
@@ -385,7 +378,7 @@
                 </div>
 
                 <div style="text-align: center;margin-top:50px;">
-                    <input class="all-btn w3-submit w3-border w3-round-large" type="button" value="Update" onclick='idas_update();'>
+                    <input class="all-btn w3-submit w3-border w3-round-large" type="button" value="<?php echo $text['system_idas_upload_file'];?>" onclick='idas_update();'>
                 </div> 
             </div>
         </div>

@@ -194,7 +194,7 @@ class Miscellaneous{
                 13 => 'step_tar_type',
                 14 => 'step_tar_tor',
                 15 => 'step_tar_ang',
-                //16 => 'step_tar_delay',
+                16 => 'step_tar_delay',
                 17 => 'step_tor_unit',
                 18 => 'fasten_torque',
                 19 => 'fasten_angle',

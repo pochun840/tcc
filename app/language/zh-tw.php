@@ -539,6 +539,10 @@ $text['system_agent_start'] = '開始';
 $text['system_agent_stop'] = '停止';
 $text['system_client_status'] = '客戶端 狀態';
 $text['system_server_status'] = '伺服器 狀態';
+$text['system_agent_ip'] = '代理伺服器IP';
+$text['system_agent_type'] = '代理模式';
+$text['system_idas_current_version'] = '當前 iDAS 版本';
+$text['system_idas_upload_file'] = '上傳檔案';
 
 
 //barcode setting
