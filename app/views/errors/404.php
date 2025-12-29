@@ -361,8 +361,8 @@ a{color:inherit}
         <!-- Right -->
         <div class="terminal">
           <div class="termTitle">
-            <div>diagnostic@idas:~</div>
-            <div class="right" id="countdown">redirect in 6s</div>
+            <div>user@idas:~</div>
+            <div class="right" id="countdown">redirect </div>
           </div>
           <div class="term" id="term">
             <div><span class="ok">[OK]</span> core.php loaded</div>

@@ -19,6 +19,14 @@ class Customize extends Controller
     // 取得所有Jobs
     public function index(){
 
+
+         // 直接顯示 404
+        http_response_code(404);
+        $this->view('errors/404');
+        return;
+        
+
+
         $file = $this->MiscellaneousModel->lang_load();
         if (!empty($file)) {
             include $file;
@@ -28,11 +36,6 @@ class Customize extends Controller
         $job_list = $this->SettingModel->get_job_list_tcc();
         $data_button = $this->MiscellaneousModel->details('customize');
 
-        //echo "<pre>";
-        //print_r($data_button);
-        //echo "</pre>";
-        //die();
-   
         //判斷 csv 是否存在
         $data_csv = $this->load_customize_csv_arrays();
 
@@ -449,16 +452,17 @@ class Customize extends Controller
 
 
     /**
-     * ntcs_data 欄位白名單（依索引對應欄位）
-     * 供 DB 模式以索引安全映射到實際欄位名
+     * tcc 鎖附記錄 欄位白名單（依索引對應欄位）
+     * 供 DB 模式以索引 到實際欄位名
      */
     private static function ntcsColumns(): array {
+
         $columns = [
             "system_sn",
             "data_time",
             "device_type",
             "device_id",
-            "device_sn",
+            "device_name",
             "tool_type",
             "tool_sn",
             "tool_status",
@@ -470,30 +474,30 @@ class Customize extends Controller
             "step_tar_type",
             "step_tar_tor",
             "step_tar_ang",
+            "step_tar_delay",
             "step_tor_unit",
             "fasten_torque",
             "fasten_angle",
-            // "step_tor_unit",
-            // "fasten_torque",
-            // "fasten_angle",
-            // "fasten_time",
-            // "fasten_status",
-            // "error_message",
-            // "count_dir",
-            // "last_screw_count",
-            // "max_screw_count",
-            // "step_rpm",
-            // "step_tool_dir",
-            // "step_hi_tor",
-            // "step_lo_tor",
-            // "step_hi_ang",
-            // "step_lo_ang",
-            // "step_th_mode",
-            // "step_th_tor",
-            // "step_ds_tor",
-            // "step_ds_speed",
-            // "barcode"
+            "fasten_time",
+            "fasten_status",
+            "error_message",
+            "count_dir",
+            "last_screw_count",
+            "max_screw_count",
+            "step_rpm",
+            "step_tool_dir",
+            "step_hi_tor",
+            "step_lo_tor",
+            "step_hi_ang",
+            "step_lo_ang",
+            "step_th_mode",
+            "step_th_tor",
+            "step_ds_tor",
+            "step_ds_speed",
+            "barcode"
         ];
+
+
      
         return $columns;
     }

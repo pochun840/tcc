@@ -515,9 +515,9 @@
               $specialMutex = [
                 0  => range(4165,4166),           // 系統流水號
                 1  => range(4096,4101),           // 時間(Y-M-D H:I:S)
-                2  => [4144],                     // 設備類型
-                3  => '',
-                4  => 
+                2  => [4144],                     // 設備類型(TCC 回傳:9)
+                3  => [4144],                     // 鎖附控制器序號
+                36 => range(4192,4241),           // 條碼
                 //6  => range(4112,4121),           // 鎖附起子型號
                 //2  => range(4102,4111),           // 鎖附控制器序號
                 //36 => range(4192,4241),           // 條碼
@@ -568,43 +568,6 @@
                 //52 => [4260,4261],                // 步驟5角度
 
 
-                /*0  => 'system_sn',
-                1  => 'data_time',
-                2  => 'device_type',
-                3  => 'device_id',
-                4  => 'device_name',
-                5  => 'tool_type',
-                6  => 'tool_sn',
-                7  => 'tool_status',
-                8  => 'job_id',
-                9  => 'job_name',
-                10 => 'seq_id',
-                11 => 'seq_name',
-                12 => 'step_id',
-                13 => 'step_tar_type',
-                14 => 'step_tar_tor',
-                15 => 'step_tar_ang',
-                16 => 'step_tar_delay',
-                17 => 'step_tor_unit',
-                18 => 'fasten_torque',
-                19 => 'fasten_angle',
-                20 => 'fasten_time',
-                21 => 'fasten_status',
-                22 => 'error_message',
-                23 => 'count_dir',
-                24 => 'last_screw_count',
-                25 => 'max_screw_count',
-                26 => 'step_rpm',
-                27 => 'step_tool_dir',
-                28 => 'step_hi_tor',
-                29 => 'step_lo_tor',
-                30 => 'step_hi_ang',
-                31 => 'step_lo_ang',
-                32 => 'step_th_mode',
-                33 => 'step_th_tor',
-                34 => 'step_ds_tor',
-                35 => 'step_ds_speed',
-                36 => 'barcode',*/
 
               ];
 
