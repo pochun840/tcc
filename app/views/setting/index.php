@@ -154,23 +154,34 @@
 
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_delete_database']; ?></div>
-                    <div  class="col t3">
-                        <?php 
-                            if (!empty($data['history_year_arr'])) {
-                                foreach ($data['history_year_arr'] as $key => $val) { ?>
+                    <div class="col t3">
+
+                        <?php if (!empty($data['history_year_arr'])): ?>
+                            <?php foreach ($data['history_year_arr'] as $key => $val): ?>
+                                <label class="year-item" style="margin-right:12px;">
                                     <input type="checkbox"
                                         name="year[]"
-                                        value="<?php echo htmlspecialchars($val); ?>"
+                                        value="<?= htmlspecialchars($val) ?>"
                                         onclick="onlyOne(this)"
-                                        <?php echo ($key === 0) ? 'checked' : ''; ?>>
-                                    <?php echo htmlspecialchars($val); ?>&nbsp;&nbsp;
-                            <?php }
-                            }
-                        ?>
-                        <!-- 刪除按鈕 -->
-                        <button onclick="deleteSelectedFiles()" style="float: right" class="all-btn w3-button w3-border w3-round-large" ><?php echo $text['delete_text']; ?></button>
+                                        <?= ($key === 0) ? 'checked' : '' ?>>
+                                    <?= htmlspecialchars($val) ?>
+                                </label>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+
+                        <button
+                            id="btn-delete-year"
+                            onclick="deleteSelectedFiles()"
+                            style="float: right"
+                            class="all-btn w3-button w3-border w3-round-large">
+                            <?php echo $text['delete_text']; ?>
+                        </button>
+
                     </div>
                 </div>
+
+
+
 
             </div>
 
@@ -390,59 +401,125 @@
         });
     }
 
-    function deleteSelectedFiles(){
 
-        var del_year_id = [];
-        var checkboxes = document.querySelectorAll('input[name="year[]"]:checked');
-        var language = getCookie('language');
+    function deleteSelectedFiles() {
 
-        checkboxes.forEach(function (checkbox) {
-            del_year_id.push(checkbox.value);
-        });
+        const language = getCookie('language') || 'en-us';
+        const texts = (window.i18nAlert && window.i18nAlert[language])
+            ? window.i18nAlert[language]
+            : window.i18nAlert['en-us'];
 
-        if (del_year_id.length > 0) {
-            $.ajax({
-                url: "?url=Settings/delete_files",
-                method: "POST",
-                data: { 
-                    del_year_id: del_year_id
-                },
-               success: function(response) {
-                    var res = JSON.parse(response);
-                    if (res.result === true) {
-                        var res = JSON.parse(response);
-                        const texts = i18nAlert[language] || i18nAlert['en-us'];
+        const checked = document.querySelector('input[name="year[]"]:checked');
+        if (!checked) {
+            popupAlert(texts.noticeTitle, texts.selectYearFirst, texts);
+            return;
+        }
 
-                        if (res.result === true) {
-                            showAlert("successTitle", res.res_msg || texts.successMsg, 3);
-                        } else {
-                            showAlert("errorTitle", res.res_msg || texts.errorMsg, 3);
-                        }
+        const del_year = checked.value;
+        const confirmMsg = texts.deleteConfirmMsg.replace('{year}', del_year);
 
-                        // 將已勾選的 checkbox 與其旁邊的年份一起從畫面上移除
-                        const checkboxes = document.querySelectorAll('input[name="year[]"]:checked');
-                        checkboxes.forEach(function (checkbox) {
-                            // 移除 checkbox 和其後的文字節點與空白
-                            const labelText = checkbox.nextSibling;
-                            if (labelText && labelText.nodeType === Node.TEXT_NODE) {
-                                labelText.remove();
-                            }
-                            checkbox.remove();
-                        });
+        alertify.confirm(
+            texts.deleteConfirmTitle,
+            confirmMsg,
+            function onOK() {
+                // ⭐⭐ 這一行：進入 loading
+                setDeleteLoading(true, texts);
+                doDeleteYear(del_year, checked, texts);
+            },
+            function onCancel() {}
+        ).set('labels', { ok: texts.ok, cancel: texts.cancel });
+    }
 
-                    } else {
-                        //alertify.error("刪除失敗：" + (res.msg || "未知錯誤"));
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("刪除失敗", error);
-                    alertify.error("AJAX 錯誤：" + error);
+
+
+    function doDeleteYear(del_year, checkboxEl, texts) {
+
+        $.ajax({
+            url: "?url=Settings/delete_files",
+            method: "POST",
+            data: { del_year: del_year },
+            success: function (response) {
+
+                let res;
+                try {
+                    res = JSON.parse(response);
+                } catch (e) {
+                    notify("errorTitle", 'Invalid response', texts);
+                    setDeleteLoading(false, texts);
+                    return;
                 }
-            });
+
+                if (res.result === true) {
+
+                    notify("successTitle", res.res_msg || texts.successMsg, texts);
+
+                    checkboxEl.closest('.year-item')
+                        ? checkboxEl.closest('.year-item').remove()
+                        : checkboxEl.remove();
+
+                } else {
+                    notify("errorTitle", res.res_msg || texts.errorMsg, texts);
+                }
+
+                // ⭐⭐ 不論成功失敗都解除
+                setDeleteLoading(false, texts);
+            },
+            error: function (xhr, status, error) {
+                notify("errorTitle", texts.errorMsg, texts);
+                setDeleteLoading(false, texts);
+            }
+        });
+    }
+
+
+
+    function setDeleteLoading(isLoading, texts = {}) {
+
+        const btn = document.getElementById('btn-delete-year');
+        if (!btn) return;
+
+        if (isLoading) {
+            btn.dataset.originText = btn.innerHTML;
+            btn.innerHTML = `
+                <span class="spinner-border spinner-border-sm" style="margin-right:6px;"></span>
+                ${texts.deleting || 'Deleting...'}
+            `;
+            btn.disabled = true;
+            btn.classList.add('disabled');
+            btn.style.opacity = '0.6';
+            btn.style.pointerEvents = 'none';
         } else {
-            alert("請先選擇要刪除的年份");
+            btn.innerHTML = btn.dataset.originText || btn.innerHTML;
+            btn.disabled = false;
+            btn.classList.remove('disabled');
+            btn.style.opacity = '';
+            btn.style.pointerEvents = '';
         }
     }
+
+
+    function notify(typeKey, msg, texts = {}) {
+
+        const isSuccess = (typeKey === 'successTitle');
+
+        const title = isSuccess
+            ? (texts.successTitle || 'Success')
+            : (texts.errorTitle || 'Error');
+
+        if (window.alertify && alertify.alert) {
+            const dlg = alertify.alert(title, msg);
+            dlg.set('labels', { ok: texts.ok || 'OK' });
+            return;
+        }
+
+        // fallback
+        alert(title + "\n" + msg);
+    }
+
+
+
+
+
 
 
 
@@ -1154,3 +1231,43 @@ function fetchSeqList() {
   padding: 0 10px;            /* 可選：增加內距讓數字更穩定 */
 }
 </style>
+
+<script>
+/**
+ * 全域 i18n（Alert / Confirm 專用）
+ * 不依賴後端，不會 undefined
+ */
+window.i18nAlert = {
+    'en-us': {
+        deleteConfirmTitle: 'Confirm Delete',
+        deleteConfirmMsg:   'Are you sure you want to delete database for year {year}?',
+        successMsg:         'Deleted successfully',
+        errorMsg:           'Delete failed',
+        ok:                 'OK',
+        cancel:             'Cancel',
+        selectYearFirst: 'Please select a year to delete.',
+        deleting: 'Deleting...',
+    },
+    'zh-tw': {
+        deleteConfirmTitle: '確認刪除',
+        deleteConfirmMsg:   '確定要刪除 {year} 年的資料嗎？',
+        successMsg:         '刪除成功',
+        errorMsg:           '刪除失敗',
+        ok:                 '確定',
+        cancel:             '取消',
+        selectYearFirst: '請先選擇要刪除的年份',
+        deleting: '刪除中…',
+    },
+    'zh-cn': {
+        deleteConfirmTitle: '确认删除',
+        deleteConfirmMsg:   '确定要删除 {year} 年的数据吗？',
+        successMsg:         '删除成功',
+        errorMsg:           '删除失败',
+        ok:                 '确定',
+        cancel:             '取消',
+        selectYearFirst: '请先选择要删除的年份',
+        deleting: '删除中…',
+    }
+};
+</script>
+

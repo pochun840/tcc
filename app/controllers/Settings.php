@@ -502,41 +502,6 @@ class Settings extends Controller
         echo json_encode(array_values($fileList));
     }
 
-    /*public function delete_files(){
-
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $data = json_decode(file_get_contents("php://input"), true);
-            $filesToDelete = $data["files"];
-
-            if( PHP_OS_FAMILY == 'Linux'){
-                $folderPath = "/var/www/html/database"; // 修改為你的資料夾路徑
-            }else{
-                $folderPath = "../"; // 修改為你的資料夾路徑
-            }
-
-            $result = ["message" => ""];
-
-            foreach ($filesToDelete as $fileName) {
-                $filePath = $folderPath . "/" . $fileName;
-                if (file_exists($filePath) && is_file($filePath)) {
-                    if (unlink($filePath)) {
-                        $result["message"] .= "成功刪除檔案：$fileName\n";
-                        $this->logMessage('delete DB success:'. json_encode($result).'');
-                    } else {
-                        $result["message"] .= "無法刪除檔案：$fileName\n";
-                        $this->logMessage('delete DB fail:'. json_encode($result).'');
-                    }
-                } else {
-                    $result["message"] .= "檔案不存在：$fileName\n";
-                }
-            }
-
-            echo json_encode($result);
-        } else {
-            echo json_encode(["message" => "無效的請求方法"]);
-        }
-
-    }*/
 
     public function firmware_update() //FTP 上傳檔案大小限制 : 500M
     {
@@ -1528,73 +1493,73 @@ class Settings extends Controller
         return $years;
     }
 
-    //取得年份後 用modbus 刪除
+    //取得年份後 刪除
     public function delete_files(){
 
+        // ===== 載入語系 =====
         $file = $this->MiscellaneousModel->lang_load();
-        if(!empty($file)){
+        if (!empty($file)) {
             include $file;
         }
 
-
-        $del_year_id = $_POST['del_year_id'][0];
-        if(empty($del_year_id)){
+        // ===== 取得年份 =====
+        $del_year = $_POST['del_year'] ?? null;
+        if (empty($del_year)) {
             echo json_encode([
-                'result' => false,
+                'result'   => false,
                 'res_type' => 'Error',
-                'res_msg' => 'Tool not disabled'
+                'res_msg'  => $text['delete_text'] . ' ' . ($text['fail'] ?? 'failed')
             ]);
             return;
         }
 
-
-
-        $temp_del_year = $del_year_id[0]; // 只處理第一筆
-        #檢查控制器是否有登入登出
+        // ===== 檢查控制器登入狀態 =====
         $idas_result = $this->get_controller_login();
-
-        // 檢查是否可以刪除（Modbus 狀態檢查）
-        //$device_id = 0;
-        //$unitId = ($device_id >= 1 && $device_id <= 255) ? $device_id : 1;
-        //$idas_result = $this->get_controller_login();
-        
-
-        /*if ($idas_result['result'] != 1) {
+        if ($idas_result != 0) {
             echo json_encode([
-                'result' => false,
+                'result'   => false,
                 'res_type' => 'Error',
-                'res_msg' => 'Tool not disabled'
+                'res_msg'  => $text['delete_text'] . ' ' . ($text['fail'] ?? 'failed')
             ]);
             return;
         }
 
-        // 執行 Modbus 寫入刪除年份
-        $controller_ip = CONTROLLER_IP;
-        $year = array($temp_del_year);
+        // ===== 決定資料夾路徑 =====
+        if (PHP_OS_FAMILY === 'Linux') {
+            $folderPath = '/var/www/html/database';
+        } else {
+            $folderPath = '../';
+        }
 
-        require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
-        $modbus = new ModbusMaster($controller_ip, "TCP");
+        $dbFile = $folderPath . '/data' . intval($del_year) . '.db';
 
-        try {
-            $modbus->port = 502;
-            $modbus->timeout_sec = 10;
-            $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
-
-            $modbus->writeMultipleRegister($device_id, 517, $year, $dataTypes);
-
+        // ===== 檢查檔案是否存在 =====
+        if (!is_file($dbFile)) {
             echo json_encode([
-                'result' => true,
-                'res_type' => 'Success',
-                'res_msg' => $text['delete_text'].$text['success'] 
-            ]);
-        } catch (Exception $e) {
-            echo json_encode([
-                'result' => false,
+                'result'   => false,
                 'res_type' => 'Error',
-                'res_msg' => $text['delete_text'].$text['fail'] 
+                'res_msg'  => $text['delete_text'] . ' ' . ($text['fail'] ?? 'failed')
             ]);
-        }*/
+            return;
+        }
+
+        // ===== 嘗試刪除 =====
+        if (@unlink($dbFile)) {
+            echo json_encode([
+                'result'   => true,
+                'res_type' => 'Success',
+                'res_msg'  => $text['delete_text'] . ' ' . ($text['success'] ?? 'success')
+            ]);
+        } else {
+            echo json_encode([
+                'result'   => false,
+                'res_type' => 'Error',
+                'res_msg'  => $text['delete_text'] . ' ' . ($text['fail'] ?? 'failed')
+            ]);
+        }
     }
+
+
 
 
 
