@@ -488,9 +488,20 @@ class Miscellaneous{
         return isset($unit_map[$index]) ? $unit_map[$index] : null;
     }
 
-    public function batch_convert_grouped_by_unit_chart(array $values, int $inputType) {
+    public function batch_convert_grouped_by_unit_chart(array $values, int $inputType){
+
+        if (empty($values)) {
+            return [
+                "kgf.m"  => [],
+                "N.m"    => [],
+                "kgf.cm" => [],
+                "lbf.in" => [],
+                "cN.m"   => [],
+            ];
+        }
+
         $unit_keys = ["kgf.m", "N.m", "kgf.cm", "lbf.in", "cN.m"];
-        $result = array_fill_keys($unit_keys, []); // 預設空陣列
+        $result = array_fill_keys($unit_keys, []);
 
         foreach ($values as $val) {
             if (!is_numeric($val)) continue;
@@ -504,11 +515,7 @@ class Miscellaneous{
         return $result;
     }
 
-
-
-
-
-
+    
     public function lang_load() {
         $language = $_COOKIE['language'] ?? 'en-us';
         $language = preg_replace('/[^a-zA-Z0-9_-]/', '', $language);
