@@ -5,6 +5,7 @@ class Miscellaneous{
     private $db_data;//devdb tool
     private $dbh;
     private $db_tools;
+    private $db_iDas;
     // 在建構子將 Database 物件實例化
     public function __construct()
     {
@@ -515,7 +516,7 @@ class Miscellaneous{
         return $result;
     }
 
-    
+
     public function lang_load() {
         $language = $_COOKIE['language'] ?? 'en-us';
         $language = preg_replace('/[^a-zA-Z0-9_-]/', '', $language);
