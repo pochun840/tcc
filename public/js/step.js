@@ -1,3 +1,21 @@
+function setToolSpecToUIAndGlobal(tool_maxtorque, tool_mintorque) {
+    const maxV = (tool_maxtorque == null) ? '' : String(tool_maxtorque).trim();
+    const minV = (tool_mintorque == null) ? '' : String(tool_mintorque).trim();
+
+    // 全域保底（你切換目標模式會用到）
+    window.__TOOL_MIN_TOR__ = minV;
+    window.__TOOL_MAX_TOR__ = maxV;
+
+    // DOM（有就寫，沒有就跳過）
+    const elMax = document.getElementById("tool_max_tor");
+    const elMin = document.getElementById("tool_min_tor");
+    if (elMax) elMax.value = maxV;
+    if (elMin) elMin.value = minV;
+}
+
+
+
+
 /* =====================================================
  * Torque unit → precision / EPS
  * ===================================================== */
@@ -609,41 +627,59 @@ function toggleVisibility(targetValue) {
 }
 
 function targetOptChangeHandler() {
-    var target_opt = document.querySelector("select[name='edit_target_opt']").value;
-    handleTargetOptChange(target_opt); 
+    const sel = document.querySelector("select[name='edit_target_opt']");
+    if (!sel) return;
+    handleTargetOptChange(sel.value);
 }
 
 function handleTargetOptChange(target_opt) {
 
-    var rpm = document.getElementById("edit_rpm").value;  
-    var ds_tor = document.getElementById("edit_ds_tor").value;  
-    var ds_speed = document.getElementById("edit_ds_speed").value;  
-    var th_tor = document.getElementById("edit_th_tor").value; 
-    var tor_hi = cleanNumber(document.getElementById("edit_tor_hi").value);
-    var tor_lo = cleanNumber(document.getElementById("edit_tor_lo").value);
-    var ang_hi = document.getElementById("edit_ang_hi").value; 
-    var ang_lo = document.getElementById("edit_ang_lo").value;
+    const rpm       = document.getElementById("edit_rpm")?.value ?? '';
+    const ds_tor    = document.getElementById("edit_ds_tor")?.value ?? '';
+    const ds_speed  = document.getElementById("edit_ds_speed")?.value ?? '';
+    const th_tor    = document.getElementById("edit_th_tor")?.value ?? '';
 
-    var targetTorEl   = document.getElementById("edit_target_tor");
-    var targetAngEl   = document.getElementById("edit_target_ang");
-    var targetDelayEl = document.getElementById("edit_target_delay");
-    var toolMinTor    = document.getElementById("tool_min_tor")?.value;
+    const tor_hi    = cleanNumber(document.getElementById("edit_tor_hi")?.value ?? '');
+    const tor_lo    = cleanNumber(document.getElementById("edit_tor_lo")?.value ?? '');
+    const ang_hi    = document.getElementById("edit_ang_hi")?.value ?? '';
+    const ang_lo    = document.getElementById("edit_ang_lo")?.value ?? '';
 
+    const targetTorEl   = document.getElementById("edit_target_tor");
+    const targetAngEl   = document.getElementById("edit_target_ang");
+    const targetDelayEl = document.getElementById("edit_target_delay");
 
-    // =========================
-    // 目標扭力
-    // =========================
-    if (target_opt == 0) {
-        document.getElementById("edit_target_tor_item").style.display = 'block';
-        document.getElementById("edit_target_ang_item").style.display = 'none';
+    // ⭐⭐⭐ 關鍵：全域變數才是唯一可信來源
+    let toolMinTor = (window.__TOOL_MIN_TOR__ ?? '').toString().trim();
+
+    // DOM 只當備援（不可信）
+    if (!toolMinTor) {
+        toolMinTor = (document.getElementById("tool_min_tor")?.value ?? '').trim();
+    }
+
+    // 最終 fallback（避免空白）
+    const fallbackTor = toolMinTor || tor_lo || '0';
+
+    /* =====================================================
+     * 目標扭力
+     * ===================================================== */
+    if (String(target_opt) === '0') {
+
+        document.getElementById("edit_target_tor_item").style.display   = 'block';
+        document.getElementById("edit_target_ang_item").style.display   = 'none';
         document.getElementById("edit_target_delay_item").style.display = 'none';
 
-        // ⭐ 核心修正：切到目標扭力時，若目前為空白，自動帶入起子扭力下限
-        if (targetTorEl && (targetTorEl.value === '' || targetTorEl.value == null)) {
-            if (toolMinTor !== '' && toolMinTor != null) {
-                targetTorEl.value = toolMinTor;
-            }
+        // ⭐ 第一次補值
+        if (targetTorEl && !targetTorEl.value) {
+            targetTorEl.value = fallbackTor;
         }
+
+        // ⭐ 第二次補值（防 UI 重畫 / re-render）
+        setTimeout(function () {
+            const el = document.getElementById("edit_target_tor");
+            if (el && !el.value) {
+                el.value = fallbackTor;
+            }
+        }, 0);
 
         enableElementById('edit_tor_hi', tor_hi);
         enableElementById('edit_tor_lo', tor_lo);
@@ -659,13 +695,13 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("downshift_ON").checked = true;
     }
 
+    /* =====================================================
+     * 目標角度
+     * ===================================================== */
+    if (String(target_opt) === '1') {
 
-    // =========================
-    // 目標角度
-    // =========================
-    if (target_opt == 1) {
-        document.getElementById("edit_target_ang_item").style.display = 'block';
-        document.getElementById("edit_target_tor_item").style.display = 'none';
+        document.getElementById("edit_target_ang_item").style.display   = 'block';
+        document.getElementById("edit_target_tor_item").style.display   = 'none';
         document.getElementById("edit_target_delay_item").style.display = 'none';
 
         enableElementById('edit_tor_hi', tor_hi);
@@ -682,14 +718,14 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("downshift_OFF").checked = true;
     }
 
+    /* =====================================================
+     * 目標延遲
+     * ===================================================== */
+    if (String(target_opt) === '2') {
 
-    // =========================
-    // 目標延遲
-    // =========================
-    if (target_opt == 2) {
         document.getElementById("edit_target_delay_item").style.display = 'block';
-        document.getElementById("edit_target_tor_item").style.display = 'none';
-        document.getElementById("edit_target_ang_item").style.display = 'none';
+        document.getElementById("edit_target_tor_item").style.display   = 'none';
+        document.getElementById("edit_target_ang_item").style.display   = 'none';
 
         disableElementById('edit_th_tor', th_tor);
         disableElementById('edit_tor_hi', tor_hi);
@@ -706,6 +742,7 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("downshift_OFF").checked = true;
     }
 }
+
 
 
 function setRadioButton_value(radioButtons, value) {

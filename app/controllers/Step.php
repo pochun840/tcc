@@ -278,7 +278,10 @@ class Step extends Controller
             }
         }
         
-        //
+        //取得 起子的 最小扭力 
+        $Tool_Info = $this->ToolModel->GetToolInfo();
+        $min_tor = $Tool_Info['tool_mintorque'];
+
         
         if(isset($_POST['jobid'])){
 
