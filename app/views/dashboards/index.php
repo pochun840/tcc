@@ -138,7 +138,7 @@ function DB_sync_idas(argument) {
                 method: "POST",
                 success: function (response) {
                     var loginStatus = parseInt(response);
-                    if (loginStatus !== 0) {
+                    if (loginStatus == 1) {
                         showAlertAutoClose('Error', errorText.login);
                         return;
                     }
@@ -310,8 +310,14 @@ function DB_sync_idas_load(argument) {
                 url: "?url=Settings/get_controller_login",
                 method: "POST",
                 success: function (response) {
-                    var loginStatus = parseInt(response);
-                    if (loginStatus === 0) {
+                    const loginStatus = Number(String(response).trim());
+
+                    if (!Number.isFinite(loginStatus)) {
+                        showAlertAutoClose('Error', errorText.check); // 無法確認登入狀態
+                        return;
+                    }
+
+                    if (loginStatus != 1) {
                         addOverlay();
                         createProgressDialog(syncingText);
 

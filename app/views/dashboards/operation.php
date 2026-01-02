@@ -106,25 +106,25 @@
 <script>
     // Button Home
 
-    // ============================
-    // 固定 Step 顏色設定
-    // ============================
-    const STEP_COLORS = [
-        '#e53935', // red
-        '#1e88e5', // blue
-        '#43a047', // green
-        '#fb8c00', // orange
-        '#8e24aa', // purple
-        '#00897b', // teal
-        '#6d4c41', // brown
-        '#546e7a'  // gray
-    ];
+        // ============================
+        // 固定 Step 顏色設定
+        // ============================
+        const STEP_COLORS = [
+            '#e53935', // red
+            '#1e88e5', // blue
+            '#43a047', // green
+            '#fb8c00', // orange
+            '#8e24aa', // purple
+            '#00897b', // teal
+            '#6d4c41', // brown
+            '#546e7a'  // gray
+        ];
 
-// 依 step number 取得固定顏色
-function getStepColor(stepNo) {
-    const n = Number(stepNo) || 1;
-    return STEP_COLORS[(n - 1) % STEP_COLORS.length];
-}
+    // 依 step number 取得固定顏色
+    function getStepColor(stepNo) {
+        const n = Number(stepNo) || 1;
+        return STEP_COLORS[(n - 1) % STEP_COLORS.length];
+    }
 
 
 
@@ -549,19 +549,35 @@ function getStepColor(stepNo) {
 
         }
 
+        // === chart=4 座標語系化 ===
+        let xTitle = 'Angle';
+        let yTitle = 'Torque';
+
+        // 使用你既有的語系轉換
+        const t = localizeAxisTitle(language, xTitle, yTitle);
+        xTitle = t.x_title;
+        yTitle = t.y_title;
+
         myChart.setOption({
             tooltip: {
                 trigger: 'axis',
                 formatter: function (params) {
                     if (!params || !params.length) return '';
                     const p = params[0].value;
-                    return `Angle : ${p[0]}<br/>Torque : ${p[1]}`;
+                    return `${xTitle} : ${p[0]}<br/>${yTitle} : ${p[1]}`;
                 }
             },
-            xAxis: { type: 'value', name: 'Angle' },
-            yAxis: { type: 'value', name: 'Torque' },
+            xAxis: {
+                type: 'value',
+                name: xTitle
+            },
+            yAxis: {
+                type: 'value',
+                name: yTitle
+            },
             series
         }, true);
+
     }
 
 

@@ -167,28 +167,37 @@
 
 
 
-    function get_job(argument) {
+    function get_job() {
         $.ajax({
-            url: '?url=Remotes/get_current_job', // 指向服務器端檢查更新的 PHP 腳本
+            url: '?url=Remotes/get_current_job',
             method: 'GET',
-            dataType: "json",
-            beforeSend: function() {
+            dataType: 'json',
+            beforeSend: function () {
                 $('#overlay').removeClass('hidden');
             },
-            success: function(response) {
+            success: function (response) {
                 $('#overlay').addClass('hidden');
-                // 處理服務器返回的響應
-                console.log(response)
-                document.getElementById("current_job_id").value = response.result.jod_id
-                document.getElementById("current_seq_id").value = response.result.seq_id
-                document.getElementById("current_step_id").value = response.result.step_id
-                
+
+                console.log('get_current_job response:', response);
+
+                if (!response || !response.result) {
+                    console.error('Invalid response structure', response);
+                    return;
+                }
+
+                const job = response.result;
+
+                document.getElementById('current_job_id').value  = job.job_id  ?? '';
+                document.getElementById('current_seq_id').value  = job.seq_id  ?? '';
+                document.getElementById('current_step_id').value = job.step_id ?? '';
             },
-            error: function(xhr, status, error) {
+            error: function () {
                 history.go(0);
             }
         });
     }
+
+
 
     function change_job(argument) {
 

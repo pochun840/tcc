@@ -293,38 +293,38 @@ class Jobs extends Controller
    
     }
 
-    public function search_job($jobid){
-        
+
+    public function search_job(){
+
         $jobid = $_POST['jobid'] ?? null;
-        if(!empty($jobid)){
-            $res  = $this->jobModel->search_jobinfo($jobid);
-            
-            $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
-        
-            $res_device = $this->SettingModel->GetControllerInfo();
+        if(empty($jobid)) {
+            return;
+        }
 
-            if (!empty($res_device)) {
-                $step_torque_unit = (int)$res_device['device_torque_unit'];
-                $unit_name_temp =  $unit_arr[$step_torque_unit] ?? '';
+        $res = $this->jobModel->search_jobinfo($jobid);
+
+        $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
+        $res_device = $this->SettingModel->GetControllerInfo();
+
+        if(!empty($res_device)) {
+            $step_torque_unit = (int)$res_device['device_torque_unit'];
+            $unit_name_temp  = $unit_arr[$step_torque_unit] ?? '';
+        }
+
+        if($res['rev_tor_unit'] != (int)$res_device['device_torque_unit']) {
+            $res['tor_unit'] = $unit_name_temp;
+            $rev_th_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res['rev_th_tor'], 1);
+            if (!empty($rev_th_tor_tmp)) {
+                $res['rev_th_tor'] = $rev_th_tor_tmp[$unit_name_temp] ?? $res['rev_th_tor'];
             }
 
-            if($res['rev_tor_unit'] != (int)$res_device['device_torque_unit']){
+        }else{
+            $res['tor_unit'] = $unit_arr[$res['rev_tor_unit']] ?? '';
+        }
 
-                $res['tor_unit'] = $unit_name_temp;
-
-                $rev_th_tor_tmp = $this->MiscellaneousModel->convert_all_torque_units($res['rev_th_tor'],1); 
-                if(!empty($rev_th_tor_tmp)){
-                    $res['rev_th_tor'] = $rev_th_tor_tmp[$unit_name_temp];
-                }
-            }else{
-
-                $unit_name =  $unit_arr[$res['rev_tor_unit']];
-                $res['tor_unit'] = $unit_name;
-            }
-            print_r($res);
-        }       
-    
+        print_r($res);
     }
+
 
     public function check_job_type(){
         $jobid = $_POST['new_jobid'] ?? null;

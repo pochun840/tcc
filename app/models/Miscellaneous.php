@@ -489,9 +489,10 @@ class Miscellaneous{
         return isset($unit_map[$index]) ? $unit_map[$index] : null;
     }
 
-    public function batch_convert_grouped_by_unit_chart(array $values, int $inputType){
 
-        if (empty($values)) {
+    public function batch_convert_grouped_by_unit_chart(?array $values, int $inputType){
+        
+        if (empty($values) || !is_array($values)) {
             return [
                 "kgf.m"  => [],
                 "N.m"    => [],
@@ -515,6 +516,8 @@ class Miscellaneous{
 
         return $result;
     }
+
+
 
 
     public function lang_load() {

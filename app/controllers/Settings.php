@@ -1153,18 +1153,28 @@ class Settings extends Controller
         }
     }
 
+    
 
     public function Import_Config(){
 
         
+        // 載入語系
         $file = $this->MiscellaneousModel->lang_load();
         if (!empty($file)) {
             include $file;
         }
 
-        // 1) 控制器登入狀態檢查（已登入不可匯入）
-        $idas_result = (int)$this->get_controller_login();
-        if ($idas_result === 1) {
+        /* =====================================================
+        * 1) 控制器登入狀態檢查（❗不呼叫 get_controller_login）
+        * ===================================================== */
+        $Controller_Info = $this->ToolModel->GetControllerInfo();
+        $isLogin = 0;
+
+        if (is_array($Controller_Info) && !empty($Controller_Info['user_logIn'])) {
+            $isLogin = (int)$Controller_Info['user_logIn'];
+        }
+
+        if ($isLogin === 1) {
             $this->MiscellaneousModel->generateErrorResponse(
                 'Error',
                 'Controller is logged in. Please log out before importing config.'
@@ -1172,8 +1182,10 @@ class Settings extends Controller
             exit();
         }
 
-        // 2) 檢查是否有上傳檔案
-        if (empty($_FILES) || !isset($_FILES['file'])) {
+        /* =====================================================
+        * 2) 檢查是否有上傳檔案
+        * ===================================================== */
+        if (empty($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
             $this->MiscellaneousModel->generateErrorResponse(
                 'Error',
                 'No file uploaded.'
@@ -1181,79 +1193,157 @@ class Settings extends Controller
             exit();
         }
 
-        // 3) 副檔名必須是 .cfg
-        $file_name = $_FILES['file']['name'];
-        $file_info = pathinfo($file_name);
-
-        if (
-            !isset($file_info['extension']) ||
-            strtolower($file_info['extension']) !== 'cfg'
-        ) {
+        /* =====================================================
+        * 3) 副檔名必須是 .zip
+        * ===================================================== */
+        $fileInfo = pathinfo($_FILES['file']['name']);
+        if (!isset($fileInfo['extension']) || strtolower($fileInfo['extension']) !== 'zip') {
             $this->MiscellaneousModel->generateErrorResponse(
                 'Error',
-                'The uploaded file is not a .cfg file.'
+                'The uploaded file is not a .zip file.'
             );
             exit();
         }
 
-        // 4) Linux：將 cfg 內容覆蓋寫入 tcccon.db，並複製成 idas_data.db
-        if (PHP_OS_FAMILY === 'Linux') {
+        /* =====================================================
+        * 4) OS 檢查
+        * ===================================================== */
+        if (PHP_OS_FAMILY !== 'Linux') {
+            $this->MiscellaneousModel->generateErrorResponse(
+                'Error',
+                'Unsupported operating system.'
+            );
+            exit();
+        }
 
-            $targetDir   = '/var/www/html/database/';
-            $mainDb      = $targetDir . 'tcccon.db';
-            $backupDb    = $targetDir . 'idas_data.db';
+        /* =====================================================
+        * 5) DB paths
+        * ===================================================== */
+        $dbDir     = '/var/www/html/database/';
+        $tccconDb  = $dbDir . 'tcccon.db';
+        $tccdevDb  = $dbDir . 'tccdev.db';
+        $idasDb    = $dbDir . 'idas_data.db';
 
-            // 確保目錄存在
-            if (!is_dir($targetDir)) {
-                @mkdir($targetDir, 0777, true);
-            }
+        $bakCon = $dbDir . 'tcccon.db.bak';
+        $bakDev = $dbDir . 'tccdev.db.bak';
 
-            // 先寫入 tcccon.db
-            $result = move_uploaded_file($_FILES['file']['tmp_name'], $mainDb);
+        @mkdir($dbDir, 0777, true);
 
-            if ($result) {
+        /* =====================================================
+        * 6) Temp dirs
+        * ===================================================== */
+        $tmpBase  = sys_get_temp_dir() . '/import_cfg_' . uniqid();
+        $zipPath = $tmpBase . '/upload.zip';
+        $unzipDir = $tmpBase . '/unzipped';
 
-                // 權限處理
-                @chmod($mainDb, 0666);
+        @mkdir($tmpBase, 0777, true);
+        @mkdir($unzipDir, 0777, true);
 
-                // 再複製一份成 idas_data.db
-                if (!@copy($mainDb, $backupDb)) {
-                    $this->logMessage('Import cfg success, but copy to idas_data.db failed');
+        $cleanupAndExit = function ($type, $msg) use ($tmpBase) {
+            @exec('rm -rf ' . escapeshellarg($tmpBase));
+            $this->MiscellaneousModel->generateErrorResponse($type, $msg);
+            exit();
+        };
 
-                    $this->MiscellaneousModel->generateErrorResponse(
-                        'Error',
-                        'Config imported, but failed to create idas_data.db.'
-                    );
-                    exit();
-                }
+        if (!move_uploaded_file($_FILES['file']['tmp_name'], $zipPath)) {
+            $cleanupAndExit('Error', 'Failed to move uploaded file.');
+        }
 
-                @chmod($backupDb, 0666);
+        /* =====================================================
+        * 7) 解壓 ZIP
+        * ===================================================== */
+        $zip = new ZipArchive();
+        if ($zip->open($zipPath) !== true) {
+            $cleanupAndExit('Error', 'Failed to open zip file.');
+        }
+        $zip->extractTo($unzipDir);
+        $zip->close();
 
-                $this->logMessage('Import cfg -> tcccon.db & idas_data.db success');
+        /* =====================================================
+        * 8) 尋找 tcccon.db / tccdev.db
+        * ===================================================== */
+        $foundCon = null;
+        $foundDev = null;
 
-                $this->MiscellaneousModel->generateErrorResponse(
-                    'Success',
-                    'Config imported successfully.'
-                );
-                exit();
+        $rii = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($unzipDir, FilesystemIterator::SKIP_DOTS)
+        );
 
-            } else {
-                $this->MiscellaneousModel->generateErrorResponse(
-                    'Error',
-                    'Config import failed.'
-                );
-                exit();
+        foreach ($rii as $f) {
+            $name = strtolower($f->getFilename());
+            if ($name === 'tcccon.db') $foundCon = $f->getPathname();
+            if ($name === 'tccdev.db') $foundDev = $f->getPathname();
+        }
+
+        if (!$foundCon || !$foundDev) {
+            $cleanupAndExit('Error', 'tcccon.db or tccdev.db not found in zip file.');
+        }
+
+        /* =====================================================
+        * 9) 驗證 SQLite
+        * ===================================================== */
+        foreach (['tcccon.db' => $foundCon, 'tccdev.db' => $foundDev] as $name => $path) {
+            $fp = fopen($path, 'rb');
+            $header = fread($fp, 16);
+            fclose($fp);
+            if (strpos($header, 'SQLite format 3') !== 0) {
+                $cleanupAndExit('Error', "$name is not a valid SQLite database.");
             }
         }
 
-        // 非 Linux（保險）
+        /* =====================================================
+        * 10) 備份舊 DB
+        * ===================================================== */
+        if (is_file($tccconDb)) @copy($tccconDb, $bakCon);
+        if (is_file($tccdevDb)) @copy($tccdevDb, $bakDev);
+
+        /* =====================================================
+        * 11) 原子性寫入（copy → rename）
+        * ===================================================== */
+        $tmpCon = $tccconDb . '.new';
+        $tmpDev = $tccdevDb . '.new';
+
+        if (!copy($foundCon, $tmpCon)) {
+            $cleanupAndExit('Error', 'Failed to copy tcccon.db.');
+        }
+        if (!copy($foundDev, $tmpDev)) {
+            $cleanupAndExit('Error', 'Failed to copy tccdev.db.');
+        }
+
+        if (!rename($tmpCon, $tccconDb)) {
+            $cleanupAndExit('Error', 'Failed to replace tcccon.db.');
+        }
+        if (!rename($tmpDev, $tccdevDb)) {
+            $cleanupAndExit('Error', 'Failed to replace tccdev.db.');
+        }
+
+        @chmod($tccconDb, 0666);
+        @chmod($tccdevDb, 0666);
+
+        /* =====================================================
+        * 12) 同步 idas_data.db
+        * ===================================================== */
+        if (!copy($tccconDb, $idasDb)) {
+            $cleanupAndExit('Error', 'Failed to create idas_data.db.');
+        }
+        @chmod($idasDb, 0666);
+
+        /* =====================================================
+        * 13) Cleanup
+        * ===================================================== */
+        @exec('rm -rf ' . escapeshellarg($tmpBase));
+
+        $this->logMessage('Import config success (zip: tcccon.db + tccdev.db)');
+
+        /* =====================================================
+        * 14) Success
+        * ===================================================== */
         $this->MiscellaneousModel->generateErrorResponse(
-            'Error',
-            'Unsupported operating system.'
+            'Success',
+            'Configuration imported successfully. System settings and tool data have been updated.'
         );
         exit();
     }
-
 
 
 
@@ -1457,14 +1547,21 @@ class Settings extends Controller
 
     //判斷控制器是否有登出
     public function get_controller_login(){
+        header('Content-Type: text/plain; charset=utf-8');
+
         $Controller_Info = $this->ToolModel->GetControllerInfo();
-        if (!empty($Controller_Info) && isset($Controller_Info['user_logIn'])) {
-            return (int)$Controller_Info['user_logIn'];
+
+        // 預設：查不到就當沒人登入
+        $login = 0;
+
+        if (is_array($Controller_Info) && array_key_exists('user_logIn', $Controller_Info)) {
+            $login = (int)$Controller_Info['user_logIn'];
         }
 
-        // 預設值（查不到或沒資料）
-        return 0;
+        echo $login; // ★ 一定要 echo
+        exit;
     }
+
 
 
     public function get_history_year() {
@@ -1514,8 +1611,7 @@ class Settings extends Controller
         }
 
         // ===== 檢查控制器登入狀態 =====
-        $idas_result = $this->get_controller_login();
-        if ($idas_result != 0) {
+        if ($this->is_controller_logged_in()) {
             echo json_encode([
                 'result'   => false,
                 'res_type' => 'Error',
@@ -1558,6 +1654,19 @@ class Settings extends Controller
             ]);
         }
     }
+
+    // 只給 Controller 內部用，不 echo、不 exit
+    private function is_controller_logged_in(): bool
+    {
+        $info = $this->ToolModel->GetControllerInfo();
+
+        if (is_array($info) && array_key_exists('user_logIn', $info)) {
+            return ((int)$info['user_logIn'] !== 0);
+        }
+
+        return false; // 查不到 → 當作沒人登入
+    }
+
 
 
 

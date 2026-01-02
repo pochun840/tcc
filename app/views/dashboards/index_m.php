@@ -342,7 +342,7 @@ function DB_sync_idas(argument) {
                 method: "POST",
                 success: function (response) {
                     var loginStatus = parseInt(response);
-                    if (loginStatus !== 0) {
+                    if (loginStatus == 1) {
                         showAlertAutoClose('Error', errorText.login);
                         return;
                     }

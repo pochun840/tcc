@@ -687,105 +687,120 @@
         }
     }
 
+
     function edit_step_save() {
 
-        // 防止重複處理的標誌
+        // 防止重複處理
         if (isProcessing) return;
-        isProcessing = true; // 設置為處理中
+        isProcessing = true;
 
-        var target_opt = document.getElementById('edit_target_opt').value;
-        var target_tor = document.getElementById('edit_target_tor').value;
-        var target_ang = document.getElementById('edit_target_ang').value;
-        var target_delay = document.getElementById('edit_target_delay').value;
-        var tor_hi = document.getElementById('edit_tor_hi').value;
-        var tor_lo = document.getElementById('edit_tor_lo').value;
-        var ang_hi = document.getElementById('edit_ang_hi').value;
-        var ang_lo = document.getElementById('edit_ang_lo').value;
-        var rpm = document.getElementById('edit_rpm').value;
-        var direction = document.querySelector('input[name="edit_direction"]:checked')?.value || 0;
-        var th_mode = document.querySelector('input[name="edit_th_mode"]:checked').value;
-        var th_tor = document.getElementById('edit_th_tor').value;
-        var ds_tor = document.getElementById('edit_ds_tor').value;
-        var ds_speed = document.getElementById('edit_ds_speed').value;
-        var record_ang = 0; //紀錄 累計角度
-        var tor_unit = '<?php echo $data['step_torque_unit'];?>'; 
-        var pnf_set  = document.querySelector('input[name="edit_pnf_set"]:checked')?.value || 0;
+        // =========================
+        // 安全取值工具
+        // =========================
+        const val = (id) => document.getElementById(id)?.value ?? '';
+        const radioVal = (name, def = 0) =>
+            document.querySelector(`input[name="${name}"]:checked`)?.value ?? def;
 
+        // =========================
+        // 取值（全部防呆）
+        // =========================
+        var target_opt   = val('edit_target_opt');
+        var target_tor   = val('edit_target_tor');
+        var target_ang   = val('edit_target_ang');
+        var target_delay = val('edit_target_delay');
 
+        var tor_hi = val('edit_tor_hi');
+        var tor_lo = val('edit_tor_lo');
+        var ang_hi = val('edit_ang_hi');
+        var ang_lo = val('edit_ang_lo');
 
-        //驗證
+        var rpm       = val('edit_rpm');
+        var direction = radioVal('edit_direction', 0);
+        var th_mode   = radioVal('edit_th_mode', 0);
+        var th_tor    = val('edit_th_tor');
+
+        var ds_tor    = val('edit_ds_tor');
+        var ds_speed  = val('edit_ds_speed');
+
+        var record_ang = 0;
+        var tor_unit   = '1';
+        var pnf_set    = radioVal('edit_pnf_set', 0);
+
+        // =========================
+        // 驗證
+        // =========================
         let check = input_check_editstep();
-        if (check) {
-            // 顯示加載動畫
-            document.getElementById('spinner').style.display = 'block';
+        if (!check) {
+            isProcessing = false;
+            return;
+        }
 
-            $.ajax({
-                url: "?url=Step/edit_step",
-                method: "POST",
-                data: {
-                    jobid: jobid,
-                    seqid: seqid,
-                    stepid: stepid,
-                    target_opt: target_opt,
-                    target_tor: target_tor,
-                    target_ang: target_ang,
-                    target_delay: target_delay,
-                    tor_hi: tor_hi,
-                    tor_lo: tor_lo,
-                    ang_hi: ang_hi,
-                    ang_lo: ang_lo,
-                    rpm: rpm,
-                    direction: direction,
-                    th_mode: th_mode,
-                    th_tor: th_tor,
-                    ds_tor: ds_tor,
-                    ds_speed: ds_speed,
-                    record_ang: record_ang,
-                    tor_unit: tor_unit,
-                    pnf_set: pnf_set
-                },
-                success: function(response) {
-                    var responseData = JSON.parse(response);
-                    // 延遲 1000 毫秒後隱藏加載動畫，並顯示 alertify 彈跳視窗
-                    setTimeout(function() {
-                        // 隱藏加載動畫
-                        document.getElementById('spinner').style.display = 'none';
+        // 顯示 loading
+        document.getElementById('spinner').style.display = 'block';
 
-                        // 顯示 alertify 彈跳視窗
-                        alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                            // 只刷新一次頁面
-                            if (!window.pageRefreshed) {
-                                window.pageRefreshed = true; // 防止無限重複刷新
-                                history.go(0);
-                            }
-                        });
+        $.ajax({
+            url: "?url=Step/edit_step",
+            method: "POST",
+            data: {
+                jobid,
+                seqid,
+                stepid,
+                target_opt,
+                target_tor,
+                target_ang,
+                target_delay,
+                tor_hi,
+                tor_lo,
+                ang_hi,
+                ang_lo,
+                rpm,
+                direction,
+                th_mode,
+                th_tor,
+                ds_tor,
+                ds_speed,
+                record_ang,
+                tor_unit,
+                pnf_set
+            },
+            success: function (response) {
+                var responseData = JSON.parse(response);
 
-                        // 在 3 秒後自動關閉 alertify 彈跳視窗
-                        setTimeout(function() {
-                            alertify.closeAll();  // 關閉所有開啟的 alertify 彈跳視窗
+                setTimeout(function () {
+                    document.getElementById('spinner').style.display = 'none';
+
+                    alertify.alert(
+                        responseData.res_type,
+                        responseData.res_msg,
+                        function () {
                             if (!window.pageRefreshed) {
                                 window.pageRefreshed = true;
                                 history.go(0);
                             }
-                        }, 3000); 
-                    }, 1000); // 延遲 1000 毫秒
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX request failed:", status, error);
-                    // 顯示錯誤信息
-                    document.getElementById('spinner').style.display = 'none';
-                    alertify.alert('Error', 'There was an issue with the request. Please try again later.');
-                },
-                complete: function() {
-                    isProcessing = false; // 處理結束
-                }
-            });
-        } else {
-            isProcessing = false; // 如果驗證不通過，重置處理狀態
-        }
+                        }
+                    );
 
+                    setTimeout(function () {
+                        alertify.closeAll();
+                        if (!window.pageRefreshed) {
+                            window.pageRefreshed = true;
+                            history.go(0);
+                        }
+                    }, 3000);
 
+                }, 1000);
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+                document.getElementById('spinner').style.display = 'none';
+                alertify.alert('Error', 'There was an issue with the request.');
+            },
+            complete: function () {
+                isProcessing = false;
+            }
+        });
     }
+
 
     function copy_step_by_id(stepid){
         var stepid_new  = '<?php echo $data['step_id']?>';

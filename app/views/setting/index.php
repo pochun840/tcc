@@ -128,7 +128,7 @@
                 <div class="row t2">
                     <div class="col-3 t1"><?php echo $text['system_import_config'];?>:</div>
                     <div class="col t3">
-                        <input type="file" id="import-file-uploader" data-target="import-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round">
+                        <input type="file" id="import-file-uploader" data-target="import-file-uploader" accept=".zip" class="t3 w3-submit w3-border w3-round">
                         <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Import_SystemConfig();"><?php echo $text['system_import_config'];?></button>
                     </div>        
                 </div>          
@@ -671,66 +671,184 @@ function updateCurrentTime(serverDateTime) {
 
 
 
-
 function Import_SystemConfig() {
-    var import_file = document.getElementById("import-file-uploader").files[0];
-    var form = new FormData();
-    form.append("file", import_file);
-    var url = '?url=Settings/Import_Config';
-    
-    // 語言設置
-    var language = getCookie('language') || 'en';
-    var text_info, title, confirm_text;
-    
-    if(language == "zh-cn") {
-        text_info = '您確定要導入資料庫檔案嗎？';
-        title = '導入配置';
-        confirm_text = '您確定要進行此操作嗎？';
-    } else if(language == "zh-tw") {
-        text_info = '您確定要導入資料庫檔案嗎？';
-        title = '導入配置';
-        confirm_text = '您確定要進行此操作嗎？';
-    } else {
-        text_info = 'Are you sure you want to import the database file?';
-        title = 'Import Configuration';
-        confirm_text = 'Are you sure you want to perform this action?';
+
+    const fileInput = document.getElementById("import-file-uploader");
+    const import_file = fileInput?.files?.[0];
+    const spinner = document.getElementById('spinner');
+
+    const language = (getCookie('language') || 'en-us').toLowerCase();
+
+    const I18N = {
+        title: {
+            'zh-tw': '匯入系統設定',
+            'zh-cn': '导入系统配置',
+            'en': 'Import System Configuration',
+            'en-us': 'Import System Configuration'
+        },
+        noFile: {
+            'zh-tw': '請先選擇要匯入的設定檔（.zip）。',
+            'zh-cn': '请先选择要导入的配置文件（.zip）。',
+            'en': 'Please select a configuration file (.zip) first.',
+            'en-us': 'Please select a configuration file (.zip) first.'
+        },
+        mustLogout: {
+            'zh-tw': '控制器目前為登入狀態，請先於控制器登出後再匯入設定。',
+            'zh-cn': '控制器目前为登录状态，请先在控制器登出后再导入配置。',
+            'en': 'Controller is logged in. Please log out on the controller before importing.',
+            'en-us': 'Controller is logged in. Please log out on the controller before importing.'
+        },
+        confirmMsg: {
+            'zh-tw':
+                '此操作將覆蓋目前的系統設定與工具資料，並立即生效。\n\n是否確定要匯入設定檔？',
+            'zh-cn':
+                '此操作将覆盖当前系统设置与工具资料，并立即生效。\n\n是否确定要导入配置文件？',
+            'en':
+                'This action will overwrite current system settings and tool data, and will take effect immediately.\n\nAre you sure you want to import?',
+            'en-us':
+                'This action will overwrite current system settings and tool data, and will take effect immediately.\n\nAre you sure you want to import?'
+        },
+        serverBad: {
+            'zh-tw': '伺服器回應格式異常。',
+            'zh-cn': '服务器返回格式异常。',
+            'en': 'Invalid server response.',
+            'en-us': 'Invalid server response.'
+        },
+        importFailed: {
+            'zh-tw': '匯入失敗，請稍後再試。',
+            'zh-cn': '导入失败，请稍后再试。',
+            'en': 'Import failed. Please try again later.',
+            'en-us': 'Import failed. Please try again later.'
+        },
+        reloadAsk: {
+            'zh-tw': '匯入完成，是否立即重新整理頁面？',
+            'zh-cn': '导入完成，是否立即刷新页面？',
+            'en': 'Import completed. Reload the page now?',
+            'en-us': 'Import completed. Reload the page now?'
+        }
+    };
+
+    const T = (k) => I18N[k]?.[language] || I18N[k]?.['en-us'] || '';
+    const title = T('title');
+
+    /* ===============================
+     * 0) 沒選檔案直接擋
+     * =============================== */
+    if (!import_file) {
+        alertify.closeAll();
+        alertify.alert(title, T('noFile'));
+        return;
     }
 
-    if (import_file) {
-        alertify.confirm(confirm_text, function(result) {
-            if (result) {
-                document.getElementById('spinner').style.display = 'block'; // 顯示加載動畫
+    /* ===============================
+     * 安全解析登入狀態（不動後端）
+     * =============================== */
+    function parseLoginStatus(raw) {
+        if (typeof raw !== 'string') return 0;
+        const cleaned = raw.replace(/\uFEFF/g, '').trim();
+        const m = cleaned.match(/([01])\s*$/);
+        return m ? parseInt(m[1], 10) : 0;
+    }
 
-                $.ajax({
-                    url: url,
-                    method: "POST",
-                    data: form,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        var responseData = JSON.parse(response);
+    /* ===============================
+     * 1) 檢查控制器是否登出
+     * =============================== */
+    $.ajax({
+        url: "?url=Settings/get_controller_login",
+        method: "POST",
+        success: function (response) {
 
-                        setTimeout(function() {
-                            document.getElementById('spinner').style.display = 'none';
-                            alertify.alert(responseData.res_type, responseData.res_msg, function() {
-                                history.go(0); 
-                            });
+            const loginStatus = parseLoginStatus(response);
 
-                            setTimeout(function() {
-                                alertify.closeAll(); 
-                            }, 3000);
-                        }, 1000);
+            // ★ 關掉所有 dialog & spinner，避免 UI 阻塞
+            alertify.closeAll();
+            if (spinner) spinner.style.display = 'none';
+
+            if (loginStatus === 1) {
+                alertify.alert('Error', T('mustLogout'));
+                return;
+            }
+
+            /* ===============================
+             * 2) 二次確認（最穩 confirm 寫法）
+             * =============================== */
+            alertify
+                .confirm(
+                    T('confirmMsg'),
+                    function () {
+                        // OK
+                        startImport();
                     },
-                    error: function(xhr, status, error) {
-                        alertify.alert('Error', 'An error occurred while importing the configuration file.');
+                    function () {
+                        // Cancel：什麼都不做
                     }
-                });
+                )
+                .set('title', title);
+        },
+        error: function () {
+            alertify.closeAll();
+            alertify.alert('Error', T('importFailed'));
+        }
+    });
+
+    /* ===============================
+     * 3) 真正執行匯入
+     * =============================== */
+    function startImport() {
+
+        const form = new FormData();
+        form.append("file", import_file);
+
+        if (spinner) spinner.style.display = 'block';
+
+        $.ajax({
+            url: '?url=Settings/Import_Config',
+            method: "POST",
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function (resp) {
+                if (spinner) spinner.style.display = 'none';
+
+                let data;
+                try {
+                    data = JSON.parse(resp);
+                } catch (e) {
+                    alertify.closeAll();
+                    alertify.alert('Error', T('serverBad'));
+                    return;
+                }
+
+                alertify.closeAll();
+
+                if (data.res_type === 'Success') {
+                    alertify
+                        .confirm(
+                            (data.res_msg || '') + '\n\n' + T('reloadAsk'),
+                            function () {
+                                location.reload();
+                            },
+                            function () {}
+                        )
+                        .set('title', title);
+                } else {
+                    alertify.alert(
+                        data.res_type || 'Error',
+                        data.res_msg || T('importFailed')
+                    );
+                }
+            },
+            error: function () {
+                if (spinner) spinner.style.display = 'none';
+                alertify.closeAll();
+                alertify.alert('Error', T('importFailed'));
             }
         });
-    } else {
-        alertify.alert(title, text_info); // 如果 import_file 沒有值，顯示提示訊息
     }
 }
+
+
+
 
 
 function StatusCheck(action) {

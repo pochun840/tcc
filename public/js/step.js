@@ -1,3 +1,148 @@
+/* =====================================================
+ * Torque unit → precision / EPS
+ * ===================================================== */
+const TORQUE_UNIT_RULES = {
+    'N.m':    { precision: 3, eps: 0.0005 },
+    'kgf.cm': { precision: 2, eps: 0.005  },
+    'kgf.m':  { precision: 3, eps: 0.0005 },
+    'lbf.in': { precision: 2, eps: 0.005  },
+    'cN.m':   { precision: 1, eps: 0.05   }
+};
+
+// 取得目前扭力單位（依你系統實際顯示來源）
+function getTorqueUnit() {
+    return document.getElementById('torque_unit_text')?.value
+        || document.getElementById('tor_unit_label')?.innerText
+        || 'N.m';
+}
+
+function getTorqueRule() {
+    const unit = getTorqueUnit();
+    return TORQUE_UNIT_RULES[unit] || { precision: 3, eps: 0.0005 };
+}
+
+/* =====================================================
+ * i18n（可擴充）
+ * ===================================================== */
+const I18N = {
+    'format_hint': {
+        'zh-tw': '已依扭力單位自動限制小數位',
+        'zh-cn': '已根据扭力单位自动限制小数位',
+        'en-us': 'Decimal places are limited by torque unit'
+    }
+};
+
+function getLang() {
+    return (window.getLangAndUnit?.().lang
+        || window.getCookieSafe?.('language')
+        || 'zh-tw').toLowerCase();
+}
+
+function t(key) {
+    const lang = getLang();
+    return I18N[key]?.[lang] || I18N[key]?.['en-us'] || key;
+}
+
+
+/* =====================================================
+ * Format helpers
+ * ===================================================== */
+function formatByPrecision(value, precision) {
+    if (value === '' || value === null) return '';
+
+    let v = String(value).replace(/[^\d.]/g, '');
+
+    // 只允許一個小數點
+    const parts = v.split('.');
+    if (parts.length > 2) {
+        v = parts[0] + '.' + parts.slice(1).join('');
+    }
+
+    // ".5" → "0.5"
+    if (v.startsWith('.')) {
+        v = '0' + v;
+    }
+
+    // 裁切小數位（不 round，避免誤差）
+    if (v.includes('.')) {
+        const [i, d] = v.split('.');
+        v = i + '.' + d.slice(0, precision);
+    }
+
+    return v;
+}
+
+/* =====================================================
+ * Bind auto-format to torque input
+ * ===================================================== */
+function bindTorqueAutoFormat(input) {
+    if (!input) return;
+
+    input.addEventListener('input', function () {
+        const { precision } = getTorqueRule();
+        const oldVal = this.value;
+        const newVal = formatByPrecision(oldVal, precision);
+
+        if (oldVal !== newVal) {
+            this.value = newVal;
+        }
+    });
+
+    // blur 時補齊格式（1. → 1.000）
+    input.addEventListener('blur', function () {
+        const { precision } = getTorqueRule();
+        if (this.value === '') return;
+
+        let num = Number(this.value);
+        if (!Number.isFinite(num)) return;
+
+        this.value = num.toFixed(precision);
+    });
+}
+
+/* =====================================================
+ * Init torque auto format
+ * ===================================================== */
+function initTorqueAutoFormat(prefix = '') {
+
+    const ids = [
+        prefix + 'target_tor',
+        prefix + 'tor_hi',
+        prefix + 'tor_lo',
+        prefix + 'th_tor',
+        prefix + 'ds_tor'
+    ];
+
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) bindTorqueAutoFormat(el);
+    });
+}
+
+/* =====================================================
+ * Reformat when unit changes
+ * ===================================================== */
+function reformatAllTorqueInputs(prefix = '') {
+    const { precision } = getTorqueRule();
+
+    const ids = [
+        prefix + 'target_tor',
+        prefix + 'tor_hi',
+        prefix + 'tor_lo',
+        prefix + 'th_tor',
+        prefix + 'ds_tor'
+    ];
+
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.value !== '') {
+            el.value = formatByPrecision(el.value, precision);
+        }
+    });
+}
+
+
+
 function create_step() {
     document.getElementById('newstep').style.display = 'block';
 
@@ -474,82 +619,94 @@ function handleTargetOptChange(target_opt) {
     var ds_tor = document.getElementById("edit_ds_tor").value;  
     var ds_speed = document.getElementById("edit_ds_speed").value;  
     var th_tor = document.getElementById("edit_th_tor").value; 
-    var tor_hi =  cleanNumber(document.getElementById("edit_tor_hi").value);
-    var tor_lo =  cleanNumber(document.getElementById("edit_tor_lo").value);
+    var tor_hi = cleanNumber(document.getElementById("edit_tor_hi").value);
+    var tor_lo = cleanNumber(document.getElementById("edit_tor_lo").value);
     var ang_hi = document.getElementById("edit_ang_hi").value; 
     var ang_lo = document.getElementById("edit_ang_lo").value;
 
-    var target_tor = document.getElementById("edit_target_tor").value;
-    var target_ang = document.getElementById("edit_target_ang").value;
-    var target_delay = document.getElementById("edit_target_delay").value;
+    var targetTorEl   = document.getElementById("edit_target_tor");
+    var targetAngEl   = document.getElementById("edit_target_ang");
+    var targetDelayEl = document.getElementById("edit_target_delay");
+    var toolMinTor    = document.getElementById("tool_min_tor")?.value;
 
 
+    // =========================
+    // 目標扭力
+    // =========================
     if (target_opt == 0) {
         document.getElementById("edit_target_tor_item").style.display = 'block';
         document.getElementById("edit_target_ang_item").style.display = 'none';
         document.getElementById("edit_target_delay_item").style.display = 'none';
 
+        // ⭐ 核心修正：切到目標扭力時，若目前為空白，自動帶入起子扭力下限
+        if (targetTorEl && (targetTorEl.value === '' || targetTorEl.value == null)) {
+            if (toolMinTor !== '' && toolMinTor != null) {
+                targetTorEl.value = toolMinTor;
+            }
+        }
 
-        enableElementById('edit_tor_hi',tor_hi);
-        enableElementById('edit_tor_lo',tor_lo);
-        enableElementById('edit_ang_hi',ang_hi);
-        enableElementById('edit_ang_lo',ang_lo);
-        enableElementById('edit_rpm',rpm);
-        enableElementById('edit_ds_tor',ds_tor);
-        enableElementById('edit_ds_speed',ds_speed);
-        enableElementById('edit_th_tor',th_tor);
+        enableElementById('edit_tor_hi', tor_hi);
+        enableElementById('edit_tor_lo', tor_lo);
+        enableElementById('edit_ang_hi', ang_hi);
+        enableElementById('edit_ang_lo', ang_lo);
+        enableElementById('edit_rpm', rpm);
+        enableElementById('edit_ds_tor', ds_tor);
+        enableElementById('edit_ds_speed', ds_speed);
+        enableElementById('edit_th_tor', th_tor);
         enableElementByName("edit_direction");
         enableElementByName("edit_th_mode");
 
         document.getElementById("downshift_ON").checked = true;
-  
-
     }
 
+
+    // =========================
+    // 目標角度
+    // =========================
     if (target_opt == 1) {
         document.getElementById("edit_target_ang_item").style.display = 'block';
         document.getElementById("edit_target_tor_item").style.display = 'none';
         document.getElementById("edit_target_delay_item").style.display = 'none';
 
-        enableElementById('edit_tor_hi',tor_hi);
-        enableElementById('edit_tor_lo',tor_lo);
-        enableElementById('edit_ang_hi',ang_hi);
-        enableElementById('edit_ang_lo',ang_lo);
-        disableElementById('edit_ds_tor',ds_tor);
-        disableElementById('edit_ds_speed',ds_speed);
-        disableElementById('edit_th_tor',th_tor);
+        enableElementById('edit_tor_hi', tor_hi);
+        enableElementById('edit_tor_lo', tor_lo);
+        enableElementById('edit_ang_hi', ang_hi);
+        enableElementById('edit_ang_lo', ang_lo);
+        disableElementById('edit_ds_tor', ds_tor);
+        disableElementById('edit_ds_speed', ds_speed);
+        disableElementById('edit_th_tor', th_tor);
         disableElementsByName("edit_th_mode");
         enableElementByName("edit_direction");
-        enableElementById('edit_rpm',rpm);
+        enableElementById('edit_rpm', rpm);
 
         document.getElementById("downshift_OFF").checked = true;
-  
     }
 
+
+    // =========================
+    // 目標延遲
+    // =========================
     if (target_opt == 2) {
         document.getElementById("edit_target_delay_item").style.display = 'block';
         document.getElementById("edit_target_tor_item").style.display = 'none';
         document.getElementById("edit_target_ang_item").style.display = 'none';
 
-        disableElementById('edit_th_tor',th_tor);
-        disableElementById('edit_tor_hi',tor_hi);
-        disableElementById('edit_tor_lo',tor_lo);
-        disableElementById('edit_ang_hi',ang_hi);
-        disableElementById('edit_ang_lo',ang_lo);
+        disableElementById('edit_th_tor', th_tor);
+        disableElementById('edit_tor_hi', tor_hi);
+        disableElementById('edit_tor_lo', tor_lo);
+        disableElementById('edit_ang_hi', ang_hi);
+        disableElementById('edit_ang_lo', ang_lo);
 
-        disableElementById('edit_rpm',rpm);
-        disableElementById('edit_ds_tor',ds_tor);
-        disableElementById('edit_ds_speed',ds_speed);
+        disableElementById('edit_rpm', rpm);
+        disableElementById('edit_ds_tor', ds_tor);
+        disableElementById('edit_ds_speed', ds_speed);
         disableElementsByName("edit_th_mode");
         disableElementsByName("edit_direction");
 
         document.getElementById("downshift_OFF").checked = true;
-
-
     }
-
-    
 }
+
 
 function setRadioButton_value(radioButtons, value) {
     radioButtons.forEach(function(button) {
@@ -760,105 +917,142 @@ function checkStepAndHandleDownshift(jobid, seqid, onSuccessCallback) {
 // 核心表單檢查邏輯
 function input_check_core(prefix, step_id = '') {
 
-    // 目標模式：0=Torque, 1=Angle, 2=Delay
+    /* =====================================================
+     * 語系 / 工具
+     * ===================================================== */
+    const getLang = () =>
+        (window.getLangAndUnit?.().lang
+            || window.getCookieSafe?.('language')
+            || 'zh-tw').toLowerCase();
+
+    const LANG = getLang();
+
+    const MSG = {
+        torque_cross: {
+            'zh-tw': 'LoTorque < 目標Torque < HiTorque',
+            'zh-cn': 'LoTorque < 目标Torque < HiTorque',
+            'en-us': 'LoTorque < Target Torque < HiTorque'
+        },
+        angle_cross: {
+            'zh-tw': '角度設定需符合：LA < 目標角度 < HA',
+            'zh-cn': '角度设定需符合：LA < 目标角度 < HA',
+            'en-us': 'Angle must satisfy: LA < Target Angle < HA'
+        }
+    };
+
+    const t = (key) => MSG[key]?.[LANG] || MSG[key]?.['en-us'] || key;
+
+    const alertMsg = (title, msg, focusEl) => {
+        if (window.alertify?.alert) {
+            alertify.alert(title, msg, () => {
+                try { focusEl?.focus(); focusEl?.select?.(); } catch {}
+            });
+        } else {
+            alert(msg);
+        }
+    };
+
+    /* =====================================================
+     * EPS / Precision（依單位）
+     * ===================================================== */
+    const TORQUE_UNIT_RULES = {
+        'N.m':    { precision: 3, eps: 0.0005 },
+        'kgf.cm': { precision: 2, eps: 0.005  },
+        'kgf.m':  { precision: 3, eps: 0.0005 },
+        'lbf.in': { precision: 2, eps: 0.005  },
+        'cN.m':   { precision: 1, eps: 0.05   }
+    };
+
+    const getTorqueUnit = () =>
+        document.getElementById('torque_unit_text')?.value
+        || document.getElementById('tor_unit_label')?.innerText
+        || 'N.m';
+
+    const getTorqueRule = () =>
+        TORQUE_UNIT_RULES[getTorqueUnit()] || { precision: 3, eps: 0.0005 };
+
+    const lt = (a, b, eps) => a < b - eps;
+
+    /* =====================================================
+     * 基本資料
+     * ===================================================== */
     const target_opt = document.getElementById(prefix + "target_opt")?.value;
     const stepOption = document.getElementById(prefix + "StepOption")?.value;
 
-    // Step ID
     step_id = prefix === "edit_"
         ? document.getElementById("edit_step_id")?.value?.trim() || ""
         : document.getElementById("add_step_id")?.value?.trim() || "";
 
-    // 工具參數
-    const maxTorque = parseTorqueValue('tool_max_tor');
-    const minTorque = parseTorqueValue('tool_min_tor');
+    const targetTorque = parseFloat(document.getElementById(prefix + 'target_tor')?.value);
+    const targetAngle  = parseInt(document.getElementById(prefix + 'target_ang')?.value, 10);
+    const torLo        = parseFloat(document.getElementById(prefix + 'tor_lo')?.value);
+    const torHi        = parseFloat(document.getElementById(prefix + 'tor_hi')?.value);
+    const angLo        = parseInt(document.getElementById(prefix + 'ang_lo')?.value, 10);
+    const angHi        = parseInt(document.getElementById(prefix + 'ang_hi')?.value, 10);
 
-    let Tool_Max_RPM = parseFloat(document.getElementById('tool_max_rpm')?.value || 0);
-    let Tool_Min_RPM = parseFloat(document.getElementById('tool_min_rpm')?.value || 0);
-    let tor_hi_unified = parseFloat(document.getElementById('tool_maxtorque_unified')?.value || 0);
-
-    let Tool_Max_Torque = maxTorque.str;
-    let Tool_Min_Torque = minTorque.display;
-
-    // Step 1 RPM 特例
-    if (step_id === "1") {
-        Tool_Min_RPM = 50;
-    }
-
-    const isDownshiftOff = document.getElementById(prefix + "downshift_OFF")?.checked || false;
-
-    const target_torque = parseFloat(document.getElementById(prefix + 'target_tor')?.value || 0);
-    const target_angle  = parseInt(document.getElementById(prefix + 'target_ang')?.value || 0);
-    const ang_lo_val    = parseInt(document.getElementById(prefix + 'ang_lo')?.value || 0);
-
-    let conditions = [];
-
-    /* =======================
-       TORQUE MODE
-    ======================= */
+    /* =====================================================
+     * Torque Cross Check
+     * ===================================================== */
     if (target_opt === "0") {
 
-        conditions.push(
-            { id: prefix + 'target_tor', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max: Tool_Max_Torque },
-            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: Tool_Min_Torque, max: tor_hi_unified },
-            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified > 0 ? tor_hi_unified - 1 : 0 },
-            { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
-        );
-    }
+        if (
+            Number.isFinite(torLo) &&
+            Number.isFinite(targetTorque) &&
+            Number.isFinite(torHi)
+        ) {
+            const { eps } = getTorqueRule();
 
-    /* =======================
-       ANGLE MODE
-    ======================= */
-    else if (target_opt === "1") {
+            if (!(lt(torLo, targetTorque, eps) && lt(targetTorque, torHi, eps))) {
 
-        conditions.push(
-            { id: prefix + 'target_ang', pattern: /^\d{1,5}$/, min: 1, max: 30600 },
-            { id: prefix + 'tor_hi', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: target_torque, max: tor_hi_unified },
-            { id: prefix + 'tor_lo', pattern: /^\d{1,5}(\.\d{1,5})?$/, min: 0, max: tor_hi_unified > 0 ? tor_hi_unified - 1 : 0 },
-            { id: prefix + 'rpm', pattern: /^\d{0,4}$/, min: Tool_Min_RPM, max: Tool_Max_RPM }
-        );
-    }
+                const loEl = document.getElementById(prefix + 'tor_lo');
+                const taEl = document.getElementById(prefix + 'target_tor');
+                const hiEl = document.getElementById(prefix + 'tor_hi');
 
-    /* =======================
-       ANG_HI / ANG_LO（共用）
-    ======================= */
-    let angHiBase = null;
+                loEl?.classList.add('is-invalid');
+                taEl?.classList.add('is-invalid');
+                hiEl?.classList.add('is-invalid');
 
-    if (stepOption === "2") {            // Torque
-        angHiBase = target_angle;
-    } else if (stepOption === "1") {     // Angle
-        angHiBase = ang_lo_val;
-    }
-
-    if (angHiBase !== null) {
-        conditions.push(
-            { id: prefix + 'ang_lo', pattern: /^\d{1,5}$/, min: 0, max: 30600 },
-            { id: prefix + 'ang_hi', pattern: /^\d{1,5}$/, min: angHiBase + 1, max: 30600 }
-        );
-    }
-
-    /* =======================
-       DELAY MODE
-    ======================= */
-    if (target_opt === "2") {
-        conditions.push(
-            { id: prefix + 'target_delay', pattern: /^\d{1,5}(\.\d{1})?$/, min: 0.1, max: 9.9 }
-        );
-    }
-
-    /* =======================
-       VALIDATE
-    ======================= */
-    let isFormValid = true;
-
-    conditions.forEach(cfg => {
-        const el = document.getElementById(cfg.id);
-        if (el && !validateInput(el, cfg.pattern, cfg.min, cfg.max)) {
-            isFormValid = false;
+                alertMsg(
+                    t('torque_cross'),
+                    `${t('torque_cross')}\n\nLo=${torLo}\nTarget=${targetTorque}\nHi=${torHi}`,
+                    taEl
+                );
+                return false;
+            }
         }
-    });
+    }
 
-    return isFormValid;
+    /* =====================================================
+     * Angle Cross Check
+     * ===================================================== */
+    if (target_opt === "1") {
+
+        if (
+            Number.isFinite(angLo) &&
+            Number.isFinite(targetAngle) &&
+            Number.isFinite(angHi)
+        ) {
+            if (!(angLo < targetAngle && targetAngle < angHi)) {
+
+                const loEl = document.getElementById(prefix + 'ang_lo');
+                const taEl = document.getElementById(prefix + 'target_ang');
+                const hiEl = document.getElementById(prefix + 'ang_hi');
+
+                loEl?.classList.add('is-invalid');
+                taEl?.classList.add('is-invalid');
+                hiEl?.classList.add('is-invalid');
+
+                alertMsg(
+                    t('angle_cross'),
+                    `${t('angle_cross')}\n\nLA=${angLo}\nTarget=${targetAngle}\nHA=${angHi}`,
+                    taEl
+                );
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 
