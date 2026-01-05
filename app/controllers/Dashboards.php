@@ -11,8 +11,8 @@ class Dashboards extends Controller
     private $sequenceModel;
 
     // 在建構子中將 Post 物件（Model）實例化
-    public function __construct()
-    {
+    public function __construct(){
+
         $this->DashboardModel = $this->model('Dashboard');
         $this->AdminModel = $this->model('Admin');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
@@ -51,129 +51,138 @@ class Dashboards extends Controller
 
     }
 
-    // operation即時面板
+
+    // operation 即時面板
     public function operation(){
 
         $isMobile = $this->isMobileCheck();
 
+        /* =============================
+        * 基本設定
+        * ============================= */
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
 
-        // 控制器扭力單位
         $res_device = $this->SettingModel->GetControllerInfo();
         $step_torque_unit = !empty($res_device)
             ? (int)$res_device['device_torque_unit']
             : 0;
 
-        // 最新一筆鎖附資料
-        $first_data = $this->get_current_data();
+        /* =============================
+        * 即時狀態（顯示用）
+        * ============================= */
+        $first_data   = $this->get_current_data();
+        $has_realtime = !empty($first_data);
 
-        // 同步 CSV（給 chart=4 用）
         $this->auto_fix_and_sync_csv();
         $this->cleanCsvKeepLast10Core();
 
-        // 整理狀態顯示
-        if(!empty($first_data)){
-
+        if ($has_realtime) {
             $first_data['status_explain'] =
                 $status_arr[$first_data['fasten_status']] ?? '';
 
-            if ($first_data['fasten_status'] == "4") {
-                $first_data['fasten_status_bg'] = 'green';
-            } elseif ($first_data['fasten_status'] == "5" || $first_data['fasten_status'] == "6") {
-                $first_data['fasten_status_bg'] = '#FFCC00';
-            } else {
-                $first_data['fasten_status_bg'] = 'red';
-            }
+            $first_data['fasten_status_bg'] =
+                ($first_data['fasten_status'] == 4) ? 'green' :
+                (in_array($first_data['fasten_status'], [5, 6]) ? '#FFCC00' : 'red');
 
-            $step_tor_unit_tmp = (int)$first_data['step_tor_unit'];
-            if ($step_tor_unit_tmp == $step_torque_unit) {
-                $first_data['status_unit_explain'] =
-                    $unit_arr[$first_data['step_tor_unit']] ?? '';
-            } else {
-                $first_data['status_unit_explain'] =
-                    $unit_arr[$step_torque_unit] ?? '';
-            }
+            $unit_idx = (int)$first_data['step_tor_unit'];
+            $first_data['status_unit_explain'] =
+                $unit_arr[$unit_idx] ?? ($unit_arr[$step_torque_unit] ?? '');
         }
 
-        // chart mode（只允許 1~4）
+        /* =============================
+        * chart mode
+        * ============================= */
         $chart_mode = isset($_GET['chart']) ? (int)$_GET['chart'] : 1;
-        if ($chart_mode < 1 || $chart_mode > 4) {
-            $chart_mode = 1;
-        }
+        if ($chart_mode < 1 || $chart_mode > 4) $chart_mode = 1;
 
-        // chart menu / title
         $chart_menu_arr = $this->MiscellaneousModel->details('chart_menu');
         $chart_mode_arr = $this->MiscellaneousModel->details('chart_mode');
         $echart_name    = explode("/", $chart_mode_arr[$chart_mode]);
 
-        // -----------------------------
-        // chart 資料（1~3 用）
-        // -----------------------------
-        $temp_chart = [];
+        /* =============================
+        * 統一 chart payload
+        * ============================= */
+        $chart_payload = ['xAxis' => [], 'series' => []];
+        $has_csv = false;
 
-        if ($chart_mode != 4) {
+        /* =============================
+        * 取得最新 CSV（一次處理路徑）
+        * ============================= */
+        $latest_csv = $this->getLatestCsvFromPublicFtp();
 
-            // X 軸資料
-            $x_val = $this->DashboardModel->get_csv_first_column($chart_mode);
-            if (!empty($x_val)) {
-                $x_val = array_slice($x_val, 1);
-            }
-
-            // CSV 資料
-            $csvdata_arr = $this->DashboardModel->get_info($chart_mode);
-
-            if (!empty($csvdata_arr)) {
-
-                $unit_name = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit);
-
-                $chart_temp = $this->MiscellaneousModel->batch_convert_grouped_by_unit_chart($csvdata_arr, 1);
-
-                $csvdata_arr = $chart_temp[$unit_name] ?? [];
-            }
-
-            if (!empty($csvdata_arr)) {
-
-                // 移除表頭
-                $csvdata_arr = array_slice($csvdata_arr, 1);
-
-                $temp_chart = $this->ChartData(
-                    $chart_mode,
-                    $csvdata_arr,
-                    $chart_mode,
-                    $x_val
-                );
+        if (!empty($latest_csv)) {
+            if (strpos($latest_csv, '/') === false) {
+                $latest_csv = '/var/www/html/idas/public/ftp/' . $latest_csv;
+            } elseif (strpos($latest_csv, '/idas/public/ftp/') === 0) {
+                $latest_csv = '/var/www/html' . $latest_csv;
             }
         }
 
-        // 若無鎖附資料，圖表清空
-        if (empty($first_data)) {
-            $temp_chart = [];
+        /* =============================
+        * 共用 CSV parser（chart 1~4）
+        * ============================= */
+        if (!empty($latest_csv) && is_file($latest_csv)) {
+
+            $rows = file($latest_csv, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            if ($rows && count($rows) > 1) {
+
+                array_shift($rows); // remove header
+
+                // 欄位 mapping
+                // col 0: time/index
+                // col 1: torque
+                // col 2: angle
+                // col 3: rpm
+                $x_col = ($chart_mode == 4) ? 2 : 0;
+                $y_col = 1;
+                if ($chart_mode == 2) $y_col = 2;
+                if ($chart_mode == 3) $y_col = 3;
+
+                $xAxis = [];
+                $yData = [];
+
+                foreach ($rows as $line) {
+
+                    $delim = (strpos($line, "\t") !== false) ? "\t" : ",";
+                    $cols  = explode($delim, $line);
+
+                    if (!isset($cols[$x_col], $cols[$y_col])) continue;
+                    if (!is_numeric($cols[$x_col]) || !is_numeric($cols[$y_col])) continue;
+
+                    $xAxis[] = (float)$cols[$x_col];
+                    $yData[] = (float)$cols[$y_col];
+                }
+
+                if (!empty($xAxis) && !empty($yData)) {
+                    $chart_payload['xAxis'] = $xAxis;
+                    $chart_payload['series'][] = [
+                        'name' => $echart_name[0] ?? 'Data',
+                        'data' => $yData
+                    ];
+                    $has_csv = true;
+                }
+            }
         }
 
-        // -----------------------------
-        // chart=4 專用：最新 CSV
-        // -----------------------------
-        $latest_csv = '';
-        if ($chart_mode == 4) {
-            $latest_csv = $this->getLatestCsvFromPublicFtp();
-        }
-
-        // view data
+        /* =============================
+        * View data
+        * ============================= */
         $data = [
             'isMobile'       => $isMobile,
-            'chart_info'     => $temp_chart,   // chart 1~3 用
-            'echart_name'    => $echart_name,
+            'chart_payload'  => $chart_payload,
             'chart_mode'     => $chart_mode,
-            'chart_menu_arr'=> $chart_menu_arr,
-            'latest_csv'     => $latest_csv    // chart=4 CSV-only
+            'echart_name'    => $echart_name,
+            'chart_menu_arr' => $chart_menu_arr,
+            'has_csv'        => $has_csv,
+            'has_realtime'   => $has_realtime,
+            'first_data'     => $first_data,
         ];
 
-        if ($isMobile) {
-            $this->view('dashboards/operation_m', $data);
-        } else {
-            $this->view('dashboards/operation', $data);
-        }
+        $this->view(
+            $isMobile ? 'dashboards/operation_m' : 'dashboards/operation',
+            $data
+        );
     }
 
 
@@ -230,9 +239,7 @@ class Dashboards extends Controller
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
         
-    
-   
-    
+
         // 根據 system_sn 取得最新資料
         $first_data = $this->DataModel->get_new_info($system_sn); 
     
