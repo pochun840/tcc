@@ -162,10 +162,7 @@ function reformatAllTorqueInputs(prefix = '') {
 function create_step() {
     document.getElementById('newstep').style.display = 'block';
 
-    // 套用 tool_min_tor 的小數格式
-    //const tool_min_tor_raw = document.getElementById('tool_min_tor').value || "0";
-    //const decimalPlaces = (tool_min_tor_raw.split('.')[1] || "").length; // 判斷幾位小數
-    //const tool_min_tor = parseFloat(tool_min_tor_raw).toFixed(decimalPlaces);
+ 
 
     const tool_min_tor_raw = document.getElementById('tool_min_tor').value || "0";
     //const tool_min_tor = parseFloat(tool_min_tor_raw); // ✅ 自動去掉多餘的 0
@@ -967,11 +964,14 @@ function checkStepAndHandleDownshift(jobid, seqid, onSuccessCallback) {
     });
 }
 
-// 核心表單檢查邏輯
+
+// =====================================================
+// 核心表單檢查邏輯（FINAL CLEAN VERSION）
+// =====================================================
 function input_check_core(prefix, step_id = '') {
 
     /* =====================================================
-     * 語系 / 工具
+     * 語系
      * ===================================================== */
     const getLang = () =>
         (window.getLangAndUnit?.().lang
@@ -982,54 +982,64 @@ function input_check_core(prefix, step_id = '') {
 
     const MSG = {
 
-        /* ===============================
-        * Torque（扭力）
-        * =============================== */
-
+        /* ========== Torque ========== */
         torque_cross: {
             'zh-tw': '目標扭力必須大於最小扭力、小於最大扭力',
             'zh-cn': '目标扭力必须大于最小扭力、小于最大扭力',
             'en-us': 'Target torque must be greater than the minimum torque and less than the maximum torque'
         },
+        torque_lo_hi: {
+            'zh-tw': '扭力下限必須小於扭力上限',
+            'zh-cn': '扭力下限必须小于扭力上限',
+            'en-us': 'Torque low limit must be less than torque high limit'
+        },
 
-        /* ===============================
-        * Angle（角度）
-        * =============================== */
-
+        /* ========== Angle ========== */
         angle_cross: {
             'zh-tw': '目標角度必須大於角度下限、小於角度上限',
             'zh-cn': '目标角度必须大于角度下限、小于角度上限',
             'en-us': 'Target angle must be greater than the minimum angle and less than the maximum angle'
         },
-
         angle_lo_range: {
             'zh-tw': '角度下限必須介於 0 ～ 30600',
             'zh-cn': '角度下限必须介于 0 ～ 30600',
             'en-us': 'Minimum angle must be between 0 and 30600'
         },
-
         angle_hi_range: {
             'zh-tw': '角度上限必須介於 0 ～ 30600',
             'zh-cn': '角度上限必须介于 0 ～ 30600',
             'en-us': 'Maximum angle must be between 0 and 30600'
         },
-
         angle_lo_hi: {
             'zh-tw': '角度下限必須小於角度上限',
             'zh-cn': '角度下限必须小于角度上限',
             'en-us': 'Minimum angle must be less than the maximum angle'
-        }
+        },
 
+        /* ========== Downshift / Threshold ========== */
+        th_tor_range: {
+            'zh-tw': '門檻扭力必須介於 ({min} ~ {max})',
+            'zh-cn': '门槛扭力必须介于 ({min} ~ {max})',
+            'en-us': 'Threshold torque must be between ({min} ~ {max})'
+        },
+        ds_tor_range: {
+            'zh-tw': '降速點扭力必須介於 ({min} ~ {max})',
+            'zh-cn': '降速点扭力必须介于 ({min} ~ {max})',
+            'en-us': 'Downshift torque must be between ({min} ~ {max})'
+        }
     };
 
+    const t = (k) => MSG[k]?.[LANG] || MSG[k]?.['en-us'] || k;
+    const tf = (k, v = {}) => {
+        let s = t(k);
+        for (const key in v) s = s.replaceAll(`{${key}}`, v[key]);
+        return s;
+    };
 
-
-    const t = (key) => MSG[key]?.[LANG] || MSG[key]?.['en-us'] || key;
-
-    const alertMsg = (title, msg, focusEl) => {
+    const alertMsg = (title, msg, el) => {
         if (window.alertify?.alert) {
             alertify.alert(title, msg, () => {
-                try { focusEl?.focus(); focusEl?.select?.(); } catch {}
+                try { el?.focus(); el?.select?.(); } catch {}
             });
         } else {
             alert(msg);
@@ -1037,152 +1047,113 @@ function input_check_core(prefix, step_id = '') {
     };
 
     /* =====================================================
-     * EPS / Precision（依單位）
+     * Torque 精度
      * ===================================================== */
-    const TORQUE_UNIT_RULES = {
-        'N.m':    { precision: 3, eps: 0.0005 },
-        'kgf.cm': { precision: 2, eps: 0.005  },
-        'kgf.m':  { precision: 3, eps: 0.0005 },
-        'lbf.in': { precision: 2, eps: 0.005  },
-        'cN.m':   { precision: 1, eps: 0.05   }
+    const TORQUE_EPS = {
+        'N.m': 0.0005,
+        'kgf.cm': 0.005,
+        'kgf.m': 0.0005,
+        'lbf.in': 0.005,
+        'cN.m': 0.05
     };
 
-    const getTorqueUnit = () =>
+    const unit =
         document.getElementById('torque_unit_text')?.value
         || document.getElementById('tor_unit_label')?.innerText
         || 'N.m';
 
-    const getTorqueRule = () =>
-        TORQUE_UNIT_RULES[getTorqueUnit()] || { precision: 3, eps: 0.0005 };
-
-    const lt = (a, b, eps) => a < b - eps;
+    const eps = TORQUE_EPS[unit] ?? 0.0005;
 
     /* =====================================================
-     * 基本資料
+     * 模式判斷
      * ===================================================== */
-    const target_opt = document.getElementById(prefix + "target_opt")?.value;
-
-    step_id = prefix === "edit_"
-        ? document.getElementById("edit_step_id")?.value?.trim() || ""
-        : document.getElementById("add_step_id")?.value?.trim() || "";
-
-    const targetTorque = parseFloat(document.getElementById(prefix + 'target_tor')?.value);
-    const targetAngle  = parseInt(document.getElementById(prefix + 'target_ang')?.value, 10);
-    const torLo        = parseFloat(document.getElementById(prefix + 'tor_lo')?.value);
-    const torHi        = parseFloat(document.getElementById(prefix + 'tor_hi')?.value);
-    const angLo        = parseInt(document.getElementById(prefix + 'ang_lo')?.value, 10);
-    const angHi        = parseInt(document.getElementById(prefix + 'ang_hi')?.value, 10);
-
-    const hasAngleInput =
-        Number.isFinite(angLo) ||
-        Number.isFinite(angHi) ||
-        Number.isFinite(targetAngle);
+    const target_opt = document.getElementById(prefix + 'target_opt')?.value;
 
     /* =====================================================
-     * Angle Range Check (0 ~ 30600)
+     * Angle 模式（target_opt === '1'）
      * ===================================================== */
-    if (hasAngleInput) {
+    if (target_opt === '1') {
 
-        const loEl = document.getElementById(prefix + 'ang_lo');
-        const hiEl = document.getElementById(prefix + 'ang_hi');
+        const elTar = document.getElementById(prefix + 'target_ang');
+        const elLo  = document.getElementById(prefix + 'ang_lo');
+        const elHi  = document.getElementById(prefix + 'ang_hi');
 
-        if (Number.isFinite(angLo) && (angLo < 0 || angLo > 30600)) {
-            loEl?.classList.add('is-invalid');
-            alertMsg(t('angle_lo_range'), t('angle_lo_range'), loEl);
+        const tar = parseInt(elTar?.value, 10);
+        const lo  = parseInt(elLo?.value, 10);
+        const hi  = parseInt(elHi?.value, 10);
+
+        if (Number.isFinite(lo) && (lo < 0 || lo > 30600)) {
+            alertMsg(t('angle_lo_range'), t('angle_lo_range'), elLo);
             return false;
         }
 
-        if (Number.isFinite(angHi) && (angHi < 0 || angHi > 30600)) {
-            hiEl?.classList.add('is-invalid');
-            alertMsg(t('angle_hi_range'), t('angle_hi_range'), hiEl);
+        if (Number.isFinite(hi) && (hi < 0 || hi > 30600)) {
+            alertMsg(t('angle_hi_range'), t('angle_hi_range'), elHi);
             return false;
         }
+
+        if (Number.isFinite(lo) && Number.isFinite(hi) && lo >= hi) {
+            alertMsg(t('angle_lo_hi'), t('angle_lo_hi'), elLo);
+            return false;
+        }
+
+        if (Number.isFinite(tar) && Number.isFinite(hi) && tar >= hi) {
+            alertMsg(t('angle_cross'), t('angle_cross'), elTar);
+            return false;
+        }
+
+        if (Number.isFinite(tar) && Number.isFinite(lo) && tar <= lo) {
+            alertMsg(t('angle_cross'), t('angle_cross'), elTar);
+            return false;
+        }
+
+        return true;
     }
 
     /* =====================================================
-     * Angle Lo/Hi Relation Check (LA < HA)
+     * Torque + Downshift（target_opt === '0'）
      * ===================================================== */
-    if (hasAngleInput && Number.isFinite(angLo) && Number.isFinite(angHi)) {
+    if (target_opt === '0') {
 
-        if (!(angLo < angHi)) {
+        const elTar = document.getElementById(prefix + 'target_tor');
+        const tar   = parseFloat(elTar?.value);
 
-            const loEl = document.getElementById(prefix + 'ang_lo');
-            const hiEl = document.getElementById(prefix + 'ang_hi');
-
-            loEl?.classList.add('is-invalid');
-            hiEl?.classList.add('is-invalid');
-
-            alertMsg(
-                t('angle_lo_hi'),
-                `${t('angle_lo_hi')}\n`,
-                loEl
-            );
-            return false;
-        }
-    }
-
-    /* =====================================================
-     * Angle Cross Check (LA < Target < HA)
-     * ===================================================== */
-    if (target_opt === "1" && hasAngleInput) {
+        const toolMin = parseFloat(document.getElementById('tool_min_tor')?.value);
+        const toolMax = parseFloat(document.getElementById('tool_max_tor')?.value);
 
         if (
-            Number.isFinite(angLo) &&
-            Number.isFinite(targetAngle) &&
-            Number.isFinite(angHi)
+            Number.isFinite(tar) &&
+            Number.isFinite(toolMin) &&
+            Number.isFinite(toolMax) &&
+            (tar < toolMin - eps || tar > toolMax + eps)
         ) {
+            alertMsg(t('torque_cross'), t('torque_cross'), elTar);
+            return false;
+        }
 
-            if (!(angLo < targetAngle && targetAngle < angHi)) {
+        if (document.getElementById('downshift_ON')?.checked) {
 
-                const loEl = document.getElementById(prefix + 'ang_lo');
-                const taEl = document.getElementById(prefix + 'target_ang');
-                const hiEl = document.getElementById(prefix + 'ang_hi');
+            const elTh = document.getElementById(prefix + 'th_tor');
+            const elDs = document.getElementById(prefix + 'ds_tor');
 
-                loEl?.classList.add('is-invalid');
-                taEl?.classList.add('is-invalid');
-                hiEl?.classList.add('is-invalid');
+            const th = parseFloat(elTh?.value);
+            const ds = parseFloat(elDs?.value);
 
-                alertMsg(
-                    t('angle_cross'),
-                    `${t('angle_cross')}\n`,
-                    taEl
-                );
+            const minStr = (0).toFixed(3);
+            const maxStr = Number.isFinite(toolMax) ? toolMax.toFixed(3) : '';
+
+            if (Number.isFinite(th) && (th < 0 - eps || th > toolMax + eps)) {
+                alertMsg('Torque', tf('th_tor_range', { min: minStr, max: maxStr }), elTh);
+                return false;
+            }
+
+            if (Number.isFinite(ds) && (ds < 0 - eps || ds > toolMax + eps)) {
+                alertMsg('Torque', tf('ds_tor_range', { min: minStr, max: maxStr }), elDs);
                 return false;
             }
         }
-    }
 
-    /* =====================================================
-     * Torque Cross Check
-     * ===================================================== */
-    if (target_opt === "0") {
-
-        if (
-            Number.isFinite(torLo) &&
-            Number.isFinite(targetTorque) &&
-            Number.isFinite(torHi)
-        ) {
-
-            const { eps } = getTorqueRule();
-
-            if (!(lt(torLo, targetTorque, eps) && lt(targetTorque, torHi, eps))) {
-
-                const loEl = document.getElementById(prefix + 'tor_lo');
-                const taEl = document.getElementById(prefix + 'target_tor');
-                const hiEl = document.getElementById(prefix + 'tor_hi');
-
-                loEl?.classList.add('is-invalid');
-                taEl?.classList.add('is-invalid');
-                hiEl?.classList.add('is-invalid');
-
-                alertMsg(
-                    t('torque_cross'),
-                    `${t('torque_cross')}\n`,
-                    taEl
-                );
-                return false;
-            }
-        }
+        return true;
     }
 
     return true;
