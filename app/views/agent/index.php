@@ -6,10 +6,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // 如果你一定要固定用 UTC+8，而不是用瀏覽器時區：
+
+    // 固定用 UTC+8
     function getNowPlus8() {
         const now = new Date();
-        // 取得 UTC 毫秒 + 8 小時
         const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
         return new Date(utc + 8 * 60 * 60 * 1000);
     }
@@ -19,17 +19,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateDateTime() {
-        const now = getNowPlus8(); // 如果要用瀏覽器自己的時區，可改成 new Date()
+        const now = getNowPlus8(); // 若改用瀏覽器時區：new Date()
 
-        const year  = now.getFullYear();
-        const month = pad2(now.getMonth() + 1);
-        const day   = pad2(now.getDate());
+        const year   = now.getFullYear();
+        const month  = pad2(now.getMonth() + 1);
+        const day    = pad2(now.getDate());
 
         const hour   = pad2(now.getHours());
         const minute = pad2(now.getMinutes());
+        const second = pad2(now.getSeconds()); // ✅ 秒數
 
         const dateStr = `${year}/${month}/${day}`;
-        const timeStr = `${hour} : ${minute}`;
+        const timeStr = `${hour} : ${minute} : ${second}`; // ✅ 加秒數
 
         const dayEl  = document.getElementById('day');
         const timeEl = document.getElementById('time');
@@ -38,10 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (timeEl) timeEl.textContent = 'Time: ' + timeStr;
     }
 
-    // 先立刻更新一次
     updateDateTime();
-    // 之後每 1 分鐘更新一次（要每秒改成 1000 也可以）
-    setInterval(updateDateTime, 60 * 1000);
+    setInterval(updateDateTime, 1000); // ✅ 每秒更新
 });
 </script>
 
@@ -55,10 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 
     <div style="margin-top: 10px">
-        <div id="menu">
-            <a id="bnt1" onclick="OpenButton('agent')"><?php echo $text['agent_title'];?></a>
-        </div>
-
         <div id="Agent_Display" class="agent-display" style="margin-top:18px">
             <div class="table-scroll" id="style-Agent">
                 <table id="data-table" class="container2" role="table">

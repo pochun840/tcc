@@ -966,7 +966,7 @@ function checkStepAndHandleDownshift(jobid, seqid, onSuccessCallback) {
 
 
 // =====================================================
-// 核心表單檢查邏輯（FINAL CLEAN VERSION）
+// 核心表單檢查邏輯
 // =====================================================
 function input_check_core(prefix, step_id = '') {
 
@@ -983,22 +983,33 @@ function input_check_core(prefix, step_id = '') {
     const MSG = {
 
         /* ========== Torque ========== */
+        
         torque_cross: {
-            'zh-tw': '目標扭力必須大於最小扭力、小於最大扭力',
-            'zh-cn': '目标扭力必须大于最小扭力、小于最大扭力',
-            'en-us': 'Target torque must be greater than the minimum torque and less than the maximum torque'
+            'zh-tw': '目標扭力超出範圍（{min} ～ {max}）',
+            'zh-cn': '目标扭力超出范围（{min} ～ {max}）',
+            'en-us': 'Target torque is out of range ({min} ~ {max})'
         },
         torque_lo_hi: {
             'zh-tw': '扭力下限必須小於扭力上限',
             'zh-cn': '扭力下限必须小于扭力上限',
             'en-us': 'Torque low limit must be less than torque high limit'
         },
+        tor_hi_over: {
+            'zh-tw': '扭力上限超出允許範圍（{min} ～ {max}）',
+            'zh-cn': '扭力上限超出允许范围（{min} ～ {max}）',
+            'en-us': 'Torque high limit is out of the allowed range ({min} ~ {max})'
+        },
+        tor_lo_cross: {
+            'zh-tw': '扭力下限 必須小於 目標扭力',
+            'zh-cn': '扭力下限 必须小于 目标扭力',
+            'en-us': 'Torque low limit must be less than target torque'
+        },
 
         /* ========== Angle ========== */
         angle_cross: {
-            'zh-tw': '目標角度必須大於角度下限、小於角度上限',
-            'zh-cn': '目标角度必须大于角度下限、小于角度上限',
-            'en-us': 'Target angle must be greater than the minimum angle and less than the maximum angle'
+            'zh-tw': '目標角度超出範圍（1 ～ 30600）',
+            'zh-cn': '目标角度超出范围（1 ～ 30600）',
+            'en-us': 'Target angle is out of range (1 ~ 30600)'
         },
         angle_lo_range: {
             'zh-tw': '角度下限必須介於 0 ～ 30600',
@@ -1026,6 +1037,12 @@ function input_check_core(prefix, step_id = '') {
             'zh-tw': '降速點扭力必須介於 ({min} ~ {max})',
             'zh-cn': '降速点扭力必须介于 ({min} ~ {max})',
             'en-us': 'Downshift torque must be between ({min} ~ {max})'
+        },
+
+        rpm_range: {
+            'zh-tw': '轉速必須介於 ({min} ~ {max})',
+            'zh-cn': '转速必须介于 ({min} ~ {max})',
+            'en-us': 'RPM must be between ({min} ~ {max})'
         }
     };
 
@@ -1070,6 +1087,23 @@ function input_check_core(prefix, step_id = '') {
     const target_opt = document.getElementById(prefix + 'target_opt')?.value;
 
     /* =====================================================
+     * RPM 驗證（一定先跑）
+     * ===================================================== */
+    const elRpm = document.getElementById(prefix + 'rpm');
+    const rpm   = parseInt(elRpm?.value, 10);
+
+    const toolMaxRpm = parseInt(document.getElementById('tool_max_rpm')?.value,10);
+
+    const stepNum = parseInt(step_id || '1', 10);
+    const rpmMin  = (stepNum === 1) ? 50 : 100;
+
+    if ( Number.isFinite(rpm) && Number.isFinite(toolMaxRpm) && (rpm < rpmMin || rpm > toolMaxRpm)) {
+
+        alertMsg( 'RPM', tf('rpm_range', { min: rpmMin, max: toolMaxRpm }), elRpm);
+        return false;
+    }
+
+    /* =====================================================
      * Angle 模式（target_opt === '1'）
      * ===================================================== */
     if (target_opt === '1') {
@@ -1111,26 +1145,114 @@ function input_check_core(prefix, step_id = '') {
     }
 
     /* =====================================================
-     * Torque + Downshift（target_opt === '0'）
-     * ===================================================== */
+    * Torque + Downshift（target_opt === '0'）
+    * ===================================================== */
     if (target_opt === '0') {
 
-        const elTar = document.getElementById(prefix + 'target_tor');
-        const tar   = parseFloat(elTar?.value);
+        const elTar   = document.getElementById(prefix + 'target_tor');
+        const elTorHi = document.getElementById(prefix + 'tor_hi');
+        const elTorHiEdit = document.getElementById(prefix + 'edit_tor_hi');
+
+        const hi_tor_final = document.getElementById('tool_maxtorque_unified');
+
+        const tar        = parseFloat(elTar?.value);
+        const torHi      = parseFloat(elTorHi?.value);
+        const torHiEdit  = parseFloat(elTorHiEdit?.value);
 
         const toolMin = parseFloat(document.getElementById('tool_min_tor')?.value);
         const toolMax = parseFloat(document.getElementById('tool_max_tor')?.value);
 
+        const hiTorFinalVal = parseFloat(hi_tor_final?.value);
+
+        const elTorLo = document.getElementById(prefix + 'tor_lo');
+        const torLo   = parseFloat(elTorLo?.value);
+
+
+        /* ① target torque 範圍 */
+        if (Number.isFinite(tar) && Number.isFinite(toolMin) && Number.isFinite(toolMax) && (tar < toolMin - eps || tar > toolMax + eps)) {
+
+                alertMsg('Torque', tf('torque_cross', {min: toolMin.toFixed(3), max: toolMax.toFixed(3)}), elTar);
+                return false;
+        }
+
+        /* ①-1 tor_lo 必須小於 target_tor */
         if (
+            Number.isFinite(torLo) &&
             Number.isFinite(tar) &&
-            Number.isFinite(toolMin) &&
-            Number.isFinite(toolMax) &&
-            (tar < toolMin - eps || tar > toolMax + eps)
+            torLo >= tar - eps
         ) {
-            alertMsg(t('torque_cross'), t('torque_cross'), elTar);
+            alertMsg(
+                'Torque',
+                t('tor_lo_cross'),
+                elTorLo
+            );
             return false;
         }
 
+        /* ①-2 Angle lo / hi 驗證（Torque 模式也要檢查） */
+        const elAngLo = document.getElementById(prefix + 'ang_lo');
+        const elAngHi = document.getElementById(prefix + 'ang_hi');
+
+        const angLo = parseInt(elAngLo?.value, 10);
+        const angHi = parseInt(elAngHi?.value, 10);
+
+        if (
+            Number.isFinite(angLo) &&
+            Number.isFinite(angHi) &&
+            angLo >= angHi
+        ) {
+            alertMsg(
+                'Angle',
+                t('angle_lo_hi'),
+                elAngLo
+            );
+            return false;
+        }
+
+
+
+
+
+        /* ② tor_hi / edit_tor_hi 驗證
+        * 規則：
+        *   target_tor < tor_hi ≤ tool_maxtorque_unified
+        */
+        if (Number.isFinite(hiTorFinalVal) && Number.isFinite(tar)) {
+
+            if (
+                Number.isFinite(torHi) &&
+                (torHi <= tar + eps || torHi > hiTorFinalVal + eps)
+            ) {
+                alertMsg(
+                    'Torque',
+                    tf('tor_hi_over', {
+                        min: tar.toFixed(3),
+                        max: hiTorFinalVal.toFixed(3)
+                    }),
+                    elTorHi
+                );
+                return false;
+            }
+
+            if (
+                Number.isFinite(torHiEdit) &&
+                (torHiEdit <= tar + eps || torHiEdit > hiTorFinalVal + eps)
+            ) {
+                alertMsg(
+                    'Torque',
+                    tf('tor_hi_over', {
+                        min: tar.toFixed(3),
+                        max: hiTorFinalVal.toFixed(3)
+                    }),
+                    elTorHiEdit
+                );
+                return false;
+            }
+        }
+
+
+
+        /* ④ downshift */
         if (document.getElementById('downshift_ON')?.checked) {
 
             const elTh = document.getElementById(prefix + 'th_tor');
@@ -1156,8 +1278,12 @@ function input_check_core(prefix, step_id = '') {
         return true;
     }
 
+
+
     return true;
 }
+
+
 
 
 

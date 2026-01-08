@@ -1,3 +1,12 @@
+
+<script>
+window.APP = {
+    page: 'settings',
+    lang: "<?php echo $_SESSION['language'] ?? 'en-us'; ?>"
+};
+</script>
+
+
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -209,7 +218,7 @@
                                     <?php foreach ($data['barcodes'] as $k_b =>$v_b){?>
                                         <tr>
                                             <td style="text-align: center; vertical-align: middle;" >
-                                                <input class="form-check-input" type="checkbox" name="barcode_check" id="barcode_check" value="<?php echo $v_b['barcode_selected_job'];?>" style="zoom:1.2">
+                                               <input class="form-check-input" type="checkbox" name="barcode_check" value="<?php echo $v_b['barcode_selected_job'];?>" data-barcode="<?php echo htmlspecialchars($v_b['barcode']); ?>" data-from="<?php echo $v_b['barcode_mask_from']; ?>" data-count="<?php echo $v_b['barcode_mask_count']; ?>" data-enable="<?php echo $v_b['barcode_enable']; ?>" data-job="<?php echo $v_b['barcode_selected_job']; ?>" data-seq="<?php echo $v_b['barcode_selected_seq'] ?? '-1'; ?>" style="zoom:1.2">
                                             </td> 
                                             <td><?php echo $v_b['barcode_selected_job'];?></td>
                                             <td><?php echo $v_b['job_name'];?></td>

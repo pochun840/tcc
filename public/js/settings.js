@@ -336,3 +336,60 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('barcode_mask_count').value = length;
     });
 });
+
+document.addEventListener('change', function (e) {
+
+    if (!e.target.matches('input[name="barcode_check"]')) return;
+
+    const cb = e.target;
+
+    // ✅ 只允許單選（其他自動取消）
+    document.querySelectorAll('input[name="barcode_check"]').forEach(el => {
+        if (el !== cb) el.checked = false;
+    });
+
+    // ❌ 取消勾選 → 清空表單
+    if (!cb.checked) {
+        clearBarcodeForm();
+        return;
+    }
+
+    // ✅ 帶入資料
+    document.getElementById('barcode_content').value =
+        cb.dataset.barcode || '';
+
+    document.getElementById('barcode_mask_from').value =
+        cb.dataset.from || 1;
+
+    document.getElementById('barcode_mask_count').value =
+        cb.dataset.count || '';
+
+    document.getElementById('barcode_enable').value =
+        cb.dataset.enable ?? -1;
+
+    document.getElementById('barcode_job').value =
+        cb.dataset.job ?? -1;
+
+    // 觸發 job → seq 載入
+    fetchSeqList(() => {
+        document.getElementById('barcode_seq').value =
+            cb.dataset.seq ?? -1;
+    });
+
+    // 顯示 seq 區塊（依 mode）
+    toggleBarcodeSeq();
+});
+
+
+function clearBarcodeForm() {
+    document.getElementById('barcode_content').value = '';
+    document.getElementById('barcode_mask_from').value = 1;
+    document.getElementById('barcode_mask_count').value = '';
+    document.getElementById('barcode_enable').value = -1;
+    document.getElementById('barcode_job').value = -1;
+    document.getElementById('barcode_seq').value = -1;
+
+    document.getElementById('barcode_select_seq').style.display = 'none';
+}
+
+

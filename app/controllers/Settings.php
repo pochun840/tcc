@@ -661,10 +661,7 @@ class Settings extends Controller
                         $modbus->writeMultipleRegister(0, 506, $data, $dataTypes);
                         $this->logMessage('modbus write 506 , array = '.implode("','", $data));
                         $this->logMessage('modbus status:' . $modbus->status);
-    
-                        $modbus->writeMultipleRegister(0, 462, array(1), $dataTypes);
-                        //echo json_encode(array('error' => ''));
-    
+                            
                         exit();
     
                     } catch (Exception $e) {
