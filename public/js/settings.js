@@ -337,11 +337,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
 document.addEventListener('change', function (e) {
 
     if (!e.target.matches('input[name="barcode_check"]')) return;
 
     const cb = e.target;
+
+    // ✅ 先清掉所有列的高亮
+    document.querySelectorAll('#job_table tbody tr').forEach(tr => {
+        tr.classList.remove('barcode-checked');
+    });
 
     // ✅ 只允許單選（其他自動取消）
     document.querySelectorAll('input[name="barcode_check"]').forEach(el => {
@@ -353,6 +359,10 @@ document.addEventListener('change', function (e) {
         clearBarcodeForm();
         return;
     }
+
+    // ✅ 勾選 → 高亮該列
+    const tr = cb.closest('tr');
+    if (tr) tr.classList.add('barcode-checked');
 
     // ✅ 帶入資料
     document.getElementById('barcode_content').value =
@@ -379,6 +389,8 @@ document.addEventListener('change', function (e) {
     // 顯示 seq 區塊（依 mode）
     toggleBarcodeSeq();
 });
+
+
 
 
 function clearBarcodeForm() {

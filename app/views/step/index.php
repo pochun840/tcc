@@ -69,7 +69,7 @@
         </div>
     </div>
 
-    <div style="display:block;">
+    <div style="display:none;">
         <input id="tool_max_tor" value="<?php echo $data['tools']['tool_maxtorque']; ?>">
         <input id="tool_min_tor" value="<?php echo $data['tools']['tool_mintorque']; ?>">
         <input id="tool_max_rpm" value="<?php echo $data['tools']['tool_maxrpm']; ?>">

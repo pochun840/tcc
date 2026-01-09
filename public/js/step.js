@@ -1043,7 +1043,15 @@ function input_check_core(prefix, step_id = '') {
             'zh-tw': '轉速必須介於 ({min} ~ {max})',
             'zh-cn': '转速必须介于 ({min} ~ {max})',
             'en-us': 'RPM must be between ({min} ~ {max})'
-        }
+        },
+
+        ds_speed_range: {
+            'zh-tw': '降速點轉速 必須介於 ({min} ~ {max})',
+            'zh-cn': '降速点转速 必须介于 ({min} ~ {max})',
+            'en-us': 'Downshift speed must be between ({min} ~ {max})'
+        },
+
+
     };
 
     const t = (k) => MSG[k]?.[LANG] || MSG[k]?.['en-us'] || k;
@@ -1274,6 +1282,25 @@ function input_check_core(prefix, step_id = '') {
                 return false;
             }
         }
+
+        /* ④-1 ds_speed（降速點轉速）驗證：範圍與 RPM 相同 */
+        const elDsSpeed = document.getElementById(prefix + 'ds_speed');
+        const dsSpeed   = parseInt(elDsSpeed?.value, 10);
+
+        if (
+            Number.isFinite(dsSpeed) &&
+            Number.isFinite(toolMaxRpm) &&
+            (dsSpeed < rpmMin || dsSpeed > toolMaxRpm)
+        ) {
+            alertMsg(
+                'RPM',
+                tf('ds_speed_range', { min: rpmMin, max: toolMaxRpm }),
+                elDsSpeed
+            );
+            return false;
+        }
+
+
 
         return true;
     }

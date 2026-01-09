@@ -474,3 +474,7 @@ select
     color: #fff;
 }
 
+/* Barcode 列選取背景色 */
+#job_table tbody tr.barcode-checked {
+    background-color: #BBD5DD !important;
+}
