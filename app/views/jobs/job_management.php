@@ -181,7 +181,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" style="display:none;" >
                             <div class="col-6 t1"><?php echo $text['rev_option']; ?> :</div>
                             <div class="col-4 t2">
                                 <select id="rev_cnt_mode" name="rev_cnt_mode" class="custom-file" style="width:225px">
@@ -194,7 +194,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" style="display:none;" >
                             <div class="col-6 t1"><?php echo $text['threshold_tor']; ?>(<?php echo $text[$data['unit_name']] ?? $data['unit_name']; ?>) :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="rev_th_tor" name="rev_th_tor">
@@ -203,7 +203,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" style="display:none;" >
                             <div class="col-6 t1"><?php echo $text['threshold_ang']; ?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="rev_th_ang" name="rev_th_ang">
@@ -316,7 +316,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" style="display:none;">
                             <div class="col-6 t1"><?php echo $text['rev_option']; ?> :</div>
                             <div class="col-4 t2">
                                 <select id="edit_rev_cnt_mode" name="edit_rev_cnt_mode" class="custom-file" style="width:225px">
@@ -329,7 +329,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" style="display:none;" >
                             <div class="col-6 t1"><?php echo $text['threshold_tor']; ?>(<span id='threshold_tor_label'></span>) :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_rev_th_tor" name="edit_rev_th_tor">
@@ -338,7 +338,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" style="display:none;" >
                             <div class="col-6 t1"><?php echo $text['threshold_ang']; ?> :</div>
                             <div class="col-4 t2">
                                 <input type="text" class="form-control input-ms" id="edit_rev_th_ang" name="edit_rev_th_ang">

@@ -21,9 +21,9 @@
                             <div class="col-4 t1"><?php //echo $text['tool_type'];?>:</div>
                             <div class="col t1"><?php //echo $data['tools_info']['tool_type'];?></div>
                         </div>-->
-                        <div class="row border-bottom">
-                            <div class="col-4 t1"><?php echo $text['tool_sn'];?>:</div>
-                            <div class="col t1"><?php echo $data['tools_info']['tool_sn'];?></div>
+                        <div class="row border-bottom"> 
+                            <div class="col-4 t1"><?php //echo $text['tool_sn'];?>:</div>
+                            <div class="col t1"><?php //echo $data['tools_info']['tool_sn'];?></div>
                         </div>
             
                         <!--<div class="row border-bottom">
