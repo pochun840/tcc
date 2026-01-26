@@ -7,6 +7,7 @@ class Sequences extends Controller
     private $MiscellaneousModel;
     private $stepModel;
     private $ToolModel;
+    private $SettingModel;
 
     public function __construct(){
 
@@ -14,6 +15,7 @@ class Sequences extends Controller
         $this->MiscellaneousModel = $this->model('Miscellaneous');
         $this->stepModel = $this->model('Steptcc');
         $this->ToolModel = $this->model('Tool');
+        $this->SettingModel = $this->model('Setting');
         
     }
 
@@ -27,7 +29,46 @@ class Sequences extends Controller
         }
    
         $sequences  = $this->sequenceModel->getSequences_by_job_id($job_id);
-        $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
+        $torque_unit   = $this->MiscellaneousModel->details("torque_unit");
+        $unit_arr  = $this->MiscellaneousModel->details('torque_unit');
+
+        
+        //取得起子的資訊
+        $tools_temp = $this->ToolModel->GetToolInfo();
+         // inc Unit Tor tại Setting
+        $res_device = $this->SettingModel->GetControllerInfo();
+        if(!empty($res_device)){
+            $rev_tor_unit = (int)$res_device['device_torque_unit'];
+
+            $unit_name = $torque_unit[$rev_tor_unit];
+        }
+
+        // ✅ 只有在不是外部傳入的情況下才進行 torque 換算處理 - Zhǐyǒu zài bùshì wàibù chuán rù de qíngkuàng xià cái jìnxíng torque huànsuàn chǔlǐ
+        if (!empty( $tools_temp)) {
+
+            $tool_min_torque = floatval($tools_temp['tool_mintorque']);
+            $tool_max_torque = floatval($tools_temp['tool_maxtorque']);
+
+            if (!empty($res_device)) {
+                $device_torque_unit = (int)$res_device['device_torque_unit'];
+                $unit_name = $this->MiscellaneousModel->get_unit_name_by_index($rev_tor_unit);
+
+                $tools_temp['tool_maxtorque_diff'] = round($tool_max_torque * 1.1, 3);
+                $tools_temp['tool_mintorque_diff'] = floor($tools_temp['tool_maxtorque_diff'] * 10) / 10;
+
+                $tmp_torque_1 = $this->MiscellaneousModel->convert_all_torque_units($tools_temp['tool_mintorque'], 1);
+                $tmp_torque_2 = $this->MiscellaneousModel->convert_all_torque_units($tools_temp['tool_maxtorque'], 1);
+
+                if (isset($tmp_torque_1[$unit_name])) {
+                    $tools_temp['tool_mintorque'] = $tmp_torque_1[$unit_name];
+                }
+
+                if (isset($tmp_torque_2[$unit_name])) {
+                    $tools_temp['tool_maxtorque'] = $tmp_torque_2[$unit_name];
+                }
+            }
+        }
+
 
 
         if(empty($sequences)){
@@ -49,7 +90,11 @@ class Sequences extends Controller
             'unit_arr' => $unit_arr,
             'seq_id' => $seq_id,
             'old_seqid' => '',
-            'next_seq_id' => $next_seq_id
+            'next_seq_id' => $next_seq_id,
+            'rev_tor_unit' => $device_torque_unit,
+            'tools' => $tools_temp,
+
+
 
         );
 
@@ -87,6 +132,12 @@ class Sequences extends Controller
             $seq_work_limit = isset($_POST['seq_work_limit']) ? intval($_POST['seq_work_limit']) : null;
             $seq_dt = isset($_POST['seq_dt']) ? intval($_POST['seq_dt']) : 0;
             $seq_tt = isset($_POST['seq_tt']) ? intval($_POST['seq_tt']) : 0;
+
+            $rev_tor_unit = isset($_POST['rev_tor_unit'])? intval($_POST['rev_tor_unit']) : 1;
+
+            $tool_max_tor = isset($_POST['tool_max_tor']) ? floatval($_POST['tool_max_tor']) : 0.0;
+            $tool_min_tor = isset($_POST['tool_min_tor']) ? floatval($_POST['tool_min_tor']) : 0.0;
+
 
 
             $seq_name = $_POST['seq_name'];
@@ -152,10 +203,10 @@ class Sequences extends Controller
                 'seq_id'       => $seqid,
                 'step_id'      => 1,
                 'target_opt'   => 0,      // 預設：扭力模式
-                'target_tor'   => $min_tor,
+                'target_tor'   => $tool_min_tor,
                 'target_ang'   => 0,
                 'target_delay' => 0,
-                'tor_hi'       => 55,
+                'tor_hi'       => $tool_max_tor,
                 'tor_lo'       => 0,
                 'ang_hi'       => 30600,
                 'ang_lo'       => 0,
@@ -166,7 +217,7 @@ class Sequences extends Controller
                 'ds_tor'       => 0,
                 'ds_speed'     => 100,
                 'record_ang'   => 0,
-                'tor_unit'     => 1,
+                'tor_unit'     => $rev_tor_unit,
                 'pnf_set'      => 0
             );
 

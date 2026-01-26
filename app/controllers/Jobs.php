@@ -96,6 +96,7 @@ class Jobs extends Controller
             'unit_name' => $unit_name
         );
 
+        
         if($isMobile){
             $this->view('jobs/job_management_m',$data);
         }else{
@@ -113,12 +114,18 @@ class Jobs extends Controller
             include $file;
         }
 
+
+
         if(isset($_POST['jobidnew'])){
 
             $rev_cnt_mode = isset($_POST['rev_cnt_mode']) ? intval($_POST['rev_cnt_mode']) : null;
             $rev_th_tor = isset($_POST['rev_th_tor']) ? floatval($_POST['rev_th_tor']) : 0.0;
             $rev_th_ang = isset($_POST['rev_th_ang']) ? intval($_POST['rev_th_ang']) : 0;
             $rev_tor_unit = isset($_POST['rev_tor_unit'])? intval($_POST['rev_tor_unit']) : 1;
+
+            $tool_max_tor = isset($_POST['tool_max_tor']) ? floatval($_POST['tool_max_tor']) : 0.0;
+            $tool_min_tor = isset($_POST['tool_min_tor']) ? floatval($_POST['tool_min_tor']) : 0.0;
+
 
             $jobdata = array(
                 'job_id' => $_POST['jobidnew'],
@@ -145,9 +152,6 @@ class Jobs extends Controller
     
                 $res = $this->jobModel->create_job($jobdata);
 
-                //取得 起子的 最小扭力 
-                $Tool_Info = $this->ToolModel->GetToolInfo();
-                $min_tor = $Tool_Info['tool_mintorque'];
 
                 # ----------------------------------------------------
                 # 自動建立預設 SEQ（SEQ_ID = 1）
@@ -182,10 +186,10 @@ class Jobs extends Controller
                         'seq_id'       => 1,
                         'step_id'      => 1,
                         'target_opt'   => 0,      // 預設：扭力模式
-                        'target_tor'   => $min_tor,
+                        'target_tor'   => $tool_min_tor,
                         'target_ang'   => 0,
                         'target_delay' => 0,
-                        'tor_hi'       => 55,
+                        'tor_hi'       => $tool_max_tor,
                         'tor_lo'       => 0,
                         'ang_hi'       => 30600,
                         'ang_lo'       => 0,
@@ -196,7 +200,7 @@ class Jobs extends Controller
                         'ds_tor'       => 0,
                         'ds_speed'     => 100,
                         'record_ang'   => 0,
-                        'tor_unit'     => 1,
+                        'tor_unit'     => $rev_tor_unit,
                         'pnf_set'      => 0
                     );
 

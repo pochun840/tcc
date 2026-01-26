@@ -4,7 +4,7 @@
     <input id="tool_min_tor" value="<?php echo $data['tools']['tool_mintorque']; ?>">
     <input id="tool_max_rpm" value="<?php echo $data['tools']['tool_maxrpm']; ?>">
     <input id="tool_min_rpm" value="<?php echo $data['tools']['tool_minrpm']; ?>">
-    <input id="rev_tor_unit" value="<?php echo  $data['rev_tor_unit']?>">
+    <input id="rev_tor_unit" value="<?php echo $data['rev_tor_unit'];?>">
 </div>
 
 <div class="container-ms">
@@ -207,6 +207,9 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
+                    <input type='hidden' id="tool_max_tor" value="<?php echo $data['tools']['tool_maxtorque']; ?>">
+                    <input type='hidden' id="tool_min_tor" value="<?php echo $data['tools']['tool_mintorque']; ?>">
+                    <input type='hidden' id="rev_tor_unit" value="<?php echo $data['rev_tor_unit']; ?>">
                     <button id="" class="button-modal" onclick="savejob()"><?php echo $text['save'];?></button>
                     <button id="" class="button-modal" onclick="closebutton('newjob')" class="closebtn"><?php echo $text['close'];?></button>
                 </div>
@@ -574,6 +577,9 @@ function savejob() {
     var rev_cnt_mode     = document.getElementById("rev_cnt_mode").value;
     var rev_th_tor     = document.getElementById("rev_th_tor").value;
     var rev_th_ang     = document.getElementById("rev_th_ang").value;
+    var tool_max_tor   = document.getElementById("tool_max_tor").value;
+    var tool_min_tor   = document.getElementById("tool_min_tor").value;
+
 
     var rev_tor_unit = <?php echo  $data['rev_tor_unit'] ?>
 
@@ -608,7 +614,9 @@ function savejob() {
                 rev_tor_unit: rev_tor_unit,
                  direction_val: direction_val, //起子方向
                 job_ok_val: job_ok_val,
-                job_ok_stop_val:job_ok_stop_val
+                job_ok_stop_val:job_ok_stop_val,
+                tool_max_tor :tool_max_tor,
+                tool_min_tor :tool_min_tor
             },
             success: function(response) {
 

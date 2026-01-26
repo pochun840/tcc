@@ -475,6 +475,61 @@ class Miscellaneous{
     }
 
 
+    /**
+     * 將 Tool 的 torque 轉為「顯示用單位」
+     * - 不修改原始值（raw）
+     * - 回傳 display 用資料
+     *
+     * @param array $toolRaw        ToolModel->GetToolInfo() 原始資料（基準單位）
+     * @param int   $deviceUnitIdx Controller 的 torque unit index
+     * @param float $diffRatio     最大扭力倍率（預設 1.1）
+     *
+     * @return array
+     */
+    public function buildToolTorqueDisplay(
+        array $toolRaw,
+        int $deviceUnitIdx,
+        float $diffRatio = 1.1
+    ): array {
+
+        if (empty($toolRaw)) {
+            return [];
+        }
+
+        $unitName = $this->get_unit_name_by_index($deviceUnitIdx);
+
+        // 保留 raw，另外建立 display
+        $display = $toolRaw;
+
+        $minRaw = floatval($toolRaw['tool_mintorque'] ?? 0);
+        $maxRaw = floatval($toolRaw['tool_maxtorque'] ?? 0);
+
+        // ---------- diff（顯示用） ----------
+        $display['tool_maxtorque_diff_display']
+            = round($maxRaw * $diffRatio, 3);
+
+        $display['tool_mintorque_diff_display']
+            = floor($display['tool_maxtorque_diff_display'] * 10) / 10;
+
+        // ---------- 單位轉換 ----------
+        $minArr = $this->convert_all_torque_units($minRaw, 1);
+        $maxArr = $this->convert_all_torque_units($maxRaw, 1);
+
+        if (isset($minArr[$unitName])) {
+            $display['tool_mintorque_display'] = $minArr[$unitName];
+        }
+
+        if (isset($maxArr[$unitName])) {
+            $display['tool_maxtorque_display'] = $maxArr[$unitName];
+        }
+
+        // 額外給 view 用
+        $display['display_unit'] = $unitName;
+
+        return $display;
+    }
+
+
 
    
 

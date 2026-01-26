@@ -1,3 +1,9 @@
+<div style="display:none;">
+    <input id="tool_max_tor" value="<?php echo $data['tools']['tool_maxtorque']; ?>">
+    <input id="tool_min_tor" value="<?php echo $data['tools']['tool_mintorque']; ?>">
+    <input id="rev_tor_unit" value="<?php echo  $data['rev_tor_unit']?>">
+</div>
+
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
@@ -233,6 +239,10 @@
                 </div>
 
                 <div class="modal-footer justify-content-center">
+                    <input type='hidden' id="tool_max_tor" value="<?php echo $data['tools']['tool_maxtorque']; ?>">
+                    <input type='hidden' id="tool_min_tor" value="<?php echo $data['tools']['tool_mintorque']; ?>">
+                    <input type='hidden' id="rev_tor_unit" value="<?php echo $data['rev_tor_unit']; ?>">
+
                     <button id="" class="button-modal" onclick="saveseq();"><?php echo $text['save'];?></button>
                     <button id="" class="button-modal" onclick="closebutton('newseq');"  class="closebtn"><?php echo $text['close'];?></button>
                 </div>
@@ -737,30 +747,28 @@ function delete_seqid(seqid){
 }
 
 
-
 function saveseq(){
 
     var jobid = '<?php echo $data['job_id']?>';
     var seqid = '<?php echo $data['next_seq_id']?>';
     var seq_name = document.getElementById("seq_name").value;
     var seq_tr = document.getElementById("seq_tr").value;
- 
     var seq_ns = document.getElementById('seq_ns').value;
-
     var seqElement = document.querySelector('input[name="seq_ok"]:checked');
     var seq_ok = seqElement ? seqElement.value : null;
-
     var seq_stop_Element = document.querySelector('input[name="seq_ok_stop"]:checked');
     var seq_ok_stop = seq_stop_Element ? seq_stop_Element.value : null;
-
     var seq_opt = getSelectedValue('opt_option', null);
     var seq_k_val = document.getElementById("seq_k_val").value;
     var seq_ofs = document.getElementById("seq_ofs").value;
-
     // 06/03 Lana add new function
     var seq_work_limit = document.getElementById('seq_work_limit').value;
     var seq_dt = document.getElementById('seq_dt').value;
     var seq_tt = document.getElementById('seq_tt').value;
+    var tool_max_tor   = document.getElementById("tool_max_tor").value;
+    var tool_min_tor   = document.getElementById("tool_min_tor").value;
+    var rev_tor_unit   = document.getElementById("rev_tor_unit").value;
+
     
     //驗證
     let check = input_check_saveseq();
@@ -784,7 +792,10 @@ function saveseq(){
                 seq_ofs: seq_ofs,
                 seq_work_limit: seq_work_limit,
                 seq_dt: seq_dt,
-                seq_tt: seq_tt
+                seq_tt: seq_tt,
+                tool_max_tor :tool_max_tor,
+                tool_min_tor :tool_min_tor,
+                rev_tor_unit
 
             },
             success: function(response) {
