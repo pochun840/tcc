@@ -5,10 +5,16 @@ class Sequences extends Controller
     // 在建構子中將 Post 物件（Model）實例化
     private $sequenceModel;
     private $MiscellaneousModel;
+    private $stepModel;
+    private $ToolModel;
+
     public function __construct(){
 
         $this->sequenceModel = $this->model('Sequence');
         $this->MiscellaneousModel = $this->model('Miscellaneous');
+        $this->stepModel = $this->model('Steptcc');
+        $this->ToolModel = $this->model('Tool');
+        
     }
 
     // 取得所有Sequences
@@ -132,6 +138,43 @@ class Sequences extends Controller
 
             $mode = "create";
             $res = $this->sequenceModel->create_seq($mode,$jobdata);
+                //取得 起子的 最小扭力 
+            $Tool_Info = $this->ToolModel->GetToolInfo();
+            $min_tor = $Tool_Info['tool_mintorque'];
+            
+
+            //自動新增 預設的STEP
+            // =======================================================
+            //  預設 STEP-1
+            // =======================================================
+            $defaultStep = array(
+                'job_id'       => $jobdata['job_id'],
+                'seq_id'       => $seqid,
+                'step_id'      => 1,
+                'target_opt'   => 0,      // 預設：扭力模式
+                'target_tor'   => $min_tor,
+                'target_ang'   => 0,
+                'target_delay' => 0,
+                'tor_hi'       => 55,
+                'tor_lo'       => 0,
+                'ang_hi'       => 30600,
+                'ang_lo'       => 0,
+                'rpm'          => 50,
+                'direction'    => 0,
+                'th_mode'      => 0,
+                'th_tor'       => 0,
+                'ds_tor'       => 0,
+                'ds_speed'     => 100,
+                'record_ang'   => 0,
+                'tor_unit'     => 1,
+                'pnf_set'      => 0
+            );
+
+            $this->stepModel->create_step("create", $defaultStep);
+
+
+
+
             $result = array();
             if($res){
                 $res_type = 'Success';

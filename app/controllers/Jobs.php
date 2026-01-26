@@ -145,8 +145,12 @@ class Jobs extends Controller
     
                 $res = $this->jobModel->create_job($jobdata);
 
+                //取得 起子的 最小扭力 
+                $Tool_Info = $this->ToolModel->GetToolInfo();
+                $min_tor = $Tool_Info['tool_mintorque'];
+
                 # ----------------------------------------------------
-                # ⭐ 自動建立預設 SEQ（SEQ_ID = 1）
+                # 自動建立預設 SEQ（SEQ_ID = 1）
                 # ----------------------------------------------------
                 if ($res) {
 
@@ -171,19 +175,19 @@ class Jobs extends Controller
                     $this->sequenceModel->create_seq("create", $defaultSeq);
 
                     // =======================================================
-                    // ★★ 預設 STEP-1
+                    //  預設 STEP-1
                     // =======================================================
                     $defaultStep = array(
                         'job_id'       => $jobdata['job_id'],
                         'seq_id'       => 1,
                         'step_id'      => 1,
                         'target_opt'   => 0,      // 預設：扭力模式
-                        'target_tor'   => 0,
+                        'target_tor'   => $min_tor,
                         'target_ang'   => 0,
                         'target_delay' => 0,
-                        'tor_hi'       => 0,
+                        'tor_hi'       => 55,
                         'tor_lo'       => 0,
-                        'ang_hi'       => 0,
+                        'ang_hi'       => 30600,
                         'ang_lo'       => 0,
                         'rpm'          => 50,
                         'direction'    => 0,

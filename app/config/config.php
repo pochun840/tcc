@@ -2,9 +2,10 @@
 
 //sudo chmod -R 777 /var/www/html/idas
 //sudo chmod -R 777 /var/www/html/database
-//sudo rm -rf /var/www/html/tccidas
+//sudo rm -rf /var/www/html/idas
 //sudo chown -R www-data:www-data /var/www/html/tccidas/app/views/step
 //12345678rd
+//sudo chmod -R 777 /var/www/html/idas_update.php
 
 //sudo chmod -R 777 /var/www/html/upload.php idas_update.php
 // App 根目錄，這是引入 app 資料夾裡的資源用的
@@ -63,7 +64,7 @@ switch ( ICONMODE ) {
 		define('ICON_AGENT',        URLROOT.'img/192.png'); // normal icon
 		define('ICON_AGENT_APPLE',  URLROOT.'img/60.png');  // apple icon
 		define('TITLE_INDEX',       'KILEWS');              // 首頁title
-		define('SUBTITLE_INDEX',    'iDAS for KL-TCC-M7');     // 首頁subtitle
+		define('SUBTITLE_INDEX',    'iDAS FOR KL-TCC-M7');     // 首頁subtitle
 		define('TITLE_AGENT',       'KILEWS IoT Agent');    // Agent頁title
 		define('DEVICE_TYPE_10',    'KL-TCC');    // Agent頁title
 		break;
@@ -124,7 +125,7 @@ switch ( ICONMODE ) {
 		define('ICON_AGENT',        URLROOT.'img/192.png');
 		define('ICON_AGENT_APPLE',  URLROOT.'img/60.png');
 		define('TITLE_INDEX',       'KILEWS');
-		define('SUBTITLE_INDEX',    'iDAS for TCC-M7');
+		define('SUBTITLE_INDEX',    'iDAS FOR KL-TCC-M7');
 		define('TITLE_AGENT',       'KILEWS IoT Agent');
 		define('DEVICE_TYPE_10',    'KL-TCC');    // Agent頁title
 		break;

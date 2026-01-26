@@ -97,7 +97,7 @@ class Remotes extends Controller
                 //$recData[0] = ;$recData[1] = ;$recData[2] = ;$recData[3] = ;
 
 
-                $data['jod_id']  = $recData[0]*16 + $recData[1];
+                $data['job_id']  = $recData[0]*16 + $recData[1];
                 $data['seq_id']  = $recData[2]*16 + $recData[3];
                 $data['step_id'] = $recData[4]*16 + $recData[5];
 

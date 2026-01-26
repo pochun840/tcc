@@ -12,63 +12,65 @@ class Logins extends Controller
     // 取得所有Jobs
     public function index($url){
         session_start();
+
         $device_info = $this->Device_Info();
         $_SESSION['sessionid'] = session_id();
         $_SESSION['privilege'] = '';
-        $error_message = '';
-        $authToken = '';
+
         $data = [
-            'error_message' => $error_message,
-            'device_info' => $device_info
+            'error_message' => '',
+            'device_info'   => $device_info
         ];
 
-        //例外狀況，切換語系
+        // 例外狀況：切換語系
         $exception = false;
-        if(isset($url[1])){
-            if($url[0] == 'Dashboards' && $url[1] == 'change_language' ){
-                $exception = true;
-            }
+        if (isset($url[1]) && $url[0] === 'Dashboards' && $url[1] === 'change_language') {
+            $exception = true;
         }
 
-        //判斷有沒有post password
-        //有post就驗證password
-        //沒有就單純檢查cookies
-        if( !empty($_POST['password']) && isset($_POST['password'])  ){
-            //login attempt
+        /* =========================
+        * Login POST
+        * ========================= */
+        if (!empty($_POST['password'])) {
+
+            // login attempt
             $this->logLoginAttempt();
 
-            $password = $_POST['password'];
-            $authToken = hash('sha256', $password);
-            
-            if($this->verifyCredentials($authToken)){
-                
+            $authToken = hash('sha256', $_POST['password']);
+
+            if ($this->verifyCredentials($authToken)) {
+
                 if (PHP_OS === 'Linux') {
                     $this->SettingModel->login_db_load();
                 }
+
                 setcookie('auth_token', $authToken, time() + 600, '/');
 
-                
-                return true;
-            }else{
-                // 用戶未登錄或身份驗證超時，跳轉到登錄頁面
-                $this->logout();
-                $this->view('login/index', $data);
-                exit();
+                // ✅ 關鍵修正：登入成功後一定 redirect（PRG）
+                         header('Location: /idas/public/?url=Dashboards');
+                exit;
             }
 
-        }else{
-            if ($this->isAuthenticated() || $exception ) { //切換語系例外
-                // 用戶已登錄，繼續處理其他操作
-                return true;
-            } else {
-                // 用戶未登錄或身份驗證超時，跳轉到登錄頁面
-                $this->logout();
-                $this->view('login/index', $data);
-                exit();
-            }
+            // 登入失敗
+            $this->logout();
+            $this->view('login/index', $data);
+            exit;
         }
 
+        /* =========================
+        * 非 POST：檢查登入狀態
+        * ========================= */
+        if ($this->isAuthenticated() || $exception) {
+            return true;
+        }
+
+        // 未登入
+        $this->logout();
+        $this->view('login/index', $data);
+        exit;
     }
+
+
 
     public function isAuthenticated() {
         if (isset($_COOKIE['auth_token'])) {

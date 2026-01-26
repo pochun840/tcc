@@ -137,7 +137,7 @@
                             optionsData.forEach((option, index) => {
                                 const opt = document.createElement("option");
                                 opt.value = option.seq_id;
-                                opt.textContent = `Seq-${index + 1} ${option.seq_name || ''}`;
+                                opt.textContent = option.seq_name || '';
                                 seqSelect.appendChild(opt);
                             });
 

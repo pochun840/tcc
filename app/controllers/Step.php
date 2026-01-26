@@ -163,9 +163,9 @@ class Step extends Controller
             $target_tor = isset($_POST['target_tor'])? floatval($_POST['target_tor']) : 0; 
             $target_ang = isset($_POST['target_ang'])? intval($_POST['target_ang']) : 0; 
             $target_delay = isset($_POST['target_delay'])? floatval($_POST['target_delay']) : 0; 
-            $tor_hi = isset($_POST['tor_hi'])? floatval($_POST['tor_hi']) : 0; 
+            $tor_hi = isset($_POST['tor_hi'])? floatval($_POST['tor_hi']) : 55; 
             $tor_lo = isset($_POST['tor_lo'])? floatval($_POST['tor_lo']) : 0; 
-            $ang_hi  = isset($_POST['ang_hi'])? intval($_POST['ang_hi']) : 0; 
+            $ang_hi  = isset($_POST['ang_hi'])? intval($_POST['ang_hi']) : 30600; 
             $ang_lo  = isset($_POST['ang_lo'])? intval($_POST['ang_lo']) : 0; 
             $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 50;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
