@@ -561,6 +561,7 @@ $text['system_idas_upload_file'] = 'Upload file';
 
 
 
+
 //barcode setting
 $text['system_barcode_setting'] = 'Barcode Setting';
 $text['system_barcode_from'] = 'From';
@@ -808,3 +809,6 @@ $text['missing_info_json'] ='Missing info.json, unable to verify the update file
 $text['info_json_invalid'] = 'info.json format error or missing Match_TCC_Version';
 $text['version_too_low'] = 'The update file version is lower than the current version and cannot be updated. Current version:';
 $text['update_success'] = 'Update successful. Files have been moved to the tccidas directory';
+$text['idas_pack_name_invalid'] = 'Invalid update package file name format.';
+$text['info_json_idas_invalid']  = 'Invalid info.json format (IDAS mismatch).';
+

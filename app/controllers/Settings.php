@@ -940,108 +940,139 @@ class Settings extends Controller
       
     }
 
-    #IDAS上傳 20250522 修改
     public function iDas_Update() {
-        // 1. 紀錄目前 PHP 的上傳限制，方便除錯
-        $maxUpload = ini_get('upload_max_filesize');
-        $postMax = ini_get('post_max_size');
-        error_log("目前 upload_max_filesize: $maxUpload");
-        error_log("目前 post_max_size: $postMax");
 
-        // 2. 載入語系檔，供 $text 語系變數使用
+        // 1. 紀錄 PHP 上傳限制
+        error_log("upload_max_filesize: " . ini_get('upload_max_filesize'));
+        error_log("post_max_size: " . ini_get('post_max_size'));
+
+        // 2. 載入語系
         $file = $this->MiscellaneousModel->lang_load();
         if (!empty($file)) include $file;
 
-        // 3. 取得目前 iDAS 版本，之後會用來比對 info.json 的版本
+        // 3. 目前 iDAS 版本
         $iDas_Vesion = $this->AdminModel->Get_Das_Config('idas_version');
 
-        //  4. 根據系統平台（Linux 或 Windows）設定根目錄與解壓縮路徑
-        $file_location = (PHP_OS_FAMILY === 'Linux') ? '/var/www/html/' : $_SERVER['DOCUMENT_ROOT'] . '/';
+        // 4. 平台路徑
+        $file_location = (PHP_OS_FAMILY === 'Linux')
+            ? '/var/www/html/'
+            : $_SERVER['DOCUMENT_ROOT'] . '/';
+
         $extract_path = $file_location . 'extracted/';
-        $main_folder = ''; // 後面會指定為解壓出來的主資料夾路徑
+        $main_folder  = '';
 
         try {
-            //  5. 驗證上傳檔案是否存在且無錯誤
+
+            // 5. 檔案存在與錯誤檢查
             if (empty($_FILES['file']) || $_FILES['file']['error'] !== 0) {
-                $msg = empty($_FILES['file']) ? 'No file uploaded.' : 'File upload error: ' . $_FILES['file']['error'];
+                $msg = empty($_FILES['file'])
+                    ? 'No file uploaded.'
+                    : 'File upload error: ' . $_FILES['file']['error'];
                 return $this->sendResponse('Error', $msg);
             }
 
-            //  6. 檢查檔案大小（限制為 30MB 以內）
+            // 6. 檔案大小限制 30MB
             if ($_FILES['file']['size'] > 30 * 1024 * 1024) {
                 return $this->sendResponse('Error', $text['over_size_text']);
             }
 
-            //  7. 驗證副檔名必須為 .pack
+            // 7. 檔名 + 副檔名驗證
             $uploaded_filename = $_FILES['file']['name'];
-            if (strtolower(pathinfo($uploaded_filename, PATHINFO_EXTENSION)) !== 'pack') {
-                return $this->sendResponse('Error', $text['invalid_file_extension']. $uploaded_filename);
+
+            $packNamePattern = '/^tcc_idas_\d{8}-\d+\.\d+\.\d+\.\d+(?:_SA\d+)?\.pack$/i';
+
+            if (!preg_match($packNamePattern, $uploaded_filename)) {
+                return $this->sendResponse(
+                    'Error',
+                    $text['idas_pack_name_invalid'] . ' : ' . $uploaded_filename
+                );
             }
 
-            //  8. 使用 ZipArchive 解壓縮 .pack 檔案
+            // 8. 開啟 zip
             $zip = new ZipArchive();
             if ($zip->open($_FILES['file']['tmp_name']) !== TRUE) {
                 return $this->sendResponse('Error', $text['cannot_open_pack']);
             }
 
-            //  9. 若解壓縮目錄不存在就先建立
-            if (!is_dir($extract_path)) mkdir($extract_path, 0777, true);
+            // 9. 建立解壓目錄
+            if (!is_dir($extract_path)) {
+                mkdir($extract_path, 0777, true);
+            }
 
-            //  10. 解壓縮至指定目錄
+            // 10. 解壓
             if (!$zip->extractTo($extract_path)) {
                 $zip->close();
-                return $this->sendResponse('Error', $text['extract_failed'] );
+                return $this->sendResponse('Error', $text['extract_failed']);
             }
             $zip->close();
 
-            //  11. 找出解壓縮後的主資料夾
-            $folders = array_filter(scandir($extract_path), fn($f) => is_dir($extract_path . $f) && !in_array($f, ['.', '..']));
+            // 11. 找主資料夾
+            $folders = array_filter(
+                scandir($extract_path),
+                fn($f) => is_dir($extract_path . $f) && !in_array($f, ['.', '..'])
+            );
+
             if (empty($folders)) {
-                return $this->sendResponse('Error', $text['no_extracted_folder'] );
+                return $this->sendResponse('Error', $text['no_extracted_folder']);
             }
 
-            //  12. 指定主資料夾與 info.json 路徑
-            $main_folder = $extract_path . reset($folders);
-            $info_json_url = $main_folder . "/info.json";
+            $main_folder  = $extract_path . reset($folders);
+            $info_json_url = $main_folder . '/info.json';
 
-            //  13. 檢查 info.json 是否存在
+            // 12. info.json 存在檢查
             if (!file_exists($info_json_url)) {
-                return $this->sendResponse('Error', $text['missing_info_json'] );
+                return $this->sendResponse('Error', $text['missing_info_json']);
             }
 
-            //  14. 解析 info.json，取得更新檔版本資訊
-            $verify_data = json_decode(@file_get_contents($info_json_url), true);
-            if (!$verify_data || !isset($verify_data['Match_TCC_Version'])) {
+            // 13. 解析 info.json
+            $verify_data = json_decode(file_get_contents($info_json_url), true);
+
+            if (
+                !$verify_data ||
+                !isset($verify_data['Match_TCC_Version']) ||
+                !isset($verify_data['IDAS'])
+            ) {
                 return $this->sendResponse('Error', $text['info_json_invalid']);
             }
 
-            //  15. 比對版本：如果更新檔比目前版本還舊，就不更新
-            $match_tcc_version = $verify_data['Match_TCC_Version'];
-            if (version_compare($match_tcc_version, $iDas_Vesion, '<')) {
-                return $this->sendResponse('Error',  $text['version_too_low'] . $iDas_Vesion . '，更新版本：' . $match_tcc_version);
+            // 14. IDAS 驗證
+            if ($verify_data['IDAS'] !== 'TCCIDAS') {
+                return $this->sendResponse('Error', $text['info_json_idas_invalid']);
             }
 
+            // 15. 版本比對
+            $match_tcc_version = $verify_data['Match_TCC_Version'];
+            if (version_compare($match_tcc_version, $iDas_Vesion, '<')) {
+                return $this->sendResponse(
+                    'Error',
+                    $text['version_too_low'] . $iDas_Vesion . '，更新版本：' . $match_tcc_version
+                );
+            }
 
-            // 16. 將 $verify_data['Match_TCC_Version'] 寫入到資料庫
-            $this->AdminModel->Set_idas_version($verify_data['Match_TCC_Version']);
+            // 16. 更新版本號
+            $this->AdminModel->Set_idas_version($match_tcc_version);
 
-
-            //  17. 指定最終目標目錄（部署到 /idas/ 下）
+            // 17. 目標部署目錄
             $target_directory = $_SERVER['DOCUMENT_ROOT'] . '/idas/';
-            if (!is_dir($target_directory)) mkdir($target_directory, 0777, true);
+            if (!is_dir($target_directory)) {
+                mkdir($target_directory, 0777, true);
+            }
 
-            //  18. 複製解壓出來的檔案到正式目錄
+            // 18. 複製檔案
             $this->copyDirectory($main_folder, $target_directory);
 
-            //  19. 強制登出控制器使用者（安全性與更新重啟）
+            // 19. 強制登出
             $this->setting_logout();
 
-        
-            //  20. 成功更新回應
-            return $this->sendResponse('Success',$text['update_success'] . '<script>window.location.href="?url=In";</script>');
+            // 20. 成功
+            return $this->sendResponse(
+                'Success',
+                $text['update_success'] . '<script>window.location.href="?url=In";</script>'
+            );
 
         } finally {
-            //  21. 無論成功或失敗，清除主資料夾與解壓縮目錄
+
+            // 21. 清除暫存目錄
             if (!empty($main_folder) && is_dir($main_folder)) {
                 $this->deleteDirectory($main_folder);
             }
@@ -1049,8 +1080,9 @@ class Settings extends Controller
                 $this->deleteDirectory($extract_path);
             }
         }
-        
     }
+
+
 
 
 

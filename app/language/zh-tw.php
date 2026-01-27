@@ -794,3 +794,6 @@ $text['missing_info_json'] = '缺少 info.json，無法驗證更新檔';
 $text['info_json_invalid'] = 'info.json 格式錯誤或缺少 Match_TCC_Version';
 $text['version_too_low'] = '更新檔版本低於目前版本，無法更新，目前版本：';
 $text['update_success'] = '更新成功，已將檔案移動至 tccidas 目錄';
+$text['idas_pack_name_invalid'] = '更新檔檔名格式錯誤';
+$text['info_json_idas_invalid']  = 'info.json 格式錯誤（IDAS 不符）';
+
