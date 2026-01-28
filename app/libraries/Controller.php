@@ -237,5 +237,62 @@ class Controller
         return $row;        
     }
 
+    
+    public function get_modbus_port(): ?int{
+
+        // ---------- DB 路徑 ----------
+        if (PHP_OS_FAMILY === 'Linux') {
+            $dbPath = '/var/www/html/database/tcccon.db';
+        } else {
+            $dbPath = '../idas_data.db';
+        }
+
+        if (!is_file($dbPath)) {
+            error_log('[MODBUS] idas_data.db not found: ' . $dbPath);
+            return null;
+        }
+
+        try {
+            // ---------- DB 連線 ----------
+            $db = new PDO('sqlite:' . $dbPath, null, null, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_TIMEOUT => 2,
+            ]);
+
+            // ---------- 只取需要的欄位 ----------
+            $stmt = $db->prepare('SELECT device_serverport FROM device LIMIT 1');
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$row || !isset($row['device_serverport'])) {
+                error_log('[MODBUS] device_serverport not found in device table');
+                return null;
+            }
+
+            $port = trim((string)$row['device_serverport']);
+
+            // ---------- 驗證 port ----------
+            if ($port === '' || !ctype_digit($port)) {
+                error_log('[MODBUS] invalid device_serverport: ' . $port);
+                return null;
+            }
+
+            $port = (int)$port;
+
+            if ($port < 1 || $port > 65535) {
+                error_log('[MODBUS] device_serverport out of range: ' . $port);
+                return null;
+            }
+
+            return $port;
+
+        } catch (Throwable $e) {
+            error_log('[MODBUS] get_modbus_port exception: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+
+
 
 }

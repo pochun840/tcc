@@ -540,7 +540,7 @@ class Customize extends Controller
         require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
 
         $ip = CONTROLLER_IP;
-        $port = 502;
+        $modbus->port = $this->get_modbus_port();
         $startAddress = $a;
         $quantity = $b;  // 每個「暫存器」= 16-bit (= 2 bytes)  
         $unitId = 0;
@@ -548,7 +548,7 @@ class Customize extends Controller
         
         try {
             $modbus = new ModbusMaster($ip, "TCP");
-            $modbus->port = $port;
+            $modbus->port = $this->get_modbus_port();
             $modbus->timeout_sec = 10;
 
             $raw = $modbus->readMultipleRegisters(0, $startAddress, $quantity);

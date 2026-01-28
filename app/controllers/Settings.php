@@ -653,7 +653,7 @@ class Settings extends Controller
                     $modbus = new ModbusMaster("127.0.0.1", "TCP");
     
                     try {
-                        $modbus->port = 502;
+                        $modbus->port = $this->get_modbus_port();
                         $modbus->timeout_sec = 10;
                         $data = array(1, 26948, 24947);
                         $dataTypes = array("INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT");
@@ -737,7 +737,7 @@ class Settings extends Controller
                 require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
                 $modbus = new ModbusMaster("127.0.0.1", "TCP");
                 try {
-                    $modbus->port = 502;
+                    $modbus->port = $this->get_modbus_port();
                     $modbus->timeout_sec = 10;
                     $data = array(1, 26948, 24947);
                     $dataTypes = array("INT", "INT", "INT");
@@ -1404,7 +1404,7 @@ class Settings extends Controller
                 require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
                 $modbus = new ModbusMaster("127.0.0.1", "TCP");
                 try {
-                    $modbus->port = 502;
+                    $modbus->port = $this->get_modbus_port();
                     $modbus->timeout_sec = 10;
                     $data = array(1, $name_int16[0], $name_int16[1], $name_int16[2], $name_int16[3], $name_int16[4], $name_int16[5], $name_int16[6], $name_int16[7], $name_int16[8], $name_int16[9], $name_int16[10], $name_int16[11]);
                     $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
