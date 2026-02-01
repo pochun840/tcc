@@ -653,7 +653,7 @@ class Settings extends Controller
                     $modbus = new ModbusMaster("127.0.0.1", "TCP");
     
                     try {
-                        $modbus->port = $this->get_modbus_port();
+                        $modbus->port = 502;
                         $modbus->timeout_sec = 10;
                         $data = array(1, 26948, 24947);
                         $dataTypes = array("INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT","INT");
@@ -737,7 +737,7 @@ class Settings extends Controller
                 require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
                 $modbus = new ModbusMaster("127.0.0.1", "TCP");
                 try {
-                    $modbus->port = $this->get_modbus_port();
+                    $modbus->port = 502;
                     $modbus->timeout_sec = 10;
                     $data = array(1, 26948, 24947);
                     $dataTypes = array("INT", "INT", "INT");
@@ -977,7 +977,7 @@ class Settings extends Controller
             }
 
             // 7. 檔名 + 副檔名驗證
-            $uploaded_filename = $_FILES['file']['name'];
+            /*$uploaded_filename = $_FILES['file']['name'];
 
             $packNamePattern = '/^tcc_idas_\d{8}-\d+\.\d+\.\d+\.\d+(?:_SA\d+)?\.pack$/i';
 
@@ -986,7 +986,7 @@ class Settings extends Controller
                     'Error',
                     $text['idas_pack_name_invalid'] . ' : ' . $uploaded_filename
                 );
-            }
+            }*/
 
             // 8. 開啟 zip
             $zip = new ZipArchive();
@@ -1027,18 +1027,38 @@ class Settings extends Controller
             // 13. 解析 info.json
             $verify_data = json_decode(file_get_contents($info_json_url), true);
 
-            if (
-                !$verify_data ||
-                !isset($verify_data['Match_TCC_Version']) ||
-                !isset($verify_data['IDAS'])
-            ) {
+            if (!is_array($verify_data)) {
                 return $this->sendResponse('Error', $text['info_json_invalid']);
             }
 
-            // 14. IDAS 驗證
-            if ($verify_data['IDAS'] !== 'TCCIDAS') {
-                return $this->sendResponse('Error', $text['info_json_idas_invalid']);
+            $isIdasPackage = false;
+            $isLegacy      = false;
+
+            /**
+             * 新版包：IDAS === TCCIDAS
+             */
+            if (isset($verify_data['IDAS']) && $verify_data['IDAS'] === 'KL-TCC-M7') {
+                $isIdasPackage = true;
             }
+
+            /**
+             * 舊版包（legacy B）：只有 Match_TCC_Version
+             */
+            if (
+                !$isIdasPackage &&
+                isset($verify_data['Match_TCC_Version']) &&
+                trim((string)$verify_data['Match_TCC_Version']) !== ''
+            ) {
+                $isIdasPackage = true;
+                $isLegacy = true;
+            }
+
+            // ❌ 不是 iDAS 包
+            if (!$isIdasPackage) {
+                return $this->sendResponse('Error', $text['not_idas_package'] ?? 'Not an iDAS package');
+            }
+
+
 
             // 15. 版本比對
             $match_tcc_version = $verify_data['Match_TCC_Version'];
@@ -1404,7 +1424,7 @@ class Settings extends Controller
                 require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
                 $modbus = new ModbusMaster("127.0.0.1", "TCP");
                 try {
-                    $modbus->port = $this->get_modbus_port();
+                    $modbus->port = 502;
                     $modbus->timeout_sec = 10;
                     $data = array(1, $name_int16[0], $name_int16[1], $name_int16[2], $name_int16[3], $name_int16[4], $name_int16[5], $name_int16[6], $name_int16[7], $name_int16[8], $name_int16[9], $name_int16[10], $name_int16[11]);
                     $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");

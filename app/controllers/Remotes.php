@@ -49,7 +49,7 @@ class Remotes extends Controller
             require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
             $modbus = new ModbusMaster("127.0.0.1", "TCP");
             try {
-                $modbus->port = $this->get_modbus_port();
+                $modbus->port = 502;
                 $modbus->timeout_sec = 10;
                 $data = array($job_id,$seq_id);
                 $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
@@ -82,7 +82,7 @@ class Remotes extends Controller
             require_once '../modules/phpmodbus-master/Phpmodbus/ModbusMaster.php';
             $modbus = new ModbusMaster("127.0.0.1", "TCP");
             try {
-                $modbus->port = $this->get_modbus_port();
+                $modbus->port = 502;
                 $modbus->timeout_sec = 10;
                 $dataTypes = array("INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT");
 
