@@ -1035,9 +1035,9 @@ class Settings extends Controller
             $isLegacy      = false;
 
             /**
-             * 新版包：IDAS === TCCIDAS
+             * 新版包：Controller_type === KL-TCC-M7
              */
-            if (isset($verify_data['IDAS']) && $verify_data['IDAS'] === 'KL-TCC-M7') {
+            if (isset($verify_data['Controller_type']) && $verify_data['Controller_type'] === 'KL-TCC-M7') {
                 $isIdasPackage = true;
             }
 
