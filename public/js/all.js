@@ -262,6 +262,17 @@ function checkAuthToken() {
     }
 }
 
+
+window.addEventListener('load', function(){
+  const lang = (getCookie('language') || 'en-us').toLowerCase();
+  const map = {
+    'en-us': 'Logout',
+    'zh-tw': '登出',
+    'zh-cn': '退出'
+  };
+  const btn = document.getElementById('btnLogout');
+  if(btn) btn.value = map[lang] || 'Logout';
+});
 // 呼叫檢查
 checkAuthToken();
 

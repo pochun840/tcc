@@ -1,4 +1,4 @@
-function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 3000) {
+function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 1000) {
     async function fetchData() {
         try {
             const response = await fetch(url);

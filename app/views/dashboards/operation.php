@@ -249,9 +249,7 @@ function drawUnifiedChart(payload) {
         tooltip: {
             trigger: 'axis'
         },
-        legend: {
-            top: 6
-        },
+        legend: { show: false }, 
         grid: {
             left: '8%',
             right: '6%',
@@ -293,7 +291,7 @@ window.addEventListener("orientationchange", function() {
 /* =====================================================
  * 即時資料 polling
  * ===================================================== */
-
+let lastDataVersion = 0;
 let pollingActive = true;
 
 async function fetchData(url, system_sn, chart_mode) {
@@ -301,7 +299,11 @@ async function fetchData(url, system_sn, chart_mode) {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ system_sn, chart_mode })
+            body: JSON.stringify({
+                system_sn,
+                chart_mode,
+                last_version: lastDataVersion   // ⭐新增
+            })
         });
 
         if (!response.ok) throw new Error(response.status);
@@ -316,6 +318,10 @@ async function fetchData(url, system_sn, chart_mode) {
 
 function updateDataOnPage(data) {
     if (!data) return;
+
+    /* =============================
+       更新文字資訊
+    ============================= */
 
     document.getElementById('system_sn').value = data.system_sn || '--';
     document.getElementById('job_name').value = data.job_id + "/" + data.jobs_count;
@@ -336,9 +342,27 @@ function updateDataOnPage(data) {
         document.getElementById('fasten_status_bg').style.backgroundColor =
             data.fasten_status_bg;
     }
+
+    /* =============================
+       即時更新曲線圖
+    ============================= */
+
+    if (!data.data_version) return;
+
+    // 沒有新資料 → 不重畫
+    if (data.data_version === lastDataVersion) return;
+
+    console.log("📈 New fastening detected → redraw chart");
+
+    lastDataVersion = data.data_version;
+
+    if (!data.chart_payload || !myChart) return;
+
+    drawUnifiedChart(data.chart_payload);
 }
 
-function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 3000) {
+
+function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 1000) {
     const system_sn = document.getElementById('system_sn').value || '--';
     const chart_mode = new URLSearchParams(location.search).get('chart') || 1;
 

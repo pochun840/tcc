@@ -977,9 +977,9 @@ class Settings extends Controller
             }
 
             // 7. 檔名 + 副檔名驗證
-            /*$uploaded_filename = $_FILES['file']['name'];
+            //$uploaded_filename = $_FILES['file']['name'];
 
-            $packNamePattern = '/^tcc_idas_\d{8}-\d+\.\d+\.\d+\.\d+(?:_SA\d+)?\.pack$/i';
+            /*$packNamePattern = '/^tcc_idas_\d{8}-\d+\.\d+\.\d+\.\d+(?:_SA\d+)?\.pack$/i';
 
             if (!preg_match($packNamePattern, $uploaded_filename)) {
                 return $this->sendResponse(
@@ -1027,38 +1027,18 @@ class Settings extends Controller
             // 13. 解析 info.json
             $verify_data = json_decode(file_get_contents($info_json_url), true);
 
-            if (!is_array($verify_data)) {
+            if (
+                !$verify_data ||
+                !isset($verify_data['Match_TCC_Version']) ||
+                !isset($verify_data['controller_type'])
+            ) {
                 return $this->sendResponse('Error', $text['info_json_invalid']);
             }
 
-            $isIdasPackage = false;
-            $isLegacy      = false;
-
-            /**
-             * 新版包：Controller_type === KL-TCC-M7
-             */
-            if (isset($verify_data['Controller_type']) && $verify_data['Controller_type'] === 'KL-TCC-M7') {
-                $isIdasPackage = true;
+            // 14. IDAS 驗證
+            if ($verify_data['controller_type'] !== 'TCCIDAS') {
+                return $this->sendResponse('Error', $text['info_json_idas_invalid']);
             }
-
-            /**
-             * 舊版包（legacy B）：只有 Match_TCC_Version
-             */
-            if (
-                !$isIdasPackage &&
-                isset($verify_data['Match_TCC_Version']) &&
-                trim((string)$verify_data['Match_TCC_Version']) !== ''
-            ) {
-                $isIdasPackage = true;
-                $isLegacy = true;
-            }
-
-            // ❌ 不是 iDAS 包
-            if (!$isIdasPackage) {
-                return $this->sendResponse('Error', $text['not_idas_package'] ?? 'Not an iDAS package');
-            }
-
-
 
             // 15. 版本比對
             $match_tcc_version = $verify_data['Match_TCC_Version'];
@@ -1214,7 +1194,7 @@ class Settings extends Controller
         }
 
         /* =====================================================
-        * 1) 控制器登入狀態檢查（❗不呼叫 get_controller_login）
+        * 1) 控制器登入狀態檢查
         * ===================================================== */
         $Controller_Info = $this->ToolModel->GetControllerInfo();
         $isLogin = 0;
@@ -1607,7 +1587,7 @@ class Settings extends Controller
             $login = (int)$Controller_Info['user_logIn'];
         }
 
-        echo $login; // ★ 一定要 echo
+        echo $login; 
         exit;
     }
 
@@ -1713,8 +1693,7 @@ class Settings extends Controller
             return ((int)$info['user_logIn'] !== 0);
         }
 
-        return false; // 查不到 → 當作沒人登入
-    }
+        return false; 
 
 
 

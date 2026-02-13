@@ -732,13 +732,29 @@ function handleTargetOptChange(target_opt) {
     }
 
     /* =====================================================
-     * 目標延遲
-     * ===================================================== */
+    * 目標延遲
+    * ===================================================== */
     if (String(target_opt) === '2') {
 
         document.getElementById("edit_target_delay_item").style.display = 'block';
         document.getElementById("edit_target_tor_item").style.display   = 'none';
         document.getElementById("edit_target_ang_item").style.display   = 'none';
+
+        // ⭐⭐⭐ 延遲預設值（關鍵修正）
+        const fallbackDelay = '1.0';
+
+        // 第一次補值
+        if (targetDelayEl && (targetDelayEl.value == null || String(targetDelayEl.value).trim() === '')) {
+            targetDelayEl.value = fallbackDelay;
+        }
+
+        // 第二次補值（防 UI re-render 被洗掉）
+        setTimeout(function () {
+            const el = document.getElementById("edit_target_delay");
+            if (el && (el.value == null || String(el.value).trim() === '')) {
+                el.value = fallbackDelay;
+            }
+        }, 0);
 
         disableElementById('edit_th_tor', th_tor);
         disableElementById('edit_tor_hi', tor_hi);
@@ -754,6 +770,8 @@ function handleTargetOptChange(target_opt) {
 
         document.getElementById("downshift_OFF").checked = true;
     }
+
+
 }
 
 
@@ -965,352 +983,348 @@ function checkStepAndHandleDownshift(jobid, seqid, onSuccessCallback) {
 }
 
 
-// =====================================================
-// 核心表單檢查邏輯
-// =====================================================
 function input_check_core(prefix, step_id = '') {
 
     /* =====================================================
-     * 語系
-     * ===================================================== */
-    const getLang = () =>
-        (window.getLangAndUnit?.().lang
-            || window.getCookieSafe?.('language')
-            || 'zh-tw').toLowerCase();
+    * 語系
+    * ===================================================== */
+    function normalizeLang(raw){
+        const v = String(raw || '').toLowerCase().replace('_','-');
+        if (v.startsWith('zh-tw') || v.startsWith('zh-hant') || v === 'tw' || v === 'zh') return 'zh-tw';
+        if (v.startsWith('zh-cn') || v.startsWith('zh-hans') || v === 'cn') return 'zh-cn';
+        return 'en-us';
+    }
+    const LANG = normalizeLang(getCookie('language') || 'zh-tw');
 
-    const LANG = getLang();
-
+    /* ===================================================== */
     const MSG = {
+        rpm_range:{'zh-tw':'轉速必須介於 ({min} ~ {max})','zh-cn':'转速必须介于 ({min} ~ {max})','en-us':'RPM must be between ({min} ~ {max})'},
+        delay_range:{'zh-tw':'延遲時間必須介於 0.1 ~ 9.9 秒','zh-cn':'延迟时间必须介于 0.1 ~ 9.9 秒','en-us':'Delay time must be 0.1 ~ 9.9 sec'},
 
-        /* ========== Torque ========== */
-        
-        torque_cross: {
-            'zh-tw': '目標扭力超出範圍（{min} ～ {max}）',
-            'zh-cn': '目标扭力超出范围（{min} ～ {max}）',
-            'en-us': 'Target torque is out of range ({min} ~ {max})'
-        },
-        torque_lo_hi: {
-            'zh-tw': '扭力下限必須小於扭力上限',
-            'zh-cn': '扭力下限必须小于扭力上限',
-            'en-us': 'Torque low limit must be less than torque high limit'
-        },
-        tor_hi_over: {
-            'zh-tw': '扭力上限超出允許範圍（{min} ～ {max}）',
-            'zh-cn': '扭力上限超出允许范围（{min} ～ {max}）',
-            'en-us': 'Torque high limit is out of the allowed range ({min} ~ {max})'
-        },
-        tor_lo_cross: {
-            'zh-tw': '扭力下限 必須小於 目標扭力',
-            'zh-cn': '扭力下限 必须小于 目标扭力',
-            'en-us': 'Torque low limit must be less than target torque'
+        angle_lo_range:{'zh-tw':'角度下限必須介於 0 ~ 30600','zh-cn':'角度下限必须介于 0 ~ 30600','en-us':'Angle low must be 0 ~ 30600'},
+        angle_hi_range:{'zh-tw':'角度上限必須介於 1 ~ 30600','zh-cn':'角度上限必须介于 1 ~ 30600','en-us':'Angle high must be 1 ~ 30600'},
+        angle_lo_hi:{'zh-tw':'角度下限必須小於角度上限','zh-cn':'角度下限必须小于角度上限','en-us':'Angle low must be < Angle high'},
+        angle_lo_target:{'zh-tw':'角度下限必須小於目標角度','zh-cn':'角度下限必须小于目标角度','en-us':'Angle low must be < Target angle'},
+        angle_target_range:{'zh-tw':'目標角度必須介於角度上下限之間','zh-cn':'目标角度必须介于角度上下限之间','en-us':'Target angle must be inside range'},
+
+        torque_target_range:{'zh-tw':'目標扭力必須介於 ({min} ~ {max})','zh-cn':'目标扭力必须介于 ({min} ~ {max})','en-us':'Target torque must be ({min} ~ {max})'},
+        torque_lo_hi:{'zh-tw':'扭力下限必須小於扭力上限','zh-cn':'扭力下限必须小于扭力上限','en-us':'Torque low must be < Torque high'},
+        torque_lo_target:{'zh-tw':'扭力下限必須小於目標扭力','zh-cn':'扭力下限必须小于目标扭力','en-us':'Torque low must be < target torque'},
+        torque_hi_target:{'zh-tw':'扭力上限必須大於目標扭力','zh-cn':'扭力上限必须大于目标扭力','en-us':'Torque high must be > target torque'},
+
+        torque_hi_out_range:{
+            'zh-tw':'扭力上限超出範圍（{min} ~ {max}）',
+            'zh-cn':'扭力上限超出范围（{min} ~ {max}）',
+            'en-us':'Torque high is out of range ({min} ~ {max})'
         },
 
-        /* ========== Angle ========== */
-        angle_cross: {
-            'zh-tw': '目標角度超出範圍（1 ～ 30600）',
-            'zh-cn': '目标角度超出范围（1 ～ 30600）',
-            'en-us': 'Target angle is out of range (1 ~ 30600)'
-        },
-        angle_lo_range: {
-            'zh-tw': '角度下限必須介於 0 ～ 30600',
-            'zh-cn': '角度下限必须介于 0 ～ 30600',
-            'en-us': 'Minimum angle must be between 0 and 30600'
-        },
-        angle_hi_range: {
-            'zh-tw': '角度上限必須介於 0 ～ 30600',
-            'zh-cn': '角度上限必须介于 0 ～ 30600',
-            'en-us': 'Maximum angle must be between 0 and 30600'
-        },
-        angle_lo_hi: {
-            'zh-tw': '角度下限必須小於角度上限',
-            'zh-cn': '角度下限必须小于角度上限',
-            'en-us': 'Minimum angle must be less than the maximum angle'
+        // ✅ 修正：這個原本中文寫錯，會顯示成「必須小於目標扭力」
+        torque_lo_out_range:{
+            'zh-tw':'扭力下限超出範圍（{min} ~ {max}）',
+            'zh-cn':'扭力下限超出范围（{min} ~ {max}）',
+            'en-us':'Torque low is out of range ({min} ~ {max})'
         },
 
-        /* ========== Downshift / Threshold ========== */
-        th_tor_range: {
-            'zh-tw': '門檻扭力必須介於 ({min} ~ {max})',
-            'zh-cn': '门槛扭力必须介于 ({min} ~ {max})',
-            'en-us': 'Threshold torque must be between ({min} ~ {max})'
-        },
-        ds_tor_range: {
-            'zh-tw': '降速點扭力必須介於 ({min} ~ {max})',
-            'zh-cn': '降速点扭力必须介于 ({min} ~ {max})',
-            'en-us': 'Downshift torque must be between ({min} ~ {max})'
+        torque_hi_gt_lo_required:{
+            'zh-tw':'扭力上限需大於扭力下限',
+            'zh-cn':'扭力上限需大于扭力下限',
+            'en-us':'Torque high must be greater than torque low'
         },
 
-        rpm_range: {
-            'zh-tw': '轉速必須介於 ({min} ~ {max})',
-            'zh-cn': '转速必须介于 ({min} ~ {max})',
-            'en-us': 'RPM must be between ({min} ~ {max})'
+        torque_hi_hard_max: {
+        'zh-tw': '扭力上限超出範圍',
+        'zh-cn': '扭力上限超出范围',
+        'en-us': 'Torque high is out of range'
         },
 
-        ds_speed_range: {
-            'zh-tw': '降速點轉速 必須介於 ({min} ~ {max})',
-            'zh-cn': '降速点转速 必须介于 ({min} ~ {max})',
-            'en-us': 'Downshift speed must be between ({min} ~ {max})'
-        },
 
 
     };
 
-    const t = (k) => MSG[k]?.[LANG] || MSG[k]?.['en-us'] || k;
-    const tf = (k, v = {}) => {
-        let s = t(k);
-        for (const key in v) s = s.replaceAll(`{${key}}`, v[key]);
-        return s;
-    };
-
+    const t  = k => MSG[k]?.[LANG] || MSG[k]?.['zh-tw'] || '';
+    const tf = (k, v = {}) => { let s = t(k); for (const x in v) s = s.replaceAll(`{${x}}`, v[x]); return s; };
     const alertMsg = (title, msg, el) => {
-        if (window.alertify?.alert) {
-            alertify.alert(title, msg, () => {
-                try { el?.focus(); el?.select?.(); } catch {}
-            });
-        } else {
-            alert(msg);
-        }
+        alertify?.alert
+            ? alertify.alert(title, msg, () => { el?.focus?.(); el?.select?.(); })
+            : alert(msg);
     };
 
-    /* =====================================================
-     * Torque 精度
-     * ===================================================== */
-    const TORQUE_EPS = {
-        'N.m': 0.0005,
-        'kgf.cm': 0.005,
-        'kgf.m': 0.0005,
-        'lbf.in': 0.005,
-        'cN.m': 0.05
-    };
-
-    const unit =
-        document.getElementById('torque_unit_text')?.value
-        || document.getElementById('tor_unit_label')?.innerText
-        || 'N.m';
-
-    const eps = TORQUE_EPS[unit] ?? 0.0005;
-
-    /* =====================================================
-     * 模式判斷
-     * ===================================================== */
-    const target_opt = document.getElementById(prefix + 'target_opt')?.value;
-
-    /* =====================================================
-     * RPM 驗證（一定先跑）
-     * ===================================================== */
-    const elRpm = document.getElementById(prefix + 'rpm');
-    const rpm   = parseInt(elRpm?.value, 10);
-
-    const toolMaxRpm = parseInt(document.getElementById('tool_max_rpm')?.value,10);
-
+    /* ===================================================== */
+    const target_opt = document.getElementById(prefix+'target_opt')?.value;
     const stepNum = parseInt(step_id || '1', 10);
-    const rpmMin  = (stepNum === 1) ? 50 : 100;
 
-    if ( Number.isFinite(rpm) && Number.isFinite(toolMaxRpm) && (rpm < rpmMin || rpm > toolMaxRpm)) {
+    /* =====================================================
+    * RPM（所有模式都檢查）
+    * ===================================================== */
+    const elRpm = document.getElementById(prefix+'rpm');
+    const rpm = parseInt(elRpm?.value, 10);
+    const toolMaxRpm = parseInt(document.getElementById('tool_max_rpm')?.value, 10);
+    const rpmMin = (stepNum === 1) ? 50 : 100;
 
-        alertMsg( 'RPM', tf('rpm_range', { min: rpmMin, max: toolMaxRpm }), elRpm);
+    if (Number.isFinite(rpm) && Number.isFinite(toolMaxRpm) && (rpm < rpmMin || rpm > toolMaxRpm)) {
+        alertMsg('RPM', tf('rpm_range', { min: rpmMin, max: toolMaxRpm }), elRpm);
         return false;
     }
 
     /* =====================================================
-     * Angle 模式（target_opt === '1'）
-     * ===================================================== */
+    * Delay 模式（只讀 delay）
+    * ===================================================== */
+    if (target_opt === '2') {
+        const el = document.getElementById(prefix+'target_delay');
+        const v = parseFloat(el?.value);
+        if (!Number.isFinite(v) || v < 0.1 || v > 9.9) {
+            alertMsg('Delay', t('delay_range'), el);
+            return false;
+        }
+        return true;
+    }
+
+    /* =====================================================
+    * Angle 模式（主驗證 Angle + 被動驗證 Torque）🔥 FINAL
+    * 規則：
+    * 1️⃣ tor_hi 只要有輸入 >0 → 永遠檢查範圍
+    * 2️⃣ Torque window ON 條件：tor_lo > 0
+    * 3️⃣ lo/hi 關係只在 window ON 才檢查
+    * ===================================================== */
     if (target_opt === '1') {
 
-        const elTar = document.getElementById(prefix + 'target_ang');
-        const elLo  = document.getElementById(prefix + 'ang_lo');
-        const elHi  = document.getElementById(prefix + 'ang_hi');
+        const HARD_MAX_TORQUE = 55;
+
+        const toolMin = parseFloat(document.getElementById('tool_min_tor')?.value);
+        const toolMax = parseFloat(document.getElementById('tool_max_tor')?.value);
+        const hasToolRange = Number.isFinite(toolMin) && Number.isFinite(toolMax);
+
+        const torHiEl = document.getElementById(prefix+'tor_hi');
+        const torLoEl = document.getElementById(prefix+'tor_lo');
+
+        const torHiRaw = String(torHiEl?.value ?? '').trim();
+        const torLoRaw = String(torLoEl?.value ?? '').trim();
+
+        const hasTorHi = torHiRaw !== '';
+        const hasTorLo = torLoRaw !== '';
+
+        const torHi = hasTorHi ? parseFloat(torHiRaw) : NaN;
+        const torLo = hasTorLo ? parseFloat(torLoRaw) : NaN;
+
+        const torHiEnabled = hasTorHi && Number.isFinite(torHi) && torHi > 0;
+        const torLoEnabled = hasTorLo && Number.isFinite(torLo) && torLo > 0;
+
+        /* =====================================================
+        * ⭐⭐⭐ 永遠檢查 tor_hi 範圍（修正切模式殘值 bug）⭐⭐⭐
+        * ===================================================== */
+
+        // 機台硬上限
+        if (torHiEnabled && torHi > HARD_MAX_TORQUE) {
+            alertMsg('Torque', tf('torque_hi_hard_max', { max: HARD_MAX_TORQUE }), torHiEl);
+            return false;
+        }
+
+        // Tool range（只要有填 hi 就要檢查）
+        if (hasToolRange && torHiEnabled && (torHi < toolMin || torHi > toolMax)) {
+            alertMsg('Torque', tf('torque_hi_out_range', { min: toolMin, max: toolMax }), torHiEl);
+            return false;
+        }
+
+        /* =====================================================
+        * Torque window 開關（只看 tor_lo）
+        * ===================================================== */
+        const torqueWindowEnabledInAngle = torLoEnabled;
+
+        if (hasToolRange && torqueWindowEnabledInAngle) {
+
+            if (torLoEnabled === false && hasTorLo && torLoRaw !== '0') {
+                if (!Number.isFinite(torLo)) {
+                    alertMsg('Torque', tf('torque_lo_out_range', { min: toolMin, max: toolMax }), torLoEl);
+                    return false;
+                }
+            }
+
+            if (torHiEnabled === false && hasTorHi && torHiRaw !== '0') {
+                if (!Number.isFinite(torHi)) {
+                    alertMsg('Torque', tf('torque_hi_out_range', { min: toolMin, max: toolMax }), torHiEl);
+                    return false;
+                }
+            }
+
+            if (torLoEnabled && (torLo < toolMin || torLo > toolMax)) {
+                alertMsg('Torque', tf('torque_lo_out_range', { min: toolMin, max: toolMax }), torLoEl);
+                return false;
+            }
+
+            // ⭐ window ON 才檢查 lo < hi
+            if (torLoEnabled && torHiEnabled && torLo >= torHi) {
+                alertMsg('Torque', t('torque_lo_hi'), torLoEl);
+                return false;
+            }
+        }
+
+        /* ================= 主驗證 Angle ================= */
+        const elTar = document.getElementById(prefix+'target_ang');
+        const elLo  = document.getElementById(prefix+'ang_lo');
+        const elHi  = document.getElementById(prefix+'ang_hi');
 
         const tar = parseInt(elTar?.value, 10);
         const lo  = parseInt(elLo?.value, 10);
         const hi  = parseInt(elHi?.value, 10);
 
-        if (Number.isFinite(lo) && (lo < 0 || lo > 30600)) {
-            alertMsg(t('angle_lo_range'), t('angle_lo_range'), elLo);
+        if (!Number.isFinite(lo) || lo < 0 || lo > 30600) {
+            alertMsg('Angle', t('angle_lo_range'), elLo);
             return false;
         }
 
-        if (Number.isFinite(hi) && (hi < 0 || hi > 30600)) {
-            alertMsg(t('angle_hi_range'), t('angle_hi_range'), elHi);
+        if (!Number.isFinite(hi) || hi < 1 || hi > 30600) {
+            alertMsg('Angle', t('angle_hi_range'), elHi);
             return false;
         }
 
-        if (Number.isFinite(lo) && Number.isFinite(hi) && lo >= hi) {
-            alertMsg(t('angle_lo_hi'), t('angle_lo_hi'), elLo);
+        if (lo >= hi) {
+            alertMsg('Angle', t('angle_lo_hi'), elLo);
             return false;
         }
 
-        if (Number.isFinite(tar) && Number.isFinite(hi) && tar >= hi) {
-            alertMsg(t('angle_cross'), t('angle_cross'), elTar);
+        if (!Number.isFinite(tar)) {
+            alertMsg('Angle', t('angle_target_range'), elTar);
             return false;
         }
 
-        if (Number.isFinite(tar) && Number.isFinite(lo) && tar <= lo) {
-            alertMsg(t('angle_cross'), t('angle_cross'), elTar);
+        if (lo >= tar) {
+            alertMsg('Angle', t('angle_lo_target'), elLo);
+            return false;
+        }
+
+        if (tar <= lo || tar >= hi) {
+            alertMsg('Angle', t('angle_target_range'), elTar);
             return false;
         }
 
         return true;
     }
 
+
+
     /* =====================================================
-    * Torque + Downshift（target_opt === '0'）
+    * Torque 模式（主驗證 Torque + 被動驗證 Angle）🔥 FINAL
     * ===================================================== */
     if (target_opt === '0') {
 
-        const elTar   = document.getElementById(prefix + 'target_tor');
-        const elTorHi = document.getElementById(prefix + 'tor_hi');
-        const elTorHiEdit = document.getElementById(prefix + 'edit_tor_hi');
-
-        const hi_tor_final = document.getElementById('tool_maxtorque_unified');
-
-        const tar        = parseFloat(elTar?.value);
-        const torHi      = parseFloat(elTorHi?.value);
-        const torHiEdit  = parseFloat(elTorHiEdit?.value);
+        const HARD_MAX_TORQUE = 55;
 
         const toolMin = parseFloat(document.getElementById('tool_min_tor')?.value);
         const toolMax = parseFloat(document.getElementById('tool_max_tor')?.value);
+        const hasToolRange = Number.isFinite(toolMin) && Number.isFinite(toolMax);
 
-        const hiTorFinalVal = parseFloat(hi_tor_final?.value);
+        const elTar = document.getElementById(prefix+'target_tor');
+        const elLo  = document.getElementById(prefix+'tor_lo');
+        const elHi  = document.getElementById(prefix+'tor_hi');
 
-        const elTorLo = document.getElementById(prefix + 'tor_lo');
-        const torLo   = parseFloat(elTorLo?.value);
+        const tarRaw = String(elTar?.value ?? '').trim();
+        const loRaw  = String(elLo?.value  ?? '').trim();
+        const hiRaw  = String(elHi?.value  ?? '').trim();
 
+        const hasTar = tarRaw !== '';
+        const hasLo  = loRaw  !== '';
+        const hasHi  = hiRaw  !== '';
 
-        /* ① target torque 範圍 */
-        if (Number.isFinite(tar) && Number.isFinite(toolMin) && Number.isFinite(toolMax) && (tar < toolMin - eps || tar > toolMax + eps)) {
+        const tar = hasTar ? parseFloat(tarRaw) : NaN;
+        const lo  = hasLo  ? parseFloat(loRaw)  : NaN;
+        const hi  = hasHi  ? parseFloat(hiRaw)  : NaN;
 
-                alertMsg('Torque', tf('torque_cross', {min: toolMin.toFixed(3), max: toolMax.toFixed(3)}), elTar);
-                return false;
-        }
+        const loEnabled = hasLo && Number.isFinite(lo) && lo > 0;
+        const hiEnabled = hasHi && Number.isFinite(hi) && hi > 0;
 
-        /* ①-1 tor_lo 必須小於 target_tor */
-        if (
-            Number.isFinite(torLo) &&
-            Number.isFinite(tar) &&
-            torLo >= tar - eps
-        ) {
-            alertMsg(
-                'Torque',
-                t('tor_lo_cross'),
-                elTorLo
-            );
+        /* ================= 被動檢查 Angle ================= */
+        const angHiEl = document.getElementById(prefix+'ang_hi');
+        const angLoEl = document.getElementById(prefix+'ang_lo');
+
+        const angHi = parseInt(angHiEl?.value, 10);
+        const angLo = parseInt(angLoEl?.value, 10);
+
+        if (Number.isFinite(angHi) && (angHi < 1 || angHi > 30600)) {
+            alertMsg('Angle', t('angle_hi_range'), angHiEl);
             return false;
         }
 
-        /* ①-2 Angle lo / hi 驗證（Torque 模式也要檢查） */
-        const elAngLo = document.getElementById(prefix + 'ang_lo');
-        const elAngHi = document.getElementById(prefix + 'ang_hi');
-
-        const angLo = parseInt(elAngLo?.value, 10);
-        const angHi = parseInt(elAngHi?.value, 10);
-
-        if (
-            Number.isFinite(angLo) &&
-            Number.isFinite(angHi) &&
-            angLo >= angHi
-        ) {
-            alertMsg(
-                'Angle',
-                t('angle_lo_hi'),
-                elAngLo
-            );
+        if (Number.isFinite(angLo) && (angLo < 0 || angLo > 30600)) {
+            alertMsg('Angle', t('angle_lo_range'), angLoEl);
             return false;
         }
 
-
-
-
-
-        /* ② tor_hi / edit_tor_hi 驗證
-        * 規則：
-        *   target_tor < tor_hi ≤ tool_maxtorque_unified
-        */
-        if (Number.isFinite(hiTorFinalVal) && Number.isFinite(tar)) {
-
-            if (
-                Number.isFinite(torHi) &&
-                (torHi <= tar + eps || torHi > hiTorFinalVal + eps)
-            ) {
-                alertMsg(
-                    'Torque',
-                    tf('tor_hi_over', {
-                        min: tar.toFixed(3),
-                        max: hiTorFinalVal.toFixed(3)
-                    }),
-                    elTorHi
-                );
-                return false;
-            }
-
-            if (
-                Number.isFinite(torHiEdit) &&
-                (torHiEdit <= tar + eps || torHiEdit > hiTorFinalVal + eps)
-            ) {
-                alertMsg(
-                    'Torque',
-                    tf('tor_hi_over', {
-                        min: tar.toFixed(3),
-                        max: hiTorFinalVal.toFixed(3)
-                    }),
-                    elTorHiEdit
-                );
-                return false;
-            }
-        }
-
-
-
-        /* ④ downshift */
-        if (document.getElementById('downshift_ON')?.checked) {
-
-            const elTh = document.getElementById(prefix + 'th_tor');
-            const elDs = document.getElementById(prefix + 'ds_tor');
-
-            const th = parseFloat(elTh?.value);
-            const ds = parseFloat(elDs?.value);
-
-            const minStr = (0).toFixed(3);
-            const maxStr = Number.isFinite(toolMax) ? toolMax.toFixed(3) : '';
-
-            if (Number.isFinite(th) && (th < 0 - eps || th > toolMax + eps)) {
-                alertMsg('Torque', tf('th_tor_range', { min: minStr, max: maxStr }), elTh);
-                return false;
-            }
-
-            if (Number.isFinite(ds) && (ds < 0 - eps || ds > toolMax + eps)) {
-                alertMsg('Torque', tf('ds_tor_range', { min: minStr, max: maxStr }), elDs);
-                return false;
-            }
-        }
-
-        /* ④-1 ds_speed（降速點轉速）驗證：範圍與 RPM 相同 */
-        const elDsSpeed = document.getElementById(prefix + 'ds_speed');
-        const dsSpeed   = parseInt(elDsSpeed?.value, 10);
-
-        if (
-            Number.isFinite(dsSpeed) &&
-            Number.isFinite(toolMaxRpm) &&
-            (dsSpeed < rpmMin || dsSpeed > toolMaxRpm)
-        ) {
-            alertMsg(
-                'RPM',
-                tf('ds_speed_range', { min: rpmMin, max: toolMaxRpm }),
-                elDsSpeed
-            );
+        if (Number.isFinite(angLo) && Number.isFinite(angHi) && angLo >= angHi) {
+            alertMsg('Angle', t('angle_lo_hi'), angLoEl);
             return false;
         }
 
+        /* ================= Target Torque ================= */
+        if (!hasTar || !Number.isFinite(tar)) {
+            alertMsg('Torque', t('torque_target_range'), elTar);
+            return false;
+        }
 
+        if (hasToolRange && (tar < toolMin || tar > toolMax)) {
+            alertMsg('Torque', tf('torque_target_range',{min:toolMin,max:toolMax}), elTar);
+            return false;
+        }
+
+        /* ================= tor_hi 永遠檢查硬上限 ================= */
+        if (hiEnabled && hi > HARD_MAX_TORQUE) {
+            alertMsg('Torque', tf('torque_hi_hard_max', { max: HARD_MAX_TORQUE }), elHi);
+            return false;
+        }
+
+        /* =====================================================
+        * ⭐ 新規則：lo=0 且 hi=0 不允許
+        * ===================================================== */
+        if (!loEnabled && !hiEnabled) {
+            alertMsg('Torque', t('torque_hi_gt_lo_required'), elHi);
+            return false;
+        }
+
+        /* ================= Window 開關 ================= */
+        const torqueWindowEnabled = loEnabled;
+
+        if (!torqueWindowEnabled) {
+            return true; // lo=0 → 不檢查 window 關係
+        }
+
+        /* ================= Window ON ================= */
+
+        if (hasToolRange && (lo < toolMin || lo > toolMax)) {
+            alertMsg('Torque', tf('torque_lo_out_range',{min:toolMin,max:toolMax}), elLo);
+            return false;
+        }
+
+        if (hiEnabled && hasToolRange && (hi < toolMin || hi > toolMax)) {
+            alertMsg('Torque', tf('torque_hi_out_range',{min:toolMin,max:toolMax}), elHi);
+            return false;
+        }
+
+        if (lo >= tar) {
+            alertMsg('Torque', t('torque_lo_target'), elLo);
+            return false;
+        }
+
+        if (hiEnabled && hi <= tar) {
+            alertMsg('Torque', t('torque_hi_target'), elHi);
+            return false;
+        }
+
+        if (hiEnabled && lo >= hi) {
+            alertMsg('Torque', t('torque_lo_hi'), elLo);
+            return false;
+        }
 
         return true;
     }
+
+
+
+
+
 
 
 
     return true;
 }
-
-
 
 
 

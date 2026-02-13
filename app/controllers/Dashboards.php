@@ -223,7 +223,6 @@ class Dashboards extends Controller
     }
 
 
-
     public function get_new_data() {
 
         $file = $this->MiscellaneousModel->lang_load();
@@ -233,84 +232,76 @@ class Dashboards extends Controller
 
         $inputData = json_decode(file_get_contents('php://input'), true);
 
-        $system_sn = isset($inputData['system_sn']) ? trim($inputData['system_sn']) : '';
+        $system_sn  = $inputData['system_sn']  ?? '';
         $chart_mode = isset($inputData['chart_mode']) ? (int)$inputData['chart_mode'] : 1;
 
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
-        
 
-        // 根據 system_sn 取得最新資料
+        /* =============================
+        最新鎖附資訊
+        ============================= */
         $first_data = $this->DataModel->get_new_info($system_sn); 
-    
+
         if (!empty($first_data)) {
-            // 整理狀態說明與背景顏色
-            $first_data['fasten_status_explain'] = $status_arr[$first_data['fasten_status']] ?? '';
-    
+
+            $first_data['fasten_status_explain'] =
+                $status_arr[$first_data['fasten_status']] ?? '';
+
             switch ($first_data['fasten_status']) {
-                case "4":
-                    $first_data['fasten_status_bg'] = 'green';
-                    break;
+                case "4": $first_data['fasten_status_bg'] = 'green'; break;
                 case "5":
-                case "6":
-                    $first_data['fasten_status_bg'] = '#FFCC00';
-                    break;
-                default:
-                    $first_data['fasten_status_bg'] = 'red';
-                    break;
-            }
-    
-
-            //控制器的扭力單位
-            $res_device = $this->SettingModel->GetControllerInfo();
-            if(!empty($res_device)){
-                $step_torque_unit = (int)$res_device['device_torque_unit'];  
+                case "6": $first_data['fasten_status_bg'] = '#FFCC00'; break;
+                default:  $first_data['fasten_status_bg'] = 'red'; break;
             }
 
-            $step_tor_unit_tmp = (int)$first_data['step_tor_unit'];
-            
-            if($step_tor_unit_tmp == $first_data['fasten_status']){
-                $flag = "Y";
-                $first_data['fasten_status_unit_explain'] = $unit_arr[$first_data['step_tor_unit']];
-            }else{
-                $flag = "N";
-                $first_data['fasten_status_unit_explain'] = $unit_arr[$step_torque_unit];
-
-                //扭力單位換算
-                $res_device = $this->SettingModel->GetControllerInfo();
-                $step_torque_unit = (int)$res_device['device_torque_unit']; // ex: 0~4
-                $unit_name       = $this->MiscellaneousModel->get_unit_name_by_index($step_torque_unit); //取得扭力單位的中文名稱
-                $temp_tor  = $this->MiscellaneousModel->convert_all_torque_units($first_data['fasten_torque'], 1); // 1 = N.m
-                $first_data['fasten_torque'] = $temp_tor[$unit_name]; 
-                           
-            }
-
-            $first_data['error_massage_explanation'] = $error_message['ERR_'.$first_data['error_message']];
-
-            //取得目前的job數量 
-            $jobs_count  = $this->jobModel->countjob();
-            if(!empty($jobs_count)){
-                 $first_data['jobs_count'] = $jobs_count;
-            }
-            //透過job_id 去找出對應的seq數量
-            $seqs_count = $this->sequenceModel->countseq($first_data['job_id']);
-            if(!empty($seqs_count)){
-                $first_data['seqs_count'] = $seqs_count;
-            }
-
+            $first_data['error_massage_explanation'] =
+                $error_message['ERR_'.$first_data['error_message']];
         }
 
+        /* =============================
+        ⭐ 即時曲線圖
+        ============================= */
+        if (!empty($first_data)) {
 
-        #即時曲線圖
-        if(!empty($first_data)){
-           
             $chart_data = $this->live_line_chart($chart_mode);
-            $first_data['chart_data'] = $chart_data;
-        }
-        
-        echo json_encode($first_data);
 
+            $chart_payload = [
+                'xAxis' => [],
+                'series' => []
+            ];
+
+            if (!empty($chart_data['x_val']) && !empty($chart_data['y_val'])) {
+
+                $chart_payload['xAxis'] = array_values($chart_data['x_val']);
+
+                if (array_keys($chart_data['y_val']) === range(0, count($chart_data['y_val']) - 1)) {
+                    $chart_payload['series'][] = [
+                        'name' => 'Realtime',
+                        'data' => array_values($chart_data['y_val'])
+                    ];
+                } else {
+                    foreach ($chart_data['y_val'] as $step => $vals) {
+                        $chart_payload['series'][] = [
+                            'name' => 'Step '.$step,
+                            'data' => array_values($vals)
+                        ];
+                    }
+                }
+            }
+
+            $first_data['chart_payload'] = $chart_payload;
+        }
+
+        /* =============================
+        ⭐⭐⭐ 最重要：即時更新版本號
+        ============================= */
+        $first_data['data_version'] = $this->get_latest_csv_version();
+
+        echo json_encode($first_data);
     }
+
+
 
 
 
@@ -567,6 +558,23 @@ class Dashboards extends Controller
 
         return [true, $msg];
     }
+
+    private function get_latest_csv_version(){
+
+        $dir = '/mnt/ramdisk/ftp/';
+        if (!is_dir($dir)) return 0;
+
+        $files = glob($dir . '*.csv');
+        if (!$files) return 0;
+
+        $latestTime = 0;
+        foreach ($files as $f) {
+            $t = filemtime($f);
+            if ($t > $latestTime) $latestTime = $t;
+        }
+        return $latestTime;
+    }
+
 
 
     

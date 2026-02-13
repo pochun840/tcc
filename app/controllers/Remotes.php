@@ -16,6 +16,12 @@ class Remotes extends Controller
     // 取得所有Jobs
     public function index(){
 
+        /*$file = $this->MiscellaneousModel->lang_load();
+        if(!empty($file)){
+            include $file;
+        }*/
+
+
         $isMobile = $this->isMobileCheck();
         $job_list = $this->SettingModel->get_job_list();
 

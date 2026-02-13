@@ -238,6 +238,9 @@ input:disabled
 
 
 <script>
+let lastDataVersion = 0;
+let pollingActive = true;
+
 /* =====================================================
  * 共用工具
  * ===================================================== */
@@ -266,13 +269,35 @@ function chart_type(argument) {
     url.searchParams.set("chart", chart);
     window.history.replaceState({}, '', url);
 
-    // 重新畫圖（直接用後端已給的 payload）
-    drawUnifiedChart(window.chartPayload);
+    // ⭐強制重新抓新曲線
+    lastDataVersion = 0;
+
+    const sn = document.getElementById('system_sn').value;
+    if (!sn) return;   // ⭐這行非常重要
+
+    fetchData('?url=Dashboards/get_new_data', sn, chart);
 }
+
+
 
 /* =====================================================
  * 統一曲線圖（唯一入口）
  * ===================================================== */
+function getLangSafe() {
+  return (getCookie?.('language') || 'zh-tw').toLowerCase();
+}
+
+function t(key) {
+  const lang = getLangSafe();
+  const dict = {
+    waiting_fasten: {
+      'zh-tw': '等待鎖附資料中…',
+      'zh-cn': '等待锁附数据中…',
+      'en-us': 'Waiting for fastening data…'
+    }
+  };
+  return (dict[key] && (dict[key][lang] || dict[key]['en-us'])) || key;
+}
 
 var myChart = null;
 
@@ -295,12 +320,23 @@ window.addEventListener('load', function () {
         chartPayload.series.length === 0
     ) {
         dom.innerHTML =
-            '<div style="text-align:center;color:#999;padding-top:80px;">等待鎖附資料中…</div>';
+             `<div style="text-align:center;color:#999;padding-top:80px;">${t('waiting_fasten')}</div>`;
         return;
     }
 
     drawUnifiedChart(chartPayload);
+
+    if (chartPayload && chartPayload.version) {
+        lastDataVersion = chartPayload.version;
+    }
+
+    // ⭐搬到這裡
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+        mainContent.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }
 });
+
 
 function drawUnifiedChart(payload) {
 
@@ -317,7 +353,7 @@ function drawUnifiedChart(payload) {
 
     const option = {
         tooltip: { trigger: 'axis' },
-        legend: { top: 6 },
+        legend: { show: false }, 
         grid: {
             left: '10%',
             right: '6%',
@@ -358,14 +394,16 @@ window.addEventListener("orientationchange", function () {
  * 即時資料 polling（只更新右側狀態，不再動 chart）
  * ===================================================== */
 
-let pollingActive = true;
-
 async function fetchData(url, system_sn, chart_mode) {
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ system_sn, chart_mode })
+            body: JSON.stringify({
+                system_sn,
+                chart_mode,
+                last_version: lastDataVersion   // ⭐新增
+            })
         });
 
         if (!response.ok) throw new Error(response.status);
@@ -379,6 +417,10 @@ async function fetchData(url, system_sn, chart_mode) {
 
 function updateDataOnPage(data) {
     if (!data) return;
+
+    /* =============================
+       更新右側文字資訊
+    ============================= */
 
     document.getElementById('system_sn').value = data.system_sn || '--';
     document.getElementById('job_name').value = data.job_id + "/" + data.jobs_count;
@@ -399,32 +441,53 @@ function updateDataOnPage(data) {
         document.getElementById('fasten_status_bg').style.backgroundColor =
             data.fasten_status_bg;
     }
+
+    // 後端沒有給 version → 不更新
+    if (!data.data_version) return;
+
+    // 沒有新鎖附 → 不重畫
+    if (data.data_version === lastDataVersion) return;
+
+    console.log("📈 New fastening detected → redraw chart");
+
+    lastDataVersion = data.data_version;
+
+    if (!data.chart_payload) return;
+
+    // 更新全域 payload
+    window.chartPayload = data.chart_payload;
+
+    // 重畫圖
+    drawUnifiedChart(data.chart_payload);
 }
 
-function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 3000) {
 
-    const system_sn = document.getElementById('system_sn').value || '--';
-    const chart_mode = new URLSearchParams(location.search).get('chart') || 1;
+function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 1000) {
 
     async function poll() {
+
         if (!pollingActive) return;
+
+        const system_sn =
+            document.getElementById('system_sn').value || '';
+
+        const chart_mode =
+            new URLSearchParams(location.search).get('chart') || 1;
+
+        // ⭐沒有 system_sn 不要打 API
+        if (!system_sn) {
+            setTimeout(poll, interval);
+            return;
+        }
+
         await fetchData(url, system_sn, chart_mode);
         setTimeout(poll, interval);
     }
+
     poll();
 }
 
 startApiPolling();
 
-/* =====================================================
- * 回到頁面頂部（保留原行為）
- * ===================================================== */
-
-window.onload = function () {
-    const mainContent = document.querySelector('.main-content');
-    if (mainContent) {
-        mainContent.scrollIntoView({ behavior: 'auto', block: 'start' });
-    }
-};
 </script>
 
