@@ -1695,12 +1695,6 @@ class Settings extends Controller
 
         return false; 
 
-
-
-
-
-
-
-    
+    }
 
 }
