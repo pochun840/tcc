@@ -1,3 +1,8 @@
+// 取得上限扭力(已做完扭力單位的轉換)
+function getHardMaxTorque() {
+    return parseFloat(document.getElementById('tool_maxtorque_unified')?.value) || 0;
+}
+
 function setToolSpecToUIAndGlobal(tool_maxtorque, tool_mintorque) {
     const maxV = (tool_maxtorque == null) ? '' : String(tool_maxtorque).trim();
     const minV = (tool_mintorque == null) ? '' : String(tool_mintorque).trim();
@@ -588,7 +593,7 @@ function toggleVisibility(targetValue) {
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
         document.getElementById("downshift_OFF").checked = true;
-        document.getElementById('tor_hi').value = 55;
+        document.getElementById('tor_hi').value = getHardMaxTorque();
         document.getElementById('tor_lo').value = 0;
         document.getElementById('ang_hi').value = 30600;
         document.getElementById('ang_lo').value = 0;
@@ -609,7 +614,7 @@ function toggleVisibility(targetValue) {
         disableElementById('direction_CCW','');
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
-        document.getElementById('tor_hi').value = 55;
+        document.getElementById('tor_hi').value = getHardMaxTorque();
         document.getElementById('tor_lo').value = 0;
         document.getElementById('ang_hi').value = 30600;
         document.getElementById('ang_lo').value = 0;
@@ -1088,7 +1093,7 @@ function input_check_core(prefix, step_id = '') {
     * ===================================================== */
     if (target_opt === '1') {
 
-        const HARD_MAX_TORQUE = 55;
+        const HARD_MAX_TORQUE = getHardMaxTorque();
 
         const toolMin = parseFloat(document.getElementById('tool_min_tor')?.value);
         const toolMax = parseFloat(document.getElementById('tool_max_tor')?.value);
@@ -1207,7 +1212,7 @@ function input_check_core(prefix, step_id = '') {
     * ===================================================== */
     if (target_opt === '0') {
 
-        const HARD_MAX_TORQUE = 55;
+        const HARD_MAX_TORQUE = getHardMaxTorque();
 
         const toolMin = parseFloat(document.getElementById('tool_min_tor')?.value);
         const toolMax = parseFloat(document.getElementById('tool_max_tor')?.value);

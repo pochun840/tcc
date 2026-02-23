@@ -139,6 +139,11 @@ class Step extends Controller
             'target_tor_value' => $low_torque_arr[$unit_name]
         ];
 
+        //扭力單位換算過後的 final扭力值
+        //$data['tools']['tool_maxtorque_unified']
+
+      
+
         if ($isMobile) {
             $this->view('step/index_m', $data);
         } else {
