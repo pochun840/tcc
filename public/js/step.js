@@ -292,139 +292,119 @@ function edit_step(stepid) {
             step_id: stepid
         },
         success: function (response) {
+
             const responseJSON = JSON.stringify(response);
             let cleanString = responseJSON.replace(/Array|\\n/g, '');
             cleanString = cleanString.substring(2, cleanString.length - 2);
 
-            const [, target_opt] = cleanString.match(/\[target_opt\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, target_tor] = cleanString.match(/\[target_tor\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, target_ang] = cleanString.match(/\[target_ang\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, target_delay] = cleanString.match(/\[target_delay\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, tor_hi] = cleanString.match(/\[tor_hi\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, tor_lo] = cleanString.match(/\[tor_lo\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, ang_hi] = cleanString.match(/\[ang_hi\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, ang_lo] = cleanString.match(/\[ang_lo\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, rpm] = cleanString.match(/\[rpm\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, direction] = cleanString.match(/\[direction\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, th_mode] = cleanString.match(/\[th_mode\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, pnf_set] = cleanString.match(/\[pnf_set\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, ds_tor] = cleanString.match(/\[ds_tor\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, ds_speed] = cleanString.match(/\[ds_speed\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, th_tor] = cleanString.match(/\[th_tor\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, step_id] = cleanString.match(/\[step_id\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, tool_maxtorque] = cleanString.match(/\[tool_maxtorque\]\s*=>\s*([^ ]+)/) || [, null];
-            const [, tool_mintorque] = cleanString.match(/\[tool_mintorque\]\s*=>\s*([^ ]+)/) || [, null];
+            // 解析 step 資料
+            const [, target_opt]   = cleanString.match(/\[target_opt\]\s*=>\s*([^ ]+)/) || [, '0'];
+            const [, target_tor]   = cleanString.match(/\[target_tor\]\s*=>\s*([^ ]+)/) || [, ''];
+            const [, target_ang]   = cleanString.match(/\[target_ang\]\s*=>\s*([^ ]+)/) || [, ''];
+            const [, target_delay] = cleanString.match(/\[target_delay\]\s*=>\s*([^ ]+)/) || [, ''];
 
+            const [, tor_hi] = cleanString.match(/\[tor_hi\]\s*=>\s*([^ ]+)/) || [, ''];
+            const [, tor_lo] = cleanString.match(/\[tor_lo\]\s*=>\s*([^ ]+)/) || [, ''];
+            const [, ang_hi] = cleanString.match(/\[ang_hi\]\s*=>\s*([^ ]+)/) || [, ''];
+            const [, ang_lo] = cleanString.match(/\[ang_lo\]\s*=>\s*([^ ]+)/) || [, ''];
+
+            const [, rpm]       = cleanString.match(/\[rpm\]\s*=>\s*([^ ]+)/) || [, ''];
+            const [, direction] = cleanString.match(/\[direction\]\s*=>\s*([^ ]+)/) || [, ''];
+            const [, th_mode]   = cleanString.match(/\[th_mode\]\s*=>\s*([^ ]+)/) || [, '0'];
+            const [, pnf_set]   = cleanString.match(/\[pnf_set\]\s*=>\s*([^ ]+)/) || [, '0'];
+
+            const [, ds_tor]   = cleanString.match(/\[ds_tor\]\s*=>\s*([^ ]+)/) || [, ''];
+            const [, ds_speed] = cleanString.match(/\[ds_speed\]\s*=>\s*([^ ]+)/) || [, ''];
+            const [, th_tor]   = cleanString.match(/\[th_tor\]\s*=>\s*([^ ]+)/) || [, ''];
+
+            const [, step_id]  = cleanString.match(/\[step_id\]\s*=>\s*([^ ]+)/) || [, ''];
+
+            // ⚠️ 工具值（後端 raw）— 只取出來，不要用它覆蓋 UI 的 unified
+            const [, toolMaxRawFromDb] = cleanString.match(/\[tool_maxtorque\]\s*=>\s*([^ ]+)/) || [, null];
+            const [, toolMinRawFromDb] = cleanString.match(/\[tool_mintorque\]\s*=>\s*([^ ]+)/) || [, null];
+
+            // ✅ 用「目前頁面已轉換好的工具上下限」當唯一可信來源（避免 55 -> 1）
+            // 這裡會讓 handleTargetOptChange / input_check_core 讀到的範圍保持一致
+            const pageToolMax = (document.getElementById("tool_maxtorque_unified")?.value ?? '').toString().trim()
+                             || (document.getElementById("tool_max_tor")?.value ?? '').toString().trim();
+            const pageToolMin = (document.getElementById("tool_min_tor")?.value ?? '').toString().trim();
+
+            window.__TOOL_MAX_TOR__ = pageToolMax;
+            window.__TOOL_MIN_TOR__ = pageToolMin;
+
+            // ❌ 不要做：unified.value = toolMaxRawFromDb;
+            // ❌ 不要做：setToolSpecToUIAndGlobal(toolMaxRawFromDb, toolMinRawFromDb);
+
+            // 開啟 modal
             document.getElementById('editstep').style.display = 'block';
-            document.querySelector("select[name='edit_target_opt']").value = target_opt;
-            document.getElementById("tool_max_tor").value = tool_maxtorque;
-            document.getElementById("tool_min_tor").value = tool_mintorque;
 
+            // 設定 target_opt（先設值，後面我們手動呼叫 handleTargetOptChange）
+            const sel = document.querySelector("select[name='edit_target_opt']");
+            if (sel) sel.value = String(target_opt);
 
-
-            if (target_opt == 0) {
-                const inputs = document.querySelectorAll("input[type='text'], input[type='radio'], select");
-                inputs.forEach(input => input.disabled = false);
-
-                document.getElementById("edit_target_tor").value = target_tor;
-                document.getElementById("edit_target_ang_item").style.display = 'none';
-                document.getElementById("edit_target_delay_item").style.display = 'none';
-                document.getElementById("edit_target_tor_item").style.display = 'block';
-
-                // ✅ 檢查是否為第 4 個 step，禁用 downshift
-                $.post("?url=Step/check_step_limit", {
-                    jobid: jobid,
-                    seqid: seqid
-                }, function (res) {
-                    let result;
-                    try {
-                        result = JSON.parse(res);
-                    } catch (e) {
-                        alertify.alert('錯誤', '回傳格式錯誤');
-                        return;
-                    }
-
-                    if (result.count === 4) {
-                        const downshiftOff = document.getElementById('edit_downshift_OFF');
-                        const downshiftOn = document.getElementById('edit_downshift_ON');
-                        if (downshiftOff) downshiftOff.disabled = true;
-                        if (downshiftOn) downshiftOn.disabled = true;
-                    }
-                });
-            }
-
-            if (target_opt == 1) {
-                const inputs = document.querySelectorAll("input[type='text'], input[type='radio'], select");
-                inputs.forEach(function (input) {
-                    if (input.type === 'radio' && input.name === 'edit_direction') {
-                        input.disabled = false;
-                    } else if (input.type !== 'radio') {
-                        input.disabled = false;
-                    }
-                });
-
-                document.getElementById("edit_target_ang").value = target_ang;
-                document.getElementById("edit_target_tor_item").style.display = 'none';
-                document.getElementById("edit_target_delay_item").style.display = 'none';
-                document.getElementById("edit_target_ang_item").style.display = 'block';
-
-                disableElementsByName("edit_th_mode");
-                disableElementById('edit_ds_tor');
-                disableElementById('edit_ds_speed');
-                disableElementById('edit_th_tor');
-                enableElementById('edit_rpm');
-                enableElementById('edit_tor_hi');
-                enableElementById('edit_tor_lo');
-                enableElementById('edit_ang_hi');
-                enableElementById('edit_ang_lo');
-            }
-
-            if (target_opt == 2) {
-                document.getElementById("edit_target_delay").value = target_delay;
-                document.getElementById("edit_target_tor_item").style.display = 'none';
-                document.getElementById("edit_target_ang_item").style.display = 'none';
-                document.getElementById("edit_target_delay_item").style.display = 'block';
-
-                disableElementById('edit_rpm');
-                disableElementById('edit_ds_tor');
-                disableElementById('edit_ds_speed');
-                disableElementById('edit_th_tor');
-                disableElementById('edit_tor_hi');
-                disableElementById('edit_tor_lo');
-                disableElementById('edit_ang_hi');
-                disableElementById('edit_ang_lo');
-                disableElementsByName("edit_th_mode");
-                disableElementsByName("edit_direction");
-            }
-
-            document.getElementById("edit_rpm").value = rpm;
+            // 先把欄位值填回來（避免被切換 handler 先吃到空值）
+            document.getElementById("edit_rpm").value      = rpm;
             document.getElementById("edit_ds_speed").value = ds_speed;
-            document.getElementById("edit_ds_tor").value = ds_tor;
-            document.getElementById("edit_th_tor").value = th_tor;
-            document.getElementById("edit_tor_hi").value = tor_hi;
+            document.getElementById("edit_ds_tor").value   = ds_tor;
+            document.getElementById("edit_th_tor").value   = th_tor;
+
+            document.getElementById("edit_tor_hi").value = tor_hi;  // ✅ DB 的 55.000 應該要回來
             document.getElementById("edit_tor_lo").value = tor_lo;
+
             document.getElementById("edit_ang_hi").value = ang_hi;
             document.getElementById("edit_ang_lo").value = ang_lo;
+
             document.getElementById('edit_step_id').value = step_id;
 
-            const radioButtons_th_mode = document.getElementsByName("edit_th_mode");
-            setRadioButton_value(radioButtons_th_mode, th_mode);
+            // target values（兩個 id 都兼容：edit_target_ang / edit_target_angle）
+            const elTargetTor   = document.getElementById("edit_target_tor");
+            const elTargetAngA  = document.getElementById("edit_target_ang");
+            const elTargetAngB  = document.getElementById("edit_target_angle");
+            const elTargetDelay = document.getElementById("edit_target_delay");
 
-            const radioButtons_direction = document.getElementsByName("edit_direction");
-            setRadioButton_value(radioButtons_direction, direction);
+            if (elTargetTor)   elTargetTor.value   = target_tor;
+            if (elTargetAngA)  elTargetAngA.value  = target_ang;
+            if (elTargetAngB)  elTargetAngB.value  = target_ang;
+            if (elTargetDelay) elTargetDelay.value = target_delay;
 
-        
-            const radioButtons_pnf_set = document.getElementsByName("edit_pnf_set");
-            setRadioButton_value(radioButtons_pnf_set, pnf_set);
+            // radio
+            setRadioButton_value(document.getElementsByName("edit_th_mode"), th_mode);
+            setRadioButton_value(document.getElementsByName("edit_direction"), direction);
+            setRadioButton_value(document.getElementsByName("edit_pnf_set"), pnf_set);
 
+            // ✅ 最後：根據 target_opt 切換顯示/disabled（用你既有的 handler）
+            if (typeof handleTargetOptChange === 'function') {
+                handleTargetOptChange(String(target_opt));
+            }
+
+            // ✅ 你要的：切換到「角度」時，若空值就補 1800
+            if (String(target_opt) === '1') {
+                const angEl = document.getElementById("edit_target_angle") || document.getElementById("edit_target_ang");
+                if (angEl && String(angEl.value || '').trim() === '') {
+                    angEl.value = '1800';
+                }
+            }
+
+            // 你原本的 downshift 限制 / th_tor disable
             toggleThTorDisabled();
+
+            // 第 4 個 step 禁用 downshift（保留你原本邏輯）
+            $.post("?url=Step/check_step_limit", { jobid: jobid, seqid: seqid }, function (res) {
+                let result;
+                try { result = JSON.parse(res); } catch (e) { return; }
+                if (result.count === 4) {
+                    const off = document.getElementById('edit_downshift_OFF');
+                    const on  = document.getElementById('edit_downshift_ON');
+                    if (off) off.disabled = true;
+                    if (on)  on.disabled  = true;
+                }
+            });
         },
-        error: function (xhr, status, error) {
+        error: function () {
             alertify.alert('錯誤', '取得步驟資料失敗');
         }
     });
 }
-
 
 
   
@@ -634,34 +614,40 @@ function targetOptChangeHandler() {
 
 function handleTargetOptChange(target_opt) {
 
-    const rpm       = document.getElementById("edit_rpm")?.value ?? '';
-    const ds_tor    = document.getElementById("edit_ds_tor")?.value ?? '';
-    const ds_speed  = document.getElementById("edit_ds_speed")?.value ?? '';
-    const th_tor    = document.getElementById("edit_th_tor")?.value ?? '';
+    const rpm      = document.getElementById("edit_rpm")?.value ?? '';
+    const ds_tor   = document.getElementById("edit_ds_tor")?.value ?? '';
+    const ds_speed = document.getElementById("edit_ds_speed")?.value ?? '';
+    const th_tor   = document.getElementById("edit_th_tor")?.value ?? '';
 
-    const tor_hi    = cleanNumber(document.getElementById("edit_tor_hi")?.value ?? '');
-    const tor_lo    = cleanNumber(document.getElementById("edit_tor_lo")?.value ?? '');
-    const ang_hi    = document.getElementById("edit_ang_hi")?.value ?? '';
-    const ang_lo    = document.getElementById("edit_ang_lo")?.value ?? '';
+    // ✅ 依扭力單位保留小數位（例如 N.m = 3 → 55.000）
+    const { precision } = getTorqueRule();
+    const keepTorqueFormat = (v) => {
+        const raw = String(v ?? '').trim();
+        if (raw === '') return '';
+        const n = Number(raw);
+        if (!Number.isFinite(n)) return raw;
+        return n.toFixed(precision);
+    };
+
+    // ✅ 不要 cleanNumber()，否則 55.000 會變 55
+    const tor_hi = keepTorqueFormat(document.getElementById("edit_tor_hi")?.value ?? '');
+    const tor_lo = keepTorqueFormat(document.getElementById("edit_tor_lo")?.value ?? '');
+
+    const ang_hi = document.getElementById("edit_ang_hi")?.value ?? '';
+    const ang_lo = document.getElementById("edit_ang_lo")?.value ?? '';
 
     const targetTorEl   = document.getElementById("edit_target_tor");
-    const targetAngEl   = document.getElementById("edit_target_ang");
+    const targetAngEl   = document.getElementById("edit_target_ang") || document.getElementById("edit_target_angle"); // ✅ 兩種 id 都支援
     const targetDelayEl = document.getElementById("edit_target_delay");
 
     // ⭐⭐⭐ 關鍵：全域變數才是唯一可信來源
     let toolMinTor = (window.__TOOL_MIN_TOR__ ?? '').toString().trim();
-
-    // DOM 只當備援（不可信）
     if (!toolMinTor) {
         toolMinTor = (document.getElementById("tool_min_tor")?.value ?? '').trim();
     }
 
-    // 最終 fallback（避免空白）
-    const fallbackTor = toolMinTor || tor_lo || '0';
-
-    // ✅ 目標角度預設值
+    const fallbackTor = keepTorqueFormat(toolMinTor || tor_lo || '0');
     const fallbackAng = '1800';
-
 
     /* =====================================================
      * 目標扭力
@@ -672,17 +658,12 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_target_ang_item").style.display   = 'none';
         document.getElementById("edit_target_delay_item").style.display = 'none';
 
-        // ⭐ 第一次補值
-        if (targetTorEl && !targetTorEl.value) {
+        if (targetTorEl && !String(targetTorEl.value ?? '').trim()) {
             targetTorEl.value = fallbackTor;
         }
-
-        // ⭐ 第二次補值（防 UI 重畫 / re-render）
-        setTimeout(function () {
+        setTimeout(() => {
             const el = document.getElementById("edit_target_tor");
-            if (el && !el.value) {
-                el.value = fallbackTor;
-            }
+            if (el && !String(el.value ?? '').trim()) el.value = fallbackTor;
         }, 0);
 
         enableElementById('edit_tor_hi', tor_hi);
@@ -693,6 +674,7 @@ function handleTargetOptChange(target_opt) {
         enableElementById('edit_ds_tor', ds_tor);
         enableElementById('edit_ds_speed', ds_speed);
         enableElementById('edit_th_tor', th_tor);
+
         enableElementByName("edit_direction");
         enableElementByName("edit_th_mode");
 
@@ -708,28 +690,24 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_target_tor_item").style.display   = 'none';
         document.getElementById("edit_target_delay_item").style.display = 'none';
 
-        // ✅ 第一次補值：如果原本是目標扭力存的，target_ang 常常會是空白
-        if (targetAngEl && (targetAngEl.value == null || String(targetAngEl.value).trim() === '')) {
-            targetAngEl.value = fallbackAng;
-        }
-
-        // ✅ 第二次補值：防止某些情況切換 UI 後又被洗掉
-        setTimeout(function () {
-            const el = document.getElementById("edit_target_ang");
-            if (el && (el.value == null || String(el.value).trim() === '')) {
-                el.value = fallbackAng;
-            }
+        // ✅ 切到角度：強制 target_ang = 1800
+        if (targetAngEl) targetAngEl.value = fallbackAng;
+        setTimeout(() => {
+            const el = document.getElementById("edit_target_ang") || document.getElementById("edit_target_angle");
+            if (el) el.value = fallbackAng;
         }, 0);
 
-
+        // ✅ 重點：不要覆寫 edit_tor_hi/lo 的值，只 disable 即可
         enableElementById('edit_tor_hi', tor_hi);
         enableElementById('edit_tor_lo', tor_lo);
         enableElementById('edit_ang_hi', ang_hi);
         enableElementById('edit_ang_lo', ang_lo);
+
         disableElementById('edit_ds_tor', ds_tor);
         disableElementById('edit_ds_speed', ds_speed);
         disableElementById('edit_th_tor', th_tor);
         disableElementsByName("edit_th_mode");
+
         enableElementByName("edit_direction");
         enableElementById('edit_rpm', rpm);
 
@@ -737,30 +715,24 @@ function handleTargetOptChange(target_opt) {
     }
 
     /* =====================================================
-    * 目標延遲
-    * ===================================================== */
+     * 目標延遲
+     * ===================================================== */
     if (String(target_opt) === '2') {
 
         document.getElementById("edit_target_delay_item").style.display = 'block';
         document.getElementById("edit_target_tor_item").style.display   = 'none';
         document.getElementById("edit_target_ang_item").style.display   = 'none';
 
-        // ⭐⭐⭐ 延遲預設值（關鍵修正）
         const fallbackDelay = '1.0';
-
-        // 第一次補值
-        if (targetDelayEl && (targetDelayEl.value == null || String(targetDelayEl.value).trim() === '')) {
+        if (targetDelayEl && !String(targetDelayEl.value ?? '').trim()) {
             targetDelayEl.value = fallbackDelay;
         }
-
-        // 第二次補值（防 UI re-render 被洗掉）
-        setTimeout(function () {
+        setTimeout(() => {
             const el = document.getElementById("edit_target_delay");
-            if (el && (el.value == null || String(el.value).trim() === '')) {
-                el.value = fallbackDelay;
-            }
+            if (el && !String(el.value ?? '').trim()) el.value = fallbackDelay;
         }, 0);
 
+        // ✅ 延遲模式：一樣不要洗掉 tor_hi/lo 的值
         disableElementById('edit_th_tor', th_tor);
         disableElementById('edit_tor_hi', tor_hi);
         disableElementById('edit_tor_lo', tor_lo);
@@ -775,10 +747,7 @@ function handleTargetOptChange(target_opt) {
 
         document.getElementById("downshift_OFF").checked = true;
     }
-
-
 }
-
 
 
 function setRadioButton_value(radioButtons, value) {
@@ -1001,7 +970,6 @@ function input_check_core(prefix, step_id = '') {
     }
     const LANG = normalizeLang(getCookie('language') || 'zh-tw');
 
-    /* ===================================================== */
     const MSG = {
         rpm_range:{'zh-tw':'轉速必須介於 ({min} ~ {max})','zh-cn':'转速必须介于 ({min} ~ {max})','en-us':'RPM must be between ({min} ~ {max})'},
         delay_range:{'zh-tw':'延遲時間必須介於 0.1 ~ 9.9 秒','zh-cn':'延迟时间必须介于 0.1 ~ 9.9 秒','en-us':'Delay time must be 0.1 ~ 9.9 sec'},
@@ -1009,7 +977,7 @@ function input_check_core(prefix, step_id = '') {
         angle_lo_range:{'zh-tw':'角度下限必須介於 0 ~ 30600','zh-cn':'角度下限必须介于 0 ~ 30600','en-us':'Angle low must be 0 ~ 30600'},
         angle_hi_range:{'zh-tw':'角度上限必須介於 1 ~ 30600','zh-cn':'角度上限必须介于 1 ~ 30600','en-us':'Angle high must be 1 ~ 30600'},
         angle_lo_hi:{'zh-tw':'角度下限必須小於角度上限','zh-cn':'角度下限必须小于角度上限','en-us':'Angle low must be < Angle high'},
-        angle_lo_target:{'zh-tw':'角度下限必須小於目標角度','zh-cn':'角度下限必须小于目标角度','en-us':'Angle low must be < Target angle'},
+        angle_lo_target:{'zh-tw':'角度下限必須小於目標角度','zh-cn':'角度下限必须小于目标扭力','en-us':'Angle low must be < Target angle'},
         angle_target_range:{'zh-tw':'目標角度必須介於角度上下限之間','zh-cn':'目标角度必须介于角度上下限之间','en-us':'Target angle must be inside range'},
 
         torque_target_range:{'zh-tw':'目標扭力必須介於 ({min} ~ {max})','zh-cn':'目标扭力必须介于 ({min} ~ {max})','en-us':'Target torque must be ({min} ~ {max})'},
@@ -1022,28 +990,21 @@ function input_check_core(prefix, step_id = '') {
             'zh-cn':'扭力上限超出范围（{min} ~ {max}）',
             'en-us':'Torque high is out of range ({min} ~ {max})'
         },
-
-        // ✅ 修正：這個原本中文寫錯，會顯示成「必須小於目標扭力」
         torque_lo_out_range:{
             'zh-tw':'扭力下限超出範圍（{min} ~ {max}）',
             'zh-cn':'扭力下限超出范围（{min} ~ {max}）',
             'en-us':'Torque low is out of range ({min} ~ {max})'
         },
-
         torque_hi_gt_lo_required:{
             'zh-tw':'扭力上限需大於扭力下限',
             'zh-cn':'扭力上限需大于扭力下限',
             'en-us':'Torque high must be greater than torque low'
         },
-
         torque_hi_hard_max: {
-        'zh-tw': '扭力上限超出範圍',
-        'zh-cn': '扭力上限超出范围',
-        'en-us': 'Torque high is out of range'
+            'zh-tw': '扭力上限超出範圍',
+            'zh-cn': '扭力上限超出范围',
+            'en-us': 'Torque high is out of range'
         },
-
-
-
     };
 
     const t  = k => MSG[k]?.[LANG] || MSG[k]?.['zh-tw'] || '';
@@ -1053,6 +1014,32 @@ function input_check_core(prefix, step_id = '') {
             ? alertify.alert(title, msg, () => { el?.focus?.(); el?.select?.(); })
             : alert(msg);
     };
+
+    /* =====================================================
+    * ✅ 統一取得「同單位」的 tool torque range（關鍵修正）
+    * ===================================================== */
+    function getToolTorqueRangeUnified(){
+        const hardMax = getHardMaxTorque();
+
+        // 1) 先吃全域（setToolSpecToUIAndGlobal 會維護）
+        let minV = parseFloat(String(window.__TOOL_MIN_TOR__ ?? '').trim());
+        let maxV = parseFloat(String(window.__TOOL_MAX_TOR__ ?? '').trim());
+
+        // 2) fallback DOM（最後手段）
+        if (!Number.isFinite(minV)) minV = parseFloat(document.getElementById('tool_min_tor')?.value);
+        if (!Number.isFinite(maxV)) maxV = parseFloat(document.getElementById('tool_max_tor')?.value);
+
+        const has = Number.isFinite(minV) && Number.isFinite(maxV);
+        const maxAllowed = has ? Math.min(maxV, hardMax) : hardMax;
+
+        return {
+            hardMax,
+            hasToolRange: has,
+            toolMin: has ? minV : NaN,
+            toolMax: has ? maxV : NaN,
+            maxAllowed
+        };
+    }
 
     /* ===================================================== */
     const target_opt = document.getElementById(prefix+'target_opt')?.value;
@@ -1085,19 +1072,15 @@ function input_check_core(prefix, step_id = '') {
     }
 
     /* =====================================================
-    * Angle 模式（主驗證 Angle + 被動驗證 Torque）🔥 FINAL
-    * 規則：
-    * 1️⃣ tor_hi 只要有輸入 >0 → 永遠檢查範圍
-    * 2️⃣ Torque window ON 條件：tor_lo > 0
-    * 3️⃣ lo/hi 關係只在 window ON 才檢查
+    * Angle 模式（主驗證 Angle + 被動驗證 Torque）
     * ===================================================== */
     if (target_opt === '1') {
 
-        const HARD_MAX_TORQUE = getHardMaxTorque();
-
-        const toolMin = parseFloat(document.getElementById('tool_min_tor')?.value);
-        const toolMax = parseFloat(document.getElementById('tool_max_tor')?.value);
-        const hasToolRange = Number.isFinite(toolMin) && Number.isFinite(toolMax);
+        const R = getToolTorqueRangeUnified();
+        const HARD_MAX_TORQUE = R.hardMax;
+        const toolMin = R.toolMin;
+        const hasToolRange = R.hasToolRange;
+        const maxAllowed = R.maxAllowed;
 
         const torHiEl = document.getElementById(prefix+'tor_hi');
         const torLoEl = document.getElementById(prefix+'tor_lo');
@@ -1114,49 +1097,31 @@ function input_check_core(prefix, step_id = '') {
         const torHiEnabled = hasTorHi && Number.isFinite(torHi) && torHi > 0;
         const torLoEnabled = hasTorLo && Number.isFinite(torLo) && torLo > 0;
 
-        /* =====================================================
-        * ⭐⭐⭐ 永遠檢查 tor_hi 範圍（修正切模式殘值 bug）⭐⭐⭐
-        * ===================================================== */
+        // ✅ tor_hi：只要有輸入 >0 就永遠檢查範圍
+        if (torHiEnabled) {
 
-        // 機台硬上限
-        if (torHiEnabled && torHi > HARD_MAX_TORQUE) {
-            alertMsg('Torque', tf('torque_hi_hard_max', { max: HARD_MAX_TORQUE }), torHiEl);
-            return false;
+            if (torHi > HARD_MAX_TORQUE) {
+                alertMsg('Torque', tf('torque_hi_hard_max', { max: HARD_MAX_TORQUE }), torHiEl);
+                return false;
+            }
+
+            if (hasToolRange && (torHi < toolMin || torHi > maxAllowed)) {
+                alertMsg('Torque', tf('torque_hi_out_range', { min: toolMin, max: maxAllowed }), torHiEl);
+                return false;
+            }
         }
 
-        // Tool range（只要有填 hi 就要檢查）
-        if (hasToolRange && torHiEnabled && (torHi < toolMin || torHi > toolMax)) {
-            alertMsg('Torque', tf('torque_hi_out_range', { min: toolMin, max: toolMax }), torHiEl);
-            return false;
-        }
-
-        /* =====================================================
-        * Torque window 開關（只看 tor_lo）
-        * ===================================================== */
+        // ✅ Torque window 開關（只看 tor_lo）
         const torqueWindowEnabledInAngle = torLoEnabled;
 
         if (hasToolRange && torqueWindowEnabledInAngle) {
 
-            if (torLoEnabled === false && hasTorLo && torLoRaw !== '0') {
-                if (!Number.isFinite(torLo)) {
-                    alertMsg('Torque', tf('torque_lo_out_range', { min: toolMin, max: toolMax }), torLoEl);
-                    return false;
-                }
-            }
-
-            if (torHiEnabled === false && hasTorHi && torHiRaw !== '0') {
-                if (!Number.isFinite(torHi)) {
-                    alertMsg('Torque', tf('torque_hi_out_range', { min: toolMin, max: toolMax }), torHiEl);
-                    return false;
-                }
-            }
-
-            if (torLoEnabled && (torLo < toolMin || torLo > toolMax)) {
-                alertMsg('Torque', tf('torque_lo_out_range', { min: toolMin, max: toolMax }), torLoEl);
+            if (torLoEnabled && (torLo < toolMin || torLo > maxAllowed)) {
+                alertMsg('Torque', tf('torque_lo_out_range', { min: toolMin, max: maxAllowed }), torLoEl);
                 return false;
             }
 
-            // ⭐ window ON 才檢查 lo < hi
+            // window ON 才檢查 lo < hi
             if (torLoEnabled && torHiEnabled && torLo >= torHi) {
                 alertMsg('Torque', t('torque_lo_hi'), torLoEl);
                 return false;
@@ -1205,18 +1170,16 @@ function input_check_core(prefix, step_id = '') {
         return true;
     }
 
-
-
     /* =====================================================
-    * Torque 模式（主驗證 Torque + 被動驗證 Angle）🔥 FINAL
+    * Torque 模式（主驗證 Torque + 被動驗證 Angle）
     * ===================================================== */
     if (target_opt === '0') {
 
-        const HARD_MAX_TORQUE = getHardMaxTorque();
-
-        const toolMin = parseFloat(document.getElementById('tool_min_tor')?.value);
-        const toolMax = parseFloat(document.getElementById('tool_max_tor')?.value);
-        const hasToolRange = Number.isFinite(toolMin) && Number.isFinite(toolMax);
+        const R = getToolTorqueRangeUnified();
+        const HARD_MAX_TORQUE = R.hardMax;
+        const toolMin = R.toolMin;
+        const hasToolRange = R.hasToolRange;
+        const maxAllowed = R.maxAllowed;
 
         const elTar = document.getElementById(prefix+'target_tor');
         const elLo  = document.getElementById(prefix+'tor_lo');
@@ -1265,8 +1228,8 @@ function input_check_core(prefix, step_id = '') {
             return false;
         }
 
-        if (hasToolRange && (tar < toolMin || tar > toolMax)) {
-            alertMsg('Torque', tf('torque_target_range',{min:toolMin,max:toolMax}), elTar);
+        if (hasToolRange && (tar < toolMin || tar > maxAllowed)) {
+            alertMsg('Torque', tf('torque_target_range',{min:toolMin,max:maxAllowed}), elTar);
             return false;
         }
 
@@ -1277,7 +1240,7 @@ function input_check_core(prefix, step_id = '') {
         }
 
         /* =====================================================
-        * ⭐ 新規則：lo=0 且 hi=0 不允許
+        * lo=0 且 hi=0 不允許
         * ===================================================== */
         if (!loEnabled && !hiEnabled) {
             alertMsg('Torque', t('torque_hi_gt_lo_required'), elHi);
@@ -1286,20 +1249,16 @@ function input_check_core(prefix, step_id = '') {
 
         /* ================= Window 開關 ================= */
         const torqueWindowEnabled = loEnabled;
-
-        if (!torqueWindowEnabled) {
-            return true; // lo=0 → 不檢查 window 關係
-        }
+        if (!torqueWindowEnabled) return true;
 
         /* ================= Window ON ================= */
-
-        if (hasToolRange && (lo < toolMin || lo > toolMax)) {
-            alertMsg('Torque', tf('torque_lo_out_range',{min:toolMin,max:toolMax}), elLo);
+        if (hasToolRange && (lo < toolMin || lo > maxAllowed)) {
+            alertMsg('Torque', tf('torque_lo_out_range',{min:toolMin,max:maxAllowed}), elLo);
             return false;
         }
 
-        if (hiEnabled && hasToolRange && (hi < toolMin || hi > toolMax)) {
-            alertMsg('Torque', tf('torque_hi_out_range',{min:toolMin,max:toolMax}), elHi);
+        if (hiEnabled && hasToolRange && (hi < toolMin || hi > maxAllowed)) {
+            alertMsg('Torque', tf('torque_hi_out_range',{min:toolMin,max:maxAllowed}), elHi);
             return false;
         }
 
@@ -1321,15 +1280,9 @@ function input_check_core(prefix, step_id = '') {
         return true;
     }
 
-
-
-
-
-
-
-
     return true;
 }
+
 
 
 

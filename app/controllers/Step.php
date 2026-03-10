@@ -210,7 +210,7 @@ class Step extends Controller
                     exit();
                 }
             }
-           
+
             if ($target_opt == 0) {
                 $target_ang = 0;
                 $target_delay = 0;

@@ -4,114 +4,306 @@
     <div class="main-content">
         <div class="center-content w3-center">
             <div style="text-shadow:3px 5px 0 #444;" class="wrapper w3-center w3-text-red">
-                <div class="buttonbox" style=" top: 2%;right: 10px;text-align: right;position: absolute;">
-                <input type="button" id="btnLogout" value="Logout" onclick="logout()">
-                <input type="button" name="" value="简中" data-language="zh-cn" onclick="language_change('zh-cn');" >
-                <input type="button" name="" value="繁中" data-language="zh-tw" onclick="language_change('zh-tw');" >
-                <input type="button" name="" value="English" data-language="en-us" onclick="language_change('en-us');">
+                <div class="buttonbox" style="top: 2%; right: 10px; text-align: right; position: absolute;">
+                    <input type="button" id="btnLogout" value="Logout" onclick="logout()">
+                    <input type="button" value="简中" data-language="zh-cn" onclick="language_change('zh-cn');">
+                    <input type="button" value="繁中" data-language="zh-tw" onclick="language_change('zh-tw');">
+                    <input type="button" value="English" data-language="en-us" onclick="language_change('en-us');">
                 </div>
 
-     
-                <div style=" margin-top: 5%">   
-                    <h1 class="col-ms-3 pt-5"  style="font-size: 50px;"><?php echo TITLE_INDEX; ?></h1>
-                    <div style="text-shadow:2px 2px 0 #444; font-size: 30px" class="text w3-center w3-text-yellow"><?php echo SUBTITLE_INDEX; ?></div>
+                <div style="margin-top: 5%">
+                    <h1 class="col-ms-3 pt-5" style="font-size: 50px;"><?php echo TITLE_INDEX; ?></h1>
+                    <div style="text-shadow:2px 2px 0 #444; font-size: 30px" class="text w3-center w3-text-yellow">
+                        <?php echo SUBTITLE_INDEX; ?>
+                    </div>
                 </div>
-             
-             
-
             </div>
 
-            <div class="w3-center button-container" style="margin: 20px">
-                <button class="menu-item blue" id="job_manager" onclick="window.location.href='?url=Jobs/index'"><span style="visibility: hidden;">Job</span></button>
-                <button class="menu-item purple" id="operation" onclick="window.location.href='?url=Dashboards/operation'"><span style="visibility: hidden;">Operation</span></button>
-                
-                <button class="menu-item green" id="io_input" onclick="window.location.href='?url=Inputs/index'"><span style="visibility: hidden;">IO Input</span></button>
-                <button class="menu-item orange" id="io_output" onclick="window.location.href='?url=Outputs/index'"><span style="visibility: hidden;">IO Output</span></button>
+            <div class="w3-center button-container">
+                <button class="menu-item blue" id="job_manager" onclick="window.location.href='?url=Jobs/index'">
+                    <span><?php echo $text['job_manager'] ?? 'Job'; ?></span>
+                </button>
 
-                <button class="menu-item lightblue" id="data" onclick="window.location.href='?url=Data/index'"><span style="visibility: hidden;">Data</span></button>
-                <button class="menu-item pink" id="tool" onclick="window.location.href='?url=Tools/index'"><span style="visibility: hidden;">Tool</span></button>
-                
-                <button class="menu-item PaleGreen" id="setting" onclick="window.location.href='?url=Settings/index'"><span style="visibility: hidden;">Setting</span></button>
-                
+                <button class="menu-item purple" id="operation" onclick="window.location.href='?url=Dashboards/operation'">
+                    <span><?php echo $text['operation'] ?? 'Operation'; ?></span>
+                </button>
 
-    
-                <button class="menu-item lime" id="remote" style="font-size: 24px" onclick="window.location.href='?url=Remotes'"><span style="visibility: hidden;">Remotes</span></button>
-                <button class="menu-item lime" id="agent" style="font-size: 24px" onclick="window.location.href='?url=Agents'"><span style="visibility: hidden;">Agent</span></button>
+                <button class="menu-item green" id="io_input" onclick="window.location.href='?url=Inputs/index'">
+                    <span><?php echo $text['io_input'] ?? 'IO Input'; ?></span>
+                </button>
 
-                <button class="menu-item indigo" id="load" onclick="DB_sync_idas_load('C2D')"><span style="visibility: hidden;">Load</span></button>
-                <button class="menu-item deep-orange" id="save" onclick="DB_sync_idas('D2C')"><span style="visibility: hidden;">Save</span></button>
+                <button class="menu-item orange" id="io_output" onclick="window.location.href='?url=Outputs/index'">
+                    <span><?php echo $text['io_output'] ?? 'IO Output'; ?></span>
+                </button>
 
+                <button class="menu-item lightblue" id="data" onclick="window.location.href='?url=Data/index'">
+                    <span><?php echo $text['data'] ?? 'Data'; ?></span>
+                </button>
+
+                <button class="menu-item pink" id="tool" onclick="window.location.href='?url=Tools/index'">
+                    <span><?php echo $text['tool'] ?? 'Tool'; ?></span>
+                </button>
+
+                <button class="menu-item PaleGreen" id="setting" onclick="window.location.href='?url=Settings/index'">
+                    <span><?php echo $text['setting'] ?? 'Setting'; ?></span>
+                </button>
+
+                <button class="menu-item lime" id="remote" onclick="window.location.href='?url=Remotes'">
+                    <span><?php echo $text['remote'] ?? 'Remotes'; ?></span>
+                </button>
+
+                <button class="menu-item indigo" id="load" onclick="DB_sync_idas_load('C2D')">
+                    <span><?php echo $text['load'] ?? 'Load'; ?></span>
+                </button>
+
+                <button class="menu-item deep-orange" id="save" onclick="DB_sync_idas('D2C')">
+                    <span><?php echo $text['save'] ?? 'Save'; ?></span>
+                </button>
             </div>
-
-            
         </div>
-
-        
     </div>
-
-    
 </div>
 
-<div class='bottom-right'>
-                <?php if (!empty($data['idas_online_version'])) echo "Version: {$data['idas_online_version']}"; ?>
-            </div>
-
+<div class="bottom-right">
+    <?php if (!empty($data['idas_online_version'])) echo "Version: {$data['idas_online_version']}"; ?>
+</div>
 
 <style>
-.button-container 
-{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Center buttons in the container */
-    gap: 10px; /* Adjust space between buttons */
+html, body {
+    height: auto !important;
+    min-height: 100%;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Khi màn hình nhỏ (dưới 768px), hiển thị 2 nút trên 1 hàng */
-@media (max-width: 768px) {
-    .button-container {
-        justify-content: space-evenly; /* Chia đều không gian giữa các nút */
+body {
+    margin: 0;
+    position: static !important;
+}
+
+.container-ms {
+    margin: 0 auto;
+    padding: 0;
+    min-height: 100vh;
+    height: auto !important;
+    overflow: visible !important;
+    position: relative;
+}
+
+.main-content {
+    display: block !important;
+    width: 100%;
+    min-height: 100vh;
+    overflow: visible !important;
+}
+
+.center-content {
+    width: 100%;
+    padding: 10px 10px 80px;
+    box-sizing: border-box;
+    overflow: visible !important;
+}
+
+.wrapper {
+    position: relative;
+    overflow: visible !important;
+    padding-top: 10px;
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px;
+    padding-bottom: 24px;
+}
+
+.menu-item {
+    position: relative;
+    background-position: center 18px !important;
+    background-repeat: no-repeat !important;
+    background-size: 64px 64px !important;
+    padding-top: 88px;
+    padding-bottom: 12px;
+    min-height: 120px;
+    min-width: 120px;
+    text-align: center;
+    vertical-align: top;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-item span {
+    visibility: visible !important;
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+    line-height: 1.2;
+    padding: 0 4px;
+    margin-top: 0;
+}
+
+.menu-item:hover {
+    transform: scale(1.03);
+}
+
+#job_manager {
+    background: url("<?php echo $text['img_job']; ?>") no-repeat;
+}
+#job_manager:hover {
+    background: url("<?php echo $text['img_job_hover']; ?>") no-repeat;
+}
+
+#io_input {
+    background: url("<?php echo $text['img_io_input']; ?>") no-repeat;
+}
+#io_input:hover {
+    background: url("<?php echo $text['img_io_input_hover']; ?>") no-repeat;
+}
+
+#io_output {
+    background: url("<?php echo $text['img_io_output']; ?>") no-repeat;
+}
+#io_output:hover {
+    background: url("<?php echo $text['img_io_output_hover']; ?>") no-repeat;
+}
+
+#operation {
+    background: url("<?php echo $text['img_operation']; ?>") no-repeat;
+}
+#operation:hover {
+    background: url("<?php echo $text['img_operation_hover']; ?>") no-repeat;
+}
+
+#data {
+    background: url("<?php echo $text['img_data']; ?>") no-repeat;
+}
+#data:hover {
+    background: url("<?php echo $text['img_data_hover']; ?>") no-repeat;
+}
+
+#tool {
+    background: url("<?php echo $text['img_tool']; ?>") no-repeat;
+}
+#tool:hover {
+    background: url("<?php echo $text['img_tool_hover']; ?>") no-repeat;
+}
+
+#setting {
+    background: url("<?php echo $text['img_setting']; ?>") no-repeat;
+}
+#setting:hover {
+    background: url("<?php echo $text['img_setting_hover']; ?>") no-repeat;
+}
+
+#load {
+    background: url("<?php echo $text['img_load']; ?>") no-repeat;
+}
+#load:hover {
+    background: url("<?php echo $text['img_load_hover']; ?>") no-repeat;
+}
+
+#save {
+    background: url("<?php echo $text['img_save']; ?>") no-repeat;
+}
+#save:hover {
+    background: url("<?php echo $text['img_save_hover']; ?>") no-repeat;
+}
+
+#agent {
+    background: url("<?php echo $text['img_agent']; ?>") no-repeat;
+}
+#agent:hover {
+    background: url("<?php echo $text['img_agent_hover']; ?>") no-repeat;
+}
+
+#remote {
+    background: url("<?php echo $text['img_remote']; ?>") no-repeat;
+}
+#remote:hover {
+    background: url("<?php echo $text['img_remote_hover']; ?>") no-repeat;
+}
+
+@media only screen and (max-width: 768px) {
+    .buttonbox {
+        position: static !important;
+        text-align: center !important;
+        margin-bottom: 12px;
     }
-    
+
+    .button-container {
+        justify-content: space-evenly;
+        gap: 10px;
+        margin: 5px;
+    }
+
+    .menu-item {
+        position: relative;
+
+        width:120px;
+        height:120px;
+
+        background-position:center center !important;
+        background-repeat:no-repeat !important;
+        background-size:90px 90px !important;
+
+        border:none;
+        cursor:pointer;
+
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .menu-item span {
+        display:none !important;
+    }
+
+    .bottom-right {
+        position: static !important;
+        margin: 12px;
+        text-align: right;
+        color: white;
+        font-size: 16px;
+    }
 }
 </style>
 
 <script>
-
 document.addEventListener('DOMContentLoaded', function() {
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      var headerElements = document.querySelectorAll('.ajs-header');
-      headerElements.forEach(function(headerElement) {
-        headerElement.parentNode.removeChild(headerElement);
-      });
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            var headerElements = document.querySelectorAll('.ajs-header');
+            headerElements.forEach(function(headerElement) {
+                headerElement.parentNode.removeChild(headerElement);
+            });
+        });
     });
-  });
 
-  observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, subtree: true });
 });
 
 function language_change(language){
-    if( language){
+    if (language) {
         $.ajax({
             url: "?url=Dashboards/change_language",
             method: "POST",
-            data:{ 
-                language: language
-
-            },
+            data:{ language: language },
             success: function(response) {
                 history.go(0);
             },
             error: function(xhr, status, error) {
-                
             }
         });
-
     }
 }
-
-
-
 
 function DB_sync_idas_load(argument) {
     var language = getCookie('language');
@@ -180,9 +372,8 @@ function DB_sync_idas_load(argument) {
                             if (progress >= 100) {
                                 progress = 100;
                                 clearInterval(interval);
-                                removeProgressDialog(); // ✅ 關閉自訂進度視窗
+                                removeProgressDialog();
 
-                                // 開始同步
                                 $.ajax({
                                     url: "?url=Settings/Sync_check_db_load",
                                     method: "POST",
@@ -227,11 +418,9 @@ function DB_sync_idas_load(argument) {
             });
         },
         function () {
-            //alertify.error('已取消');
         }
     );
 
-    // ✅ alertify 自動關閉封裝
     function showAlertAutoClose(title, message, delay = 3000) {
         const dialog = alertify.alert(title, message);
         dialog.set('onshow', function () {
@@ -241,7 +430,6 @@ function DB_sync_idas_load(argument) {
         });
     }
 
-    // ✅ 遮罩
     function addOverlay() {
         var overlay = document.createElement('div');
         overlay.id = 'overlayMask';
@@ -260,7 +448,6 @@ function DB_sync_idas_load(argument) {
         if (overlay) overlay.remove();
     }
 
-    // ✅ 自訂進度對話框
     function createProgressDialog(syncingText) {
         var dialog = document.createElement("div");
         dialog.id = "customProgressDialog";
@@ -285,8 +472,6 @@ function DB_sync_idas_load(argument) {
     }
 }
 
-
-
 function DB_sync_idas(argument) {
     var language = getCookie('language');
 
@@ -301,7 +486,7 @@ function DB_sync_idas(argument) {
         "zh-tw": { "D2C": '同步後目前控制器上的資料將被覆蓋，確認是否同步' },
         "default": { "D2C": "After synchronization, the controller's current data will be overwritten. Confirm sync" }
     };
-    
+
     var syncingTexts = {
         "zh-cn": "同步中，请稍候...",
         "zh-tw": "同步中，請稍候...",
@@ -336,7 +521,6 @@ function DB_sync_idas(argument) {
 
     alertify.confirm(title, message,
         function () {
-            // 新增：登入檢查
             $.ajax({
                 url: "?url=Settings/get_controller_login",
                 method: "POST",
@@ -347,7 +531,6 @@ function DB_sync_idas(argument) {
                         return;
                     }
 
-                    // 通過登入檢查後開始同步流程
                     var totalSeconds = 8;
                     var progress = 0;
                     var intervalTime = (totalSeconds * 1000) / 100;
@@ -402,7 +585,6 @@ function DB_sync_idas(argument) {
             });
         },
         function () {
-            //alertify.error('已取消');
         }
     );
 
@@ -456,101 +638,4 @@ function DB_sync_idas(argument) {
         if (dialog) dialog.remove();
     }
 }
-
-
-
-
-
 </script>
-
-<style>
-    #job_manager {
-        background: url("<?php echo $text['img_job']; ?>") no-repeat;
-    }
-    #job_manager:hover {
-        background: url("<?php echo $text['img_job_hover']; ?>") no-repeat;
-    }
-
-    #io_input {
-        background: url("<?php echo $text['img_io_input']; ?>") no-repeat;
-    }
-    #io_input:hover {
-        background: url("<?php echo $text['img_io_input_hover']; ?>") no-repeat;
-    }
-
-    #io_output {
-        background: url("<?php echo $text['img_io_output']; ?>") no-repeat;
-    }
-    #io_output:hover {
-        background: url("<?php echo $text['img_io_output_hover']; ?>") no-repeat;
-    }
-
-    #operation {
-        background: url("<?php echo $text['img_operation']; ?>") no-repeat;
-    }
-    #operation:hover {
-        background: url("<?php echo $text['img_operation_hover']; ?>") no-repeat;
-    }
-    
-    #data {
-        background: url("<?php echo $text['img_data']; ?>") no-repeat;
-    }
-    #data:hover {
-        background: url("<?php echo $text['img_data_hover']; ?>") no-repeat;
-    }
-
-    #tool {
-        background: url("<?php echo $text['img_tool']; ?>") no-repeat;
-    }
-    #tool:hover {
-        background: url("<?php echo $text['img_tool_hover']; ?>") no-repeat;
-    }
-
-    #setting {
-        background: url("<?php echo $text['img_setting']; ?>") no-repeat;
-    }
-    #setting:hover {
-        background: url("<?php echo $text['img_setting_hover']; ?>") no-repeat;
-    }
-
-    #load {
-        background: url("<?php echo $text['img_load']; ?>") no-repeat;
-    }
-    #load:hover {
-        background: url("<?php echo $text['img_load_hover']; ?>") no-repeat;
-    }
-
-    #save {
-        background: url("<?php echo $text['img_save']; ?>") no-repeat;
-    }
-    #save:hover {
-        background: url("<?php echo $text['img_save_hover']; ?>") no-repeat;
-    }
-
-    #agent {
-        background: url("<?php echo $text['img_agent']; ?>") no-repeat;
-    }
-    #agent:hover {
-        background: url("<?php echo $text['img_agent_hover']; ?>") no-repeat;
-    }
-
-    #remote {
-        background: url("<?php echo $text['img_remote']; ?>") no-repeat;
-    }
-    
-    #remote:hover {
-        background: url("<?php echo $text['img_remote_hover']; ?>") no-repeat;
-    }
-
-
-    @media only screen and (max-width: 768px) {
-        .bottom-right {
-            position: fixed; /* 固定在螢幕右下角 */
-            bottom: 10px;  /* 距離頁面底部 10px */
-            right: 10px;   /* 距離頁面右邊 10px */
-            color: white;
-            font-size: 18px;
-        }
-    }
-            
-</style>

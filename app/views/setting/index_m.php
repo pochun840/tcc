@@ -134,73 +134,6 @@ window.APP = {
                                 </form>
                             </div>        
                         </div>          
-                        <div class="row t2 border-bottom">
-                            <div class="col t1"><?php echo $text['system_export_config'];?>:</div>
-                            <div class="col t2">
-                                <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Export_SystemConfig();"><?php echo $text['system_export_config'];?></button>
-                            </div>        
-                        </div> 
-                        
-                        <div class="col t1"><?php echo $text['system_import_config'];?>:</div>         
-                        <div class="row t2 border-bottom">
-                            <div class="col t2" style="margin-left: 5%">
-                                <input type="file" id="import-file-uploader" data-target="import-file-uploader" accept=".zip" class="t3 w3-submit w3-border w3-round" style="width: 300px; height: 34px">
-                            </div>        
-                            <div class="col t2">
-                                <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Import_SystemConfig();"><?php echo $text['system_import_config'];?></button>
-                            </div>
-                        </div>          
-                        
-                        <div class="col t1"><?php echo $text['system_firmware_update'];?>:</div>
-                        <div class="row t2">
-                            <div class="col t2" style="margin-left: 5%">
-                                <input type="file" id="firmware-file-uploader" data-target="firmware-file-uploader" accept=".cfg" class="t3 w3-submit w3-border w3-round" style="width: 300px; height: 34px">
-                            </div>        
-                            <div class="col t2">
-                                <button class="all-btn w3-button w3-border w3-round-large" style="float: right" onclick="Firmware_Update();" ><?php echo $text['system_firmware_update'];?></button>
-                            </div>
-                        </div> 
-                        
-                        <div class="col t1"><?php echo $text['system_diskfull_warning']; ?>:</div>
-                        <div class="row t2 align-items-center">  
-                            <div class="col t3">
-                                <div class="progress custom-bg" style="height: 25px; width: 90%; border-radius: 10px; margin-left: 5%">
-                                    <div id="diskProgressBar" class="progress-bar custom-bar t3" role="progressbar" 
-                                        style="border-radius: 10px; text-align: center; color: white;font-weight: bold;" 
-                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                        25%
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col t1"><?php echo $text['system_delete_database']; ?></div>
-                        <div class="row t2">
-                            <div  class="col t3">
-                                <?php 
-                                    if (!empty($data['history_year_arr'])) {
-                                        foreach ($data['history_year_arr'] as $key => $val) { ?>
-                                            <input type="checkbox"
-                                                name="year[]"
-                                                value="<?php echo htmlspecialchars($val); ?>"
-                                                onclick="onlyOne(this)"
-                                                <?php echo ($key === 0) ? 'checked' : ''; ?>>
-                                            <?php echo htmlspecialchars($val); ?>&nbsp;&nbsp;
-                                    <?php }
-                                    }
-                                ?>
-                                <!-- 刪除按鈕 -->
-                                <button
-                                    id="btn-delete-year"
-                                    class="all-btn w3-button w3-border w3-round-large btn-delete-year"
-                                    onclick="deleteSelectedFiles()">
-                                    <?php echo $text['delete_text']; ?>
-                                </button>
-
-                            </div>
-                        </div>
-
-                        
                     </div>
                 </div>                
             </div>
@@ -249,80 +182,10 @@ window.APP = {
                         </div> 
                             
                         <hr>
-                                       
-                        <div class="row t2">
-                            <div class="col-5 t1"><?php echo $text['system_barcode'];?>:</div>
-                            <div class="col-7 t2">
-                                <input id="barcode_content" name="barcode_content" style="height: 32px" type="text" value="" maxlength="54" class="form-control" required>
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                        <div class="row t2">
-                            <div class="col-5 t1"><?php echo $text['system_barcode_match_from'];?>:</div>
-                            <div class="col-7 t2">
-                                <input id="barcode_mask_from" name="barcode_mask_from" style="height: 32px" type="text" value="" class="form-control">
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                        <div class="row t2">
-                            <div class="col-5 t1"><?php echo $text['system_barcode_match_to'];?>:</div>
-                            <div class="col-7 t2">
-                                <input id="barcode_mask_count" name="barcode_mask_count" style="height: 32px" type="text" value="" class="form-control">
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-
-                        <div class="row t2">
-                            <div class="col-5 t1"><?php echo $text['system_barcode_mode']?>:</div>
-                                <div class="col t2">
-                                <select class="form-select" id="barcode_enable" name="barcode_enable" onchange="toggleBarcodeSeq()">
-                                        <option value="-1"><?php echo $text['system_barcode_select'];?></option>
-                                        <?php
-                                        foreach ($data['barcode_mode'] as $key_barcode => $value_barcode) {?>
-                                            <option value='<?php echo $key_barcode;?>'><?php echo $value_barcode;?></option>
-                                        <?php }?>
-                                </select>
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-
-
-                        <div class="row t2">
-                            <div class="col-5 t1"><?php echo $text['select_job'];?>:</div>
-                            <div class="col t2">
-                                <select class="form-select" id="barcode_job" name="barcode_job" onchange="fetchSeqList()"  >
-                                    <option value="-1"><?php echo $text['system_barcode_select_job_m'];?></option>
-                                    
-                                    <?php if (!empty($data['job_list']) && is_array($data['job_list'])) { ?>
-                                        <?php foreach ($data['job_list'] as $key => $value) { ?>
-                                            <option value='<?php echo $value['job_id'];?>'><?php echo $value['job_id']." ".$value['job_name'];?></option>
-                                        <?php } ?>
-                                    <?php } ?>
-                                    
-                                </select>
-                                <div class="invalid-feedback"></div>
-                            </div>
-                        </div>
-
-                         <div id="barcode_select_seq" style="display:none;">
-                            <div class="row t2">
-                                <div class="col-5 t1"><?php echo $text['system_barcode_select_seq'];?>:</div>
-                                <div class="col t2">
-                                    <select class="form-select" id="barcode_seq" name="barcode_seq">
-                                        <option value="-1"><?php echo $text['system_barcode_select_seq_m'];?></option>   
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                     
+                                                                 
                     </div>
                 </div>    
-                        
-                <div style="text-align: center;margin-top: 10px;">
-                    <button class="all-btn w3-button w3-border w3-round-large" onclick="update_barcode()"><?php echo $text['save'];?></button>&nbsp;&nbsp;
-                    <button class="all-btn w3-button w3-border w3-round-large" onclick="delete_barcode()"><?php echo $text['delete_text'];?></button>
-                </div>               
+                                  
             </div>
 
             <!-- Connection Setting -->
@@ -384,17 +247,6 @@ window.APP = {
                         <input id="idas_software_version" name="idas_software_version" type="text" value="<?php echo $data['iDas_Vesion'];?>"  style="height: 32px" class="form-control" disabled>
                     </div>
                 </div>
-
-                <div class="col t1"><?php echo $text['system_idas_upload_file'];?>:</div>
-                <div class="row t2">
-                    <div class="col-6 t2" style="margin-left: 5%">
-                        <input type="file" id="file-uploader" data-target="file-uploader" accept=".pack" class="form-control" style="height: 32px;">
-                    </div>
-                </div>
-
-                <div style="text-align: center;margin-top:50px;">
-                    <input class="all-btn w3-submit w3-border w3-round-large" type="button" value="<?php echo $text['system_idas_upload_file'];?>" onclick='idas_update();'>
-                </div> 
             </div>
         </div>
     </div>

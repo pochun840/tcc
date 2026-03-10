@@ -19,6 +19,7 @@ class Sequences extends Controller
         
     }
 
+
     // 取得所有Sequences
     public function index($job_id){
         
@@ -43,7 +44,7 @@ class Sequences extends Controller
             $unit_name = $torque_unit[$rev_tor_unit];
         }
 
-        // ✅ 只有在不是外部傳入的情況下才進行 torque 換算處理 - Zhǐyǒu zài bùshì wàibù chuán rù de qíngkuàng xià cái jìnxíng torque huànsuàn chǔlǐ
+        // 只有在不是外部傳入的情況下才進行 torque 換算處理 - Zhǐyǒu zài bùshì wàibù chuán rù de qíngkuàng xià cái jìnxíng torque huànsuàn chǔlǐ
         if (!empty( $tools_temp)) {
 
             $tool_min_torque = floatval($tools_temp['tool_mintorque']);
@@ -492,8 +493,11 @@ class Sequences extends Controller
                 $new_temp_step[$key_step]['th_tor'] = $val_step['th_tor'];
                 $new_temp_step[$key_step]['record_ang'] = $val_step['record_ang'];
                 $new_temp_step[$key_step]['tor_unit'] = $val_step['tor_unit'];
+                $new_temp_step[$key_step]['pnf_set'] = $val_step['pnf_set'];
+
 
             }
+
 
             $rows_temp = $this->sequenceModel->copy_step_by_seq_id($new_temp_step);
 

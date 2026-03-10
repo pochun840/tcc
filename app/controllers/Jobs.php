@@ -141,6 +141,23 @@ class Jobs extends Controller
                 'rev_tor_unit' => $rev_tor_unit
             );
 
+            // 0 => kgf.m
+            // 1 => N.m
+            // 2 => kgf.cm
+            // 3 => Lbf.in
+            // 4 => cN.m
+            if($rev_tor_unit ==0){
+                $final_tor = 5.6084;
+            }else if($rev_tor_unit ==1){
+                $final_tor = 55.000;
+            }else if($rev_tor_unit ==2){
+                $final_tor = 561.00;
+            }else if($rev_tor_unit ==3){
+                $final_tor = 486.98;
+            }else{
+                $final_tor = 5500.0;
+            }
+
 
             if ($jobdata) {
 
@@ -170,7 +187,7 @@ class Jobs extends Controller
                         'seq_opt'       => 0,
                         'seq_k_val'     => 100,
                         'seq_ofs'       => 0,
-                        'seq_work_limit'=> null,
+                        'seq_work_limit'=> 0,
                         'seq_dt'        => 0,
                         'seq_tt'        => 0,
                     );
@@ -189,7 +206,7 @@ class Jobs extends Controller
                         'target_tor'   => $tool_min_tor,
                         'target_ang'   => 0,
                         'target_delay' => 0,
-                        'tor_hi'       => $tool_max_tor,
+                        'tor_hi'       => $final_tor,
                         'tor_lo'       => 0,
                         'ang_hi'       => 30600,
                         'ang_lo'       => 0,
@@ -208,8 +225,6 @@ class Jobs extends Controller
 
                 }
 
-          
-                
                 $result = array();
                 if($res){
                     $res_msg  = $text['New']."  ".$text['job_id'].':'. $jobdata['job_id']."  ".$text['success'];

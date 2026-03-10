@@ -314,7 +314,6 @@ $text['info_tool_sn'] = '锁附起子序号';
 $text['info_tool_status'] = '锁附起子状态';
 $text['job_id'] = '锁附工作编号';
 $text['job_name'] = '锁附工作名称';
-$text['seq_id'] = '锁附工序编号';
 $text['seq_name'] = '锁附工序名称';
 $text['step_id'] = '锁附步骤编号';
 $text['step_tor_unit'] = '锁附扭力单位';
