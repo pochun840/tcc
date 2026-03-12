@@ -9,153 +9,168 @@
       font-family: 'fa-solid-900';
       src: url('<?php echo URLROOT; ?>font/fa-solid-900.woff2') format('truetype');
     }
+
     .led-number
     {
-/*      font-family: 'LED字型', sans-serif;*/
+        /* font-family: 'LED字型', sans-serif; */
     }
 
-    /* 在手機旋轉時套用的 CSS 樣式 */
     @media screen and (orientation: landscape)  {
-      /* 手機為橫向旋轉狀態時的 CSS */
-      /* 在此設定您的 CSS 樣式 */
-        .panel-container
-        {
-            height: 65%!important;margin: 3px;
+        .panel-container {
+            height: 65%!important;
+            margin: 3px;
         }
 
-        .w3-container, .w3-panel
-        {
+        .w3-container, .w3-panel {
             padding: 0.01em 5px;
         }
 
-        .message-font
-        {
+        .message-font {
             font-size: 4vmin!important;
         }
 
-        .w3-panel
-        {
+        .w3-panel {
             margin-top: 5px!important;
         }
 
-        .table-font
-        {
+        .table-font {
             font-size: 3vmin!important;
         }
-
 
         .p1{ width:33%; height:23%; background-color: #CDC5BF; }
         .p2{ width:33%; height:23%; background-color: #CDC9C9; }
-        .p3{ width:33%; height:23%; background-color: #CDC9C9;position: absolute; left: 33.5%; top: 0%; }
-        .p4{ width:50%; height:23%; background-color: #CDC5BF;position: absolute; right: 0; top: 26%; display:none; }
-        .p5{ margin: 0px;padding: 0;position: absolute; left: 17%; top: 26%; width:83%; height: 100% }
-        .p6{ margin: 0px;padding: 0;position: absolute; left: 0; top: 26%; width: 20%; text-align:center; }
-        .nav-item{margin-bottom: 5px;}
+        .p3{ width:33%; height:23%; background-color: #CDC9C9; position: absolute; left: 33.5%; top: 0%; }
+        .p4{ width:50%; height:23%; background-color: #CDC5BF; position: absolute; right: 0; top: 26%; display:none; }
+        .p5{ margin: 0px; padding: 0; position: absolute; left: 17%; top: 26%; width:83%; height: 100% }
+        .p6{ margin: 0px; padding: 0; position: absolute; left: 0; top: 26%; width: 20%; text-align:center; }
+        .nav-item{ margin-bottom: 5px; }
 
-        #Target_Torque{top: 70%!important;}
-        #Torque_Result{top: 70%!important;}
-        #Target_Angle{top: 70%!important;}
-        .i-btn{display: block!important;}
+        #Target_Torque{ top: 70%!important; }
+        #Torque_Result{ top: 70%!important; }
+        #Target_Angle{ top: 70%!important; }
+        .i-btn{ display: block!important; }
     }
 
-    .panel-container
-    {
-        height: 83%;margin: 3px;
+    .panel-container {
+        height: 83%;
+        margin: 3px;
     }
 
-    @media screen and (orientation: portrait) 
-    {
-      /* 手機為直向旋轉狀態時的 CSS */
-      /* 在此設定您的 CSS 樣式 */
-     /* .panel-container{
-        height: 80%;margin: 5px;
-       }*/
-       .message-font
-       {
+    @media screen and (orientation: portrait) {
+        .message-font {
             font-size: 4vmin!important;
         }
-        .table-font
-        {
+
+        .table-font {
             font-size: 3vmin!important;
         }
 
-        .p1{ width:48%; height:20%; background-color: #CDC5BF;}
-        .p2{ width:50%; height:20%; background-color: #CDC9C9;}
-        .p3{ width:48%; height:20%; background-color: #CDC9C9;position: absolute; left: 0; top: 21%;}
-        .p4{ width:50%; height:20%; background-color: #CDC5BF;position: absolute; right: 0; top: 21%;}
-        .p5{ margin: 0px;padding: 0;position: absolute; left:0; top: 42%;}
-        .p6{ margin: 0px;padding: 0;position: absolute; left: 0; top: 92%; text-align:center; }
-        .nav-item{margin-bottom: 5px; width: 20%;}
-
+        .p1{ width:48%; height:20%; background-color: #CDC5BF; }
+        .p2{ width:50%; height:20%; background-color: #CDC9C9; }
+        .p3{ width:48%; height:20%; background-color: #CDC9C9; position: absolute; left: 0; top: 21%; }
+        .p4{ width:50%; height:20%; background-color: #CDC5BF; position: absolute; right: 0; top: 21%; }
+        .p5{ margin: 0px; padding: 0; position: absolute; left:0; top: 42%; }
+        .p6{ margin: 0px; padding: 0; position: absolute; left: 0; top: 92%; text-align:center; }
+        .nav-item{ margin-bottom: 5px; width: 20%; }
     }
 
-input:disabled 
-{
-    opacity: 1; /* Giữ độ rõ nét */
-    color: #000; /* Đảm bảo chữ vẫn có màu đen rõ ràng */
-}
+    input:disabled {
+        opacity: 1;
+        color: #000;
+    }
 
+    .chart-table {
+        width: 99%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    .chart-table th,
+    .chart-table td {
+        border: 1px solid #ddd;
+        padding: 5px;
+        text-align: center;
+        font-size: 12px;
+        height: 25px;
+    }
+
+    .chart-table th {
+        background-color: #f0f0f0;
+    }
 </style>
-
 
 <div class="container-ms">
     <div class="w3-text-white w3-center">
         <table class="no-border">
             <tr id="header">
                 <td width="100%">
-                    <h3><?php echo $text['operation_result'];?></h3>
+                    <h3><?php echo $text['operation_result']; ?></h3>
                 </td>
                 <td>
-                    <img id="back_home" src="./img/btn_home.png" style="margin-right: 10px"  onclick="window.location.href = '?url=In';">
+                    <img id="back_home" src="./img/btn_home.png" style="margin-right: 10px" onclick="window.location.href='?url=In';">
                 </td>
             </tr>
         </table>
     </div>
+
     <div class="main-content">
         <div class="center-content">
             <div class="topnav">
                 <table class="w3-table w3-dark-grey table-font">
                     <tr>
                         <td>
-                            <label style="color: #FFF; font-weight: bold" for="Job_Name"><?php echo $text['job']; ?>:</label>
-                            <input style=" color: #000" type="text" id="job_name" name="job_name" size="10" maxlength="15" value="" disabled>
-                            <input type="hidden" id="system_sn" name="system_sn" size="15" disabled>
+                            <label style="color: #FFF; font-weight: bold" for="job_name"><?php echo $text['job']; ?>:</label>
+                            <input style="color: #000" type="text" id="job_name" name="job_name" size="10" maxlength="15" value="" disabled>
+                            <input type="hidden" id="system_sn" name="system_sn" size="15"
+                                   value="<?php echo isset($data['system_sn']) ? htmlspecialchars($data['system_sn']) : ''; ?>" disabled>
                         </td>
                         <td>
-                            <label style="color: #FFF; font-weight: bold" for="Seq_Name"><?php echo $text['sequence']; ?>:</label>
-                            <input style=" color: #000" type="text" id="seq_name" name="seq_name" size="10" maxlength="15" value="" disabled>
+                            <label style="color: #FFF; font-weight: bold" for="seq_name"><?php echo $text['sequence']; ?>:</label>
+                            <input style="color: #000" type="text" id="seq_name" name="seq_name" size="10" maxlength="15" value="" disabled>
                         </td>
                         <td>
-                            <label style="color: #FFF; font-weight: bold" for="Screws"><?php echo $text['screws']; ?>:</label>
-                            <input style=" color: #000; text-align: center" type="text" id="max_screw_count" name="max_screw_count" size="4" maxlength="5" value="" disabled>
-                            <input style=" color: #000; text-align: center" type="hidden" id="last_screw_count" name="last_screw_count" size="4" maxlength="5" value="" disabled>
+                            <label style="color: #FFF; font-weight: bold" for="max_screw_count"><?php echo $text['screws']; ?>:</label>
+                            <input style="color: #000; text-align: center" type="text" id="max_screw_count" name="max_screw_count" size="4" maxlength="5" value="" disabled>
+                            <input style="color: #000; text-align: center" type="hidden" id="last_screw_count" name="last_screw_count" size="4" maxlength="5" value="" disabled>
                         </td>
                     </tr>
                 </table>
             </div>
-            
+
             <div class="operation-setting">
                 <div class="column">
                     <div class="item-target-torque w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_torque'] ;?>(<span id='fasten_status_unit_explain'></span>)</div>
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red">
+                            <?php echo $text['final_torque']; ?>(<span id="fasten_status_unit_explain"></span>)
+                        </div>
                         <div id="fasten_torque" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0;"></div>
                     </div>
-                    <div id='fasten_status_bg' class="item-result w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-black"><?php echo $text['final_result'];?></div>
-                        <div id="fasten_status_explain" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0"></div>            
+
+                    <div id="fasten_status_bg" class="item-result w3-display-container">
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-black">
+                            <?php echo $text['final_result']; ?>
+                        </div>
+                        <div id="fasten_status_explain" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0"></div>
                     </div>
                 </div>
+
                 <div class="column">
                     <div class="item-targer-angle w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_angle'];?></div>
-                        <div id="fasten_angle" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0"></div>                        
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red">
+                            <?php echo $text['final_angle']; ?>
+                        </div>
+                        <div id="fasten_angle" class="w3-display-middle" style="font-size: 6vmin; margin: 5px 0"></div>
                     </div>
+
                     <div class="item-message w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_message'];?></div>
-                        <div id="error_massage_explanation" class="w3-display-middle" style="font-size: 5vmin; margin: 5px 0"></div>                                    
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red">
+                            <?php echo $text['final_message']; ?>
+                        </div>
+                        <div id="error_massage_explanation" class="w3-display-middle" style="font-size: 5vmin; margin: 5px 0"></div>
                     </div>
                 </div>
             </div>
+
             <div class="chart-setting">
                 <div class="button-chart">
                     <?php foreach($data['chart_menu_arr'] as $k_menu => $v_menu): ?>
@@ -205,155 +220,189 @@ input:disabled
                     <div id="chart" align="center" style="max-width: 100%; height: 290px;"></div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 
-
 </body>
-
 </html>
-<style>
-    .chart-table {
-        width: 99%; /* Or adjust as needed */
-        border-collapse: collapse;
-        margin-bottom: 20px; /* Space between table and chart */
-    }
-
-    .chart-table th, .chart-table td {
-        border: 1px solid #ddd; /* Light gray borders */
-        padding: 5px; /* Reduced padding */
-        text-align: center;
-        font-size: 12px; /* Smaller font size */
-        height: 25px; /* Adjust row height as needed */
-    }
-
-    .chart-table th {
-        background-color: #f0f0f0; /* Light gray header */
-    }
-
-    
-</style> 
-
 
 <script>
 let lastDataVersion = 0;
 let pollingActive = true;
+let myChart = null;
+let pollTimer = null;
 
 /* =====================================================
  * 共用工具
  * ===================================================== */
-
-// 切換按鈕 active 樣式
-function changeBackgroundColor(button) {
-    document.querySelectorAll('.btn-chart').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    button.classList.add('active');
-}
-
-// chart 切換（不 reload 頁面）
-function chart_type(argument) {
-
-    document.querySelectorAll('.btn-chart').forEach(btn => {
-        btn.classList.toggle('active', btn.id === argument);
-    });
-
-    let chart = 1;
-    if (argument === "angle_time")  chart = 2;
-    if (argument === "rpm_time")    chart = 3;
-    if (argument === "torque_angle")chart = 4;
-
-    const url = new URL(window.location);
-    url.searchParams.set("chart", chart);
-    window.history.replaceState({}, '', url);
-
-    // ⭐強制重新抓新曲線
-    lastDataVersion = 0;
-
-    const sn = document.getElementById('system_sn').value;
-    if (!sn) return;   // ⭐這行非常重要
-
-    fetchData('?url=Dashboards/get_new_data', sn, chart);
-}
-
-
-
-/* =====================================================
- * 統一曲線圖（唯一入口）
- * ===================================================== */
 function getLangSafe() {
-  return (getCookie?.('language') || 'zh-tw').toLowerCase();
+    return (typeof getCookie === 'function'
+        ? (getCookie('language') || 'zh-tw')
+        : 'zh-tw'
+    ).toLowerCase();
 }
 
 function t(key) {
-  const lang = getLangSafe();
-  const dict = {
-    waiting_fasten: {
-      'zh-tw': '等待鎖附資料中…',
-      'zh-cn': '等待锁附数据中…',
-      'en-us': 'Waiting for fastening data…'
-    }
-  };
-  return (dict[key] && (dict[key][lang] || dict[key]['en-us'])) || key;
+    const lang = getLangSafe();
+    const dict = {
+        waiting_fasten: {
+            'zh-tw': '等待鎖附資料中…',
+            'zh-cn': '等待锁附数据中…',
+            'en-us': 'Waiting for fastening data…'
+        }
+    };
+    return (dict[key] && (dict[key][lang] || dict[key]['en-us'])) || key;
 }
 
-var myChart = null;
+function setActiveChartButton(argument) {
+    document.querySelectorAll('.btn-chart').forEach(btn => {
+        btn.classList.toggle('active', btn.id === argument);
+    });
+}
 
-// 後端統一輸出的資料
-const chartPayload = <?= json_encode($data['chart_payload'], JSON_UNESCAPED_UNICODE) ?>;
-window.chartPayload = chartPayload;
+function chartIdToMode(argument) {
+    if (argument === 'angle_time') return 2;
+    if (argument === 'rpm_time') return 3;
+    if (argument === 'torque_angle') return 4;
+    return 1;
+}
 
-window.addEventListener('load', function () {
+function safeResizeChart(delay = 80) {
+    setTimeout(function () {
+        if (myChart && typeof myChart.resize === 'function') {
+            myChart.resize();
+        }
+    }, delay);
+}
 
+/* =====================================================
+ * chart 切換
+ * ===================================================== */
+function chart_type(argument) {
+    setActiveChartButton(argument);
+
+    const chart = chartIdToMode(argument);
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('chart', chart);
+    window.history.replaceState({}, '', url.toString());
+
+    // 切圖時清掉版本，強制後端給最新圖
+    lastDataVersion = 0;
+
+    const sn = document.getElementById('system_sn').value || '--';
+    fetchData('?url=Dashboards/get_new_data', sn, chart);
+}
+
+/* =====================================================
+ * 統一曲線圖
+ * ===================================================== */
+const initialChartPayload = <?= json_encode($data['chart_payload'], JSON_UNESCAPED_UNICODE) ?>;
+window.chartPayload = initialChartPayload;
+
+function showWaitingOnChart() {
+    if (!myChart) return;
+
+    myChart.clear();
+    myChart.setOption({
+        animation: false,
+        grid: {
+            left: '10%',
+            right: '6%',
+            top: '14%',
+            bottom: '14%'
+        },
+        xAxis: { show: false, type: 'category', data: [] },
+        yAxis: { show: false, type: 'value' },
+        series: [],
+        graphic: {
+            type: 'text',
+            left: 'center',
+            top: 'middle',
+            style: {
+                text: t('waiting_fasten'),
+                fill: '#999',
+                fontSize: 16,
+                fontWeight: 400
+            }
+        }
+    }, true);
+
+    safeResizeChart(50);
+}
+
+function initChart() {
     const dom = document.getElementById('chart');
     if (!dom) return;
 
+    // 防止重複 init
+    if (myChart) {
+        try { myChart.dispose(); } catch (e) {}
+        myChart = null;
+    }
+
     myChart = echarts.init(dom);
 
-    if (
-        !chartPayload ||
-        !Array.isArray(chartPayload.xAxis) ||
-        chartPayload.xAxis.length === 0 ||
-        !Array.isArray(chartPayload.series) ||
-        chartPayload.series.length === 0
-    ) {
-        dom.innerHTML =
-             `<div style="text-align:center;color:#999;padding-top:80px;">${t('waiting_fasten')}</div>`;
+    console.log('[initChart] initialChartPayload =', initialChartPayload);
+    console.log('[initChart] chart size =', dom.clientWidth, dom.clientHeight);
+
+    const hasXAxis =
+        initialChartPayload &&
+        Array.isArray(initialChartPayload.xAxis) &&
+        initialChartPayload.xAxis.length > 0;
+
+    const hasSeries =
+        initialChartPayload &&
+        Array.isArray(initialChartPayload.series) &&
+        initialChartPayload.series.length > 0;
+
+    if (hasXAxis && hasSeries) {
+        drawUnifiedChart(initialChartPayload);
+
+        if (initialChartPayload.version !== undefined && initialChartPayload.version !== null) {
+            lastDataVersion = initialChartPayload.version;
+        }
+    } else {
+        showWaitingOnChart();
+    }
+
+    safeResizeChart(120);
+    safeResizeChart(250);
+}
+
+function drawUnifiedChart(payload) {
+    if (!myChart) return;
+
+    console.log('[drawUnifiedChart] payload =', payload);
+
+    const xAxisData = Array.isArray(payload?.xAxis) ? payload.xAxis : [];
+    const rawSeries = Array.isArray(payload?.series) ? payload.series : [];
+
+    if (xAxisData.length === 0 || rawSeries.length === 0) {
+        console.warn('[drawUnifiedChart] empty payload, skip draw');
+        showWaitingOnChart();
         return;
     }
 
-    drawUnifiedChart(chartPayload);
-
-    if (chartPayload && chartPayload.version) {
-        lastDataVersion = chartPayload.version;
-    }
-
-    // ⭐搬到這裡
-    const mainContent = document.querySelector('.main-content');
-    if (mainContent) {
-        mainContent.scrollIntoView({ behavior: 'auto', block: 'start' });
-    }
-});
-
-
-function drawUnifiedChart(payload) {
-
-    if (!myChart) return;
-
-    const series = payload.series.map(s => ({
-        name: s.name,
+    const series = rawSeries.map(s => ({
+        name: s?.name || '',
         type: 'line',
-        data: s.data,
+        data: Array.isArray(s?.data) ? s.data : [],
         showSymbol: false,
         smooth: false,
+        connectNulls: true,
         lineStyle: { width: 1.5 }
     }));
 
     const option = {
-        tooltip: { trigger: 'axis' },
-        legend: { show: false }, 
+        animation: false,
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            show: false
+        },
         grid: {
             left: '10%',
             right: '6%',
@@ -363,7 +412,7 @@ function drawUnifiedChart(payload) {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: payload.xAxis
+            data: xAxisData
         },
         yAxis: {
             type: 'value',
@@ -374,40 +423,34 @@ function drawUnifiedChart(payload) {
 
     myChart.clear();
     myChart.setOption(option, true);
+
+    safeResizeChart(50);
+    safeResizeChart(150);
 }
 
 /* =====================================================
- * Resize / Orientation
+ * API
  * ===================================================== */
-
-window.addEventListener("resize", function () {
-    if (myChart && myChart.resize) myChart.resize();
-});
-
-window.addEventListener("orientationchange", function () {
-    setTimeout(function () {
-        if (myChart && myChart.resize) myChart.resize();
-    }, 300);
-});
-
-/* =====================================================
- * 即時資料 polling（只更新右側狀態，不再動 chart）
- * ===================================================== */
-
 async function fetchData(url, system_sn, chart_mode) {
     try {
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
-                system_sn,
-                chart_mode,
-                last_version: lastDataVersion   // ⭐新增
+                system_sn: system_sn,
+                chart_mode: chart_mode,
+                last_version: lastDataVersion
             })
         });
 
-        if (!response.ok) throw new Error(response.status);
+        if (!response.ok) {
+            throw new Error('HTTP ' + response.status);
+        }
+
         const data = await response.json();
+        console.log('[fetchData] API data =', data);
         updateDataOnPage(data);
 
     } catch (e) {
@@ -418,76 +461,129 @@ async function fetchData(url, system_sn, chart_mode) {
 function updateDataOnPage(data) {
     if (!data) return;
 
-    /* =============================
-       更新右側文字資訊
-    ============================= */
+    const systemSnEl = document.getElementById('system_sn');
+    const jobNameEl = document.getElementById('job_name');
+    const seqNameEl = document.getElementById('seq_name');
+    const maxScrewCountEl = document.getElementById('max_screw_count');
+    const lastScrewCountEl = document.getElementById('last_screw_count');
+    const fastenTorqueEl = document.getElementById('fasten_torque');
+    const fastenAngleEl = document.getElementById('fasten_angle');
+    const fastenStatusExplainEl = document.getElementById('fasten_status_explain');
+    const fastenStatusUnitExplainEl = document.getElementById('fasten_status_unit_explain');
+    const errorMassageExplanationEl = document.getElementById('error_massage_explanation');
+    const fastenStatusBgEl = document.getElementById('fasten_status_bg');
 
-    document.getElementById('system_sn').value = data.system_sn || '--';
-    document.getElementById('job_name').value = data.job_id + "/" + data.jobs_count;
-    document.getElementById('seq_name').value = data.seq_id + "/" + data.seqs_count;
-    document.getElementById('max_screw_count').value =
-        data.last_screw_count + "/" + data.max_screw_count;
-
-    document.getElementById('fasten_torque').innerText = data.fasten_torque || 'N/A';
-    document.getElementById('fasten_angle').innerText  = data.fasten_angle || 'N/A';
-    document.getElementById('fasten_status_explain').innerText =
-        data.fasten_status_explain || 'N/A';
-    document.getElementById('fasten_status_unit_explain').innerText =
-        data.fasten_status_unit_explain || '';
-    document.getElementById('error_massage_explanation').innerText =
-        data.error_massage_explanation || '';
-
-    if (data.fasten_status_bg) {
-        document.getElementById('fasten_status_bg').style.backgroundColor =
-            data.fasten_status_bg;
+    if (systemSnEl) {
+        systemSnEl.value = data.system_sn || '--';
     }
 
-    // 後端沒有給 version → 不更新
-    if (!data.data_version) return;
+    if (jobNameEl) {
+        jobNameEl.value = (data.job_id ?? '--') + '/' + (data.jobs_count ?? '--');
+    }
 
-    // 沒有新鎖附 → 不重畫
-    if (data.data_version === lastDataVersion) return;
+    if (seqNameEl) {
+        seqNameEl.value = (data.seq_id ?? '--') + '/' + (data.seqs_count ?? '--');
+    }
 
-    console.log("📈 New fastening detected → redraw chart");
+    if (maxScrewCountEl) {
+        maxScrewCountEl.value = (data.last_screw_count ?? '--') + '/' + (data.max_screw_count ?? '--');
+    }
 
-    lastDataVersion = data.data_version;
+    if (lastScrewCountEl) {
+        lastScrewCountEl.value = data.last_screw_count ?? '--';
+    }
 
-    if (!data.chart_payload) return;
+    if (fastenTorqueEl) {
+        fastenTorqueEl.innerText = data.fasten_torque || 'N/A';
+    }
 
-    // 更新全域 payload
-    window.chartPayload = data.chart_payload;
+    if (fastenAngleEl) {
+        fastenAngleEl.innerText = data.fasten_angle || 'N/A';
+    }
 
-    // 重畫圖
-    drawUnifiedChart(data.chart_payload);
+    if (fastenStatusExplainEl) {
+        fastenStatusExplainEl.innerText = data.fasten_status_explain || 'N/A';
+    }
+
+    if (fastenStatusUnitExplainEl) {
+        fastenStatusUnitExplainEl.innerText = data.fasten_status_unit_explain || '';
+    }
+
+    if (errorMassageExplanationEl) {
+        errorMassageExplanationEl.innerText = data.error_massage_explanation || '';
+    }
+
+    if (fastenStatusBgEl && data.fasten_status_bg) {
+        fastenStatusBgEl.style.backgroundColor = data.fasten_status_bg;
+    }
+
+    // 只要 API 有圖就直接畫
+    if (data.chart_payload) {
+        console.log('[updateDataOnPage] chart_payload =', data.chart_payload);
+        window.chartPayload = data.chart_payload;
+        drawUnifiedChart(data.chart_payload);
+    }
+
+    // version 只做記錄
+    if (data.data_version !== undefined && data.data_version !== null) {
+        lastDataVersion = data.data_version;
+    }
 }
 
-
+/* =====================================================
+ * Polling
+ * ===================================================== */
 function startApiPolling(url = '?url=Dashboards/get_new_data', interval = 1000) {
-
     async function poll() {
-
         if (!pollingActive) return;
 
-        const system_sn =
-            document.getElementById('system_sn').value || '';
-
-        const chart_mode =
-            new URLSearchParams(location.search).get('chart') || 1;
-
-        // ⭐沒有 system_sn 不要打 API
-        if (!system_sn) {
-            setTimeout(poll, interval);
-            return;
-        }
+        const system_sn = document.getElementById('system_sn').value || '--';
+        const chart_mode = new URLSearchParams(window.location.search).get('chart') || 1;
 
         await fetchData(url, system_sn, chart_mode);
-        setTimeout(poll, interval);
+        pollTimer = setTimeout(poll, interval);
+    }
+
+    if (pollTimer) {
+        clearTimeout(pollTimer);
+        pollTimer = null;
     }
 
     poll();
 }
 
-startApiPolling();
+/* =====================================================
+ * 初始化
+ * ===================================================== */
+window.addEventListener('load', function () {
+    initChart();
 
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+        mainContent.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }
+
+    // 延遲一點抓第一次，避免手機版 layout 尚未穩定
+    setTimeout(function () {
+        const initSn = document.getElementById('system_sn').value || '--';
+        const initChartMode = new URLSearchParams(window.location.search).get('chart') || 1;
+        fetchData('?url=Dashboards/get_new_data', initSn, initChartMode);
+    }, 150);
+
+    setTimeout(function () {
+        startApiPolling();
+    }, 300);
+});
+
+/* =====================================================
+ * Resize / Orientation
+ * ===================================================== */
+window.addEventListener('resize', function () {
+    safeResizeChart(30);
+});
+
+window.addEventListener('orientationchange', function () {
+    safeResizeChart(200);
+    safeResizeChart(400);
+});
 </script>
-
