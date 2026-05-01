@@ -1,302 +1,317 @@
 <link rel="stylesheet" href="<?php echo URLROOT; ?>css/tcc_main.css?v=<?php echo ASSET_VERSION; ?>" type="text/css">
 
-<div class="container-ms">
-    <div class="main-content">
-        <div class="center-content w3-center">
+<div class="container-ms page-scroll-fix">
+    <div class="main-content main-scroll-fix">
+        <div class="center-content w3-center content-scroll-fix">
             <div style="text-shadow:3px 5px 0 #444;" class="wrapper w3-center w3-text-red">
-                <div class="buttonbox" style="top: 2%; right: 10px; text-align: right; position: absolute;">
-                    <input type="button" id="btnLogout" value="Logout" onclick="logout()">
-                    <input type="button" value="简中" data-language="zh-cn" onclick="language_change('zh-cn');">
-                    <input type="button" value="繁中" data-language="zh-tw" onclick="language_change('zh-tw');">
-                    <input type="button" value="English" data-language="en-us" onclick="language_change('en-us');">
+                <div class="buttonbox top-tools">
+                    <input type="button" name="" value="Logout" onclick="logout()">
+                    <input type="button" name="" value="简中" data-language="zh-cn" onclick="language_change('zh-cn');">
+                    <input type="button" name="" value="繁中" data-language="zh-tw" onclick="language_change('zh-tw');">
+                    <input type="button" name="" value="English" data-language="en-us" onclick="language_change('en-us');">
                 </div>
 
-                <div style="margin-top: 5%">
-                    <h1 class="col-ms-3 pt-5" style="font-size: 50px;"><?php echo TITLE_INDEX; ?></h1>
-                    <div style="text-shadow:2px 2px 0 #444; font-size: 30px" class="text w3-center w3-text-yellow">
-                        <?php echo SUBTITLE_INDEX; ?>
-                    </div>
+                <div class="title-block">
+                    <h1 class="col-ms-3 pt-5 main-title"><?php echo TITLE_INDEX; ?></h1>
+                    <div class="sub-title text w3-center w3-text-yellow"><?php echo SUBTITLE_INDEX; ?></div>
                 </div>
             </div>
 
             <div class="w3-center button-container">
-                <button class="menu-item blue" id="job_manager" onclick="window.location.href='?url=Jobs/index'">
-                    <span><?php echo $text['job_manager'] ?? 'Job'; ?></span>
-                </button>
+                <button class="menu-item blue" id="job_manager" onclick="window.location.href='?url=Jobs/index'"><span style="visibility: hidden;">Job</span></button>
+                <button class="menu-item purple" id="operation" onclick="window.location.href='?url=Dashboards/operation'"><span style="visibility: hidden;">Operation</span></button>
 
-                <button class="menu-item purple" id="operation" onclick="window.location.href='?url=Dashboards/operation'">
-                    <span><?php echo $text['operation'] ?? 'Operation'; ?></span>
-                </button>
+                <button class="menu-item green" id="io_input" onclick="window.location.href='?url=Inputs/index'"><span style="visibility: hidden;">IO Input</span></button>
+                <button class="menu-item orange" id="io_output" onclick="window.location.href='?url=Outputs/index'"><span style="visibility: hidden;">IO Output</span></button>
 
-                <button class="menu-item green" id="io_input" onclick="window.location.href='?url=Inputs/index'">
-                    <span><?php echo $text['io_input'] ?? 'IO Input'; ?></span>
-                </button>
+                <button class="menu-item lightblue" id="data" onclick="window.location.href='?url=Data/index'"><span style="visibility: hidden;">Data</span></button>
+                <button class="menu-item pink" id="tool" onclick="window.location.href='?url=Tools/index'"><span style="visibility: hidden;">Tool</span></button>
 
-                <button class="menu-item orange" id="io_output" onclick="window.location.href='?url=Outputs/index'">
-                    <span><?php echo $text['io_output'] ?? 'IO Output'; ?></span>
-                </button>
+                <button class="menu-item PaleGreen" id="setting" onclick="window.location.href='?url=Settings/index'"><span style="visibility: hidden;">Setting</span></button>
 
-                <button class="menu-item lightblue" id="data" onclick="window.location.href='?url=Data/index'">
-                    <span><?php echo $text['data'] ?? 'Data'; ?></span>
-                </button>
+                <button class="menu-item lime" id="remote" style="font-size: 24px" onclick="window.location.href='?url=Remotes'"><span style="visibility: hidden;">Remotes</span></button>
+                <button class="menu-item indigo" id="load" onclick="DB_sync_idas_load('C2D')"><span style="visibility: hidden;">Load</span></button>
+                <button class="menu-item deep-orange" id="save" onclick="DB_sync_idas('D2C')"><span style="visibility: hidden;">Save</span></button>
+            </div>
 
-                <button class="menu-item pink" id="tool" onclick="window.location.href='?url=Tools/index'">
-                    <span><?php echo $text['tool'] ?? 'Tool'; ?></span>
-                </button>
-
-                <button class="menu-item PaleGreen" id="setting" onclick="window.location.href='?url=Settings/index'">
-                    <span><?php echo $text['setting'] ?? 'Setting'; ?></span>
-                </button>
-
-                <button class="menu-item lime" id="remote" onclick="window.location.href='?url=Remotes'">
-                    <span><?php echo $text['remote'] ?? 'Remotes'; ?></span>
-                </button>
-
-                <button class="menu-item indigo" id="load" onclick="DB_sync_idas_load('C2D')">
-                    <span><?php echo $text['load'] ?? 'Load'; ?></span>
-                </button>
-
-                <button class="menu-item deep-orange" id="save" onclick="DB_sync_idas('D2C')">
-                    <span><?php echo $text['save'] ?? 'Save'; ?></span>
-                </button>
+            <div class="bottom-right">
+                <?php if (!empty($data['idas_online_version'])) echo "Version: {$data['idas_online_version']}"; ?>
             </div>
         </div>
     </div>
 </div>
 
-<div class="bottom-right">
-    <?php if (!empty($data['idas_online_version'])) echo "Version: {$data['idas_online_version']}"; ?>
-</div>
-
 <style>
-html, body {
-    height: auto !important;
-    min-height: 100%;
-    overflow-x: hidden !important;
+/* =========================
+   關鍵：不要靠 body 捲，改靠頁面自己的容器捲
+========================= */
+.page-scroll-fix {
+    position: relative !important;
+    width: 100% !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    overflow: hidden !important;
+}
+
+.main-scroll-fix {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    overflow: hidden !important;
+}
+
+.content-scroll-fix {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
     overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+    padding: 10px 10px 90px !important;
 }
 
-body {
-    margin: 0;
-    position: static !important;
-}
-
-.container-ms {
-    margin: 0 auto;
-    padding: 0;
-    min-height: 100vh;
-    height: auto !important;
-    overflow: visible !important;
-    position: relative;
-}
-
-.main-content {
-    display: block !important;
-    width: 100%;
-    min-height: 100vh;
-    overflow: visible !important;
-}
-
-.center-content {
-    width: 100%;
-    padding: 10px 10px 80px;
-    box-sizing: border-box;
-    overflow: visible !important;
-}
-
+/* 桌機/手機都避免被外層 fixed 影響 */
 .wrapper {
-    position: relative;
-    overflow: visible !important;
-    padding-top: 10px;
+    position: relative !important;
+    height: auto !important;
+    min-height: 170px !important;
+    padding-top: 10px !important;
+}
+
+.top-tools {
+    z-index: 2;
+    margin: 6px 0 10px 0;
+}
+
+.title-block {
+    margin-top: 5%;
+}
+
+.main-title {
+    font-size: 50px;
+}
+
+.sub-title {
+    text-shadow: 2px 2px 0 #444;
+    font-size: 30px;
 }
 
 .button-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin: 20px;
-    padding-bottom: 24px;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    margin: 20px auto !important;
+    padding-bottom: 20px !important;
+    overflow: visible !important;
 }
 
-.menu-item {
-    position: relative;
-    background-position: center 18px !important;
-    background-repeat: no-repeat !important;
-    background-size: 64px 64px !important;
-    padding-top: 88px;
-    padding-bottom: 12px;
-    min-height: 120px;
-    min-width: 120px;
+.bottom-right {
+    margin: 16px 0 12px;
+    color: white;
+    font-size: 18px;
     text-align: center;
-    vertical-align: top;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
 }
 
-.menu-item span {
-    visibility: visible !important;
-    display: block;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 1px 1px 2px #000;
-    line-height: 1.2;
-    padding: 0 4px;
-    margin-top: 0;
-}
-
-.menu-item:hover {
-    transform: scale(1.03);
-}
-
+/* 背景按鈕 */
 #job_manager {
-    background: url("<?php echo $text['img_job']; ?>") no-repeat;
+    background: url("<?php echo $text['img_job']; ?>") no-repeat center center;
 }
 #job_manager:hover {
-    background: url("<?php echo $text['img_job_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_job_hover']; ?>") no-repeat center center;
 }
 
 #io_input {
-    background: url("<?php echo $text['img_io_input']; ?>") no-repeat;
+    background: url("<?php echo $text['img_io_input']; ?>") no-repeat center center;
 }
 #io_input:hover {
-    background: url("<?php echo $text['img_io_input_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_io_input_hover']; ?>") no-repeat center center;
 }
 
 #io_output {
-    background: url("<?php echo $text['img_io_output']; ?>") no-repeat;
+    background: url("<?php echo $text['img_io_output']; ?>") no-repeat center center;
 }
 #io_output:hover {
-    background: url("<?php echo $text['img_io_output_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_io_output_hover']; ?>") no-repeat center center;
 }
 
 #operation {
-    background: url("<?php echo $text['img_operation']; ?>") no-repeat;
+    background: url("<?php echo $text['img_operation']; ?>") no-repeat center center;
 }
 #operation:hover {
-    background: url("<?php echo $text['img_operation_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_operation_hover']; ?>") no-repeat center center;
 }
 
 #data {
-    background: url("<?php echo $text['img_data']; ?>") no-repeat;
+    background: url("<?php echo $text['img_data']; ?>") no-repeat center center;
 }
 #data:hover {
-    background: url("<?php echo $text['img_data_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_data_hover']; ?>") no-repeat center center;
 }
 
 #tool {
-    background: url("<?php echo $text['img_tool']; ?>") no-repeat;
+    background: url("<?php echo $text['img_tool']; ?>") no-repeat center center;
 }
 #tool:hover {
-    background: url("<?php echo $text['img_tool_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_tool_hover']; ?>") no-repeat center center;
 }
 
 #setting {
-    background: url("<?php echo $text['img_setting']; ?>") no-repeat;
+    background: url("<?php echo $text['img_setting']; ?>") no-repeat center center;
 }
 #setting:hover {
-    background: url("<?php echo $text['img_setting_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_setting_hover']; ?>") no-repeat center center;
 }
 
 #load {
-    background: url("<?php echo $text['img_load']; ?>") no-repeat;
+    background: url("<?php echo $text['img_load']; ?>") no-repeat center center;
 }
 #load:hover {
-    background: url("<?php echo $text['img_load_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_load_hover']; ?>") no-repeat center center;
 }
 
 #save {
-    background: url("<?php echo $text['img_save']; ?>") no-repeat;
+    background: url("<?php echo $text['img_save']; ?>") no-repeat center center;
 }
 #save:hover {
-    background: url("<?php echo $text['img_save_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_save_hover']; ?>") no-repeat center center;
 }
 
 #agent {
-    background: url("<?php echo $text['img_agent']; ?>") no-repeat;
+    background: url("<?php echo $text['img_agent']; ?>") no-repeat center center;
 }
 #agent:hover {
-    background: url("<?php echo $text['img_agent_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_agent_hover']; ?>") no-repeat center center;
 }
 
 #remote {
-    background: url("<?php echo $text['img_remote']; ?>") no-repeat;
+    background: url("<?php echo $text['img_remote']; ?>") no-repeat center center;
 }
 #remote:hover {
-    background: url("<?php echo $text['img_remote_hover']; ?>") no-repeat;
+    background: url("<?php echo $text['img_remote_hover']; ?>") no-repeat center center;
 }
 
-@media only screen and (max-width: 768px) {
-    .buttonbox {
-        position: static !important;
-        text-align: center !important;
-        margin-bottom: 12px;
-    }
-
-    .button-container {
-        justify-content: space-evenly;
-        gap: 10px;
-        margin: 5px;
-    }
-
-    .menu-item {
-        position: relative;
-
-        width:120px;
-        height:120px;
-
-        background-position:center center !important;
-        background-repeat:no-repeat !important;
-        background-size:90px 90px !important;
-
-        border:none;
-        cursor:pointer;
-
-        display:flex;
-        align-items:center;
-        justify-content:center;
-    }
-
-    .menu-item span {
-        display:none !important;
+/* 桌機 */
+@media only screen and (min-width: 769px) {
+    .top-tools {
+        position: absolute;
+        top: 2%;
+        right: 10px;
+        text-align: right;
     }
 
     .bottom-right {
-        position: static !important;
-        margin: 12px;
         text-align: right;
-        color: white;
+        margin-right: 10px;
+    }
+}
+
+/* 手機 */
+@media only screen and (max-width: 768px) {
+    .content-scroll-fix {
+        padding: 8px 8px 70px !important;
+    }
+
+    .top-tools {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        text-align: center !important;
+        margin: 4px 0 14px 0 !important;
+    }
+
+    .top-tools input[type="button"] {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+
+    .title-block {
+        margin-top: 8px !important;
+    }
+
+    .main-title {
+        font-size: 34px !important;
+        line-height: 1.2;
+        margin: 8px 0 !important;
+    }
+
+    .sub-title {
+        font-size: 20px !important;
+        line-height: 1.3;
+    }
+
+    .button-container {
+        justify-content: space-evenly !important;
+        gap: 10px !important;
+        margin: 16px auto !important;
+    }
+
+    .bottom-right {
         font-size: 16px;
+        text-align: center;
+        margin-top: 14px;
     }
 }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            var headerElements = document.querySelectorAll('.ajs-header');
-            headerElements.forEach(function(headerElement) {
+    // 移除 alertify header
+    var observer = new MutationObserver(function() {
+        var headerElements = document.querySelectorAll('.ajs-header');
+        headerElements.forEach(function(headerElement) {
+            if (headerElement.parentNode) {
                 headerElement.parentNode.removeChild(headerElement);
-            });
+            }
         });
     });
-
     observer.observe(document.body, { childList: true, subtree: true });
+
+    // 強制讓這頁使用自己的 scroll container
+    var page = document.querySelector('.page-scroll-fix');
+    var main = document.querySelector('.main-scroll-fix');
+    var content = document.querySelector('.content-scroll-fix');
+
+    if (page) {
+        page.style.height = window.innerHeight + 'px';
+        page.style.overflow = 'hidden';
+    }
+    if (main) {
+        main.style.height = '100%';
+        main.style.overflow = 'hidden';
+    }
+    if (content) {
+        content.style.height = '100%';
+        content.style.overflowY = 'auto';
+        content.style.overflowX = 'hidden';
+        content.style.webkitOverflowScrolling = 'touch';
+    }
+
+    // 某些平板 WebView 要補 touch action
+    document.body.style.touchAction = 'pan-y';
+});
+
+window.addEventListener('resize', function() {
+    var page = document.querySelector('.page-scroll-fix');
+    if (page) {
+        page.style.height = window.innerHeight + 'px';
+    }
 });
 
 function language_change(language){
-    if (language) {
+    if (language){
         $.ajax({
             url: "?url=Dashboards/change_language",
             method: "POST",
             data:{ language: language },
-            success: function(response) {
+            success: function() {
                 history.go(0);
             },
             error: function(xhr, status, error) {
@@ -403,8 +418,8 @@ function DB_sync_idas_load(argument) {
                             var progressBar = document.getElementById('syncProgress');
                             if (progressBar) progressBar.value = progress;
 
-                            var syncText = document.getElementById('syncText');
-                            if (syncText) syncText.innerHTML = syncingText + ' ' + progress + '%';
+                            var syncTextEl = document.getElementById('syncText');
+                            if (syncTextEl) syncTextEl.innerHTML = syncingText + ' ' + progress + '%';
                         }, intervalTime);
 
                     } else {
@@ -417,8 +432,7 @@ function DB_sync_idas_load(argument) {
                 }
             });
         },
-        function () {
-        }
+        function () {}
     );
 
     function showAlertAutoClose(title, message, delay = 3000) {
@@ -574,8 +588,8 @@ function DB_sync_idas(argument) {
                         var progressBar = document.getElementById('syncProgress');
                         if (progressBar) progressBar.value = progress;
 
-                        var syncText = document.getElementById('syncText');
-                        if (syncText) syncText.innerHTML = syncingText + ' ' + progress + '%';
+                        var syncTextEl = document.getElementById('syncText');
+                        if (syncTextEl) syncTextEl.innerHTML = syncingText + ' ' + progress + '%';
                     }, intervalTime);
                 },
                 error: function (xhr, status, error) {
@@ -584,8 +598,7 @@ function DB_sync_idas(argument) {
                 }
             });
         },
-        function () {
-        }
+        function () {}
     );
 
     function showAlertAutoClose(title, message, delay = 3000) {

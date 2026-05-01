@@ -29,13 +29,13 @@
                         </div>
 
                         <div class="row border-bottom">
-                            <div class="col-4 t1"><?php echo $text['tool_max_torque2'];?>:</div>
-                            <div class="col t1"><?php echo  $data['tools_info']['tool_maxtorque'];?></div>
+                            <div class="col-4 t1"><?php echo $text['Torque'];?>:</div>
+                            <div class="col t1"><?php echo  $data['tools_info']['tool_mintorque'];?>/<?php echo  $data['tools_info']['tool_maxtorque'];?></div>
                         </div>
 
                         <div class="row border-bottom">
-                            <div class="col-4 t1"><?php echo $text['tool_max_speed'];?>:</div>
-                            <div class="col t1"><?php echo $data['tools_info']['tool_maxrpm'];?></div>
+                            <div class="col-4 t1"><?php echo $text['rpm'];?>:</div>
+                            <div class="col t1"><?php echo $data['tools_info']['tool_maxrpm'];?>/<?php echo $data['tools_info']['tool_minrpm'];?></div>
                         </div>
 
                         <div class="row border-bottom">

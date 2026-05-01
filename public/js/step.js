@@ -1019,25 +1019,62 @@ function input_check_core(prefix, step_id = '') {
     * ✅ 統一取得「同單位」的 tool torque range（關鍵修正）
     * ===================================================== */
     function getToolTorqueRangeUnified(){
-        const hardMax = getHardMaxTorque();
+        /*
+         * 修正重點：
+         * 1. 不判斷起子型號，只判斷目前工具範圍 tool_min_tor ~ tool_max_tor。
+         * 2. tool_min_tor = 0 也必須是有效範圍，不能被當 false。
+         * 3. tool_max_tor / tool_min_tor 是頁面 hidden input 已轉換後的範圍，優先使用。
+         * 4. window.__TOOL_MAX_TOR__ 可能被 edit_step() 以 tool_maxtorque_unified 覆蓋成 55，
+         *    所以只能當 DOM 不存在時的最後 fallback。
+         * 5. tool_maxtorque_unified 只當 fallback，不再拿來壓縮 maxAllowed。
+         */
+        const readNumber = (id) => {
+            const raw = document.getElementById(id)?.value;
+            const s = String(raw ?? '').trim().replace(',', '.');
+            if (s === '') return NaN;
 
-        // 1) 先吃全域（setToolSpecToUIAndGlobal 會維護）
-        let minV = parseFloat(String(window.__TOOL_MIN_TOR__ ?? '').trim());
-        let maxV = parseFloat(String(window.__TOOL_MAX_TOR__ ?? '').trim());
+            const n = Number(s);
+            return Number.isFinite(n) ? n : NaN;
+        };
 
-        // 2) fallback DOM（最後手段）
-        if (!Number.isFinite(minV)) minV = parseFloat(document.getElementById('tool_min_tor')?.value);
-        if (!Number.isFinite(maxV)) maxV = parseFloat(document.getElementById('tool_max_tor')?.value);
+        const readGlobalNumber = (key) => {
+            const raw = window[key];
+            const s = String(raw ?? '').trim().replace(',', '.');
+            if (s === '') return NaN;
 
+            const n = Number(s);
+            return Number.isFinite(n) ? n : NaN;
+        };
+
+        // ✅ 正確來源：目前頁面 hidden input 的起子範圍
+        let minV = readNumber('tool_min_tor');
+        let maxV = readNumber('tool_max_tor');
+
+        // fallback 1：全域變數，只在 DOM 沒有值時使用
+        if (!Number.isFinite(minV)) minV = readGlobalNumber('__TOOL_MIN_TOR__');
+        if (!Number.isFinite(maxV)) maxV = readGlobalNumber('__TOOL_MAX_TOR__');
+
+        // fallback 2：舊欄位，只在 tool_max_tor / global 都沒有時使用
+        const unifiedMax = readNumber('tool_maxtorque_unified');
+        if (!Number.isFinite(maxV)) maxV = unifiedMax;
+
+        // ✅ 0 是有效下限，所以只能用 Number.isFinite 判斷
         const has = Number.isFinite(minV) && Number.isFinite(maxV);
-        const maxAllowed = has ? Math.min(maxV, hardMax) : hardMax;
+
+        // 防呆：若資料來源反了，直接交換，避免驗證失效
+        if (has && minV > maxV) {
+            const tmp = minV;
+            minV = maxV;
+            maxV = tmp;
+        }
 
         return {
-            hardMax,
+            // hardMax 也改成有效工具上限；避免後面 hi > HARD_MAX_TORQUE 又吃到 55
+            hardMax: has ? maxV : (Number.isFinite(unifiedMax) ? unifiedMax : getHardMaxTorque()),
             hasToolRange: has,
             toolMin: has ? minV : NaN,
             toolMax: has ? maxV : NaN,
-            maxAllowed
+            maxAllowed: has ? maxV : (Number.isFinite(unifiedMax) ? unifiedMax : getHardMaxTorque())
         };
     }
 

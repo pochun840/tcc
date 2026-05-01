@@ -379,15 +379,15 @@ class Settings extends Controller
         echo trim($output);
     }
 
-     function firmware_reset()
+    function firmware_reset()
     {
         // code...
     }
 
 
-    public function export_sysytem_config(){
-
-        // 4 個都打包
+ 
+    public function export_sysytem_config()
+    {
         $files = [
             '/var/log/syslog',
             '/home/kls/project/system/oplog0.bin',
@@ -395,13 +395,20 @@ class Settings extends Controller
             '/var/www/html/database/tccdev.db',
         ];
 
-        // zip 存放目錄
         $zipDir = '/mnt/ramdisk/tmp/';
         if (!is_dir($zipDir)) {
             @mkdir($zipDir, 0777, true);
         }
 
-        $zipFile = $zipDir . 'system_config_' . date('Ymd_His') . '.zip';
+        $timestamp    = date('Ymd_His');
+        $stageDir     = $zipDir . 'export_stage_' . $timestamp . '/';
+        $zipFile      = $zipDir . 'system_config_' . $timestamp . '.zip';
+        $downloadName = 'system_config_' . $timestamp . '.zip';
+        $syslogTmp    = $zipDir . 'syslog_copy_' . $timestamp;
+
+        if (!is_dir($stageDir)) {
+            @mkdir($stageDir, 0777, true);
+        }
 
         $zip = new ZipArchive();
         if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
@@ -410,43 +417,180 @@ class Settings extends Controller
             exit;
         }
 
-        $added = [];
-        $missing = [];
+        $added        = [];
+        $missing      = [];
+        $unreadable   = [];
+        $failed       = [];
+        $scriptCopied = [];
 
         foreach ($files as $file) {
-            if (file_exists($file) && is_readable($file)) {
-                // 用 basename 存入 zip（不帶完整路徑）
-                $zip->addFile($file, basename($file));
-                $added[] = $file;
-            } else {
+            $baseName  = basename($file);
+            $stageFile = $stageDir . $baseName;
+
+            // =========================
+            // syslog 特別處理
+            // =========================
+            if ($file === '/var/log/syslog') {
+                @unlink($syslogTmp);
+
+                // 1. 先嘗試直接 copy
+                if (file_exists($file) && is_readable($file)) {
+                    if (@copy($file, $stageFile)) {
+                        if ($zip->addFile($stageFile, $baseName)) {
+                            $added[] = $file;
+                        } else {
+                            $failed[] = $file . ' (zip add failed)';
+                        }
+                    } else {
+                        $failed[] = $file . ' (direct copy failed)';
+                    }
+                } else {
+                    // 2. 不可讀時，使用 sudo cp 備援
+                    $output1 = [];
+                    $ret1    = 0;
+                    $cmd1    = sprintf(
+                        'sudo /bin/cp %s %s 2>&1',
+                        escapeshellarg($file),
+                        escapeshellarg($syslogTmp)
+                    );
+
+                    exec($cmd1, $output1, $ret1);
+
+                    error_log("SYSLOG FALLBACK CMD1: " . $cmd1);
+                    error_log("SYSLOG FALLBACK RET1: " . $ret1);
+                    error_log("SYSLOG FALLBACK OUT1: " . implode("\n", $output1));
+
+                    $output2 = [];
+                    $ret2    = 0;
+
+                    if ($ret1 === 0 && file_exists($syslogTmp)) {
+                        $cmd2 = sprintf(
+                            'sudo /bin/chmod 644 %s 2>&1',
+                            escapeshellarg($syslogTmp)
+                        );
+
+                        exec($cmd2, $output2, $ret2);
+
+                        error_log("SYSLOG FALLBACK CMD2: " . $cmd2);
+                        error_log("SYSLOG FALLBACK RET2: " . $ret2);
+                        error_log("SYSLOG FALLBACK OUT2: " . implode("\n", $output2));
+                    }
+
+                    if ($ret1 === 0 && file_exists($syslogTmp) && is_readable($syslogTmp)) {
+                        if (@copy($syslogTmp, $stageFile)) {
+                            if ($zip->addFile($stageFile, $baseName)) {
+                                $added[]        = $file . ' (via sudo cp)';
+                                $scriptCopied[] = $file;
+                            } else {
+                                $failed[] = $file . ' (sudo cp ok, zip add failed)';
+                            }
+                        } else {
+                            $failed[] = $file . ' (sudo cp ok, stage copy failed)';
+                        }
+                    } else {
+                        if (!file_exists($file)) {
+                            $missing[] = $file;
+                        } else {
+                            $unreadable[] = $file;
+                        }
+
+                        $failed[] = $file . ' sudo cp failed: ' . implode(' ; ', $output1);
+                    }
+                }
+
+                continue;
+            }
+
+            // =========================
+            // 其他檔案：正常流程
+            // =========================
+            $exists   = file_exists($file);
+            $readable = is_readable($file);
+
+            error_log("CHECK FILE: " . $file);
+            error_log(" - exists: " . ($exists ? 'YES' : 'NO'));
+            error_log(" - readable: " . ($readable ? 'YES' : 'NO'));
+
+            if (!$exists) {
                 $missing[] = $file;
+                continue;
+            }
+
+            if (!$readable) {
+                $unreadable[] = $file;
+                continue;
+            }
+
+            if (@copy($file, $stageFile)) {
+                if ($zip->addFile($stageFile, $baseName)) {
+                    $added[] = $file;
+                } else {
+                    $failed[] = $file . ' (zip add failed)';
+                }
+            } else {
+                $failed[] = $file . ' (copy failed)';
             }
         }
 
-        // 寫入 manifest，方便你核對
-        //$manifest = "Export Time: " . date('Y-m-d H:i:s') . "\n\n";
-        //$manifest .= "[ADDED]\n" . (count($added) ? implode("\n", $added) : "(none)") . "\n\n";
-        //$manifest .= "[MISSING]\n" . (count($missing) ? implode("\n", $missing) : "(none)") . "\n";
-        //$zip->addFromString('manifest.txt', $manifest);
+        $manifest  = "Export Time: " . date('Y-m-d H:i:s') . "\n\n";
+        $manifest .= "[ADDED]\n" . (count($added) ? implode("\n", $added) : "(none)") . "\n\n";
+        $manifest .= "[SCRIPT_COPIED]\n" . (count($scriptCopied) ? implode("\n", $scriptCopied) : "(none)") . "\n\n";
+        $manifest .= "[MISSING]\n" . (count($missing) ? implode("\n", $missing) : "(none)") . "\n\n";
+        $manifest .= "[UNREADABLE]\n" . (count($unreadable) ? implode("\n", $unreadable) : "(none)") . "\n\n";
+        $manifest .= "[FAILED]\n" . (count($failed) ? implode("\n", $failed) : "(none)") . "\n";
 
+        $zip->addFromString('manifest.txt', $manifest);
         $zip->close();
 
+        @unlink($syslogTmp);
+
         if (!file_exists($zipFile)) {
+            $this->deleteDirectoryIfExists($stageDir);
             http_response_code(404);
             echo json_encode(['error' => 'Zip file not found']);
             exit;
         }
 
-        // 提供前端下載
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
+
         header('Content-Type: application/zip');
-        header('Content-Disposition: attachment; filename="system_config_' . date('Ymd_His') . '.zip"');
+        header('Content-Disposition: attachment; filename="' . $downloadName . '"');
         header('Content-Length: ' . filesize($zipFile));
         header('Pragma: no-cache');
         header('Expires: 0');
 
         readfile($zipFile);
+
+        @unlink($zipFile);
+        $this->deleteDirectoryIfExists($stageDir);
         exit;
     }
+
+    private function deleteDirectoryIfExists($dir)
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        $items = scandir($dir);
+        foreach ($items as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+
+            $path = $dir . DIRECTORY_SEPARATOR . $item;
+            if (is_dir($path)) {
+                $this->deleteDirectoryIfExists($path);
+            } else {
+                @unlink($path);
+            }
+        }
+
+        @rmdir($dir);
+    }
+
 
 
 

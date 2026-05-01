@@ -34,7 +34,7 @@
                             <input type="text" id="current_job_id" name="" style="width:70%;max-width: 100px;text-align: center;" disabled>
                         </div>
                         <div class="col-3" style="font-size: 18px; margin: 5px 10px 5px">
-                            <label for="current_seq_id"><?php echo $text['seq_id']; ?></label>
+                            <label for="current_seq_id"><?php echo $text['sequence_id']; ?></label>
                             <input type="text" id="current_seq_id" name="" style="width:70%;max-width: 100px;text-align: center;" disabled>
                         </div>
                         <div class="col-3" style="font-size: 18px; margin: 5px 10px 5px">

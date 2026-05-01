@@ -3,7 +3,7 @@
 //sudo chmod -R 777 /var/www/html/idas
 //sudo chmod -R 777 /var/www/html/database
 //sudo rm -rf /var/www/html/idas
-//sudo chown -R www-data:www-data /var/www/html/tccidas/app/views/step
+//sudo chown -R www-data:www-data /var/www/html/upload_status.php
 //12345678rd
 //sudo chmod -R 777 /var/www/html/idas_update.php
 

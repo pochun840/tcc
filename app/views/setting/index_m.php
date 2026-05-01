@@ -127,10 +127,10 @@ window.APP = {
                         <div class="col t1"><?php echo $text['system_sys_date'];?>(UTC):</div>
                         <div class="row t2 border-bottom">
                             <div class="col t2">
-                                <form style="margin-left: 5%"  onsubmit="change_datetime();return false;" >
+                                <form onsubmit="change_datetime();return false;">
                                     <span id="currentSystemTime"></span>
                                     <input type="datetime-local" id="newTime" value="" size="25" required class="w3-submit w3-border" style="margin: 0px 0px 5px; height: 32px">
-                                    <input type="button" value="<?php echo $text['save'];?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right" onclick="time_save()">
+                                    <input type="submit" value="<?php echo $text['save']; ?>" class="all-btn w3-submit w3-border w3-round-large" style="float: right">
                                 </form>
                             </div>        
                         </div>          
