@@ -1,6 +1,83 @@
-// 取得上限扭力(已做完扭力單位的轉換)
+// 固定扭力上限基準值：55 N.m
+// 前端依目前扭力單位換算後，作為畫面預設值與驗證上限使用。
+const HARD_MAX_TORQUE_NM = 55;
+
+function normalizeTorqueUnitName(unit) {
+    const raw = String(unit || '').trim();
+    const compact = raw
+        .replace(/\s+/g, '')
+        .replace(/[·・]/g, '.')
+        .replace(/牛頓米|牛顿米/gi, 'N.m')
+        .replace(/公斤力公分|千克力厘米/gi, 'kgf.cm')
+        .replace(/公斤力米|千克力米/gi, 'kgf.m')
+        .replace(/磅力英吋|磅力英寸/gi, 'lbf.in')
+        .replace(/厘牛頓米|厘牛顿米/gi, 'cN.m');
+
+    const lower = compact.toLowerCase();
+
+    if (lower.includes('kgf.cm') || lower.includes('kgf-cm') || lower.includes('kgfcm')) return 'kgf.cm';
+    if (lower.includes('kgf.m')  || lower.includes('kgf-m')  || lower.includes('kgfm'))  return 'kgf.m';
+    if (lower.includes('lbf.in') || lower.includes('lbf-in') || lower.includes('lbfin')) return 'lbf.in';
+    if (lower.includes('cn.m')   || lower.includes('cn-m')   || lower.includes('cnm'))   return 'cN.m';
+    if (lower.includes('n.m')    || lower.includes('n-m')    || lower.includes('nm'))    return 'N.m';
+
+    // 依後端 device_torque_unit 常見 index 做 fallback；若專案 index 不同，可在這裡調整。
+    const unitIndex = String(document.getElementById('step_torque_unit')?.value ?? '').trim();
+    const indexMap = {
+        '0': 'N.m',
+        '1': 'N.m',
+        '2': 'kgf.cm',
+        '3': 'kgf.m',
+        '4': 'lbf.in',
+        '5': 'cN.m'
+    };
+
+    return indexMap[unitIndex] || 'N.m';
+}
+
+function convertNmToTorqueUnit(nm, unit) {
+    const normalizedUnit = normalizeTorqueUnitName(unit);
+
+    switch (normalizedUnit) {
+        case 'N.m':
+            return nm;
+        case 'kgf.cm':
+            return nm * 10.19716213;
+        case 'kgf.m':
+            return nm * 0.1019716213;
+        case 'lbf.in':
+            return nm * 8.85074579;
+        case 'cN.m':
+            return nm * 100;
+        default:
+            return nm;
+    }
+}
+
+// 取得固定上限扭力：55 N.m 依目前扭力單位換算
 function getHardMaxTorque() {
-    return parseFloat(document.getElementById('tool_maxtorque_unified')?.value) || 0;
+    const unit = getTorqueUnit();
+    const { precision } = getTorqueRule();
+    const converted = convertNmToTorqueUnit(HARD_MAX_TORQUE_NM, unit);
+
+    return Number(converted.toFixed(precision));
+}
+
+function getHardMaxTorqueText() {
+    const { precision } = getTorqueRule();
+    return getHardMaxTorque().toFixed(precision);
+}
+
+function syncHardMaxTorqueToHiddenInput() {
+    const hardMaxText = getHardMaxTorqueText();
+    const unifiedEl = document.getElementById('tool_maxtorque_unified');
+    const maxEl = document.getElementById('tool_max_tor');
+
+    if (unifiedEl) unifiedEl.value = hardMaxText;
+    if (maxEl) maxEl.value = hardMaxText;
+
+    window.__TOOL_MAX_TOR__ = hardMaxText;
+    return hardMaxText;
 }
 
 function setToolSpecToUIAndGlobal(tool_maxtorque, tool_mintorque) {
@@ -32,9 +109,13 @@ const TORQUE_UNIT_RULES = {
 
 // 取得目前扭力單位（依你系統實際顯示來源）
 function getTorqueUnit() {
-    return document.getElementById('torque_unit_text')?.value
+    const rawUnit = document.getElementById('torque_unit_text')?.value
         || document.getElementById('tor_unit_label')?.innerText
+        || document.querySelector('[id$="unit_name"]')?.value
+        || document.querySelector('#target_tor_item .t1, #edit_target_tor_item .t1, #tor_hi_item .t1, #edit_tor_hi_item .t1')?.innerText
         || 'N.m';
+
+    return normalizeTorqueUnitName(rawUnit);
 }
 
 function getTorqueRule() {
@@ -172,7 +253,7 @@ function create_step() {
     const tool_min_tor_raw = document.getElementById('tool_min_tor').value || "0";
     //const tool_min_tor = parseFloat(tool_min_tor_raw); // ✅ 自動去掉多餘的 0
     const tool_min_tor  = tool_min_tor_raw;
-    const tor_hi_unified_raw = document.getElementById('tool_maxtorque_unified').value || "0";
+    const tor_hi_unified_raw = syncHardMaxTorqueToHiddenInput() || "0";
     //const tor_hi_unified = parseFloat(tor_hi_unified_raw); // ✅ 自動去尾 0
     const tor_hi_unified =tor_hi_unified_raw;
 
@@ -325,8 +406,7 @@ function edit_step(stepid) {
 
             // ✅ 用「目前頁面已轉換好的工具上下限」當唯一可信來源（避免 55 -> 1）
             // 這裡會讓 handleTargetOptChange / input_check_core 讀到的範圍保持一致
-            const pageToolMax = (document.getElementById("tool_maxtorque_unified")?.value ?? '').toString().trim()
-                             || (document.getElementById("tool_max_tor")?.value ?? '').toString().trim();
+            const pageToolMax = syncHardMaxTorqueToHiddenInput();
             const pageToolMin = (document.getElementById("tool_min_tor")?.value ?? '').toString().trim();
 
             window.__TOOL_MAX_TOR__ = pageToolMax;
@@ -528,7 +608,7 @@ function toggleVisibility(targetValue) {
     const targetTorItem = document.getElementById('target_tor_item');
     const targetAngItem = document.getElementById('target_ang_item');
     const targetDelayItem = document.getElementById('target_delay_item');
-    const tor_hi_unified = document.getElementById('tool_maxtorque_unified').value;
+    const tor_hi_unified = syncHardMaxTorqueToHiddenInput();
     
     targetTorItem.style.display = 'none';
     targetAngItem.style.display = 'none';
@@ -1046,17 +1126,16 @@ function input_check_core(prefix, step_id = '') {
             return Number.isFinite(n) ? n : NaN;
         };
 
-        // ✅ 正確來源：目前頁面 hidden input 的起子範圍
+        // ✅ 前端固定上限：55 N.m 依目前扭力單位換算
+        const fixedHardMax = getHardMaxTorque();
+        syncHardMaxTorqueToHiddenInput();
+
+        // 下限仍沿用工具最小扭力；若取不到，就用 0。
         let minV = readNumber('tool_min_tor');
-        let maxV = readNumber('tool_max_tor');
-
-        // fallback 1：全域變數，只在 DOM 沒有值時使用
         if (!Number.isFinite(minV)) minV = readGlobalNumber('__TOOL_MIN_TOR__');
-        if (!Number.isFinite(maxV)) maxV = readGlobalNumber('__TOOL_MAX_TOR__');
+        if (!Number.isFinite(minV)) minV = 0;
 
-        // fallback 2：舊欄位，只在 tool_max_tor / global 都沒有時使用
-        const unifiedMax = readNumber('tool_maxtorque_unified');
-        if (!Number.isFinite(maxV)) maxV = unifiedMax;
+        let maxV = fixedHardMax;
 
         // ✅ 0 是有效下限，所以只能用 Number.isFinite 判斷
         const has = Number.isFinite(minV) && Number.isFinite(maxV);
@@ -1070,11 +1149,11 @@ function input_check_core(prefix, step_id = '') {
 
         return {
             // hardMax 也改成有效工具上限；避免後面 hi > HARD_MAX_TORQUE 又吃到 55
-            hardMax: has ? maxV : (Number.isFinite(unifiedMax) ? unifiedMax : getHardMaxTorque()),
+            hardMax: getHardMaxTorque(),
             hasToolRange: has,
             toolMin: has ? minV : NaN,
             toolMax: has ? maxV : NaN,
-            maxAllowed: has ? maxV : (Number.isFinite(unifiedMax) ? unifiedMax : getHardMaxTorque())
+            maxAllowed: getHardMaxTorque()
         };
     }
 
