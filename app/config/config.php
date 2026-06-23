@@ -37,10 +37,10 @@ define('CONTROLLER_IP', '127.0.0.1');
 
 
 // 抓取APP的檔案名稱，判斷是哪一個品牌
-//$brand_code = get_brand_code();
-$brand = '0';//預設值帶kilews
+$brand_code = get_brand_code();
+//$brand = '0';//預設值帶kilews
 
-/*if($brand_code == false || $brand_code == 'BF01'){ //Kilews or Windows
+if($brand_code == false || $brand_code == 'BF01'){ //Kilews or Windows
 	$brand = '0';
 }else if($brand_code == 'BF02'){ //上海
 	$brand = '2';
@@ -52,7 +52,7 @@ $brand = '0';//預設值帶kilews
 	$brand = '6';
 }else if($brand_code == 'BF07'){ //白牌
 	$brand = '7';
-}*/
+}
 
 // iDAS出貨版本 0:Kilews 2:上海 shanhai 4:MyTorque 5:晶元SUMAKE 6:DELTA 7:白牌 6:
 define('ICONMODE', $brand);
@@ -133,7 +133,7 @@ switch ( ICONMODE ) {
 
 
 
-/*function get_brand_code()
+function get_brand_code()
 {
 	if( PHP_OS_FAMILY == 'Linux'){
 		$directory = '/home/kls/project/system/ltver'; // 指定目錄路徑
@@ -153,4 +153,4 @@ switch ( ICONMODE ) {
 	}else{
 		return false;
 	}
-}*/
+}

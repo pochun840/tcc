@@ -1,5 +1,5 @@
-// 固定扭力上限基準值：55 N.m
-// 前端依目前扭力單位換算後，作為畫面預設值與驗證上限使用。
+// HQ/High Torque 規格上限固定為 55 N.m。
+// Target Torque 仍使用工具實際最小/最大扭力範圍。
 const HARD_MAX_TORQUE_NM = 55;
 
 function normalizeTorqueUnitName(unit) {
@@ -24,12 +24,12 @@ function normalizeTorqueUnitName(unit) {
     // 依後端 device_torque_unit 常見 index 做 fallback；若專案 index 不同，可在這裡調整。
     const unitIndex = String(document.getElementById('step_torque_unit')?.value ?? '').trim();
     const indexMap = {
-        '0': 'N.m',
+        // 與後端 Step.php / search_stepinfo 的 torque unit index 保持一致
+        '0': 'kgf.m',
         '1': 'N.m',
         '2': 'kgf.cm',
-        '3': 'kgf.m',
-        '4': 'lbf.in',
-        '5': 'cN.m'
+        '3': 'lbf.in',
+        '4': 'cN.m'
     };
 
     return indexMap[unitIndex] || 'N.m';
@@ -54,29 +54,52 @@ function convertNmToTorqueUnit(nm, unit) {
     }
 }
 
-// 取得固定上限扭力：55 N.m 依目前扭力單位換算
-function getHardMaxTorque() {
-    const unit = getTorqueUnit();
-    const { precision } = getTorqueRule();
-    const converted = convertNmToTorqueUnit(HARD_MAX_TORQUE_NM, unit);
+function readFiniteNumberFromValue(raw) {
+    const s = String(raw ?? '').trim().replace(',', '.');
+    if (s === '') return NaN;
+    const n = Number(s);
+    return Number.isFinite(n) ? n : NaN;
+}
 
-    return Number(converted.toFixed(precision));
+// 取得工具實際最大扭力；優先讀 tool_max_tor，再讀 tool_maxtorque_unified。
+// 兩者都是後端已依目前單位轉好的值。
+function getHardMaxTorque() {
+    const fromToolMax = readFiniteNumberFromValue(document.getElementById('tool_max_tor')?.value);
+    if (Number.isFinite(fromToolMax)) return fromToolMax;
+
+    const fromUnified = readFiniteNumberFromValue(document.getElementById('tool_maxtorque_unified')?.value);
+    if (Number.isFinite(fromUnified)) return fromUnified;
+
+    const fromGlobal = readFiniteNumberFromValue(window.__TOOL_MAX_TOR__);
+    if (Number.isFinite(fromGlobal)) return fromGlobal;
+
+    return NaN;
 }
 
 function getHardMaxTorqueText() {
     const { precision } = getTorqueRule();
-    return getHardMaxTorque().toFixed(precision);
+    const max = getHardMaxTorque();
+    return Number.isFinite(max) ? max.toFixed(precision) : '';
 }
 
+// HQ/High Torque 允許到 55 N.m，依目前扭力單位換算。
+function getHqMaxTorque() {
+    const fromHidden = readFiniteNumberFromValue(document.getElementById('hq_torque_limit')?.value);
+    if (Number.isFinite(fromHidden)) return fromHidden;
+
+    return convertNmToTorqueUnit(HARD_MAX_TORQUE_NM, getTorqueUnit());
+}
+
+function getHqMaxTorqueText() {
+    const { precision } = getTorqueRule();
+    const max = getHqMaxTorque();
+    return Number.isFinite(max) ? max.toFixed(precision) : '';
+}
+
+// 只同步全域變數，不再覆寫 hidden input，避免把真正工具上限洗成固定 55。
 function syncHardMaxTorqueToHiddenInput() {
     const hardMaxText = getHardMaxTorqueText();
-    const unifiedEl = document.getElementById('tool_maxtorque_unified');
-    const maxEl = document.getElementById('tool_max_tor');
-
-    if (unifiedEl) unifiedEl.value = hardMaxText;
-    if (maxEl) maxEl.value = hardMaxText;
-
-    window.__TOOL_MAX_TOR__ = hardMaxText;
+    if (hardMaxText !== '') window.__TOOL_MAX_TOR__ = hardMaxText;
     return hardMaxText;
 }
 
@@ -102,7 +125,7 @@ function setToolSpecToUIAndGlobal(tool_maxtorque, tool_mintorque) {
 const TORQUE_UNIT_RULES = {
     'N.m':    { precision: 3, eps: 0.0005 },
     'kgf.cm': { precision: 2, eps: 0.005  },
-    'kgf.m':  { precision: 3, eps: 0.0005 },
+    'kgf.m':  { precision: 4, eps: 0.00005 },
     'lbf.in': { precision: 2, eps: 0.005  },
     'cN.m':   { precision: 1, eps: 0.05   }
 };
@@ -245,30 +268,90 @@ function reformatAllTorqueInputs(prefix = '') {
 
 
 
+
+
+/* =====================================================
+ * New Step Downshift ON values
+ * Rule:
+ *   Threshold Torque = 0 formatted by current torque unit
+ *   Downshift Torque = 0 formatted by current torque unit
+ *   Downshift Speed  = 100
+ * Only for New Step. Edit Step must preserve DB values.
+ * ===================================================== */
+function getTorqueZeroText() {
+    const { precision } = getTorqueRule();
+    return (0).toFixed(precision);
+}
+
+function setNewDownshiftDefaultValues(force = false) {
+    const thTor = document.getElementById('th_tor');
+    const dsTor = document.getElementById('ds_tor');
+    const dsSpeed = document.getElementById('ds_speed');
+    const zeroText = getTorqueZeroText();
+
+    // New Step：切成 Downshift ON 時，兩個扭力欄位固定帶 0，
+    // 並依目前扭力單位顯示對應小數位：N.m 3、kgf.cm 2、kgf.m 4、lbf.in 2、cN.m 1。
+    if (thTor && (force || String(thTor.value ?? '').trim() === '')) {
+        thTor.value = zeroText;
+    }
+    if (dsTor && (force || String(dsTor.value ?? '').trim() === '')) {
+        dsTor.value = zeroText;
+    }
+    if (dsSpeed && (force || String(dsSpeed.value ?? '').trim() === '')) {
+        dsSpeed.value = '100';
+    }
+}
+
+function clearNewDownshiftTorqueValues() {
+    // New Step + Downshift OFF：欄位 disabled，但仍顯示 0，並依目前扭力單位補對應小數位。
+    // N.m 3、kgf.cm 2、kgf.m 4、lbf.in 2、cN.m 1。
+    const thTor = document.getElementById('th_tor');
+    const dsTor = document.getElementById('ds_tor');
+    const dsSpeed = document.getElementById('ds_speed');
+    const zeroText = getTorqueZeroText();
+
+    if (thTor) thTor.value = zeroText;
+    if (dsTor) dsTor.value = zeroText;
+    if (dsSpeed && String(dsSpeed.value ?? '').trim() === '') dsSpeed.value = '100';
+}
+
 function create_step() {
     document.getElementById('newstep').style.display = 'block';
 
  
 
-    const tool_min_tor_raw = document.getElementById('tool_min_tor').value || "0";
-    //const tool_min_tor = parseFloat(tool_min_tor_raw); // ✅ 自動去掉多餘的 0
-    const tool_min_tor  = tool_min_tor_raw;
-    const tor_hi_unified_raw = syncHardMaxTorqueToHiddenInput() || "0";
-    //const tor_hi_unified = parseFloat(tor_hi_unified_raw); // ✅ 自動去尾 0
-    const tor_hi_unified =tor_hi_unified_raw;
+    // 目標扭力預設值：使用起子最大扭力（Step.php 已換算成目前控制器單位後放在 target_tor_value）。
+    // 若 hidden 值不存在，fallback 讀 tool_max_tor。
+    const target_tor_value_raw = document.getElementById('target_tor_value')?.value
+        || document.getElementById('tool_max_tor')?.value
+        || "0";
+    const target_tor_value = target_tor_value_raw;
+
+    // 扭力上限仍依規格固定使用 HQ 55 N.m 換算值。
+    const tor_hi_unified_raw = getHqMaxTorqueText() || syncHardMaxTorqueToHiddenInput() || "0";
+    const tor_hi_unified = tor_hi_unified_raw;
 
         
     // 預設值
-    document.getElementById('rpm').value = 100;
-    document.getElementById('th_tor').value = (0.0).toFixed(1);
-    document.getElementById('ds_tor').value = (0.0).toFixed(1);
+    document.getElementById('rpm').value = 200;
+    clearNewDownshiftTorqueValues();
     document.getElementById('ds_speed').value = 100;
     document.getElementById("direction_CW").checked = true;
     document.getElementById('ang_hi').value = 30600;
     document.getElementById('ang_lo').value = 0;
     document.getElementById('tor_hi').value =  tor_hi_unified;
     document.getElementById('tor_lo').value = 0;
-    document.getElementById('target_tor').value = tool_min_tor;
+    document.getElementById('target_tor').value = target_tor_value;
+    // New Step 規則：Downshift ON / OFF 的 Threshold Torque 與 Downshift Torque 都顯示 0，
+    // 並依扭力單位補小數位；OFF 狀態只 disabled 欄位。
+    document.getElementById('target_tor').addEventListener('input', function () {
+        if (document.getElementById("downshift_ON")?.checked) {
+            setNewDownshiftDefaultValues(true);
+        } else {
+            // OFF 時仍顯示 0，只是欄位 disabled。
+            clearNewDownshiftTorqueValues();
+        }
+    });
     document.getElementById('target_ang').value = 1800;
     document.getElementById("pnf_set_OFF").checked = true;
 
@@ -348,12 +431,14 @@ function create_step() {
 // 用來根據 downshift 的選項來控制其他欄位的 disabled 狀態
 function toggleDisabledFields() {
     if (document.getElementById("downshift_ON").checked) {
-        // 當 downshift_ON 被選中時，解除 disabled
+        // 當 downshift_ON 被選中時，解除 disabled，並補上新建 Step 的預設值
         document.getElementById('th_tor').disabled = false;
         document.getElementById('ds_tor').disabled = false;
         document.getElementById('ds_speed').disabled = false;
+        setNewDownshiftDefaultValues(true);
     } else {
-        // 當 downshift_OFF 被選中時，設置 disabled
+        // 當 downshift_OFF 被選中時，欄位 disabled，但仍顯示 0 與對應小數位。
+        clearNewDownshiftTorqueValues();
         document.getElementById('th_tor').disabled = true;
         document.getElementById('ds_tor').disabled = true;
         document.getElementById('ds_speed').disabled = true;
@@ -361,6 +446,7 @@ function toggleDisabledFields() {
 }
 
 
+/* TARGET ANGLE KEEP VALUE FIX: angle edit keeps DB/user value instead of forcing 2000 */
 function edit_step(stepid) {
     if (!jobid) return;
 
@@ -428,7 +514,7 @@ function edit_step(stepid) {
             document.getElementById("edit_ds_tor").value   = ds_tor;
             document.getElementById("edit_th_tor").value   = th_tor;
 
-            document.getElementById("edit_tor_hi").value = tor_hi;  // ✅ DB 的 55.000 應該要回來
+            document.getElementById("edit_tor_hi").value = tor_hi;  // ✅ 保留 DB 實際儲存的扭力上限
             document.getElementById("edit_tor_lo").value = tor_lo;
 
             document.getElementById("edit_ang_hi").value = ang_hi;
@@ -457,7 +543,13 @@ function edit_step(stepid) {
                 handleTargetOptChange(String(target_opt));
             }
 
-            // ✅ 你要的：切換到「角度」時，若空值就補 1800
+            // Downshift OFF 只能鎖住欄位，不能把原本的門檻扭力 / 降速點扭力清成 0.0。
+            // 因為 handleTargetOptChange 會切換 enable/disable，這裡再把 DB 回來的值補回去一次。
+            document.getElementById("edit_ds_speed").value = ds_speed;
+            document.getElementById("edit_ds_tor").value   = ds_tor;
+            document.getElementById("edit_th_tor").value   = th_tor;
+
+            // ✅ 你要的：切換到「角度」時，若空值就補 2000
             if (String(target_opt) === '1') {
                 const angEl = document.getElementById("edit_target_angle") || document.getElementById("edit_target_ang");
                 if (angEl && String(angEl.value || '').trim() === '') {
@@ -466,6 +558,7 @@ function edit_step(stepid) {
             }
 
             // 你原本的 downshift 限制 / th_tor disable
+            bindEditDownshiftModeEvents();
             toggleThTorDisabled();
 
             // 第 4 個 step 禁用 downshift（保留你原本邏輯）
@@ -534,57 +627,82 @@ function copy_step(stepid){
 
 }
 
+function isRadioLikeElement(element) {
+    return element && (element.type === 'radio' || element.type === 'checkbox');
+}
+
+function setValueIfAllowed(element, value) {
+    // Radio / checkbox 的 value 是固定語意值，不能因 enable/disable 被清掉，否則送出會變空值。
+    if (!element || value === undefined || isRadioLikeElement(element)) return;
+    element.value = value;
+}
+
 function disableElements(elements, value) {
-    elements.forEach(function(element) {
-        element.disabled = value;
-        element.value = value === true ? 0 : ''; 
+    Array.from(elements || []).forEach(function(element) {
+        element.disabled = true;
+        setValueIfAllowed(element, value === true ? 0 : value);
     });
 }
 
-function disableElementById(id, value = '') {
-    var element = document.getElementById(id); 
+function disableElementById(id, value = undefined) {
+    var element = document.getElementById(id);
     if (element) {
-        element.disabled = true;  
-        element.value = value;    
+        element.disabled = true;
+        setValueIfAllowed(element, value);
     } else {
-        console.log("元素未找到: " + id);  
+        console.log("元素未找到: " + id);
     }
 }
 
 function disableElementsByName(elementName) {
     const elements = document.getElementsByName(elementName);
-    for (let i = 0; i < elements.length; i++) {
-        elements[i].disabled = true;
-    }
+    Array.from(elements).forEach(function(element) {
+        element.disabled = true;
+    });
 }
 
-function enableElementById(id, value = '') {
-    var element = document.getElementById(id); 
-    if (element && element.disabled) {
-        element.disabled = false;  
-        element.value = value;     
-        //console.log('元素已启用:', id, '并设置值为:', value);
-    } else if (element) {
-        //console.log('元素已是启用状态:', id);
+function enableElementById(id, value = undefined) {
+    var element = document.getElementById(id);
+    if (element) {
+        element.disabled = false;
+        setValueIfAllowed(element, value);
     } else {
-        console.log("元素未找到: " + id);  
+        console.log("元素未找到: " + id);
     }
 }
-function enableElementByName(name, value = '') {
-    var elements = document.getElementsByName(name); 
+function enableElementByName(name, value = undefined) {
+    var elements = document.getElementsByName(name);
     if (elements.length > 0) {
-        // 遍歷所有具有該 name 的元素
-        elements.forEach(function(element) {
-            if (element.disabled) {
-                element.disabled = false;  
-                element.value = value;     
-                //console.log('元素已启用:', name, '并设置值为:', value);
-            } else {
-                //console.log('元素已是启用状态:', name);
-            }
+        Array.from(elements).forEach(function(element) {
+            element.disabled = false;
+            setValueIfAllowed(element, value);
         });
     } else {
         console.log("未找到具有 name '" + name + "' 的元素");
+    }
+}
+
+function setRadioChecked(id, checked) {
+    const el = document.getElementById(id);
+    if (el) el.checked = !!checked;
+}
+
+function forceEditDownshiftOff() {
+    setRadioChecked('edit_downshift_OFF', true);
+    setRadioChecked('edit_downshift_ON', false);
+}
+
+function forceNewDownshiftOff() {
+    setRadioChecked('downshift_OFF', true);
+    setRadioChecked('downshift_ON', false);
+}
+
+function ensurePositiveDefaultValue(el, fallbackValue) {
+    if (!el) return;
+    const raw = String(el.value ?? '').trim();
+    const n = Number(raw);
+    if (raw === '' || !Number.isFinite(n) || n <= 0) {
+        el.value = fallbackValue;
     }
 }
 
@@ -608,7 +726,8 @@ function toggleVisibility(targetValue) {
     const targetTorItem = document.getElementById('target_tor_item');
     const targetAngItem = document.getElementById('target_ang_item');
     const targetDelayItem = document.getElementById('target_delay_item');
-    const tor_hi_unified = syncHardMaxTorqueToHiddenInput();
+    // 扭力上限仍固定使用 HQ 55 N.m 依目前單位換算後的值。
+    const tor_hi_unified = getHqMaxTorqueText() || syncHardMaxTorqueToHiddenInput();
     
     targetTorItem.style.display = 'none';
     targetAngItem.style.display = 'none';
@@ -628,15 +747,17 @@ function toggleVisibility(targetValue) {
         enableElementById('ang_hi','0');
         enableElementById('ang_lo','0');
         enableElementById('rpm','200');
-        enableElementById('th_tor','0.0');
-        enableElementById('ds_tor','0.0');
+        enableElementById('th_tor','');
+        enableElementById('ds_tor','');
         enableElementById('ds_speed','100');
         enableElementById('direction_CW','');
         enableElementById('direction_CCW','');
         enableElementById('downshift_ON','');
         enableElementById('downshift_OFF','');
 
-        document.getElementById("downshift_ON").checked = true;
+        document.getElementById("downshift_OFF").checked = true;
+        document.getElementById("downshift_ON").checked = false;
+        clearNewDownshiftTorqueValues();
 
     } else if (targetValue == 1) {
         targetAngItem.style.display = "block";
@@ -647,13 +768,13 @@ function toggleVisibility(targetValue) {
         enableElementById('ang_lo', ''); 
         enableElementById('direction_CW','');
         enableElementById('direction_CCW','');
-        disableElementById('th_tor','0.0');
-        disableElementById('ds_tor','0.0');
+        disableElementById('th_tor','');
+        disableElementById('ds_tor','');
         disableElementById('ds_speed','100');
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
-        document.getElementById("downshift_OFF").checked = true;
-        document.getElementById('tor_hi').value = getHardMaxTorque();
+        forceNewDownshiftOff();
+        document.getElementById('tor_hi').value = getHqMaxTorqueText() || getHardMaxTorque();
         document.getElementById('tor_lo').value = 0;
         document.getElementById('ang_hi').value = 30600;
         document.getElementById('ang_lo').value = 0;
@@ -667,21 +788,21 @@ function toggleVisibility(targetValue) {
         disableElementById('ang_hi','0');
         disableElementById('ang_lo','0');
         disableElementById('rpm','200');
-        disableElementById('th_tor','0.0');
-        disableElementById('ds_tor','0.0');
+        disableElementById('th_tor','');
+        disableElementById('ds_tor','');
         disableElementById('ds_speed','100');
         disableElementById('direction_CW','');
         disableElementById('direction_CCW','');
         disableElementById('downshift_ON','');
         disableElementById('downshift_OFF','');
-        document.getElementById('tor_hi').value = getHardMaxTorque();
+        document.getElementById('tor_hi').value = getHqMaxTorqueText() || getHardMaxTorque();
         document.getElementById('tor_lo').value = 0;
         document.getElementById('ang_hi').value = 30600;
         document.getElementById('ang_lo').value = 0;
         document.getElementById('target_delay').value = (1.0).toFixed(1);
 
 
-        document.getElementById("downshift_OFF").checked = true;
+        forceNewDownshiftOff();
 
     }
 }
@@ -689,7 +810,13 @@ function toggleVisibility(targetValue) {
 function targetOptChangeHandler() {
     const sel = document.querySelector("select[name='edit_target_opt']");
     if (!sel) return;
+
+    bindEditDownshiftModeEvents();
     handleTargetOptChange(sel.value);
+
+    // Edit Step 從 Angle / Delay 切回 Torque 時，handleTargetOptChange 會先把欄位 enable。
+    // 這裡再依目前 Downshift OFF / ON 狀態同步一次 disabled，避免 OFF 時欄位仍可輸入。
+    toggleThTorDisabled();
 }
 
 function handleTargetOptChange(target_opt) {
@@ -726,7 +853,30 @@ function handleTargetOptChange(target_opt) {
         toolMinTor = (document.getElementById("tool_min_tor")?.value ?? '').trim();
     }
 
-    const fallbackTor = keepTorqueFormat(toolMinTor || tor_lo || '0');
+    const pickPositiveTorqueDefault = (...values) => {
+        for (const v of values) {
+            const raw = String(v ?? '').trim();
+            const n = Number(raw);
+            if (raw !== '' && Number.isFinite(n) && n > 0) {
+                return keepTorqueFormat(raw);
+            }
+        }
+        return keepTorqueFormat('0');
+    };
+
+    // Angle / Delay step 會把 target_tor 存成 0；
+    // Edit 時若從 Angle 切回 Torque，預設值應與 New Step 一致，
+    // 優先使用 target_tor_value（目前控制器單位的建議目標扭力），
+    // 不要優先取 tool_min_tor，否則 kgf.m 會顯示 0.0102 這類工具下限值。
+    const fallbackTor = pickPositiveTorqueDefault(
+        document.getElementById('target_tor_value')?.value,
+        document.getElementById('ds_tor')?.value,
+        document.getElementById('edit_ds_tor')?.value,
+        document.getElementById('tool_max_tor')?.value,
+        window.__TOOL_MAX_TOR__,
+        toolMinTor,
+        tor_lo
+    );
     const fallbackAng = '1800';
 
     /* =====================================================
@@ -738,12 +888,10 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_target_ang_item").style.display   = 'none';
         document.getElementById("edit_target_delay_item").style.display = 'none';
 
-        if (targetTorEl && !String(targetTorEl.value ?? '').trim()) {
-            targetTorEl.value = fallbackTor;
-        }
+        ensurePositiveDefaultValue(targetTorEl, fallbackTor);
         setTimeout(() => {
             const el = document.getElementById("edit_target_tor");
-            if (el && !String(el.value ?? '').trim()) el.value = fallbackTor;
+            ensurePositiveDefaultValue(el, fallbackTor);
         }, 0);
 
         enableElementById('edit_tor_hi', tor_hi);
@@ -758,7 +906,13 @@ function handleTargetOptChange(target_opt) {
         enableElementByName("edit_direction");
         enableElementByName("edit_th_mode");
 
-        document.getElementById("downshift_ON").checked = true;
+        // Edit 模式：不要強制把 Downshift 改成 ON。
+        // 原本資料若是 OFF，就只要 disabled 欄位，th_tor / ds_tor / ds_speed 的值必須保留。
+        const editDownshiftOn  = document.getElementById("edit_downshift_ON");
+        const editDownshiftOff = document.getElementById("edit_downshift_OFF");
+        if (editDownshiftOn && editDownshiftOff && !editDownshiftOn.checked && !editDownshiftOff.checked) {
+            editDownshiftOff.checked = true;
+        }
     }
 
     /* =====================================================
@@ -770,11 +924,12 @@ function handleTargetOptChange(target_opt) {
         document.getElementById("edit_target_tor_item").style.display   = 'none';
         document.getElementById("edit_target_delay_item").style.display = 'none';
 
-        // ✅ 切到角度：強制 target_ang = 1800
-        if (targetAngEl) targetAngEl.value = fallbackAng;
+        // ✅ 切到角度：不要覆蓋已存在/DB 回來的 target_ang
+        // 原本這裡每次都強制寫入 1800，導致已改成 2000 後再次開啟 Edit 仍顯示 1800。
+        ensurePositiveDefaultValue(targetAngEl, fallbackAng);
         setTimeout(() => {
             const el = document.getElementById("edit_target_ang") || document.getElementById("edit_target_angle");
-            if (el) el.value = fallbackAng;
+            ensurePositiveDefaultValue(el, fallbackAng);
         }, 0);
 
         // ✅ 重點：不要覆寫 edit_tor_hi/lo 的值，只 disable 即可
@@ -786,12 +941,11 @@ function handleTargetOptChange(target_opt) {
         disableElementById('edit_ds_tor', ds_tor);
         disableElementById('edit_ds_speed', ds_speed);
         disableElementById('edit_th_tor', th_tor);
+        forceEditDownshiftOff();
         disableElementsByName("edit_th_mode");
 
         enableElementByName("edit_direction");
         enableElementById('edit_rpm', rpm);
-
-        document.getElementById("downshift_OFF").checked = true;
     }
 
     /* =====================================================
@@ -822,10 +976,9 @@ function handleTargetOptChange(target_opt) {
         disableElementById('edit_rpm', rpm);
         disableElementById('edit_ds_tor', ds_tor);
         disableElementById('edit_ds_speed', ds_speed);
+        forceEditDownshiftOff();
         disableElementsByName("edit_th_mode");
         disableElementsByName("edit_direction");
-
-        document.getElementById("downshift_OFF").checked = true;
     }
 }
 
@@ -905,6 +1058,15 @@ function del_stepid(step_id) {
 
 
 
+function bindEditDownshiftModeEvents() {
+    const radios = document.getElementsByName('edit_th_mode');
+    Array.from(radios || []).forEach(function (radio) {
+        if (radio.dataset.editDownshiftBound === '1') return;
+        radio.dataset.editDownshiftBound = '1';
+        radio.addEventListener('change', toggleThTorDisabled);
+    });
+}
+
 function toggleThTorDisabled() {
 
     const radios = document.getElementsByName('edit_th_mode');
@@ -912,13 +1074,21 @@ function toggleThTorDisabled() {
     const edit_ds_tor = document.getElementById('edit_ds_tor');
     const edit_ds_speed = document.getElementById('edit_ds_speed');
 
-    // 檢查是否有 "downshift_OFF" 單選框被選中
+    if (!edit_th_tor || !edit_ds_tor || !edit_ds_speed) return;
+
+    // 只有 Target Type = Torque 時，Downshift 欄位才可能開放。
+    // Angle / Delay 一律 disabled。
+    const editTargetOpt = String(document.getElementById('edit_target_opt')?.value ?? '');
+    const isTorqueTarget = editTargetOpt === '0';
+
+    // Downshift OFF：只 disabled，不改 value。
+    // 這樣 Edit 既有資料的 Threshold Torque / Downshift Torque 會保留顯示與儲存。
     const isDownshiftOffChecked = Array.from(radios).some(radio => radio.checked && radio.value === '0');
-    edit_th_tor.disabled = isDownshiftOffChecked;
-    edit_ds_tor.disabled = isDownshiftOffChecked;
-    edit_ds_speed.disabled = isDownshiftOffChecked;
+    const shouldDisable = !isTorqueTarget || isDownshiftOffChecked;
 
-
+    edit_th_tor.disabled = shouldDisable;
+    edit_ds_tor.disabled = shouldDisable;
+    edit_ds_speed.disabled = shouldDisable;
 }
 
 
@@ -1081,9 +1251,9 @@ function input_check_core(prefix, step_id = '') {
             'en-us':'Torque high must be greater than torque low'
         },
         torque_hi_hard_max: {
-            'zh-tw': '扭力上限超出範圍',
-            'zh-cn': '扭力上限超出范围',
-            'en-us': 'Torque high is out of range'
+            'zh-tw': '扭力上限超出範圍（最大 {max}）',
+            'zh-cn': '扭力上限超出范围（最大 {max}）',
+            'en-us': 'Torque high is out of range (max {max})'
         },
     };
 
@@ -1126,18 +1296,19 @@ function input_check_core(prefix, step_id = '') {
             return Number.isFinite(n) ? n : NaN;
         };
 
-        // ✅ 前端固定上限：55 N.m 依目前扭力單位換算
-        const fixedHardMax = getHardMaxTorque();
+        // Target Torque 範圍仍讀工具實際最大扭力。
+        // HQ/High Torque 另外使用 getHqMaxTorque() 的 55 N.m 換算值。
         syncHardMaxTorqueToHiddenInput();
 
-        // 下限仍沿用工具最小扭力；若取不到，就用 0。
         let minV = readNumber('tool_min_tor');
         if (!Number.isFinite(minV)) minV = readGlobalNumber('__TOOL_MIN_TOR__');
         if (!Number.isFinite(minV)) minV = 0;
 
-        let maxV = fixedHardMax;
+        let maxV = readNumber('tool_max_tor');
+        if (!Number.isFinite(maxV)) maxV = readNumber('tool_maxtorque_unified');
+        if (!Number.isFinite(maxV)) maxV = readGlobalNumber('__TOOL_MAX_TOR__');
 
-        // ✅ 0 是有效下限，所以只能用 Number.isFinite 判斷
+        // 0 是有效下限，所以只能用 Number.isFinite 判斷
         const has = Number.isFinite(minV) && Number.isFinite(maxV);
 
         // 防呆：若資料來源反了，直接交換，避免驗證失效
@@ -1148,12 +1319,11 @@ function input_check_core(prefix, step_id = '') {
         }
 
         return {
-            // hardMax 也改成有效工具上限；避免後面 hi > HARD_MAX_TORQUE 又吃到 55
-            hardMax: getHardMaxTorque(),
+            hardMax: has ? maxV : NaN,
             hasToolRange: has,
             toolMin: has ? minV : NaN,
             toolMax: has ? maxV : NaN,
-            maxAllowed: getHardMaxTorque()
+            maxAllowed: has ? maxV : NaN
         };
     }
 
@@ -1193,7 +1363,7 @@ function input_check_core(prefix, step_id = '') {
     if (target_opt === '1') {
 
         const R = getToolTorqueRangeUnified();
-        const HARD_MAX_TORQUE = R.hardMax;
+        const HARD_MAX_TORQUE = getHqMaxTorque();
         const toolMin = R.toolMin;
         const hasToolRange = R.hasToolRange;
         const maxAllowed = R.maxAllowed;
@@ -1213,6 +1383,12 @@ function input_check_core(prefix, step_id = '') {
         const torHiEnabled = hasTorHi && Number.isFinite(torHi) && torHi > 0;
         const torLoEnabled = hasTorLo && Number.isFinite(torLo) && torLo > 0;
 
+        // LQ/Low Torque 允許小於工具下限，但不可為負數或非數字。
+        if (hasTorLo && (!Number.isFinite(torLo) || torLo < 0)) {
+            alertMsg('Torque', tf('torque_lo_out_range', { min: 0, max: torHiEnabled ? torHi : (getHqMaxTorqueText() || HARD_MAX_TORQUE) }), torLoEl);
+            return false;
+        }
+
         // ✅ tor_hi：只要有輸入 >0 就永遠檢查範圍
         if (torHiEnabled) {
 
@@ -1221,8 +1397,9 @@ function input_check_core(prefix, step_id = '') {
                 return false;
             }
 
-            if (hasToolRange && (torHi < toolMin || torHi > maxAllowed)) {
-                alertMsg('Torque', tf('torque_hi_out_range', { min: toolMin, max: maxAllowed }), torHiEl);
+            // HQ/High Torque 可大於起子工具上限，但不可小於工具下限。上限改用 55 N.m 換算值。
+            if (hasToolRange && torHi < toolMin) {
+                alertMsg('Torque', tf('torque_hi_out_range', { min: toolMin, max: getHqMaxTorqueText() || HARD_MAX_TORQUE }), torHiEl);
                 return false;
             }
         }
@@ -1232,8 +1409,8 @@ function input_check_core(prefix, step_id = '') {
 
         if (hasToolRange && torqueWindowEnabledInAngle) {
 
-            if (torLoEnabled && (torLo < toolMin || torLo > maxAllowed)) {
-                alertMsg('Torque', tf('torque_lo_out_range', { min: toolMin, max: maxAllowed }), torLoEl);
+            if (torLoEnabled && torLo < 0) {
+                alertMsg('Torque', tf('torque_lo_out_range', { min: 0, max: torHiEnabled ? torHi : (getHqMaxTorqueText() || HARD_MAX_TORQUE) }), torLoEl);
                 return false;
             }
 
@@ -1292,7 +1469,7 @@ function input_check_core(prefix, step_id = '') {
     if (target_opt === '0') {
 
         const R = getToolTorqueRangeUnified();
-        const HARD_MAX_TORQUE = R.hardMax;
+        const HARD_MAX_TORQUE = getHqMaxTorque();
         const toolMin = R.toolMin;
         const hasToolRange = R.hasToolRange;
         const maxAllowed = R.maxAllowed;
@@ -1349,6 +1526,15 @@ function input_check_core(prefix, step_id = '') {
             return false;
         }
 
+        /* ================= Low Torque =================
+         * LQ/Low Torque 只需 >= 0，且後面會檢查必須小於 Target Torque。
+         * 不再用工具下限 tool_min_tor 限制，避免 0.001 < 0.2 被擋。
+         */
+        if (hasLo && (!Number.isFinite(lo) || lo < 0)) {
+            alertMsg('Torque', tf('torque_lo_out_range',{min:0,max:Number.isFinite(tar) ? tar : ''}), elLo);
+            return false;
+        }
+
         /* ================= tor_hi 永遠檢查硬上限 ================= */
         if (hiEnabled && hi > HARD_MAX_TORQUE) {
             alertMsg('Torque', tf('torque_hi_hard_max', { max: HARD_MAX_TORQUE }), elHi);
@@ -1363,28 +1549,28 @@ function input_check_core(prefix, step_id = '') {
             return false;
         }
 
+        /* ================= HQ 必須大於 Target Torque =================
+         * LQ = 0 時 torqueWindowEnabled 會是 false；
+         * 但 HQ 仍然必須大於目標扭力，不能直接通過。
+         */
+        if (hiEnabled && hi <= tar) {
+            alertMsg('Torque', t('torque_hi_target'), elHi);
+            return false;
+        }
+
         /* ================= Window 開關 ================= */
         const torqueWindowEnabled = loEnabled;
         if (!torqueWindowEnabled) return true;
 
         /* ================= Window ON ================= */
-        if (hasToolRange && (lo < toolMin || lo > maxAllowed)) {
-            alertMsg('Torque', tf('torque_lo_out_range',{min:toolMin,max:maxAllowed}), elLo);
-            return false;
-        }
-
-        if (hiEnabled && hasToolRange && (hi < toolMin || hi > maxAllowed)) {
-            alertMsg('Torque', tf('torque_hi_out_range',{min:toolMin,max:maxAllowed}), elHi);
+        // HQ/High Torque 可大於起子工具上限，但不可小於工具下限。上限改用 55 N.m 換算值。
+        if (hiEnabled && hasToolRange && hi < toolMin) {
+            alertMsg('Torque', tf('torque_hi_out_range',{min:toolMin,max:getHqMaxTorqueText() || HARD_MAX_TORQUE}), elHi);
             return false;
         }
 
         if (lo >= tar) {
             alertMsg('Torque', t('torque_lo_target'), elLo);
-            return false;
-        }
-
-        if (hiEnabled && hi <= tar) {
-            alertMsg('Torque', t('torque_hi_target'), elHi);
             return false;
         }
 
