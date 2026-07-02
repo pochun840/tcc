@@ -908,71 +908,144 @@ class Settings extends Controller
         return $barcodes;
     }
 
+
+    private function formatBarcodeForDisplay(string $value): string
+    {
+        return strtr($value, [
+            "\r\n" => '<CRLF>',
+            "\r"   => '<CR>',
+            "\n"   => '<LF>',
+            "\t"   => '<TAB>',
+            chr(29) => '<GS>',
+            chr(2)  => '<STX>',
+            chr(3)  => '<ETX>',
+            chr(27) => '<ESC>',
+        ]);
+    }
+
+
     public function show_Barcodes(){
 
         $isMobile = $this->isMobileCheck();
-        $barcode_list = '';
         $barcodes = $this->SettingModel->GetAllBarcodes();
         $barcode_mode = $this->MiscellaneousModel->details('barcode_mode');
+        $esc = static function ($value) {
+            return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        };
+
         if(!empty($barcodes)){
-            
-            if(!$isMobile){
+            foreach($barcodes as $kk =>$vv){
+                $jobId   = $esc($vv['barcode_selected_job'] ?? '');
+                $jobName = $esc($vv['job_name'] ?? '');
+                $barcodeRaw = (string)($vv['barcode'] ?? '');
+                $barcodeDisplay = $this->formatBarcodeForDisplay($barcodeRaw);
 
-                foreach($barcodes as $kk =>$vv){
-                    $barcode_list = '<tr style="text-align: center; vertical-align: middle;" >';
-                    $barcode_list .= "<td><input class='form-check-input' type='checkbox' name='barcode_check' id='barcode_check' style='zoom:1.2' value='".$vv['barcode_selected_job']."'></td>";
-                    $barcode_list .= '<td>'.$vv['barcode_selected_job'].'</td>';
-                    $barcode_list .= '<td>'.$vv['job_name'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_mask_from'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_mask_count'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_enable'].'</td>';
-                    $barcode_list .= '<tr>';
-    
-                    echo $barcode_list;
-                }
+                $barcode = $esc($barcodeDisplay);
 
-            }else{
-                foreach($barcodes as $kk =>$vv){
-                    $barcode_list = '<tr style="text-align: center; vertical-align: middle;" >';
-                    $barcode_list .= "<td><input class='form-check-input' type='checkbox' name='barcode_check' id='barcode_check' style='zoom:1.2' value='".$vv['barcode_selected_job']."'></td>";
-                    $barcode_list .= '<td>'.$vv['barcode_selected_job'].'</td>';
-                    $barcode_list .= '<td>'.$vv['job_name'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_mask_from'].'</td>';
-                    $barcode_list .= '<td>'.$vv['barcode_mask_count'].'</td>';
-                    $barcode_list .= '<td>'.$barcode_mode[$vv['barcode_enable']].'</td>';
-                    $barcode_list .= '<tr>';
-    
-                    echo $barcode_list;
-                }
+                $barcodeB64 = $esc(base64_encode($barcodeRaw));
+                $from    = $esc($vv['barcode_mask_from'] ?? '');
+                $count   = $esc($vv['barcode_mask_count'] ?? '');
+                $enable  = $esc($vv['barcode_enable'] ?? '');
+                $seq     = $esc($vv['barcode_selected_seq'] ?? '-1');
+                $mode    = $esc($barcode_mode[$vv['barcode_enable']] ?? ($vv['barcode_enable'] ?? ''));
 
+                $barcode_list  = '<tr style="text-align: center; vertical-align: middle;" >';
+                $barcode_list .= "<td><input class='form-check-input' type='checkbox' name='barcode_check' style='zoom:1.2' value='{$jobId}' data-barcode='{$barcode}' data-barcode-b64='{$barcodeB64}' data-from='{$from}' data-count='{$count}' data-enable='{$enable}' data-job='{$jobId}' data-seq='{$seq}'></td>";
+                $barcode_list .= '<td>'.$jobId.'</td>';
+                $barcode_list .= '<td>'.$jobName.'</td>';
+                $barcode_list .= '<td title="'.$barcode.'" style="white-space: break-spaces; word-break: break-all; overflow-wrap: anywhere; text-align:left;">'.$barcode.'</td>';
+                $barcode_list .= '<td>'.$from.'</td>';
+                $barcode_list .= '<td>'.$count.'</td>';
+                $barcode_list .= '<td>'.$mode.'</td>';
+                $barcode_list .= '</tr>';
+
+                echo $barcode_list;
             }
-          
         }
 
     }
+
+
+    private function normalizeBarcodeScannerValue(string $value): string
+    {
+        // QRCode 掃描時統一處理：
+        // 1. 單引號強制轉成雙引號
+        // 2. 取消英文大小寫互換，英文字母維持原樣
+        return str_replace(["'", '‘', '’', '‛', '＇'], '"', $value);
+    }
+
+
+    private function decodeBarcodeBase64Url(string $value): ?string
+    {
+        $value = trim($value);
+        if ($value === '') {
+            return null;
+        }
+
+        // 支援一般 Base64，也支援網址列安全的 Base64URL。
+        $normalized = strtr($value, '-_', '+/');
+        $pad = strlen($normalized) % 4;
+        if ($pad > 0) {
+            $normalized .= str_repeat('=', 4 - $pad);
+        }
+
+        $decoded = base64_decode($normalized, true);
+        return ($decoded === false) ? null : $decoded;
+    }
+
+
 
     //update barcode
     public function Update_Barcode(){
         
         $barcode = array();
 
-        $barcode['barcode_content']       = $_POST['barcode_content'] ?? null;
-        $barcode['barcode_mask_from']     = $_POST['barcode_mask_from'] ?? null;
-        $barcode['barcode_mask_count']    = $_POST['barcode_mask_count'] ?? null;
-        $barcode['barcode_selected_job']  = $_POST['barcode_selected_job'] ?? null;
-        $barcode['barcode_enable']        = $_POST['barcode_enable'] ?? null;
-        $barcode['barcode_selected_seq']  = $_POST['barcode_selected_seq'] ?? null;
+        // 支援 POST，也支援網址列 GET。
+        // 若帶 barcode_content_b64，優先使用 Base64URL 還原，避免 ? & # < > ' " 等特殊符號破壞 query string。
+        $barcodeContentRaw = (string)($_POST['barcode_content'] ?? $_GET['barcode_content'] ?? '');
+        $barcodeContentB64 = (string)($_POST['barcode_content_b64'] ?? $_GET['barcode_content_b64'] ?? '');
+
+        if ($barcodeContentB64 !== '') {
+            $decodedBarcode = $this->decodeBarcodeBase64Url($barcodeContentB64);
+            if ($decodedBarcode !== null) {
+                $barcodeContentRaw = $decodedBarcode;
+            }
+        }
+
+        // QRCode 掃描內容統一：單引號轉雙引號；英文大小寫維持原樣。
+        $barcodeContentRaw = $this->normalizeBarcodeScannerValue($barcodeContentRaw);
+        $barcode['barcode_content']       = $barcodeContentRaw;
+        $barcode['barcode_mask_from']     = $_POST['barcode_mask_from'] ?? $_GET['barcode_mask_from'] ?? null;
+        $barcode['barcode_mask_count']    = $_POST['barcode_mask_count'] ?? $_GET['barcode_mask_count'] ?? null;
+        $barcode['barcode_selected_job']  = $_POST['barcode_selected_job'] ?? $_GET['barcode_selected_job'] ?? null;
+        $barcode['barcode_original_job']  = $_POST['barcode_original_job'] ?? $_GET['barcode_original_job'] ?? $barcode['barcode_selected_job'];
+        $barcode['barcode_enable']        = $_POST['barcode_enable'] ?? $_GET['barcode_enable'] ?? null;
+        $barcode['barcode_selected_seq']  = $_POST['barcode_selected_seq'] ?? $_GET['barcode_selected_seq'] ?? null;
+
+        $barcodeLength = mb_strlen($barcode['barcode_content'], 'UTF-8');
+        if ($barcodeLength < 1 || $barcodeLength > 100) {
+            $this->MiscellaneousModel->generateErrorResponse('Error', 'Barcode length must be 1~100');
+            return;
+        }
+
+        $maskCount = (int)($barcode['barcode_mask_count'] ?? 0);
+        if ($maskCount < 1 || $maskCount > 100) {
+            $this->MiscellaneousModel->generateErrorResponse('Error', 'Barcode count must be 1~100');
+            return;
+        }
+
+        if (empty($barcode['barcode_selected_job']) || (string)$barcode['barcode_selected_job'] === '-1') {
+            $this->MiscellaneousModel->generateErrorResponse('Error', 'Please select job');
+            return;
+        }
+
         if(!empty($barcode)){
             $barcode_result = $this->SettingModel->Update_Barcode($barcode);
             if($barcode_result){
-                $res_msg = 'edit barcode :'. $barcode['barcode_content'].' success';
-                $this->MiscellaneousModel->generateErrorResponse('Success', $res_msg );
+                $this->MiscellaneousModel->generateErrorResponse('Success', 'edit barcode success' );
 
             }else{
-                $res_msg = 'edit barcode :'. $barcode['barcode_content'].' fail';
-                $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg );
+                $this->MiscellaneousModel->generateErrorResponse('Error', 'edit barcode fail' );
             }
                
         }

@@ -1,3 +1,94 @@
+let currentBarcodeOriginalJob = '';
+
+function normalizeBarcodeScannerValue(value) {
+    // QRCode 掃描時統一處理：
+    // 1. 單引號強制轉成雙引號
+    // 2. 取消英文大小寫互換，英文字母維持原樣
+    return String(value || '')
+        .replace(/['\u2018\u2019\u201B\uFF07]/g, '"');
+}
+
+function barcodeEditableTextToRaw(value) {
+    let text = String(value || '');
+
+    // 讓不可見控制字元也可以用可讀 token 輸入：
+    // \t / <TAB> / [TAB]  -> TAB
+    // \r / <CR>  / [CR]   -> CR
+    // \n / <LF>  / [LF]   -> LF
+    // \x1D / <GS> / [GS]  -> ASCII 29 (GS / FNC1 常見分隔符)
+    const replacements = [
+        [/\\r\\n/g, '\r\n'],
+        [/<CRLF>/gi, '\r\n'],
+        [/\[CRLF\]/gi, '\r\n'],
+
+        [/\\t/g, '\t'],
+        [/<TAB>/gi, '\t'],
+        [/\[TAB\]/gi, '\t'],
+
+        [/\\r/g, '\r'],
+        [/<CR>/gi, '\r'],
+        [/\[CR\]/gi, '\r'],
+
+        [/\\n/g, '\n'],
+        [/<LF>/gi, '\n'],
+        [/\[LF\]/gi, '\n'],
+
+        [/\\x1d/gi, String.fromCharCode(29)],
+        [/<GS>/gi, String.fromCharCode(29)],
+        [/\[GS\]/gi, String.fromCharCode(29)],
+        [/<FNC1>/gi, String.fromCharCode(29)],
+        [/\[FNC1\]/gi, String.fromCharCode(29)],
+
+        [/\\x02/gi, String.fromCharCode(2)],
+        [/<STX>/gi, String.fromCharCode(2)],
+        [/\[STX\]/gi, String.fromCharCode(2)],
+
+        [/\\x03/gi, String.fromCharCode(3)],
+        [/<ETX>/gi, String.fromCharCode(3)],
+        [/\[ETX\]/gi, String.fromCharCode(3)],
+
+        [/\\x1b/gi, String.fromCharCode(27)],
+        [/<ESC>/gi, String.fromCharCode(27)],
+        [/\[ESC\]/gi, String.fromCharCode(27)]
+    ];
+
+    replacements.forEach(function (pair) {
+        text = text.replace(pair[0], pair[1]);
+    });
+
+    return normalizeBarcodeScannerValue(text);
+}
+
+function barcodeRawToEditableText(value) {
+    return normalizeBarcodeScannerValue(value)
+        .replace(/\r\n/g, '<CRLF>')
+        .replace(/\r/g, '<CR>')
+        .replace(/\n/g, '<LF>')
+        .replace(/\t/g, '<TAB>')
+        .replace(new RegExp(String.fromCharCode(29), 'g'), '<GS>')
+        .replace(new RegExp(String.fromCharCode(2), 'g'), '<STX>')
+        .replace(new RegExp(String.fromCharCode(3), 'g'), '<ETX>')
+        .replace(new RegExp(String.fromCharCode(27), 'g'), '<ESC>');
+}
+
+function barcodeRawLength(value) {
+    return Array.from(String(value || '')).length;
+}
+
+function refreshBarcodeCount() {
+    const barcodeInput = document.getElementById('barcode_content');
+    const barcodeCount = document.getElementById('barcode_mask_count');
+    if (!barcodeInput || !barcodeCount) return;
+
+    const normalizedValue = normalizeBarcodeScannerValue(barcodeInput.value);
+    if (barcodeInput.value !== normalizedValue) {
+        barcodeInput.value = normalizedValue;
+    }
+
+    barcodeCount.value = barcodeRawLength(barcodeEditableTextToRaw(barcodeInput.value));
+}
+
+
 
 function cc_save(){
 
@@ -117,7 +208,8 @@ function set_agent_type(argument) {
 
 
 function update_barcode(){
-    var barcode_content    = document.getElementById("barcode_content").value;
+    var barcode_content_text = document.getElementById("barcode_content").value;
+    var barcode_content    = barcodeEditableTextToRaw(barcode_content_text);
     var barcode_mask_from  = document.getElementById("barcode_mask_from").value;
     var barcode_mask_count = document.getElementById("barcode_mask_count").value;
     var barcode_selected_job  = document.querySelector("select[name='barcode_job']").value;
@@ -142,9 +234,11 @@ function update_barcode(){
             method: "POST",
             data:{ 
                 barcode_content : barcode_content,
+                barcode_content_b64: encodeUtf8Base64Url(barcode_content),
                 barcode_mask_from: barcode_mask_from,
                 barcode_mask_count: barcode_mask_count,
-                barcode_selected_job:barcode_selected_job,
+                barcode_selected_job: barcode_selected_job,
+                barcode_original_job: currentBarcodeOriginalJob || barcode_selected_job,
                 barcode_enable:barcode_enable,
                 barcode_selected_seq : barcode_selected_seq
             },
@@ -330,10 +424,84 @@ function idas_update() {
 }
 
 
+
+
+function encodeUtf8Base64Url(value) {
+    const text = String(value || '');
+    if (!text) return '';
+
+    try {
+        let binary = '';
+
+        if (window.TextEncoder) {
+            const bytes = new TextEncoder().encode(text);
+            bytes.forEach(function (byte) {
+                binary += String.fromCharCode(byte);
+            });
+        } else {
+            binary = unescape(encodeURIComponent(text));
+        }
+
+        return btoa(binary)
+            .replace(/\+/g, '-')
+            .replace(/\//g, '_')
+            .replace(/=+$/g, '');
+    } catch (e) {
+        console.warn('encodeUtf8Base64Url failed', e);
+        return '';
+    }
+}
+
+function decodeUtf8Base64(value) {
+    let b64 = String(value || '');
+    if (!b64) return '';
+
+    try {
+        // 支援一般 Base64，也支援網址列安全的 Base64URL（- / _，可省略 =）。
+        b64 = b64.replace(/-/g, '+').replace(/_/g, '/');
+        const pad = b64.length % 4;
+        if (pad) b64 += '='.repeat(4 - pad);
+
+        const binary = atob(b64);
+
+        if (window.TextDecoder) {
+            const bytes = Uint8Array.from(binary, function (ch) {
+                return ch.charCodeAt(0);
+            });
+            return new TextDecoder('utf-8').decode(bytes);
+        }
+
+        let encoded = '';
+        for (let i = 0; i < binary.length; i++) {
+            encoded += '%' + ('00' + binary.charCodeAt(i).toString(16)).slice(-2);
+        }
+        return decodeURIComponent(encoded);
+    } catch (e) {
+        console.warn('decodeUtf8Base64 failed', e);
+        return '';
+    }
+}
+
+function getBarcodeValueFromCheckbox(cb) {
+    if (!cb) return '';
+
+    const b64 = cb.dataset ? (cb.dataset.barcodeB64 || '') : '';
+    if (b64) {
+        return decodeUtf8Base64(b64);
+    }
+
+    return (cb.dataset && cb.dataset.barcode) ? cb.dataset.barcode : '';
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('barcode_content').addEventListener('input', function() {
-        var length = this.value.length;
-        document.getElementById('barcode_mask_count').value = length;
+    const barcodeInput = document.getElementById('barcode_content');
+    const barcodeCount = document.getElementById('barcode_mask_count');
+
+    if (!barcodeInput || !barcodeCount) return;
+
+    barcodeInput.addEventListener('input', function() {
+        refreshBarcodeCount();
     });
 });
 
@@ -360,19 +528,22 @@ document.addEventListener('change', function (e) {
         return;
     }
 
-    // ✅ 勾選 → 高亮該列
+    // ✅ 勾選 → 高亮該列，並記住原始 Job ID
+    currentBarcodeOriginalJob = cb.dataset.job || cb.value || '';
+
     const tr = cb.closest('tr');
     if (tr) tr.classList.add('barcode-checked');
 
     // ✅ 帶入資料
+    const rawBarcodeValue = getBarcodeValueFromCheckbox(cb);
     document.getElementById('barcode_content').value =
-        cb.dataset.barcode || '';
+        barcodeRawToEditableText(rawBarcodeValue);
 
     document.getElementById('barcode_mask_from').value =
         cb.dataset.from || 1;
 
     document.getElementById('barcode_mask_count').value =
-        cb.dataset.count || '';
+        cb.dataset.count || barcodeRawLength(rawBarcodeValue);
 
     document.getElementById('barcode_enable').value =
         cb.dataset.enable ?? -1;
@@ -380,20 +551,30 @@ document.addEventListener('change', function (e) {
     document.getElementById('barcode_job').value =
         cb.dataset.job ?? -1;
 
-    // 觸發 job → seq 載入
-    fetchSeqList(() => {
-        document.getElementById('barcode_seq').value =
-            cb.dataset.seq ?? -1;
-    });
+    // 顯示 seq 區塊（依 mode）；帶入 checkbox 時由下方 fetchSeqList(callback) 負責載入，避免重複打 API。
+    toggleBarcodeSeq(false);
 
-    // 顯示 seq 區塊（依 mode）
-    toggleBarcodeSeq();
+    const selectedSeq = cb.dataset.seq ?? -1;
+    const barcodeModeValue = String(document.getElementById('barcode_enable').value);
+
+    // Switch Seq / Switch Job + Seq 都需要載入 SEQ 清單。
+    // 原本只判斷 mode === '2'，若系統的 Switch Job / Seq 是其他 key（例如 3），
+    // 下拉選單會只剩「請選擇工序」，看不到 SEQ-1。
+    if (barcodeModeValue !== '-1' && barcodeModeValue !== '0' && barcodeModeValue !== '1') {
+        // 觸發 job → seq 載入，完成後再帶回原本選擇的 SEQ。
+        fetchSeqList(() => {
+            document.getElementById('barcode_seq').value = selectedSeq;
+        });
+    } else {
+        document.getElementById('barcode_seq').value = selectedSeq;
+    }
 });
 
 
 
 
 function clearBarcodeForm() {
+    currentBarcodeOriginalJob = '';
     document.getElementById('barcode_content').value = '';
     document.getElementById('barcode_mask_from').value = 1;
     document.getElementById('barcode_mask_count').value = '';

@@ -159,17 +159,40 @@ window.APP = {
                                     </thead>
 
                                     <tbody style="font-size: 3vmin;" id='total_barcodes'>
-                                        <?php foreach ($data['barcodes'] as $k_b =>$v_b){?>
+                                        <?php foreach ($data['barcodes'] as $k_b =>$v_b){
+                                            $barcodeRaw = (string)($v_b['barcode'] ?? '');
+                                            $barcodeDisplay = strtr($barcodeRaw, [
+                                                "\r\n" => '<CRLF>',
+                                                "\r"   => '<CR>',
+                                                "\n"   => '<LF>',
+                                                "\t"   => '<TAB>',
+                                                chr(29) => '<GS>',
+                                                chr(2)  => '<STX>',
+                                                chr(3)  => '<ETX>',
+                                                chr(27) => '<ESC>',
+                                            ]);
+
+                                            $barcodeEsc = htmlspecialchars($barcodeDisplay, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+                                            $barcodeB64Esc = htmlspecialchars(base64_encode($barcodeRaw), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                            $jobIdEsc   = htmlspecialchars((string)($v_b['barcode_selected_job'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                            $jobNameEsc = htmlspecialchars((string)($v_b['job_name'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                            $fromEsc    = htmlspecialchars((string)($v_b['barcode_mask_from'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                            $countEsc   = htmlspecialchars((string)($v_b['barcode_mask_count'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                            $enableEsc  = htmlspecialchars((string)($v_b['barcode_enable'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                            $seqEsc     = htmlspecialchars((string)($v_b['barcode_selected_seq'] ?? '-1'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                            $modeEsc    = htmlspecialchars((string)($data['barcode_mode'][$v_b['barcode_enable']] ?? $v_b['barcode_enable'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                        ?>
                                             <tr>
                                                 <td style="text-align: center; vertical-align: middle;" >
-                                                   <input class="form-check-input" type="checkbox" name="barcode_check" value="<?php echo $v_b['barcode_selected_job'];?>" data-barcode="<?php echo htmlspecialchars($v_b['barcode']); ?>" data-from="<?php echo $v_b['barcode_mask_from']; ?>" data-count="<?php echo $v_b['barcode_mask_count']; ?>" data-enable="<?php echo $v_b['barcode_enable']; ?>" data-job="<?php echo $v_b['barcode_selected_job']; ?>" data-seq="<?php echo $v_b['barcode_selected_seq'] ?? '-1'; ?>" style="zoom:1.2">
+                                                   <input class="form-check-input" type="checkbox" name="barcode_check" value="<?php echo $jobIdEsc; ?>" data-barcode="<?php echo $barcodeEsc; ?>" data-barcode-b64="<?php echo $barcodeB64Esc; ?>" data-from="<?php echo $fromEsc; ?>" data-count="<?php echo $countEsc; ?>" data-enable="<?php echo $enableEsc; ?>" data-job="<?php echo $jobIdEsc; ?>" data-seq="<?php echo $seqEsc; ?>" style="zoom:1.2">
                                                 </td> 
-                                                <td><?php echo $v_b['barcode_selected_job'];?></td>
-                                                <td><?php echo $v_b['job_name'];?></td>
-                                                <td><?php echo $v_b['barcode'];?></td>
-                                                <td><?php echo $v_b['barcode_mask_from'];?></td>
-                                                <td><?php echo $v_b['barcode_mask_count'];?></td>
-                                                <th><?php echo $data['barcode_mode'][$v_b['barcode_enable']];?></th>
+                                                <td><?php echo $jobIdEsc; ?></td>
+                                                <td><?php echo $jobNameEsc; ?></td>
+                                                <td title="<?php echo $barcodeEsc; ?>" style="white-space: break-spaces; word-break: break-all; overflow-wrap: anywhere; text-align:left;"><?php echo $barcodeEsc; ?></td>
+                                                <td><?php echo $fromEsc; ?></td>
+                                                <td><?php echo $countEsc; ?></td>
+                                                <th><?php echo $modeEsc; ?></th>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
@@ -817,7 +840,7 @@ function input_check_savebarcode() {
     let conditions = [
         { id: 'barcode_content',  pattern: /.*/, min: 1, max: 100, isString: true },
         { id: 'barcode_mask_from', pattern: /^[0-9]+$/, min: 1, max: 54 },
-        { id: 'barcode_mask_count', pattern: /^[0-9]+$/, min: 1, max: 54 },
+        { id: 'barcode_mask_count', pattern: /^[0-9]+$/, min: 1, max: 100 },
         
 
     ];
@@ -842,7 +865,14 @@ function input_check_savebarcode() {
 
 
 function validateInput(element, pattern, min, max, isString) {
-    let value = element.value.trim();
+    let value = isString ? element.value : element.value.trim();
+    let valueForLength = value;
+    if (isString && element && element.id === 'barcode_content' && typeof barcodeEditableTextToRaw === 'function') {
+        valueForLength = barcodeEditableTextToRaw(value);
+    }
+    let valueLength = (typeof barcodeRawLength === 'function')
+        ? barcodeRawLength(valueForLength)
+        : String(valueForLength || '').length;
     let isValid = true;
 
     if (value === "") {
@@ -855,11 +885,11 @@ function validateInput(element, pattern, min, max, isString) {
     }
     else if (isString) {
         // 檢查字串長度
-        if (min !== null && value.length < min) {
+        if (min !== null && valueLength < min) {
             element.classList.add("is-invalid");
             isValid = false;
         }
-        else if (max !== null && value.length > max) {
+        else if (max !== null && valueLength > max) {
             element.classList.add("is-invalid");
             isValid = false;
         } else {
@@ -1149,8 +1179,25 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-function toggleBarcodeSeq() {
-    const barcodeMode = document.getElementById('barcode_enable');  // ✅ 修正為正確 ID
+let barcodeSeqLoadToken = 0;
+let barcodeSeqXHR = null;
+
+function resetBarcodeSeqOptions() {
+    const barcodeSeq = document.getElementById('barcode_seq');
+    if (!barcodeSeq) return;
+
+    barcodeSeq.innerHTML = '';
+
+    const defaultOption = document.createElement('option');
+    defaultOption.value = "-1";
+    defaultOption.textContent = "<?php echo $text['system_barcode_select_seq_m'];?>";
+    barcodeSeq.appendChild(defaultOption);
+}
+
+function toggleBarcodeSeq(autoFetch) {
+    if (typeof autoFetch === 'undefined') autoFetch = true;
+
+    const barcodeMode = document.getElementById('barcode_enable');
     const barcodeSeq = document.getElementById('barcode_seq');
     const seqContainer = document.getElementById("barcode_select_seq");
 
@@ -1160,74 +1207,98 @@ function toggleBarcodeSeq() {
         return;
     }
 
-    if (barcodeMode.value === '0' || barcodeMode.value === '1') {
+    const modeValue = String(barcodeMode.value);
+    const needSeq = (modeValue !== '-1' && modeValue !== '0' && modeValue !== '1');
+
+    if (!needSeq) {
         barcodeSeq.disabled = true;
         seqContainer.style.display = 'none';
-    } else if (barcodeMode.value === '2') {
-        barcodeSeq.disabled = false;
-        seqContainer.style.display = 'block';
+        resetBarcodeSeqOptions();
+        return;
+    }
 
-        // 若已選擇 Job，則自動載入對應的 SEQ
-        const jobId = document.getElementById('barcode_job')?.value || '-1';
-        if (jobId !== '-1') {
-            fetchSeqList();
-        } else {
-            // 未選 Job，清空 SEQ 並加預設提示
-            barcodeSeq.innerHTML = '';
-            const defaultOption = document.createElement('option');
-            defaultOption.value = "-1";
-            defaultOption.textContent = "<?php echo $text['system_barcode_select_seq_m'];?>";
-            barcodeSeq.appendChild(defaultOption);
-        }
-    } else {
-        barcodeSeq.disabled = false;
-        seqContainer.style.display = 'block';
+    barcodeSeq.disabled = false;
+    seqContainer.style.display = 'block';
+
+    const jobId = document.getElementById('barcode_job')?.value || '-1';
+    if (jobId === '-1') {
+        resetBarcodeSeqOptions();
+    } else if (autoFetch && barcodeSeq.options.length <= 1) {
+        // Switch Seq / Switch Job + Seq 都需要載入 SEQ 清單。
+        // 不再只限定 mode === '2'，避免 Switch Job / Seq 的 key 不是 2 時看不到 SEQ-1。
+        fetchSeqList();
     }
 }
 
 
 
 //透過JOBID 取得對應的SEQ
-function fetchSeqList() {
-    const jobId = document.getElementById('barcode_job').value;
+function fetchSeqList(callback) {
+    const barcodeJob = document.getElementById('barcode_job');
     const barcodeSeq = document.getElementById('barcode_seq');
+    if (!barcodeJob || !barcodeSeq) return;
 
-    // Reset list
-    barcodeSeq.innerHTML = '';
+    const jobId = barcodeJob.value;
+    const requestToken = ++barcodeSeqLoadToken;
 
-    // 預設項目
-    const defaultOption = document.createElement('option');
-    defaultOption.value = "-1";
-    defaultOption.textContent = "Please Select Seq";
-    barcodeSeq.appendChild(defaultOption);
+    // 取消前一次尚未完成的請求，避免快速切換 Job / Barcode 時舊回應又 append 一次。
+    if (barcodeSeqXHR && barcodeSeqXHR.readyState !== 4) {
+        barcodeSeqXHR.abort();
+    }
 
-    if (jobId === '-1') return;
+    resetBarcodeSeqOptions();
 
-    $.ajax({
+    if (jobId === '-1') {
+        if (typeof callback === 'function') callback();
+        return;
+    }
+
+    barcodeSeqXHR = $.ajax({
         url: '?url=Settings/GetJobSeq',
         type: 'POST',
         data: { job_id: jobId },
         success: function(response) {
+            if (requestToken !== barcodeSeqLoadToken) return;
+
             try {
                 const seqList = JSON.parse(response);
+                resetBarcodeSeqOptions();
 
                 // ✅ 使用正確的屬性名稱：seq_id、seq_name
+                // ✅ 同時以前端 Set 去重，避免重複 AJAX 或 DB 重複資料造成下拉選單重複。
                 if (Array.isArray(seqList)) {
+                    const addedSeqIds = new Set(['-1']);
+
                     seqList.forEach(seq => {
+                        const seqId = String(seq.seq_id ?? '');
+                        if (!seqId || addedSeqIds.has(seqId)) return;
+
+                        addedSeqIds.add(seqId);
+
                         const option = document.createElement('option');
-                        option.value = seq.seq_id; // 注意這裡用小寫
-                        option.textContent = `${seq.seq_id} ${seq.seq_name}`;
+                        option.value = seqId;
+                        option.textContent = `${seqId} ${seq.seq_name ?? ''}`.trim();
                         barcodeSeq.appendChild(option);
                     });
                 } else {
                     console.error("Response is not an array:", seqList);
+                }
+
+                if (typeof callback === 'function') {
+                    callback();
                 }
             } catch (e) {
                 console.error("JSON parse error:", e, "Raw response:", response);
             }
         },
         error: function(xhr, status, error) {
+            if (status === 'abort') return;
             console.error('Error occurred:', error);
+        },
+        complete: function() {
+            if (requestToken === barcodeSeqLoadToken) {
+                barcodeSeqXHR = null;
+            }
         }
     });
 }

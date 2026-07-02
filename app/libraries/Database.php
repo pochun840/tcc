@@ -98,7 +98,25 @@ class Database{
         return $this->db_iDas_login;
     }
 
+    /**
+     * Tool Information 實際使用的資料庫：
+     * /var/www/html/database/tccdev.db
+     */
     public function getDb_tools() {
         return $this->db_tools;
+    }
+
+    /**
+     * 相容新版 Tool Model 的 accessor 名稱。
+     * 本專案仍然共用 tccdev.db，不另外建立 ntcs_device_IDAS.db。
+     */
+    public function getDb_das_tools() {
+        return $this->db_tools;
+    }
+
+    public function getDb_tools_path() {
+        return PHP_OS_FAMILY === 'Linux'
+            ? '/var/www/html/database/tccdev.db'
+            : '../tccdev.db';
     }
 }

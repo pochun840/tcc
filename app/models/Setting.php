@@ -36,7 +36,7 @@ class Setting{
     //get all job seq
     public function get_seq_list_for_modbus($job_id){
 
-        $sql = "SELECT job_id,seq_id,seq_name FROM sequence WHERE job_id = :job_id AND seq_en = 1 order by seq_id";
+        $sql = "SELECT job_id, seq_id, MIN(seq_name) AS seq_name FROM sequence WHERE job_id = :job_id AND seq_en = 1 GROUP BY job_id, seq_id ORDER BY seq_id";
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
         $results = $statement->execute();
@@ -220,7 +220,8 @@ class Setting{
                 MIN(barcode.barcode) AS barcode,
                 MIN(barcode.barcode_mask_from) AS barcode_mask_from,
                 MIN(barcode.barcode_mask_count) AS barcode_mask_count,
-                barcode.barcode_enable,
+                MIN(barcode.barcode_enable) AS barcode_enable,
+                MIN(COALESCE(barcode.barcode_selected_seq, -1)) AS barcode_selected_seq,
                 MIN(job.job_name) AS job_name
             FROM barcode
             LEFT JOIN job
@@ -242,42 +243,80 @@ class Setting{
 
     public function Update_Barcode($barcode)
     {
-        if( $this->check_barcode_conflict($barcode['barcode_selected_job']) ){ 
+        $selectedJob = (string)($barcode['barcode_selected_job'] ?? '');
+        $originalJob = (string)($barcode['barcode_original_job'] ?? $selectedJob);
 
-        
-            $sql = "UPDATE `barcode` 
-                    SET barcode = :barcode,
-                        barcode_mask_from  = :barcode_mask_from,
-                        barcode_mask_count = :barcode_mask_count,
-                        barcode_enable = :barcode_enable
-                    WHERE barcode_selected_job = :barcode_selected_job ";
-            $statement = $this->db_iDas->prepare($sql);
-            $statement->bindValue(':barcode', $barcode['barcode_content']);
-            $statement->bindValue(':barcode_mask_from', $barcode['barcode_mask_from']);
-            $statement->bindValue(':barcode_mask_count', $barcode['barcode_mask_count']);
-            $statement->bindValue(':barcode_selected_job',$barcode['barcode_selected_job']);
-            $statement->bindValue(':barcode_enable', $barcode['barcode_enable']);
-            $statement->bindValue(':barcode_selected_seq', $barcode['barcode_selected_seq']);
-            $results = $statement->execute();
-
-
-        }else{ //不存在，用insert
-
-            $sql = "INSERT INTO `barcode` ('barcode','barcode_mask_from','barcode_mask_count','barcode_selected_job','barcode_enable','barcode_selected_seq')
-                    VALUES (:barcode,:barcode_mask_from,:barcode_mask_count,:barcode_selected_job,:barcode_enable,:barcode_selected_seq)";
-            $statement = $this->db_iDas->prepare($sql);
-            $statement->bindValue(':barcode', $barcode['barcode_content']);
-            $statement->bindValue(':barcode_mask_from', $barcode['barcode_mask_from']);
-            $statement->bindValue(':barcode_mask_count', $barcode['barcode_mask_count']);
-            $statement->bindValue(':barcode_selected_job', $barcode['barcode_selected_job']);
-            $statement->bindValue(':barcode_enable', $barcode['barcode_enable']);
-            $statement->bindValue(':barcode_selected_seq', $barcode['barcode_selected_seq']);
-            $results = $statement->execute();
-
+        if ($selectedJob === '' || $selectedJob === '-1') {
+            return false;
         }
 
-        return $results;
+        if ($originalJob === '' || $originalJob === '-1') {
+            $originalJob = $selectedJob;
+        }
+
+        // 避免舊資料或前端未傳 SEQ 時，重新編輯無法正確帶入預設值。
+        if (!isset($barcode['barcode_selected_seq']) || $barcode['barcode_selected_seq'] === '') {
+            $barcode['barcode_selected_seq'] = '-1';
+        }
+
+        $isEdit = $this->check_barcode_conflict($originalJob);
+
+        // 編輯時若有更換 Job，且新 Job 已存在另一筆條碼，避免變成新增或覆蓋其他 Job。
+        if ($isEdit && $selectedJob !== $originalJob && $this->check_barcode_conflict($selectedJob)) {
+            return false;
+        }
+
+        if ($isEdit) {
+            $sql = "UPDATE `barcode`
+                    SET barcode = :barcode,
+                        barcode_mask_from = :barcode_mask_from,
+                        barcode_mask_count = :barcode_mask_count,
+                        barcode_selected_job = :barcode_selected_job,
+                        barcode_enable = :barcode_enable,
+                        barcode_selected_seq = :barcode_selected_seq
+                    WHERE barcode_selected_job = :barcode_original_job";
+            $statement = $this->db_iDas->prepare($sql);
+            $statement->bindValue(':barcode', $barcode['barcode_content']);
+            $statement->bindValue(':barcode_mask_from', $barcode['barcode_mask_from']);
+            $statement->bindValue(':barcode_mask_count', $barcode['barcode_mask_count']);
+            $statement->bindValue(':barcode_selected_job', $selectedJob);
+            $statement->bindValue(':barcode_original_job', $originalJob);
+            $statement->bindValue(':barcode_enable', $barcode['barcode_enable']);
+            $statement->bindValue(':barcode_selected_seq', $barcode['barcode_selected_seq']);
+            return $statement->execute();
+        }
+
+        // 新增時若目標 Job 已存在，改用 UPDATE，避免重複新增。
+        if ($this->check_barcode_conflict($selectedJob)) {
+            $sql = "UPDATE `barcode`
+                    SET barcode = :barcode,
+                        barcode_mask_from = :barcode_mask_from,
+                        barcode_mask_count = :barcode_mask_count,
+                        barcode_enable = :barcode_enable,
+                        barcode_selected_seq = :barcode_selected_seq
+                    WHERE barcode_selected_job = :barcode_selected_job";
+            $statement = $this->db_iDas->prepare($sql);
+            $statement->bindValue(':barcode', $barcode['barcode_content']);
+            $statement->bindValue(':barcode_mask_from', $barcode['barcode_mask_from']);
+            $statement->bindValue(':barcode_mask_count', $barcode['barcode_mask_count']);
+            $statement->bindValue(':barcode_selected_job', $selectedJob);
+            $statement->bindValue(':barcode_enable', $barcode['barcode_enable']);
+            $statement->bindValue(':barcode_selected_seq', $barcode['barcode_selected_seq']);
+            return $statement->execute();
+        }
+
+        $sql = "INSERT INTO `barcode` ('barcode','barcode_mask_from','barcode_mask_count','barcode_selected_job','barcode_enable','barcode_selected_seq')
+                VALUES (:barcode,:barcode_mask_from,:barcode_mask_count,:barcode_selected_job,:barcode_enable,:barcode_selected_seq)";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->bindValue(':barcode', $barcode['barcode_content']);
+        $statement->bindValue(':barcode_mask_from', $barcode['barcode_mask_from']);
+        $statement->bindValue(':barcode_mask_count', $barcode['barcode_mask_count']);
+        $statement->bindValue(':barcode_selected_job', $selectedJob);
+        $statement->bindValue(':barcode_enable', $barcode['barcode_enable']);
+        $statement->bindValue(':barcode_selected_seq', $barcode['barcode_selected_seq']);
+        return $statement->execute();
     }
+
 
     public function check_barcode_conflict($job_id){
         
@@ -328,7 +367,7 @@ class Setting{
     //get all job seq
     public function get_seq_list($job_id){
 
-        $sql = "SELECT job_id,seq_id,seq_name FROM sequence WHERE job_id = :job_id AND seq_en = 1 order by seq_id";
+        $sql = "SELECT job_id, seq_id, MIN(seq_name) AS seq_name FROM sequence WHERE job_id = :job_id AND seq_en = 1 GROUP BY job_id, seq_id ORDER BY seq_id";
         $statement = $this->db_iDas->prepare($sql);
         $statement->bindValue(':job_id', $job_id);
         $results = $statement->execute();

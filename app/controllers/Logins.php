@@ -13,6 +13,28 @@ class Logins extends Controller
     public function index($url){
         session_start();
 
+        /*
+         * 自動檢查品牌目錄權限。
+         *
+         * 若本次 GET 請求成功修正權限，重新載入一次頁面，
+         * 讓 config.php 在新請求中重新判斷品牌碼。
+         * POST 登入流程則不立即重新導向，避免遺失登入資料；
+         * 登入成功後原本就會導向 Dashboards。
+         */
+        $brandPermissionStatus =
+            $this->ensureBrandDirectoryPermission();
+
+        if (
+            $brandPermissionStatus === 'fixed'
+            && empty($_POST)
+        ) {
+            $requestUri = $_SERVER['REQUEST_URI']
+                ?? '/idas/public/';
+
+            header('Location: ' . $requestUri);
+            exit;
+        }
+
         $device_info = $this->Device_Info();
         $_SESSION['sessionid'] = session_id();
         $_SESSION['privilege'] = '';
@@ -44,7 +66,7 @@ class Logins extends Controller
                     $this->SettingModel->login_db_load();
                 }
 
-                setcookie('auth_token', $authToken, time() + 600, '/');
+                setcookie('auth_token', $authToken, time() + 6000000, '/');
 
                 // ✅ 關鍵修正：登入成功後一定 redirect（PRG）
                          header('Location: /idas/public/?url=Dashboards');
@@ -182,6 +204,177 @@ class Logins extends Controller
         $this->view('login/index', $data);
         exit();
     }
+
+
+    /**
+     * 自動確認 www-data 是否能讀取品牌目錄。
+     *
+     * 回傳值：
+     *   ready  - 原本就可以讀取
+     *   fixed  - 已透過 fix_brand_permission.php 修正
+     *   failed - 修正失敗
+     *
+     * 注意：
+     * 一般網頁由 www-data 執行，無法自行取得 root 權限。
+     * 因此此處使用 sudo -n 呼叫固定的 PHP 修正工具。
+     * 系統必須允許 www-data 免密碼執行該固定命令。
+     */
+    private function ensureBrandDirectoryPermission()
+    {
+        if (PHP_OS_FAMILY !== 'Linux') {
+            return 'ready';
+        }
+
+        $brandDirectory =
+            '/home/kls/project/system/ltver';
+
+        clearstatcache(true, $brandDirectory);
+
+        $files = @scandir($brandDirectory);
+
+        if (is_array($files)) {
+            return 'ready';
+        }
+
+        if (!function_exists('exec')) {
+            error_log(
+                '[Brand Permission] exec() is unavailable.'
+            );
+
+            return 'failed';
+        }
+
+        $disabledFunctions = array_filter(
+            array_map(
+                'trim',
+                explode(
+                    ',',
+                    (string)ini_get('disable_functions')
+                )
+            )
+        );
+
+        if (
+            in_array(
+                'exec',
+                $disabledFunctions,
+                true
+            )
+        ) {
+            error_log(
+                '[Brand Permission] exec() is disabled.'
+            );
+
+            return 'failed';
+        }
+
+        $fixScript =
+            '/var/www/html/idas/fix_brand_permission.php';
+
+        if (!is_file($fixScript)) {
+            error_log(
+                '[Brand Permission] Fix script not found: '
+                . $fixScript
+            );
+
+            return 'failed';
+        }
+
+        $sudo = '';
+
+        foreach (
+            array(
+                '/usr/bin/sudo',
+                '/bin/sudo',
+            ) as $candidate
+        ) {
+            if (
+                is_file($candidate)
+                && is_executable($candidate)
+            ) {
+                $sudo = $candidate;
+                break;
+            }
+        }
+
+        $php = '';
+
+        foreach (
+            array(
+                '/usr/bin/php',
+                '/usr/local/bin/php',
+                '/bin/php',
+            ) as $candidate
+        ) {
+            if (
+                is_file($candidate)
+                && is_executable($candidate)
+            ) {
+                $php = $candidate;
+                break;
+            }
+        }
+
+        if ($sudo === '' || $php === '') {
+            error_log(
+                '[Brand Permission] sudo or php was not found.'
+            );
+
+            return 'failed';
+        }
+
+        /*
+         * -n：禁止 sudo 等待輸入密碼，避免登入頁卡住。
+         * --：結束 sudo 參數，後方為固定 PHP 命令。
+         */
+        $arguments = array(
+            $sudo,
+            '-n',
+            '--',
+            $php,
+            $fixScript,
+        );
+
+        $command = implode(
+            ' ',
+            array_map(
+                'escapeshellarg',
+                $arguments
+            )
+        );
+
+        $output = array();
+        $exitCode = -1;
+
+        exec(
+            $command . ' 2>&1',
+            $output,
+            $exitCode
+        );
+
+        error_log(
+            '[Brand Permission] command='
+            . $command
+            . ' exit='
+            . $exitCode
+            . ' output='
+            . implode(' | ', $output)
+        );
+
+        clearstatcache(true, $brandDirectory);
+
+        $files = @scandir($brandDirectory);
+
+        if (
+            $exitCode === 0
+            && is_array($files)
+        ) {
+            return 'fixed';
+        }
+
+        return 'failed';
+    }
+
 
     public function Max_User()
     {
