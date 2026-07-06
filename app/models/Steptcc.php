@@ -128,6 +128,16 @@ class Steptcc{
         if (empty($jobdata['job_id'])) {
             return false; 
         }
+
+        // Downshift rule: only STEP 1 with Torque target can enable Downshift.
+        if ((int)($jobdata['step_id'] ?? 1) !== 1) {
+            $jobdata['th_mode'] = 0;
+            $jobdata['th_tor'] = 0;
+            $jobdata['ds_tor'] = 0;
+            $jobdata['ds_speed'] = 100;
+        } elseif ((int)($jobdata['target_opt'] ?? 0) !== 0) {
+            $jobdata['th_mode'] = 0;
+        }
         
         $sql = "INSERT INTO `step` (job_id, seq_id, step_id, target_opt, target_tor, target_ang, target_delay, tor_hi, tor_lo, ang_hi, ang_lo, rpm, direction, th_mode, ds_tor, ds_speed, th_tor,record_ang,tor_unit,pnf_set) ";
         $sql .= "VALUES (:job_id, :seq_id, :step_id, :target_opt, :target_tor, :target_ang, :target_delay, :tor_hi, :tor_lo, :ang_hi, :ang_lo, :rpm, :direction, :th_mode, :ds_tor, :ds_speed, :th_tor,:record_ang,:tor_unit,:pnf_set);";
@@ -188,6 +198,16 @@ class Steptcc{
 
         // 強制設置 $jobdata['record_ang'] 為 0 如果不存在
         $jobdata['record_ang'] = isset($jobdata['record_ang']) ? $jobdata['record_ang'] : 0;
+
+        // Downshift rule: only STEP 1 with Torque target can enable Downshift.
+        if ((int)($jobdata['step_id'] ?? 1) !== 1) {
+            $jobdata['th_mode'] = 0;
+            $jobdata['th_tor'] = 0;
+            $jobdata['ds_tor'] = 0;
+            $jobdata['ds_speed'] = 100;
+        } elseif ((int)($jobdata['target_opt'] ?? 0) !== 0) {
+            $jobdata['th_mode'] = 0;
+        }
 
         $sql = "UPDATE `step` SET 
                     target_opt = :target_opt,
@@ -265,6 +285,11 @@ class Steptcc{
         $final_update_sql = "UPDATE step SET step_id = CAST(REPLACE(step_id, 'New_Value', '') AS UNSIGNED) WHERE job_id = ?";
         $final_update_statement = $this->db_iDas->prepare($final_update_sql);
         $final_update_statement->execute([$jobid]);
+
+        // Downshift rule: after reordering, only STEP 1 can keep Downshift ON.
+        $downshift_update_sql = "UPDATE step SET th_mode = 0, th_tor = 0, ds_tor = 0, ds_speed = 100 WHERE job_id = ? AND step_id != 1";
+        $downshift_update_statement = $this->db_iDas->prepare($downshift_update_sql);
+        $downshift_update_statement->execute([$jobid]);
 
         return true;
     }

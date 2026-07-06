@@ -228,7 +228,7 @@ class Step extends Controller
             $tor_lo = isset($_POST['tor_lo'])? floatval($_POST['tor_lo']) : 0; 
             $ang_hi  = isset($_POST['ang_hi'])? intval($_POST['ang_hi']) : 30600; 
             $ang_lo  = isset($_POST['ang_lo'])? intval($_POST['ang_lo']) : 0; 
-            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 50;
+            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 100;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
             $th_mode = isset($_POST['th_mode'])? intval($_POST['th_mode']) : 0;
             $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0.0; 
@@ -237,6 +237,14 @@ class Step extends Controller
             $record_ang = isset($_POST['record_ang'])? intval($_POST['record_ang']) : 0;
             $tor_unit = $current_torque_unit_for_save;
             $pnf_set = isset($_POST['pnf_set'])? intval($_POST['pnf_set']) : 0;
+
+            // Downshift rule: only STEP 1 can enable Downshift.
+            if ($stepid !== 1) {
+                $th_mode = 0;
+                $th_tor = 0.0;
+                $ds_tor = 0.0;
+                $ds_speed = 100;
+            }
 
             if($target_opt  == 1){
 
@@ -366,7 +374,7 @@ class Step extends Controller
             $tor_lo = isset($_POST['tor_lo'])? floatval($_POST['tor_lo']) : 0; 
             $ang_hi  = isset($_POST['ang_hi'])? intval($_POST['ang_hi']) : 0; 
             $ang_lo  = isset($_POST['ang_lo'])? intval($_POST['ang_lo']) : 0; 
-            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 50;
+            $rpm       = isset($_POST['rpm'])? intval($_POST['rpm']) : 10;
             $direction = isset($_POST['direction'])? intval($_POST['direction']) : 0;
             $th_mode = isset($_POST['th_mode'])? intval($_POST['th_mode']) : 0;
             $ds_tor = isset($_POST['ds_tor'])? floatval($_POST['ds_tor']) : 0.3; 
@@ -377,8 +385,16 @@ class Step extends Controller
             $tor_unit = $step_torque_unit;
             $pnf_set = isset($_POST['pnf_set'])? intval($_POST['pnf_set']) : 0;
 
+            // Downshift rule: only STEP 1 can enable Downshift.
+            if ($stepid !== 1) {
+                $th_mode = 0;
+                $th_tor = 0.0;
+                $ds_tor = 0.0;
+                $ds_speed = 100;
+            }
 
-            if($target_opt  == 0 ){
+
+            if($target_opt  == 0 && $th_mode == 1 ){
 
                 if ($ds_tor > $target_tor) {
                     $res_type = 'Error';
@@ -546,6 +562,16 @@ class Step extends Controller
             // Copy Step 時，Torque / Angle / Delay 都允許複製。
             $old_res= $this->stepModel->getStepNo($job_id,$seq_id,$old_step_id);
             if(!empty($old_res)){
+                // Downshift rule: only STEP 1 can enable Downshift.
+                $copy_allow_downshift = ($new_step_id === 1)
+                    && ((int)$old_res[0]['target_opt'] === 0)
+                    && ((int)$old_res[0]['th_mode'] === 1);
+
+                $copy_th_mode  = $copy_allow_downshift ? 1 : 0;
+                $copy_th_tor   = $copy_allow_downshift ? $old_res[0]['th_tor'] : 0;
+                $copy_ds_tor   = $copy_allow_downshift ? $old_res[0]['ds_tor'] : 0;
+                $copy_ds_speed = $copy_allow_downshift ? $old_res[0]['ds_speed'] : 100;
+
                 $jobdata = array(
                     'job_id'           => $job_id,
                     'seq_id'           => $seq_id,
@@ -560,10 +586,10 @@ class Step extends Controller
                     'ang_lo'           => $old_res[0]['ang_lo'],
                     'rpm'              => $old_res[0]['rpm'],
                     'direction'        => $old_res[0]['direction'],
-                    'th_mode'          => $old_res[0]['th_mode'],
-                    'th_tor'           => $old_res[0]['th_tor'],
-                    'ds_tor'           => $old_res[0]['ds_tor'],
-                    'ds_speed'         => $old_res[0]['ds_speed'],
+                    'th_mode'          => $copy_th_mode,
+                    'th_tor'           => $copy_th_tor,
+                    'ds_tor'           => $copy_ds_tor,
+                    'ds_speed'         => $copy_ds_speed,
                     'record_ang'       => $old_res[0]['record_ang'],
                     'tor_unit'         => $old_res[0]['tor_unit'],
                     'pnf_set'          => $old_res[0]['pnf_set']

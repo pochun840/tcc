@@ -93,7 +93,7 @@ $qrCodeUrl = (string)($data['qrcode_url'] ?? '');
 
                     <div class="row border-bottom">
                         <div class="col-4 t1">
-                            <?php echo $text['maintain_counts']; ?>:
+                            <?php echo  $text['total_counts']; ?>:
                         </div>
                         <div class="col t1">
                             <?php
@@ -108,7 +108,7 @@ $qrCodeUrl = (string)($data['qrcode_url'] ?? '');
 
                     <div class="row border-bottom">
                         <div class="col-4 t1">
-                            <?php echo $text['total_counts']; ?>:
+                            <?php echo $text['maintain_counts']; ?>:
                         </div>
                         <div class="col t1">
                             <?php

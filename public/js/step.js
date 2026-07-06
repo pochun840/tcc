@@ -333,7 +333,7 @@ function create_step() {
 
         
     // 預設值
-    document.getElementById('rpm').value = 200;
+    document.getElementById('rpm').value = 100;
     clearNewDownshiftTorqueValues();
     document.getElementById('ds_speed').value = 100;
     document.getElementById("direction_CW").checked = true;
@@ -362,6 +362,7 @@ function create_step() {
     // 監聽 downshift 切換
     document.getElementById("downshift_ON").addEventListener('change', toggleDisabledFields);
     document.getElementById("downshift_OFF").addEventListener('change', toggleDisabledFields);
+    applyNewDownshiftStepRule();
 
     // 處理 target_opt 預設選項
     var targetoptionselect = document.getElementById('target_opt');
@@ -403,9 +404,10 @@ function create_step() {
         var target_opt_Value = targetoptionselect.value;
         localStorage.setItem('target_option', target_opt_Value);
         toggleVisibility(target_opt_Value);
+        applyNewDownshiftStepRule();
     });
 
-    // ✅ 加入檢查：如果目前是第 4 個 step，禁用 downshift radio
+    // Downshift rule: only STEP 1 can turn Downshift ON.
     $.post("?url=Step/check_step_limit", {
         jobid: jobid,
         seqid: seqid
@@ -418,18 +420,18 @@ function create_step() {
             return;
         }
 
-        if (result.count === 3) {
-            const downshiftOff = document.getElementById('downshift_OFF');
-            const downshiftOn = document.getElementById('downshift_ON');
-            if (downshiftOff) downshiftOff.disabled = true;
-            if (downshiftOn) downshiftOn.disabled = true;
-        }
+        applyNewDownshiftStepRule();
     });
 }
 
 
 // 用來根據 downshift 的選項來控制其他欄位的 disabled 狀態
 function toggleDisabledFields() {
+    // Only STEP 1 is allowed to enable Downshift.
+    if (!applyNewDownshiftStepRule()) {
+        return;
+    }
+
     if (document.getElementById("downshift_ON").checked) {
         // 當 downshift_ON 被選中時，解除 disabled，並補上新建 Step 的預設值
         document.getElementById('th_tor').disabled = false;
@@ -560,18 +562,7 @@ function edit_step(stepid) {
             // 你原本的 downshift 限制 / th_tor disable
             bindEditDownshiftModeEvents();
             toggleThTorDisabled();
-
-            // 第 4 個 step 禁用 downshift（保留你原本邏輯）
-            $.post("?url=Step/check_step_limit", { jobid: jobid, seqid: seqid }, function (res) {
-                let result;
-                try { result = JSON.parse(res); } catch (e) { return; }
-                if (result.count === 4) {
-                    const off = document.getElementById('edit_downshift_OFF');
-                    const on  = document.getElementById('edit_downshift_ON');
-                    if (off) off.disabled = true;
-                    if (on)  on.disabled  = true;
-                }
-            });
+            applyEditDownshiftStepRule();
         },
         error: function () {
             alertify.alert('錯誤', '取得步驟資料失敗');
@@ -697,6 +688,84 @@ function forceNewDownshiftOff() {
     setRadioChecked('downshift_ON', false);
 }
 
+// Downshift rule: only STEP 1 can turn Downshift ON.
+function getNewStepIdForDownshift() {
+    const fromHidden = parseInt(String(document.getElementById('add_step_id')?.value ?? '').trim(), 10);
+    if (Number.isFinite(fromHidden) && fromHidden > 0) return fromHidden;
+
+    const rowCount = document.querySelectorAll('#step_table tbody tr').length;
+    return rowCount + 1;
+}
+
+function getEditStepIdForDownshift() {
+    const fromHidden = parseInt(String(document.getElementById('edit_step_id')?.value ?? '').trim(), 10);
+    if (Number.isFinite(fromHidden) && fromHidden > 0) return fromHidden;
+
+    const fromSelected = parseInt(String(window.stepid ?? stepid ?? '').trim(), 10);
+    return (Number.isFinite(fromSelected) && fromSelected > 0) ? fromSelected : 1;
+}
+
+function disableNewDownshiftForNonStep1() {
+    forceNewDownshiftOff();
+    clearNewDownshiftTorqueValues();
+
+    disableElementById('th_tor', getTorqueZeroText());
+    disableElementById('ds_tor', getTorqueZeroText());
+    disableElementById('ds_speed', '100');
+    disableElementById('downshift_ON');
+    disableElementById('downshift_OFF');
+}
+
+function applyNewDownshiftStepRule() {
+    const stepNum = getNewStepIdForDownshift();
+    const targetOpt = String(document.getElementById('target_opt')?.value ?? '0');
+    const allowDownshift = (stepNum === 1 && targetOpt === '0');
+
+    if (!allowDownshift) {
+        disableNewDownshiftForNonStep1();
+        return false;
+    }
+
+    enableElementById('downshift_ON');
+    enableElementById('downshift_OFF');
+
+    // Keep Downshift fields disabled while OFF, even after target type changes re-enable inputs.
+    if (document.getElementById('downshift_ON')?.checked) {
+        enableElementById('th_tor');
+        enableElementById('ds_tor');
+        enableElementById('ds_speed');
+    } else {
+        clearNewDownshiftTorqueValues();
+        disableElementById('th_tor', getTorqueZeroText());
+        disableElementById('ds_tor', getTorqueZeroText());
+        disableElementById('ds_speed', '100');
+    }
+
+    return true;
+}
+
+function disableEditDownshiftForNonStep1() {
+    forceEditDownshiftOff();
+    disableElementById('edit_th_tor', getTorqueZeroText());
+    disableElementById('edit_ds_tor', getTorqueZeroText());
+    disableElementById('edit_ds_speed', '100');
+    disableElementsByName('edit_th_mode');
+}
+
+function applyEditDownshiftStepRule() {
+    const stepNum = getEditStepIdForDownshift();
+    const targetOpt = String(document.getElementById('edit_target_opt')?.value ?? '0');
+    const allowDownshift = (stepNum === 1 && targetOpt === '0');
+
+    if (!allowDownshift) {
+        disableEditDownshiftForNonStep1();
+        return false;
+    }
+
+    enableElementByName('edit_th_mode');
+    return true;
+}
+
 function ensurePositiveDefaultValue(el, fallbackValue) {
     if (!el) return;
     const raw = String(el.value ?? '').trim();
@@ -746,7 +815,7 @@ function toggleVisibility(targetValue) {
         enableElementById('tor_lo','0');
         enableElementById('ang_hi','0');
         enableElementById('ang_lo','0');
-        enableElementById('rpm','200');
+        enableElementById('rpm','100');
         enableElementById('th_tor','');
         enableElementById('ds_tor','');
         enableElementById('ds_speed','100');
@@ -787,7 +856,7 @@ function toggleVisibility(targetValue) {
         disableElementById('tor_lo','0');
         disableElementById('ang_hi','0');
         disableElementById('ang_lo','0');
-        disableElementById('rpm','200');
+        disableElementById('rpm','100');
         disableElementById('th_tor','');
         disableElementById('ds_tor','');
         disableElementById('ds_speed','100');
@@ -805,6 +874,8 @@ function toggleVisibility(targetValue) {
         forceNewDownshiftOff();
 
     }
+
+    applyNewDownshiftStepRule();
 }
 
 function targetOptChangeHandler() {
@@ -817,6 +888,7 @@ function targetOptChangeHandler() {
     // Edit Step 從 Angle / Delay 切回 Torque 時，handleTargetOptChange 會先把欄位 enable。
     // 這裡再依目前 Downshift OFF / ON 狀態同步一次 disabled，避免 OFF 時欄位仍可輸入。
     toggleThTorDisabled();
+    applyEditDownshiftStepRule();
 }
 
 function handleTargetOptChange(target_opt) {
@@ -905,6 +977,7 @@ function handleTargetOptChange(target_opt) {
 
         enableElementByName("edit_direction");
         enableElementByName("edit_th_mode");
+        applyEditDownshiftStepRule();
 
         // Edit 模式：不要強制把 Downshift 改成 ON。
         // 原本資料若是 OFF，就只要 disabled 欄位，th_tor / ds_tor / ds_speed 的值必須保留。
@@ -1076,6 +1149,11 @@ function toggleThTorDisabled() {
 
     if (!edit_th_tor || !edit_ds_tor || !edit_ds_speed) return;
 
+    // Only STEP 1 is allowed to enable Downshift.
+    if (!applyEditDownshiftStepRule()) {
+        return;
+    }
+
     // 只有 Target Type = Torque 時，Downshift 欄位才可能開放。
     // Angle / Delay 一律 disabled。
     const editTargetOpt = String(document.getElementById('edit_target_opt')?.value ?? '');
@@ -1119,6 +1197,7 @@ function prepareAddStepId() {
     const addStepInput = document.getElementById("add_step_id");
     if (addStepInput) {
         addStepInput.value = nextStepId;
+        applyNewDownshiftStepRule();
     } else {
         console.warn("[prepareAddStepId] ⚠️ 無法找到 #add_step_id 元素，請確認該欄位已正確插入頁面。");
     }
@@ -1139,21 +1218,8 @@ function prepareAddStep(jobid, seqid) {
             return;
         }
 
-        // ✅ 如果是準備建立第 4 個 step，禁用 downshift radio
-        if (result.count === 3) {
-            const downshiftOff = document.getElementById('downshift_OFF');
-            const downshiftOn = document.getElementById('downshift_ON');
-
-            if (downshiftOff) downshiftOff.disabled = true;
-            if (downshiftOn) downshiftOn.disabled = true;
-        } else {
-            // 不是第 4 個 step，就啟用選項
-            const downshiftOff = document.getElementById('downshift_OFF');
-            const downshiftOn = document.getElementById('downshift_ON');
-
-            if (downshiftOff) downshiftOff.disabled = false;
-            if (downshiftOn) downshiftOn.disabled = false;
-        }
+        // Downshift rule: only STEP 1 can turn Downshift ON.
+        applyNewDownshiftStepRule();
 
         // ❌ 後端回傳禁止新增
         if (!result.allow) {
@@ -1174,17 +1240,8 @@ function checkStepAndHandleDownshift(jobid, seqid, onSuccessCallback) {
         },
         dataType: "json",
         success: function(result) {
-            // ✅ 第4個 step，禁用 downshift radio
-            const downshiftOff = document.getElementById('downshift_OFF');
-            const downshiftOn = document.getElementById('downshift_ON');
-
-            if (result.count === 3) {
-                if (downshiftOff) downshiftOff.disabled = true;
-                if (downshiftOn) downshiftOn.disabled = true;
-            } else {
-                if (downshiftOff) downshiftOff.disabled = false;
-                if (downshiftOn) downshiftOn.disabled = false;
-            }
+            // Downshift rule: only STEP 1 can turn Downshift ON.
+            applyNewDownshiftStepRule();
 
             // ❌ 不允許新增 Step
             if (!result.allow) {
@@ -1337,7 +1394,8 @@ function input_check_core(prefix, step_id = '') {
     const elRpm = document.getElementById(prefix+'rpm');
     const rpm = parseInt(elRpm?.value, 10);
     const toolMaxRpm = parseInt(document.getElementById('tool_max_rpm')?.value, 10);
-    const rpmMin = (stepNum === 1) ? 50 : 100;
+    const toolMinRpm = parseInt(document.getElementById('tool_min_rpm')?.value, 10);
+    const rpmMin = Number.isFinite(toolMinRpm) ? toolMinRpm : 10;
 
     if (Number.isFinite(rpm) && Number.isFinite(toolMaxRpm) && (rpm < rpmMin || rpm > toolMaxRpm)) {
         alertMsg('RPM', tf('rpm_range', { min: rpmMin, max: toolMaxRpm }), elRpm);

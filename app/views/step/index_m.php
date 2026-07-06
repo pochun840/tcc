@@ -630,6 +630,15 @@ $unit_label = htmlspecialchars((string)$unit_label, ENT_QUOTES, 'UTF-8');
             th_mode = 0;
         }
 
+        // Downshift 只允許 STEP1 開啟，其它 Step 送出前強制關閉。
+        var addStepNum = parseInt(String(add_stepid || document.getElementById('add_step_id')?.value || '1'), 100);
+        if (addStepNum !== 1) {
+            th_mode = 0;
+            th_tor = 0;
+            ds_tor = 0;
+            ds_speed = 100;
+        }
+
         // 驗證
         let check = input_check_savestep();
         if (check) {
@@ -744,6 +753,15 @@ $unit_label = htmlspecialchars((string)$unit_label, ENT_QUOTES, 'UTF-8');
         // Angle / Delay 模式不允許 Downshift ON；Radio disabled 時仍可能保留 checked，送出前強制 OFF。
         if (String(target_opt) !== '0') {
             th_mode = 0;
+        }
+
+        // Downshift 只允許 STEP1 開啟，其它 Step 送出前強制關閉。
+        const editStepNum = parseInt(String(stepid || val('edit_step_id') || '1'), 10);
+        if (editStepNum !== 1) {
+            th_mode = 0;
+            th_tor = 0;
+            ds_tor = 0;
+            ds_speed = 100;
         }
 
         // =========================

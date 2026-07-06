@@ -210,7 +210,7 @@ class Jobs extends Controller
                         'tor_lo'       => 0,
                         'ang_hi'       => 30600,
                         'ang_lo'       => 0,
-                        'rpm'          => 50,
+                        'rpm'          => 100,
                         'direction'    => 0,
                         'th_mode'      => 0,
                         'th_tor'       => 0,
