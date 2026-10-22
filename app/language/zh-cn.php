@@ -294,11 +294,11 @@ $text['column_status'] = '状态';
 $text['device_type'] = '设备类型';
 $text['device_name'] = '设备名称';
 
-$text['kgf.m'] = '公斤米';
+$text['kgf.m'] = '公斤.米';
 $text['N.m'] = '牛頓米';
-$text['kgf.cm'] = '公斤公分';
-$text['lbf.in'] = '英磅英吋';
-$text['cN.m'] = '厘牛米';
+$text['kgf.cm'] = '公斤.厘米';
+$text['lbf.in'] = '磅.英吋';
+$text['cN.m'] = '厘牛頓米';
 
 //Customize 
 // zh-cn（简体中文）

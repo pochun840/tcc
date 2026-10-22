@@ -57,6 +57,12 @@ class Dashboards extends Controller
 
         $isMobile = $this->isMobileCheck();
 
+        // 載入目前語系，扭力單位顯示名稱也跟著語系切換
+        $file = $this->MiscellaneousModel->lang_load();
+        if (!empty($file)) {
+            include $file;
+        }
+
         /* =============================
         * 基本設定
         * ============================= */
@@ -85,9 +91,20 @@ class Dashboards extends Controller
                 ($first_data['fasten_status'] == 4) ? 'green' :
                 (in_array($first_data['fasten_status'], [5, 6]) ? '#FFCC00' : 'red');
 
-            $unit_idx = (int)$first_data['step_tor_unit'];
-            $first_data['status_unit_explain'] =
-                $unit_arr[$unit_idx] ?? ($unit_arr[$step_torque_unit] ?? '');
+            $unit_idx = isset($first_data['step_tor_unit'])
+                ? (int)$first_data['step_tor_unit']
+                : $step_torque_unit;
+
+            // unit_arr 保留實際單位 key（例：N.m、kgf.cm、lbf.in）
+            // 畫面顯示則透過語系檔 $text[...] 轉換
+            $unit_key = $unit_arr[$unit_idx] ?? ($unit_arr[$step_torque_unit] ?? '');
+            $unit_display = ($unit_key !== '' && isset($text[$unit_key]))
+                ? $text[$unit_key]
+                : $unit_key;
+
+            // 新舊欄位都保留，避免既有畫面或其他程式受影響
+            $first_data['fasten_status_unit_explain'] = $unit_display;
+            $first_data['status_unit_explain'] = $unit_display;
         }
 
         /* =============================
@@ -169,6 +186,7 @@ class Dashboards extends Controller
         * View data
         * ============================= */
         $data = [
+            'text'           => $text ?? [],
             'isMobile'       => $isMobile,
             'chart_payload'  => $chart_payload,
             'chart_mode'     => $chart_mode,
@@ -238,6 +256,11 @@ class Dashboards extends Controller
         $status_arr = $this->MiscellaneousModel->details('status');
         $unit_arr   = $this->MiscellaneousModel->details('torque_unit');
 
+        $res_device = $this->SettingModel->GetControllerInfo();
+        $default_torque_unit = !empty($res_device)
+            ? (int)$res_device['device_torque_unit']
+            : 0;
+
         /* =============================
         最新鎖附資訊
         ============================= */
@@ -256,7 +279,19 @@ class Dashboards extends Controller
             }
 
             $first_data['error_massage_explanation'] =
-                $error_message['ERR_'.$first_data['error_message']];
+                $error_message['ERR_'.$first_data['error_message']] ?? '';
+
+            // 即時 API 同步回傳「已語系化」的扭力單位
+            // 優先使用該筆鎖附資料的 step_tor_unit，沒有時才使用控制器設定值
+            $unit_idx = isset($first_data['step_tor_unit'])
+                ? (int)$first_data['step_tor_unit']
+                : $default_torque_unit;
+
+            $unit_key = $unit_arr[$unit_idx] ?? ($unit_arr[$default_torque_unit] ?? '');
+            $first_data['fasten_status_unit_explain'] =
+                ($unit_key !== '' && isset($text[$unit_key]))
+                    ? $text[$unit_key]
+                    : $unit_key;
         }
 
         /* =============================

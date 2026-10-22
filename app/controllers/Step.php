@@ -52,6 +52,174 @@ class Step extends Controller
     }
 
 
+
+
+    private function isDownshiftForceCloseConfirmed(): bool
+    {
+        $raw = $_POST['downshift_force_close_confirm'] ?? $_POST['force_close_downshift_confirm'] ?? 0;
+        return in_array(strtolower((string)$raw), ['1', 'true', 'yes', 'y'], true);
+    }
+
+    private function getDownshiftDialogLang(): string
+    {
+        // Downshift 衝突提示需求：只顯示繁中 / 簡中。
+        // 避免系統或瀏覽器語系是 en-us 時，又回到英文提示。
+        $candidates = [
+            $_COOKIE['language'] ?? '',
+            $_COOKIE['lang'] ?? '',
+            $_COOKIE['locale'] ?? '',
+            $_POST['language'] ?? '',
+            $_POST['lang'] ?? ''
+        ];
+
+        foreach ($candidates as $candidate) {
+            $lang = strtolower(str_replace('_', '-', (string)$candidate));
+            if ($lang === '') {
+                continue;
+            }
+
+            if (strpos($lang, 'zh-cn') !== false || strpos($lang, 'zh-hans') !== false || strpos($lang, 'cn') !== false) {
+                return 'zh-cn';
+            }
+
+            if (strpos($lang, 'zh-tw') !== false || strpos($lang, 'zh-hant') !== false || strpos($lang, 'tw') !== false || strpos($lang, 'zh') !== false) {
+                return 'zh-tw';
+            }
+
+            if (strpos($lang, 'en-us') !== false || strpos($lang, 'en') !== false || strpos($lang, 'us') !== false) {
+                return 'en-us';
+            }
+        }
+
+        return 'zh-tw';
+    }
+
+    private function getDownshiftForceCloseDialog(): array
+    {
+        $dialogs = [
+            'zh-tw' => [
+                'title' => '關閉降轉功能',
+                'message' => '<b>關閉降轉功能</b><br><br>是否要關閉降轉功能？',
+                'yes' => '是',
+                'no' => '否'
+            ],
+            'zh-cn' => [
+                'title' => '关闭降转功能',
+                'message' => '<b>关闭降转功能</b><br><br>是否要关闭降转功能？',
+                'yes' => '是',
+                'no' => '否'
+            ],
+            'en-us' => [
+                'title' => 'Turn off Downshift',
+                'message' => '<b>Turn off Downshift</b><br><br>Turn off downshift?',
+                'yes' => 'YES',
+                'no' => 'NO'
+            ],
+        ];
+
+        $lang = $this->getDownshiftDialogLang();
+        return $dialogs[$lang] ?? $dialogs['zh-tw'];
+    }
+
+    private function outputDownshiftForceCloseConfirm(): void
+    {
+        $dialog = $this->getDownshiftForceCloseDialog();
+        echo json_encode([
+            'res_type' => 'Confirm',
+            'res_msg' => $dialog['message'],
+            'confirm_required' => true,
+            'confirm_action' => 'force_close_step1_downshift',
+            'confirm_title' => $dialog['title'],
+            'confirm_yes' => $dialog['yes'],
+            'confirm_no' => $dialog['no']
+        ]);
+    }
+
+
+    /**
+     * 儲存前即時檢查 STEP1 降轉衝突。
+     *
+     * 這個 API 是給前端 Save 按鈕先呼叫，避免只靠頁面載入時的 hidden 值，
+     * 造成「STEP1 剛開啟降轉後，新增 STEP2 目標扭力時沒有跳提示」。
+     * 真正儲存時 create/edit/copy 仍會再呼叫 resolveDownshiftTorqueConflict() 做最後防呆。
+     */
+    public function check_downshift_force_close_before_save()
+    {
+        $jobid = isset($_POST['jobid']) ? intval($_POST['jobid']) : 0;
+        $seqid = isset($_POST['seqid']) ? intval($_POST['seqid']) : 0;
+        $stepid = isset($_POST['stepid']) ? intval($_POST['stepid']) : 1;
+        $target_opt = isset($_POST['target_opt']) ? intval($_POST['target_opt']) : -1;
+        $th_mode = isset($_POST['th_mode']) ? intval($_POST['th_mode']) : 0;
+
+        if ($jobid <= 0 || $seqid <= 0 || $target_opt !== 0 || $this->isDownshiftForceCloseConfirmed()) {
+            echo json_encode(['confirm_required' => false]);
+            exit();
+        }
+
+        $hasConflict = false;
+
+        if ($stepid !== 1) {
+            $hasConflict = $this->stepModel->is_step1_downshift_enabled($jobid, $seqid);
+        } elseif ($th_mode === 1) {
+            $hasConflict = $this->stepModel->has_other_target_torque_step($jobid, $seqid, 1);
+        }
+
+        if ($hasConflict) {
+            $this->outputDownshiftForceCloseConfirm();
+            exit();
+        }
+
+        echo json_encode(['confirm_required' => false]);
+        exit();
+    }
+
+    /**
+     * Controller 相容規則：
+     * 1. 只有 STEP1 可以開啟 Downshift。
+     * 2. 若 STEP1 Downshift ON，後續 STEP 不可再儲存為 Target Torque。
+     * 3. 若使用者確認「關閉降轉功能」，儲存前會強制關閉 STEP1 Downshift。
+     */
+    private function resolveDownshiftTorqueConflict(
+        int $jobid,
+        int $seqid,
+        int $stepid,
+        int $target_opt,
+        int &$th_mode,
+        float &$th_tor,
+        float &$ds_tor,
+        int &$ds_speed,
+        bool $confirmed
+    ): bool {
+        if ($target_opt !== 0) {
+            return true;
+        }
+
+        $hasConflict = false;
+
+        if ($stepid !== 1) {
+            $hasConflict = $this->stepModel->is_step1_downshift_enabled($jobid, $seqid);
+        } elseif ($th_mode === 1) {
+            $hasConflict = $this->stepModel->has_other_target_torque_step($jobid, $seqid, 1);
+        }
+
+        if (!$hasConflict) {
+            return true;
+        }
+
+        if (!$confirmed) {
+            $this->outputDownshiftForceCloseConfirm();
+            return false;
+        }
+
+        $this->stepModel->force_close_step1_downshift($jobid, $seqid);
+        $th_mode = 0;
+        $th_tor = 0.0;
+        $ds_tor = 0.0;
+        $ds_speed = 100;
+
+        return true;
+    }
+
     public function index($job_id, $seq_id, $tools = null) {
 
         if (empty($job_id) || empty($seq_id)) {
@@ -158,6 +326,26 @@ class Step extends Controller
         $check_torque = $this->stepModel->chek_step_target_torque($job_id, $seq_id);
         $counts_torque = !empty($check_torque) ? (int)$check_torque[0]['counts'] : 0;
 
+        // 給前端預先判斷用：STEP1 若已開啟降轉，後續 STEP 設為目標扭力時要先跳確認。
+        // 後端 create/edit/copy 仍會再次檢查，避免前端被快取或繞過。
+        $step1_downshift_enabled = false;
+        $other_target_torque_count = 0;
+        if (is_array($step)) {
+            foreach ($step as $step_row) {
+                $row_step_id = (int)($step_row['step_id'] ?? 0);
+                $row_target_opt = (int)($step_row['target_opt'] ?? -1);
+                $row_th_mode = (int)($step_row['th_mode'] ?? 0);
+
+                if ($row_step_id === 1 && $row_th_mode === 1) {
+                    $step1_downshift_enabled = true;
+                }
+
+                if ($row_step_id !== 1 && $row_target_opt === 0) {
+                    $other_target_torque_count++;
+                }
+            }
+        }
+
         $data = [
             'isMobile' => $isMobile,
             'step' => $step,
@@ -180,7 +368,9 @@ class Step extends Controller
             'seq_opt' => $seq_opt,
             'counts_torque' => $counts_torque,
             'target_tor_value' => $tools['tool_mintorque'] ?? $hq_torque_limit,
-            'hq_torque_limit' => $hq_torque_limit
+            'hq_torque_limit' => $hq_torque_limit,
+            'step1_downshift_enabled' => $step1_downshift_enabled ? 1 : 0,
+            'other_target_torque_count' => $other_target_torque_count
         ];
 
         //扭力單位換算過後的 final扭力值
@@ -244,6 +434,20 @@ class Step extends Controller
                 $th_tor = 0.0;
                 $ds_tor = 0.0;
                 $ds_speed = 100;
+            }
+
+            if (!$this->resolveDownshiftTorqueConflict(
+                $jobid,
+                $seqid,
+                $stepid,
+                $target_opt,
+                $th_mode,
+                $th_tor,
+                $ds_tor,
+                $ds_speed,
+                $this->isDownshiftForceCloseConfirmed()
+            )) {
+                exit();
             }
 
             if($target_opt  == 1){
@@ -391,6 +595,20 @@ class Step extends Controller
                 $th_tor = 0.0;
                 $ds_tor = 0.0;
                 $ds_speed = 100;
+            }
+
+            if (!$this->resolveDownshiftTorqueConflict(
+                $jobid,
+                $seqid,
+                $stepid,
+                $target_opt,
+                $th_mode,
+                $th_tor,
+                $ds_tor,
+                $ds_speed,
+                $this->isDownshiftForceCloseConfirmed()
+            )) {
+                exit();
             }
 
 
@@ -568,9 +786,23 @@ class Step extends Controller
                     && ((int)$old_res[0]['th_mode'] === 1);
 
                 $copy_th_mode  = $copy_allow_downshift ? 1 : 0;
-                $copy_th_tor   = $copy_allow_downshift ? $old_res[0]['th_tor'] : 0;
-                $copy_ds_tor   = $copy_allow_downshift ? $old_res[0]['ds_tor'] : 0;
-                $copy_ds_speed = $copy_allow_downshift ? $old_res[0]['ds_speed'] : 100;
+                $copy_th_tor   = $copy_allow_downshift ? (float)$old_res[0]['th_tor'] : 0.0;
+                $copy_ds_tor   = $copy_allow_downshift ? (float)$old_res[0]['ds_tor'] : 0.0;
+                $copy_ds_speed = $copy_allow_downshift ? (int)$old_res[0]['ds_speed'] : 100;
+
+                if (!$this->resolveDownshiftTorqueConflict(
+                    $job_id,
+                    $seq_id,
+                    $new_step_id,
+                    (int)$old_res[0]['target_opt'],
+                    $copy_th_mode,
+                    $copy_th_tor,
+                    $copy_ds_tor,
+                    $copy_ds_speed,
+                    $this->isDownshiftForceCloseConfirmed()
+                )) {
+                    exit();
+                }
 
                 $jobdata = array(
                     'job_id'           => $job_id,

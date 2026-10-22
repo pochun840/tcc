@@ -49,6 +49,50 @@ class Steptcc{
 
 
 
+
+
+    /**
+     * STEP1 是否已啟用降速。
+     * Controller 規則：若 STEP1 降速 ON，後續 STEP 不可再設定目標扭力，否則可能造成控制器鎖附失敗。
+     */
+    public function is_step1_downshift_enabled($jobid, $seqid){
+        $sql = "SELECT COUNT(*) AS counts FROM step WHERE job_id = ? AND seq_id = ? AND step_id = 1 AND th_mode = 1";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid, $seqid]);
+        $result = $statement->fetch();
+        return !empty($result['counts']);
+    }
+
+    /**
+     * 檢查同一個 Sequence 是否還有其它 Target Torque STEP。
+     */
+    public function has_other_target_torque_step($jobid, $seqid, $exclude_step_id = 1){
+        $sql = "SELECT COUNT(*) AS counts FROM step WHERE job_id = ? AND seq_id = ? AND step_id != ? AND target_opt = '0'";
+        $statement = $this->db_iDas->prepare($sql);
+        $statement->execute([$jobid, $seqid, $exclude_step_id]);
+        $result = $statement->fetch();
+        return !empty($result['counts']);
+    }
+
+    /**
+     * 強制關閉 STEP1 降速，避免 STEP1 Downshift + 其它 Target Torque STEP 導致控制器鎖附失敗。
+     */
+    public function force_close_step1_downshift($jobid, $seqid){
+        $sql = "UPDATE step SET th_mode = 0, th_tor = 0, ds_tor = 0, ds_speed = 100 WHERE job_id = ? AND seq_id = ? AND step_id = 1";
+        $statement = $this->db_iDas->prepare($sql);
+        return $statement->execute([$jobid, $seqid]);
+    }
+
+    /**
+     * 保險整理：若資料已形成 STEP1 Downshift ON + 其它 Target Torque STEP，直接關閉 STEP1 降速。
+     */
+    public function normalize_downshift_torque_conflict($jobid, $seqid){
+        if ($this->is_step1_downshift_enabled($jobid, $seqid) && $this->has_other_target_torque_step($jobid, $seqid, 1)) {
+            return $this->force_close_step1_downshift($jobid, $seqid);
+        }
+        return true;
+    }
+
     #透過job_id 及 seq_id 取得對應的step
     public function getStep($job_id, $seq_id) {
 
@@ -290,6 +334,17 @@ class Steptcc{
         $downshift_update_sql = "UPDATE step SET th_mode = 0, th_tor = 0, ds_tor = 0, ds_speed = 100 WHERE job_id = ? AND step_id != 1";
         $downshift_update_statement = $this->db_iDas->prepare($downshift_update_sql);
         $downshift_update_statement->execute([$jobid]);
+
+        // 重新排序後若形成 STEP1 Downshift ON + 其它 Target Torque STEP，必須同步關閉 STEP1 降速。
+        $affectedSeqIds = [];
+        foreach ($rowInfoArray as $rowInfo) {
+            if (isset($rowInfo['sequence_id'])) {
+                $affectedSeqIds[(int)$rowInfo['sequence_id']] = true;
+            }
+        }
+        foreach (array_keys($affectedSeqIds) as $affectedSeqId) {
+            $this->normalize_downshift_torque_conflict($jobid, $affectedSeqId);
+        }
 
         return true;
     }

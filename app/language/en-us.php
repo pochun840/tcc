@@ -307,11 +307,11 @@ $text['column_status'] = 'Status';
 $text['device_type'] = 'Device Mode';
 $text['device_name'] = 'Device Name';
 
-$text['kgf.m'] = 'Kgf.m';
+$text['kgf.m'] = 'kgf.m';
 $text['N.m'] = 'N.m';
-$text['kgf.cm'] = 'Kgf.cm';
-$text['lbf.in'] = 'Lbf.in';
-$text['cN.m'] = "cN.m";
+$text['kgf.cm'] = 'kgf.cm';
+$text['lbf.in'] = 'in·lbs';
+$text['cN.m'] = 'cN.m';
 
 //Customize 
 $text['customize'] = 'Customize';
@@ -471,8 +471,8 @@ $text['tool'] = 'Tool';
 $text['tool_type'] = 'Tool Type';
 $text['tool_sn'] = 'Tool SN';
 $text['sw_version'] = 'S/W Version';
-$text['maintain_counts'] = 'Maintain Counts';
-$text['total_counts'] = 'Total Counts';
+$text['maintain_counts'] = 'Cumulative Count';
+$text['total_counts'] = 'Current Count';
 $text['tool_max_torque2'] = 'Max Torque';
 $text['tool_max_speed'] = 'Max Speed';
 $text['calibration_value'] = 'Calibration Value';

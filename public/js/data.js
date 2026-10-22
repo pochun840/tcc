@@ -31,20 +31,26 @@ function exportData() {
     }
 
     if (valid_flag) {
+        // Capture the operating device's local time once, when export is requested.
+        var now = new Date();
+        var pad = function(value) { return String(value).padStart(2, '0'); };
+        var timestamp = now.getFullYear() + '_' + pad(now.getMonth() + 1) + '_' +
+            pad(now.getDate()) + '_' + pad(now.getHours()) + pad(now.getMinutes());
         $.ajax({
             url: "?url=Data/exportData",
             method: "POST",
             data: {
                 start_date: start_date,
                 end_date: end_date,
-                expert_val: expert_val
+                expert_val: expert_val,
+                export_timestamp: timestamp
             },
             xhrFields: {
                 responseType: 'blob' 
             },
             success: function(response, status, xhr) {
                 var contentType = xhr.getResponseHeader('Content-Type');
-                var filename = expert_val === "1" ? 'tcc_data.zip' : 'tcc_data.csv';  
+                var filename = timestamp + (expert_val === "1" ? '.zip' : '.csv');
                 var blob = new Blob([response], { type: contentType });
                 var link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);

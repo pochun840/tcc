@@ -853,6 +853,12 @@ SVG;
 
     public function compareSchemaDifferences()
     {
+        // idas_data.db 防呆：不存在或 0 KB 時，由 tcccon.db 自動重建
+        if (PHP_OS_FAMILY === 'Linux' && !$this->ensureIdasDataDb()) {
+            echo "<pre>❌ Error: Failed to rebuild idas_data.db from tcccon.db.</pre>";
+            return;
+        }
+
         try {
             $db1 = new PDO('sqlite:/var/www/html/database/tcccon.db');
             $db2 = new PDO('sqlite:/var/www/html/database/idas_data.db');

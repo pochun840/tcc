@@ -66,7 +66,7 @@ window.APP = {
                                 $selected = ($data['controller_info']['device_torque_unit'] == $k_unit) ? 'selected' : '';
                             ?>
                                 <option value="<?php echo $k_unit; ?>" <?php echo $selected; ?>>
-                                    <?php echo $v_unit; ?>
+                                    <?php echo $text[$v_unit] ?? $v_unit; ?>
                                 </option>
                             <?php } ?>
                         </select>

@@ -541,36 +541,70 @@ class Setting{
     }
 
 
-    public function login_db_load() {
-        // 設定資料庫目錄
-        
+    public function login_db_load()
+    {
         $dbDir = '/var/www/html/database';
-        
-        // 設定資料庫檔案路徑
+
         $idasDataDb = $dbDir . '/idas_data.db';
-        $tccconDb = $dbDir . '/tcccon.db';
-    
-        // 檢查 idas_data.db 是否存在
-        if (!file_exists($idasDataDb)) {
-            // 如果 idas_data.db 不存在，則檢查 tcccon.db 是否存在
-            if (file_exists($tccconDb)) {
-                // 複製 tcccon.db 到 idas_data.db
-                if (copy($tccconDb, $idasDataDb)) {
-                    // 檔案成功複製，回傳 true
-                    return true;
-                } else {
-                    // 複製檔案失敗，回傳 false
-                    return false;
-                }
-            } else {
-                // 如果 tcccon.db 不存在，回傳 false
-                return false;
-            }
-        } else {
-            // 如果 idas_data.db 已存在，回傳 true（不需要複製）
+        $tccconDb   = $dbDir . '/tcccon.db';
+
+        clearstatcache(true, $idasDataDb);
+        clearstatcache(true, $tccconDb);
+
+        // idas_data.db 正常存在且有內容，直接使用
+        if (is_file($idasDataDb) && filesize($idasDataDb) > 0) {
             return true;
         }
+
+        // idas_data.db 不存在或為 0 KB，檢查來源 tcccon.db
+        if (!is_file($tccconDb) || filesize($tccconDb) <= 0) {
+            error_log('[login_db_load] tcccon.db missing or empty: ' . $tccconDb);
+            return false;
+        }
+
+        // 先複製到暫存檔，避免其他 request 讀到半份 DB
+        $tmpDb = $idasDataDb . '.tmp_' . getmypid();
+
+        @unlink($tmpDb);
+
+        if (!@copy($tccconDb, $tmpDb)) {
+            error_log('[login_db_load] Failed to copy tcccon.db to temp DB.');
+            return false;
+        }
+
+        clearstatcache(true, $tmpDb);
+
+        // 確認暫存 DB 有內容
+        if (!is_file($tmpDb) || filesize($tmpDb) <= 0) {
+            @unlink($tmpDb);
+            error_log('[login_db_load] Temporary idas_data.db is empty.');
+            return false;
+        }
+
+        @chmod($tmpDb, 0666);
+
+        // 原子取代 idas_data.db
+        if (!@rename($tmpDb, $idasDataDb)) {
+            @unlink($tmpDb);
+            error_log('[login_db_load] Failed to replace idas_data.db.');
+            return false;
+        }
+
+        @chmod($idasDataDb, 0666);
+
+        // 強制 filesystem 寫回
+        @exec('sync');
+
+        clearstatcache(true, $idasDataDb);
+
+        // 最終確認
+        if (!is_file($idasDataDb) || filesize($idasDataDb) <= 0) {
+            error_log('[login_db_load] idas_data.db is still invalid after recovery.');
+            return false;
+        }
+
+        return true;
     }
-    
 
 }
+?>

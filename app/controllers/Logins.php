@@ -2,6 +2,8 @@
 
 class Logins extends Controller
 {
+    private $LoginModel;
+    private $SettingModel;
     // 在建構子中將 Post 物件（Model）實例化
     public function __construct()
     {
@@ -33,6 +35,11 @@ class Logins extends Controller
 
             header('Location: ' . $requestUri);
             exit;
+        }
+
+        // idas_data.db 防呆：不存在或 0 KB 時，由 tcccon.db 自動重建
+        if (PHP_OS_FAMILY === 'Linux' && !$this->ensureIdasDataDb()) {
+            error_log('[Logins] Failed to ensure idas_data.db before Device_Info().');
         }
 
         $device_info = $this->Device_Info();

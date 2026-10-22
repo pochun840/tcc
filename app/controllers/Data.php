@@ -109,6 +109,26 @@ class Data extends Controller
     // 匯出資料：依據日期範圍輸出 CSV 或 ZIP
     public function exportData()
     {
+        // Use the operating device's local timestamp for the download and ZIP entry.
+        $exportName = $_POST['export_timestamp'] ?? null;
+        $validExportTime = is_string($exportName) && preg_match(
+            '/\A[0-9]{4}_(0[1-9]|1[0-2])_(0[1-9]|[12][0-9]|3[01])_([01][0-9]|2[0-3])[0-5][0-9]\z/',
+            $exportName
+        );
+        if ($validExportTime) {
+            $validExportTime = checkdate(
+                (int) substr($exportName, 5, 2),
+                (int) substr($exportName, 8, 2),
+                (int) substr($exportName, 0, 4)
+            );
+        }
+        // Preserve compatibility for older clients that do not send a timestamp.
+        if (!$validExportTime) {
+            $exportName = date('Y_m_d_Hi');
+        }
+        $csvName = $exportName . '.csv';
+        $zipName = $exportName . '.zip';
+
         $input_check = true;
 
         // 日期驗證與格式化
@@ -143,12 +163,12 @@ class Data extends Controller
                 // 匯出為 CSV
                 $csv_headers = array_keys($dataset[0]);
                 header('Content-Type: text/csv; charset=utf-8');
-                header('Content-Disposition: attachment; filename=tcc_data.csv');
+                header("Content-Disposition: attachment; filename=\"" . $csvName . "\"; filename*=UTF-8''" . rawurlencode($csvName));
 
                 $output = fopen('php://output', 'w');
-                fputcsv($output, $csv_headers);
+                fputcsv($output, $csv_headers, ',', '"', '\\');
                 foreach ($dataset as $row) {
-                    fputcsv($output, $row);
+                    fputcsv($output, $row, ',', '"', '\\');
                 }
                 fclose($output);
                 exit();
@@ -164,11 +184,11 @@ class Data extends Controller
                 $zip_filename = tempnam(sys_get_temp_dir(), 'tcc_data') . '.zip';
 
                 if ($zip->open($zip_filename, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
-                    $zip->addFromString("data.csv", $csv_content);
+                    $zip->addFromString($csvName, $csv_content);
                     $zip->close();
 
                     header('Content-Type: application/zip');
-                    header('Content-Disposition: attachment; filename=tcc_data.zip');
+                    header("Content-Disposition: attachment; filename=\"" . $zipName . "\"; filename*=UTF-8''" . rawurlencode($zipName));
                     header('Content-Length: ' . filesize($zip_filename));
                     readfile($zip_filename);
                     unlink($zip_filename);

@@ -73,7 +73,7 @@ class Customize extends Controller
         if ($bom !== "\xEF\xBB\xBF") rewind($fh);
 
         // 讀表頭
-        $headers = fgetcsv($fh);
+        $headers = fgetcsv($fh, 0, ',', '"', '\\');
         if ($headers === false || !is_array($headers)) { fclose($fh); return null; }
 
         // 表頭正規化（大小寫不敏感、空白→底線、去除非 \w）
@@ -102,7 +102,7 @@ class Customize extends Controller
             'result'         => [],
         ];
 
-        while (($row = fgetcsv($fh)) !== false) {
+        while (($row = fgetcsv($fh, 0, ',', '"', '\\')) !== false) {
             if (!is_array($row)) continue;
 
             // 跳過全空列
@@ -400,12 +400,12 @@ class Customize extends Controller
             fwrite($fp, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
             // 表頭（已移除 Input Position）
-            fputcsv($fp, ['NO', 'Read Position', 'result']);
+            fputcsv($fp, ['NO', 'Read Position', 'result'], ',', '"', '\\');
 
             // 內容
             $i = 1;
             foreach ($rowsForCsv as $r) {
-                fputcsv($fp, [$i++, $r['read_pos'], $r['result'] ?? '']);
+                fputcsv($fp, [$i++, $r['read_pos'], $r['result'] ?? ''], ',', '"', '\\');
             }
 
             @flock($fp, LOCK_UN);
@@ -1001,7 +1001,7 @@ class Customize extends Controller
         $rows = [];
         $isFirst = true;
 
-        while (($cols = fgetcsv($fp)) !== false) {
+        while (($cols = fgetcsv($fp, 0, ',', '"', '\\')) !== false) {
             if ($isFirst && isset($cols[0])) {
                 // 去 BOM
                 $cols[0] = preg_replace('/^\xEF\xBB\xBF/', '', (string)$cols[0]);
@@ -1066,9 +1066,9 @@ class Customize extends Controller
         $out = fopen($tmp, 'w');
         if ($out) {
             fwrite($out, "\xEF\xBB\xBF");
-            fputcsv($out, ['no','read_position','input_position','result']);
+            fputcsv($out, ['no','read_position','input_position','result'], ',', '"', '\\');
             foreach ($rows as $r) {
-                fputcsv($out, [$r['no'], $r['read_position'], $r['input_position'], $r['result']]);
+                fputcsv($out, [$r['no'], $r['read_position'], $r['input_position'], $r['result']], ',', '"', '\\');
             }
             fclose($out);
             @unlink($csvPath);

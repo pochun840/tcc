@@ -218,23 +218,113 @@ class Controller
         return $delta;
     }
 
+    /**
+     * 檢查 idas_data.db 是否存在且不是 0 KB。
+     * 若不存在或為 0 KB，則使用 tcccon.db 重新建立。
+     */
+    protected function ensureIdasDataDb(): bool
+    {
+        $idasDb = '/var/www/html/database/idas_data.db';
+        $tccDb  = '/var/www/html/database/tcccon.db';
+
+        // idas_data.db 正常存在且有內容
+        if (is_file($idasDb) && filesize($idasDb) > 0) {
+            return true;
+        }
+
+        // 備援來源不存在或本身也是空檔
+        if (!is_file($tccDb) || filesize($tccDb) <= 0) {
+            error_log('[Device_Info] tcccon.db missing or empty.');
+            return false;
+        }
+
+        // 先複製成暫存檔，避免直接覆蓋時出現半份檔案
+        $tmpDb = $idasDb . '.tmp_' . getmypid();
+
+        @unlink($tmpDb);
+
+        if (!@copy($tccDb, $tmpDb)) {
+            error_log('[Device_Info] Failed to copy tcccon.db to temp db.');
+            return false;
+        }
+
+        // 確認暫存檔不是空的
+        clearstatcache(true, $tmpDb);
+
+        if (!is_file($tmpDb) || filesize($tmpDb) <= 0) {
+            @unlink($tmpDb);
+            error_log('[Device_Info] Temp idas_data.db is empty.');
+            return false;
+        }
+
+        @chmod($tmpDb, 0666);
+
+        // 原子替換
+        if (!@rename($tmpDb, $idasDb)) {
+            @unlink($tmpDb);
+            error_log('[Device_Info] Failed to replace idas_data.db.');
+            return false;
+        }
+
+        @chmod($idasDb, 0666);
+
+        // 強制寫回
+        @exec('sync');
+
+        clearstatcache(true, $idasDb);
+
+        return is_file($idasDb) && filesize($idasDb) > 0;
+    }
+
+
     //取得tcscon device table資訊
     public function Device_Info()
     {
-        if( PHP_OS_FAMILY == 'Linux'){
-            $con_db = new PDO('sqlite:/var/www/html/database/idas_data.db'); 
-        }else{
-            $con_db = new PDO('sqlite:../idas_data.db'); 
-            
+        if (PHP_OS_FAMILY == 'Linux') {
+
+            // 先確認 idas_data.db 正常
+            if (!$this->ensureIdasDataDb()) {
+                return false;
+            }
+
+            $dbPath = '/var/www/html/database/idas_data.db';
+
+        } else {
+
+            $dbPath = '../idas_data.db';
         }
 
-        $con_db->exec('set names utf-8'); 
-        $sql = 'SELECT * FROM device';
-        $statement = $con_db->prepare($sql);
-        $results = $statement->execute();
-        $row = $statement->fetch(PDO::FETCH_ASSOC);
+        try {
 
-        return $row;        
+            $con_db = new PDO('sqlite:' . $dbPath);
+
+            $con_db->setAttribute(
+                PDO::ATTR_ERRMODE,
+                PDO::ERRMODE_EXCEPTION
+            );
+
+            $sql = 'SELECT * FROM device';
+
+            $statement = $con_db->prepare($sql);
+
+            if ($statement === false) {
+                return false;
+            }
+
+            $statement->execute();
+
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+            return $row ?: false;
+
+        } catch (Throwable $e) {
+
+            error_log(
+                '[Device_Info] ' . $e->getMessage()
+            );
+
+            return false;
+        }
     }
 
 

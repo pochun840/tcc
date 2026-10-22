@@ -750,6 +750,13 @@ class Settings extends Controller
     
         if (!empty($argument)) {
             if (PHP_OS_FAMILY == 'Linux' && $argument == 'D2C') {
+
+                // idas_data.db 防呆：不存在或 0 KB 時，由 tcccon.db 自動重建
+                if (!$this->ensureIdasDataDb()) {
+                    $res_msg = "Error: Failed to rebuild idas_data.db from tcccon.db.";
+                    $this->MiscellaneousModel->generateErrorResponse('Error', $res_msg);
+                    return;
+                }
     
                 // 1. 確認 iDas 資料庫是否存在
                 if (!file_exists($Das_DB_Location)) {
@@ -835,6 +842,15 @@ class Settings extends Controller
         $Copy_Destination    = '/mnt/ramdisk/ftp/iDas.cfg';           // RAMDISK 快取位置
     
         if (!empty($argument) && PHP_OS_FAMILY === 'Linux' && $argument === 'C2D') {
+
+            // idas_data.db 防呆：不存在或 0 KB 時，由 tcccon.db 自動重建
+            if (!$this->ensureIdasDataDb()) {
+                $this->MiscellaneousModel->generateErrorResponse(
+                    'Error',
+                    'Failed to rebuild idas_data.db from tcccon.db.'
+                );
+                return;
+            }
     
             // 時間比對提示（非強制）
             if (filemtime($Con_DB_Location) > filemtime($Das_DB_Location)) {
@@ -1278,6 +1294,17 @@ class Settings extends Controller
             // 18. 複製檔案
             $this->copyDirectory($main_folder, $target_directory);
 
+            /**
+             * 18-1. 強制將更新內容寫回磁碟
+             *
+             * 避免更新完成後立即 logout / redirect，
+             * 下一個 request 太快讀取剛更新的程式或相關檔案。
+             */
+            if (PHP_OS_FAMILY === 'Linux') {
+                @exec('sync');
+                sleep(5); // 5 秒
+            }
+
             // 19. 強制登出
             $this->setting_logout();
 
@@ -1474,6 +1501,15 @@ class Settings extends Controller
         $bakDev = $dbDir . 'tccdev.db.bak';
 
         @mkdir($dbDir, 0777, true);
+
+        // 匯入前先確保現行 idas_data.db 不是空檔；後續匯入成功仍會以新 tcccon.db 更新它
+        if (!$this->ensureIdasDataDb()) {
+            $this->MiscellaneousModel->generateErrorResponse(
+                'Error',
+                'Failed to rebuild idas_data.db from tcccon.db.'
+            );
+            exit();
+        }
 
         /* =====================================================
         * 6) Temp dirs
@@ -1912,6 +1948,42 @@ class Settings extends Controller
 
         return false; 
 
+    }
+
+
+    /**
+     * Read-only TCC iDAS diagnostics.
+     * Hidden URL: ?url=Settings/platform_debug
+     */
+    public function platform_debug()
+    {
+        require_once '../app/libraries/TccDebug.php';
+        $debug = TccDebug::collect();
+        $this->view('setting/platform_debug', ['debug' => $debug]);
+    }
+
+    /**
+     * Download complete read-only Debug report as JSON.
+     */
+    public function platform_debug_report()
+    {
+        require_once '../app/libraries/TccDebug.php';
+        $debug = TccDebug::collect();
+
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+            header(
+                'Content-Disposition: attachment; filename="tcc_idas_debug_'
+                . date('Ymd_His') . '.json"'
+            );
+            header('Cache-Control: no-store, no-cache, must-revalidate');
+        }
+
+        echo json_encode(
+            $debug,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        );
+        exit;
     }
 
 }

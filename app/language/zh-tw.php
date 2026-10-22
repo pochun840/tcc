@@ -295,10 +295,10 @@ $text['column_status'] = '狀態';
 $text['device_type'] = '設備類型';
 $text['device_name'] = '設備名稱';
 
-$text['kgf.m'] = '公斤公尺';
-$text['N.m'] = '牛頓公尺';
-$text['kgf.cm'] = '公斤公分';
-$text['lbf.in'] = '英磅英吋';
+$text['kgf.m'] = '公斤.公尺';
+$text['N.m'] = '牛頓-公尺';
+$text['kgf.cm'] = '公斤.公分';
+$text['lbf.in'] = '磅.英吋';
 $text['cN.m'] = '厘牛頓米';
 
 //Customize 

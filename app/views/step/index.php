@@ -98,6 +98,8 @@ $unit_label = htmlspecialchars((string)$unit_label, ENT_QUOTES, 'UTF-8');
         <input id="tool_maxtorque_unified" value="<?php echo  $data['tools']['tool_maxtorque_unified'];?>">
         <input id ="target_tor_value" value="<?php echo $data['target_tor_value']?>">
         <input id="hq_torque_limit" value="<?php echo $data['hq_torque_limit'] ?? 55; ?>">
+        <input id="step1_downshift_enabled" value="<?php echo $data['step1_downshift_enabled'] ?? 0; ?>">
+        <input id="other_target_torque_count" value="<?php echo $data['other_target_torque_count'] ?? 0; ?>">
     </div>
 
     <!-- Add New Step -->
@@ -607,7 +609,101 @@ for (var i = 0; i < rows.length; i++) {
 
 
   
-function add_step() {
+
+
+function idasShowDownshiftForceCloseConfirm(responseData, onConfirm, onCancel) {
+    if (typeof showStepDownshiftForceCloseConfirm === 'function') {
+        showStepDownshiftForceCloseConfirm(responseData || {}, onConfirm, onCancel);
+        return;
+    }
+
+    var fallbackLang = 'zh-tw';
+    if (typeof getLang === 'function') {
+        fallbackLang = getLang();
+    } else if (/关闭|储存|步骤|扭力|目标|返回/.test(String(document.body && document.body.innerText || ''))) {
+        fallbackLang = 'zh-cn';
+    } else if (/Step Management|Target Torque|High Torque|Low Torque|High Angle|Low Angle|Save|Close|Return/i.test(String(document.body && document.body.innerText || ''))) {
+        fallbackLang = 'en-us';
+    }
+
+    var dialogFallbacks = {
+        'zh-tw': {
+            title: '關閉降轉功能',
+            message: '<b>關閉降轉功能</b><br><br>是否要關閉降轉功能？',
+            yes: '是',
+            no: '否'
+        },
+        'zh-cn': {
+            title: '关闭降转功能',
+            message: '<b>关闭降转功能</b><br><br>是否要关闭降转功能？',
+            yes: '是',
+            no: '否'
+        },
+        'en-us': {
+            title: 'Turn off Downshift',
+            message: '<b>Turn off Downshift</b><br><br>Turn off downshift?',
+            yes: 'YES',
+            no: 'NO'
+        }
+    };
+    var fallback = dialogFallbacks[fallbackLang] || dialogFallbacks['zh-tw'];
+    var title = (responseData && responseData.confirm_title) || fallback.title;
+    var message = (responseData && responseData.res_msg) || fallback.message;
+    var yesLabel = (responseData && responseData.confirm_yes) || fallback.yes;
+    var noLabel = (responseData && responseData.confirm_no) || fallback.no;
+
+    try {
+        var dialog = alertify.confirm(title, message, function () {
+            if (typeof onConfirm === 'function') onConfirm();
+        }, function () {
+            if (typeof onCancel === 'function') onCancel();
+        });
+        if (dialog && typeof dialog.set === 'function') {
+            dialog.set('labels', { ok: yesLabel, cancel: noLabel });
+        }
+    } catch (e) {
+        if (window.confirm(String(message).replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, ''))) {
+            if (typeof onConfirm === 'function') onConfirm();
+        } else if (typeof onCancel === 'function') {
+            onCancel();
+        }
+    }
+}
+
+function precheckStepDownshiftForceCloseBeforeSubmit(payload, onContinue, onCancel) {
+    if (String(payload.downshift_force_close_confirm || 0) === '1') {
+        if (typeof onContinue === 'function') onContinue(true);
+        return;
+    }
+
+    $.ajax({
+        url: '?url=Step/check_downshift_force_close_before_save',
+        method: 'POST',
+        dataType: 'json',
+        data: payload,
+        success: function (responseData) {
+            if (responseData && responseData.confirm_required === true) {
+                var spinner = document.getElementById('spinner');
+                if (spinner) spinner.style.display = 'none';
+
+                idasShowDownshiftForceCloseConfirm(responseData, function () {
+                    if (typeof onContinue === 'function') onContinue(true);
+                }, function () {
+                    if (typeof onCancel === 'function') onCancel();
+                });
+                return;
+            }
+
+            if (typeof onContinue === 'function') onContinue(false);
+        },
+        error: function () {
+            // Precheck API 失敗時仍放行，真正儲存 API 會再次回傳 confirm_required，避免功能中斷。
+            if (typeof onContinue === 'function') onContinue(false);
+        }
+    });
+}
+
+function add_step(force_close_downshift_confirm = 0) {
     
     // 防止重複處理的標誌
     if (isProcessing) return;
@@ -639,7 +735,7 @@ function add_step() {
     }
 
     // Downshift 只允許 STEP1 開啟，其它 Step 送出前強制關閉。
-    var addStepNum = parseInt(String(add_stepid || document.getElementById('add_step_id')?.value || '1'), 100);
+    var addStepNum = parseInt(String(add_stepid || document.getElementById('add_step_id')?.value || '1'), 10);
     if (addStepNum !== 1) {
         th_mode = 0;
         th_tor = 0;
@@ -650,6 +746,33 @@ function add_step() {
     // 驗證
     let check = input_check_savestep();
     if (check) {
+        // STEP1 降轉已開啟時，後續 STEP 設為目標扭力必須先提示使用者確認。
+        if (typeof confirmStep1DownshiftCloseIfNeeded === 'function' &&
+            confirmStep1DownshiftCloseIfNeeded(addStepNum, target_opt, th_mode, force_close_downshift_confirm, function () { add_step(1); })) {
+            return;
+        }
+
+        if (String(force_close_downshift_confirm) !== '1' && window.__skipDownshiftPrecheckOnce !== true && typeof precheckStepDownshiftForceCloseBeforeSubmit === 'function') {
+            precheckStepDownshiftForceCloseBeforeSubmit({
+                jobid: jobid,
+                seqid: seqid,
+                stepid: addStepNum,
+                target_opt: target_opt,
+                th_mode: th_mode,
+                downshift_force_close_confirm: force_close_downshift_confirm
+            }, function (confirmed) {
+                window.__skipDownshiftPrecheckOnce = true;
+                isProcessing = false;
+                if (typeof window !== 'undefined') window.isProcessing = false;
+                add_step(confirmed ? 1 : 0);
+            }, function () {
+                isProcessing = false;
+                if (typeof window !== 'undefined') window.isProcessing = false;
+            });
+            return;
+        }
+        window.__skipDownshiftPrecheckOnce = false;
+
         // 顯示加載動畫
         document.getElementById('spinner').style.display = 'block';
 
@@ -659,7 +782,7 @@ function add_step() {
             data: {
                 jobid: jobid,
                 seqid: seqid,
-                stepid: add_stepid,
+                stepid: addStepNum,
                 target_opt: target_opt,
                 target_tor:target_tor,
                 target_ang: target_ang,
@@ -676,10 +799,14 @@ function add_step() {
                 ds_speed: ds_speed,
                 record_ang: record_ang,
                 tor_unit: tor_unit,
-                pnf_set: pnf_set 
+                pnf_set: pnf_set,
+                downshift_force_close_confirm: force_close_downshift_confirm
             },
             success: function(response) {
                 var responseData = JSON.parse(response);
+                if (typeof handleStepDownshiftConfirmResponse === 'function' && handleStepDownshiftConfirmResponse(responseData, function () { add_step(1); })) {
+                    return;
+                }
                 // 延遲 1000 毫秒後隱藏加載動畫，並顯示 alertify 彈跳視窗
                 setTimeout(function() {
                     // 隱藏加載動畫
@@ -720,7 +847,7 @@ function add_step() {
 }
 
 
-function edit_step_save() {
+function edit_step_save(force_close_downshift_confirm = 0) {
 
     // 防止重複處理
     if (isProcessing) return;
@@ -782,6 +909,33 @@ function edit_step_save() {
         return;
     }
 
+    // STEP1 降轉已開啟時，後續 STEP 設為目標扭力必須先提示使用者確認。
+    if (typeof confirmStep1DownshiftCloseIfNeeded === 'function' &&
+        confirmStep1DownshiftCloseIfNeeded(editStepNum, target_opt, th_mode, force_close_downshift_confirm, function () { edit_step_save(1); })) {
+        return;
+    }
+
+    if (String(force_close_downshift_confirm) !== '1' && window.__skipDownshiftEditPrecheckOnce !== true && typeof precheckStepDownshiftForceCloseBeforeSubmit === 'function') {
+        precheckStepDownshiftForceCloseBeforeSubmit({
+            jobid: jobid,
+            seqid: seqid,
+            stepid: editStepNum,
+            target_opt: target_opt,
+            th_mode: th_mode,
+            downshift_force_close_confirm: force_close_downshift_confirm
+        }, function (confirmed) {
+            window.__skipDownshiftEditPrecheckOnce = true;
+            isProcessing = false;
+            if (typeof window !== 'undefined') window.isProcessing = false;
+            edit_step_save(confirmed ? 1 : 0);
+        }, function () {
+            isProcessing = false;
+            if (typeof window !== 'undefined') window.isProcessing = false;
+        });
+        return;
+    }
+    window.__skipDownshiftEditPrecheckOnce = false;
+
     // 顯示 loading
     document.getElementById('spinner').style.display = 'block';
 
@@ -808,10 +962,14 @@ function edit_step_save() {
             ds_speed,
             record_ang,
             tor_unit,
-            pnf_set
+            pnf_set,
+            downshift_force_close_confirm: force_close_downshift_confirm
         },
         success: function (response) {
             var responseData = JSON.parse(response);
+            if (typeof handleStepDownshiftConfirmResponse === 'function' && handleStepDownshiftConfirmResponse(responseData, function () { edit_step_save(1); })) {
+                return;
+            }
 
             setTimeout(function () {
                 document.getElementById('spinner').style.display = 'none';
@@ -859,7 +1017,7 @@ function copy_step_by_id(stepid){
 
 }
 
-function copy_step_by_id_ajax() {
+function copy_step_by_id_ajax(force_close_downshift_confirm = 0) {
     
     var language = getCookie('language');
     if(language == "zh-cn"){
@@ -880,24 +1038,25 @@ function copy_step_by_id_ajax() {
     isProcessing = true; // 設置為處理
 
     if (stepid_new) {
-        // 顯示加載動畫
-      
-
-        $.ajax({
-            url: "?url=Step/copy_tcc_step",
-            method: "POST",
-            data: { 
-                job_id: jobid,
-                seq_id: seqid,
-                old_step_id: stepid,
-                new_step_id: stepid_new
-            },
-           success: function(response) {
-                alertify.confirm(text_info, function (result) {
+        const runCopyStepAjax = function () {
+            $.ajax({
+                url: "?url=Step/copy_tcc_step",
+                method: "POST",
+                data: { 
+                    job_id: jobid,
+                    seq_id: seqid,
+                    old_step_id: stepid,
+                    new_step_id: stepid_new,
+                    downshift_force_close_confirm: force_close_downshift_confirm
+                },
+                success: function(response) {
+                    var responseData = JSON.parse(response);
+                    if (typeof handleStepDownshiftConfirmResponse === 'function' && handleStepDownshiftConfirmResponse(responseData, function () { copy_step_by_id_ajax(1); })) {
+                        return;
+                    }
 
                     document.getElementById('spinner').style.display = 'block';
                     
-                    var responseData = JSON.parse(response);
                     // 延遲 1000 毫秒後隱藏加載動畫，並在隱藏後顯示 alertify 彈跳視窗
                     setTimeout(function() {
                         // 隱藏加載動畫
@@ -915,20 +1074,35 @@ function copy_step_by_id_ajax() {
                             history.go(0); 
                         }, 3000); 
                     }, 1000); // 延遲 1000 毫秒
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed:", status, error);
+                    // 顯示錯誤信息
+                    document.getElementById('spinner').style.display = 'none';
+                    alertify.alert('Error', 'There was an issue with the request. Please try again later.');
+                },
+                complete: function() {
+                    isProcessing = false; 
+                }
+            });
+        };
 
+        if (Number(force_close_downshift_confirm) === 1) {
+            runCopyStepAjax();
+        } else {
+            try {
+                alertify.confirm(title, text_info, runCopyStepAjax, function () {
+                    isProcessing = false;
                 });
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX request failed:", status, error);
-                // 顯示錯誤信息
-                document.getElementById('spinner').style.display = 'none';
-                alertify.alert('Error', 'There was an issue with the request. Please try again later.');
-            },
-            complete: function() {
-                isProcessing = false; 
+            } catch (e) {
+                if (window.confirm(text_info)) {
+                    runCopyStepAjax();
+                } else {
+                    isProcessing = false;
+                }
             }
-        });
-    } else {
+        }
+        } else {
         isProcessing = false; 
     }
 }

@@ -157,15 +157,180 @@ const I18N = {
     }
 };
 
+function normalizeIdasLang(rawLang) {
+    const lang = String(rawLang || '').toLowerCase().replace(/_/g, '-');
+    if (!lang) return '';
+    if (lang.includes('zh-cn') || lang.includes('zh-hans') || lang.includes('cn')) return 'zh-cn';
+    if (lang.includes('zh-tw') || lang.includes('zh-hant') || lang.includes('tw') || lang === 'zh') return 'zh-tw';
+    if (lang.includes('en-us') || lang === 'en' || lang.includes('en-') || lang.includes('us')) return 'en-us';
+    return '';
+}
+
+function getCookieValue(name) {
+    try {
+        const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.$?*|{}()\[\]\\/\+^]/g, '\\$&') + '=([^;]*)'));
+        return match ? decodeURIComponent(match[1]) : '';
+    } catch (e) {
+        return '';
+    }
+}
+
+function detectStepPageLang() {
+    const bodyText = String(document.body?.innerText || '');
+
+    // 若頁面主體已經是中文，提示也跟著中文顯示，避免 cookie / 舊 helper 誤判成 en-us。
+    if (/關閉|儲存|步驟|扭力|目標|返回/.test(bodyText)) return 'zh-tw';
+    if (/关闭|储存|步骤|扭力|目标|返回/.test(bodyText)) return 'zh-cn';
+    if (/Step Management|Target Torque|High Torque|Low Torque|High Angle|Low Angle|Save|Close|Return/i.test(bodyText)) return 'en-us';
+
+    return '';
+}
+
 function getLang() {
-    return (window.getLangAndUnit?.().lang
-        || window.getCookieSafe?.('language')
-        || 'zh-tw').toLowerCase();
+    // 依目前頁面 / cookie 語系顯示 Downshift 衝突提示；若無法判斷，預設繁中。
+    return normalizeIdasLang(detectStepPageLang())
+        || normalizeIdasLang(window.getLangAndUnit?.().lang)
+        || normalizeIdasLang(window.getCookieSafe?.('language'))
+        || normalizeIdasLang(getCookieValue('language'))
+        || normalizeIdasLang(getCookieValue('lang'))
+        || 'zh-tw';
 }
 
 function t(key) {
     const lang = getLang();
     return I18N[key]?.[lang] || I18N[key]?.['en-us'] || key;
+}
+
+
+/* =====================================================
+ * STEP1 Downshift + other Target Torque STEP conflict
+ * ===================================================== */
+function getStepDownshiftForceCloseFallbackText(langOverride) {
+    const lang = normalizeIdasLang(langOverride) || getLang();
+    const dialogs = {
+         'zh-tw': {
+            title: '關閉降轉功能',
+            message: '<b>關閉降轉功能</b><br><br>是否要關閉降轉功能？',
+            yes: '是',
+            no: '否'
+        },
+        'zh-cn': {
+            title: '关闭降转功能',
+            message: '<b>关闭降转功能</b><br><br>是否要关闭降转功能？',
+            yes: '是',
+            no: '否'
+        },
+        'en-us': {
+            title: 'Turn off Downshift',
+            message: '<b>Turn off Downshift</b><br><br>Turn off downshift?',
+            yes: 'YES',
+            no: 'NO'
+        }
+    };
+
+    return dialogs[lang] || dialogs['zh-tw'];
+}
+
+function showStepDownshiftForceCloseConfirm(responseData, onConfirm, onCancel) {
+    const pageLang = getLang();
+    const fallback = getStepDownshiftForceCloseFallbackText(pageLang);
+
+    // 優先使用目前頁面語系；後端回傳值只作為備援。
+    const title = fallback.title || responseData?.confirm_title || '關閉降轉功能';
+    const message = fallback.message || responseData?.res_msg || '<b>關閉降轉功能</b><br><br>STEP1 已啟用降轉功能。若其它 STEP 再設定為目標扭力，控制器可能會回報鎖附失敗。<br><br>是否要關閉 STEP1 降轉功能後再儲存？';
+    const yesLabel = fallback.yes || responseData?.confirm_yes || '是';
+    const noLabel = fallback.no || responseData?.confirm_no || '否';
+
+    const ok = function () {
+        if (typeof onConfirm === 'function') onConfirm();
+    };
+    const cancel = function () {
+        if (typeof onCancel === 'function') onCancel();
+    };
+
+    try {
+        const dialog = alertify.confirm(title, message, ok, cancel);
+        if (dialog && typeof dialog.set === 'function') {
+            dialog.set('labels', { ok: yesLabel, cancel: noLabel });
+        }
+    } catch (e) {
+        // 舊版 alertify fallback
+        if (window.confirm(String(message).replace(/<br\s*\/?>/gi, '\n'))) {
+            ok();
+        } else {
+            cancel();
+        }
+    }
+}
+
+function handleStepDownshiftConfirmResponse(responseData, retryCallback, cancelCallback) {
+    if (!responseData || responseData.confirm_required !== true) return false;
+
+    const spinner = document.getElementById('spinner');
+    if (spinner) spinner.style.display = 'none';
+
+    showStepDownshiftForceCloseConfirm(
+        responseData,
+        function () {
+            if (typeof window !== 'undefined') window.isProcessing = false;
+            if (typeof isProcessing !== 'undefined') isProcessing = false;
+            if (typeof retryCallback === 'function') retryCallback();
+        },
+        function () {
+            if (typeof window !== 'undefined') window.isProcessing = false;
+            if (typeof isProcessing !== 'undefined') isProcessing = false;
+            if (typeof cancelCallback === 'function') cancelCallback();
+        }
+    );
+
+    return true;
+}
+
+
+function readBooleanHiddenInput(id) {
+    const raw = String(document.getElementById(id)?.value ?? '').trim().toLowerCase();
+    return raw === '1' || raw === 'true' || raw === 'yes' || raw === 'y';
+}
+
+function readIntHiddenInput(id, defaultValue = 0) {
+    const n = parseInt(String(document.getElementById(id)?.value ?? '').trim(), 10);
+    return Number.isFinite(n) ? n : defaultValue;
+}
+
+/**
+ * 前端預先提示：避免使用者按 Save 後看不到提示。
+ * 後端 create/edit/copy 仍有最終防呆，這裡只負責讓 UX 與控制器流程一致。
+ */
+function confirmStep1DownshiftCloseIfNeeded(stepNum, targetOpt, thMode, forceConfirmed, onConfirm, onCancel) {
+    if (Number(forceConfirmed) === 1 || String(forceConfirmed) === 'true') return false;
+
+    const currentStep = parseInt(String(stepNum ?? '1'), 10);
+    const isTorqueTarget = String(targetOpt) === '0';
+    if (!isTorqueTarget) return false;
+
+    const step1DownshiftEnabled = readBooleanHiddenInput('step1_downshift_enabled');
+    const otherTargetTorqueCount = readIntHiddenInput('other_target_torque_count', 0);
+
+    const conflictByOtherStep = currentStep !== 1 && step1DownshiftEnabled;
+    const conflictByStep1Enable = currentStep === 1 && String(thMode) === '1' && otherTargetTorqueCount > 0;
+
+    if (!conflictByOtherStep && !conflictByStep1Enable) return false;
+
+    showStepDownshiftForceCloseConfirm(
+        { confirm_required: true },
+        function () {
+            if (typeof window !== 'undefined') window.isProcessing = false;
+            if (typeof isProcessing !== 'undefined') isProcessing = false;
+            if (typeof onConfirm === 'function') onConfirm();
+        },
+        function () {
+            if (typeof window !== 'undefined') window.isProcessing = false;
+            if (typeof isProcessing !== 'undefined') isProcessing = false;
+            if (typeof onCancel === 'function') onCancel();
+        }
+    );
+
+    return true;
 }
 
 

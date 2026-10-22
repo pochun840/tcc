@@ -1,3 +1,10 @@
+<?php
+// Dashboards::operation() 將語系陣列放在 $data['text']；
+// View 內明確取出，避免依賴 Controller::view() 是否 extract() 變數。
+if (!isset($text) || !is_array($text)) {
+    $text = (isset($data['text']) && is_array($data['text'])) ? $data['text'] : [];
+}
+?>
 
 <div class="container-ms">
     <div class="w3-text-white w3-center">
@@ -26,7 +33,7 @@
             <div class="operation-setting">
                 <div class="column">
                     <div class="item-target-torque w3-display-container">
-                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_torque'] ;?>(<span id='fasten_status_unit_explain'></span>)</div>
+                        <div class="w3-display-topmiddle w3-border-top w3-border-bottom w3-border-red"><?php echo $text['final_torque'] ;?>(<span id='fasten_status_unit_explain'><?php echo htmlspecialchars($data['first_data']['fasten_status_unit_explain'] ?? '', ENT_QUOTES, 'UTF-8'); ?></span>)</div>
                         <div id="fasten_torque" class="w3-display-middle" style="font-size: 6vmin"></div>
                     </div>
                     <div id='fasten_status_bg' class="item-result w3-display-container">
@@ -323,11 +330,19 @@ function updateDataOnPage(data) {
        更新文字資訊
     ============================= */
 
+    // jobs_count / seqs_count 並不是 get_new_data() 保證回傳的欄位，
+    // 缺少時只顯示目前 ID，避免畫面出現 2/undefined、1/undefined。
+    const formatIdCount = (id, count) => {
+        const idValue = (id !== undefined && id !== null && id !== '') ? id : '--';
+        const hasCount = (count !== undefined && count !== null && count !== '');
+        return hasCount ? `${idValue}/${count}` : String(idValue);
+    };
+
     document.getElementById('system_sn').value = data.system_sn || '--';
-    document.getElementById('job_name').value = data.job_id + "/" + data.jobs_count;
-    document.getElementById('seq_name').value = data.seq_id + "/" + data.seqs_count;
+    document.getElementById('job_name').value = formatIdCount(data.job_id, data.jobs_count);
+    document.getElementById('seq_name').value = formatIdCount(data.seq_id, data.seqs_count);
     document.getElementById('max_screw_count').value =
-        data.last_screw_count + "/" + data.max_screw_count;
+        formatIdCount(data.last_screw_count, data.max_screw_count);
 
     document.getElementById('fasten_torque').innerText = data.fasten_torque || 'N/A';
     document.getElementById('fasten_angle').innerText  = data.fasten_angle || 'N/A';

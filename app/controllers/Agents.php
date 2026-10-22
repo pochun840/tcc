@@ -3,7 +3,7 @@
 class Agents extends Controller
 {
     private $AdminModel;
-    private $MiscellaneousModl;
+    private $MiscellaneousModel;
 
     
     /*
